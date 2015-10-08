@@ -21,6 +21,19 @@ use eZ\Publish\SPI\Search;
 class SearchField implements Indexable
 {
     /**
+     * @var array
+     */
+    protected $countriesInfo;
+
+    /**
+     * @param array $countriesInfo Array of countries data
+     */
+    public function __construct(array $countriesInfo)
+    {
+        $this->countriesInfo = $countriesInfo;
+    }
+
+    /**
      * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
@@ -30,15 +43,53 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
+        if (empty($field->value->data)) {
+            return array();
+        }
+
+        $nameList = array();
+        $IDCList = array();
+        $alpha2List = array();
+        $alpha3List = array();
+
+        foreach ($field->value->data as $alpha2) {
+            if (isset($this->countriesInfo[$alpha2])) {
+                $nameList[] = $this->countriesInfo[$alpha2]['Name'];
+                $IDCList[] = $this->countriesInfo[$alpha2]['IDC'];
+                $alpha2List[] = $this->countriesInfo[$alpha2]['Alpha2'];
+                $alpha3List[] = $this->countriesInfo[$alpha2]['Alpha3'];
+            }
+        }
+
         return array(
             new Search\Field(
-                'value',
-                $field->value->data,
+                'idc',
+                $IDCList,
+                new Search\FieldType\MultipleIntegerField()
+            ),
+            new Search\Field(
+                'alpha2',
+                $alpha2List,
                 new Search\FieldType\MultipleStringField()
             ),
             new Search\Field(
+                'alpha3',
+                $alpha3List,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'name',
+                $nameList,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'sort_value',
+                $field->value->sortKey,
+                new Search\FieldType\StringField()
+            ),
+            new Search\Field(
                 'fulltext',
-                $field->value->data,
+                $nameList,
                 new Search\FieldType\FullTextField()
             ),
         );
@@ -52,7 +103,11 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            'value' => new Search\FieldType\MultipleStringField(),
+            'idc' => new Search\FieldType\MultipleIntegerField(),
+            'alpha2' => new Search\FieldType\MultipleStringField(),
+            'alpha3' => new Search\FieldType\MultipleStringField(),
+            'name' => new Search\FieldType\MultipleStringField(),
+            'sort_value' => new Search\FieldType\StringField(),
         );
     }
 
@@ -67,7 +122,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return 'value';
+        return 'name';
     }
 
     /**
@@ -81,6 +136,6 @@ class SearchField implements Indexable
      */
     public function getDefaultSortField()
     {
-        return $this->getDefaultMatchField();
+        return 'sort_value';
     }
 }

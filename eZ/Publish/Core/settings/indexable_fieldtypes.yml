@@ -47,6 +47,8 @@ services:
 
     ezpublish.fieldType.indexable.ezcountry:
         class: %ezpublish.fieldType.indexable.ezcountry.class%
+        arguments:
+            - %ezpublish.fieldType.ezcountry.data%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezcountry}
 

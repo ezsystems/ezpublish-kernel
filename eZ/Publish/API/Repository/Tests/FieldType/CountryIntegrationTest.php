@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class CountryIntegrationTest extends BaseIntegrationTest
+class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 {
     /**
      * Get name of tested field type.
@@ -403,5 +403,111 @@ class CountryIntegrationTest extends BaseIntegrationTest
                 $this->getValidCreationFieldData(),
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return array('Andorra');
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return array('Trinidad and Tobago');
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 'Andorra';
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 'Trinidad and Tobago';
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                'idc',
+                '376',
+                '1868',
+            ),
+            array(
+                'alpha2',
+                'AD',
+                'TT',
+            ),
+            array(
+                'alpha3',
+                'AND',
+                'TTO',
+            ),
+            array(
+                'name',
+                'Andorra',
+                'Trinidad and Tobago',
+            ),
+            array(
+                'sort_value',
+                'andorra',
+                'trinidad and tobago',
+            ),
+        );
+    }
+
+    protected function getValidMultivaluedSearchValuesOne()
+    {
+        return array('Andorra', 'Bolivia');
+    }
+
+    protected function getValidMultivaluedSearchValuesTwo()
+    {
+        return array('Syrian Arab Republic', 'Trinidad and Tobago');
+    }
+
+    protected function getAdditionallyIndexedMultivaluedFieldData()
+    {
+        return array(
+            array(
+                'idc',
+                array(376, 591),
+                array(963, 1868),
+            ),
+            array(
+                'alpha2',
+                array('AD', 'BO'),
+                array('SY', 'TT'),
+            ),
+            array(
+                'alpha3',
+                array('AND', 'BOL'),
+                array('SYR', 'TTO'),
+            ),
+            array(
+                'name',
+                array('Andorra', 'Bolivia'),
+                array('Syrian Arab Republic', 'Trinidad and Tobago'),
+            ),
+        );
+    }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('Andorra', 'Tobago'),
+        );
+    }
+
+    protected function createTestContentType()
+    {
+        $contentType = $this->createContentType(
+            array(
+                'isMultiple' => true,
+            ),
+            $this->getValidValidatorConfiguration()
+        );
+
+        return $contentType;
     }
 }
