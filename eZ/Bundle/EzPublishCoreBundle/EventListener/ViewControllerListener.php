@@ -82,6 +82,7 @@ class ViewControllerListener implements EventSubscriberInterface
                     $request->attributes->get('locationId')
                 );
                 $request->attributes->set('contentId', $valueObject->contentId);
+                $request->attributes->set('location', $valueObject);
             } elseif ($request->attributes->get('location') instanceof Location) {
                 $valueObject = $request->attributes->get('location');
                 $request->attributes->set('locationId', $valueObject->id);
