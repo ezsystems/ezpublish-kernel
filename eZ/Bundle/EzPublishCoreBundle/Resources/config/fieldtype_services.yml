@@ -48,8 +48,6 @@ parameters:
     ezpublish.fieldType.ezrichtext.validator.docbook.resources:
         - %ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/ezpublish.rng
         - %ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/docbook.iso.sch.xsl
-    ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5.resources:
-        - %ezpublish.fieldType.ezrichtext.resources%/schemas/ezxhtml5/edit/ezxhtml5.xsd
     ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5.resources:
         - %ezpublish.fieldType.ezrichtext.resources%/schemas/ezxhtml5/output/ezxhtml5.xsd
 
@@ -234,10 +232,6 @@ services:
     ezpublish.fieldType.ezrichtext.validator.docbook:
         class: %ezpublish.fieldType.ezrichtext.validator.xml.class%
         arguments: [%ezpublish.fieldType.ezrichtext.validator.docbook.resources%]
-
-    ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5:
-        class: %ezpublish.fieldType.ezrichtext.validator.xml.class%
-        arguments: [%ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5.resources%]
 
     ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5:
         class: %ezpublish.fieldType.ezrichtext.validator.xml.class%

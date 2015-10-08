@@ -85,16 +85,4 @@ class DocbookToXhtml5EditTest extends BaseTest
             ),
         );
     }
-
-    /**
-     * Return an array of absolute paths to conversion result validation schemas.
-     *
-     * @return string[]
-     */
-    protected function getConversionValidationSchema()
-    {
-        return array(
-            __DIR__ . '/_fixtures/xhtml5/edit/custom_schemas/youtube.xsd',
-        );
-    }
 }
