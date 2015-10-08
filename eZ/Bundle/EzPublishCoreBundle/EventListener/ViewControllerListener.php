@@ -77,14 +77,14 @@ class ViewControllerListener implements EventSubscriberInterface
             return;
         }
         try {
-            if ($request->attributes->has('locationId')) {
+            if ($request->attributes->get('locationId')) {
                 $valueObject = $this->repository->getLocationService()->loadLocation(
                     $request->attributes->get('locationId')
                 );
                 $request->attributes->set('contentId', $valueObject->contentId);
                 $request->attributes->set('location', $valueObject);
-            } elseif ($request->attributes->get('location') instanceof Location) {
-                $valueObject = $request->attributes->get('location');
+            } elseif (($location = $request->attributes->get('location')) instanceof Location) {
+                $valueObject = $location;
                 $request->attributes->set('locationId', $valueObject->id);
                 $request->attributes->set('contentId', $valueObject->contentId);
             } elseif ($request->attributes->has('contentId')) {
@@ -95,8 +95,8 @@ class ViewControllerListener implements EventSubscriberInterface
                         );
                     }
                 );
-            } elseif ($request->attributes->get('contentInfo') instanceof ContentInfo) {
-                $valueObject = $request->attributes->get('contentInfo');
+            } elseif (($contentInfo = $request->attributes->get('contentInfo')) instanceof ContentInfo) {
+                $valueObject = $contentInfo;
                 $request->attributes->set('contentId', $valueObject->id);
             }
         } catch (UnauthorizedException $e) {
