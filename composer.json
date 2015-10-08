@@ -10,7 +10,6 @@
         "php": ">=5.4.4",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
-        "ext-gd": "*",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",

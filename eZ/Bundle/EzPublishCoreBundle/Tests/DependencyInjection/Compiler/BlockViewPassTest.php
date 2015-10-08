@@ -14,16 +14,9 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BlockViewPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 class BlockViewPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->setDefinition('ezpublish.view_manager', new Definition());
-    }
-
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()
      * method:.
@@ -35,41 +28,18 @@ class BlockViewPassTest extends AbstractCompilerPassTestCase
         $container->addCompilerPass(new BlockViewPass());
     }
 
-    /**
-     * @dataProvider addViewProviderProvider
-     */
-    public function testAddViewProvider($declaredPriority, $expectedPriority)
+    public function testAddViewProvider()
     {
         $def = new Definition();
-        if ($declaredPriority !== null) {
-            $def->addTag(BlockViewPass::VIEW_PROVIDER_IDENTIFIER, array('priority' => $declaredPriority));
-        } else {
-            $def->addTag(BlockViewPass::VIEW_PROVIDER_IDENTIFIER);
-        }
+        $def->addTag(BlockViewPass::VIEW_PROVIDER_IDENTIFIER, array('priority' => 12));
         $serviceId = 'service_id';
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.view_manager',
-            BlockViewPass::ADD_VIEW_PROVIDER_METHOD,
-            array(new Reference($serviceId), $expectedPriority)
-        );
-    }
-
-    public function addViewProviderProvider()
-    {
-        return array(
-            array(null, 0),
-            array(0, 0),
-            array(57, 57),
-            array(-23, -23),
-            array(-255, -255),
-            array(-256, -255),
-            array(-1000, -255),
-            array(255, 255),
-            array(256, 255),
-            array(1000, 255),
+        $this->assertContainerBuilderHasServiceDefinitionWithTag(
+            $serviceId,
+            'ezpublish.view_provider',
+            ['priority' => 12, 'type' => BlockViewPass::VIEW_TYPE]
         );
     }
 }

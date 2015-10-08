@@ -674,10 +674,12 @@ class DoctrineDatabase extends Gateway
 
     /**
      * Publish the specified role draft.
+     * If the draft was created from an existing role, published version will take the original role ID.
      *
-     * @param mixed $roleId
+     * @param mixed $roleDraftId
+     * @param mixed|null $originalRoleId ID of role the draft was created from. Will be null if the role draft was completely new.
      */
-    public function publishRoleDraft($roleId)
+    public function publishRoleDraft($roleDraftId, $originalRoleId = null)
     {
         $query = $this->handler->createUpdateQuery();
         $query
@@ -685,12 +687,21 @@ class DoctrineDatabase extends Gateway
             ->set(
                 $this->handler->quoteColumn('version'),
                 $query->bindValue(Role::STATUS_DEFINED, null, \PDO::PARAM_INT)
-            )->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('id'),
-                    $query->bindValue($roleId, null, \PDO::PARAM_INT)
-                )
             );
+        // Draft was created from an existing role, so published role must get the original ID.
+        if ($originalRoleId !== null) {
+            $query->set(
+                $this->handler->quoteColumn('id'),
+                $query->bindValue($originalRoleId, null, \PDO::PARAM_INT)
+            );
+        }
+
+        $query->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn('id'),
+                $query->bindValue($roleDraftId, null, \PDO::PARAM_INT)
+            )
+        );
         $statement = $query->prepare();
         $statement->execute();
 
@@ -700,12 +711,21 @@ class DoctrineDatabase extends Gateway
             ->set(
                 $this->handler->quoteColumn('original_id'),
                 $policyQuery->bindValue(0, null, \PDO::PARAM_INT)
-            )->where(
-                $policyQuery->expr->eq(
-                    $this->handler->quoteColumn('role_id'),
-                    $policyQuery->bindValue($roleId, null, \PDO::PARAM_INT)
-                )
             );
+        // Draft was created from an existing role, so published policies must get the original role ID.
+        if ($originalRoleId !== null) {
+            $policyQuery->set(
+                $this->handler->quoteColumn('role_id'),
+                $policyQuery->bindValue($originalRoleId, null, \PDO::PARAM_INT)
+            );
+        }
+
+        $policyQuery->where(
+            $policyQuery->expr->eq(
+                $this->handler->quoteColumn('role_id'),
+                $policyQuery->bindValue($roleDraftId, null, \PDO::PARAM_INT)
+            )
+        );
         $queryStatement = $policyQuery->prepare();
         $queryStatement->execute();
     }
@@ -808,34 +828,18 @@ class DoctrineDatabase extends Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function removePolicy($policyId, $status = Role::STATUS_DEFINED)
+    public function removePolicy($policyId)
     {
         $this->removePolicyLimitations($policyId);
 
         $query = $this->handler->createDeleteQuery();
-        if ($status === Role::STATUS_DEFINED) {
-            $policyCondition = $query->expr->eq(
-                $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                $query->bindValue(0, null, \PDO::PARAM_INT)
-            );
-        } else {
-            $policyCondition = $query->expr->neq(
-                $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                $query->bindValue(0, null, \PDO::PARAM_INT)
-            );
-        }
-
         $query
             ->deleteFrom($this->handler->quoteTable('ezpolicy'))
             ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('id'),
-                        $query->bindValue($policyId, null, \PDO::PARAM_INT)
-                    ),
-                    $policyCondition
+                $query->expr->eq(
+                    $this->handler->quoteColumn('id'),
+                    $query->bindValue($policyId, null, \PDO::PARAM_INT)
                 )
             );
         $query->prepare()->execute();

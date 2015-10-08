@@ -22,7 +22,7 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
      */
     protected function getMatchableValueObject()
     {
-        return $this->getBlockMock(array('id' => 456));
+        return $this->getBlockView(array('id' => 456));
     }
 
     /**
@@ -33,7 +33,7 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
      */
     protected function getNonMatchableValueObject()
     {
-        return $this->getBlockMock(array('id' => 123456789));
+        return $this->getBlockView(array('id' => 123456789));
     }
 
     /**

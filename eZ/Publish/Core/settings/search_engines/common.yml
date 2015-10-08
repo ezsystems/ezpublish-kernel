@@ -1,3 +1,6 @@
+imports:
+    - {resource: search_engines/slots.yml}
+
 parameters:
     ezpublish.search.common.field_registry.class: eZ\Publish\Core\Search\Common\FieldRegistry
     ezpublish.search.common.field_name_resolver.class: eZ\Publish\Core\Search\Common\FieldNameResolver

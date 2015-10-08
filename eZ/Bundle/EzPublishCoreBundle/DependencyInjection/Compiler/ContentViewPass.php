@@ -23,4 +23,5 @@ class ContentViewPass extends ViewManagerPass
 {
     const VIEW_PROVIDER_IDENTIFIER = 'ezpublish.content_view_provider';
     const ADD_VIEW_PROVIDER_METHOD = 'addContentViewProvider';
+    const VIEW_TYPE = 'eZ\Publish\Core\MVC\Symfony\View\ContentView';
 }

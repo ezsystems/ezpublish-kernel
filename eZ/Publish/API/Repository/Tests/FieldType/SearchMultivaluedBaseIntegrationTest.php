@@ -121,6 +121,19 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
     }
 
     /**
+     * Proxy method for creating test Content Type.
+     *
+     * Defaults to the testCreateContentType() in the base field type test,
+     * override in the concrete test as needed.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected function createTestContentType()
+    {
+        return $this->testCreateContentType();
+    }
+
+    /**
      * Creates test Content and Locations and returns the context for subsequent testing.
      *
      * Context consists of repository instance and created Content IDs.
@@ -139,7 +152,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
 
         $this->checkSearchEngineSupport();
 
-        $contentType = $this->testCreateContentType();
+        $contentType = $this->createTestContentType();
 
         $context = array(
             $repository,

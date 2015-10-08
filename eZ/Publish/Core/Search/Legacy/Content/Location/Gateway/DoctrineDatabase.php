@@ -16,6 +16,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use PDO;
 
 /**
@@ -47,20 +48,30 @@ class DoctrineDatabase extends Gateway
     private $sortClauseConverter;
 
     /**
+     * Language handler.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $criteriaConverter
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter $sortClauseConverter
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
     public function __construct(
         DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
-        SortClauseConverter $sortClauseConverter
+        SortClauseConverter $sortClauseConverter,
+        LanguageHandler $languageHandler
     ) {
         $this->handler = $handler;
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -83,7 +94,7 @@ class DoctrineDatabase extends Gateway
         array $languageFilter = array(),
         $doCount = true
     ) {
-        $count = $doCount ? $this->getTotalCount($criterion) : null;
+        $count = $doCount ? $this->getTotalCount($criterion, $languageFilter) : null;
 
         if (!$doCount && $limit === 0) {
             throw new \RuntimeException('Invalid query, can not disable count and request 0 items at the same time');
@@ -94,7 +105,11 @@ class DoctrineDatabase extends Gateway
         }
 
         $selectQuery = $this->handler->createSelectQuery();
-        $selectQuery->select('ezcontentobject_tree.*');
+        $selectQuery->select(
+            'ezcontentobject_tree.*',
+            $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
+            $this->handler->quoteColumn('initial_language_id', 'ezcontentobject')
+        );
 
         if ($sortClauses !== null) {
             $this->sortClauseConverter->applySelect($selectQuery, $sortClauses);
@@ -114,11 +129,11 @@ class DoctrineDatabase extends Gateway
             );
 
         if ($sortClauses !== null) {
-            $this->sortClauseConverter->applyJoin($selectQuery, $sortClauses);
+            $this->sortClauseConverter->applyJoin($selectQuery, $sortClauses, $languageFilter);
         }
 
         $selectQuery->where(
-            $this->criteriaConverter->convertCriteria($selectQuery, $criterion),
+            $this->criteriaConverter->convertCriteria($selectQuery, $criterion, $languageFilter),
             $selectQuery->expr->eq(
                 'ezcontentobject.status',
                 //ContentInfo::STATUS_PUBLISHED
@@ -134,6 +149,23 @@ class DoctrineDatabase extends Gateway
                 $selectQuery->bindValue(0, null, PDO::PARAM_INT)
             )
         );
+
+        // If not main-languages query
+        if (!empty($languageFilter['languages'])) {
+            $selectQuery->where(
+                $selectQuery->expr->gt(
+                    $selectQuery->expr->bitAnd(
+                        $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
+                        $selectQuery->bindValue(
+                            $this->getLanguageMask($languageFilter),
+                            null,
+                            PDO::PARAM_INT
+                        )
+                    ),
+                    $selectQuery->bindValue(0, null, PDO::PARAM_INT)
+                )
+            );
+        }
 
         if ($sortClauses !== null) {
             $this->sortClauseConverter->applyOrderBy($selectQuery);
@@ -154,10 +186,11 @@ class DoctrineDatabase extends Gateway
      * Returns total results count for $criterion and $sortClauses.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $languageFilter
      *
      * @return array
      */
-    protected function getTotalCount(Criterion $criterion)
+    protected function getTotalCount(Criterion $criterion, array $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
         $query
@@ -175,7 +208,7 @@ class DoctrineDatabase extends Gateway
             );
 
         $query->where(
-            $this->criteriaConverter->convertCriteria($query, $criterion),
+            $this->criteriaConverter->convertCriteria($query, $criterion, $languageFilter),
             $query->expr->eq(
                 'ezcontentobject.status',
                 //ContentInfo::STATUS_PUBLISHED
@@ -192,11 +225,55 @@ class DoctrineDatabase extends Gateway
             )
         );
 
+        // If not main-languages query
+        if (!empty($languageFilter['languages'])) {
+            $query->where(
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
+                        $query->bindValue(
+                            $this->getLanguageMask($languageFilter),
+                            null,
+                            PDO::PARAM_INT
+                        )
+                    ),
+                    $query->bindValue(0, null, PDO::PARAM_INT)
+                )
+            );
+        }
+
         $statement = $query->prepare();
         $statement->execute();
 
-        $res = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return (int)$statement->fetchColumn();
+    }
 
-        return (int)$res[0]['count'];
+    /**
+     * Generates a language mask from the given $languageFilter.
+     *
+     * @param array $languageFilter
+     *
+     * @return int
+     */
+    protected function getLanguageMask(array $languageFilter)
+    {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
+        $mask = 0;
+        if ($languageFilter['useAlwaysAvailable']) {
+            $mask |= 1;
+        }
+
+        foreach ($languageFilter['languages'] as $languageCode) {
+            $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
+        }
+
+        return $mask;
     }
 }

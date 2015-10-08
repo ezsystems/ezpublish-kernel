@@ -10,6 +10,13 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use eZ\Publish\Core\MVC\Symfony\View\BlockView;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use PHPUnit_Framework_TestCase;
 
 abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
@@ -46,7 +53,7 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
     public function testMatchFailNoViewType()
     {
         $matcherFactory = new $this->matcherFactoryClass($this->getRepositoryMock(), array());
-        $this->assertNull($matcherFactory->match($this->getLocationMock(), 'full'));
+        $this->assertNull($matcherFactory->match($this->getContentView(), 'full'));
     }
 
     /**
@@ -72,31 +79,6 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
         $matcherFactory->match($this->getMatchableValueObject(), 'full');
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     *
-     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::getMatcher
-     */
-    public function testMatchInvalidValueObject()
-    {
-        $matcherFactory = new $this->matcherFactoryClass(
-            $this->getRepositoryMock(),
-            array(
-                'full' => array(
-                    'test' => array(
-                        'template' => 'foo.html.twig',
-                        'match' => array(
-                            $this->getMatcherClass() => 123,
-                        ),
-                    ),
-                ),
-            )
-        );
-        $matcherFactory->match($this->getMock('eZ\\Publish\\API\\Repository\\Values\\ValueObject'), 'full');
     }
 
     /**
@@ -126,7 +108,7 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $configHash = $matcherFactory->match($this->getMatchableValueObject(), 'full');
+        $configHash = $matcherFactory->match($this->getMatchableValueObject());
         $this->assertArrayHasKey('matcher', $configHash);
         $this->assertInstanceOf(
             constant("$this->matcherFactoryClass::MATCHER_RELATIVE_NAMESPACE") . '\\' . $this->getMatcherClass(),
@@ -193,39 +175,38 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    protected function getLocationMock(array $properties = array())
+    protected function getContentView(array $contentInfoProperties = [], array $locationProperties = [])
     {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Location')
-            ->setConstructorArgs(array($properties))
-            ->getMockForAbstractClass();
+        $view = new ContentView();
+        $view->setContent(
+            new Content(
+                [
+                    'versionInfo' => new VersionInfo(
+                        [
+                            'contentInfo' => new ContentInfo($contentInfoProperties),
+                        ]
+                    ),
+                ]
+            )
+        );
+        $view->setLocation(new Location($locationProperties));
+
+        return $view;
     }
 
     /**
-     * @param array $properties
+     * @param array $blockProperties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\BlockView
      */
-    protected function getContentInfoMock(array $properties = array())
+    protected function getBlockView(array $blockProperties = array())
     {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo')
-            ->setConstructorArgs(array($properties))
-            ->getMockForAbstractClass();
-    }
+        $view = new BlockView();
+        $view->setViewType('full');
+        $view->setBlock(new Block($blockProperties));
 
-    /**
-     * @param array $properties
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getBlockMock(array $properties = array())
-    {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block')
-            ->setConstructorArgs(array($properties))
-            ->getMockForAbstractClass();
+        return $view;
     }
 }

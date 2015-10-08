@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 
 /**
@@ -45,7 +45,7 @@ class ViewManager implements ViewManagerInterface, SiteAccessAware
     {
     }
 
-    public function renderContentView(ContentViewInterface $view, array $defaultParams = array())
+    public function renderContentView(View $view, array $defaultParams = array())
     {
     }
 }

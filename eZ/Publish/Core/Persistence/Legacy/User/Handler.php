@@ -346,7 +346,7 @@ class Handler implements BaseUserHandler
         $role = $this->loadRole($roleId, $status);
 
         foreach ($role->policies as $policy) {
-            $this->roleGateway->removePolicy($policy->id, $status);
+            $this->roleGateway->removePolicy($policy->id);
         }
 
         $this->roleGateway->deleteRole($role->id, $status);
@@ -355,36 +355,34 @@ class Handler implements BaseUserHandler
     /**
      * Publish the specified role draft.
      *
-     * @param mixed $roleId
+     * @param mixed $roleDraftId
      */
-    public function publishRoleDraft($roleId)
+    public function publishRoleDraft($roleDraftId)
     {
-        $roleDraft = $this->loadRole($roleId, Role::STATUS_DRAFT);
+        $roleDraft = $this->loadRole($roleDraftId, Role::STATUS_DRAFT);
 
         try {
-            $role = $this->loadRole($roleId);
+            $originalRoleId = $roleDraft->originalId;
+            $role = $this->loadRole($originalRoleId);
             $roleAssignments = $this->loadRoleAssignmentsByRoleId($role->id);
             $this->deleteRole($role->id);
 
             foreach ($roleAssignments as $roleAssignment) {
                 if (empty($roleAssignment->limitationIdentifier)) {
-                    $this->assignRole(
-                        $roleAssignment->contentId,
-                        $roleId
-                    );
+                    $this->assignRole($roleAssignment->contentId, $originalRoleId);
                 } else {
                     $this->assignRole(
                         $roleAssignment->contentId,
-                        $roleId,
+                        $originalRoleId,
                         [$roleAssignment->limitationIdentifier => $roleAssignment->values]
                     );
                 }
             }
+            $this->roleGateway->publishRoleDraft($roleDraft->id, $role->id);
         } catch (NotFound $e) {
-            // If no published role is found, no updates are necessary to it
+            // If no published role is found, only publishing is needed, without specifying original role ID as there is none.
+            $this->roleGateway->publishRoleDraft($roleDraft->id);
         }
-
-        $this->roleGateway->publishRoleDraft($roleDraft->id);
     }
 
     /**

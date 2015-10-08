@@ -124,10 +124,12 @@ abstract class Gateway
 
     /**
      * Publish the specified role draft.
+     * If the draft was created from an existing role, published version will take the original role ID.
      *
-     * @param mixed $roleId
+     * @param mixed $roleDraftId
+     * @param mixed|null $originalRoleId ID of role the draft was created from. Will be null if the role draft was completely new.
      */
-    abstract public function publishRoleDraft($roleId);
+    abstract public function publishRoleDraft($roleDraftId, $originalRoleId = null);
 
     /**
      * Adds a policy to a role.
@@ -149,9 +151,8 @@ abstract class Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function removePolicy($policyId, $status = Role::STATUS_DEFINED);
+    abstract public function removePolicy($policyId);
 
     /**
      * Removes a policy from a role.

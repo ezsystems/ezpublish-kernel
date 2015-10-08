@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class Depth extends MultipleValued
 {
@@ -44,5 +45,10 @@ class Depth extends MultipleValued
         );
 
         return isset($this->values[$location->depth]);
+    }
+
+    public function match(View $view)
+    {
+        // TODO: Implement match() method.
     }
 }

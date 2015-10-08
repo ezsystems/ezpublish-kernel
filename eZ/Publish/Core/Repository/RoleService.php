@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
@@ -398,21 +399,21 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the RoleDraft
+     * @param PolicyDraft $policyDraft the policy to remove from the RoleDraft
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated RoleDraft
+     * @return APIRoleDraft if the authenticated user is not allowed to remove a policy
      */
-    public function removePolicyByRoleDraft(APIRoleDraft $roleDraft, APIPolicy $policy)
+    public function removePolicyByRoleDraft(APIRoleDraft $roleDraft, PolicyDraft $policyDraft)
     {
         if ($this->repository->hasAccess('role', 'update') !== true) {
             throw new UnauthorizedException('role', 'update');
         }
 
-        if ($policy->roleId != $roleDraft->id) {
+        if ($policyDraft->roleId != $roleDraft->id) {
             throw new InvalidArgumentException('$policy', 'Policy does not belong to the given role');
         }
 
-        $this->internalDeletePolicy($policy);
+        $this->internalDeletePolicy($policyDraft);
 
         return $this->loadRoleDraft($roleDraft->id);
     }

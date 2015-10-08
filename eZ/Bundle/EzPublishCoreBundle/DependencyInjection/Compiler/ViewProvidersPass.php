@@ -51,9 +51,9 @@ class ViewProvidersPass implements CompilerPassInterface
             }
         }
 
-        if ($container->hasDefinition('ezpublish.view.type_provider_registry')) {
-            $container->getDefinition('ezpublish.view.type_provider_registry')->addMethodCall(
-                'addViewProviders',
+        if ($container->hasDefinition('ezpublish.view_provider.registry')) {
+            $container->getDefinition('ezpublish.view_provider.registry')->addMethodCall(
+                'setViewProviders',
                 [$viewProviders]
             );
         }
@@ -62,7 +62,7 @@ class ViewProvidersPass implements CompilerPassInterface
         if ($container->hasDefinition('ezpublish.view.custom_location_controller_checker')) {
             $container->getDefinition('ezpublish.view.custom_location_controller_checker')->addMethodCall(
                 'addViewProviders',
-                [$viewProviders['eZ\Publish\API\Repository\Values\Content\Location']]
+                [$viewProviders['eZ\Publish\Core\MVC\Symfony\View\ContentView']]
             );
         }
     }

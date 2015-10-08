@@ -23,4 +23,5 @@ class LocationViewPass extends ViewManagerPass
 {
     const VIEW_PROVIDER_IDENTIFIER = 'ezpublish.location_view_provider';
     const ADD_VIEW_PROVIDER_METHOD = 'addLocationViewProvider';
+    const VIEW_TYPE = 'eZ\Publish\Core\MVC\Symfony\View\ContentView';
 }

@@ -244,13 +244,15 @@ class ExceptionConversion extends Gateway
 
     /**
      * Publish the specified role draft.
+     * If the draft was created from an existing role, published version will take the original role ID.
      *
-     * @param mixed $roleId
+     * @param mixed $roleDraftId
+     * @param mixed|null $originalRoleId ID of role the draft was created from. Will be null if the role draft was completely new.
      */
-    public function publishRoleDraft($roleId)
+    public function publishRoleDraft($roleDraftId, $originalRoleId = null)
     {
         try {
-            return $this->innerGateway->publishRoleDraft($roleId);
+            return $this->innerGateway->publishRoleDraft($roleDraftId, $originalRoleId);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -296,12 +298,11 @@ class ExceptionConversion extends Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function removePolicy($policyId, $status = Role::STATUS_DEFINED)
+    public function removePolicy($policyId)
     {
         try {
-            return $this->innerGateway->removePolicy($policyId, $status);
+            return $this->innerGateway->removePolicy($policyId);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
