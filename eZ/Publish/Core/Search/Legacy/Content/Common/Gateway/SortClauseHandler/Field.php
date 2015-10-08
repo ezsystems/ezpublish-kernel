@@ -132,9 +132,14 @@ class Field extends SortClauseHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     * @param array $languageSettings
      */
-    public function applyJoin(SelectQuery $query, SortClause $sortClause, $number)
-    {
+    public function applyJoin(
+        SelectQuery $query,
+        SortClause $sortClause,
+        $number,
+        array $languageSettings
+    ) {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
@@ -149,28 +154,6 @@ class Field extends SortClauseHandler
 
         $fieldDefinitionId = $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier]['field_definition_id'];
         $table = $this->getSortTableName($number);
-
-        if ($fieldTarget->languageCode === null) {
-            $languageExpression = $query->expr->gt(
-                $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
-                    $this->dbHandler->quoteColumn('initial_language_id', 'ezcontentobject')
-                ),
-                0
-            );
-        } else {
-            $languageExpression = $query->expr->gt(
-                $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
-                    $query->bindValue(
-                        $this->languageHandler->loadByLanguageCode($fieldTarget->languageCode)->id,
-                        null,
-                        \PDO::PARAM_INT
-                    )
-                ),
-                0
-            );
-        }
 
         $query
             ->leftJoin(
@@ -191,8 +174,95 @@ class Field extends SortClauseHandler
                         $this->dbHandler->quoteColumn('version', $table),
                         $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
                     ),
-                    $languageExpression
+                    $this->getFieldCondition($query, $languageSettings, $table)
                 )
             );
+    }
+
+    /**
+     * Returns a field language join condition for the given $languageSettings.
+     *
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param array $languageSettings
+     * @param string $fieldTableName
+     *
+     * @return string
+     */
+    protected function getFieldCondition(SelectQuery $query, array $languageSettings, $fieldTableName)
+    {
+        // 1. Use main language(s) by default
+        if (empty($languageSettings['languages'])) {
+            return $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn('initial_language_id', 'ezcontentobject'),
+                    $this->dbHandler->quoteColumn('language_id', $fieldTableName)
+                ),
+                $query->bindValue(0, null, PDO::PARAM_INT)
+            );
+        }
+
+        // 2. Otherwise use prioritized languages
+        $leftSide = $query->expr->bitAnd(
+            $query->expr->sub(
+                $this->dbHandler->quoteColumn('language_mask', 'ezcontentobject'),
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn('language_mask', 'ezcontentobject'),
+                    $this->dbHandler->quoteColumn('language_id', $fieldTableName)
+                )
+            ),
+            $query->bindValue(1, null, PDO::PARAM_INT)
+        );
+        $rightSide = $query->expr->bitAnd(
+            $this->dbHandler->quoteColumn('language_id', $fieldTableName),
+            $query->bindValue(1, null, PDO::PARAM_INT)
+        );
+
+        for ($index = count($languageSettings['languages']) - 1, $multiplier = 2; $index >= 0; $index--, $multiplier *= 2) {
+            $languageId = $this->languageHandler
+                ->loadByLanguageCode($languageSettings['languages'][$index])->id;
+
+            $addToLeftSide = $query->expr->bitAnd(
+                $query->expr->sub(
+                    $this->dbHandler->quoteColumn('language_mask', 'ezcontentobject'),
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn('language_mask', 'ezcontentobject'),
+                        $this->dbHandler->quoteColumn('language_id', $fieldTableName)
+                    )
+                ),
+                $query->bindValue($languageId, null, PDO::PARAM_INT)
+            );
+            $addToRightSide = $query->expr->bitAnd(
+                $this->dbHandler->quoteColumn('language_id', $fieldTableName),
+                $query->bindValue($languageId, null, PDO::PARAM_INT)
+            );
+
+            if ($multiplier > $languageId) {
+                $factor = $multiplier / $languageId;
+                for ($shift = 0; $factor > 1; $factor = $factor / 2, $shift++);
+                $factorTerm = ' << ' . $shift;
+                $addToLeftSide .= $factorTerm;
+                $addToRightSide .= $factorTerm;
+            } elseif ($multiplier < $languageId) {
+                $factor = $languageId / $multiplier;
+                for ($shift = 0; $factor > 1; $factor = $factor / 2, $shift++);
+                $factorTerm = ' >> ' . $shift;
+                $addToLeftSide .= $factorTerm;
+                $addToRightSide .= $factorTerm;
+            }
+
+            $leftSide = $query->expr->add($leftSide, "($addToLeftSide)");
+            $rightSide = $query->expr->add($rightSide, "($addToRightSide)");
+        }
+
+        return $query->expr->lAnd(
+            $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn('language_mask', 'ezcontentobject'),
+                    $this->dbHandler->quoteColumn('language_id', $fieldTableName)
+                ),
+                $query->bindValue(0, null, PDO::PARAM_INT)
+            ),
+            $query->expr->lt($leftSide, $rightSide)
+        );
     }
 }

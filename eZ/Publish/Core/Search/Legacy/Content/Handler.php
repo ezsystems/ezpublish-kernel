@@ -24,6 +24,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -77,23 +78,33 @@ class Handler implements SearchHandlerInterface
     protected $locationMapper;
 
     /**
+     * Language handler.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Gateway $gateway
      * @param \eZ\Publish\Core\Search\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
     public function __construct(
         Gateway $gateway,
         LocationGateway $locationGateway,
         ContentMapper $contentMapper,
-        LocationMapper $locationMapper
+        LocationMapper $locationMapper,
+        LanguageHandler $languageHandler
     ) {
         $this->gateway = $gateway;
         $this->locationGateway = $locationGateway;
         $this->contentMapper = $contentMapper;
         $this->locationMapper = $locationMapper;
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -111,6 +122,14 @@ class Handler implements SearchHandlerInterface
      */
     public function findContent(Query $query, array $languageFilter = array())
     {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
         $start = microtime(true);
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
@@ -135,15 +154,40 @@ class Handler implements SearchHandlerInterface
         $result = new SearchResult();
         $result->time = microtime(true) - $start;
         $result->totalCount = $data['count'];
+        $contentInfoList = $this->contentMapper->extractContentInfoFromRows(
+            $data['rows'],
+            '',
+            'main_tree_'
+        );
 
-        foreach ($this->contentMapper->extractContentInfoFromRows($data['rows'], '', 'main_tree_') as $contentInfo) {
+        foreach ($contentInfoList as $index => $contentInfo) {
             $searchHit = new SearchHit();
             $searchHit->valueObject = $contentInfo;
+            $searchHit->matchedTranslation = $this->extractMatchedLanguage(
+                $data['rows'][$index]['language_mask'],
+                $data['rows'][$index]['initial_language_id'],
+                $languageFilter
+            );
 
             $result->searchHits[] = $searchHit;
         }
 
         return $result;
+    }
+
+    protected function extractMatchedLanguage($languageMask, $mainLanguageId, $languageSettings)
+    {
+        foreach ($languageSettings['languages'] as $languageCode) {
+            if ($languageMask & $this->languageHandler->loadByLanguageCode($languageCode)->id) {
+                return $languageCode;
+            }
+        }
+
+        if ($languageMask & 1 || empty($languageSettings['languages'])) {
+            return $this->languageHandler->load($mainLanguageId)->languageCode;
+        }
+
+        return null;
     }
 
     /**
@@ -163,6 +207,14 @@ class Handler implements SearchHandlerInterface
      */
     public function findSingle(Criterion $filter, array $languageFilter = array())
     {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
         $searchQuery = new Query();
         $searchQuery->filter = $filter;
         $searchQuery->query = new Criterion\MatchAll();
@@ -188,6 +240,14 @@ class Handler implements SearchHandlerInterface
      */
     public function findLocations(LocationQuery $query, array $languageFilter = array())
     {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
         $start = microtime(true);
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
@@ -210,9 +270,18 @@ class Handler implements SearchHandlerInterface
         $result = new SearchResult();
         $result->time = microtime(true) - $start;
         $result->totalCount = $data['count'];
+        $locationList = $this->locationMapper->createLocationsFromRows($data['rows']);
 
-        foreach ($this->locationMapper->createLocationsFromRows($data['rows']) as $location) {
-            $result->searchHits[] = new SearchHit(array('valueObject' => $location));
+        foreach ($locationList as $index => $location) {
+            $searchHit = new SearchHit();
+            $searchHit->valueObject = $location;
+            $searchHit->matchedTranslation = $this->extractMatchedLanguage(
+                $data['rows'][$index]['language_mask'],
+                $data['rows'][$index]['initial_language_id'],
+                $languageFilter
+            );
+
+            $result->searchHits[] = $searchHit;
         }
 
         return $result;

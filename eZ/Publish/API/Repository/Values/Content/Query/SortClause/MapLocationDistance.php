@@ -35,15 +35,13 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
      * @param float $latitude Latitude of the location that distance is calculated from
      * @param float $longitude Longitude of the location that distance is calculated from
      * @param string $sortDirection
-     * @param null|string $languageCode
      */
     public function __construct(
         $typeIdentifier,
         $fieldIdentifier,
         $latitude,
         $longitude,
-        $sortDirection = Query::SORT_ASC,
-        $languageCode = null
+        $sortDirection = Query::SORT_ASC
     ) {
         parent::__construct(
             'maplocation_distance',
@@ -52,8 +50,7 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
                 $latitude,
                 $longitude,
                 $typeIdentifier,
-                $fieldIdentifier,
-                $languageCode
+                $fieldIdentifier
             )
         );
     }

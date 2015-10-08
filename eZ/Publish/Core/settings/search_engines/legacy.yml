@@ -38,6 +38,7 @@ services:
             - @ezpublish.api.search_engine.legacy.dbhandler
             - @ezpublish.search.legacy.gateway.criteria_converter.content
             - @ezpublish.search.legacy.gateway.sort_clause_converter.content
+            - @ezpublish.spi.persistence.language_handler
 
     ezpublish.search.legacy.gateway.content.exception_conversion:
         class: %ezpublish.search.legacy.gateway.content.exception_conversion.class%
@@ -54,6 +55,7 @@ services:
             - @ezpublish.api.search_engine.legacy.dbhandler
             - @ezpublish.search.legacy.gateway.criteria_converter.location
             - @ezpublish.search.legacy.gateway.sort_clause_converter.location
+            - @ezpublish.spi.persistence.language_handler
 
     ezpublish.search.legacy.gateway.location.exception_conversion:
         class: %ezpublish.search.legacy.gateway.location.exception_conversion.class%
@@ -71,6 +73,7 @@ services:
             - @ezpublish.search.legacy.gateway.location
             - @ezpublish.persistence.legacy.content.mapper
             - @ezpublish.persistence.legacy.location.mapper
+            - @ezpublish.spi.persistence.language_handler
         tags:
             - {name: ezpublish.searchEngine, alias: legacy}
         lazy: true

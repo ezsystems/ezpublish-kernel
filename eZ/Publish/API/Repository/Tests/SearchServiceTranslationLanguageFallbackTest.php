@@ -11,6 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -38,10 +39,6 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         if ($setupFactory instanceof LegacyElasticsearch) {
             $this->markTestIncomplete('Not implemented for Elasticsearch Search Engine');
-        }
-
-        if (ltrim(get_class($setupFactory), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped('Not implemented for Legacy Search Engine');
         }
 
         parent::setUp();
@@ -1412,6 +1409,19 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         throw new RuntimeException("Backend cores setup '{$coresSetup}' is not handled");
     }
 
+    protected function getIndexName($indexMap)
+    {
+        $setupFactory = $this->getSetupFactory();
+
+        if ($setupFactory instanceof LegacySolr) {
+            $setupType = $this->getSetupType();
+
+            return $indexMap[$setupType];
+        }
+
+        return null;
+    }
+
     /**
      * @dataProvider providerForTestFind
      * @depends testCreateTestContent
@@ -1427,7 +1437,6 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
     ) {
         /** @var \eZ\Publish\Api\Repository\Repository $repository */
         list($repository, $data) = $context;
-        $setupType = $this->getSetupType();
 
         $queryProperties = array(
             'filter' => new Criterion\ContentTypeIdentifier('test-type'),
@@ -1453,7 +1462,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $content->id
             );
             $this->assertEquals(
-                $indexMap[$setupType],
+                $this->getIndexName($indexMap),
                 $searchResult->searchHits[$index]->index
             );
             $this->assertEquals(
@@ -1478,7 +1487,6 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
     ) {
         /** @var \eZ\Publish\Api\Repository\Repository $repository */
         list($repository, $data) = $context;
-        $setupType = $this->getSetupType();
 
         $queryProperties = array(
             'filter' => new Criterion\LogicalAnd(
@@ -1509,7 +1517,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $location->id
             );
             $this->assertEquals(
-                $indexMap[$setupType],
+                $this->getIndexName($indexMap),
                 $searchResult->searchHits[$index]->index
             );
             $this->assertEquals(
@@ -1534,7 +1542,6 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
     ) {
         /** @var \eZ\Publish\Api\Repository\Repository $repository */
         list($repository, $data) = $context;
-        $setupType = $this->getSetupType();
 
         $queryProperties = array(
             'filter' => new Criterion\ContentTypeIdentifier('test-type'),
@@ -1561,7 +1568,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $location->id
             );
             $this->assertEquals(
-                $indexMap[$setupType],
+                $this->getIndexName($indexMap),
                 $searchResult->searchHits[$index]->index
             );
             $this->assertEquals(
@@ -1581,7 +1588,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $location->id
             );
             $this->assertEquals(
-                $indexMap[$setupType],
+                $this->getIndexName($indexMap),
                 $searchResult->searchHits[$realIndex]->index
             );
             $this->assertEquals(

@@ -65,9 +65,14 @@ class SectionName extends SortClauseHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     * @param array $languageSettings
      */
-    public function applyJoin(SelectQuery $query, SortClause $sortClause, $number)
-    {
+    public function applyJoin(
+        SelectQuery $query,
+        SortClause $sortClause,
+        $number,
+        array $languageSettings
+    ) {
         $table = $this->getSortTableName($number);
         $query
             ->leftJoin(
