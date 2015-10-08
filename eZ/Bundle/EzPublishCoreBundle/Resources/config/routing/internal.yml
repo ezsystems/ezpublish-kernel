@@ -7,8 +7,11 @@ _ezpublishLocation:
         layout: true
 
 _ez_content_view:
-    path: /content/view/{contentId}/{language}
-    defaults: { _controller: ezpublish.controller.content:viewContentAction }
+    path: /view/content/{contentId}/{language}/{viewType}/{layout}
+    defaults:
+        _controller: ez_content:viewContent
+        viewType: full
+        layout: true
 
 _ezpublishPreviewContent:
     path: /content/versionview/{contentId}/{versionNo}/{language}/site_access/{siteAccessName}

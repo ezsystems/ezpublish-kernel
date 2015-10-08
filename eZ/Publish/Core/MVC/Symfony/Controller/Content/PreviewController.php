@@ -106,7 +106,7 @@ class PreviewController
 
         try {
             $response = $this->kernel->handle(
-                $this->getForwardRequest($location, $content, $siteAccess, $request),
+                $this->getForwardRequest($location, $content, $siteAccess, $request, $language),
                 HttpKernelInterface::SUB_REQUEST,
                 false
             );
@@ -139,10 +139,11 @@ EOF;
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $previewSiteAccess
      * @param Request $request
+     * @param string $language
      *
      * @return \Symfony\Component\HttpFoundation\Request
      */
-    protected function getForwardRequest(Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request)
+    protected function getForwardRequest(Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request, $language)
     {
         $forwardRequestParameters = array(
             '_controller' => 'ez_content:viewContent',
@@ -151,6 +152,7 @@ EOF;
             '_route_params' => array(
                 'contentId' => $content->id,
                 'locationId' => $location->id,
+                'language' => $language,
             ),
             'location' => $location,
             'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
