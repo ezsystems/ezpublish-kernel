@@ -48,6 +48,6 @@ class Content extends MultipleValued
             return false;
         }
 
-        return isset($this->values[$view->getContent()->id]);
+        return isset($this->values[$view->getContent()->contentInfo->id]);
     }
 }
