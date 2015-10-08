@@ -7,10 +7,11 @@ _ezpublishLocation:
         layout: true
 
 _ez_content_view:
-    path: /view/content/{contentId}/{language}/{viewType}/{layout}
+    path: /view/content/{contentId}/{language}/{locationId}/{viewType}/{layout}
     defaults:
         _controller: ez_content:viewContent
         viewType: full
+        locationId: null
         layout: true
 
 _ezpublishPreviewContent:
