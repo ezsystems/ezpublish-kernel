@@ -16,6 +16,8 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
  * Interface for content view providers.
  *
  * Content view providers select a view for a given content, depending on its own internal rules.
+ *
+ * @deprecated since 6.0.0
  */
 interface Content
 {
