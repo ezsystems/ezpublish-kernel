@@ -130,6 +130,7 @@ services:
             - @controller_resolver
             - @ezpublish.view.configurator
             - @ezpublish.view_builder.registry
+            - @event_dispatcher
             - @logger
         tags:
             - { name: kernel.event_subscriber }
