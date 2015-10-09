@@ -11,8 +11,10 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry;
-use eZ\Publish\Core\MVC\Symfony\View\Configurator;
+use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewBuilderParametersEvent;
+use eZ\Publish\Core\MVC\Symfony\View\Events;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
@@ -33,16 +35,23 @@ class ViewControllerListener implements EventSubscriberInterface
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry */
     private $viewBuilderRegistry;
 
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher
+     */
+    private $eventDispatcher;
+
     public function __construct(
         ControllerResolverInterface $controllerResolver,
         Configurator $viewConfigurator,
         ViewBuilderRegistry $viewBuilderRegistry,
+        EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger
     ) {
         $this->controllerResolver = $controllerResolver;
         $this->viewConfigurator = $viewConfigurator;
-        $this->logger = $logger;
         $this->viewBuilderRegistry = $viewBuilderRegistry;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->logger = $logger;
     }
 
     public static function getSubscribedEvents()
@@ -65,7 +74,9 @@ class ViewControllerListener implements EventSubscriberInterface
             return;
         }
 
-        $view = $viewBuilder->buildView($request->attributes->all());
+        $parameterEvent = new FilterViewBuilderParametersEvent(clone $request);
+        $this->eventDispatcher->dispatch(Events::FILTER_BUILDER_PARAMETERS, $parameterEvent);
+        $view = $viewBuilder->buildView($parameterEvent->getParameters()->all());
 
         $this->viewConfigurator->configure($view);
         $request->attributes->set('view', $view);

@@ -54,15 +54,23 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder|\PHPUnit_Framework_MockObject_MockObject */
     private $viewBuilderMock;
 
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $eventDispatcher;
+
     protected function setUp()
     {
         parent::setUp();
         $this->controllerResolver = $this->getMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
         $this->viewConfigurator = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Configurator');
         $this->viewBuilderRegistry = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry');
+        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
         $this->controllerListener = new ViewControllerListener(
-            $this->controllerResolver, $this->viewConfigurator, $this->viewBuilderRegistry, $this->logger
+            $this->controllerResolver,
+            $this->viewConfigurator,
+            $this->viewBuilderRegistry,
+            $this->eventDispatcher,
+            $this->logger
         );
 
         $this->request = new Request();
