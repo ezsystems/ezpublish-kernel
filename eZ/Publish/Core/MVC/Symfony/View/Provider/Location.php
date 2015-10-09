@@ -16,6 +16,8 @@ use eZ\Publish\API\Repository\Values\Content\Location as APIContentLocation;
  * Interface for location view providers.
  *
  * Location view providers select a view for a given location, depending on its own internal rules.
+ *
+ * @deprecated since 6.0.0
  */
 interface Location
 {
