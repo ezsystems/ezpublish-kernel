@@ -17,6 +17,8 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block as PageBlock;
  *
  * Block view providers select a view for a given page block, depending on its own internal rules.
  * Such provider is meant to work along with Page field type.
+ *
+ * @deprecated since 6.0.0
  */
 interface Block
 {
