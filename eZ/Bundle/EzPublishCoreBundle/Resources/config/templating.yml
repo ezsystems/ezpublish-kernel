@@ -183,3 +183,8 @@ services:
     ezpublish.view_builder.block:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\BlockViewBuilder
         arguments: [@ezpublish.fieldType.ezpage.pageService]
+
+    ezpublish.view.builder_parameter_collector.request_attributes:
+        class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParameterCollector\RequestAttributes
+        tags:
+            - {name: kernel.event_subscriber}
