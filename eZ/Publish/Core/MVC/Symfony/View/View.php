@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
@@ -116,4 +117,18 @@ interface View
      * @return ControllerReference
      */
     public function getControllerReference();
+
+    /**
+     * Sets a pre-configured Response that will be used to render the View.
+     *
+     * @param Response $response
+     */
+    public function setResponse(Response $response);
+
+    /**
+     * Returns the pre-configured Response.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     */
+    public function getResponse();
 }
