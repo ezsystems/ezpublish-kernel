@@ -5,6 +5,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
@@ -58,6 +59,9 @@ abstract class BaseView implements View
 
     /** @var ControllerReference */
     private $controllerReference;
+
+    /** @var \Symfony\Component\HttpFoundation\Response */
+    private $response;
 
     /**
      * @param string|\Closure $templateIdentifier Valid path to the template. Can also be a closure.
@@ -210,5 +214,15 @@ abstract class BaseView implements View
     protected function getInternalParameters()
     {
         return [];
+    }
+
+    public function setResponse(Response $response)
+    {
+        $this->response = $response;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
