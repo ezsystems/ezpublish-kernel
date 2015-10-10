@@ -20,6 +20,7 @@ use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -232,38 +233,9 @@ class ViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContent($contentId, $viewType, $layout = false, array $params = array())
+    public function viewContent(View $view)
     {
-        if ($viewType === 'embed') {
-            return $this->embedContent($contentId, $viewType, $layout, $params);
-        }
-
-        $this->performAccessChecks();
-        $response = $this->buildResponse();
-
-        try {
-            $content = $this->getRepository()->getContentService()->loadContent($contentId);
-
-            if ($response->isNotModified($this->getRequest())) {
-                return $response;
-            }
-
-            if (!isset($params['location']) && !isset($params['locationId'])) {
-                $params['location'] = $this->getRepository()->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
-            }
-            $response->headers->set('X-Location-Id', $content->contentInfo->mainLocationId);
-            $response->setContent(
-                $this->renderContent($content, $viewType, $layout, $params)
-            );
-
-            return $response;
-        } catch (UnauthorizedException $e) {
-            throw new AccessDeniedException();
-        } catch (NotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (Exception $e) {
-            return $this->handleViewException($response, $params, $e, $viewType, $contentId);
-        }
+        return $view;
     }
 
     /**
