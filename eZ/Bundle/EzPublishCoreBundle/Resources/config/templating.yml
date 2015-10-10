@@ -194,7 +194,7 @@ services:
 
     ezpublish.view_builder.content:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder
-        arguments: [@ezpublish.api.repository, @security.authorization_checker]
+        arguments: [@ezpublish.api.repository, @security.authorization_checker, @ezpublish.view.view_parameters.injector.dispatcher]
 
     ezpublish.view_builder.block:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\BlockViewBuilder
@@ -212,5 +212,30 @@ services:
     ezpublish.view.renderer_listener:
         class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewRendererListener
         arguments: [@ezpublish.view.template_renderer]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.view.view_parameters.injector.dispatcher:
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EventDispatcherInjector
+        arguments: [@event_dispatcher]
+
+    ezpublish.view.view_parameters.injector.custom_parameters:
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\CustomParameters
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.view.view_parameters.injector.no_layout:
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\NoLayout
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.view.view_parameters.injector.value_objects_ids:
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ValueObjectsIds
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.view.view_parameters.injector.viewbase_layout:
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ViewbaseLayout
+        arguments: [%ezpublish.content_view.viewbase_layout%]
         tags:
             - { name: kernel.event_subscriber }

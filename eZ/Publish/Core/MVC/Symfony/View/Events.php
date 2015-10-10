@@ -17,4 +17,13 @@ class Events
      * attributes based on the request headers.
      */
     const FILTER_BUILDER_PARAMETERS = 'view.builder_parameter_collection';
+
+    /**
+     * Dispatched before ViewParameters are injected into a View to collect the view parameters.
+     *
+     * Receives a ViewParameterFilterEvent, that gives access to a copy of the View as well as the builder input parameters.
+     * Listeners can modify the parameters that will be injected as view parameters, and made available in controller
+     * and templates.
+     */
+    const FILTER_VIEW_PARAMETERS = 'view.parameters_injection';
 }
