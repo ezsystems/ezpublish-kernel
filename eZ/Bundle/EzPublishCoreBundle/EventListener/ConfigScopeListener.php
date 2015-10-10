@@ -29,6 +29,11 @@ class ConfigScopeListener implements EventSubscriberInterface
      */
     private $viewManager;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider|\eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware
+     */
+    private $viewProviders;
+
     public function __construct(
         VersatileScopeInterface $configResolver,
         ViewManagerInterface $viewManager
@@ -52,5 +57,21 @@ class ConfigScopeListener implements EventSubscriberInterface
         if ($this->viewManager instanceof SiteAccessAware) {
             $this->viewManager->setSiteAccess($siteAccess);
         }
+
+        foreach ($this->viewProviders as $viewProvider) {
+            if ($viewProvider instanceof SiteAccessAware) {
+                $viewProvider->setSiteAccess($siteAccess);
+            }
+        }
+    }
+
+    /**
+     * Sets the complete list of view providers.
+     *
+     * @param array $viewProviders
+     */
+    public function setViewProviders(array $viewProviders)
+    {
+        $this->viewProviders = $viewProviders;
     }
 }
