@@ -4,6 +4,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,7 +26,9 @@ class ValueObjectsIds implements EventSubscriberInterface
         $parameterBag = $event->getParameterBag();
 
         if ($view instanceof View\LocationValueView) {
-            $parameterBag->set('locationId', $view->getLocation()->id);
+            if (($location = $view->getLocation()) instanceof Location) {
+                $parameterBag->set('locationId', $view->getLocation()->id);
+            }
         }
         if ($view instanceof View\ContentValueView) {
             $parameterBag->set('contentId', $view->getContent()->id);
