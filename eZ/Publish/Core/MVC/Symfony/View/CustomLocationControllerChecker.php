@@ -4,6 +4,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
@@ -11,7 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  */
 class CustomLocationControllerChecker
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[] */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[] */
     private $viewProviders;
 
     /**
@@ -19,17 +20,22 @@ class CustomLocationControllerChecker
      *
      * @since 5.4.5
      *
+     * @param $content Content
      * @param $location Location
+     * @param $viewMode string
      *
      * @return bool
      */
-    public function usesCustomController(Location $location, $viewMode = 'full')
+    public function usesCustomController(Content $content, Location $location, $viewMode = 'full')
     {
+        $contentView = new ContentView(null, [], $viewMode);
+        $contentView->setContent($content);
+        $contentView->setLocation($location);
+
         foreach ($this->viewProviders as $viewProvider) {
-            $view = $viewProvider->getView($location, $viewMode);
-            if ($view instanceof ContentViewInterface) {
-                $configHash = $view->getConfigHash();
-                if (isset($configHash['controller'])) {
+            $view = $viewProvider->getView($contentView);
+            if ($view instanceof View) {
+                if ($view->getControllerReference() !== null) {
                     return true;
                 }
             }
@@ -39,7 +45,7 @@ class CustomLocationControllerChecker
     }
 
     /**
-     * @param $viewProviders \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
+     * @param $viewProviders \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     public function addViewProviders(array $viewProviders)
     {
