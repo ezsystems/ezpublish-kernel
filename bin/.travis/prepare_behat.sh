@@ -14,7 +14,7 @@ cd ezplatform
 
 composer require --no-update \
   "ezsystems/demobundle:dev-ezp24869-viewController_refactoring as 6.0.x-dev" \
-  "ezsystems/commentsbundle:dev-ezp24869-viewController_refactoring as 6.0.x-dev"
+  "ezsystems/comments-bundle:dev-ezp24869-viewController_refactoring as 6.0.x-dev"
 
 # Install everything needed for behat testing, using our local branch of this repo
 ./bin/.travis/setup_from_external_repo.sh $BRANCH_BUILD_DIR "ezsystems/ezpublish-kernel:dev-tmp_travis_branch as 6.0.x-dev"
