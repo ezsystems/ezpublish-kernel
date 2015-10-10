@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -12,6 +11,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -26,10 +26,17 @@ class ContentViewBuilder implements ViewBuilder
     /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    public function __construct(Repository $repository, AuthorizationCheckerInterface $authorizationChecker)
-    {
+    /** @var ParametersInjector */
+    private $viewParametersInjector;
+
+    public function __construct(
+        Repository $repository,
+        AuthorizationCheckerInterface $authorizationChecker,
+        ParametersInjector $viewParametersInjector
+    ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
+        $this->viewParametersInjector = $viewParametersInjector;
     }
 
     public function matches($argument)
@@ -42,50 +49,37 @@ class ContentViewBuilder implements ViewBuilder
      */
     public function buildView(array $parameters)
     {
-        $view = new ContentView();
-        if (isset($parameters['viewType'])) {
-            $view->setViewType($parameters['viewType']);
-        }
+        $view = new ContentView(null, [], $parameters['viewType']);
 
         if (isset($parameters['locationId'])) {
-            $parameters['location'] = $this->loadLocation($parameters['locationId']);
+            $location = $this->loadLocation($parameters['locationId']);
+        } elseif (isset($parameters['location'])) {
+            $location = $parameters['location'];
         }
 
-        if (isset($parameters['contentId']) || isset($parameters['location'])) {
-            $location = isset($parameters['location']) ? $parameters['location'] : null;
-
+        if (isset($parameters['content'])) {
+            $content = $parameters['content'];
+        } else {
             if (isset($parameters['contentId'])) {
                 $contentId = $parameters['contentId'];
-            } elseif (isset($parameters['location'])) {
-                $contentId = $parameters['location']->contentInfo->id;
+            } elseif (isset($location)) {
+                $contentId = $location->contentId;
             } else {
-                throw new InvalidArgumentException('view', 'Missing one of locationId or contentId');
+                throw new InvalidArgumentException('Content', 'No content could not be loaded from parameters');
             }
-
-            $parameters['content'] = $this->loadContent($view->getViewType(), $contentId, $location);
+            $content = $this->loadContent(
+                $view->getViewType(),
+                $contentId,
+                isset($location) ? $location : null
+            );
         }
 
-        if (isset($parameters['content']) && $parameters['content'] instanceof Content) {
-            $view->setContent($parameters['content']);
-        } else {
-            throw new InvalidArgumentException('Content', 'Content could not be loaded from parameters');
+        $view->setContent($content);
+        if (isset($location)) {
+            $view->setLocation($location);
         }
 
-        if (isset($parameters['location']) && $parameters['location'] instanceof Location) {
-            $view->setLocation($parameters['location']);
-        }
-
-        $view->setContent($parameters['content']);
-        $viewParameters = [
-            'contentId' => $parameters['content']->id,
-            'noLayout' => isset($parameters['layout']) ? !(bool) $parameters['layout'] : false,
-        ];
-
-        if (isset($parameters['location'])) {
-            $view->setLocation($parameters['location']);
-            $viewParameters['locationId'] = $parameters['location']->id;
-        }
-        $view->addParameters($viewParameters);
+        $this->viewParametersInjector->injectViewParameters($view, $parameters);
 
         // viewLocation/embedLocation without a custom controller are mapped to their viewContent equivalent
         if ($parameters['_controller'] === 'ez_content:viewLocation') {

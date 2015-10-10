@@ -25,6 +25,12 @@ class RequestAttributes implements EventSubscriberInterface
      */
     public function addRequestAttributes(ViewBuilderParameterCollectionEvent $e)
     {
-        $e->getParameters()->add($e->getRequest()->attributes->all());
+        $parameterBag = $e->getParameters();
+        $parameterBag->add($e->getRequest()->attributes->all());
+
+        // maybe this should be in its own listener ? The ViewBuilder needs it.
+        if (!$parameterBag->has('viewType')) {
+            $parameterBag->add(['viewType' => null]);
+        }
     }
 }
