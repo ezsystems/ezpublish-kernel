@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Renderer;
 use eZ\Publish\Core\MVC\Symfony\View\Renderer;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\Templating\EngineInterface as TemplateEngine;
+use Closure;
 
 class TemplateRenderer implements Renderer
 {
@@ -22,12 +23,17 @@ class TemplateRenderer implements Renderer
     }
 
     /**
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface $view
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
      *
      * @return string
      */
     public function render(View $view)
     {
+        $templateIdentifier = $view->getTemplateIdentifier();
+        if ($templateIdentifier instanceof Closure) {
+            return $templateIdentifier($view->getParameters());
+        }
+
         return $this->templateEngine->render(
             $view->getTemplateIdentifier(),
             $view->getParameters()
