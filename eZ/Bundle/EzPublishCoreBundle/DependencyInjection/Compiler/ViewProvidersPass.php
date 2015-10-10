@@ -58,6 +58,20 @@ class ViewProvidersPass implements CompilerPassInterface
             );
         }
 
+        $flattenedViewProviders = [];
+        foreach ($viewProviders as $type => $typeViewProviders) {
+            foreach ($typeViewProviders as $typeViewProvider) {
+                $flattenedViewProviders[] = $typeViewProvider;
+            }
+        }
+
+        if ($container->hasDefinition('ezpublish.config_scope_listener')) {
+            $container->getDefinition('ezpublish.config_scope_listener')->addMethodCall(
+                'setViewProviders',
+                [$flattenedViewProviders]
+            );
+        }
+
         // 5.4.5 BC service after location view deprecation
         if ($container->hasDefinition('ezpublish.view.custom_location_controller_checker')) {
             $container->getDefinition('ezpublish.view.custom_location_controller_checker')->addMethodCall(
