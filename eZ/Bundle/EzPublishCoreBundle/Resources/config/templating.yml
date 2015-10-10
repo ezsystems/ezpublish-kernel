@@ -191,7 +191,7 @@ services:
 
     ezpublish.view.template_renderer:
         class: eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
-        arguments: [@templating]
+        arguments: [@templating, @event_dispatcher]
 
     ezpublish.view.renderer_listener:
         class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewRendererListener

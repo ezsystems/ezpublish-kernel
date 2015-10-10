@@ -7,6 +7,9 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Renderer;
 
 use eZ\Publish\Core\MVC\Symfony\View\Renderer;
 use eZ\Publish\Core\MVC\Symfony\View\View;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use Symfony\Component\Templating\EngineInterface as TemplateEngine;
 use Closure;
 
@@ -17,9 +20,15 @@ class TemplateRenderer implements Renderer
      */
     protected $templateEngine;
 
-    public function __construct(TemplateEngine $templateEngine)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(TemplateEngine $templateEngine, EventDispatcherInterface $eventDispatcher)
     {
         $this->templateEngine = $templateEngine;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -29,6 +38,11 @@ class TemplateRenderer implements Renderer
      */
     public function render(View $view)
     {
+        $this->eventDispatcher->dispatch(
+            MVCEvents::PRE_CONTENT_VIEW,
+            new PreContentViewEvent($view)
+        );
+
         $templateIdentifier = $view->getTemplateIdentifier();
         if ($templateIdentifier instanceof Closure) {
             return $templateIdentifier($view->getParameters());
