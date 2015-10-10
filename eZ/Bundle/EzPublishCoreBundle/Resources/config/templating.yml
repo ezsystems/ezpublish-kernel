@@ -28,6 +28,7 @@ parameters:
     assetic.asset_factory.class: eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory
 
     ezpublish.view.cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
+    ezpublish.view.block_cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\BlockCacheResponseListener
     ezpublish.view.view_parameters.injector.viewbase_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ViewbaseLayout
     ezpublish.view.view_parameters.injector.value_objects_ids.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ValueObjectsIds
     ezpublish.view.view_parameters.injector.no_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\NoLayout
@@ -272,5 +273,12 @@ services:
             - $content.view_cache$
             - $content.ttl_cache$
             - $content.default_ttl$
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.view.block_cache_response_listener:
+        class: %ezpublish.view.block_cache_response_listener.class%
+        calls:
+            - [setEnableViewCache, [$content.view_cache$]]
         tags:
             - { name: kernel.event_subscriber }
