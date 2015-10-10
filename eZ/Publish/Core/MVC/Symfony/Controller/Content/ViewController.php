@@ -103,41 +103,9 @@ class ViewController extends Controller
      *
      * @deprecated Since 6.0.0. Viewing locations is now done with ViewContent.
      */
-    public function viewLocation($locationId, $viewType, $layout = false, array $params = array())
+    public function viewLocation(View $view)
     {
-        $this->performAccessChecks();
-        $response = $this->buildResponse();
-
-        try {
-            if (isset($params['location']) && $params['location'] instanceof Location) {
-                $location = $params['location'];
-            } else {
-                $location = $this->getRepository()->getLocationService()->loadLocation($locationId);
-                if ($location->invisible) {
-                    throw new NotFoundHttpException("Location #$locationId cannot be displayed as it is flagged as invisible.");
-                }
-            }
-
-            $response->headers->set('X-Location-Id', $locationId);
-            $response->setContent(
-                $this->renderLocation(
-                    $location,
-                    $viewType,
-                    $layout,
-                    $params
-                )
-            );
-
-            return $response;
-        } catch (UnauthorizedException $e) {
-            throw new AccessDeniedException();
-        } catch (NotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (NotFoundHttpException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            return $this->handleViewException($response, $params, $e, $viewType, null, $locationId);
-        }
+        return $this->renderContent($view);
     }
 
     /**
@@ -157,65 +125,9 @@ class ViewController extends Controller
      *
      * @deprecated Since 6.0.0. Viewing locations is now done with ViewContent.
      */
-    public function embedLocation($locationId, $viewType, $layout = false, array $params = array())
+    public function embedLocation(View $view)
     {
-        $this->performAccessChecks();
-        $response = $this->buildResponse();
-
-        try {
-            /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
-            $location = $this->getRepository()->sudo(
-                function (Repository $repository) use ($locationId) {
-                    return $repository->getLocationService()->loadLocation($locationId);
-                }
-            );
-
-            if ($location->invisible) {
-                throw new NotFoundHttpException("Location #{$locationId} cannot be displayed as it is flagged as invisible.");
-            }
-
-            // Check both 'content/read' and 'content/view_embed'.
-            if (
-                !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute(
-                        'content',
-                        'read',
-                        array('valueObject' => $location->contentInfo, 'targets' => $location)
-                    )
-                )
-                && !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute(
-                        'content',
-                        'view_embed',
-                        array('valueObject' => $location->contentInfo, 'targets' => $location)
-                    )
-                )
-            ) {
-                throw new AccessDeniedException();
-            }
-
-            if ($response->isNotModified($this->getRequest())) {
-                return $response;
-            }
-
-            $response->headers->set('X-Location-Id', $locationId);
-            $response->setContent(
-                $this->renderLocation(
-                    $location,
-                    $viewType,
-                    $layout,
-                    $params
-                )
-            );
-
-            return $response;
-        } catch (UnauthorizedException $e) {
-            throw new AccessDeniedException();
-        } catch (NotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (Exception $e) {
-            return $this->handleViewException($response, $params, $e, $viewType, null, $locationId);
-        }
+        return $this->renderContent($view);
     }
 
     /**
@@ -253,57 +165,9 @@ class ViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function embedContent($contentId, $viewType, $layout = false, array $params = array())
+    public function embedContent(View $view)
     {
-        $this->performAccessChecks();
-        $response = $this->buildResponse();
-
-        try {
-            /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
-            $content = $this->getRepository()->sudo(
-                function (Repository $repository) use ($contentId) {
-                    return $repository->getContentService()->loadContent($contentId);
-                }
-            );
-
-            // Check both 'content/read' and 'content/view_embed'.
-            if (
-                !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute('content', 'read', array('valueObject' => $content))
-                )
-                && !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute('content', 'view_embed', array('valueObject' => $content))
-                )
-            ) {
-                throw new AccessDeniedException();
-            }
-
-            // Check that Content is published, since sudo allows loading unpublished content.
-            if (
-                $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
-                && !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
-                )
-            ) {
-                throw new AccessDeniedException();
-            }
-
-            if ($response->isNotModified($this->getRequest())) {
-                return $response;
-            }
-
-            $response->setContent(
-                $this->renderContent($content, $viewType, $layout, $params)
-            );
-
-            return $response;
-        } catch (UnauthorizedException $e) {
-            throw new AccessDeniedException();
-        } catch (NotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (Exception $e) {
-            return $this->handleViewException($response, $params, $e, $viewType, $contentId);
-        }
+        return $this->renderContent($view);
     }
 
     protected function handleViewException(Response $response, $params, Exception $e, $viewType, $contentId = null, $locationId = null)
@@ -341,9 +205,9 @@ class ViewController extends Controller
      *
      * @return string
      */
-    protected function renderLocation(Location $location, $viewType, $layout = false, array $params = array())
+    protected function renderLocation(View $view)
     {
-        return $this->viewManager->renderLocation($location, $viewType, $params + array('noLayout' => !$layout));
+        return $this->renderContent($view);
     }
 
     /**
@@ -356,9 +220,9 @@ class ViewController extends Controller
      *
      * @return string
      */
-    protected function renderContent(Content $content, $viewType, $layout = false, array $params = array())
+    protected function renderContent(View $view)
     {
-        return $this->viewManager->renderContent($content, $viewType, $params + array('noLayout' => !$layout));
+        return $view;
     }
 
     /**
