@@ -188,3 +188,13 @@ services:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParameterCollector\RequestAttributes
         tags:
             - {name: kernel.event_subscriber}
+
+    ezpublish.view.template_renderer:
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
+        arguments: [@templating]
+
+    ezpublish.view.renderer_listener:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewRendererListener
+        arguments: [@ezpublish.view.template_renderer]
+        tags:
+            - { name: kernel.event_subscriber }
