@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -75,7 +76,11 @@ class ContentViewBuilder implements ViewBuilder
         }
 
         $view->setContent($parameters['content']);
-        $viewParameters = ['contentId' => $parameters['content']->id];
+        $viewParameters = [
+            'contentId' => $parameters['content']->id,
+            'noLayout' => isset($parameters['layout']) ? !(bool) $parameters['layout'] : false,
+        ];
+
         if (isset($parameters['location'])) {
             $view->setLocation($parameters['location']);
             $viewParameters['locationId'] = $parameters['location']->id;
