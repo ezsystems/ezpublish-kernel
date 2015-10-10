@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 use Exception;
 
 /**
@@ -26,7 +26,7 @@ class APIContentExceptionEvent extends Event
     private $apiException;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @var \eZ\Publish\Core\MVC\Symfony\View\View
      */
     private $contentView;
 
@@ -53,15 +53,15 @@ class APIContentExceptionEvent extends Event
      * Injects the ContentView object to display content from.
      * It is a good idea to call {@link stopPropagation()} after that so that other listeners won't override it.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface $contentView
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $contentView
      */
-    public function setContentView(ContentViewInterface $contentView)
+    public function setContentView(View $contentView)
     {
         $this->contentView = $contentView;
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \eZ\Publish\Core\MVC\Symfony\View\View
      */
     public function getContentView()
     {
