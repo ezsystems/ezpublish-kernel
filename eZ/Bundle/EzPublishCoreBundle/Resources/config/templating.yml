@@ -228,3 +228,12 @@ services:
         arguments: [%ezpublish.content_view.viewbase_layout%]
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish.view.cache_response_listener:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
+        arguments:
+            - $content.view_cache$
+            - $content.ttl_cache$
+            - $content.default_ttl$
+        tags:
+            - { name: kernel.event_subscriber }
