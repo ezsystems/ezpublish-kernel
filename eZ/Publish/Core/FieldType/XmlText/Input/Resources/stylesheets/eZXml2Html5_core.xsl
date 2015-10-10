@@ -35,10 +35,6 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="paragraph[@ez-temporary]">
-        <xsl:apply-templates/>
-    </xsl:template>
-
     <xsl:template match="paragraph">
         <p>
             <xsl:copy-of select="@class"/>
