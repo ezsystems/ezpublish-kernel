@@ -208,6 +208,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish.view.view_parameters.injector.embed_object_parameters:
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EmbedObjectParameters
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezpublish.view.view_parameters.injector.no_layout:
         class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\NoLayout
         tags:
