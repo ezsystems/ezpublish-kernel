@@ -55,7 +55,7 @@ class ContentViewBuilder implements ViewBuilder
 
         if (isset($parameters['locationId'])) {
             $location = $this->loadLocation($parameters['locationId']);
-            if ($view->getLocation()->invisible) {
+            if ($location->invisible) {
                 throw new NotFoundHttpException("Location cannot be displayed as it is flagged as invisible.");
             }
         } elseif (isset($parameters['location'])) {
