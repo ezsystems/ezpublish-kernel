@@ -13,6 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -46,6 +47,7 @@ class ContentViewBuilder implements ViewBuilder
 
     /**
      * @throws InvalidArgumentException If both contentId and locationId parameters are missing
+     * @throws NotFoundHttpException If the location is invisible
      */
     public function buildView(array $parameters)
     {
@@ -53,6 +55,9 @@ class ContentViewBuilder implements ViewBuilder
 
         if (isset($parameters['locationId'])) {
             $location = $this->loadLocation($parameters['locationId']);
+            if ($location->invisible) {
+                throw new NotFoundHttpException('Location cannot be displayed as it is flagged as invisible.');
+            }
         } elseif (isset($parameters['location'])) {
             $location = $parameters['location'];
         }
