@@ -175,7 +175,7 @@ services:
     ezpublish.view_builder.registry:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry
         arguments:
-            - [@ezpublish.view_builder.content, @ezpublish.view_builder.block]
+            - [@ezpublish.view_builder.content, @ezpublish.view_builder.block, @ezpublish.view_builder.query_type]
 
     ezpublish.view_builder.content:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder
@@ -184,6 +184,13 @@ services:
     ezpublish.view_builder.block:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\BlockViewBuilder
         arguments: [@ezpublish.fieldType.ezpage.pageService]
+
+    ezpublish.view_builder.query_type:
+        class: eZ\Publish\Core\MVC\Symfony\View\Builder\QueryTypeViewBuilder
+        arguments:
+            - @ezpublish.query_type.registry
+            - @ezpublish.api.service.search
+            - @ezpublish.view.view_parameters.injector.dispatcher
 
     ezpublish.query_type_view_provider.configured:
         class: %ezpublish.view_provider.configured.class%
