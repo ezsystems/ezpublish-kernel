@@ -5,6 +5,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 class QueryTypeView extends BaseView implements View
 {
@@ -63,7 +64,7 @@ class QueryTypeView extends BaseView implements View
     }
 
     /**
-     * @param mixed $searchResults
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult|\Pagerfanta\Pagerfanta $searchResults
      */
     public function setSearchResult($searchResults)
     {

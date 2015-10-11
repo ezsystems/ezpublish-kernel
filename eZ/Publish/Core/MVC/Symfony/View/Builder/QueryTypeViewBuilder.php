@@ -12,6 +12,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use eZ\Publish\Core\MVC\Symfony\View\QueryTypeView;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
+use Pagerfanta\Pagerfanta;
 
 class QueryTypeViewBuilder implements ViewBuilder
 {
@@ -77,6 +78,17 @@ class QueryTypeViewBuilder implements ViewBuilder
             $this->extractSearchedType($parameters['_controller'])
         );
 
+        $configHash = $view->getConfigHash();
+        if (isset($configHash['enable_pager']) && $configHash['enable_pager'] === false) {
+            $view->setSearchResult(
+                $this->runQuery($view->getQuery(), $view->getSearchedType())
+            );
+        } else {
+            $view->setSearchResult(
+                $this->createPager($view->getQuery(), $view->getSearchedType())
+            );
+        }
+
         $this->viewParametersInjector->injectViewParameters($view, $parameters);
 
         return $view;
@@ -86,23 +98,50 @@ class QueryTypeViewBuilder implements ViewBuilder
      * Runs the query using the relevant SearchService method, based on the controller string.
      *
      * @param Query|LocationQuery $query
-     * @param string $controllerString ez_query:(content|location|contentInfo)
+     * @param string $searchedType
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the query controller action couldn't be resolved.
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @internal param string $controllerString ez_query:(content|location|contentInfo)
      */
     private function runQuery($query, $searchedType)
     {
-        $searchedTypeMethodMap = [
-            'location' => 'findLocations',
-            'content' => 'findContent',
-            'contentInfo' => 'findContentInfo',
-        ];
-        $searchMethod = $searchedTypeMethodMap[$searchedType];
+        $searchMethod = $this->getSearchMethod($searchedType);
 
         return $this->searchService->$searchMethod($query);
     }
 
+    /**
+     * Creates the PagerFanta instance for a query and searched type.
+     *
+     * @param $query
+     * @param $searchedType
+     *
+     * @return \Pagerfanta\Pagerfanta
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    private function createPager($query, $searchedType)
+    {
+        $searchMethod = $this->getSearchMethod($searchedType);
+        $searchService = $this->searchService;
+
+        return new PagerFanta(
+            new QueryTypeSearchAdapter(
+                $query,
+                function (Query $query) use ($searchService, $searchMethod) {
+                    return $searchService->$searchMethod($query);
+                }
+            )
+        );
+    }
+
+    /**
+     * Extracts the searched type (one of the QueryType::SEARCH_TYPE_* constants) from the controller string.
+     *
+     * @param string $controllerString
+     *
+     * @return string
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
     private function extractSearchedType($controllerString)
     {
         $actionSearchedTypeMap = [
@@ -117,5 +156,27 @@ class QueryTypeViewBuilder implements ViewBuilder
         }
 
         return $actionSearchedTypeMap[$action];
+    }
+
+    /**
+     * Gets the SearchService method to use based on the searched type.
+     *
+     * @param string $searchedType
+     *
+     * @return string
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no method exists for the searched type
+     */
+    private function getSearchMethod($searchedType)
+    {
+        $searchedTypeMethodMap = [
+            QueryTypeView::SEARCH_TYPE_LOCATION => 'findLocations',
+            QueryTypeView::SEARCH_TYPE_CONTENT => 'findContent',
+            QueryTypeView::SEARCH_TYPE_CONTENT_INFO => 'findContentInfo',
+        ];
+        if (!isset($searchedTypeMethodMap[$searchedType])) {
+            throw new InvalidArgumentException('search method', "No search method for the searched type $searchedType");
+        }
+
+        return $searchedTypeMethodMap[$searchedType];
     }
 }

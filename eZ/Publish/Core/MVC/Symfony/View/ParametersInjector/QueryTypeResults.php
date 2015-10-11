@@ -4,10 +4,12 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use eZ\Publish\Core\MVC\Symfony\View\QueryTypeView;
 use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class QueryTypeResults implements EventSubscriberInterface
@@ -26,9 +28,9 @@ class QueryTypeResults implements EventSubscriberInterface
 
         $searchResult = $view->getSearchResult();
         $parameters = [
-            'total_count' => $searchResult->totalCount,
+            'total_count' => $this->mapTotalCount($searchResult),
             'parameters' => $view->getQueryParameters(),
-            'list_count' => count($searchResult->searchHits),
+            'list_count' => $this->mapListCount($searchResult),
         ] + $this->extractSearchResults($view);
 
         $event->getParameterBag()->add($parameters);
@@ -55,11 +57,50 @@ class QueryTypeResults implements EventSubscriberInterface
         }
         $itemsKey = $searchedTypeListKeyMap[$view->getSearchedType()];
 
-        $items = [];
-        foreach ($view->getSearchResult()->searchHits as $searchHit) {
-            $items[] = $searchHit->valueObject;
+        $searchResult = $view->getSearchResult();
+
+        if ($searchResult instanceof Pagerfanta) {
+            return [$itemsKey => $searchResult];
         }
 
-        return [$itemsKey => $items];
+        if ($searchResult instanceof SearchResult) {
+            $items = [];
+            foreach ($searchResult->searchHits as $searchHit) {
+                $items[] = $searchHit->valueObject;
+            }
+
+            return [$itemsKey => $items];
+        }
+
+        throw new InvalidArgumentException('searchResult', 'Invalid search result type');
+    }
+
+    public function mapTotalCount($searchResult)
+    {
+        if ($searchResult instanceof PagerFanta) {
+            return count($searchResult);
+        }
+
+        if ($searchResult instanceof SearchResult) {
+            return $searchResult->totalCount;
+        }
+
+        throw new InvalidArgumentException('searchResult', 'Invalid search result type');
+    }
+
+    /**
+     * Maps the SearchResult to the number of elements in the current resultset.
+     */
+    public function mapListCount($searchResult)
+    {
+        if ($searchResult instanceof PagerFanta) {
+            return count($searchResult);
+        }
+
+        if ($searchResult instanceof SearchResult) {
+            return count($searchResult->searchHits);
+        }
+
+        throw new InvalidArgumentException('searchResult', 'Invalid search result type');
     }
 }

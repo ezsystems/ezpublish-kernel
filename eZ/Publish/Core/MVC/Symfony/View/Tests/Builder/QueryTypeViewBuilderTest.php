@@ -24,12 +24,21 @@ class QueryTypeViewBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\QueryTypeViewBuilder */
     private $builder;
 
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit_Framework_MockObject_MockObject */
+    private $viewConfiguratorMock;
+
     public function setUp()
     {
         $this->registryMock = $this->getMock('eZ\Publish\Core\QueryType\QueryTypeRegistry');
         $this->searchServiceMock = $this->getMock('eZ\Publish\API\Repository\SearchService');
         $this->injectorMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\ParametersInjector');
-        $this->builder = new QueryTypeViewBuilder($this->registryMock, $this->searchServiceMock, $this->injectorMock);
+        $this->viewConfiguratorMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Configurator');
+        $this->builder = new QueryTypeViewBuilder(
+            $this->registryMock,
+            $this->searchServiceMock,
+            $this->viewConfiguratorMock,
+            $this->injectorMock
+        );
     }
 
     public function testMatches()
@@ -47,7 +56,6 @@ class QueryTypeViewBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = ['_controller' => $controller, 'queryTypeName' => 'latest_articles', 'viewType' => 'full'];
 
-        $searchResult = new SearchResult();
         $queryTypeMock = $this->getMock('eZ\Publish\Core\QueryType\QueryType');
         $queryTypeMock
             ->expects($this->once())
@@ -60,16 +68,10 @@ class QueryTypeViewBuilderTest extends \PHPUnit_Framework_TestCase
             ->with('latest_articles')
             ->will($this->returnValue($queryTypeMock));
 
-        $this->searchServiceMock
-            ->expects($this->once())
-            ->method($searchMethod)
-            ->with($query)
-            ->will($this->returnValue($searchResult));
-
         $view = $this->builder->buildView($parameters);
 
         self::assertEquals('latest_articles', $view->getQueryTypeName());
-        self::assertEquals($searchResult, $view->getSearchResult());
+        self::assertInstanceOf('Pagerfanta\Pagerfanta', $view->getSearchResult());
         self::assertEquals($expectedSearchedType, $view->getSearchedType());
     }
 
