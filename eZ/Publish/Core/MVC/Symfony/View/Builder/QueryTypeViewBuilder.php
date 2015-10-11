@@ -49,7 +49,7 @@ class QueryTypeViewBuilder implements ViewBuilder
      *
      * @param array $parameters
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\View An implementation of the View interface
+     * @return QueryTypeView
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     public function buildView(array $parameters)
