@@ -190,7 +190,7 @@ services:
     ezpublish.view_builder.registry:
         class: %ezpublish.view_builder.registry.class%
         calls:
-            - [addToRegistry, [[@ezpublish.view_builder.content, @ezpublish.view_builder.block]]]
+            - [addToRegistry, [[@ezpublish.view_builder.content, @ezpublish.view_builder.block, @ezpublish.view_builder.query_type]]]
 
     ezpublish.view_builder.content:
         class: %ezpublish.view_builder.content.class%
@@ -203,6 +203,26 @@ services:
     ezpublish.view_builder.block:
         class: %ezpublish.view_builder.block.class%
         arguments: [@ezpublish.fieldType.ezpage.pageService]
+
+    ezpublish.view_builder.query_type:
+        class: eZ\Publish\Core\MVC\Symfony\View\Builder\QueryTypeViewBuilder
+        arguments:
+            - @ezpublish.query_type.registry
+            - @ezpublish.api.service.search
+            - @ezpublish.view.configurator
+            - @ezpublish.view.view_parameters.injector.dispatcher
+
+    ezpublish.query_type_view_provider.configured:
+        class: %ezpublish.view_provider.configured.class%
+        arguments: [@ezpublish.query_type.matcher_factory]
+        tags:
+            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\QueryTypeView', priority: 10}
+
+    ezpublish.query_type.matcher_factory:
+        class: %ezpublish.query_type.matcher_factory.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.view.builder_parameter_collector.request_attributes:
         class: %ezpublish.view.builder_parameter_collector.request_attributes.class%
