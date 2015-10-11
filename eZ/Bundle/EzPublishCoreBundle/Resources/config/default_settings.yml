@@ -10,6 +10,7 @@ parameters:
     ezsettings.default.location_view: {}
     ezsettings.default.content_view: {}
     ezsettings.default.block_view: {}
+    ezsettings.default.query_type_view: {}
 
     # Common settings
     ezpublish.repositories: {}
