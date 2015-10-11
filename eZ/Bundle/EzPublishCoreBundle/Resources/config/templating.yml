@@ -9,6 +9,7 @@ parameters:
     ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
     ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
     ezpublish.block_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory
+    ezpublish.query_type.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\QueryTypeMatcherFactory
 
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
