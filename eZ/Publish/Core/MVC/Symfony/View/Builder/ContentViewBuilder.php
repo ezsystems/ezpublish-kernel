@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -7,6 +8,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Builder;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
@@ -70,8 +72,9 @@ class ContentViewBuilder implements ViewBuilder
             } elseif (isset($location)) {
                 $contentId = $location->contentId;
             } else {
-                throw new InvalidArgumentException('Content', 'No content could not be loaded from parameters');
+                throw new InvalidArgumentException('Content', 'No content could be loaded from parameters');
             }
+
             $content = $this->loadContent(
                 $view->getViewType(),
                 $contentId,
@@ -105,11 +108,12 @@ class ContentViewBuilder implements ViewBuilder
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     private function loadContent($viewType, $contentId, Location $location = null)
     {
-        if ($viewType === 'embed') {
+        if ($viewType === 'embed' || $viewType === 'embed-inline') {
             $content = $this->repository->sudo(
                 function (Repository $repository) use ($contentId) {
                     return $repository->getContentService()->loadContent($contentId);
@@ -121,6 +125,16 @@ class ContentViewBuilder implements ViewBuilder
                     'content', 'read|view_embed',
                     ['contentId' => $contentId, 'locationId' => $location !== null ? $location->id : 'n/a']
                 );
+            }
+
+            // Check that Content is published, since sudo allows loading unpublished content.
+            if (
+                $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
+                && !$this->authorizationChecker->isGranted(
+                    new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
+                )
+            ) {
+                throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentId]);
             }
         } else {
             $content = $this->repository->getContentService()->loadContent($contentId);
@@ -153,7 +167,7 @@ class ContentViewBuilder implements ViewBuilder
     {
         $limitations = ['valueObject' => $content->contentInfo];
         if (isset($location)) {
-            $limitations['location'] = $location;
+            $limitations['targets'] = $location;
         }
 
         $readAttribute = new AuthorizationAttribute('content', 'read', $limitations);
