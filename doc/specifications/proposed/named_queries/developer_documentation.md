@@ -95,9 +95,9 @@ displayed using the object's properties or the `ez_content` controller actions.
 
 #### Available variables
 
-`location_list`                | array | Array of resulting Location. *Only set by the contentInfo action*
-`content_list`                 | array | Array of resulting Content. *Only set by the contentInfo action*
-`content_info_list`            | array | Array of resulting ContentInfo. *Only set by the contentInfo action*
+`location_list`                | array | Array of resulting Location. *Only set by the `location` action*
+`content_list`                 | array | Array of resulting Content. *Only set by the `content` action*
+`content_info_list`            | array | Array of resulting ContentInfo. *Only set by the `contentInfo` action*
 `list_count`                   | int   | Number of items in the resultset, within the limit if any
 `total_count`                  | int   | Total number of items in the search result
 `parameters`                   | array | The `parameters` hash that was passed to the Query
