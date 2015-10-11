@@ -184,6 +184,12 @@ services:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\BlockViewBuilder
         arguments: [@ezpublish.fieldType.ezpage.pageService]
 
+    ezpublish.query_type_view_provider.configured:
+        class: %ezpublish.view_provider.configured.class%
+        arguments: [@ezpublish.query_type.matcher_factory]
+        tags:
+            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\QueryTypeView', priority: 10}
+
     ezpublish.view.builder_parameter_collector.request_attributes:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParameterCollector\RequestAttributes
         tags:
