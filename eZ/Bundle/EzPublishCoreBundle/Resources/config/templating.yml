@@ -269,6 +269,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish.view.view_parameters.injector.query_type_results:
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\QueryTypeResults
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezpublish.view.cache_response_listener:
         class: %ezpublish.view.cache_response_listener.class%
         arguments:
