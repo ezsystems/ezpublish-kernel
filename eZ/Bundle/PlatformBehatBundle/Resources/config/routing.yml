@@ -1,0 +1,7 @@
+ez_platform_behat_latest_articles:
+    path: '/platform-behat/latest-articles'
+    defaults:
+        _controller: 'ez_query:content'
+        queryTypeName: 'EzPlatformBehatBundle:LatestContent'
+        parameters: {type: 'article'}
+        viewType: 'full'
