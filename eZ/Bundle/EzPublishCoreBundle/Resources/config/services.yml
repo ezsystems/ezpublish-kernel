@@ -128,7 +128,6 @@ services:
         class: %ezpublish.view_controller_listener.class%
         arguments:
             - @controller_resolver
-            - @ezpublish.view.configurator
             - @ezpublish.view_builder.registry
             - @event_dispatcher
             - @logger

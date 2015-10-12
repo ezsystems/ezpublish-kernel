@@ -29,26 +29,19 @@ class ViewControllerListener implements EventSubscriberInterface
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator */
-    private $viewConfigurator;
-
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry */
     private $viewBuilderRegistry;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcher
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
         ControllerResolverInterface $controllerResolver,
-        Configurator $viewConfigurator,
         ViewBuilderRegistry $viewBuilderRegistry,
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger
     ) {
         $this->controllerResolver = $controllerResolver;
-        $this->viewConfigurator = $viewConfigurator;
         $this->viewBuilderRegistry = $viewBuilderRegistry;
         $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
@@ -77,8 +70,6 @@ class ViewControllerListener implements EventSubscriberInterface
         $parameterEvent = new FilterViewBuilderParametersEvent(clone $request);
         $this->eventDispatcher->dispatch(Events::FILTER_BUILDER_PARAMETERS, $parameterEvent);
         $view = $viewBuilder->buildView($parameterEvent->getParameters()->all());
-
-        $this->viewConfigurator->configure($view);
         $request->attributes->set('view', $view);
 
         // View parameters are added as request attributes so that they are available as controller action parameters
