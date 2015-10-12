@@ -11,6 +11,15 @@ core:
             paths:
                 - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Content
                 - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Exception
+                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/View
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ExceptionContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\QueryTypeContext:
+                    queryTypeRegistry: @ezpublish.query_type.registry
+                    searchService: @ezpublish.api.service.search
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ViewConfigurationContext:
+                    configResolver: @ezpublish.config.resolver
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\NavigationContext:
+                    router: @router
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\QueryTypeViewContext

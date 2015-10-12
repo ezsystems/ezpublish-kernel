@@ -2,3 +2,32 @@ ez_platform_behat_repository_unauthorized_exception:
     path: '/platform-behat/exceptions/repository-unauthorized'
     defaults:
         _controller: 'platform_behat.controller.exception:throwRepositoryUnauthorizedAction'
+
+ez_platform_behat_latest_articles:
+    path: '/platform-behat/latest-articles'
+    defaults:
+        _controller: 'ez_query:content'
+        queryTypeName: 'EzPlatformBehatBundle:LatestContent'
+        parameters: {type: 'article'}
+        viewType: 'full'
+
+ez_platform_behat_views_query_type_pager_disabled:
+    path: '/platform-behat/views/query-type/pager-disabled'
+    defaults:
+        _controller: 'ez_query:content'
+        queryTypeName: 'EzPlatformBehatBundle:PagerDisabled'
+        viewType: 'full'
+
+ez_platform_behat_views_query_type_pager_enabled:
+    path: '/platform-behat/views/query-type/pager-enabled'
+    defaults:
+        _controller: 'ez_query:content'
+        queryTypeName: 'EzPlatformBehatBundle:PagerEnabled'
+        viewType: 'full'
+
+ez_platform_behat_views_query_type_match_name:
+    path: '/platform-behat/views/query-type/match-name'
+    defaults:
+        _controller: 'ez_query:content'
+        queryTypeName: 'EzPlatformBehatBundle:MatchName'
+        viewType: 'full'

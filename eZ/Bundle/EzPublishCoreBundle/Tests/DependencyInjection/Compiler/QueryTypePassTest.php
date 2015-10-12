@@ -86,7 +86,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * Adds to the kernel the path to a stub bundle that contains a QueryType class named by convention
+     * Adds to the kernel the path to a stub bundle that contains a QueryType class named by convention.
      */
     private function defineQueryTypeBundle()
     {

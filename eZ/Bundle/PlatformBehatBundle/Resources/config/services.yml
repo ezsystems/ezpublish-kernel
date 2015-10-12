@@ -1,3 +1,9 @@
 services:
     platform_behat.controller.exception:
         class: eZ\Bundle\PlatformBehatBundle\Controller\ExceptionController
+
+    platform_behat.type_twig_extension:
+        class: eZ\Bundle\PlatformBehatBundle\Twig\TypeTwigExtension
+        public: false
+        tags:
+            - { name: twig.extension }

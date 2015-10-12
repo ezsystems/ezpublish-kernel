@@ -1,0 +1,26 @@
+system:
+    default:
+        query_type_view:
+            full:
+                latest_articles:
+                    template: 'EzPlatformBehatBundle:full:query_latest_article.html.twig'
+                    enable_pager: true
+                    match:
+                        QueryType\Name: 'EzPlatformBehatBundle:LatestContent'
+                        QueryType\Parameters:
+                            type: 'article'
+                pager_disabled:
+                    template: 'EzPlatformBehatBundle:full:list-variable-is-an-array.html.twig'
+                    match:
+                        QueryType\Name: 'EzPlatformBehatBundle:PagerDisabled'
+                    enable_pager: false
+
+                pager_enabled:
+                    template: 'EzPlatformBehatBundle:full:list-variable-is-a-pager.html.twig'
+                    match:
+                        QueryType\Name: 'EzPlatformBehatBundle:PagerEnabled'
+
+                match_name:
+                    template: 'EzPlatformBehatBundle:full:view-query-type-list-results.html.twig'
+                    match:
+                        QueryType\Name: 'EzPlatformBehatBundle:MatchName'

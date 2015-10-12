@@ -1,0 +1,13 @@
+<div>
+    <ul class="latest-articles">
+        {% for article in content_list %}
+            <li class="article">{{ ez_content_name(article) }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% if content_list.haveToPaginate() %}
+    <div class="pagination-centered">
+        {{ pagerfanta( content_list, 'twitter_bootstrap_translated', {'routeName': 'bd_sandbox_latest_articles'} ) }}
+    </div>
+{% endif %}
