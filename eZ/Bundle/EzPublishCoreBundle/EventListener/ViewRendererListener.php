@@ -37,9 +37,7 @@ class ViewRendererListener implements EventSubscriberInterface
             $response = new Response();
         }
 
-        if (!$response->isNotModified($event->getRequest())) {
-            $response->setContent($this->viewRenderer->render($view));
-        }
+        $response->setContent($this->viewRenderer->render($view));
 
         $event->setResponse($response);
     }

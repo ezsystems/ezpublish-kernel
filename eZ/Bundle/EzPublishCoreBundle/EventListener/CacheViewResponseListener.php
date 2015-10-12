@@ -61,10 +61,8 @@ class CacheViewResponseListener implements EventSubscriberInterface
         $response = $event->getResponse();
         $request = $event->getRequest();
 
-        if (!$response->isNotModified($event->getRequest())) {
-            if ($view instanceof LocationValueView && ($location = $view->getLocation()) instanceof Location) {
-                $response->headers->set('X-Location-Id', $location->id, false);
-            }
+        if ($view instanceof LocationValueView && ($location = $view->getLocation()) instanceof Location) {
+            $response->headers->set('X-Location-Id', $location->id, false);
         }
 
         $response->setPublic();
