@@ -11,6 +11,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
@@ -29,16 +30,21 @@ class ContentViewBuilder implements ViewBuilder
     /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /** @var ParametersInjector */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator */
+    private $viewConfigurator;
+
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\ParametersInjector */
     private $viewParametersInjector;
 
     public function __construct(
         Repository $repository,
         AuthorizationCheckerInterface $authorizationChecker,
+        Configurator $viewConfigurator,
         ParametersInjector $viewParametersInjector
     ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
+        $this->viewConfigurator = $viewConfigurator;
         $this->viewParametersInjector = $viewParametersInjector;
     }
 
@@ -87,14 +93,15 @@ class ContentViewBuilder implements ViewBuilder
             $view->setLocation($location);
         }
 
-        $this->viewParametersInjector->injectViewParameters($view, $parameters);
-
         // viewLocation/embedLocation without a custom controller are mapped to their viewContent equivalent
         if ($parameters['_controller'] === 'ez_content:viewLocation') {
             $view->setControllerReference(new ControllerReference('ez_content:viewContent'));
         } elseif ($parameters['_controller'] === 'ez_content:embedLocation') {
             $view->setControllerReference(new ControllerReference('ez_content:embedContent'));
         }
+
+        $this->viewConfigurator->configure($view);
+        $this->viewParametersInjector->injectViewParameters($view, $parameters);
 
         return $view;
     }

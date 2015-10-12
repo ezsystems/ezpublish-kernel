@@ -61,13 +61,11 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->controllerResolver = $this->getMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
-        $this->viewConfigurator = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Configurator');
         $this->viewBuilderRegistry = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry');
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
         $this->controllerListener = new ViewControllerListener(
             $this->controllerResolver,
-            $this->viewConfigurator,
             $this->viewBuilderRegistry,
             $this->eventDispatcher,
             $this->logger
@@ -133,25 +131,13 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($this->viewBuilderMock));
 
-        $viewObject = new ContentView();
+        $viewObject = new ContentView($templateIdentifier);
+        $viewObject->setControllerReference(new ControllerReference($customController));
 
         $this->viewBuilderMock
             ->expects($this->once())
             ->method('buildView')
             ->will($this->returnValue($viewObject));
-
-        $this->viewConfigurator
-            ->expects($this->once())
-            ->method('configure')
-            ->with($viewObject)
-            ->will(
-                $this->returnCallback(
-                    function (View $view) use ($templateIdentifier, $customController) {
-                        $view->setTemplateIdentifier($templateIdentifier);
-                        $view->setControllerReference(new ControllerReference($customController));
-                    }
-                )
-            );
 
         $this->event
             ->expects($this->once())
