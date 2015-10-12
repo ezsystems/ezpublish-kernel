@@ -462,7 +462,7 @@
         <xsl:value-of select="@id"/>
       </xsl:attribute>
     </xsl:if>
-    <xsl:if test="@href">
+    <xsl:if test="@data-href">
       <xsl:attribute name="xlink:href">
         <xsl:value-of select="@data-href"/>
       </xsl:attribute>
