@@ -457,7 +457,7 @@
       <xsl:attribute name="itemscope">itemscope</xsl:attribute>
     </xsl:if>
     <xsl:if test="@xlink:href">
-      <xsl:attribute name="href">
+      <xsl:attribute name="data-href">
         <xsl:value-of select="@xlink:href"/>
       </xsl:attribute>
     </xsl:if>

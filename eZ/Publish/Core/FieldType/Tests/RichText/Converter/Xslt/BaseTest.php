@@ -57,7 +57,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $lossySubdirectory = "_fixtures/{$fixtureSubdirectories['input']}/lossy";
         $inputDirNormalized = str_replace('/', '.', $fixtureSubdirectories['input']);
         $outputDirNormalized = str_replace('/', '.', $fixtureSubdirectories['output']);
-        foreach (glob(__DIR__ . "/{$lossySubdirectory}/*.{$fixtureSubdirectories['input']}.xml") as $inputFile) {
+        foreach (glob(__DIR__ . "/{$lossySubdirectory}/*.{$inputDirNormalized}.xml") as $inputFile) {
             $basename = basename(basename($inputFile, '.xml'), ".{$inputDirNormalized}");
             $outputFile = __DIR__ . "/{$lossySubdirectory}/{$basename}.{$outputDirNormalized}.xml";
 

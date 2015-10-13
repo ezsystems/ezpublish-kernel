@@ -445,14 +445,14 @@
   <xsl:template match="ezxhtml5:div[@data-ezelement='ezembed']">
     <xsl:element name="ezembed" namespace="http://docbook.org/ns/docbook">
       <xsl:call-template name="addCommonEmbedAttributes"/>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="node()[not(self::text())]"/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:span[@data-ezelement='ezembedinline']">
     <xsl:element name="ezembedinline" namespace="http://docbook.org/ns/docbook">
       <xsl:call-template name="addCommonEmbedAttributes"/>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="node()[not(self::text())]"/>
     </xsl:element>
   </xsl:template>
 
@@ -462,9 +462,9 @@
         <xsl:value-of select="@id"/>
       </xsl:attribute>
     </xsl:if>
-    <xsl:if test="@href">
+    <xsl:if test="@data-href">
       <xsl:attribute name="xlink:href">
-        <xsl:value-of select="@href"/>
+        <xsl:value-of select="@data-href"/>
       </xsl:attribute>
     </xsl:if>
     <xsl:if test="@data-ezview">
