@@ -21,7 +21,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use PDO;
 
-class UpdateFieldAlwaysAvailableFlag extends ContainerAwareCommand
+class UpdateFieldAlwaysAvailableFlagCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
