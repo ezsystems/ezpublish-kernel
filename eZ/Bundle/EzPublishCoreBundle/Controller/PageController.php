@@ -14,6 +14,13 @@ use eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService as CoreBundlePageSe
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\Controller\PageController as BasePageController;
 
+/**
+ * This controller provides the block view feature.
+ *
+ * @deprecated since 6.0.0 This specific override of PageController is deprecated since 6.0.0
+ *             and in the future, only base PageController (eZ\Publish\Core\MVC\Symfony\Controller\PageController)
+ *             will be used.
+ */
 class PageController extends BasePageController
 {
     public function viewBlock(Block $block, array $params = array(), array $cacheSettings = array())

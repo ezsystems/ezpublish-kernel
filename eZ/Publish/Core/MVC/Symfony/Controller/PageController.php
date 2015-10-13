@@ -14,7 +14,13 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\PageService;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use Symfony\Component\HttpFoundation\Response;
+use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 
+/**
+ * This controller provides the block view feature.
+ *
+ * @since 6.0.0 All methods except `viewAction()` are deprecated and will be removed in the future.
+ */
 class PageController extends Controller
 {
     /**
@@ -31,6 +37,27 @@ class PageController extends Controller
     {
         $this->viewManager = $viewManager;
         $this->pageService = $pageService;
+    }
+
+    /**
+     * This is the default view action for a BlockView object.
+     *
+     * It doesn't do anything by itself: the returned View object is rendered by the ViewRendererListener
+     * into an HttpFoundation Response.
+     *
+     * This action can be selectively replaced by a custom action by means of block_view
+     * configuration. Custom actions can add parameters to the view and customize the Response the View will be
+     * converted to. They may also bypass the ViewRenderer by returning an HttpFoundation Response.
+     *
+     * Cache is in both cases handled by the BlockCacheResponseListener.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\BlockView $view
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\View\BlockView
+     */
+    public function viewAction(BlockView $view)
+    {
+        return $view;
     }
 
     /**
