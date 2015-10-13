@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
@@ -146,7 +147,7 @@ EOF;
     protected function getForwardRequest(Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request, $language)
     {
         $forwardRequestParameters = array(
-            '_controller' => 'ez_content:viewContent',
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             // specify a route for RouteReference generator
             '_route' => UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
             '_route_params' => array(

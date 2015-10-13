@@ -93,14 +93,17 @@ class ContentViewBuilder implements ViewBuilder
             $view->setLocation($location);
         }
 
-        // viewLocation/embedLocation without a custom controller are mapped to their viewContent equivalent
-        if ($parameters['_controller'] === 'ez_content:viewLocation') {
-            $view->setControllerReference(new ControllerReference('ez_content:viewContent'));
-        } elseif ($parameters['_controller'] === 'ez_content:embedLocation') {
-            $view->setControllerReference(new ControllerReference('ez_content:embedContent'));
+        $this->viewConfigurator->configure($view);
+
+       // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
+        if (!$view->getControllerReference() instanceof ControllerReference) {
+            if (in_array($parameters['_controller'], ['ez_content:viewLocation', 'ez_content:viewContent'])) {
+                $view->setControllerReference(new ControllerReference('ez_content:viewAction'));
+            } elseif (in_array($parameters['_controller'], ['ez_content:embedLocation', 'ez_content:embedContent'])) {
+                $view->setControllerReference(new ControllerReference('ez_content:embedAction'));
+            }
         }
 
-        $this->viewConfigurator->configure($view);
         $this->viewParametersInjector->injectViewParameters($view, $parameters);
 
         return $view;

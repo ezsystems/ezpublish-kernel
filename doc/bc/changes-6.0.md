@@ -187,8 +187,8 @@ Changes affecting version compatibility with former or future versions.
 * Some methods have been deprecated in `eZ/Publish/API/Repository/RoleService`: `updateRole`, `addPolicy`,
   `removePolicy`, `deletePolicy`, and `updatePolicy`. Use the corresponding `*Draft` and `*ByRoleDraft` methods instead.
 
-* The `viewLocation` and `embedLocation` controller actions are deprecated. `viewContent` and `embedContent` can be used
-  instead, with the location as an extra parameter.
+* The `viewLocation`, `embedLocation`, `viewContent` and `embedContent` Content\ViewController`` actions are deprecated.
+  `viewAction` and `embedAction` must be used instead. Both accept the location as an extra parameter.
   The corresponding `location_view` configuration is also deprecated. It will transparently be converted to `content_view`,
   but you should update your configuration:
   ```

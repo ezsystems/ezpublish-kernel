@@ -194,7 +194,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $destinationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -235,7 +235,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $destinationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -278,7 +278,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'contentId' => 456,
             'locationId' => $destinationId,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -320,7 +320,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $destinationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -364,7 +364,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $destinationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -403,7 +403,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $destinationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -454,7 +454,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $destinationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
