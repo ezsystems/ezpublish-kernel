@@ -620,17 +620,17 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
         $expectedPolicies = [
             'custom_module' => [
-                'custom_function_1' => null,
-                'custom_function_2' => ['CustomLimitation'],
+                'custom_function_1' => [],
+                'custom_function_2' => ['CustomLimitation' => true],
             ],
             'helloworld' => [
-                'foo' => ['bar', 'additional_limitation'],
-                'baz' => null,
-                'some' => ['thingy', 'thing', 'but', 'wait'],
+                'foo' => ['bar' => true, 'additional_limitation' => true],
+                'baz' => [],
+                'some' => ['thingy' => true, 'thing' => true, 'but' => true, 'wait' => true],
             ],
             'custom_module2' => [
-                'custom_function_3' => null,
-                'custom_function_4' => ['CustomLimitation2', 'CustomLimitation3'],
+                'custom_function_3' => [],
+                'custom_function_4' => ['CustomLimitation2' => true, 'CustomLimitation3' => true],
             ],
         ];
 

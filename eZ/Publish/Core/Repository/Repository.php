@@ -524,7 +524,7 @@ class Repository implements RepositoryInterface
                      * For policy limitation atm only support ACCESS_GRANTED
                      *
                      * Reasoning: Right now, use of a policy limitation not valid for a policy is per definition a
-                     * BadState. To reach this you would have to configure the "limitationMap" wrongly, like using
+                     * BadState. To reach this you would have to configure the "policyMap" wrongly, like using
                      * Node (Location) limitation on state/assign. So in this case Role Limitations will return
                      * ACCESS_ABSTAIN (== no access here), and other limitations will throw InvalidArgument above,
                      * both cases forcing dev to investigate to find miss configuration. This might be relaxed in

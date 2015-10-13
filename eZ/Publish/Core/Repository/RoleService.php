@@ -95,8 +95,7 @@ class RoleService implements RoleServiceInterface
         $this->roleDomainMapper = $roleDomainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
-            'limitationMap' => array(
-                // @todo Inject these dynamically by activated eZ Controllers, see PR #252
+            'policyMap' => array(
                 'content' => array(
                     'read' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
                     'diff' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
@@ -1253,19 +1252,19 @@ class RoleService implements RoleServiceInterface
      */
     public function getLimitationTypesByModuleFunction($module, $function)
     {
-        if (empty($this->settings['limitationMap'][$module][$function])) {
+        if (empty($this->settings['policyMap'][$module][$function])) {
             return array();
         }
 
         $types = array();
         try {
-            foreach (array_keys($this->settings['limitationMap'][$module][$function]) as $identifier) {
+            foreach (array_keys($this->settings['policyMap'][$module][$function]) as $identifier) {
                 $types[$identifier] = $this->limitationService->getLimitationType($identifier);
             }
         } catch (LimitationNotFoundException $e) {
             throw new BadStateException(
                 "{$module}/{$function}",
-                "limitationMap configuration is referring to non existing identifier: {$identifier}",
+                "policyMap configuration is referring to non existing identifier: {$identifier}",
                 $e
             );
         }
@@ -1324,7 +1323,7 @@ class RoleService implements RoleServiceInterface
                     );
                 }
 
-                if (!isset($this->settings['limitationMap'][$module][$function][$limitation->getIdentifier()])) {
+                if (!isset($this->settings['policyMap'][$module][$function][$limitation->getIdentifier()])) {
                     throw new InvalidArgumentException(
                         'policy',
                         "The limitation '{$limitation->getIdentifier()}' is not applicable on '{$module}/{$function}'"

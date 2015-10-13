@@ -16,13 +16,22 @@ class PoliciesConfigBuilder extends ContainerConfigBuilder
     public function addConfig(array $config)
     {
         $policyMap = [];
+        $previousPolicyMap = [];
+
+        // We receive limitations as values, but we want them as keys to be used by isset().
+        foreach ($config as $module => $functionArray) {
+            foreach ($functionArray as $function => $limitationCollection) {
+                $policyMap[$module][$function] = array_fill_keys((array)$limitationCollection, true);
+            }
+        }
+
         if ($this->containerBuilder->hasParameter('ezpublish.api.role.policy_map')) {
-            $policyMap = $this->containerBuilder->getParameter('ezpublish.api.role.policy_map');
+            $previousPolicyMap = $this->containerBuilder->getParameter('ezpublish.api.role.policy_map');
         }
 
         $this->containerBuilder->setParameter(
             'ezpublish.api.role.policy_map',
-            array_merge_recursive($policyMap, $config)
+            array_merge_recursive($previousPolicyMap, $policyMap)
         );
     }
 

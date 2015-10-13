@@ -26,6 +26,7 @@ services:
             - @ezpublish.config.resolver
             - @ezpublish.field_type_collection.factory
             - %ezpublish.api.inner_repository.class%
+            - %ezpublish.api.role.policy_map%
         calls:
             - [setContainer, [@service_container]]
 

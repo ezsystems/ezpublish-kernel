@@ -47,7 +47,7 @@ class RoleTest extends BaseServiceMockTest
             ->will($this->returnValue(array(42)));
 
         $settings = array(
-            'limitationMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
+            'policyMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
             'limitationTypes' => array('mockIdentifier' => $limitationTypeMock),
         );
 
@@ -114,7 +114,7 @@ class RoleTest extends BaseServiceMockTest
             ->will($this->returnValue('mockIdentifier'));
 
         $settings = array(
-            'limitationMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
+            'policyMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
             'limitationTypes' => array('mockIdentifier' => $limitationTypeMock),
         );
 
@@ -180,7 +180,7 @@ class RoleTest extends BaseServiceMockTest
             ->will($this->returnValue('mockIdentifier'));
 
         $settings = array(
-            'limitationMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
+            'policyMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
             'limitationTypes' => array('mockIdentifier' => $limitationTypeMock),
         );
 
