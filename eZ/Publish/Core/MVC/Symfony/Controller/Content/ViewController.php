@@ -74,6 +74,19 @@ class ViewController extends Controller
     }
 
     /**
+     * Embed a content.
+     * Behaves mostly like viewAction(), but with specific content load permission handling.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView
+     */
+    public function embedAction(ContentView $view)
+    {
+        return $view;
+    }
+
+    /**
      * Build the response so that depending on settings it's cacheable.
      *
      * @param string|null $etag

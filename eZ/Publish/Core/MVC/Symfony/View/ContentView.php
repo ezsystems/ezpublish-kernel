@@ -40,13 +40,16 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  * }
  * </code>
  */
-class ContentView extends BaseView implements View, ContentValueView, LocationValueView
+class ContentView extends BaseView implements View, ContentValueView, LocationValueView, EmbedView
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;
 
     /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
     private $location;
+
+    /** @var bool */
+    private $isEmbed = false;
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
@@ -85,5 +88,24 @@ class ContentView extends BaseView implements View, ContentValueView, LocationVa
     protected function getInternalParameters()
     {
         return ['location' => $this->location, 'content' => $this->content];
+    }
+
+    /**
+     * Sets the value as embed / not embed.
+     *
+     * @param bool $value
+     */
+    public function setIsEmbed($value)
+    {
+        $this->isEmbed = (bool)$value;
+    }
+
+    /**
+     * Is the view an embed or not.
+     * @return bool True if the view is an embed, false if it is not.
+     */
+    public function isEmbed()
+    {
+        return $this->isEmbed;
     }
 }

@@ -14,6 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use eZ\Publish\Core\MVC\Symfony\View\EmbedView;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -54,20 +55,29 @@ class ContentViewBuilder implements ViewBuilder
     }
 
     /**
-     * @throws InvalidArgumentException If both contentId and locationId parameters are missing
-     * @throws NotFoundHttpException If the location is invisible
+     * @param array $parameters
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|\eZ\Publish\Core\MVC\Symfony\View\View
+     *         If both contentId and locationId parameters are missing
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *         If both contentId and locationId parameters are missing
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function buildView(array $parameters)
     {
         $view = new ContentView(null, [], $parameters['viewType']);
+        $view->setIsEmbed($this->isEmbed($parameters));
+
+        if ($view->isEmbed() && $parameters['viewType'] === null) {
+            $view->setViewType(EmbedView::DEFAULT_VIEW_TYPE);
+        }
 
         if (isset($parameters['locationId'])) {
             $location = $this->loadLocation($parameters['locationId']);
-            if ($location->invisible) {
-                throw new NotFoundHttpException('Location cannot be displayed as it is flagged as invisible.');
-            }
         } elseif (isset($parameters['location'])) {
             $location = $parameters['location'];
+        } else {
+            $location = null;
         }
 
         if (isset($parameters['content'])) {
@@ -81,11 +91,7 @@ class ContentViewBuilder implements ViewBuilder
                 throw new InvalidArgumentException('Content', 'No content could be loaded from parameters');
             }
 
-            $content = $this->loadContent(
-                $view->getViewType(),
-                $contentId,
-                isset($location) ? $location : null
-            );
+            $content = $view->isEmbed() ? $this->loadContent($contentId) : $this->loadEmbeddedContent($contentId, $location);
         }
 
         $view->setContent($content);
@@ -95,7 +101,7 @@ class ContentViewBuilder implements ViewBuilder
 
         $this->viewConfigurator->configure($view);
 
-       // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
+        // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
         if (!$view->getControllerReference() instanceof ControllerReference) {
             if (in_array($parameters['_controller'], ['ez_content:viewLocation', 'ez_content:viewContent'])) {
                 $view->setControllerReference(new ControllerReference('ez_content:viewAction'));
@@ -111,58 +117,77 @@ class ContentViewBuilder implements ViewBuilder
 
     /**
      * Loads Content with id $contentId.
-     * Will cover permissions for special viewtypes (ex: embed).
      *
-     * @param string $viewType
      * @param mixed $contentId
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    private function loadContent($viewType, $contentId, Location $location = null)
+    private function loadContent($contentId)
     {
-        if ($viewType === 'embed' || $viewType === 'embed-inline') {
-            $content = $this->repository->sudo(
-                function (Repository $repository) use ($contentId) {
-                    return $repository->getContentService()->loadContent($contentId);
-                }
+        return $this->repository->getContentService()->loadContent($contentId);
+    }
+
+    /**
+     * Loads the embedded content with id $contentId.
+     * Will load the content with sudo(), and check if the user can view_embed this content, for the given location
+     * if provided.
+     *
+     * @param mixed $contentId
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    private function loadEmbeddedContent($contentId, Location $location = null)
+    {
+        $content = $this->repository->sudo(
+            function (Repository $repository) use ($contentId) {
+                return $repository->getContentService()->loadContent($contentId);
+            }
+        );
+
+        if (!$this->canRead($content, $location)) {
+            throw new UnauthorizedException(
+                'content', 'read|view_embed',
+                ['contentId' => $contentId, 'locationId' => $location !== null ? $location->id : 'n/a']
             );
+        }
 
-            if (!$this->canRead($content, $location)) {
-                throw new UnauthorizedException(
-                    'content', 'read|view_embed',
-                    ['contentId' => $contentId, 'locationId' => $location !== null ? $location->id : 'n/a']
-                );
-            }
-
-            // Check that Content is published, since sudo allows loading unpublished content.
-            if (
-                $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
-                && !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
-                )
-            ) {
-                throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentId]);
-            }
-        } else {
-            $content = $this->repository->getContentService()->loadContent($contentId);
+        // Check that Content is published, since sudo allows loading unpublished content.
+        if (
+            $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
+            && !$this->authorizationChecker->isGranted(
+                new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
+            )
+        ) {
+            throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentId]);
         }
 
         return $content;
     }
 
     /**
+     * Loads a visible Location.
+     * @todo Do we need to handle permissions here ?
+     *
+     * @param $locationId
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     private function loadLocation($locationId)
     {
-        return $this->repository->sudo(
+        $location = $this->repository->sudo(
             function (Repository $repository) use ($locationId) {
                 return $repository->getLocationService()->loadLocation($locationId);
             }
         );
+        if ($location->invisible) {
+            throw new NotFoundHttpException('Location cannot be displayed as it is flagged as invisible.');
+        }
+
+        return $location;
     }
 
     /**
@@ -186,5 +211,25 @@ class ContentViewBuilder implements ViewBuilder
         return
             $this->authorizationChecker->isGranted($readAttribute) ||
             $this->authorizationChecker->isGranted($viewEmbedAttribute);
+    }
+
+    /**
+     * Checks if the view is an embed one.
+     * Uses either the controller action (embedAction), or the viewType (embed/embed-inline).
+     *
+     * @param array $parameters The ViewBuilder parameters array.
+     *
+     * @return bool
+     */
+    private function isEmbed($parameters)
+    {
+        if ($parameters['_controller'] === 'ez_content:embedAction') {
+            return true;
+        }
+        if (in_array($parameters['viewType'], ['embed', 'embed-inline'])) {
+            return true;
+        }
+
+        return false;
     }
 }
