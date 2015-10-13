@@ -68,7 +68,7 @@ class ViewController extends Controller
      *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function view(ContentView $view)
+    public function viewAction(ContentView $view)
     {
         return $view;
     }
