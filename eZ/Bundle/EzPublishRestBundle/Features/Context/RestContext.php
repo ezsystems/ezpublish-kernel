@@ -10,6 +10,8 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
+use Behat\Mink\Mink;
+use Behat\MinkExtension\Context\MinkAwareContext;
 use EzSystems\BehatBundle\Context\Api\Context;
 use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -22,7 +24,7 @@ use PHPUnit_Framework_Assert as Assertion;
  *   Settings and client initializations is done here
  *   Also it contains all REST generic actions.
  */
-class RestContext extends Context
+class RestContext extends Context implements MinkAwareContext
 {
     use SubContext\EzRest;
     use SubContext\Authentication;
@@ -56,6 +58,16 @@ class RestContext extends Context
      * @var string
      */
     private $driver;
+
+    /**
+     * @var \Behat\Mink\Mink
+     */
+    private $mink;
+
+    /**
+     * @var array
+     */
+    private $minkParameters;
 
     /**
      * Initialize class.
@@ -251,5 +263,26 @@ class RestContext extends Context
             . "\nActual: "
             . print_r($this->restDriver->getBody(), true)
         );
+    }
+
+    /**
+     * Sets Mink instance.
+     *
+     * @param Mink $mink Mink session manager
+     */
+    public function setMink(Mink $mink)
+    {
+        $this->mink = $mink;
+    }
+
+    /**
+     * Sets parameters provided for Mink.
+     *
+     * @param array $parameters
+     */
+    public function setMinkParameters(array $parameters)
+    {
+        $this->minkParameters = $parameters;
+        $this->restDriver->setHost($parameters['base_url'] . '/api/ezp/v2');
     }
 }
