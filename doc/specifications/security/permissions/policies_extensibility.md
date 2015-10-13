@@ -21,7 +21,26 @@ A `PolicyProvider` is an object providing a hash containing declared modules, fu
 * Each module can provide *functions* (e.g. "content/read": "content" is the module, "read" is the function)
 * Each function can provide a collection of limitations.
 
-Limitations need to be implemented as *limitation types* and declared as services identified with `ezpublish.limitationType` tag.
+Policies configuration hash contains declared these modules, functions and limitations.
+First level key is the module name, value is a hash of available functions, with function name as key.
+Function value is an array of available limitations, identified by the alias declared in LimitationType service tag.
+If no limitation is provided, value can be null or an empty array.
+
+```php
+[
+    "content" => [
+        "read" => ["Class", "ParentClass", "Node", "Language"],
+        "edit" => ["Class", "ParentClass", "Language"]
+    ],
+    "custom_module" => [
+        "custom_function_1" => null,
+        "custom_function_2" => ["CustomLimitation"]
+    ],
+]
+```
+
+> Limitations need to be implemented as *limitation types* and declared as services identified with `ezpublish.limitationType` tag.
+> Name provided in the hash for each limitation is the same value set in `alias` attribute in the service tag. 
 
 ### Example
 

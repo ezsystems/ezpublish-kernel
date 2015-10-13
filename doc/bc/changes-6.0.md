@@ -171,6 +171,8 @@ Changes affecting version compatibility with former or future versions.
   whole User object. User API abstract object has been changed to implement this so there is no BC
   break for API use, only for custom API implementations.
   Also new `getCurrentUserReference()` method has been added on Repository to get this object.
+  
+* Internal `limitationMap` repository service setting (for `RoleService`) has been renamed to `policyMap`.
 
 ## Deprecations
 

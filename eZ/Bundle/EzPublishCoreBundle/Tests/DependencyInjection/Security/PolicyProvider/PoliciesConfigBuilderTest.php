@@ -23,8 +23,8 @@ class PoliciesConfigBuilderTest extends PHPUnit_Framework_TestCase
         $config1 = ['foo' => ['bar' => null]];
         $config2 = ['some' => ['thing' => ['limitation']]];
         $expected = [
-            'foo' => ['bar' => null],
-            'some' => ['thing' => ['limitation']],
+            'foo' => ['bar' => []],
+            'some' => ['thing' => ['limitation' => true]],
         ];
         $configBuilder->addConfig($config1);
         $configBuilder->addConfig($config2);
