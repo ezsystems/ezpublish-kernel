@@ -12,7 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry;
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewBuilderParametersEvent;
-use eZ\Publish\Core\MVC\Symfony\View\Events;
+use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -68,7 +68,7 @@ class ViewControllerListener implements EventSubscriberInterface
         }
 
         $parameterEvent = new FilterViewBuilderParametersEvent(clone $request);
-        $this->eventDispatcher->dispatch(Events::FILTER_BUILDER_PARAMETERS, $parameterEvent);
+        $this->eventDispatcher->dispatch(ViewEvents::FILTER_BUILDER_PARAMETERS, $parameterEvent);
         $view = $viewBuilder->buildView($parameterEvent->getParameters()->all());
         $request->attributes->set('view', $view);
 

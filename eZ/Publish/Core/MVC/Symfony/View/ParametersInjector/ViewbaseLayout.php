@@ -5,7 +5,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
-use eZ\Publish\Core\MVC\Symfony\View\Events;
+use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -25,7 +25,7 @@ class ViewbaseLayout implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return [Events::FILTER_VIEW_PARAMETERS => 'injectViewbaseLayout'];
+        return [ViewEvents::FILTER_VIEW_PARAMETERS => 'injectViewbaseLayout'];
     }
 
     public function injectViewbaseLayout(FilterViewParametersEvent $event)

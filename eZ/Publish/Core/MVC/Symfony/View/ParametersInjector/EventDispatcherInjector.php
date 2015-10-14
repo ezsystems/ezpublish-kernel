@@ -5,7 +5,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
-use eZ\Publish\Core\MVC\Symfony\View\Events;
+use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -28,7 +28,7 @@ class EventDispatcherInjector implements ParametersInjector
     public function injectViewParameters(View $view, array $parameters)
     {
         $event = new FilterViewParametersEvent($view, $parameters);
-        $this->eventDispatcher->dispatch(Events::FILTER_VIEW_PARAMETERS, $event);
+        $this->eventDispatcher->dispatch(ViewEvents::FILTER_VIEW_PARAMETERS, $event);
         $view->addParameters($event->getViewParameters());
     }
 }
