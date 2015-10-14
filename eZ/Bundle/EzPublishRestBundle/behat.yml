@@ -1,0 +1,20 @@
+rest:
+    suites:
+        fullJson:
+            paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
+            contexts:
+                - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
+                    driver: BuzzDriver
+                    type: json
+        fullXml:
+            paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
+            contexts:
+                - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
+                    driver: BuzzDriver
+                    type: xml
+        guzzle:
+            paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
+            contexts:
+                - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
+                    driver: GuzzleDriver
+                    type: json

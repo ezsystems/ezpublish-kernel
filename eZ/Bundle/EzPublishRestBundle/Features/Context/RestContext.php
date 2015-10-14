@@ -10,6 +10,8 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
+use Behat\Mink\Mink;
+use Behat\MinkExtension\Context\MinkAwareContext;
 use EzSystems\BehatBundle\Context\Api\Context;
 use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -22,7 +24,7 @@ use PHPUnit_Framework_Assert as Assertion;
  *   Settings and client initializations is done here
  *   Also it contains all REST generic actions.
  */
-class RestContext extends Context
+class RestContext extends Context implements MinkAwareContext
 {
     use SubContext\EzRest;
     use SubContext\Authentication;
@@ -58,6 +60,16 @@ class RestContext extends Context
     private $driver;
 
     /**
+     * @var \Behat\Mink\Mink
+     */
+    private $mink;
+
+    /**
+     * @var array
+     */
+    private $minkParameters;
+
+    /**
      * Initialize class.
      *
      * @param string $url    Base URL for REST calls
@@ -65,17 +77,45 @@ class RestContext extends Context
      * @param string $json
      */
     public function __construct(
-        $url = self::DEFAULT_URL,
         $driver = self::DEFAULT_DRIVER,
         $type = self::DEFAULT_BODY_TYPE,
         $authType = self::DEFAULT_AUTH_TYPE
     ) {
         $this->driver = $driver;
-        $this->url = $url;
         $this->restBodyType = $type;
         $this->authType = $authType;
 
-        $this->setRestDriver($this->driver, $this->url);
+        $this->setRestDriver($this->driver);
+    }
+
+    private function setUrl($url)
+    {
+        $this->url = $url;
+        if (isset($this->restDriver)) {
+            $this->restDriver->setHost($this->url);
+        }
+    }
+
+    /**
+     * Sets Mink instance.
+     *
+     * @param Mink $mink Mink session manager
+     */
+    public function setMink(Mink $mink)
+    {
+        $this->mink = $mink;
+    }
+
+    /**
+     * Sets parameters provided for Mink.
+     * While at it, take the base_url, and use it to build the one for the REST driver.
+     *
+     * @param array $parameters
+     */
+    public function setMinkParameters(array $parameters)
+    {
+        $this->minkParameters = $parameters;
+        $this->setUrl($parameters['base_url'] . '/api/ezp/v2/');
     }
 
     /**
@@ -90,9 +130,8 @@ class RestContext extends Context
      * Create and set the REST driver to be used.
      *
      * @param string $restDriver REST driver class name
-     * @param string|null $restUrl Base URL for the REST calls
      */
-    private function setRestDriver($restDriver, $restUrl)
+    private function setRestDriver($restDriver)
     {
         $namespace = '\\' . __NAMESPACE__ .  '\\RestClient\\';
         $driver = $namespace . $restDriver;
@@ -108,7 +147,9 @@ class RestContext extends Context
 
         // create a new REST Driver
         $this->restDriver = new $driver();
-        $this->restDriver->setHost($restUrl);
+        if (isset($this->url)) {
+            $this->restDriver->setHost($this->url);
+        }
     }
 
     /**

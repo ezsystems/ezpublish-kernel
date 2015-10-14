@@ -1,0 +1,12 @@
+# This file is meant to be imported from ezplatform's behat.yml.dist.
+# All path are relative to the root ezplatform directory.
+core:
+    suites:
+        console:
+            paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Console]
+            contexts: [ eZ\Bundle\EzPublishCoreBundle\Features\Context\ConsoleContext ]
+        web:
+            paths:
+                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features
+            contexts:
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
