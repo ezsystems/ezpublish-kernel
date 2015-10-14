@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
-class BlockView extends BaseView implements View, BlockValueView
+class BlockView extends BaseView implements View, BlockValueView, CachableView
 {
     /** @var Block */
     private $block;

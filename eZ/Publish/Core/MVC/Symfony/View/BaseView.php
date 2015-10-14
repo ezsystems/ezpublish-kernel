@@ -36,6 +36,9 @@ abstract class BaseView implements View
     /** @var \Symfony\Component\HttpFoundation\Response */
     private $response;
 
+    /** @var bool */
+    private $isCacheEnabled = true;
+
     /**
      * @param string|\Closure $templateIdentifier Valid path to the template. Can also be a closure.
      * @param string $viewType
@@ -197,5 +200,15 @@ abstract class BaseView implements View
     public function getResponse()
     {
         return $this->response;
+    }
+
+    public function setCacheEnabled($cacheEnabled)
+    {
+        $this->isCacheEnabled = (bool)$cacheEnabled;
+    }
+
+    public function isCacheEnabled()
+    {
+        return $this->isCacheEnabled;
     }
 }
