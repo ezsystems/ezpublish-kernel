@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 interface EmbedView
 {
     /**
-     * The default viewType for embed views
+     * The default viewType for embed views.
      * @var string
      */
     const DEFAULT_VIEW_TYPE = 'embed';
