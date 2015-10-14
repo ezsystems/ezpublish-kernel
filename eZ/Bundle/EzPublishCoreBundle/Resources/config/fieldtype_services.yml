@@ -16,7 +16,6 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.aggregate.class: eZ\Publish\Core\FieldType\RichText\Converter\Aggregate
     ezpublish.fieldType.ezrichtext.converter.output.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5
     ezpublish.fieldType.ezrichtext.converter.edit.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Edit
-    ezpublish.fieldType.ezrichtext.converter.input.ezxml.normalize.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Ezxml\ToRichTextPreNormalize
     ezpublish.fieldType.ezrichtext.converter.input.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Input
     ezpublish.fieldType.ezrichtext.converter.link.class: eZ\Publish\Core\FieldType\RichText\Converter\Link
     ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed
@@ -30,7 +29,6 @@ parameters:
     ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
     ezpublish.fieldType.ezrichtext.resources: %ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/RichText/Resources
 
-    ezpublish.fieldType.ezrichtext.converter.input.ezxml.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/ezxml/docbook/core.xsl
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/xhtml5/edit/docbook.xsl
     ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/docbook/xhtml5/edit/xhtml5.xsl
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/docbook/xhtml5/output/xhtml5.xsl
@@ -90,26 +88,6 @@ services:
         class: %ezpublish.fieldType.ezpage.hashConverter.class%
 
     # RichText
-    # Aggregate converter for EZXML input that other converters register to
-    # through service tags.
-    ezpublish.fieldType.ezrichtext.converter.input.ezxml:
-        class: %ezpublish.fieldType.ezrichtext.converter.aggregate.class%
-
-    # Input normalizing converter should typically be the first one to execute
-    ezpublish.fieldType.ezrichtext.converter.input.ezxml.normalize:
-        class: %ezpublish.fieldType.ezrichtext.converter.input.ezxml.normalize.class%
-        arguments:
-            - @ezpublish.fieldType.ezxmltext.converter.expanding
-            - @ezpublish.fieldType.ezxmltext.converter.embedLinking
-        tags:
-            - {name: ezpublish.ezrichtext.converter.input.ezxml, priority: 0}
-
-    ezpublish.fieldType.ezrichtext.converter.input.ezxml.core:
-        class: %ezpublish.fieldType.ezrichtext.converter.xslt.class%
-        arguments: [%ezpublish.fieldType.ezrichtext.converter.input.ezxml.resources%]
-        tags:
-            - {name: ezpublish.ezrichtext.converter.input.ezxml, priority: 100}
-
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.input.html5.class%
         arguments:
@@ -121,7 +99,6 @@ services:
         arguments:
             -
                 http://docbook.org/ns/docbook: null
-                http://ez.no/namespaces/ezpublish3/xhtml/: @ezpublish.fieldType.ezrichtext.converter.input.ezxml
                 http://ez.no/namespaces/ezpublish5/xhtml5/edit: @ezpublish.fieldType.ezrichtext.converter.input.xhtml5
 
     ezpublish.fieldType.ezrichtext.converter.link:
