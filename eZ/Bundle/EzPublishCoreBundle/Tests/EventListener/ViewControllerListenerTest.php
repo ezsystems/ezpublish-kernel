@@ -99,7 +99,7 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
 
         $this->viewBuilderRegistry
             ->expects($this->once())
-            ->method('get')
+            ->method('getFromRegistry')
             ->with('Foo::bar')
             ->willReturn(null);
 
@@ -128,7 +128,7 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
 
         $this->viewBuilderRegistry
             ->expects($this->once())
-            ->method('get')
+            ->method('getFromRegistry')
             ->will($this->returnValue($this->viewBuilderMock));
 
         $viewObject = new ContentView($templateIdentifier);
