@@ -11,15 +11,6 @@ parameters:
     ezpublish.fieldType.ezpage.zone.class: eZ\Publish\Core\FieldType\Page\Parts\Zone
     ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
 
-    # XmlText
-    ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\XmlText\Converter\Html5
-    ezpublish.fieldType.ezxmltext.converter.html5.resources: %ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
-    ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
-    ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes: [view, node_id, object_id]
-    ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5
-    ezpublish.fieldType.ezxmltext.converter.expanding.class: eZ\Publish\Core\FieldType\XmlText\Converter\Expanding
-    ezpublish.fieldType.ezxmltext.converter.embedLinking.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking
-
     # RichText
     ezpublish.fieldType.ezrichtext.converter.xslt.class: eZ\Publish\Core\FieldType\RichText\Converter\Xslt
     ezpublish.fieldType.ezrichtext.converter.aggregate.class: eZ\Publish\Core\FieldType\RichText\Converter\Aggregate
@@ -97,43 +88,6 @@ services:
 
     ezpublish.fieldType.ezpage.hashConverter:
         class: %ezpublish.fieldType.ezpage.hashConverter.class%
-
-    # XmlText
-    ezpublish.fieldType.ezxmltext.converter.html5:
-        class: %ezpublish.fieldType.ezxmltext.converter.html5.class%
-        arguments:
-            - %ezpublish.fieldType.ezxmltext.converter.html5.resources%
-            - @ezpublish.config.resolver
-
-    ezpublish.fieldType.ezxmltext.converter.expanding:
-        class: %ezpublish.fieldType.ezxmltext.converter.expanding.class%
-        tags:
-            - { name: ezpublish.ezxml.converter, priority: 32 }
-
-    ezpublish.fieldType.ezxmltext.converter.embedLinking:
-        class: %ezpublish.fieldType.ezxmltext.converter.embedLinking.class%
-        tags:
-            - { name: ezpublish.ezxml.converter, priority: 24 }
-
-    ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
-        class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
-        arguments:
-            - @ezpublish.api.service.location
-            - @ezpublish.api.service.content
-            - @ezpublish.urlalias_router
-            - @?logger
-        tags:
-            - { name: ezpublish.ezxml.converter, priority: 16 }
-
-    ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
-        class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
-        arguments:
-            - @fragment.handler
-            - @ezpublish.api.repository
-            - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
-            - @?logger
-        tags:
-            - { name: ezpublish.ezxml.converter, priority: 8 }
 
     # RichText
     # Aggregate converter for EZXML input that other converters register to

@@ -54,7 +54,6 @@ $fieldTypes = array(
     new Client\FieldType(new FieldType\TextLine\Type()),
     new Client\FieldType(new FieldType\Url\Type()),
     new Client\FieldType(new FieldType\User\Type()),
-    new Client\FieldType(new FieldType\Null\Type('ezxmltext')),         // @todo FIXME: Add correct type
     new Client\FieldType(new FieldType\Null\Type('ezpage')),            // @todo FIXME: Add correct type
 );
 

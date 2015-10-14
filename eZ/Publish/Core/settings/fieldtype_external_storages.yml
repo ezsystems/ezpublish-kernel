@@ -4,7 +4,6 @@ parameters:
     ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
     ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
-    ezpublish.fieldType.ezxmltext.externalStorage.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
     ezpublish.fieldType.ezuser.externalStorage.class: eZ\Publish\Core\FieldType\User\UserStorage
     ezpublish.fieldType.ezrichtext.externalStorage.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage
@@ -59,11 +58,6 @@ services:
         class: %ezpublish.fieldType.ezrichtext.externalStorage.class%
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezrichtext}
-
-    ezpublish.fieldType.ezxmltext.externalStorage:
-        class: %ezpublish.fieldType.ezxmltext.externalStorage.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezxmltext}
 
     ezpublish.fieldType.ezgmaplocation.externalStorage:
         class: %ezpublish.fieldType.ezgmaplocation.externalStorage.class%

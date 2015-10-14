@@ -24,11 +24,6 @@
 {% endspaceless %}
 {% endblock %}
 
-{% block ezxmltext_field %}
-    {%- set field_value = field.value.xml|xmltext_to_html5 -%}
-    {{ block( 'simple_block_field' ) }}
-{% endblock %}
-
 {% block ezrichtext_field %}
     {%- set field_value = field.value.xml|richtext_to_html5 -%}
     {{ block( 'simple_block_field' ) }}
@@ -438,7 +433,7 @@
 {% endblock %}
 
 
-{# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
+{# The simple_block_field block is a shorthand html block-based fields (like eztext or ezrichtext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
 {% block simple_block_field %}
 {% spaceless %}
