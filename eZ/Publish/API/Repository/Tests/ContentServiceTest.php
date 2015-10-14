@@ -1498,7 +1498,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->setField(
             'description',
-            '<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>'
+            '<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0"/>'
         );
 
         // Don't set this, then the above call without languageCode will fail

@@ -930,7 +930,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $this->assertEquals(
             array(
                 'ezstring' => array(841),
-                'ezxmltext' => array(842),
+                'ezrichtext' => array(842),
                 'ezimage' => array(843),
                 'ezkeyword' => array(844),
             ),
