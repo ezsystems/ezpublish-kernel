@@ -21,6 +21,15 @@ use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
  */
 class EzxmlToDocbookTest extends BaseTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if (!class_exists('eZ\Publish\Core\FieldType\XmlText\Converter\Expanding')) {
+            $this->markTestSkipped('This tests requires XmlText field type');
+        }
+    }
+
     /**
      * @return \eZ\Publish\Core\FieldType\RichText\Converter\Xslt
      */
