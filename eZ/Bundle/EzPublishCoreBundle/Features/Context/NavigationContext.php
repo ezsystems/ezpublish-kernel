@@ -50,7 +50,7 @@ class NavigationContext implements Context, SnippetAcceptingContext, MinkAwareCo
      */
     public function routeHasTheDefaultSetTo($defaultName, $defaultValue)
     {
-        Assertion::assertNotNull($this->currentRoute, "No currentRoute was set");
+        Assertion::assertNotNull($this->currentRoute, 'No currentRoute was set');
 
         Assertion::assertTrue(
             $this->currentRoute->hasDefault($defaultName),
@@ -85,8 +85,7 @@ class NavigationContext implements Context, SnippetAcceptingContext, MinkAwareCo
      */
     public function iGoToThatRoute()
     {
-        Assertion::assertTrue(isset($this->currentRoute), "No current Route was set");
+        Assertion::assertTrue(isset($this->currentRoute), 'No current Route was set');
         $this->getSession()->visit($this->currentRoute->getPath());
     }
-
 }

@@ -41,7 +41,7 @@ class QueryTypeContext implements Context, SnippetAcceptingContext, KernelAwareC
      */
     private $searchService;
 
-    public function __construct( QueryTypeRegistry $queryTypeRegistry, SearchService $searchService)
+    public function __construct(QueryTypeRegistry $queryTypeRegistry, SearchService $searchService)
     {
         $this->queryTypeRegistry = $queryTypeRegistry;
         $this->searchService = $searchService;
@@ -86,7 +86,7 @@ class QueryTypeContext implements Context, SnippetAcceptingContext, KernelAwareC
     {
         Assertion::assertTrue(
             isset($this->currentQueryType),
-            "No current QueryType was set"
+            'No current QueryType was set'
         );
 
         $query = $this->currentQueryType->getQuery([$parameterName => $parameterValue]);

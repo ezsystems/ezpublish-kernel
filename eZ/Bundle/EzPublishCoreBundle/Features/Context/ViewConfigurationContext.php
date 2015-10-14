@@ -54,7 +54,7 @@ class ViewConfigurationContext implements Context, SnippetAcceptingContext
      */
     public function configurationHasThePropertySetToTheValue($propertyName, $propertyValue)
     {
-        Assertion::assertNotNull($this->currentViewConfiguration, "No currentViewConfiguration was set");
+        Assertion::assertNotNull($this->currentViewConfiguration, 'No currentViewConfiguration was set');
 
         Assertion::assertArrayHasKey(
             $propertyName,
@@ -79,7 +79,7 @@ class ViewConfigurationContext implements Context, SnippetAcceptingContext
         } elseif ($propertyValue === 'false') {
             $propertyValue = false;
         } else {
-            throw new InvalidArgumentException("propertyValue", "Unknown boolean value '$propertyValue''");
+            throw new InvalidArgumentException('propertyValue', "Unknown boolean value '$propertyValue''");
         }
 
         $this->configurationHasThePropertySetToTheValue($propertyName, $propertyValue);
@@ -90,7 +90,7 @@ class ViewConfigurationContext implements Context, SnippetAcceptingContext
      */
     public function configurationHasMatch($matcherName, $matcherValue)
     {
-        Assertion::assertNotNull($this->currentViewConfiguration, "No currentViewConfiguration was set");
+        Assertion::assertNotNull($this->currentViewConfiguration, 'No currentViewConfiguration was set');
 
         $matchConfig = $this->currentViewConfiguration['match'];
 
