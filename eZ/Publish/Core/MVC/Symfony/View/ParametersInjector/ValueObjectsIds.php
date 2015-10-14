@@ -17,7 +17,7 @@ class ValueObjectsIds implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return [View\Events::FILTER_VIEW_PARAMETERS => 'injectValueObjectsIds'];
+        return [View\ViewEvents::FILTER_VIEW_PARAMETERS => 'injectValueObjectsIds'];
     }
 
     public function injectValueObjectsIds(View\Event\FilterViewParametersEvent $event)

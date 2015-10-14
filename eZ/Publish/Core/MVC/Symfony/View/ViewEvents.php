@@ -7,7 +7,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 /**
  * Events constants of views.
  */
-class Events
+final class ViewEvents
 {
     /**
      * Dispatched before the ViewBuilder is called to collect the ViewBuilder parameters.
