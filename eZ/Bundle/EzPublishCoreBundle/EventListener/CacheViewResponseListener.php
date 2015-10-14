@@ -5,6 +5,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\Symfony\View\CachableView;
 use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -50,16 +51,15 @@ class CacheViewResponseListener implements EventSubscriberInterface
 
     public function configureCache(FilterResponseEvent $event)
     {
-        if (!($view = $event->getRequest()->attributes->get('view')) instanceof View) {
+        if (!($view = $event->getRequest()->attributes->get('view')) instanceof CachableView) {
             return;
         }
 
-        if (!$this->enableViewCache) {
+        if (!$this->enableViewCache || !$view->isCacheEnabled()) {
             return;
         }
 
         $response = $event->getResponse();
-        $request = $event->getRequest();
 
         if ($view instanceof LocationValueView && ($location = $view->getLocation()) instanceof Location) {
             $response->headers->set('X-Location-Id', $location->id, false);

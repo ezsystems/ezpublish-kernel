@@ -40,7 +40,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  * }
  * </code>
  */
-class ContentView extends BaseView implements View, ContentValueView, LocationValueView, EmbedView
+class ContentView extends BaseView implements View, ContentValueView, LocationValueView, EmbedView, CachableView
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;
