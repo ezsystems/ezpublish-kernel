@@ -113,6 +113,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
         $content = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
         $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
         $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $location = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
         $content
             ->expects($this->once())
             ->method('getVersionInfo')
@@ -124,11 +125,11 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
 
         // Configuring view provider behaviour
         $templateIdentifier = 'foo:bar:baz';
-        $params = array('foo' => 'bar');
+        $params = array('foo' => 'bar', 'location' => $location);
         $viewProvider
             ->expects($this->once())
             ->method('getView')
-            ->with($contentInfo, 'customViewType')
+            ->with($contentInfo, $params['location'], 'customViewType')
             ->will(
                 $this->returnValue(
                     new ContentView($templateIdentifier, $params)
@@ -143,7 +144,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
             ->with($templateIdentifier, $params + array('content' => $content, 'viewbaseLayout' => $this->viewBaseLayout))
             ->will($this->returnValue($expectedTemplateResult));
 
-        self::assertSame($expectedTemplateResult, $this->viewManager->renderContent($content, 'customViewType'));
+        self::assertSame($expectedTemplateResult, $this->viewManager->renderContent($content, 'customViewType', $params));
     }
 
     public function testRenderContentWithClosure()
