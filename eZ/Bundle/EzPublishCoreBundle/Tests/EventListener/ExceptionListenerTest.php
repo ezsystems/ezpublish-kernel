@@ -53,7 +53,7 @@ class ExceptionListenerTest extends PHPUnit_Framework_TestCase
     public function testGetSubscribedEvents()
     {
         self::assertSame(
-            [KernelEvents::EXCEPTION => ['onKernelException', -90]],
+            [KernelEvents::EXCEPTION => ['onKernelException', 10]],
             ExceptionListener::getSubscribedEvents()
         );
     }
@@ -113,7 +113,7 @@ class ExceptionListenerTest extends PHPUnit_Framework_TestCase
 
         $this->listener->onKernelException($event);
         $convertedException = $event->getException();
-        self::assertInstanceOf('\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException', $convertedException);
+        self::assertInstanceOf('\Symfony\Component\Security\Core\Exception\AccessDeniedException', $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame($translatedMessage, $convertedException->getMessage());
     }
