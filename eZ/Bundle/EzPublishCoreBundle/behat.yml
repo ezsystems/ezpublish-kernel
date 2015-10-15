@@ -3,10 +3,14 @@
 core:
     suites:
         console:
-            paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Console]
-            contexts: [ eZ\Bundle\EzPublishCoreBundle\Features\Context\ConsoleContext ]
+            paths:
+                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Console
+            contexts:
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ConsoleContext
         web:
             paths:
-                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features
+                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Content
+                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Exception
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ExceptionContext

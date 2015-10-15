@@ -1,0 +1,3 @@
+services:
+    platform_behat.controller.exception:
+        class: eZ\Bundle\PlatformBehatBundle\Controller\ExceptionController
