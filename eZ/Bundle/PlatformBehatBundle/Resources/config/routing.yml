@@ -1,4 +1,0 @@
-ez_platform_behat_repository_unauthorized_exception:
-    path: '/platform-behat/exceptions/repository-unauthorized'
-    defaults:
-        _controller: 'platform_behat.controller.exception:throwRepositoryUnauthorizedAction'
