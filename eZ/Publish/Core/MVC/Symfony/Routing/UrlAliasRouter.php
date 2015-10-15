@@ -35,8 +35,15 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
     const URL_ALIAS_ROUTE_NAME = 'ez_urlalias';
 
+    /**
+     * @deprecated since 6.0.0.
+     */
     const LOCATION_VIEW_CONTROLLER = 'ez_content:viewLocation';
-    const CONTENT_VIEW_CONTROLLER = 'ez_content:viewContent';
+
+    /**
+     * @since 6.0.0
+     */
+    const VIEW_ACTION = 'ez_content:viewAction';
 
     /**
      * @var \Symfony\Component\Routing\RequestContext
@@ -131,7 +138,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                 case URLAlias::LOCATION:
                     $location = $this->generator->loadLocation($urlAlias->destination);
                     $params += array(
-                        '_controller' => static::CONTENT_VIEW_CONTROLLER,
+                        '_controller' => static::VIEW_ACTION,
                         'contentId' => $location->contentId,
                         'locationId' => $urlAlias->destination,
                         'viewType' => ViewManager::VIEW_TYPE_FULL,

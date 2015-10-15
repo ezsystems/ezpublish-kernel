@@ -44,7 +44,7 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
 
         $matcherFactory = new BlockMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
         $matcherFactory->setContainer($container);
-        $matcherFactory->match($this->getBlockMock(), 'full');
+        $matcherFactory->match($this->getBlockMock());
     }
 
     public function testSetSiteAccessNull()

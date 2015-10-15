@@ -10,8 +10,12 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher;
 
+use eZ\Publish\Core\MVC\Symfony\View\View;
+
 /**
  * Base interface for matchers.
+ *
+ * @deprecated since 6.0.0. ViewMatcherInterface, that inherits from this interface, should be used instead.
  */
 interface MatcherInterface
 {

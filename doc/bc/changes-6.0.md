@@ -187,8 +187,8 @@ Changes affecting version compatibility with former or future versions.
 * Some methods have been deprecated in `eZ/Publish/API/Repository/RoleService`: `updateRole`, `addPolicy`,
   `removePolicy`, `deletePolicy`, and `updatePolicy`. Use the corresponding `*Draft` and `*ByRoleDraft` methods instead.
 
-* The `viewLocation` and `embedLocation` controller actions are deprecated. `viewContent` and `embedContent` can be used
-  instead, with the location as an extra parameter.
+* The `viewLocation`, `embedLocation`, `viewContent` and `embedContent` Content\ViewController`` actions are deprecated.
+  `viewAction` and `embedAction` must be used instead. Both accept the location as an extra parameter.
   The corresponding `location_view` configuration is also deprecated. It will transparently be converted to `content_view`,
   but you should update your configuration:
   ```
@@ -210,6 +210,12 @@ Changes affecting version compatibility with former or future versions.
   Rules that use a custom location view controller can't be transparently changed.
   Those need to be changed to custom content view controllers, that use a contentId instead of a locationId as an
   argument. The location is available in the `$parameters` array.
+
+* The `eZ\Publish\Core\MVC\Symfony\View\MatcherInterface` interface is deprecated.
+  Matchers that use it will stop working until they implement `eZ\Publish\Core\MVC\Symfony\View\ViewMatcherInterface`
+  instead. This interface exposes a single `match()` method that expects an `eZ\Publish\Core\MVC\Symfony\View\View`
+  as its argument. Implementations should check the type of value the View contains, depending on what it is matching
+  against (`LocationValueView`, `ContentValueView`, `BlockValueView`.
 
 ## Removed features
 

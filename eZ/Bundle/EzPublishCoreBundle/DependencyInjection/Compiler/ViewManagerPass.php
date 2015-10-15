@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * The ViewPass adds DIC compiler pass related to content view.
@@ -22,6 +21,8 @@ use Symfony\Component\DependencyInjection\Reference;
  * @see \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider
  *
  * @deprecated since 6.0
+ *
+ * Converts the old tag (ezpublish.xxx_view_provider) to the new one (ezpublish.view_provider with type attribute)
  */
 abstract class ViewManagerPass implements CompilerPassInterface
 {
@@ -30,25 +31,18 @@ abstract class ViewManagerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.view_manager')) {
-            return;
-        }
-
-        $viewManagerDef = $container->getDefinition('ezpublish.view_manager');
         foreach ($container->findTaggedServiceIds(static::VIEW_PROVIDER_IDENTIFIER) as $id => $attributes) {
+            $taggedServiceDefinition = $container->getDefinition($id);
             foreach ($attributes as $attribute) {
+                // @todo log deprecated message
                 $priority = isset($attribute['priority']) ? (int)$attribute['priority'] : 0;
-                // Priority range is between -255 (the lowest) and 255 (the highest)
-                $priority = max(min($priority, 255), -255);
-
-                $viewManagerDef->addMethodCall(
-                    static::ADD_VIEW_PROVIDER_METHOD,
-                    array(
-                        new Reference($id),
-                        $priority,
-                    )
+                $taggedServiceDefinition->clearTag(static::VIEW_PROVIDER_IDENTIFIER);
+                $taggedServiceDefinition->addTag(
+                    'ezpublish.view_provider',
+                    ['type' => static::VIEW_TYPE, 'priority' => $priority]
                 );
             }
+            $container->setDefinition($id, $taggedServiceDefinition);
         }
     }
 }

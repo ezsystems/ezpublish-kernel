@@ -11,8 +11,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\RepositoryAwareInterface;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 use SplObjectStorage;
 use InvalidArgumentException;
 
@@ -71,7 +71,7 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      *
      * @throws InvalidArgumentException
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface
+     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface|\eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface
      */
     protected function getMatcher($matcherIdentifier)
     {
@@ -100,18 +100,18 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
     /**
      * Checks if $valueObject has a usable configuration for $viewType.
      * If so, the configuration hash will be returned.
-     *
      * $valueObject can be for example a Location or a Content object.
      *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
-     * @param string $viewType
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
      *
      * @return array|null The matched configuration as a hash, containing template or controller to use, or null if not matched.
      */
-    public function match(ValueObject $valueObject, $viewType)
+    public function match(View $view)
     {
+        $viewType = $view->getViewType();
+
         if (!isset($this->matchConfig[$viewType])) {
-            return;
+            return null;
         }
 
         if (!isset($this->alreadyMatched[$viewType])) {
@@ -119,8 +119,8 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
         }
 
         // If we already matched, just returned the matched value.
-        if (isset($this->alreadyMatched[$viewType][$valueObject])) {
-            return $this->alreadyMatched[$viewType][$valueObject];
+        if (isset($this->alreadyMatched[$viewType][$view])) {
+            return $this->alreadyMatched[$viewType][$view];
         }
 
         foreach ($this->matchConfig[$viewType] as $configHash) {
@@ -129,26 +129,26 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
             foreach ($configHash['match'] as $matcherIdentifier => $value) {
                 $matcher = $this->getMatcher($matcherIdentifier);
                 $matcher->setMatchingConfig($value);
-                if (!$this->doMatch($matcher, $valueObject)) {
+                if (!$matcher->match($view)) {
                     $hasMatched = false;
                 }
             }
 
             if ($hasMatched) {
-                return $this->alreadyMatched[$viewType][$valueObject] = $configHash + array('matcher' => $matcher);
+                return $this->alreadyMatched[$viewType][$view] = $configHash + array('matcher' => $matcher);
             }
         }
 
-        return $this->alreadyMatched[$viewType][$valueObject] = null;
+        return $this->alreadyMatched[$viewType][$view] = null;
     }
 
     /**
      * Checks if $valueObject matches $matcher rules.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface $matcher
-     * @param ValueObject $valueObject
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $valueObject
      *
      * @return bool
      */
-    abstract protected function doMatch(MatcherInterface $matcher, ValueObject $valueObject);
+    abstract protected function doMatch(MatcherInterface $matcher, View $valueObject);
 }

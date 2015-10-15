@@ -130,7 +130,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $locationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -187,7 +187,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $locationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -246,7 +246,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $locationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
@@ -399,7 +399,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             'locationId' => $destinationId,
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,

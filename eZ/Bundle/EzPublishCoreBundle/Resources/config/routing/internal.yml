@@ -7,9 +7,9 @@ _ezpublishLocation:
         layout: true
 
 _ez_content_view:
-    path: /view/content/{contentId}/{language}/{locationId}/{viewType}/{layout}
+    path: /view/content/{contentId}/{language}/{viewType}/{layout}/{locationId}
     defaults:
-        _controller: ez_content:viewContent
+        _controller: ez_content:viewAction
         viewType: full
         locationId: null
         layout: true

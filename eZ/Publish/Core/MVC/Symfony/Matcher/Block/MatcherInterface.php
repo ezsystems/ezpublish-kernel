@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Block;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface as BaseMatcherInterface;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface as BaseMatcherInterface;
 
 /**
  * Main interface for block matchers.

@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
@@ -111,7 +112,7 @@ class PreviewController
                 false
             );
         } catch (\Exception $e) {
-            if ($location->isDraft() && $this->controllerChecker->usesCustomController($location)) {
+            if ($location->isDraft() && $this->controllerChecker->usesCustomController($content, $location)) {
                 // @todo This should probably be an exception that embeds the original one
                 $message = <<<EOF
 <p>The view that rendered this location draft uses a custom controller, and resulted in a fatal error.</p>
@@ -146,7 +147,7 @@ EOF;
     protected function getForwardRequest(Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request, $language)
     {
         $forwardRequestParameters = array(
-            '_controller' => 'ez_content:viewContent',
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
             // specify a route for RouteReference generator
             '_route' => UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
             '_route_params' => array(
@@ -166,7 +167,7 @@ EOF;
             'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
         );
 
-        if ($this->controllerChecker->usesCustomController($location)) {
+        if ($this->controllerChecker->usesCustomController($content, $location)) {
             $forwardRequestParameters = [
                 '_controller' => 'ez_content:viewLocation',
                 '_route' => self::INTERNAL_LOCATION_VIEW_ROUTE,

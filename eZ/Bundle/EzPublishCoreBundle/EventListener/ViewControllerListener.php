@@ -10,50 +10,40 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\MVC\Symfony\Controller\ManagerInterface as ControllerManagerInterface;
+use eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry;
+use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewBuilderParametersEvent;
+use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ViewControllerListener implements EventSubscriberInterface
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Controller\ManagerInterface
-     */
-    private $controllerManager;
-
-    /**
-     * @var \Symfony\Component\HttpKernel\Controller\ControllerResolverInterface
-     */
+    /** @var \Symfony\Component\HttpKernel\Controller\ControllerResolverInterface */
     private $controllerResolver;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
+
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry */
+    private $viewBuilderRegistry;
+
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcher */
+    private $eventDispatcher;
 
     public function __construct(
         ControllerResolverInterface $controllerResolver,
-        ControllerManagerInterface $controllerManager,
-        Repository $repository,
+        ViewBuilderRegistry $viewBuilderRegistry,
+        EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger
     ) {
-        $this->controllerManager = $controllerManager;
         $this->controllerResolver = $controllerResolver;
-        $this->repository = $repository;
+        $this->viewBuilderRegistry = $viewBuilderRegistry;
+        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
     }
 
@@ -63,7 +53,7 @@ class ViewControllerListener implements EventSubscriberInterface
     }
 
     /**
-     * Detects if there is a custom controller to use to render a Location/Content.
+     * Configures the View for eZ View controllers.
      *
      * @param FilterControllerEvent $event
      *
@@ -72,77 +62,21 @@ class ViewControllerListener implements EventSubscriberInterface
     public function getController(FilterControllerEvent $event)
     {
         $request = $event->getRequest();
-        // Only taking content related controller (i.e. ez_content:viewLocation or ez_content:viewContent)
-        if (strpos($request->attributes->get('_controller'), 'ez_content:') === false) {
-            return;
-        }
-        try {
-            if ($request->attributes->get('locationId')) {
-                $valueObject = $this->repository->getLocationService()->loadLocation(
-                    $request->attributes->get('locationId')
-                );
-                $request->attributes->set('contentId', $valueObject->contentId);
-                $request->attributes->set('location', $valueObject);
-            } elseif (($location = $request->attributes->get('location')) instanceof Location) {
-                $valueObject = $location;
-                $request->attributes->set('locationId', $valueObject->id);
-                $request->attributes->set('contentId', $valueObject->contentId);
-            } elseif ($request->attributes->has('contentId')) {
-                $valueObject = $this->repository->sudo(
-                    function (Repository $repository) use ($request) {
-                        return $repository->getContentService()->loadContentInfo(
-                            $request->attributes->get('contentId')
-                        );
-                    }
-                );
-            } elseif (($contentInfo = $request->attributes->get('contentInfo')) instanceof ContentInfo) {
-                $valueObject = $contentInfo;
-                $request->attributes->set('contentId', $valueObject->id);
-            }
-        } catch (UnauthorizedException $e) {
-            throw new AccessDeniedException();
-        }
 
-        if (!isset($valueObject)) {
-            $this->logger->error('Could not resolver a view controller, invalid value object to match.');
-
+        if (($viewBuilder = $this->viewBuilderRegistry->getFromRegistry($request->attributes->get('_controller'))) === null) {
             return;
         }
 
-        $requestParams = $request->attributes->get('params', []);
-        if ($valueObject instanceof Location && !isset($requestParams['location'])) {
-            $requestParams += ['location' => $valueObject];
-            $request->attributes->set('params', $requestParams);
-        }
+        $parameterEvent = new FilterViewBuilderParametersEvent(clone $request);
+        $this->eventDispatcher->dispatch(ViewEvents::FILTER_BUILDER_PARAMETERS, $parameterEvent);
+        $view = $viewBuilder->buildView($parameterEvent->getParameters()->all());
+        $request->attributes->set('view', $view);
 
-        $controllerReference = $this->controllerManager->getControllerReference(
-            $valueObject,
-            $request->attributes->get('viewType')
-        );
+        // View parameters are added as request attributes so that they are available as controller action parameters
+        $request->attributes->add($view->getParameters());
 
-        if ($valueObject instanceof Location && !$controllerReference instanceof ControllerReference) {
-            // If value object is a location and location view rules did not match a controller
-            // we should try matching with content view rules
-            $controllerReference = $this->controllerManager->getControllerReference(
-                $valueObject->contentInfo,
-                $request->attributes->get('viewType')
-            );
-        }
-
-        if ($controllerReference instanceof ControllerReference) {
+        if (($controllerReference = $view->getControllerReference()) instanceof ControllerReference) {
             $request->attributes->set('_controller', $controllerReference->controller);
-            $event->setController($this->controllerResolver->getController($request));
-
-            return;
-        }
-
-        // if there is no custom controller, viewContent can be used instead of viewLocation.
-        if ($request->attributes->get('_controller') === 'ez_content:viewLocation') {
-            $request->attributes->set('_controller', 'ez_content:viewContent');
-            $event->setController($this->controllerResolver->getController($request));
-        }
-        if ($request->attributes->get('_controller') === 'ez_content:embedLocation') {
-            $request->attributes->set('_controller', 'ez_content:embedContent');
             $event->setController($this->controllerResolver->getController($request));
         }
     }

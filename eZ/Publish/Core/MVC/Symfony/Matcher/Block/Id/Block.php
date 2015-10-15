@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\Block\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MultipleValued;
 use eZ\Publish\Core\FieldType\Page\Parts\Block as PageBlock;
+use eZ\Publish\Core\MVC\Symfony\View\BlockValueView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class Block extends MultipleValued
 {
@@ -25,5 +27,14 @@ class Block extends MultipleValued
     public function matchBlock(PageBlock $block)
     {
         return isset($this->values[$block->id]);
+    }
+
+    public function match(View $view)
+    {
+        if (!$view instanceof BlockValueView) {
+            return false;
+        }
+
+        return isset($this->values[$view->getBlock()->id]);
     }
 }

@@ -28,11 +28,20 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
      */
     private $viewManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $viewProviders;
+
     protected function setUp()
     {
         parent::setUp();
         $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface');
         $this->viewManager = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager');
+        $this->viewProviders = array(
+            $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
+            $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
+        );
     }
 
     public function testGetSubscribedEvents()
@@ -59,7 +68,15 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
             ->method('setSiteAccess')
             ->with($siteAccess);
 
+        foreach ($this->viewProviders as $viewProvider) {
+            $viewProvider
+                ->expects($this->once())
+                ->method('setSiteAccess')
+                ->with($siteAccess);
+        }
+
         $listener = new ConfigScopeListener($this->configResolver, $this->viewManager);
+        $listener->setViewProviders($this->viewProviders);
         $listener->onConfigScopeChange($event);
         $this->assertSame($siteAccess, $event->getSiteAccess());
     }
