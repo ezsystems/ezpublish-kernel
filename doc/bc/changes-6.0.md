@@ -211,6 +211,13 @@ Changes affecting version compatibility with former or future versions.
   Those need to be changed to custom content view controllers, that use a contentId instead of a locationId as an
   argument. The location is available in the `$parameters` array.
 
+* The `viewBlock` and `viewBlockById` `PageController` actions are deprecated.
+  `viewAction` must be used instead. It accepts both `block` and `id` as parameters.
+
+* `eZ\Bundle\EzPublishCoreBundle\Controller\PageController` is deprecated and will be removed once
+  deprecated methods from base controller are also removed. You must use the base `PageController`
+  and its `viewAction` method.
+
 * The `eZ\Publish\Core\MVC\Symfony\View\MatcherInterface` interface is deprecated.
   Matchers that use it will stop working until they implement `eZ\Publish\Core\MVC\Symfony\View\ViewMatcherInterface`
   instead. This interface exposes a single `match()` method that expects an `eZ\Publish\Core\MVC\Symfony\View\View`

@@ -28,11 +28,14 @@ parameters:
     assetic.asset_factory.class: eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory
 
     ezpublish.view.cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
+    ezpublish.view.block_cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\BlockCacheResponseListener
     ezpublish.view.view_parameters.injector.viewbase_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ViewbaseLayout
     ezpublish.view.view_parameters.injector.value_objects_ids.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ValueObjectsIds
     ezpublish.view.view_parameters.injector.no_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\NoLayout
     ezpublish.view.view_parameters.injector.embed_object_parameters.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EmbedObjectParameters
     ezpublish.view.view_parameters.injector.custom_parameters.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\CustomParameters
+    ezpublish.view.view_parameters.injector.block.valid_items.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\Block\ValidItems
+    ezpublish.view.view_parameters.injector.block.valid_content_info_items.class: eZ\Bundle\EzPublishCoreBundle\EventListener\BlockValidContentInfoItemsListener
     ezpublish.view.view_parameters.injector.dispatcher.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EventDispatcherInjector
     ezpublish.view.renderer_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewRendererListener
     ezpublish.view.template_renderer.class: eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
@@ -202,7 +205,10 @@ services:
 
     ezpublish.view_builder.block:
         class: %ezpublish.view_builder.block.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        arguments:
+            - @ezpublish.fieldType.ezpage.pageService
+            - @ezpublish.view.configurator
+            - @ezpublish.view.view_parameters.injector.dispatcher
 
     ezpublish.view.builder_parameter_collector.request_attributes:
         class: %ezpublish.view.builder_parameter_collector.request_attributes.class%
@@ -249,11 +255,30 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish.view.view_parameters.injector.block.valid_items:
+        class: %ezpublish.view.view_parameters.injector.block.valid_items.class%
+        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.view.view_parameters.injector.block.valid_content_info_items:
+        class: %ezpublish.view.view_parameters.injector.block.valid_content_info_items.class%
+        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezpublish.view.cache_response_listener:
         class: %ezpublish.view.cache_response_listener.class%
         arguments:
             - $content.view_cache$
             - $content.ttl_cache$
             - $content.default_ttl$
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.view.block_cache_response_listener:
+        class: %ezpublish.view.block_cache_response_listener.class%
+        calls:
+            - [setEnableViewCache, [$content.view_cache$]]
         tags:
             - { name: kernel.event_subscriber }

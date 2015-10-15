@@ -120,7 +120,7 @@ services:
         alias: ezpublish.controller.content.view
 
     # Same as above for the page controller
-    # {{ render( controller( "ez_page:viewBlock", {'block': myBlock} ) ) }}
+    # {{ render( controller( "ez_page:viewAction", {'block': myBlock} ) ) }}
     ez_page:
         alias: ezpublish.controller.page.view
 
