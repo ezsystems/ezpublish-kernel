@@ -42,11 +42,11 @@ matrix:
     - php: 7.0
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 #    - php: 7.0
-#      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="dedicated" SOLR_CORES="core0 core1 core2 core3 core4 core5 core6 core7" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/language-fieldtypes.xml"
+#      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="dedicated" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/language-fieldtypes.xml"
 #    - php: 7.0
-#      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="shared" SOLR_CORES="core0 core1 core2 core3 core4" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/language-fieldtypes.xml"
+#      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="shared" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/language-fieldtypes.xml"
     - php: 7.0
-      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="single" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Search/Solr/Resources/language-fieldtypes.xml"
+      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="single" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/solr/language-fieldtypes.xml"
 # hhvm - disabled, no need to enable before travis has newer versions avaiable
 #    - php: hhvm
 #      env: TEST_CONFIG="phpunit.xml"

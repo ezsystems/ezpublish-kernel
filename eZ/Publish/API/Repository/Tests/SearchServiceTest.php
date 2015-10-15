@@ -11,7 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -3844,7 +3844,7 @@ class SearchServiceTest extends BaseTest
 
         // Do not limit for LSE, as it does not not require reindexing.
         // See explanation below.
-        if ($setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
             $criteria[] = new Criterion\ContentTypeIdentifier('folder');
         }
 
@@ -3864,7 +3864,7 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        if ($setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
             $result = $searchService->findContent($query);
 
             // Administrator User is owned by itself, when additional Locations are added
@@ -3933,7 +3933,7 @@ class SearchServiceTest extends BaseTest
 
         // Do not limit for LSE, as it does not not require reindexing.
         // See explanation below.
-        if ($setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
             $criteria[] = new Criterion\ContentTypeIdentifier('folder');
         }
 
@@ -3953,7 +3953,7 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        if ($setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
             $result = $searchService->findLocations($query);
 
             // Administrator User is owned by itself, when additional Locations are added
@@ -4200,7 +4200,7 @@ class SearchServiceTest extends BaseTest
         try {
             if ($query instanceof LocationQuery) {
                 $setupFactory = $this->getSetupFactory();
-                if ($setupFactory instanceof LegacySolr) {
+                if ($setupFactory instanceof LegacySolrSetupFactory) {
                     // @todo When we want to test score again by default we will need fixtures for Solr
                 }
 

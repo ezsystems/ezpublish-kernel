@@ -9,7 +9,7 @@
          colors="true"
          >
     <php>
-        <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr" />
+        <env name="setupFactory" value="EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory" />
         <env name="backendVersion" value="5" />
         <env name="fixtureDir" value="Solr" />
         <env name="solrServer" value="http://localhost:8983/" />

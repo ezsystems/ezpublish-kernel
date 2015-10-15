@@ -11,7 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -1413,7 +1413,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
     {
         $setupFactory = $this->getSetupFactory();
 
-        if ($setupFactory instanceof LegacySolr) {
+        if ($setupFactory instanceof LegacySolrSetupFactory) {
             $setupType = $this->getSetupType();
 
             return $indexMap[$setupType];
