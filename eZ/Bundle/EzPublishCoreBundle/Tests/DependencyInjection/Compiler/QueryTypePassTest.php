@@ -31,11 +31,11 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
 
     public function testRegisterTaggedQueryType()
     {
-        $def = new Definition();
-        $def->addTag('ezpublish.query_type');
-        $def->setClass('eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType');
         $serviceId = 'test.query_type';
-        $this->setDefinition($serviceId, $def);
+        $this->defineQueryTypeService(
+            $serviceId,
+            'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType'
+        );
 
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
@@ -47,13 +47,52 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
 
     public function testConventionQueryType()
     {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle']);
+        $this->defineQueryTypeBundle();
 
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.query_type.registry',
             'addQueryTypes',
             [[new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype')]]
+        );
+    }
+
+    /**
+     * Tests that a QueryType that is declared as a service and named by convention is registered correctly.
+     */
+    public function testServicePlusConvention()
+    {
+        $this->defineQueryTypeService(
+            'test.query_type',
+            'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType'
+        );
+        $this->defineQueryTypeBundle();
+
+        $this->compile();
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'ezpublish.query_type.registry',
+            'addQueryTypes',
+            [[new Reference('test.query_type')]]
+        );
+        $this->assertContainerBuilderNotHasService('ezpublish.query_type.convention.querytypebundle_testquerytype');
+    }
+
+    private function defineQueryTypeService($serviceId, $class)
+    {
+        $def = new Definition();
+        $def->addTag('ezpublish.query_type');
+        $def->setClass($class);
+        $this->setDefinition($serviceId, $def);
+    }
+
+    /**
+     * Adds to the kernel the path to a stub bundle that contains a QueryType class named by convention
+     */
+    private function defineQueryTypeBundle()
+    {
+        $this->setParameter(
+            'kernel.bundles',
+            ['QueryTypeBundle' => 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle']
         );
     }
 }
