@@ -33,7 +33,7 @@ class ContentPreviewContext extends BrowserContext implements Context, SnippetAc
     {
         $fields = array(
             'title' => 'Preview draft ' . date('c'),
-            'body' => '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>This is a paragraph.</paragraph></section>',
+            'body' => '<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This is a paragraph.</para></section>',
         );
         $draft = $this->getBasicContentManager()->createContentDraft(2, 'blog_post', $fields);
         $this->currentDraft = $draft;
