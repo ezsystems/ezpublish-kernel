@@ -96,6 +96,10 @@ class ContentViewBuilder implements ViewBuilder
 
         $view->setContent($content);
         if (isset($location)) {
+            if ($location->contentId !== $content->id) {
+                throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');
+            }
+
             $view->setLocation($location);
         }
 
