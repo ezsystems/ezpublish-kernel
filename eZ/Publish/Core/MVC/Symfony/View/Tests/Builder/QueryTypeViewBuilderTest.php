@@ -6,7 +6,6 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Builder;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\MVC\Symfony\View\Builder\QueryTypeViewBuilder;
 use eZ\Publish\Core\MVC\Symfony\View\QueryTypeView;
 
