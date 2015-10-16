@@ -16,7 +16,7 @@ use eZ\Publish\Core\Base\Translatable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,7 +39,7 @@ class ExceptionListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::EXCEPTION => ['onKernelException', -90],
+            KernelEvents::EXCEPTION => ['onKernelException', 10],
         ];
     }
 
@@ -50,7 +50,7 @@ class ExceptionListener implements EventSubscriberInterface
         if ($exception instanceof NotFoundException) {
             $event->setException(new NotFoundHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof UnauthorizedException) {
-            $event->setException(new AccessDeniedHttpException($this->getTranslatedMessage($exception), $exception));
+            $event->setException(new AccessDeniedException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof BadStateException || $exception instanceof InvalidArgumentException) {
             $event->setException(new BadRequestHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof Translatable) {

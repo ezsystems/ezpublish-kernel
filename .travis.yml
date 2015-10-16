@@ -29,16 +29,16 @@ matrix:
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
     - php: 5.6
-      env: BEHAT_PROFILE="demo" TEST="clean"
+      env: BEHAT_OPTS="--profile=demo --suite=clean"
     - php: 5.6
-      env: BEHAT_PROFILE="core" TEST="console"
+      env: BEHAT_OPTS="--profile=core"
 # 7.0
     - php: 7.0
       env: REST_TEST_CONFIG="phpunit-functional-rest.xml"
     - php: 7.0
       env: TEST_CONFIG="phpunit.xml"
     - php: 7.0
-      env: BEHAT_PROFILE="rest" TEST="fullJson"
+      env: BEHAT_OPTS="--profile=rest --suite=fullJson"
     - php: 7.0
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 #    - php: 7.0
@@ -61,7 +61,7 @@ branches:
 before_script:
   # Prepare system
   - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
-  - if [ "$BEHAT_PROFILE" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
+  - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
   - if [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; echo pwd; cd "$HOME/build/ezplatform/vendor/ezsystems/ezpublish-kernel"; ./bin/.travis/prepare_rest_functional_tests.sh; fi
   # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
@@ -70,7 +70,7 @@ before_script:
 # execute phpunit or behat as the script command
 script:
   - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
-  - if [ "$BEHAT_PROFILE" != "" ] ; then cd "$HOME/build/ezplatform" && php bin/behat -vv --profile $BEHAT_PROFILE --suite $TEST ; fi
+  - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform" && php bin/behat -vv $BEHAT_OPTS ; fi
   - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional ; fi
 
 # disable mail notifications
