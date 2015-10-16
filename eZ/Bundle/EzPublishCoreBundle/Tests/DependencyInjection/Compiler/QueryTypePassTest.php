@@ -41,7 +41,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.query_type.registry',
             'addQueryTypes',
-            [['Test:Test' => new Reference($serviceId)]]
+            [[new Reference($serviceId)]]
         );
     }
 
@@ -53,7 +53,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.query_type.registry',
             'addQueryTypes',
-            [['Test:Test' => new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype')]]
+            [[new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype')]]
         );
     }
 }

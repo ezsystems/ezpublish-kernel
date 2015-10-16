@@ -32,7 +32,7 @@ class QueryTypePass implements CompilerPassInterface
 
             for ($i = 0, $count = count($tags); $i < $count; ++$i) {
                 // TODO: Check for duplicates
-                $queryTypes[$queryTypeClass::getName()] = new Reference($taggedServiceId);
+                $queryTypes[] = new Reference($taggedServiceId);
             }
         }
 
@@ -65,13 +65,13 @@ class QueryTypePass implements CompilerPassInterface
                     $serviceId = 'ezpublish.query_type.convention.' . strtolower($bundleName) . '_' . strtolower($queryTypeFileName);
                     $queryTypeServices[$serviceId] = new Definition($queryTypeClassName);
 
-                    $queryTypes[$queryTypeClassName::getName()] = new Reference($serviceId);
+                    $queryTypes[] = new Reference($serviceId);
                 }
                 $container->addDefinitions($queryTypeServices);
             }
         }
 
-        $aggregatorDefinition = $container->getDefinition('ezpublish.query_type.registry');
-        $aggregatorDefinition->addMethodCall('addQueryTypes', [$queryTypes]);
+        $registryDef = $container->getDefinition('ezpublish.query_type.registry');
+        $registryDef->addMethodCall('addQueryTypes', [$queryTypesRefs]);
     }
 }
