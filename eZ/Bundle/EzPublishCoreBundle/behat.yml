@@ -10,3 +10,10 @@ core:
                 - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\QueryTypeContext:
+                    queryTypeRegistry: @ezpublish.query_type.registry
+                    searchService: @ezpublish.api.service.search
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ViewConfigurationContext:
+                    configResolver: @ezpublish.config.resolver
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\NavigationContext:
+                    router: @router

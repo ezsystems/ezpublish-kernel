@@ -1,0 +1,11 @@
+system:
+    default:
+        query_type_view:
+            full:
+                latest_articles:
+                    template: 'EzPlatformBehatBundle:full:query_latest_article.html.twig'
+                    enable_pager: true
+                    match:
+                        QueryType\Name: 'EzPlatformBehatBundle:LatestContent'
+                        QueryType\Parameters:
+                            type: 'article'

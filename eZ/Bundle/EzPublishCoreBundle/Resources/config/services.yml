@@ -114,6 +114,13 @@ services:
         parent: ezpublish.controller.base
         scope: request
 
+    ezpublish.controller.query:
+        class: eZ\Publish\Core\MVC\Symfony\Controller\Content\QueryController
+
+    # Short alias for subrequests
+    ez_query:
+        alias: ezpublish.controller.query
+
     # This alias allows easier management for subrequests
     # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewType": "line"} ) ) }
     ez_content:
