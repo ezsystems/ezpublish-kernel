@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -409,7 +409,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         $setupFactory = $this->getSetupFactory();
 
-        if (!$setupFactory instanceof LegacySolr) {
+        if (!$setupFactory instanceof LegacySolrSetupFactory) {
             return;
         }
 
@@ -428,7 +428,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $searchHandlerProperty = new \ReflectionProperty($repository, 'searchHandler');
         $searchHandlerProperty->setAccessible(true);
 
-        /** @var \eZ\Publish\Core\Search\Solr\Handler $searchHandler */
+        /** @var \EzSystems\EzPlatformSolrSearchEngine\Handler $searchHandler */
         $searchHandler = $searchHandlerProperty->getValue($repository);
 
         $searchHandler->commit();

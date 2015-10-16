@@ -11,7 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
 
@@ -67,7 +67,7 @@ class EZP20018LanguageTest extends BaseTest
     public function testSearchOnNotExistingLanguageGivesException()
     {
         $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
+        if ($setupFactory instanceof LegacySetupFactory) {
             $this->markTestSkipped('Skipped on Solr as it is not clear that SPI search should have to validate Criterion values, in this case language code');
         }
 
