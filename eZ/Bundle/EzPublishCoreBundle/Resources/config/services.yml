@@ -30,6 +30,8 @@ parameters:
     ezpublish.exception_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ExceptionListener
 
     ezpublish.fields_groups.list.class: eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList
+    
+    ezpublish.query_type.registry.class: eZ\Publish\Core\QueryType\QueryTypeNameRegistry
 
 services:
     # Siteaccess is injected in the container at runtime
@@ -173,7 +175,7 @@ services:
             - { name: kernel.event_subscriber }
 
     ezpublish.query_type.registry:
-        class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
+        class: %ezpublish.query_type.registry.class%
 
     ezpublish.fields_groups.list:
         class: %ezpublish.fields_groups.list.class%
