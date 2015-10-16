@@ -10,6 +10,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
  * Builds BlockView objects.
@@ -53,6 +54,14 @@ class BlockViewBuilder implements ViewBuilder
         }
 
         $this->viewConfigurator->configure($view);
+
+        // deprecated controller actions are replaced with their new equivalent, viewAction
+        if (!$view->getControllerReference() instanceof ControllerReference) {
+            if (in_array($parameters['_controller'], ['ez_page:viewBlock', 'ez_page:viewBlockById'])) {
+                $view->setControllerReference(new ControllerReference('ez_page:viewAction'));
+            }
+        }
+
         $this->viewParametersInjector->injectViewParameters($view, $parameters);
 
         return $view;
