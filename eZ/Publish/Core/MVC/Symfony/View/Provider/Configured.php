@@ -60,6 +60,9 @@ class Configured implements ViewProvider
         if (isset($viewConfig['controller'])) {
             $view->setControllerReference(new ControllerReference($viewConfig['controller']));
         }
+        if (isset($viewConfig['params']) && is_array($viewConfig['params'])) {
+            $view->addParameters($viewConfig['params']);
+        }
 
         return $view;
     }
