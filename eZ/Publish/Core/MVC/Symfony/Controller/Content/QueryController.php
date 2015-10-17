@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class QueryController
 {
@@ -46,7 +47,7 @@ class QueryController
     }
 
     /**
-     * Returns the query configured in the view parameters
+     * Returns the query configured in the view parameters.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
@@ -58,17 +59,23 @@ class QueryController
         if (!$view->hasParameter('query')) {
             throw new InvalidArgumentException('query', 'Missing required query parameter');
         }
-        $queryType = $this->queryTypeRegistry->getQueryType($view->getParameter('queryType'));
+        $queryType = $this->queryTypeRegistry->getQueryType($view->getParameter('query'));
 
-        $queryParameters = $view->hasParameter('queryParameters') ? $view->getParameter('query_parameters') : [];
+        $queryParameters = $view->hasParameter('queryParameters') ? $view->getParameter('queryParameters') : [];
         $supportedQueryParameters = array_flip($queryType->getSupportedParameters());
-        foreach (array_keys($queryParameters) as $queryParameterName) {
-            if (!isset( $supportedQueryParameters[$queryParameterName] )) {
-                throw new InvalidArgumentException('query parameters',
-                    "unsupported query parameter $queryParameterName");
+        foreach ($queryParameters as $queryParameterName => $queryParameterValue) {
+            if (!isset($supportedQueryParameters[$queryParameterName])) {
+                throw new InvalidArgumentException("parameter $queryParameterName", 'unsupported query parameter');
+            }
+            if (substr($queryParameterValue, 0, 2) == '@=') {
+                $language = new ExpressionLanguage();
+                $queryParameters[$queryParameterName] = $language->evaluate(
+                    substr($queryParameterValue, 2),
+                    ['view' => $view, 'location' => $view->getLocation(), 'content' => $view->getContent()]
+                );
             }
         }
 
         return $queryType->getQuery($queryParameters);
-}
+    }
 }
