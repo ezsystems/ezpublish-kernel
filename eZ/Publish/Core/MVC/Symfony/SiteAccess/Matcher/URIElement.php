@@ -43,7 +43,7 @@ class URIElement implements VersatileMatcher, URILexer
      */
     public function __construct($elementNumber)
     {
-        $this->elementNumber = (int)$elementNumber;
+        $this->elementNumber = (int)$elementNumber['value'];
     }
 
     public function __sleep()
