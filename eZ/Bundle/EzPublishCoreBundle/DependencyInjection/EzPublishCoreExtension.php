@@ -51,6 +51,14 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     private $policyProviders = [];
 
+    /**
+     * Holds a collection of YAML files, as an array with directory path as a
+     * key to the array of contained file names.
+     *
+     * @var array
+     */
+    private $defaultSettingsCollection = [];
+
     public function __construct(array $configParsers = array())
     {
         $this->configParsers = $configParsers;
@@ -90,8 +98,9 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $loader->load('security.yml');
         // Slots
         $loader->load('slot.yml');
+
         // Default settings
-        $loader->load('default_settings.yml');
+        $this->handleDefaultSettingsLoading($container, $loader);
 
         $this->registerRepositoriesConfiguration($config, $container);
         $this->registerSiteAccessConfiguration($config, $container);
@@ -154,6 +163,24 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
 
         return $this->mainConfigParser;
+    }
+
+    /**
+     * Handle default settings.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleDefaultSettingsLoading(ContainerBuilder $container, FileLoader $loader)
+    {
+        $loader->load('default_settings.yml');
+
+        foreach ($this->defaultSettingsCollection as $fileLocation => $files) {
+            $externalLoader = new Loader\YamlFileLoader($container, new FileLocator($fileLocation));
+            foreach ($files as $file) {
+                $externalLoader->load($file);
+            }
+        }
     }
 
     private function registerRepositoriesConfiguration(array $config, ContainerBuilder $container)
@@ -491,5 +518,30 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
 
         $this->configParsers[] = $configParser;
+    }
+
+    /**
+     * Adds new default settings to the internal collection.
+     * One can call this method from a bundle `build()` method.
+     *
+     * ```php
+     * public function build(ContainerBuilder $container)
+     * {
+     *     $ezExtension = $container->getExtension('ezpublish');
+     *     $ezExtension->addDefaultSettings(
+     *         __DIR__ . '/Resources/config',
+     *         ['default_settings.yml']
+     *     );
+     * }
+     * ```
+     *
+     * @since 6.0
+     *
+     * @param string $fileLocation
+     * @param array $files
+     */
+    public function addDefaultSettings($fileLocation, array $files)
+    {
+        $this->defaultSettingsCollection[$fileLocation] = $files;
     }
 }
