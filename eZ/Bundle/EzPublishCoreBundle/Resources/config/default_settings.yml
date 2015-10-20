@@ -256,6 +256,7 @@ parameters:
     ###
     # Internal settings
     ###
+    ezpublish.siteaccess.list: []
     ezpublish.siteaccess.groups: {}
     ezpublish.siteaccess.groups_by_siteaccess: {}
     ezpublish.siteaccess.default: ~

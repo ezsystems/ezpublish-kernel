@@ -22,12 +22,14 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
  */
 class SiteAccessLimitationTypeTest extends Base
 {
+    private $siteAccessList = ['ezdemo_site', 'eng', 'fre'];
+
     /**
      * @return \eZ\Publish\Core\Limitation\SiteAccessLimitationType
      */
     public function testConstruct()
     {
-        return new SiteAccessLimitationType();
+        return new SiteAccessLimitationType($this->siteAccessList);
     }
 
     /**
@@ -42,9 +44,20 @@ class SiteAccessLimitationTypeTest extends Base
                 new SiteAccessLimitation(
                     array(
                         'limitationValues' => array(
-                            '2339567439',
-                            '2582995467',
-                            '1817462202',
+                            sprintf('%u', crc32('ezdemo_site')),
+                            sprintf('%u', crc32('eng')),
+                            sprintf('%u', crc32('fre')),
+                        ),
+                    )
+                ),
+            ),
+            array(
+                new SiteAccessLimitation(
+                    array(
+                        'limitationValues' => array(
+                            crc32('ezdemo_site'),
+                            crc32('eng'),
+                            crc32('fre'),
                         ),
                     )
                 ),
@@ -102,7 +115,7 @@ class SiteAccessLimitationTypeTest extends Base
                         'limitationValues' => array('2339567439'),
                     )
                 ),
-                0,
+                1,
             ),
             array(new SiteAccessLimitation(array('limitationValues' => array(true))), 1),
             array(
@@ -114,26 +127,15 @@ class SiteAccessLimitationTypeTest extends Base
                         ),
                     )
                 ),
-                1,
-            ),
-            array(
-                new SiteAccessLimitation(
-                    array(
-                        'limitationValues' => array(
-                            null,
-                            array(),
-                        ),
-                    )
-                ),
                 2,
             ),
             array(
                 new SiteAccessLimitation(
                     array(
                         'limitationValues' => array(
-                            '2339567439',
-                            '2582995467',
-                            '1817462202',
+                            sprintf('%u', crc32('ezdemo_site')),
+                            sprintf('%u', crc32('eng')),
+                            sprintf('%u', crc32('fre')),
                         ),
                     )
                 ),
@@ -152,7 +154,6 @@ class SiteAccessLimitationTypeTest extends Base
      */
     public function testValidateError(SiteAccessLimitation $limitation, $errorCount, SiteAccessLimitationType $limitationType)
     {
-        self::markTestSkipped('Method validate() is not implemented');
         $validationErrors = $limitationType->validate($limitation);
         self::assertCount($errorCount, $validationErrors);
     }
