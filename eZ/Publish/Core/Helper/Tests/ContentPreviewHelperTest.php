@@ -24,6 +24,11 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
     private $eventDispatcher;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $siteAccessRouter;
+
+    /**
      * @var \eZ\Publish\Core\Helper\ContentPreviewHelper
      */
     private $previewHelper;
@@ -32,13 +37,21 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->previewHelper = new ContentPreviewHelper($this->eventDispatcher);
+        $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
+        $this->previewHelper = new ContentPreviewHelper($this->eventDispatcher, $this->siteAccessRouter);
     }
 
     public function testChangeConfigScope()
     {
         $newSiteAccessName = 'test';
-        $newSiteAccess = new SiteAccess($newSiteAccessName, 'preview');
+        $newSiteAccess = new SiteAccess($newSiteAccessName);
+
+        $this->siteAccessRouter
+            ->expects($this->once())
+            ->method('matchByName')
+            ->with($this->equalTo($newSiteAccessName))
+            ->willReturn($newSiteAccess);
+
         $event = new ScopeChangeEvent($newSiteAccess);
         $this->eventDispatcher
             ->expects($this->once())

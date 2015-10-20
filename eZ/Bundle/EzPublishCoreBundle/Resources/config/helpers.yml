@@ -25,7 +25,7 @@ services:
 
     ezpublish.content_preview_helper:
         class: %ezpublish.content_preview_helper.class%
-        arguments: [@event_dispatcher]
+        arguments: [@event_dispatcher, @ezpublish.siteaccess_router]
         calls:
             - [setSiteAccess, [@ezpublish.siteaccess]]
 
