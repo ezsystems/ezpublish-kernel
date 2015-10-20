@@ -257,14 +257,23 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy
      * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyDraft
      */
-    public function updatePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy, PolicyUpdateStruct $policyUpdateStruct)
+    public function updatePolicyByRoleDraft(RoleDraft $roleDraft, PolicyDraft $policy, PolicyUpdateStruct $policyUpdateStruct)
     {
-        //TODO This method doesn't seem to be needed, but keeping it until policy editing is done and we know for sure.
+        $returnValue = $this->service->updatePolicyByRoleDraft($roleDraft, $policy, $policyUpdateStruct);
+        $this->signalDispatcher->emit(
+            new UpdatePolicySignal(
+                array(
+                    'policyId' => $policy->id,
+                )
+            )
+        );
+
+        return $returnValue;
     }
 
     /**

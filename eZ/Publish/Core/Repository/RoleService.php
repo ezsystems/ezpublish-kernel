@@ -429,14 +429,58 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy
      * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyDraft
      */
-    public function updatePolicyByRoleDraft(APIRoleDraft $roleDraft, APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct)
+    public function updatePolicyByRoleDraft(APIRoleDraft $roleDraft, PolicyDraft $policy, APIPolicyUpdateStruct $policyUpdateStruct)
     {
-        //TODO This method doesn't seem to be needed, but keeping it until policy editing is done and we know for sure.
+        if (!is_string($policy->module)) {
+            throw new InvalidArgumentValue('module', $policy->module, 'Policy');
+        }
+
+        if (!is_string($policy->function)) {
+            throw new InvalidArgumentValue('function', $policy->function, 'Policy');
+        }
+
+        if ($this->repository->hasAccess('role', 'update') !== true) {
+            throw new UnauthorizedException('role', 'update');
+        }
+
+        if ($policy->roleId !== $roleDraft->id) {
+            throw new InvalidArgumentException('$policy', "doesn't belong to provided role draft");
+        }
+
+        $limitations = $policyUpdateStruct->getLimitations();
+        $limitationValidationErrors = $this->validatePolicy(
+            $policy->module,
+            $policy->function,
+            $limitations
+        );
+        if (!empty($limitationValidationErrors)) {
+            throw new LimitationValidationException($limitationValidationErrors);
+        }
+
+        $spiPolicy = $this->roleDomainMapper->buildPersistencePolicyObject(
+            $policy->module,
+            $policy->function,
+            $limitations
+        );
+        $spiPolicy->id = $policy->id;
+        $spiPolicy->roleId = $policy->roleId;
+        $spiPolicy->originalId = $policy->originalId;
+
+        $this->repository->beginTransaction();
+        try {
+            $this->userHandler->updatePolicy($spiPolicy);
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->roleDomainMapper->buildDomainPolicyObject($spiPolicy);
     }
 
     /**
