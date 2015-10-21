@@ -26,6 +26,8 @@ use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\Config\FileLocator;
 use InvalidArgumentException;
 use Symfony\Component\Yaml\Yaml;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
+use RuntimeException;
 
 class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
 {
@@ -37,22 +39,30 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
      */
-    private $configParser;
+    private $mainConfigParser;
+
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface[]
+     */
+    private $configParsers;
 
     /**
      * @var PolicyProviderInterface[]
      */
     private $policyProviders = [];
 
+    /**
+     * Holds a collection of YAML files, as an array with directory path as a
+     * key to the array of contained file names.
+     *
+     * @var array
+     */
+    private $defaultSettingsCollection = [];
+
     public function __construct(array $configParsers = array())
     {
+        $this->configParsers = $configParsers;
         $this->suggestionCollector = new SuggestionCollector();
-        foreach ($configParsers as $parser) {
-            if ($parser instanceof SuggestionCollectorAwareInterface) {
-                $parser->setSuggestionCollector($this->suggestionCollector);
-            }
-        }
-        $this->configParser = new ConfigParser($configParsers);
     }
 
     public function getAlias()
@@ -88,8 +98,10 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $loader->load('security.yml');
         // Slots
         $loader->load('slot.yml');
+
         // Default settings
-        $loader->load('default_settings.yml');
+        $this->handleDefaultSettingsLoading($container, $loader);
+
         $this->registerRepositoriesConfiguration($config, $container);
         $this->registerSiteAccessConfiguration($config, $container);
         $this->registerImageMagickConfiguration($config, $container);
@@ -108,7 +120,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         // Map settings
         $processor = new ConfigurationProcessor($container, 'ezsettings');
-        $processor->mapConfig($config, $this->configParser);
+        $processor->mapConfig($config, $this->getMainConfigParser());
 
         if ($this->suggestionCollector->hasSuggestions()) {
             $message = '';
@@ -132,7 +144,43 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        return new Configuration($this->configParser, $this->suggestionCollector);
+        return new Configuration($this->getMainConfigParser(), $this->suggestionCollector);
+    }
+
+    /**
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
+     */
+    private function getMainConfigParser()
+    {
+        if ($this->mainConfigParser === null) {
+            foreach ($this->configParsers as $parser) {
+                if ($parser instanceof SuggestionCollectorAwareInterface) {
+                    $parser->setSuggestionCollector($this->suggestionCollector);
+                }
+            }
+
+            $this->mainConfigParser = new ConfigParser($this->configParsers);
+        }
+
+        return $this->mainConfigParser;
+    }
+
+    /**
+     * Handle default settings.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleDefaultSettingsLoading(ContainerBuilder $container, FileLoader $loader)
+    {
+        $loader->load('default_settings.yml');
+
+        foreach ($this->defaultSettingsCollection as $fileLocation => $files) {
+            $externalLoader = new Loader\YamlFileLoader($container, new FileLocator($fileLocation));
+            foreach ($files as $file) {
+                $externalLoader->load($file);
+            }
+        }
     }
 
     private function registerRepositoriesConfiguration(array $config, ContainerBuilder $container)
@@ -445,5 +493,55 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     public function addPolicyProvider(PolicyProviderInterface $policyProvider)
     {
         $this->policyProviders[] = $policyProvider;
+    }
+
+    /**
+     * Adds a new config parser to the internal collection.
+     * One can call this method from a bundle `build()` method.
+     *
+     * ```php
+     * public function build(ContainerBuilder $container)
+     * {
+     *     $ezExtension = $container->getExtension('ezpublish');
+     *     $ezExtension->addConfigParser($myConfigParser);
+     * }
+     * ```
+     *
+     * @since 6.0
+     *
+     * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface $configParser
+     */
+    public function addConfigParser(ParserInterface $configParser)
+    {
+        if ($this->mainConfigParser !== null) {
+            throw new RuntimeException('Main config parser is already instantiated');
+        }
+
+        $this->configParsers[] = $configParser;
+    }
+
+    /**
+     * Adds new default settings to the internal collection.
+     * One can call this method from a bundle `build()` method.
+     *
+     * ```php
+     * public function build(ContainerBuilder $container)
+     * {
+     *     $ezExtension = $container->getExtension('ezpublish');
+     *     $ezExtension->addDefaultSettings(
+     *         __DIR__ . '/Resources/config',
+     *         ['default_settings.yml']
+     *     );
+     * }
+     * ```
+     *
+     * @since 6.0
+     *
+     * @param string $fileLocation
+     * @param array $files
+     */
+    public function addDefaultSettings($fileLocation, array $files)
+    {
+        $this->defaultSettingsCollection[$fileLocation] = $files;
     }
 }

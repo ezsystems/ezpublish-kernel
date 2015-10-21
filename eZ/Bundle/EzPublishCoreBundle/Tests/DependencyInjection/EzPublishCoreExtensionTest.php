@@ -71,7 +71,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
     {
         // Injecting needed config parsers.
         $refExtension = new ReflectionObject($this->extension);
-        $refParser = $refExtension->getProperty('configParser');
+        $refMethod = $refExtension->getMethod('getMainConfigParser');
+        $refMethod->setAccessible(true);
+        $refMethod->invoke($this->extension);
+        $refParser = $refExtension->getProperty('mainConfigParser');
         $refParser->setAccessible(true);
         /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
         $parser = $refParser->getValue($this->extension);
@@ -559,7 +562,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
         // Injecting needed config parsers.
         $refExtension = new ReflectionObject($this->extension);
-        $refParser = $refExtension->getProperty('configParser');
+        $refMethod = $refExtension->getMethod('getMainConfigParser');
+        $refMethod->setAccessible(true);
+        $refMethod->invoke($this->extension);
+        $refParser = $refExtension->getProperty('mainConfigParser');
         $refParser->setAccessible(true);
         /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
         $parser = $refParser->getValue($this->extension);
