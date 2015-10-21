@@ -8,6 +8,7 @@ parameters:
     binaryfile_storage_prefix: original
     storage_dir: var/ezdemo_site/storage
     io_root_dir: %storage_dir%
+    ezpublish.siteaccess.list: [test]
 
 services:
     ezpublish.api.persistence_handler:
