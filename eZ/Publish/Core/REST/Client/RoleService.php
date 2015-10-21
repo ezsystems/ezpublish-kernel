@@ -215,12 +215,12 @@ class RoleService implements APIRoleService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy
      * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyDraft
      */
-    public function updatePolicyByRoleDraft(APIRoleDraft $roleDraft, APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct)
+    public function updatePolicyByRoleDraft(APIRoleDraft $roleDraft, PolicyDraft $policy, APIPolicyUpdateStruct $policyUpdateStruct)
     {
         //TODO
     }

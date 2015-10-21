@@ -143,12 +143,12 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy
      * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyDraft
      */
-    public function updatePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy, PolicyUpdateStruct $policyUpdateStruct);
+    public function updatePolicyByRoleDraft(RoleDraft $roleDraft, PolicyDraft $policy, PolicyUpdateStruct $policyUpdateStruct);
 
     /**
      * Deletes the given RoleDraft.
