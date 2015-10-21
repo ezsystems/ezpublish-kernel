@@ -19,7 +19,6 @@ parameters:
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
     ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
-    ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\RelationList\Type
@@ -400,12 +399,6 @@ services:
             - @ezpublish.fieldType.ezrichtext.validator.input.dispatcher
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
-
-    ezpublish.fieldType.ezxmltext:
-        class: %ezpublish.fieldType.ezxmltext.class%
-        parent: ezpublish.fieldType
-        tags:
-            - {name: ezpublish.fieldType, alias: ezxmltext}
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%

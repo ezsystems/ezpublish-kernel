@@ -48,14 +48,10 @@ class RichTextTest extends AbstractParserTestCase
             'ezdemo_site'
         );
         $this->assertConfigResolverParameterValue(
-            'fieldtypes.ezxml.custom_xsl',
+            'fieldtypes.ezrichtext.output_custom_xsl',
             array(
                 0 => array(
-                    'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl',
-                    'priority' => 0,
-                ),
-                1 => array(
-                    'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl',
+                    'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl',
                     'priority' => 0,
                 ),
             ),

@@ -9,7 +9,7 @@ return array(
     'content' => $this->getContent(
         'article',
         array(
-            'ezxmltext' => array(
+            'ezrichtext' => array(
                 'id' => 5,
                 'fieldDefIdentifier' => 'testfield',
                 'value' => 'foo2',
@@ -27,7 +27,7 @@ return array(
     'content' => $this->getContent(
         'article',
         array(
-            'ezxmltext' => array(
+            'ezrichtext' => array(
                 array(
                     'id' => 5,
                     'fieldDefIdentifier' => 'testfield',

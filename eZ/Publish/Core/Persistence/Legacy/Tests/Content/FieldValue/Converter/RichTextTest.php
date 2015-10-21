@@ -49,7 +49,7 @@ EOT;
 
     protected function tearDown()
     {
-        unset($this->xmlText);
+        unset($this->docbookString);
         parent::tearDown();
     }
 

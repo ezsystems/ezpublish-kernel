@@ -614,7 +614,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'identifier' => 'description',
                     'category' => 'meta',
                     'placement' => '4',
-                    'data_type_string' => 'ezxmltext',
+                    'data_type_string' => 'ezrichtext',
                     'can_translate' => '1',
                     'is_required' => '1',
                     'is_information_collector' => '1',
@@ -692,7 +692,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $field->identifier = 'description';
         $field->fieldGroup = 'meta';
         $field->position = 4;
-        $field->fieldType = 'ezxmltext';
+        $field->fieldType = 'ezrichtext';
         $field->isTranslatable = true;
         $field->isRequired = true;
         $field->isInfoCollector = true;
@@ -782,7 +782,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'category' => 'meta',
                     'contentclass_id' => '2',
                     'version' => '0',
-                    'data_type_string' => 'ezxmltext',
+                    'data_type_string' => 'ezrichtext',
                     'identifier' => 'description',
                     'is_information_collector' => '1',
                     'placement' => '4',

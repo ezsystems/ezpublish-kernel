@@ -973,7 +973,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '119',
       'identifier' => 'short_description',
       'is_information_collector' => '0',
@@ -1123,7 +1123,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '156',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -1903,7 +1903,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '184',
       'identifier' => 'intro',
       'is_information_collector' => '0',
@@ -1933,7 +1933,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '185',
       'identifier' => 'body',
       'is_information_collector' => '0',
@@ -1993,7 +1993,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '187',
       'identifier' => 'caption',
       'is_information_collector' => '0',
@@ -2203,7 +2203,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '194',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -2293,7 +2293,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '197',
       'identifier' => 'body',
       'is_information_collector' => '0',
@@ -2443,7 +2443,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '202',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -2713,7 +2713,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '211',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -2803,7 +2803,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '214',
       'identifier' => 'short_description',
       'is_information_collector' => '0',
@@ -2833,7 +2833,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '215',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -2923,7 +2923,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '218',
       'identifier' => 'caption',
       'is_information_collector' => '0',
@@ -3103,7 +3103,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '224',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -3433,7 +3433,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '235',
       'identifier' => 'body',
       'is_information_collector' => '0',
@@ -3613,7 +3613,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '241',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -3703,7 +3703,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '244',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -3883,7 +3883,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '250',
       'identifier' => 'caption',
       'is_information_collector' => '0',
@@ -4033,7 +4033,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '255',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -4153,7 +4153,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '259',
       'identifier' => 'short_description',
       'is_information_collector' => '0',
@@ -4183,7 +4183,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '260',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -4303,7 +4303,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '264',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -4573,7 +4573,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '273',
       'identifier' => 'text',
       'is_information_collector' => '0',
@@ -4965,7 +4965,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '286',
       'identifier' => 'description',
       'is_information_collector' => '0',
@@ -5025,7 +5025,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '288',
       'identifier' => 'caption',
       'is_information_collector' => '0',
@@ -6615,11 +6615,10 @@ return array(
       'contentobject_id' => '41',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '99',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -6683,7 +6682,7 @@ return array(
       'data_float' => '0',
       'data_int' => '1045487555',
       'data_text' => '',
-      'data_type_string' => 'ezxmltext',
+      'data_type_string' => 'ezrichtext',
       'id' => '105',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -6746,11 +6745,10 @@ return array(
       'contentobject_id' => '45',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '125',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -6765,11 +6763,10 @@ return array(
       'contentobject_id' => '45',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '126',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -6832,11 +6829,10 @@ return array(
       'contentobject_id' => '49',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '144',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -6851,11 +6847,10 @@ return array(
       'contentobject_id' => '49',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '145',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -6918,11 +6913,10 @@ return array(
       'contentobject_id' => '50',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '149',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -6937,11 +6931,10 @@ return array(
       'contentobject_id' => '50',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '150',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -7004,11 +6997,10 @@ return array(
       'contentobject_id' => '51',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '154',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -7023,11 +7015,10 @@ return array(
       'contentobject_id' => '51',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '155',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -7499,11 +7490,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'contentobject_id' => '56',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '183',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -7518,11 +7508,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'contentobject_id' => '56',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '184',
       'language_code' => 'eng-GB',
       'language_id' => '3',
@@ -7645,9 +7634,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'contentobject_id' => '58',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>eZ is a global company with offices around the world including Skien (Norway), New York (USA), Oslo (Norway), Cologne (Germany), Paris (France), Lyon (France), Beijing (China), Tokyo (Japan), Singapore, London (UK)</paragraph><paragraph><link url_id="23">Contact us</link> for more information!</paragraph></section>',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ is a global company with offices around the world including Skien (Norway), New York (USA), Oslo (Norway), Cologne (Germany), Paris (France), Lyon (France), Beijing (China), Tokyo (Japan), Singapore, London (UK)</para><para><link xlink:href="ezurl://23" xlink:show="none">Contact us</link> for more information!</para></section>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '191',
       'language_code' => 'eng-GB',
       'language_id' => '2',
@@ -7662,9 +7652,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'contentobject_id' => '58',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">eZ Official site: <link url_id="8">http://ez.no</link></paragraph></li><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">eZ Community site: <link url_id="24">http://share.ez.no</link></paragraph></li><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">Documentation: <link url_id="25">http://doc.ez.no</link></paragraph></li><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">Follow us on <link url_id="26">Twitter</link>, <link url_id="27">Facebook</link> and <link url_id="28">LinkedIn</link></paragraph></li></ul></paragraph><paragraph>Copyright © 2012 eZ Systems AS (except where otherwise noted). All rights reserved.</paragraph></section>',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><itemizedlist><listitem><para>eZ Official site: <link xlink:href="ezurl://8" xlink:show="none">http://ez.no</link></para></listitem><listitem><para>eZ Community site: <link xlink:href="ezurl://24" xlink:show="none">http://share.ez.no</link></para></listitem><listitem><para>Documentation: <link xlink:href="ezurl://25" xlink:show="none">http://doc.ez.no</link></para></listitem><listitem><para>Follow us on <link xlink:href="ezurl://26" xlink:show="none">Twitter</link>, <link xlink:href="ezurl://27" xlink:show="none">Facebook</link> and <link xlink:href="ezurl://28" xlink:show="none">LinkedIn</link></para></listitem></itemizedlist><para>Copyright © 2012 eZ Systems AS (except where otherwise noted). All rights reserved.</para></section>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '192',
       'language_code' => 'eng-GB',
       'language_id' => '2',
@@ -7697,8 +7688,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'contentobject_id' => '58',
       'data_float' => '0',
       'data_int' => '1045487555',
-      'data_text' => '<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>',
-      'data_type_string' => 'ezxmltext',
+      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
+',
+      'data_type_string' => 'ezrichtext',
       'id' => '194',
       'language_code' => 'eng-GB',
       'language_id' => '2',
@@ -21341,9 +21334,9 @@ keywords=cms, publish, e-commerce, content management, development framework',
     ),
     92 =>
     array(
-       'id' => '570',
-       'limitation_id' => '255',
-       'value' => '1817462202',
+      'id' => '570',
+      'limitation_id' => '255',
+      'value' => '1817462202',
     ),
   ),
   'ezpreferences' =>

@@ -32,7 +32,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BlockViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
@@ -70,7 +69,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new BlockViewPass());
         $container->addCompilerPass(new SignalSlotPass());
         $container->addCompilerPass(new IdentityDefinerPass());
-        $container->addCompilerPass(new XmlTextConverterPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new RichTextHtml5ConverterPass());
         $container->addCompilerPass(new FragmentPass());
@@ -117,7 +115,6 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\Common(),
                     new ConfigParser\Content(),
                     new ConfigParser\FieldType\RichText(),
-                    new ConfigParser\FieldType\XmlText(),
                     new ConfigParser\FieldTemplates(),
                     new ConfigParser\FieldEditTemplates(),
                     new ConfigParser\FieldDefinitionSettingsTemplates(),

@@ -20,22 +20,6 @@
 </ul>
 {% endblock %}
 
-{% block ezxmltext_settings %}
-<ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
-    {% set rows = settings.numRows %}
-    {{ block( 'settings_preferredrows' ) }}
-    <li class="tag-preset">
-        <span>Tag preset:</span>
-        {% if settings.tagPreset %}
-            {# TODO take human readable name from ezxml.ini equivalent #}
-            {{ settings.tagPreset }}
-        {% else %}
-            <em>Default</em>
-        {% endif %}
-    </li>
-</ul>
-{% endblock %}
-
 {% block eztext_settings %}
 <ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
     {% set rows = settings.textRows %}

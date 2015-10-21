@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
-use eZ\Publish\Core\FieldType\XmlText\Value as XmlValue;
+use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
 
 /**
  * Test case for ContentType service.
@@ -2913,7 +2913,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeDraft = $this->createDraftContentType();
         $contentTypeService = $this->repository->getContentTypeService();
 
-        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct('body2', 'ezxmltext');
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct('body2', 'ezrichtext');
         $fieldDefCreate->names = array(
             'eng-US' => 'Body',
             'ger-DE' => 'Körper',
@@ -2927,11 +2927,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = false;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->defaultValue = new XmlValue();
+        $fieldDefCreate->defaultValue = new RichTextValue();
         $fieldDefCreate->validatorConfiguration = array();
         $fieldDefCreate->fieldSettings = array(
             'numRows' => 10,
-            'tagPreset' => \eZ\Publish\Core\FieldType\XmlText\Type::TAG_PRESET_SIMPLE_FORMATTING,
         );
         $fieldDefCreate->isSearchable = true;
 

@@ -172,14 +172,14 @@ return array(
     'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_id' => '1335',
     'ezcontentobject_attribute_contentclassattribute_id' => '186',
-    'ezcontentobject_attribute_data_type_string' => 'ezxmltext',
+    'ezcontentobject_attribute_data_type_string' => 'ezrichtext',
     'ezcontentobject_attribute_language_code' => 'eng-US',
     'ezcontentobject_attribute_language_id' => '2',
     'ezcontentobject_attribute_version' => '2',
     'ezcontentobject_attribute_data_float' => '0.0',
     'ezcontentobject_attribute_data_int' => '1045487555',
-    'ezcontentobject_attribute_data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Something is in here!</paragraph></section>
+    'ezcontentobject_attribute_data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Something is in here!</para></section>
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
@@ -210,14 +210,14 @@ return array(
     'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_id' => '1336',
     'ezcontentobject_attribute_contentclassattribute_id' => '187',
-    'ezcontentobject_attribute_data_type_string' => 'ezxmltext',
+    'ezcontentobject_attribute_data_type_string' => 'ezrichtext',
     'ezcontentobject_attribute_language_code' => 'eng-US',
     'ezcontentobject_attribute_language_id' => '2',
     'ezcontentobject_attribute_version' => '2',
     'ezcontentobject_attribute_data_float' => '0.0',
     'ezcontentobject_attribute_data_int' => '1045487555',
-    'ezcontentobject_attribute_data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Something is in here!</paragraph></section>
+    'ezcontentobject_attribute_data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Something is in here!</para></section>
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
@@ -322,14 +322,14 @@ return array(
     'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_id' => '1339',
     'ezcontentobject_attribute_contentclassattribute_id' => '190',
-    'ezcontentobject_attribute_data_type_string' => 'ezxmltext',
+    'ezcontentobject_attribute_data_type_string' => 'ezrichtext',
     'ezcontentobject_attribute_language_code' => 'eng-US',
     'ezcontentobject_attribute_language_id' => '2',
     'ezcontentobject_attribute_version' => '2',
     'ezcontentobject_attribute_data_float' => '0.0',
     'ezcontentobject_attribute_data_int' => '1045487555',
-    'ezcontentobject_attribute_data_text' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>
+    'ezcontentobject_attribute_data_text' => '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',

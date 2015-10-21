@@ -252,7 +252,7 @@ class HandlerContentTest extends LanguageAwareTestCase
                     'ezstring' => new Converter\TextLineConverter(),
                     'ezprice' => new Converter\IntegerConverter(),
                     'ezurl' => new Converter\UrlConverter(),
-                    'ezxmltext' => new Converter\XmlTextConverter(),
+                    'ezrichtext' => new Converter\RichTextConverter(),
                     'ezboolean' => new Converter\CheckboxConverter(),
                     'ezkeyword' => new Converter\KeywordConverter(),
                 )

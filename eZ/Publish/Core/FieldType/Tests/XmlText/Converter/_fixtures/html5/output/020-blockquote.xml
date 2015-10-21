@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
-  <a id="eztoc_1_1"/>
-  <h2>Example of blockquote</h2>
-  <custom name="quote">
-    <p>Don't wake me for the end of the world unless it has very good special effects.</p>
-  </custom>
-</section>

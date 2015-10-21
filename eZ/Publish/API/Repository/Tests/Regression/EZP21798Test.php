@@ -64,14 +64,10 @@ class EZP21798Test extends BaseTest
 
         $contentCreateStructArticle->setField(
             'intro',
-            '<?xml version="1.0" encoding="utf-8"?>
-            <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-            xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-            xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-            <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
-            This is summary of Article Test
-            </paragraph>
-            </section>'
+            '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0-variant ezpublish-1.0">
+  <para>This is summary of Article Test</para>
+</section>'
         );
 
         $newsLocation = $urlAliasService->lookup('/News');
