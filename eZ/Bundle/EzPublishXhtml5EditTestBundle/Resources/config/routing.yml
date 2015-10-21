@@ -1,7 +1,0 @@
-eZTest:
-    path: /test/{contentId}
-    defaults:
-        _controller: EzPublishXhtml5EditTestBundle:Test:test
-        contentId: 102
-    requirements:
-        contentId: \d+
