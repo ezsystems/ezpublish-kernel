@@ -1,0 +1,11 @@
+system:
+    default:
+        content_view:
+            full:
+                blog:
+                    template: 'EzPlatformBehatBundle:full:dump.html.twig'
+                    match:
+                        Identifier\ContentType: 'blog'
+                    controller: ez_query:contentAction
+                    params:
+                        query: 'EzPlatformBehatBundle:LatestContent'
