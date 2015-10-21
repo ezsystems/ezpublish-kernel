@@ -440,7 +440,7 @@ class Handler implements BaseUserHandler
         $this->limitationConverter->toLegacy($policy);
 
         $this->roleGateway->removePolicyLimitations($policy->id);
-        $this->roleGateway->addPolicyLimitations($policy->id, $policy->limitations);
+        $this->roleGateway->addPolicyLimitations($policy->id, $policy->limitations === '*' ? array() : $policy->limitations);
     }
 
     /**
