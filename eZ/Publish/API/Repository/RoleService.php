@@ -10,15 +10,16 @@
  */
 namespace  eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\Policy;
-use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 
@@ -315,7 +316,9 @@ interface RoleService
     public function assignRoleToUserGroup(Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null);
 
     /**
-     * removes a role from the given user group.
+     * Removes a role from the given user group.
+     *
+     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
@@ -339,7 +342,9 @@ interface RoleService
     public function assignRoleToUser(Role $role, User $user, RoleLimitation $roleLimitation = null);
 
     /**
-     * removes a role from the given user.
+     * Removes a role from the given user.
+     *
+     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
@@ -348,6 +353,18 @@ interface RoleService
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
     public function unassignRoleFromUser(Role $role, User $user);
+
+    /**
+     * Loads a role assignment for the given id.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
+     *
+     * @param mixed $roleAssignmentId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
+     */
+    public function loadRoleAssignment($roleAssignmentId);
 
     /**
      * Returns the assigned user and user groups to this role.
@@ -388,7 +405,18 @@ interface RoleService
     public function getRoleAssignmentsForUserGroup(UserGroup $userGroup);
 
     /**
-     * Instantiates a role create class.
+     * Removes the given role assignment.
+     *
+     * i.e. unassigns a user or a user group from a role with the given limitations
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
+     */
+    public function removeRoleAssignment(RoleAssignment $roleAssignment);
+
+    /**
+     *  Instantiates a role create class.
      *
      * @param string $name
      *

@@ -17,6 +17,13 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class RoleAssignment extends ValueObject
 {
     /**
+     * The role assignment id.
+     *
+     * @var mixed
+     */
+    public $id;
+
+    /**
      * The Role connected to this assignment.
      *
      * @var mixed

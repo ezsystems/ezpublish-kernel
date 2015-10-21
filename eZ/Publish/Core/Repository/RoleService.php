@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateS
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -998,7 +999,7 @@ class RoleService implements RoleServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->unAssignRole($userGroup->id, $role->id);
+            $this->userHandler->unassignRole($userGroup->id, $role->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
@@ -1087,12 +1088,83 @@ class RoleService implements RoleServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->unAssignRole($user->id, $role->id);
+            $this->userHandler->unassignRole($user->id, $role->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
+    }
+
+    /**
+     * Removes the given role assignment.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
+     */
+    public function removeRoleAssignment(RoleAssignment $roleAssignment)
+    {
+        if ($this->repository->canUser('role', 'assign', $roleAssignment) !== true) {
+            throw new UnauthorizedException('role', 'assign');
+        }
+
+        $spiRoleAssignment = $this->userHandler->loadRoleAssignment($roleAssignment->id);
+
+        $this->repository->beginTransaction();
+        try {
+            $this->userHandler->removeRoleAssignment($spiRoleAssignment->id);
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+    }
+
+    /**
+     * Loads a role assignment for the given id.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
+     *
+     * @param mixed $roleAssignmentId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
+     */
+    public function loadRoleAssignment($roleAssignmentId)
+    {
+        if ($this->repository->hasAccess('role', 'read') !== true) {
+            throw new UnauthorizedException('role', 'read');
+        }
+
+        $spiRoleAssignment = $this->userHandler->loadRoleAssignment($roleAssignmentId);
+        $userService = $this->repository->getUserService();
+        $role = $this->loadRole($spiRoleAssignment->roleId);
+        $roleAssignment = null;
+
+        // First check if the Role is assigned to a User
+        // If no User is found, see if it belongs to a UserGroup
+        try {
+            $user = $userService->loadUser($spiRoleAssignment->contentId);
+            $roleAssignment = $this->roleDomainMapper->buildDomainUserRoleAssignmentObject(
+                $spiRoleAssignment,
+                $user,
+                $role
+            );
+        } catch (APINotFoundException $e) {
+            try {
+                $userGroup = $userService->loadUserGroup($spiRoleAssignment->contentId);
+                $roleAssignment = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $userGroup,
+                    $role
+                );
+            } catch (APINotFoundException $e) {
+                // Do nothing
+            }
+        }
+
+        return $roleAssignment;
     }
 
     /**

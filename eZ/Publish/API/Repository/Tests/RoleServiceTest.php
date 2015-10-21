@@ -13,7 +13,6 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
-use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 
@@ -1732,6 +1731,56 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test loading user/group role assignments.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::loadRoleAssignment
+     */
+    public function testLoadRoleAssignment()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Assignment to user group
+        $groupRoleAssignment = $roleService->loadRoleAssignment(25);
+
+        // Assignment to user
+        $role = $roleService->loadRole(2);
+        $user = $repository->getUserService()->loadUser(14);
+        $roleService->assignRoleToUser($role, $user);
+        $userRoleAssignments = $roleService->getRoleAssignmentsForUser($user);
+
+        $userRoleAssignment = $roleService->loadRoleAssignment($userRoleAssignments[0]->id);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
+            $groupRoleAssignment
+        );
+
+        $this->assertEquals(
+            [
+                12,
+                2,
+                25,
+            ],
+            [
+                $groupRoleAssignment->userGroup->id,
+                $groupRoleAssignment->role->id,
+                $groupRoleAssignment->id,
+            ]
+        );
+
+        self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment', $userRoleAssignment);
+        self::assertEquals(14, $userRoleAssignment->user->id);
+
+        return $groupRoleAssignment;
+    }
+
+    /**
      * Test for the getRoleAssignments() method.
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
@@ -1754,10 +1803,14 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertEquals(1, count($roleAssignments));
+        $this->assertEquals(2, count($roleAssignments));
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
-            reset($roleAssignments)
+            $roleAssignments[0]
+        );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
+            $roleAssignments[1]
         );
 
         return $roleAssignments;
@@ -1879,10 +1932,10 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignments($role);
 
         // Members + Partners + Anonymous + Example User
-        $this->assertEquals(4, count($roleAssignments));
+        $this->assertEquals(5, count($roleAssignments));
 
         // Get the role limitation
-        $roleLimitation = null;
+        $roleLimitations = [];
         foreach ($roleAssignments as $roleAssignment) {
             $roleLimitation = $roleAssignment->getRoleLimitation();
             if ($roleLimitation) {
@@ -1890,17 +1943,25 @@ class RoleServiceTest extends BaseTest
                     '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment',
                     $roleAssignment
                 );
-                break;
+                $roleLimitations[] = $roleLimitation;
             }
         }
+        array_multisort($roleLimitations);
 
         $this->assertEquals(
-            new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/', '/1/2/'),
-                )
-            ),
-            $roleLimitation
+            [
+                new SubtreeLimitation(
+                    array(
+                        'limitationValues' => array('/1/2/'),
+                    )
+                ),
+                new SubtreeLimitation(
+                    array(
+                        'limitationValues' => array('/1/43/'),
+                    )
+                ),
+            ],
+            $roleLimitations
         );
     }
 
@@ -2282,10 +2343,10 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignments($role);
 
         // Members + Partners + Anonymous + Example User
-        $this->assertEquals(4, count($roleAssignments));
+        $this->assertEquals(5, count($roleAssignments));
 
         // Get the role limitation
-        $roleLimitation = null;
+        $roleLimitations = [];
         foreach ($roleAssignments as $roleAssignment) {
             $roleLimitation = $roleAssignment->getRoleLimitation();
             if ($roleLimitation) {
@@ -2293,17 +2354,25 @@ class RoleServiceTest extends BaseTest
                     '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
                     $roleAssignment
                 );
-                break;
+                $roleLimitations[] = $roleLimitation;
             }
         }
+        array_multisort($roleLimitations);
 
         $this->assertEquals(
-            new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/', '/1/2/'),
-                )
-            ),
-            $roleLimitation
+            [
+                new SubtreeLimitation(
+                    array(
+                        'limitationValues' => array('/1/2/'),
+                    )
+                ),
+                new SubtreeLimitation(
+                    array(
+                        'limitationValues' => array('/1/43/'),
+                    )
+                ),
+            ],
+            $roleLimitations
         );
     }
 
@@ -2499,6 +2568,81 @@ class RoleServiceTest extends BaseTest
         // user group does not have the "Member" role.
         $roleService->unassignRoleFromUserGroup($role, $userGroup);
         /* END: Use Case */
+    }
+
+    /**
+     * Test unassigning role by assignment.
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::removeRoleAssignment
+     */
+    public function testUnassignRoleByAssignment()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRole(2);
+        $user = $repository->getUserService()->loadUser(14);
+
+        $originalAssignmentCount = count($roleService->getRoleAssignmentsForUser($user));
+
+        $roleService->assignRoleToUser($role, $user);
+        $newAssignmentCount = count($roleService->getRoleAssignmentsForUser($user));
+        self::assertEquals($originalAssignmentCount + 1, $newAssignmentCount);
+
+        $assignments = $roleService->getRoleAssignmentsForUser($user);
+        $roleService->removeRoleAssignment($assignments[0]);
+        $finalAssignmentCount = count($roleService->getRoleAssignmentsForUser($user));
+        self::assertEquals($newAssignmentCount - 1, $finalAssignmentCount);
+    }
+
+    /**
+     * Test unassigning role by assignment.
+     *
+     * But on current admin user so he lacks access to read roles.
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::removeRoleAssignment
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUnassignRoleByAssignmentThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        try {
+            $adminUserGroup = $repository->getUserService()->loadUserGroup(12);
+            $assignments = $roleService->getRoleAssignmentsForUserGroup($adminUserGroup);
+            $roleService->removeRoleAssignment($assignments[0]);
+        } catch (Exception $e) {
+            self::fail(
+                'Unexpected exception: ' . $e->getMessage() . " \n[" . $e->getFile() . ' (' . $e->getLine() . ')]'
+            );
+        }
+
+        $roleService->removeRoleAssignment($assignments[0]);
+    }
+
+    /**
+     * Test unassigning role by non-existing assignment.
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::removeRoleAssignment
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testUnassignRoleByAssignmentThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        try {
+            $editorsUserGroup = $repository->getUserService()->loadUserGroup(13);
+            $assignments = $roleService->getRoleAssignmentsForUserGroup($editorsUserGroup);
+            $roleService->removeRoleAssignment($assignments[0]);
+        } catch (Exception $e) {
+            self::fail(
+                'Unexpected exception: ' . $e->getMessage() . " \n[" . $e->getFile() . ' (' . $e->getLine() . ')]'
+            );
+        }
+
+        $roleService->removeRoleAssignment($assignments[0]);
     }
 
     /**

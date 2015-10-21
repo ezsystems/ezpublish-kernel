@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateS
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\API\Repository\Values\User\RoleAssignment as APIRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -751,6 +752,33 @@ class RoleService implements APIRoleService, Sessionable
         if (!empty($response->body)) {
             $this->inputDispatcher->parse($response);
         }
+    }
+
+    /**
+     * Removes the given role assignment.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
+     */
+    public function removeRoleAssignment(APIRoleAssignment $roleAssignment)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Loads a user assignment for the given id.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
+     *
+     * @param mixed $roleAssignmentId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
+     */
+    public function loadRoleAssignment($roleAssignmentId)
+    {
+        throw new \Exception('@todo: Implement.');
     }
 
     /**

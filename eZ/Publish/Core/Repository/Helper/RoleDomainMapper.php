@@ -140,6 +140,7 @@ class RoleDomainMapper
 
         return new UserRoleAssignment(
             array(
+                'id' => $spiRoleAssignment->id,
                 'limitation' => $limitation,
                 'role' => $role,
                 'user' => $user,
@@ -168,6 +169,7 @@ class RoleDomainMapper
 
         return new UserGroupRoleAssignment(
             array(
+                'id' => $spiRoleAssignment->id,
                 'limitation' => $limitation,
                 'role' => $role,
                 'userGroup' => $userGroup,

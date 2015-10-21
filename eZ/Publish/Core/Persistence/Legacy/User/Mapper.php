@@ -163,6 +163,7 @@ class Mapper
     {
         $roleAssignmentData = array();
         foreach ($data as $row) {
+            $id = (int)$row['id'];
             $roleId = (int)$row['role_id'];
             $contentId = (int)$row['contentobject_id'];
              // if user already have full access to a role, continue
@@ -173,21 +174,19 @@ class Mapper
 
             $limitIdentifier = $row['limit_identifier'];
             if (!empty($limitIdentifier)) {
-                if (!isset($roleAssignmentData[$roleId][$contentId][$limitIdentifier])) {
-                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier] = new RoleAssignment(
-                        array(
-                            'roleId' => $roleId,
-                            'contentId' => $contentId,
-                            'limitationIdentifier' => $limitIdentifier,
-                            'values' => array($row['limit_value']),
-                        )
-                    );
-                } else {
-                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier]->values[] = $row['limit_value'];
-                }
+                $roleAssignmentData[$roleId][$contentId][$limitIdentifier][$id] = new RoleAssignment(
+                    array(
+                        'id' => $id,
+                        'roleId' => $roleId,
+                        'contentId' => $contentId,
+                        'limitationIdentifier' => $limitIdentifier,
+                        'values' => array($row['limit_value']),
+                    )
+                );
             } else {
                 $roleAssignmentData[$roleId][$contentId] = new RoleAssignment(
                     array(
+                        'id' => $id,
                         'roleId' => $roleId,
                         'contentId' => $contentId,
                     )

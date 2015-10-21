@@ -827,7 +827,7 @@ class UserHandlerTest extends TestCase
             )
         );
 
-        $handler->unAssignRole($user->id, $role->id);
+        $handler->unassignRole($user->id, $role->id);
 
         $this->assertQueryResult(
             array(),
@@ -870,12 +870,14 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 28,
                         'roleId' => 1,
                         'contentId' => 11,
                     )
                 ),
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 34,
                         'roleId' => 5,
                         'contentId' => 11,
                     )
@@ -888,6 +890,7 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 31,
                         'roleId' => 1,
                         'contentId' => 42,
                     )
@@ -911,6 +914,7 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 31,
                         'roleId' => 1,
                         'contentId' => 42,
                     )
@@ -929,14 +933,25 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 32,
                         'roleId' => 3,
                         'contentId' => 13,
                         'limitationIdentifier' => 'Subtree',
-                        'values' => array('/1/2/', '/1/43/'),
+                        'values' => array('/1/2/'),
                     )
                 ),
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 33,
+                        'roleId' => 3,
+                        'contentId' => 13,
+                        'limitationIdentifier' => 'Subtree',
+                        'values' => array('/1/43/'),
+                    )
+                ),
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'id' => 38,
                         'roleId' => 5,
                         'contentId' => 13,
                     )
@@ -949,14 +964,25 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 32,
                         'roleId' => 3,
                         'contentId' => 13,
                         'limitationIdentifier' => 'Subtree',
-                        'values' => array('/1/2/', '/1/43/'),
+                        'values' => array('/1/2/'),
                     )
                 ),
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 33,
+                        'roleId' => 3,
+                        'contentId' => 13,
+                        'limitationIdentifier' => 'Subtree',
+                        'values' => array('/1/43/'),
+                    )
+                ),
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'id' => 38,
                         'roleId' => 5,
                         'contentId' => 13,
                     )
@@ -975,18 +1001,21 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 28,
                         'roleId' => 1,
                         'contentId' => 11,
                     )
                 ),
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 31,
                         'roleId' => 1,
                         'contentId' => 42,
                     )
                 ),
                 new Persistence\User\RoleAssignment(
                     array(
+                        'id' => 37,
                         'roleId' => 1,
                         'contentId' => 59,
                     )
