@@ -1366,6 +1366,52 @@ class RoleServiceTest extends BaseTest
         );
     }
 
+    public function testUpdatePolicyNoLimitation()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Instantiate new policy create
+        $policyCreate = $roleService->newPolicyCreateStruct('foo', 'bar');
+
+        // Instantiate a role create and add the policy create
+        $roleCreate = $roleService->newRoleCreateStruct('myRole');
+
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        $roleCreate->addPolicy($policyCreate);
+
+        // Create a new role instance.
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
+
+        // Search for the new policy instance
+        $policy = null;
+        foreach ($role->getPolicies() as $policy) {
+            if ($policy->module === 'foo' && $policy->function === 'bar') {
+                break;
+            }
+        }
+
+        // Create an update struct and set a modified limitation
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+
+        // Update the the policy
+        $policy = $roleService->updatePolicy($policy, $policyUpdate);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy',
+            $policy
+        );
+
+        self::assertEquals(array(), $policy->getLimitations());
+    }
+
     /**
      * Test for the updatePolicy() method.
      *
