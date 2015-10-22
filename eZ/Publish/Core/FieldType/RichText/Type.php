@@ -190,7 +190,7 @@ class Type extends FieldType
         libxml_use_internal_errors(true);
         libxml_clear_errors();
 
-        $success = $document->loadXML($xmlString);
+        $success = $document->loadXML($xmlString, LIBXML_NOENT);
 
         if (!$success) {
             $messages = array();

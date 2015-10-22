@@ -136,7 +136,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $document->preserveWhiteSpace = false;
         $document->formatOutput = false;
 
-        $document->loadXml(file_get_contents($xmlFile));
+        $document->loadXml(file_get_contents($xmlFile), LIBXML_NOENT);
 
         return $document;
     }
