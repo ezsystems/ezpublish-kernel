@@ -12,12 +12,12 @@ namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\Core\REST\Common\Value as RestValue;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * RestContentCreateStruct view model.
  */
-class RestContentCreateStruct extends RestValue
+class RestContentCreateStruct extends ValueObject
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct

@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
 use Behat\Mink\Mink;
 use Behat\MinkExtension\Context\MinkAwareContext;
+use eZ\Publish\Core\REST\Client\Values\ErrorMessage;
 use EzSystems\BehatBundle\Context\Api\Context;
 use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -213,6 +214,19 @@ class RestContext extends Context implements MinkAwareContext
      */
     public function assertStatusCode($code)
     {
+        $exceptionMessage = '';
+        if ($code != $this->restDriver->getStatusCode() && $code >= 200 && $code < 400) {
+            $errorMessage = $this->getResponseObject();
+            if ($errorMessage instanceof ErrorMessage) {
+                $exceptionMessage = <<< EOF
+
+Exception ({$errorMessage->code}): {$errorMessage->description}
+
+{$errorMessage->trace}
+EOF;
+            }
+        }
+
         Assertion::assertEquals(
             $code,
             $this->restDriver->getStatusCode(),
