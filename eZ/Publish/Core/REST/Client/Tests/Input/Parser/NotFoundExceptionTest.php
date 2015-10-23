@@ -17,9 +17,6 @@ class NotFoundExceptionTest extends BaseTest
 {
     /**
      * Tests parsing of NotFoundException.
-     *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @expectedExceptionMessage Section with ID "23" not found.
      */
     public function testParse()
     {
@@ -30,7 +27,9 @@ class NotFoundExceptionTest extends BaseTest
             'errorCode' => '404',
         );
 
-        $parser->parse($inputArray, $this->getParsingDispatcherMock());
+        $exception = $parser->parse($inputArray, $this->getParsingDispatcherMock());
+        self::assertInstanceOf('eZ\Publish\API\Repository\Exceptions\NotFoundException', $exception);
+        self::assertEquals('Section with ID "23" not found.', $exception->getMessage());
     }
 
     /**

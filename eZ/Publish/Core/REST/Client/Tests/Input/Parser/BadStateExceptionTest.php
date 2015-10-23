@@ -17,9 +17,6 @@ class BadStateExceptionTest extends BaseTest
 {
     /**
      * Tests the parsing of BadStateException.
-     *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage Section with ID "23" not found.
      */
     public function testParse()
     {
@@ -30,7 +27,9 @@ class BadStateExceptionTest extends BaseTest
             'errorCode' => '409',
         );
 
-        $parser->parse($inputArray, $this->getParsingDispatcherMock());
+        $exception = $parser->parse($inputArray, $this->getParsingDispatcherMock());
+        self::assertInstanceOf('eZ\Publish\API\Repository\Exceptions\BadStateException', $exception);
+        self::assertEquals('Section with ID "23" not found.', $exception->getMessage());
     }
 
     /**

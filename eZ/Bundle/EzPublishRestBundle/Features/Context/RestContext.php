@@ -230,7 +230,7 @@ EOF;
         Assertion::assertEquals(
             $code,
             $this->restDriver->getStatusCode(),
-            "Expected status code '$code' found '{$this->restDriver->getStatusCode()}'"
+            "Expected status code '$code' found '{$this->restDriver->getStatusCode()}'$exceptionMessage"
         );
     }
 

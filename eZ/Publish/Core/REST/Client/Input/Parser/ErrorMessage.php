@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Client\Values\ErrorMessage as ErrorMessageValue;
 
 /**
  * Parser for ErrorMessage.
@@ -37,19 +38,22 @@ class ErrorMessage extends BaseParser
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \Exception
+     * @return \Exception|ErrorMessage
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         if (isset($this->errorCodeMapping[$data['errorCode']])) {
             $exceptionClass = $this->errorCodeMapping[$data['errorCode']];
-        } else {
-            $exceptionClass = '\\Exception';
+            return new $exceptionClass($data['errorDescription'], $data['errorCode']);
         }
 
-        throw new $exceptionClass(
-            $data['errorDescription'],
-            $data['errorCode']
-        );
+        return new ErrorMessageValue([
+            'code' => $data['errorCode'],
+            'message' => isset($data['errorMessage']) ? $data['errorMessage'] : null,
+            'description' => isset($data['errorDescription']) ? $data['errorDescription'] : null,
+            'trace' => isset($data['trace']) ? $data['trace'] : null,
+            'file' => isset($data['file']) ? $data['file'] : null,
+            'line' => isset($data['line']) ? $data['line'] : null,
+        ]);
     }
 }
