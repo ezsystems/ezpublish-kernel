@@ -14,10 +14,13 @@ namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 
 class LocationCreateStructTest extends ValueObjectVisitorBaseTest
 {
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    private $locationServiceMock;
+
     /**
      * Tests the LocationCreateStruct visitor.
      *
@@ -32,11 +35,23 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
 
         $locationCreateStruct = new LocationCreateStruct();
         $locationCreateStruct->hidden = false;
-        $locationCreateStruct->parentLocationId = '/content/locations/1/2/42';
+        $locationCreateStruct->parentLocationId = 42;
         $locationCreateStruct->priority = 0;
         $locationCreateStruct->remoteId = 'remote-id';
         $locationCreateStruct->sortField = Location::SORT_FIELD_PATH;
         $locationCreateStruct->sortOrder = Location::SORT_ORDER_ASC;
+
+        $this->locationServiceMock
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->with(42)
+            ->will($this->returnValue(new Location(['pathString' => '/1/2/42'])));
+
+        $this->getRouterMock()
+            ->expects($this->once())
+            ->method('generate')
+            ->with('ezpublish_rest_loadLocation', ['locationPath' => '1/2/42'])
+            ->will($this->returnValue('/content/locations/1/2/42'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -224,6 +239,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\LocationCreateStruct();
+        $this->locationServiceMock = $this->getMock('eZ\Publish\API\Repository\LocationService');
+        return new ValueObjectVisitor\LocationCreateStruct($this->locationServiceMock);
     }
 }
