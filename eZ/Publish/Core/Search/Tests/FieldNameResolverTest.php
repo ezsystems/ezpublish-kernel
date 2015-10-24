@@ -15,7 +15,7 @@ use ArrayObject;
 /**
  * Test case for FieldNameResolver.
  *
- * @covers \eZ\Publish\Core\Search\FieldNameResolver
+ * @covers \eZ\Publish\Core\Search\Common\FieldNameResolver
  */
 class FieldNameResolverTest extends TestCase
 {

@@ -316,7 +316,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testCreateBinaryFile
-     * @covers IOService \eZ\Publish\Core\IO\IOService::exists()
+     * @covers \eZ\Publish\Core\IO\IOService::exists()
      */
     public function testExists(BinaryFile $binaryFile)
     {
@@ -334,7 +334,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers IOService \eZ\Publish\Core\IO\IOService::exists()
+     * @covers \eZ\Publish\Core\IO\IOService::exists()
      */
     public function testExistsNot()
     {
@@ -353,7 +353,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testCreateBinaryFile
-     * @covers IOService \eZ\Publish\Core\IO\IOService::getMimeType()
+     * @covers \eZ\Publish\Core\IO\IOService::getMimeType()
      */
     public function testGetMimeType(BinaryFile $binaryFile)
     {
