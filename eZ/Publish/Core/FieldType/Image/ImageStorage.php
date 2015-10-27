@@ -74,11 +74,7 @@ class ImageStorage extends GatewayBasedStorage
                 $field->value->externalData['fileName']
             );
 
-            if (isset($field->value->externalData['id'])) {
-                $binaryFile = $this->IOService->loadBinaryFile($field->value->externalData['id']);
-            } elseif ($this->IOService->exists($targetPath)) {
-                $binaryFile = $this->IOService->loadBinaryFile($targetPath);
-            } elseif (isset($field->value->externalData['inputUri'])) {
+            if (isset($field->value->externalData['inputUri'])) {
                 $localFilePath = $field->value->externalData['inputUri'];
                 unset($field->value->externalData['inputUri']);
 
@@ -89,6 +85,10 @@ class ImageStorage extends GatewayBasedStorage
                 $imageSize = getimagesize($localFilePath);
                 $field->value->externalData['width'] = $imageSize[0];
                 $field->value->externalData['height'] = $imageSize[1];
+            } elseif (isset($field->value->externalData['id'])) {
+                $binaryFile = $this->IOService->loadBinaryFile($field->value->externalData['id']);
+            } elseif ($this->IOService->exists($targetPath)) {
+                $binaryFile = $this->IOService->loadBinaryFile($targetPath);
             } else {
                 throw new InvalidArgumentException(
                     'inputUri',
