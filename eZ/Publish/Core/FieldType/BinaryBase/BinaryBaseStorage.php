@@ -19,6 +19,8 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Storage for binary files.
+ *
+ * @method \eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway getGateway(array $context)
  */
 class BinaryBaseStorage extends GatewayBasedStorage
 {
@@ -65,7 +67,8 @@ class BinaryBaseStorage extends GatewayBasedStorage
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         if ($field->value->externalData === null) {
-            // Nothing to store
+            $this->deleteFieldData($versionInfo, [$field->id], $context);
+
             return false;
         }
 

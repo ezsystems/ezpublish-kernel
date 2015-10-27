@@ -193,4 +193,32 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
 
         return file_exists($path);
     }
+
+    /**
+     * Tests that a VersionUpdate can remove the stored file.
+     */
+    public function testUpdateWithRemove()
+    {
+        $type = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration(),
+            array()
+        );
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->publishVersion(
+            $this->createContent($this->getValidCreationFieldData(), $type
+            )->getVersionInfo());
+        $this->testIsNotEmptyValue($content->getFieldValue('data'));
+
+        $draft = $contentService->createContentDraft($content->contentInfo, $content->versionInfo);
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField('data', null);
+        $contentService->updateContent($draft->getVersionInfo(), $updateStruct);
+
+        $updatedContent = $contentService->publishVersion($draft->getVersionInfo());
+        $this->testIsEmptyValue($updatedContent->getFieldValue('data'));
+    }
 }
