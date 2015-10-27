@@ -52,6 +52,11 @@ class Type extends FieldType
     protected $inputConverterDispatcher;
 
     /**
+     * @var \eZ\Publish\Core\FieldType\RichText\Normalizer
+     */
+    protected $inputNormalizer;
+
+    /**
      * @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
      */
     protected $inputValidatorDispatcher;
@@ -59,15 +64,18 @@ class Type extends FieldType
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
+     * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
      * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
      */
     public function __construct(
         Validator $internalFormatValidator,
         ConverterDispatcher $inputConverterDispatcher,
+        Normalizer $inputNormalizer = null,
         ValidatorDispatcher $inputValidatorDispatcher = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
+        $this->inputNormalizer = $inputNormalizer;
         $this->inputValidatorDispatcher = $inputValidatorDispatcher;
     }
 
@@ -150,6 +158,10 @@ class Type extends FieldType
         if (is_string($inputValue)) {
             if (empty($inputValue)) {
                 $inputValue = Value::EMPTY_VALUE;
+            }
+
+            if ($this->inputNormalizer !== null && $this->inputNormalizer->accept($inputValue)) {
+                $inputValue = $this->inputNormalizer->normalize($inputValue);
             }
 
             $inputValue = $this->loadXMLString($inputValue);
