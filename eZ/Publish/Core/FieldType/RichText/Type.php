@@ -202,7 +202,11 @@ class Type extends FieldType
         libxml_use_internal_errors(true);
         libxml_clear_errors();
 
-        $success = $document->loadXML($xmlString, LIBXML_NOENT);
+        // Options:
+        // - substitute entities
+        // - disable network access
+        // - relax parser limits for document size/complexity
+        $success = $document->loadXML($xmlString, LIBXML_NOENT | LIBXML_NONET | LIBXML_PARSEHUGE);
 
         if (!$success) {
             $messages = array();
