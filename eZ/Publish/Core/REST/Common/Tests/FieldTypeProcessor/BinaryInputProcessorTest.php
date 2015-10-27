@@ -79,17 +79,12 @@ abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
 
         $outputHash = $processor->preProcessValueHash($inputHash);
 
-        $this->assertFalse(isset($outputHash['data']), 'No data in output hash');
-        $this->assertTrue(isset($outputHash['path']), 'No path in output hash');
+        $this->assertFalse(isset($outputHash['data']), 'Data found in input hash');
+        $this->assertTrue(isset($outputHash['inputUri']), 'No path found in output hash');
 
-        $this->assertTrue(
-            file_exists($outputHash['path'])
-        );
+        $this->assertTrue(file_exists($outputHash['inputUri']), "The output path {$outputHash['inputUri']} does not exist");
 
-        $this->assertEquals(
-            $fileContent,
-            file_get_contents($outputHash['path'])
-        );
+        $this->assertEquals($fileContent, file_get_contents($outputHash['inputUri']));
     }
 
     /**
