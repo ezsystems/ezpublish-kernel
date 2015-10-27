@@ -216,6 +216,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data' => null,
                 'externalData' => array(
+                    // should be ignored
+                    'id' => 'some/value',
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                     'fileName' => 'Blueish-Blue.jpg',
                     'alternativeText' => 'This blue is so blueish.',
