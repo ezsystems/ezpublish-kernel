@@ -426,15 +426,13 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      * BinaryFile field type is not searchable with Field criterion
      * and sort clause in Legacy search engine.
      */
-    public function testCreateTestContent()
+    protected function checkSearchEngineSupport()
     {
         if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
             $this->markTestSkipped(
-                'BinaryFile field type is not searchable with Field criterion and sort clause in Legacy search engine'
+                "'ezbinaryfile' field type is not searchable with Legacy Search Engine"
             );
         }
-
-        return parent::testCreateTestContent();
     }
 
     protected function getValidSearchValueTwo()
