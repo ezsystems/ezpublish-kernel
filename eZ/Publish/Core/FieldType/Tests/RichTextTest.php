@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\Core\FieldType\RichText\Normalizer\Aggregate;
 use eZ\Publish\Core\FieldType\RichText\Type as RichTextType;
 use eZ\Publish\Core\FieldType\RichText\Value;
 use eZ\Publish\Core\FieldType\RichText\ConverterDispatcher;
@@ -41,6 +42,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                 )
             ),
             new ConverterDispatcher(array('http://docbook.org/ns/docbook' => null)),
+            new Aggregate(),
             new ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());

@@ -65,6 +65,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
                 )
             ),
             new FieldType\RichText\ConverterDispatcher(array()),
+            new FieldType\RichText\Normalizer\Aggregate(),
             new FieldType\RichText\ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
