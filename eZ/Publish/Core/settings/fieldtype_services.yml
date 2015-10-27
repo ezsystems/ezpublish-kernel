@@ -1,4 +1,5 @@
 parameters:
+    ezpublish.fieldType.ezrichtext.normalizer.aggregate.class: eZ\Publish\Core\FieldType\RichText\Normalizer\Aggregate
     ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
     ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
     ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator
@@ -72,6 +73,9 @@ services:
         arguments:
             -
                 http://docbook.org/ns/docbook: null
+
+    ezpublish.fieldType.ezrichtext.normalizer.input:
+        class: %ezpublish.fieldType.ezrichtext.normalizer.aggregate.class%
 
     # Page
     ezpublish.fieldType.ezpage.pageService:
