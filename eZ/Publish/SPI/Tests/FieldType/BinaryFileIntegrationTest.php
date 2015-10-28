@@ -196,11 +196,13 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data' => null,
                 'externalData' => array(
-                    'id' => null,
+                    // used to ensure that inputUri has precedence over 'id'
+                    'id' => 'some/value',
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                     'fileName' => 'Blueish-Blue-Binary.jpg',
                     'fileSize' => filesize($path),
-                    'mimeType' => 'image/png',
+                    // on purpuse wrong, as it should be ignored by storage
+                    'mimeType' => 'foo/bar',
                     'downloadCount' => 23,
                     'uri' => __DIR__ . '/_fixtures/image.jpg',
                 ),
