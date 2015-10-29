@@ -52,6 +52,11 @@ class Type extends FieldType
     protected $inputConverterDispatcher;
 
     /**
+     * @var \eZ\Publish\Core\FieldType\RichText\Normalizer
+     */
+    protected $inputNormalizer;
+
+    /**
      * @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
      */
     protected $inputValidatorDispatcher;
@@ -59,15 +64,18 @@ class Type extends FieldType
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
+     * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
      * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
      */
     public function __construct(
         Validator $internalFormatValidator,
         ConverterDispatcher $inputConverterDispatcher,
+        Normalizer $inputNormalizer = null,
         ValidatorDispatcher $inputValidatorDispatcher = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
+        $this->inputNormalizer = $inputNormalizer;
         $this->inputValidatorDispatcher = $inputValidatorDispatcher;
     }
 
@@ -152,6 +160,10 @@ class Type extends FieldType
                 $inputValue = Value::EMPTY_VALUE;
             }
 
+            if ($this->inputNormalizer !== null && $this->inputNormalizer->accept($inputValue)) {
+                $inputValue = $this->inputNormalizer->normalize($inputValue);
+            }
+
             $inputValue = $this->loadXMLString($inputValue);
         }
 
@@ -190,7 +202,11 @@ class Type extends FieldType
         libxml_use_internal_errors(true);
         libxml_clear_errors();
 
-        $success = $document->loadXML($xmlString, LIBXML_NOENT);
+        // Options:
+        // - substitute entities
+        // - disable network access
+        // - relax parser limits for document size/complexity
+        $success = $document->loadXML($xmlString, LIBXML_NOENT | LIBXML_NONET | LIBXML_PARSEHUGE);
 
         if (!$success) {
             $messages = array();

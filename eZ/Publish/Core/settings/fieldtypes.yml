@@ -396,6 +396,7 @@ services:
         arguments:
             - @ezpublish.fieldType.ezrichtext.validator.docbook
             - @ezpublish.fieldType.ezrichtext.converter.input.dispatcher
+            - @ezpublish.fieldType.ezrichtext.normalizer.input
             - @ezpublish.fieldType.ezrichtext.validator.input.dispatcher
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}

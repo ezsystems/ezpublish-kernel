@@ -12,6 +12,7 @@ parameters:
     ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
 
     # RichText
+    ezpublish.fieldType.ezrichtext.normalizer.document_type_definition.class: eZ\Publish\Core\FieldType\RichText\Normalizer\DocumentTypeDefinition
     ezpublish.fieldType.ezrichtext.converter.xslt.class: eZ\Publish\Core\FieldType\RichText\Converter\Xslt
     ezpublish.fieldType.ezrichtext.converter.aggregate.class: eZ\Publish\Core\FieldType\RichText\Converter\Aggregate
     ezpublish.fieldType.ezrichtext.converter.output.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5
@@ -88,6 +89,13 @@ services:
         class: %ezpublish.fieldType.ezpage.hashConverter.class%
 
     # RichText
+    ezpublish.fieldType.ezrichtext.normalizer.input:
+        class: %ezpublish.fieldType.ezrichtext.normalizer.document_type_definition.class%
+        arguments:
+            - "section"
+            - "http://ez.no/namespaces/ezpublish5/xhtml5/edit"
+            - %ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/RichText/Resources/dtd/ezxhtml5_edit_html_character_entities.dtd
+
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.input.html5.class%
         arguments:
