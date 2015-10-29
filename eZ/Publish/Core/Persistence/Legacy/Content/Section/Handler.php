@@ -208,4 +208,28 @@ class Handler implements BaseSectionHandler
     {
         return $this->sectionGateway->countContentObjectsInSection($sectionId);
     }
+
+    /**
+     * Number of role policies using a Section in limitations.
+     *
+     * @param mixed $sectionId
+     *
+     * @return int
+     */
+    public function policiesCount($sectionId)
+    {
+        return $this->sectionGateway->countPoliciesUsingSection($sectionId);
+    }
+
+    /**
+     * Counts the number of role assignments using section with $sectionId in their limitations.
+     *
+     * @param int $sectionId
+     *
+     * @return int
+     */
+    public function countRoleAssignmentsUsingSection($sectionId)
+    {
+        return $this->sectionGateway->countRoleAssignmentsUsingSection($sectionId);
+    }
 }

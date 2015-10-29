@@ -215,8 +215,26 @@ class SectionService implements APISectionService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      *
      * @return int
+     *
+     * @deprecated since 6.0
      */
     public function countAssignedContents(Section $section)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Returns true if the given section is assigned to contents, or used in role policies, or in role assignments.
+     *
+     * This does not check user permissions.
+     *
+     * @since 6.0
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     *
+     * @return bool
+     */
+    public function isSectionUsed(Section $section)
     {
         throw new \Exception('@todo: Implement.');
     }

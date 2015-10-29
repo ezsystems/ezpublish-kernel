@@ -241,10 +241,30 @@ class SectionService implements SectionServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      *
      * @return int
+     *
+     * @deprecated since 6.0
      */
     public function countAssignedContents(Section $section)
     {
         return $this->sectionHandler->assignmentsCount($section->id);
+    }
+
+    /**
+     * Returns true if the given section is assigned to contents, or used in role policies, or in role assignments.
+     *
+     * This does not check user permissions.
+     *
+     * @since 6.0
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     *
+     * @return bool
+     */
+    public function isSectionUsed(Section $section)
+    {
+        return $this->sectionHandler->assignmentsCount($section->id) > 0 ||
+               $this->sectionHandler->policiesCount($section->id) > 0 ||
+               $this->sectionHandler->countRoleAssignmentsUsingSection($section->id) > 0;
     }
 
     /**
@@ -291,7 +311,8 @@ class SectionService implements SectionServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified section is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete a section
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If section can not be deleted
-     *         because it is still assigned to some contents.
+     *         because it is still assigned to some contents,
+     *         or because it is still being used in policy limitations.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
@@ -303,8 +324,12 @@ class SectionService implements SectionServiceInterface
             throw new UnauthorizedException('section', 'edit', array('sectionId' => $loadedSection->id));
         }
 
-        if ($this->countAssignedContents($loadedSection) > 0) {
+        if ($this->sectionHandler->assignmentsCount($loadedSection->id) > 0) {
             throw new BadStateException('section', 'section is still assigned to content');
+        }
+
+        if ($this->sectionHandler->policiesCount($loadedSection->id) > 0) {
+            throw new BadStateException('section', 'section is still being used in policy limitations');
         }
 
         $this->repository->beginTransaction();

@@ -84,8 +84,23 @@ interface SectionService
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      *
      * @return int
+     *
+     * @deprecated since 6.0
      */
     public function countAssignedContents(Section $section);
+
+    /**
+     * Returns true if the given section is assigned to contents, or used in role policies, or in role assignments.
+     *
+     * This does not check user permissions.
+     *
+     * @since 6.0
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     *
+     * @return bool
+     */
+    public function isSectionUsed(Section $section);
 
     /**
      * Assigns the content to the given section

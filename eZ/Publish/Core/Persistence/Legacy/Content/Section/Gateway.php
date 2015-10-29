@@ -69,6 +69,24 @@ abstract class Gateway
     abstract public function countContentObjectsInSection($id);
 
     /**
+     * Counts the number of role policies using section with $id in their limitations.
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    abstract public function countPoliciesUsingSection($id);
+
+    /**
+     * Counts the number of role assignments using section with $id in their limitations.
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    abstract public function countRoleAssignmentsUsingSection($id);
+
+    /**
      * Deletes the Section with $id.
      *
      * @param int $id

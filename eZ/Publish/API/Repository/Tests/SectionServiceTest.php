@@ -505,6 +505,35 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
+     * Test for the isSectionUsed() method.
+     *
+     * @see \eZ\Publish\API\Repository\SectionService::isSectionUsed()
+     */
+    public function testIsSectionUsed()
+    {
+        $repository = $this->getRepository();
+
+        $sectionService = $repository->getSectionService();
+
+        $standardSectionId = $this->generateId('section', 1);
+        /* BEGIN: Use Case */
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
+
+        $standardSection = $sectionService->loadSection($standardSectionId);
+
+        $isSectionUsed = $sectionService->isSectionUsed(
+            $standardSection
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            true, // Taken from the fixture
+            $isSectionUsed
+        );
+    }
+
+    /**
      * Test for the assignSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::assignSection()
@@ -585,6 +614,32 @@ class SectionServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertSame(0, $assignedContents);
+    }
+
+    /**
+     * Test for the isSectionUsed() method.
+     *
+     * @see \eZ\Publish\API\Repository\SectionService::isSectionUsed()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     */
+    public function testIsSectionUsedReturnsZeroByDefault()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $section = $sectionService->createSection($sectionCreate);
+
+        // The number of assigned contents should be zero
+        $isSectionUsed = $sectionService->isSectionUsed($section);
+        /* END: Use Case */
+
+        $this->assertSame(false, $isSectionUsed);
     }
 
     /**

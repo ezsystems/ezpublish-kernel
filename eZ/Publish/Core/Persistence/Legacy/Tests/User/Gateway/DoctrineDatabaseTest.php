@@ -78,6 +78,13 @@ class DoctrineDatabaseTest extends TestCase
                     'limit_value' => '',
                     'role_id' => '5',
                 ],
+                [
+                    'contentobject_id' => '13',
+                    'id' => '39',
+                    'limit_identifier' => 'Section',
+                    'limit_value' => '2',
+                    'role_id' => '5',
+                ],
             ],
             $query
                 ->select('contentobject_id', 'id', 'limit_identifier', 'limit_value', 'role_id')
