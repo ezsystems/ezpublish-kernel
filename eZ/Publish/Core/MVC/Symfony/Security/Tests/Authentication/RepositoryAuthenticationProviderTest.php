@@ -73,18 +73,21 @@ class RepositoryAuthenticationProviderTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckAuthenticationCredentialsChanged()
     {
+        $apiUser = $this->getMockBuilder('eZ\Publish\API\Repository\Values\User\User')
+            ->setConstructorArgs(array(array('passwordHash' => 'some_encoded_password')))
+            ->getMockForAbstractClass();
+        $tokenUser = new User($apiUser);
+        $token = new UsernamePasswordToken($tokenUser, 'foo', 'bar');
+
+        $renewedApiUser = $this->getMockBuilder('eZ\Publish\API\Repository\Values\User\User')
+            ->setConstructorArgs(array(array('passwordHash' => 'renewed_encoded_password')))
+            ->getMockForAbstractClass();
+
         $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User');
         $user
             ->expects($this->any())
-            ->method('getPassword')
-            ->will($this->returnValue('renewed_encoded_password'));
-
-        $tokenUser = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User');
-        $tokenUser
-            ->expects($this->any())
-            ->method('getPassword')
-            ->will($this->returnValue('some_encoded_password'));
-        $token = new UsernamePasswordToken($tokenUser, 'foo', 'bar');
+            ->method('getAPIUser')
+            ->will($this->returnValue($renewedApiUser));
 
         $method = new \ReflectionMethod($this->authProvider, 'checkAuthentication');
         $method->setAccessible(true);
@@ -93,18 +96,19 @@ class RepositoryAuthenticationProviderTest extends PHPUnit_Framework_TestCase
 
     public function testCheckAuthenticationAlreadyLoggedIn()
     {
-        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User');
         $password = 'encoded_password';
-        $user
-            ->expects($this->once())
-            ->method('getPassword')
-            ->will($this->returnValue($password));
 
         $apiUser = $this->getMockBuilder('eZ\Publish\API\Repository\Values\User\User')
             ->setConstructorArgs(array(array('passwordHash' => $password)))
             ->getMockForAbstractClass();
         $tokenUser = new User($apiUser);
         $token = new UsernamePasswordToken($tokenUser, 'foo', 'bar');
+
+        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User');
+        $user
+            ->expects($this->once())
+            ->method('getAPIUser')
+            ->will($this->returnValue($apiUser));
 
         $this->repository
             ->expects($this->once())

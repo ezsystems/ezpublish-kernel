@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\MVC\Symfony\Security\User as EzUser;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as EzUserInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -32,15 +32,15 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
 
     protected function checkAuthentication(UserInterface $user, UsernamePasswordToken $token)
     {
-        if (!$user instanceof EzUser) {
+        if (!$user instanceof EzUserInterface) {
             return parent::checkAuthentication($user, $token);
         }
 
         // $currentUser can either be an instance of UserInterface or just the username (e.g. during form login).
-        /** @var EzUser|string $currentUser */
+        /** @var EzUserInterface|string $currentUser */
         $currentUser = $token->getUser();
         if ($currentUser instanceof UserInterface) {
-            if ($currentUser->getPassword() !== $user->getPassword()) {
+            if ($currentUser->getAPIUser()->passwordHash !== $user->getAPIUser()->passwordHash) {
                 throw new BadCredentialsException('The credentials were changed from another session.');
             }
 
