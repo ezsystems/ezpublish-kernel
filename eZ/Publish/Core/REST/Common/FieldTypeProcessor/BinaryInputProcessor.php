@@ -41,7 +41,7 @@ abstract class BinaryInputProcessor extends FieldTypeProcessor
             );
 
             unset($incomingValueHash['data']);
-            $incomingValueHash['path'] = $tempFile;
+            $incomingValueHash['inputUri'] = $tempFile;
         }
 
         return $incomingValueHash;
