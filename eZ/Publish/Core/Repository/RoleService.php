@@ -293,13 +293,14 @@ class RoleService implements RoleServiceInterface
             try {
                 /* Throw exception if:
                  * - A published role with the same identifier exists, AND
-                 * - The ID of the two are NOT the same (otherwise it's not an editing conflict)
+                 * - The ID of the published role does not match the original ID of the draft
                 */
-                $existingRole = $this->loadRoleByIdentifier($roleUpdateStruct->identifier);
-                if ($existingRole->id != $loadedRoleDraft->id) {
+                $existingSPIRole = $this->userHandler->loadRoleByIdentifier($roleUpdateStruct->identifier);
+                $SPIRoleDraft = $this->userHandler->loadRole($loadedRoleDraft->id, Role::STATUS_DRAFT);
+                if ($existingSPIRole->id != $SPIRoleDraft->originalId) {
                     throw new InvalidArgumentException(
                         '$roleUpdateStruct',
-                        "Role '{$existingRole->id}' with the specified identifier '{$roleUpdateStruct->identifier}' " .
+                        "Role '{$existingSPIRole->id}' with the specified identifier '{$roleUpdateStruct->identifier}' " .
                         'already exists'
                     );
                 }
