@@ -39,6 +39,8 @@ parameters:
     ezpublish_rest.output.value_object_visitor.VersionInfo.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\VersionInfo
     ezpublish_rest.output.value_object_visitor.ImageVariation.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ImageVariation
     ezpublish_rest.output.value_object_visitor.Version.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Version
+    ezpublish_rest.output.value_object_visitor.VersionUpdate.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\VersionUpdate
+    ezpublish_rest.output.value_object_visitor.RestContentCreateStruct.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\RestContentCreateStruct
 
     # User group
     ezpublish_rest.output.value_object_visitor.RestUserGroup.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUserGroup
@@ -339,6 +341,20 @@ services:
         arguments: [ @ezpublish_rest.field_type_serializer  ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\Version }
+
+    ezpublish_rest.output.value_object_visitor.VersionUpdate:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.VersionUpdate.class%
+        arguments: [ @ezpublish_rest.field_type_serializer  ]
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Client\Values\Content\VersionUpdate }
+
+    ezpublish_rest.output.value_object_visitor.RestContentCreateStruct:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.RestContentCreateStruct.class%
+        arguments: [ @ezpublish_rest.field_type_serializer  ]
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct }
 
     # UserGroup
     ezpublish_rest.output.value_object_visitor.RestUserGroup:
@@ -652,6 +668,7 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.LocationCreateStruct.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\Content\LocationCreateStruct }
+        arguments: [@ezpublish.api.service.location]
 
     ezpublish_rest.output.value_object_visitor.LocationUpdateStruct:
         parent: ezpublish_rest.output.value_object_visitor.base

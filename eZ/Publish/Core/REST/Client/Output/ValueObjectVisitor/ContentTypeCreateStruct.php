@@ -22,47 +22,48 @@ class ContentTypeCreateStruct extends ValueObjectVisitor
 {
     /**
      * Visit struct returned by controllers.
+
      *
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+*@param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentCreateStruct
      */
-    public function visit(Visitor $visitor, Generator $generator, $contentTypeCreateStruct)
+    public function visit(Visitor $visitor, Generator $generator, $contentCreateStruct)
     {
         $generator->startObjectElement('ContentTypeCreate');
         $visitor->setHeader('Content-Type', $generator->getMediaType('ContentTypeCreate'));
 
-        $generator->startValueElement('identifier', $contentTypeCreateStruct->identifier);
+        $generator->startValueElement('identifier', $contentCreateStruct->identifier);
         $generator->endValueElement('identifier');
 
-        $generator->startValueElement('remoteId', $contentTypeCreateStruct->remoteId);
+        $generator->startValueElement('remoteId', $contentCreateStruct->remoteId);
         $generator->endValueElement('remoteId');
 
-        $generator->startValueElement('urlAliasSchema', $contentTypeCreateStruct->urlAliasSchema);
+        $generator->startValueElement('urlAliasSchema', $contentCreateStruct->urlAliasSchema);
         $generator->endValueElement('urlAliasSchema');
 
-        $generator->startValueElement('nameSchema', $contentTypeCreateStruct->nameSchema);
+        $generator->startValueElement('nameSchema', $contentCreateStruct->nameSchema);
         $generator->endValueElement('nameSchema');
 
-        $generator->startValueElement('isContainer', ($contentTypeCreateStruct->isContainer ? 'true' : 'false'));
+        $generator->startValueElement('isContainer', ( $contentCreateStruct->isContainer ? 'true' : 'false'));
         $generator->endValueElement('isContainer');
 
-        $generator->startValueElement('mainLanguageCode', $contentTypeCreateStruct->mainLanguageCode);
+        $generator->startValueElement('mainLanguageCode', $contentCreateStruct->mainLanguageCode);
         $generator->endValueElement('mainLanguageCode');
 
-        $generator->startValueElement('defaultAlwaysAvailable', ($contentTypeCreateStruct->defaultAlwaysAvailable ? 'true' : 'false'));
+        $generator->startValueElement('defaultAlwaysAvailable', ( $contentCreateStruct->defaultAlwaysAvailable ? 'true' : 'false'));
         $generator->endValueElement('defaultAlwaysAvailable');
 
-        $generator->startValueElement('defaultSortField', $this->serializeSortField($contentTypeCreateStruct->defaultSortField));
+        $generator->startValueElement('defaultSortField', $this->serializeSortField($contentCreateStruct->defaultSortField));
         $generator->endValueElement('defaultSortField');
 
-        $generator->startValueElement('defaultSortOrder', $this->serializeSortOrder($contentTypeCreateStruct->defaultSortOrder));
+        $generator->startValueElement('defaultSortOrder', $this->serializeSortOrder($contentCreateStruct->defaultSortOrder));
         $generator->endValueElement('defaultSortOrder');
 
-        if (!empty($contentTypeCreateStruct->names)) {
+        if (!empty( $contentCreateStruct->names)) {
             $generator->startHashElement('names');
             $generator->startList('value');
-            foreach ($contentTypeCreateStruct->names as $languageCode => $name) {
+            foreach ($contentCreateStruct->names as $languageCode => $name) {
                 $generator->startValueElement('value', $name, array('languageCode' => $languageCode));
                 $generator->endValueElement('value');
             }
@@ -70,10 +71,10 @@ class ContentTypeCreateStruct extends ValueObjectVisitor
             $generator->endHashElement('names');
         }
 
-        if (!empty($contentTypeCreateStruct->descriptions)) {
+        if (!empty( $contentCreateStruct->descriptions)) {
             $generator->startHashElement('descriptions');
             $generator->startList('value');
-            foreach ($contentTypeCreateStruct->descriptions as $languageCode => $description) {
+            foreach ($contentCreateStruct->descriptions as $languageCode => $description) {
                 $generator->startValueElement('value', $description, array('languageCode' => $languageCode));
                 $generator->endValueElement('value');
             }
@@ -81,22 +82,22 @@ class ContentTypeCreateStruct extends ValueObjectVisitor
             $generator->endHashElement('descriptions');
         }
 
-        if ($contentTypeCreateStruct->creationDate !== null) {
-            $generator->startValueElement('modificationDate', $contentTypeCreateStruct->creationDate->format('c'));
+        if ($contentCreateStruct->creationDate !== null) {
+            $generator->startValueElement('modificationDate', $contentCreateStruct->creationDate->format('c'));
             $generator->endValueElement('modificationDate');
         }
 
-        if ($contentTypeCreateStruct->creatorId !== null) {
+        if ($contentCreateStruct->creatorId !== null) {
             $generator->startObjectElement('User');
-            $generator->startAttribute('href', $contentTypeCreateStruct->creatorId);
+            $generator->startAttribute('href', $contentCreateStruct->creatorId);
             $generator->endAttribute('href');
             $generator->endObjectElement('User');
         }
 
-        if (!empty($contentTypeCreateStruct->fieldDefinitions)) {
+        if (!empty( $contentCreateStruct->fieldDefinitions)) {
             $generator->startHashElement('FieldDefinitions');
             $generator->startList('FieldDefinition');
-            foreach ($contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct) {
+            foreach ($contentCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct) {
                 $visitor->visitValueObject($fieldDefinitionCreateStruct);
             }
             $generator->endList('FieldDefinition');

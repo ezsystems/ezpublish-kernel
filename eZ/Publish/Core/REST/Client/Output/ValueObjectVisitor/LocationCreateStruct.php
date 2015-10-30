@@ -11,6 +11,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -22,11 +23,21 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 class LocationCreateStruct extends ValueObjectVisitor
 {
     /**
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    private $locationService;
+
+    public function __construct(LocationService $locationService)
+    {
+        $this->locationService = $locationService;
+    }
+
+    /**
      * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param mixed $data
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
@@ -34,8 +45,7 @@ class LocationCreateStruct extends ValueObjectVisitor
         $visitor->setHeader('Content-Type', $generator->getMediaType('LocationCreate'));
 
         $generator->startObjectElement('ParentLocation', 'Location');
-        $generator->startAttribute('href', $data->parentLocationId);
-        $generator->endAttribute('href');
+        $this->addParentLocationHref($generator, $data->parentLocationId);
         $generator->endObjectElement('ParentLocation');
 
         $generator->startValueElement('priority', $data->priority);
@@ -70,5 +80,19 @@ class LocationCreateStruct extends ValueObjectVisitor
         }
 
         return '';
+    }
+
+    private function addParentLocationHref(Generator $generator, $parentLocationId)
+    {
+        $parentLocation = $this->locationService->loadLocation($parentLocationId);
+
+        $generator->startAttribute(
+            'href',
+            $this->router->generate(
+                'ezpublish_rest_loadLocation',
+                ['locationPath' => trim($parentLocation->pathString, '/')]
+            )
+        );
+        $generator->endAttribute('href');
     }
 }

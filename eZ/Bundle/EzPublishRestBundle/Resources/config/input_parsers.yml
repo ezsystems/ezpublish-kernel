@@ -94,6 +94,7 @@ parameters:
     ezpublish_rest.input.parser.Section.class: eZ\Publish\Core\REST\Client\Input\Parser\Section
     ezpublish_rest.input.parser.SectionList.class: eZ\Publish\Core\REST\Client\Input\Parser\SectionList
     ezpublish_rest.input.parser.VersionInfo.class: eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
+    ezpublish_rest.input.parser.Version.class: eZ\Publish\Core\REST\Client\Input\Parser\Version
     ezpublish_rest.input.parser.Session.class: eZ\Publish\Core\REST\Client\Input\Parser\Session
     ezpublish_rest.input.parser.UserList.class: eZ\Publish\Core\REST\Client\Input\Parser\UserList
     ezpublish_rest.input.parser.UserRefList.class: eZ\Publish\Core\REST\Client\Input\Parser\UserRefList
@@ -797,6 +798,16 @@ services:
             - @ezpublish.api.service.content
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.VersionInfo }
+
+    ezpublish_rest.input.parser.Version:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Version.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.content_type
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Version }
 
     ezpublish_rest.input.parser.Session:
         parent: ezpublish_rest.input.parser
