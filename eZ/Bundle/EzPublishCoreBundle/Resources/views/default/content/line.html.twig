@@ -1,0 +1,7 @@
+{% set content_name=ez_content_name(content) %}
+
+{% if location is defined %}
+    <p><a href="{{ path(location) }}">{{ content_name }}</a></p>
+{% else %}
+    <p>{{ content_name }}</p>
+{% endif %}
