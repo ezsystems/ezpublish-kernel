@@ -31,7 +31,7 @@ interface SearchService
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      * @param bool $filterOnUserPermissions if true only the objects which the user is allowed to read are returned.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult
      */
     public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true);
 
@@ -51,7 +51,7 @@ interface SearchService
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      * @param bool $filterOnUserPermissions if true (default) only the objects which is the user allowed to read are returned.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentInfoSearchResult
      */
     public function findContentInfo(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true);
 
@@ -93,7 +93,7 @@ interface SearchService
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult\LocationSearchResult
      */
     public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true);
 }

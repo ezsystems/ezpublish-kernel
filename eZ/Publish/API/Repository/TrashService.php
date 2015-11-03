@@ -88,7 +88,7 @@ interface TrashService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult\TrashedSearchResult
      */
     public function findTrashItems(Query $query);
 }
