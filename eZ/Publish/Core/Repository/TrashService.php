@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
@@ -20,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\TrashedSearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use DateTime;
@@ -259,7 +260,7 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult\TrashedSearchResult
      */
     public function findTrashItems(Query $query)
     {
@@ -294,15 +295,13 @@ class TrashService implements TrashServiceInterface
             $query->sortClauses !== null ? $query->sortClauses : null
         );
 
-        $trashItems = array();
+        $searchResult = new TrashedSearchResult();
+        // @todo Count here is wrong, need to change SPI to return searchResult
+        $searchResult->totalCount = count($spiTrashItems);
         foreach ($spiTrashItems as $spiTrashItem) {
-            $trashItems[] = $this->buildDomainTrashItemObject($spiTrashItem);
+            $searchResult->items[] = $trashItem = $this->buildDomainTrashItemObject($spiTrashItem);
+            $searchResult->searchHits = new LocationSearchHit(['valueObject' => $trashItem]);
         }
-
-        $searchResult = new SearchResult();
-        $searchResult->count = count($trashItems);
-        $searchResult->items = $trashItems;
-        $searchResult->query = $query;
 
         return $searchResult;
     }

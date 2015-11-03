@@ -1,13 +1,13 @@
 <?php
 
-return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
+return eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult::__set_state(array(
    'facets' =>
   array(
   ),
    'searchHits' =>
   array(
     0 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 49,
@@ -18,7 +18,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     1 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 50,
@@ -29,7 +29,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     2 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 56,
@@ -40,7 +40,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     3 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 11,
@@ -51,7 +51,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     4 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 12,

@@ -1,10 +1,10 @@
 <?php
 
-return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(
+return eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult::__set_state(
     array(
         'facets' => array(),
         'searchHits' => array(
-                0 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
+                0 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit::__set_state(
                     array(
                         'valueObject' => array(
                             'id' => 57,
@@ -15,7 +15,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'highlight' => null,
                     )
                 ),
-                1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
+                1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit::__set_state(
                     array(
                         'valueObject' => array(
                             'id' => 58,

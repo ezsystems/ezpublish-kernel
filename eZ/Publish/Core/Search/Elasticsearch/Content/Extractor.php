@@ -10,8 +10,8 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentInfoSearchResult as SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentInfoSearchHit as SearchHit;
 
 /**
  * Abstract implementation of Search Extractor, which extracts search result

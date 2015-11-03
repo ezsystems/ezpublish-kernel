@@ -14,6 +14,8 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\TrashService as APITrashService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\TrashedSearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\REST\Common\RequestParser;
@@ -203,7 +205,7 @@ class TrashService implements APITrashService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult\TrashedSearchResult
      */
     public function findTrashItems(Query $query)
     {
@@ -217,12 +219,15 @@ class TrashService implements APITrashService, Sessionable
 
         $locations = $this->inputDispatcher->parse($response);
 
-        $trashItems = array();
+        $searchResult = new TrashedSearchResult();
+        // @todo Count here is wrong, need to get total count from REST API
+        $searchResult->totalCount = count($locations);
         foreach ($locations as $location) {
-            $trashItems[] = $this->buildTrashItem($location);
+            $searchResult->items[] = $trashItem = $this->buildTrashItem($location);
+            $searchResult->searchHits = new LocationSearchHit(['valueObject' => $trashItem]);
         }
 
-        return $trashItems;
+        return $searchResult;
     }
 
     /**

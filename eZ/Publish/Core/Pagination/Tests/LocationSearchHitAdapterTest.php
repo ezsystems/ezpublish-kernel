@@ -12,8 +12,8 @@ namespace eZ\Publish\Core\Pagination\Tests;
 
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit as SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\LocationSearchResult as SearchResult;
 use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchHitAdapter;
 use PHPUnit_Framework_TestCase;
 

@@ -12,7 +12,9 @@ namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentInfoSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\LocationSearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SearchService;
@@ -50,7 +52,7 @@ class SearchServiceTest extends ServiceTest
                     $languageFilter,
                     false,
                 ),
-                new SearchResult(array('totalCount' => 0)),
+                new ContentSearchResult(array('totalCount' => 0)),
                 0,
             ),
             array(
@@ -60,7 +62,7 @@ class SearchServiceTest extends ServiceTest
                     $languageFilter,
                     false,
                 ),
-                new SearchResult(array('totalCount' => 0)),
+                new ContentInfoSearchResult(array('totalCount' => 0)),
                 0,
             ),
             array(
@@ -80,7 +82,7 @@ class SearchServiceTest extends ServiceTest
                     $languageFilter,
                     false,
                 ),
-                new SearchResult(array('totalCount' => 0)),
+                new LocationSearchResult(array('totalCount' => 0)),
                 0,
             ),
             array(

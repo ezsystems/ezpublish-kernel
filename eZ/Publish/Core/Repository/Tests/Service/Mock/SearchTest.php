@@ -16,8 +16,10 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\LocationSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -279,9 +281,9 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->equalTo($handlerQuery), $this->equalTo($languageFilter))
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    new ContentSearchResult(
                         array(
-                            'searchHits' => array(new SearchHit(array('valueObject' => $spiContentInfo))),
+                            'searchHits' => array(new ContentSearchHit(array('valueObject' => $spiContentInfo))),
                             'totalCount' => 1,
                         )
                     )
@@ -296,9 +298,9 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findContent($serviceQuery, $languageFilter, false);
 
         $this->assertEquals(
-            new SearchResult(
+            new ContentSearchResult(
                 array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $contentMock))),
+                    'searchHits' => array(new ContentSearchHit(array('valueObject' => $contentMock))),
                     'totalCount' => 1,
                 )
             ),
@@ -355,9 +357,9 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->equalTo($query), $this->equalTo($languageFilter))
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    new ContentSearchResult(
                         array(
-                            'searchHits' => array(new SearchHit(array('valueObject' => $spiContentInfo))),
+                            'searchHits' => array(new ContentSearchHit(array('valueObject' => $spiContentInfo))),
                             'totalCount' => 1,
                         )
                     )
@@ -380,9 +382,9 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findContent($query, $languageFilter, true);
 
         $this->assertEquals(
-            new SearchResult(
+            new ContentSearchResult(
                 array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $contentMock))),
+                    'searchHits' => array(new ContentSearchHit(array('valueObject' => $contentMock))),
                     'totalCount' => 1,
                 )
             ),
@@ -428,7 +430,7 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findContent($query, array(), true);
 
         $this->assertEquals(
-            new SearchResult(array('time' => 0, 'totalCount' => 0)),
+            new ContentSearchResult(array('time' => 0, 'totalCount' => 0)),
             $result
         );
     }
@@ -488,9 +490,9 @@ class SearchTest extends BaseServiceMockTest
             )
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    new ContentSearchResult(
                         array(
-                            'searchHits' => array(new SearchHit(array('valueObject' => $spiContentInfo))),
+                            'searchHits' => array(new ContentSearchHit(array('valueObject' => $spiContentInfo))),
                             'totalCount' => 1,
                         )
                     )
@@ -500,9 +502,9 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findContent(new Query(), $languageFilter, false);
 
         $this->assertEquals(
-            new SearchResult(
+            new ContentSearchResult(
                 array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $contentMock))),
+                    'searchHits' => array(new ContentSearchHit(array('valueObject' => $contentMock))),
                     'totalCount' => 1,
                 )
             ),
@@ -677,9 +679,9 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->equalTo($query))
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    new LocationSearchResult(
                         array(
-                            'searchHits' => array(new SearchHit(array('valueObject' => $spiLocation))),
+                            'searchHits' => array(new LocationSearchHit(array('valueObject' => $spiLocation))),
                             'totalCount' => 1,
                         )
                     )
@@ -699,9 +701,9 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findLocations($query, array(), true);
 
         $this->assertEquals(
-            new SearchResult(
+            new LocationSearchResult(
                 array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $locationMock))),
+                    'searchHits' => array(new LocationSearchHit(array('valueObject' => $locationMock))),
                     'totalCount' => 1,
                 )
             ),
@@ -740,9 +742,9 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->equalTo($handlerQuery))
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    new LocationSearchResult(
                         array(
-                            'searchHits' => array(new SearchHit(array('valueObject' => $spiLocation))),
+                            'searchHits' => array(new LocationSearchHit(array('valueObject' => $spiLocation))),
                             'totalCount' => 1,
                         )
                     )
@@ -757,9 +759,9 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findLocations($serviceQuery, array(), false);
 
         $this->assertEquals(
-            new SearchResult(
+            new LocationSearchResult(
                 array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $locationMock))),
+                    'searchHits' => array(new LocationSearchHit(array('valueObject' => $locationMock))),
                     'totalCount' => 1,
                 )
             ),
@@ -845,9 +847,9 @@ class SearchTest extends BaseServiceMockTest
             )
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    new LocationSearchResult(
                         array(
-                            'searchHits' => array(new SearchHit(array('valueObject' => $spiLocation))),
+                            'searchHits' => array(new LocationSearchHit(array('valueObject' => $spiLocation))),
                             'totalCount' => 1,
                         )
                     )
@@ -857,9 +859,9 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findLocations(new LocationQuery(), array(), false);
 
         $this->assertEquals(
-            new SearchResult(
+            new LocationSearchResult(
                 array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $locationMock))),
+                    'searchHits' => array(new LocationSearchHit(array('valueObject' => $locationMock))),
                     'totalCount' => 1,
                 )
             ),

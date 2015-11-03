@@ -11,8 +11,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
@@ -36,7 +37,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
         $view = new RestExecutedView(
             array(
                 'identifier' => 'test_view',
-                'searchResults' => new SearchResult([
+                'searchResults' => new ContentSearchResult([
                     'searchHits' => [
                         $this->buildContentSearchHit(),
                         $this->buildLocationSearchHit(),
@@ -139,11 +140,11 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentSearchHit
      */
     protected function buildContentSearchHit()
     {
-        return new SearchHit([
+        return new ContentSearchHit([
             'valueObject' => new ApiValues\Content([
                 'versionInfo' => new Content\VersionInfo(['contentInfo' => new ContentInfo()]),
             ]),
@@ -151,10 +152,10 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit
      */
     protected function buildLocationSearchHit()
     {
-        return new SearchHit(['valueObject' => new ApiValues\Location()]);
+        return new LocationSearchHit(['valueObject' => new ApiValues\Location()]);
     }
 }

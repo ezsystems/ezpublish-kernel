@@ -17,8 +17,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentInfoSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\LocationSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\ContentInfoSearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
@@ -151,7 +153,7 @@ class Handler implements SearchHandlerInterface
             $query->performCount
         );
 
-        $result = new SearchResult();
+        $result = new ContentInfoSearchResult();
         $result->time = microtime(true) - $start;
         $result->totalCount = $data['count'];
         $contentInfoList = $this->contentMapper->extractContentInfoFromRows(
@@ -161,7 +163,7 @@ class Handler implements SearchHandlerInterface
         );
 
         foreach ($contentInfoList as $index => $contentInfo) {
-            $searchHit = new SearchHit();
+            $searchHit = new ContentInfoSearchHit();
             $searchHit->valueObject = $contentInfo;
             $searchHit->matchedTranslation = $this->extractMatchedLanguage(
                 $data['rows'][$index]['language_mask'],
@@ -267,13 +269,13 @@ class Handler implements SearchHandlerInterface
             $query->performCount
         );
 
-        $result = new SearchResult();
+        $result = new LocationSearchResult();
         $result->time = microtime(true) - $start;
         $result->totalCount = $data['count'];
         $locationList = $this->locationMapper->createLocationsFromRows($data['rows']);
 
         foreach ($locationList as $index => $location) {
-            $searchHit = new SearchHit();
+            $searchHit = new LocationSearchHit();
             $searchHit->valueObject = $location;
             $searchHit->matchedTranslation = $this->extractMatchedLanguage(
                 $data['rows'][$index]['language_mask'],

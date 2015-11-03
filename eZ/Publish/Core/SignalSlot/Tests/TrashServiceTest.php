@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\SignalSlot\Tests;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\TrashedSearchResult as SearchResult;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\TrashService;
 

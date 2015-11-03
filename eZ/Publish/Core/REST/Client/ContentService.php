@@ -554,39 +554,6 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
-     * Finds content objects for the given query.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     */
-    public function findContent(Query $query, array $languageFilter, $filterOnUserPermissions = true)
-    {
-        throw new \Exception('@todo: Implement.');
-    }
-
-    /**
-     * Performs a query for a single content object.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function findSingle(Query $query, array $languageFilter, $filterOnUserPermissions = true)
-    {
-        throw new \Exception('@todo: Implement.');
-    }
-
-    /**
      * Loads all outgoing relations for the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version

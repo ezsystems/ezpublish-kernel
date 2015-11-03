@@ -1,13 +1,13 @@
 <?php
 
-return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
+return eZ\Publish\API\Repository\Values\Content\Search\SearchResult\LocationSearchResult::__set_state(array(
    'facets' =>
   array(
   ),
    'searchHits' =>
   array(
     0 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 59,
@@ -18,7 +18,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     1 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 10,
@@ -29,7 +29,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     2 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 42,
@@ -40,7 +40,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     3 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 13,
@@ -51,7 +51,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     4 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 14,
@@ -62,7 +62,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     5 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 12,
@@ -73,7 +73,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     6 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 11,
@@ -84,7 +84,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'highlight' => null,
     )),
     7 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit\LocationSearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 4,

@@ -18,7 +18,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location as Locati
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentInfoSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult\LocationSearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -180,7 +182,7 @@ class SearchService implements SearchServiceInterface
         $this->validateContentSortClauses($query);
 
         if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
-            return new SearchResult(array('time' => 0, 'totalCount' => 0));
+            return new ContentInfoSearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
         return $this->searchHandler->findContent($query, $languageFilter);
@@ -306,7 +308,7 @@ class SearchService implements SearchServiceInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
         if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
-            return new SearchResult(array('time' => 0, 'totalCount' => 0));
+            return new LocationSearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
         $result = $this->searchHandler->findLocations($query, $languageFilter);

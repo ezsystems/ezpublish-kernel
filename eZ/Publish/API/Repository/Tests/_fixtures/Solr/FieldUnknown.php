@@ -1,6 +1,6 @@
 <?php
 
-return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
+return eZ\Publish\API\Repository\Values\Content\Search\SearchResult\ContentSearchResult::__set_state(array(
    'facets' =>
   array(
   ),
