@@ -15,10 +15,42 @@ return array(
             'text' => '',
             'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
         ),
+        1 => array(
+            'action' => 'eznode:314',
+            'action_type' => 'eznode',
+            'alias_redirects' => '0',
+            'id' => '2',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '3',
+            'link' => '2',
+            'parent' => '0',
+            'text' => 'path314',
+            'text_md5' => 'fdbbfa1e24e78ef56cb16ba4482c7771',
+        ),
+        2 => array(
+            'action' => 'eznode:315',
+            'action_type' => 'eznode',
+            'alias_redirects' => '0',
+            'id' => '3',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '4',
+            'link' => '3',
+            'parent' => '2',
+            'text' => 'path315',
+            'text_md5' => 'afbe70de5f03a22e867723655a995279',
+        ),
     ),
     'ezurlalias_ml_incr' => array(
         0 => array(
             'id' => '1',
+        ),
+        1 => array(
+            'id' => '2',
+        ),
+        2 => array(
+            'id' => '3',
         ),
     ),
     'ezcontent_language' => array(
