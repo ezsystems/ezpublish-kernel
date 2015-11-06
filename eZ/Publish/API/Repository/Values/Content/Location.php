@@ -24,7 +24,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read mixed $parentLocationId the id of the parent location
  * @property-read string $pathString the path to this location e.g. /1/2/4/23 where 23 is current id.
- * @property-read string $path Same as $pathString but as array, e.g. [ 1, 2, 4, 23 ]
+ * @property-read array $path Same as $pathString but as array, e.g. [ 1, 2, 4, 23 ]
  * @property-read int $depth Depth location has in the location tree
  *
  * @property-read int $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
