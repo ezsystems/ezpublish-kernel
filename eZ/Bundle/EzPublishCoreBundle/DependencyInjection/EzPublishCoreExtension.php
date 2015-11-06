@@ -28,6 +28,7 @@ use InvalidArgumentException;
 use Symfony\Component\Yaml\Yaml;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
 use RuntimeException;
+use Closure;
 
 class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
 {
@@ -58,6 +59,14 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      * @var array
      */
     private $defaultSettingsCollection = [];
+
+    /**
+     * Holds a collection of closures that will be executed from {@link self::load()} method,
+     * receiving semantic configuration array and container as parameters.
+     *
+     * @var \Closure[]
+     */
+    private $configurationRegistrarCollection = [];
 
     public function __construct(array $configParsers = array())
     {
@@ -105,7 +114,8 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->registerRepositoriesConfiguration($config, $container);
         $this->registerSiteAccessConfiguration($config, $container);
         $this->registerImageMagickConfiguration($config, $container);
-        $this->registerPageConfiguration($config, $container);
+
+        $this->registerConfiguration($config, $container);
 
         // Routing
         $this->handleRouting($config, $container, $loader);
@@ -183,6 +193,17 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
     }
 
+    /**
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    private function registerConfiguration(array $config, ContainerBuilder $container)
+    {
+        foreach ($this->configurationRegistrarCollection as $registrar) {
+            $registrar($config, $container);
+        }
+    }
+
     private function registerRepositoriesConfiguration(array $config, ContainerBuilder $container)
     {
         if (!isset($config['repositories'])) {
@@ -236,34 +257,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $filters = isset($config['imagemagick']['filters']) ? $config['imagemagick']['filters'] : array();
         $filters = $filters + $container->getParameter('ezpublish.image.imagemagick.filters');
         $container->setParameter('ezpublish.image.imagemagick.filters', $filters);
-    }
-
-    private function registerPageConfiguration(array $config, ContainerBuilder $container)
-    {
-        if (isset($config['ezpage']['layouts'])) {
-            $container->setParameter(
-                'ezpublish.ezpage.layouts',
-                $config['ezpage']['layouts'] + $container->getParameter('ezpublish.ezpage.layouts')
-            );
-        }
-        if (isset($config['ezpage']['blocks'])) {
-            $container->setParameter(
-                'ezpublish.ezpage.blocks',
-                $config['ezpage']['blocks'] + $container->getParameter('ezpublish.ezpage.blocks')
-            );
-        }
-        if (isset($config['ezpage']['enabledLayouts'])) {
-            $container->setParameter(
-                'ezpublish.ezpage.enabledLayouts',
-                $config['ezpage']['enabledLayouts'] + $container->getParameter('ezpublish.ezpage.enabledLayouts')
-            );
-        }
-        if (isset($config['ezpage']['enabledBlocks'])) {
-            $container->setParameter(
-                'ezpublish.ezpage.enabledBlocks',
-                $config['ezpage']['enabledBlocks'] + $container->getParameter('ezpublish.ezpage.enabledBlocks')
-            );
-        }
     }
 
     /**
@@ -543,5 +536,33 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     public function addDefaultSettings($fileLocation, array $files)
     {
         $this->defaultSettingsCollection[$fileLocation] = $files;
+    }
+
+    /**
+     * Adds a new closure that will be executed from {@link self::load()} method,
+     * receiving semantic configuration array and container builder as parameters.
+     *
+     * Intended to be used for registering arbitrary configuration parameters.
+     * One can call this method from a bundle `build()` method.
+     *
+     * ```php
+     * public function build(ContainerBuilder $container)
+     * {
+     *     $ezExtension = $container->getExtension('ezpublish');
+     *     $ezExtension->addConfigurationRegistrar(
+     *         function (array $config, ContainerBuilder $container) {
+     *             ...
+     *         }
+     *     );
+     * }
+     * ```
+     *
+     * @since 6.0
+     *
+     * @param \Closure $closure
+     */
+    public function addConfigurationRegistrar(Closure $closure)
+    {
+        $this->configurationRegistrarCollection[] = $closure;
     }
 }

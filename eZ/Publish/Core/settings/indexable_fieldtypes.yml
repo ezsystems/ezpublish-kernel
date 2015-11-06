@@ -147,5 +147,4 @@ services:
             - {name: ezpublish.fieldType.indexable, alias: ezsrrating}
             - {name: ezpublish.fieldType.indexable, alias: ezsubtreesubscription}
             - {name: ezpublish.fieldType.indexable, alias: ezoption}
-            - {name: ezpublish.fieldType.indexable, alias: ezpage}
             - {name: ezpublish.fieldType.indexable, alias: ezcomcomments}

@@ -28,7 +28,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolv
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BlockViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
@@ -66,7 +65,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new LocalePass());
         $container->addCompilerPass(new ContentViewPass());
         $container->addCompilerPass(new LocationViewPass());
-        $container->addCompilerPass(new BlockViewPass());
         $container->addCompilerPass(new SignalSlotPass());
         $container->addCompilerPass(new IdentityDefinerPass());
         $container->addCompilerPass(new SecurityPass());
@@ -111,7 +109,6 @@ class EzPublishCoreBundle extends Bundle
                     // just undo the conversion LocationView did.
                     new ConfigParser\ContentView(),
                     new ConfigParser\LocationView(),
-                    new ConfigParser\BlockView(),
                     new ConfigParser\Common(),
                     new ConfigParser\Content(),
                     new ConfigParser\FieldType\RichText(),
@@ -120,7 +117,6 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\FieldDefinitionSettingsTemplates(),
                     new ConfigParser\FieldDefinitionEditTemplates(),
                     new ConfigParser\Image(),
-                    new ConfigParser\Page(),
                     new ConfigParser\Languages(),
                     new ConfigParser\IO(new ComplexSettingParser()),
                 )

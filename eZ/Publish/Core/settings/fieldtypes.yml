@@ -19,7 +19,6 @@ parameters:
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
     ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
-    ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\RelationList\Type
     ezpublish.fieldType.ezuser.class: eZ\Publish\Core\FieldType\User\Type
@@ -401,13 +400,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 
-    ezpublish.fieldType.ezpage:
-        class: %ezpublish.fieldType.ezpage.class%
-        parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezpage.pageService, @ezpublish.fieldType.ezpage.hashConverter]
-        tags:
-            - {name: ezpublish.fieldType, alias: ezpage}
-
     ezpublish.fieldType.ezgmaplocation:
         class: %ezpublish.fieldType.ezgmaplocation.class%
         parent: ezpublish.fieldType
@@ -441,6 +433,13 @@ services:
         arguments: [ "ezenum" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezenum}
+
+    ezpublish.fieldType.ezpage:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        arguments: [ "ezpage" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezpage}
 
     ezpublish.fieldType.ezidentifier:
         class: %ezpublish.fieldType.eznull.class%

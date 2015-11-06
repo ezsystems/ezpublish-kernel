@@ -25,7 +25,6 @@ parameters:
     ezpublish.fieldType.ezsrrating.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlConverter
     ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullConverter
-    ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverter
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullConverter
 
 services:
@@ -108,11 +107,6 @@ services:
         class: %ezpublish.fieldType.ezurl.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezurl, lazy: true, callback: '::create'}
-
-    ezpublish.fieldType.ezpage.converter:
-        class: %ezpublish.fieldType.ezpage.converter.class%
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezpage}
 
     ezpublish.fieldType.ezimage.converter:
         class: %ezpublish.fieldType.ezimage.converter.class%
@@ -250,6 +244,11 @@ services:
         class: %ezpublish.fieldType.eznull.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: eztags, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezpage.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezpage, lazy: true, callback: '::create'}
 
     ezpublish.fieldType.ezrecommendation.converter:
         class: %ezpublish.fieldType.eznull.converter.class%

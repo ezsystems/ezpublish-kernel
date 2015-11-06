@@ -183,40 +183,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertSame($customFilters['wow'], $filters['wow']);
     }
 
-    public function testEzPageConfiguration()
-    {
-        $customLayouts = array(
-            'FoobarLayout' => array('name' => 'Foo layout', 'template' => 'foolayout.html.twig'),
-        );
-        $enabledLayouts = array('FoobarLayout', 'GlobalZoneLayout');
-        $customBlocks = array(
-            'FoobarBlock' => array('name' => 'Foo block'),
-        );
-        $enabledBlocks = array('FoobarBlock', 'DemoBlock');
-        $this->load(
-            array(
-                'ezpage' => array(
-                    'layouts' => $customLayouts,
-                    'blocks' => $customBlocks,
-                    'enabledLayouts' => $enabledLayouts,
-                    'enabledBlocks' => $enabledBlocks,
-                ),
-            )
-        );
-
-        $this->assertTrue($this->container->hasParameter('ezpublish.ezpage.layouts'));
-        $layouts = $this->container->getParameter('ezpublish.ezpage.layouts');
-        $this->assertArrayHasKey('FoobarLayout', $layouts);
-        $this->assertSame($customLayouts['FoobarLayout'], $layouts['FoobarLayout']);
-        $this->assertContainerBuilderHasParameter('ezpublish.ezpage.enabledLayouts', $enabledLayouts);
-
-        $this->assertTrue($this->container->hasParameter('ezpublish.ezpage.blocks'));
-        $blocks = $this->container->getParameter('ezpublish.ezpage.blocks');
-        $this->assertArrayHasKey('FoobarBlock', $blocks);
-        $this->assertSame($customBlocks['FoobarBlock'], $blocks['FoobarBlock']);
-        $this->assertContainerBuilderHasParameter('ezpublish.ezpage.enabledBlocks', $enabledBlocks);
-    }
-
     public function testRoutingConfiguration()
     {
         $this->load();

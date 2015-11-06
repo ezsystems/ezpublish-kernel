@@ -11,8 +11,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
@@ -192,20 +190,6 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
         $view->setLocation(new Location($locationProperties));
-
-        return $view;
-    }
-
-    /**
-     * @param array $blockProperties
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\BlockView
-     */
-    protected function getBlockView(array $blockProperties = array())
-    {
-        $view = new BlockView();
-        $view->setViewType('full');
-        $view->setBlock(new Block($blockProperties));
 
         return $view;
     }

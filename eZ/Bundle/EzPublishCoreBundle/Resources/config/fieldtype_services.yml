@@ -1,15 +1,7 @@
 parameters:
     # Parameter provider
     ezpublish.fieldType.parameterProviderRegistry.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry
-    ezpublish.fieldType.ezpage.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider
     ezpublish.fieldType.locale.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider
-
-    # Page
-    ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService
-    ezpublish.fieldType.ezpage.pageService.factory.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\PageServiceFactory
-    ezpublish.fieldType.ezpage.block.class: eZ\Publish\Core\FieldType\Page\Parts\Block
-    ezpublish.fieldType.ezpage.zone.class: eZ\Publish\Core\FieldType\Page\Parts\Zone
-    ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
 
     # RichText
     ezpublish.fieldType.ezrichtext.normalizer.document_type_definition.class: eZ\Publish\Core\FieldType\RichText\Normalizer\DocumentTypeDefinition
@@ -64,29 +56,6 @@ services:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}
             - {name: ezpublish.fieldType.parameterProvider, alias: eztime}
-
-    ezpublish.fieldType.ezpage.parameterProvider:
-        class: %ezpublish.fieldType.ezpage.parameterProvider.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
-        tags:
-            - {name: ezpublish.fieldType.parameterProvider, alias: ezpage}
-
-    # Page
-    ezpublish.fieldType.ezpage.pageService.factory:
-        class: %ezpublish.fieldType.ezpage.pageService.factory.class%
-
-    ezpublish.fieldType.ezpage.pageService:
-        class: %ezpublish.fieldType.ezpage.pageService.class%
-        factory: ["@ezpublish.fieldType.ezpage.pageService.factory", buildService]
-        arguments:
-            - %ezpublish.fieldType.ezpage.pageService.class%
-            - @ezpublish.config.resolver
-            - @ezpublish.fieldType.ezpage.storage_gateway
-            - @ezpublish.api.service.content
-        lazy: true
-
-    ezpublish.fieldType.ezpage.hashConverter:
-        class: %ezpublish.fieldType.ezpage.hashConverter.class%
 
     # RichText
     ezpublish.fieldType.ezrichtext.normalizer.input:

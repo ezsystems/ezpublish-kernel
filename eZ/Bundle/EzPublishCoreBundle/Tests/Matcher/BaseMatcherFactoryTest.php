@@ -10,8 +10,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
-use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
@@ -79,19 +77,6 @@ abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
     {
         $view = new ContentView();
         $view->setContent(new Content($properties));
-
-        return $view;
-    }
-
-    /**
-     * @param array $properties
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getBlockMock(array $properties = array())
-    {
-        $view = new BlockView();
-        $view->setBlock(new Block($properties));
 
         return $view;
     }
