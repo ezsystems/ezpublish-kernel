@@ -40,7 +40,7 @@ services:
     # Base service for flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem:
         abstract: true
-        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        class: %ezpublish.core.io.metadata_handler.flysystem.class%
         arguments:
             - ~
 
