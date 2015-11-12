@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class is used for updating the fields of a content object draft.
  *
- * @property-write array $fields
+ * @property array $fields
  */
 abstract class ContentUpdateStruct extends ValueObject
 {
