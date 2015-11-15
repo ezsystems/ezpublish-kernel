@@ -17,7 +17,7 @@ if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE $DB_NAME;" -U postgr
 ./bin/.travis/install_composer_github_key.sh
 
 # Switch to another Symfony version if asked for
-if [ "$SYMFONY_VERSION" != "" ] ; then composer require --no-update symfony/symfony=$SYMFONY_VERSION ; fi;
+if [ "$SYMFONY_VERSION" != "" ] ; then composer require --no-update symfony/symfony="$SYMFONY_VERSION" ; fi;
 
 # Install packages using composer
 composer install -v --no-progress --no-interaction
