@@ -79,22 +79,26 @@ class ParserTools
     }
 
     /**
-     * Parses a boolean from $stringValue.
+     * Parses a boolean from $value.
      *
-     * @param string $stringValue
+     * @param string|bool $value
      *
      * @return bool
+     * @throws \RuntimeException if the value can not be transformed to a boolean
      */
-    public function parseBooleanValue($stringValue)
+    public function parseBooleanValue($value)
     {
-        switch (strtolower($stringValue)) {
+        if (is_bool($value)) {
+            return $value;
+        }
+        switch (strtolower($value)) {
             case 'true':
                 return true;
             case 'false':
                 return false;
         }
 
-        throw new RuntimeException("Unknown boolean value '{$stringValue}'.");
+        throw new RuntimeException("Unknown boolean value '{$value}'.");
     }
 
     /**
