@@ -1,32 +1,22 @@
 <?php
-
 /**
- * File containing the eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Repository\Values\Content;
+namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class is used for creating a new content object.
+ * Base struct for content create/update structs.
  *
  * @property \eZ\Publish\API\Repository\Values\Content\Field[] $fields
  */
-class ContentCreateStruct extends APIContentCreateStruct
+abstract class ContentStruct extends ValueObject
 {
-    /**
-     * Field collection.
-     *
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
-    public $fields = array();
-
     /**
      * Adds a field to the field collection.
      *
@@ -39,18 +29,5 @@ class ContentCreateStruct extends APIContentCreateStruct
      *                     field type or an instance of a Value class provided by the field type
      * @param string|null $language If not given on a translatable field the initial language is used
      */
-    public function setField($fieldDefIdentifier, $value, $language = null)
-    {
-        if (!isset($language)) {
-            $language = $this->mainLanguageCode;
-        }
-
-        $this->fields[] = new Field(
-            array(
-                'fieldDefIdentifier' => $fieldDefIdentifier,
-                'value' => $value,
-                'languageCode' => $language,
-            )
-        );
-    }
+    abstract public function setField($fieldDefIdentifier, $value, $language = null);
 }
