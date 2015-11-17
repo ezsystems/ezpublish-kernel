@@ -10,14 +10,12 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
 /**
  * This class is used for creating a new content object.
  *
  * @property \eZ\Publish\API\Repository\Values\Content\Field[] $fields
  */
-abstract class ContentCreateStruct extends ValueObject
+abstract class ContentCreateStruct extends ContentStruct
 {
     /**
      * The content type for which the new content is created.
@@ -76,18 +74,4 @@ abstract class ContentCreateStruct extends ValueObject
      * @var \DateTime
      */
     public $modificationDate;
-
-    /**
-     * Adds a field to the field collection.
-     *
-     * This method could also be implemented by a magic setter so that
-     * $fields[$fieldDefIdentifier][$language] = $value or without language $fields[$fieldDefIdentifier] = $value
-     * is an equivalent call.
-     *
-     * @param string $fieldDefIdentifier the identifier of the field definition
-     * @param mixed $value Either a plain value which is understandable by the corresponding
-     *                     field type or an instance of a Value class provided by the field type
-     * @param string|null $language If not given on a translatable field the initial language is used
-     */
-    abstract public function setField($fieldDefIdentifier, $value, $language = null);
 }
