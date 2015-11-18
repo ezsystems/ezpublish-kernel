@@ -20,7 +20,7 @@ class ObjectStateCreateStruct extends ValueObject
     /**
      * Readable unique string identifier of a group.
      *
-     * @required
+     * Required.
      *
      * @var string
      */
@@ -36,7 +36,7 @@ class ObjectStateCreateStruct extends ValueObject
     /**
      * The default language code.
      *
-     * @required
+     * Required.
      *
      * @var string
      */
@@ -45,7 +45,7 @@ class ObjectStateCreateStruct extends ValueObject
     /**
      * An array of names with languageCode keys.
      *
-     * @required - at least one name in the main language is required
+     * Required. - at least one name in the main language is required
      *
      * @var string[]
      */

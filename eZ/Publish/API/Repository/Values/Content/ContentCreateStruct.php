@@ -20,7 +20,7 @@ abstract class ContentCreateStruct extends ContentStruct
     /**
      * The content type for which the new content is created.
      *
-     * @required
+     * Required.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
@@ -62,7 +62,7 @@ abstract class ContentCreateStruct extends ContentStruct
      * be used for as initial language for the first created version.
      * It is also used as default language for added fields.
      *
-     * @required
+     * Required.
      *
      * @var string
      */

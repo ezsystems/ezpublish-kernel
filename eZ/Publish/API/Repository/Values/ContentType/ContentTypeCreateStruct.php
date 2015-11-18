@@ -23,7 +23,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * String unique identifier of a type.
      *
-     * @required
+     * Required.
      *
      * @var string
      */
@@ -32,7 +32,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * Main language Code.
      *
-     * @required
+     * Required.
      *
      * @var string
      */
@@ -95,7 +95,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * An array of names with languageCode keys.
      *
-     * @required - at least one name in the main language is required
+     * Required. - at least one name in the main language is required
      *
      * @var array an array of string
      */
