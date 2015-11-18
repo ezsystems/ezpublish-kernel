@@ -46,6 +46,9 @@ class ViewTest extends AbstractParserTestCase
                 if (!isset($config['params'])) {
                     $config['params'] = array();
                 }
+                if (!isset($config['priority'])) {
+                    $config['priority'] = 0;
+                }
             }
         }
 
@@ -62,6 +65,9 @@ class ViewTest extends AbstractParserTestCase
             foreach ($rulesets as &$config) {
                 if (!isset($config['params'])) {
                     $config['params'] = array();
+                }
+                if (!isset($config['priority'])) {
+                    $config['priority'] = 0;
                 }
             }
         }
