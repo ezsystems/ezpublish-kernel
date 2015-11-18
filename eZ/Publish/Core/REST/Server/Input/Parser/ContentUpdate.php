@@ -60,8 +60,8 @@ class ContentUpdate extends BaseParser
 
         if (array_key_exists('MainLocation', $data)) {
             try {
-                $parsedData['mainLocationId'] = $this->requestParser->parseHref($data['MainLocation']['_href'], 'locationPath');
-                $parsedData['mainLocationId'] = '/' . $parsedData['mainLocationId'];
+                $mainLocationIdParts = explode('/', $this->requestParser->parseHref($data['MainLocation']['_href'], 'locationPath'));
+                $parsedData['mainLocationId'] = array_pop($mainLocationIdParts);
             } catch (Exceptions\InvalidArgumentException $e) {
                 throw new Exceptions\Parser('Invalid format for <MainLocation> reference in <ContentUpdate>.');
             }
