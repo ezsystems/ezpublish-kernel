@@ -17,14 +17,12 @@ use SplObjectStorage;
 use InvalidArgumentException;
 
 /**
- * Base for MatcherFactory classes.
+ * A matcher factory based on namespaces: matchers will be searched for as classes.
  *
- * Implementors can define MATCHER_RELATIVE_NAMESPACE constant. If so, getMatcher() will return instances of objects relative
- * to this namespace if $matcherIdentifier argument doesn't begin with a '\' (FQ class name).
- *
- * @deprecated Deprecated since 6.0, will be removed in 6.1. Use ClassNameMatcherFactory instead.
+ * A relative namespace can be defined. If so, getMatcher() will search for the requested matcher
+ * inside this namespace if a relative namespace (not starting with '\') is passed.
  */
-abstract class AbstractMatcherFactory implements MatcherFactoryInterface
+class ClassNameMatcherFactory implements MatcherFactoryInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -32,6 +30,9 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
     protected $repository;
 
     /**
+     * The view configuration this matcher should use for matching.
+     * Typically, one of the *_view siteaccess aware settings array.
+     *
      * @var array
      */
     protected $matchConfig;
@@ -39,7 +40,7 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[]
      */
-    protected $matchers;
+    protected $matchers = [];
 
     /**
      * Namespace built-in matchers are relative to.
@@ -54,28 +55,22 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      *
      * @var \SplObjectStorage[]
      */
-    protected $alreadyMatched;
+    protected $alreadyMatched = [];
 
-    public function __construct(Repository $repository, array $matchConfig = [])
+    public function __construct(Repository $repository, $relativeNamespace = null, array $matchConfig = [])
     {
-        @trigger_error(
-            "BlockMatcherFactory is deprecated, and will be removed in ezpublish-kernel 6.1.\n" .
-            'Use the ServiceAwareMatcherFactory with the relative namespace as a constructor argument instead.',
-            E_USER_DEPRECATED
-        );
-
         $this->repository = $repository;
+        $this->matcherRelativeNamespace = $relativeNamespace;
         $this->matchConfig = $matchConfig;
-        $this->matchers = array();
-        $this->alreadyMatched = array();
     }
 
     /**
      * Returns the matcher object.
      *
-     * @param string $matcherIdentifier The matcher class.
-     *                                  If it begins with a '\' it means it's a FQ class name, otherwise it is relative to
-     *                                  static::MATCHER_RELATIVE_NAMESPACE namespace (if available).
+     * @param string $matcherIdentifier The matcher identifier.
+     *                                  If it begins with a '\' it means it's a FQ class name.
+     *                                  If it does not and a relative namespace is set, it is searched inside the
+     *                                  relative namespace if set.
      *
      * @throws InvalidArgumentException
      *
@@ -84,8 +79,8 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
     protected function getMatcher($matcherIdentifier)
     {
         // Not a FQ class name, so take the relative namespace.
-        if ($matcherIdentifier[0] !== '\\' && defined('static::MATCHER_RELATIVE_NAMESPACE')) {
-            $matcherIdentifier = static::MATCHER_RELATIVE_NAMESPACE . "\\$matcherIdentifier";
+        if ($matcherIdentifier[0] !== '\\' && $this->matcherRelativeNamespace !== null) {
+            $matcherIdentifier = $this->matcherRelativeNamespace . "\\$matcherIdentifier";
         }
 
         // Retrieving the matcher instance from in-memory cache
@@ -151,12 +146,14 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
     }
 
     /**
-     * Checks if $valueObject matches $matcher rules.
+     * @param array $matchConfig
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface $matcher
-     * @param \eZ\Publish\Core\MVC\Symfony\View\View $valueObject
-     *
-     * @return bool
+     * @return AbstractMatcherFactory
      */
-    abstract protected function doMatch(MatcherInterface $matcher, View $valueObject);
+    public function setMatchConfig($matchConfig)
+    {
+        $this->matchConfig = $matchConfig;
+
+        return $this;
+    }
 }

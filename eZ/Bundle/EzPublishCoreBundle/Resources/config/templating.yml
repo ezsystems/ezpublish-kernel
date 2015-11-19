@@ -6,6 +6,7 @@ parameters:
     ezpublish.view_manager.class: eZ\Bundle\EzPublishCoreBundle\View\Manager
     ezpublish.view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
 
+    ezpublish.view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
     ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
     ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
     ezpublish.block_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory
@@ -79,10 +80,11 @@ services:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.content_view.matcher_factory:
-        class: %ezpublish.content_view.matcher_factory.class%
-        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        class: %ezpublish.view.matcher_factory.class%
+        arguments: [@ezpublish.api.repository, 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
             - [setContainer, [@service_container]]
+            - [setMatchConfig, [$content_view$]]
 
     ezpublish.location_view_provider.configured:
         class: %ezpublish.view_provider.configured.class%
@@ -91,10 +93,11 @@ services:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.location_view.matcher_factory:
-        class: %ezpublish.location_view.matcher_factory.class%
-        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        class: %ezpublish.view.matcher_factory.class%
+        arguments: [@ezpublish.api.repository, 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
             - [setContainer, [@service_container]]
+            - [setMatchConfig, [$location_view$]]
 
     ezpublish.block_view_provider.configured:
         class: %ezpublish.view_provider.configured.class%
@@ -103,10 +106,11 @@ services:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\BlockView', priority: 10}
 
     ezpublish.block_view.matcher_factory:
-        class: %ezpublish.block_view.matcher_factory.class%
-        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        class: %ezpublish.view.matcher_factory.class%
+        arguments: [@ezpublish.api.repository]
         calls:
             - [setContainer, [@service_container]]
+            - [setMatchConfig, [$block_view$]]
 
     ezpublish.templating.global_helper.core:
         class: %ezpublish.templating.global_helper.core.class%

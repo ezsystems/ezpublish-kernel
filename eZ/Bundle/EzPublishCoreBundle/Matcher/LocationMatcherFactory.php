@@ -18,6 +18,9 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * @deprecated Deprecated since 6.0, will be removed in 6.1. Location view in general is deprecated. Use content view instead.
+ */
 class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAware, ContainerAwareInterface
 {
     /**
@@ -32,6 +35,12 @@ class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAwa
 
     public function __construct(ConfigResolverInterface $configResolver, Repository $repository)
     {
+        @trigger_error(
+            "Location view has been deprecated in 6.0, and will be removed in 6.1.\n" .
+            'Use content view instead.',
+            E_USER_DEPRECATED
+        );
+
         $this->configResolver = $configResolver;
         parent::__construct(
             $repository,
