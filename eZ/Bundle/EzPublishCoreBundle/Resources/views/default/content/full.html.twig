@@ -1,0 +1,5 @@
+<h2>{{ ez_content_name(content) }}</h2>
+{% for field in content.fieldsByLanguage %}
+    <h3>{{ field.fieldDefIdentifier }}</h3>
+    {{ ez_render_field(content, field.fieldDefIdentifier) }}
+{% endfor %}

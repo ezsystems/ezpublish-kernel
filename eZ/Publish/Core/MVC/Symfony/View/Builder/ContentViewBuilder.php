@@ -37,6 +37,12 @@ class ContentViewBuilder implements ViewBuilder
     /** @var \eZ\Publish\Core\MVC\Symfony\View\ParametersInjector */
     private $viewParametersInjector;
 
+    /**
+     * Default templates, indexed per viewType (full, line, ...).
+     * @var array
+     */
+    private $defaultTemplates;
+
     public function __construct(
         Repository $repository,
         AuthorizationCheckerInterface $authorizationChecker,
