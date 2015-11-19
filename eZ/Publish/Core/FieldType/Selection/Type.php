@@ -59,7 +59,7 @@ class Type extends FieldType
                 case 'isMultiple':
                     if (!is_bool($settingValue)) {
                         $validationErrors[] = new ValidationError(
-                            "FieldType '%fieldType%' expects setting %setting% to be a of type %type%",
+                            "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
                             array(
                                 'fieldType' => $this->getFieldTypeIdentifier(),
@@ -73,12 +73,22 @@ class Type extends FieldType
                 case 'options':
                     if (!is_array($settingValue)) {
                         $validationErrors[] = new ValidationError(
-                            "FieldType '%fieldType%' expects setting %setting% to be a of type %type%",
+                            "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
                             array(
                                 'fieldType' => $this->getFieldTypeIdentifier(),
                                 'setting' => $settingKey,
                                 'type' => 'hash',
+                            ),
+                            "[$settingKey]"
+                        );
+                    } elseif (empty($settingValue)) {
+                        $validationErrors[] = new ValidationError(
+                            "FieldType '%fieldType%' expects setting '%setting%' to contain at least one option",
+                            null,
+                            array(
+                                'fieldType' => $this->getFieldTypeIdentifier(),
+                                'setting' => $settingKey,
                             ),
                             "[$settingKey]"
                         );
