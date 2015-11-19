@@ -152,7 +152,7 @@ class ContentUpdateTest extends BaseTest
             array(
                 'mainLanguageCode' => 'eng-GB',
                 'sectionId' => 23,
-                'mainLocationId' => '/1/2/55',
+                'mainLocationId' => 55,
                 'ownerId' => 42,
                 'alwaysAvailable' => false,
                 'remoteId' => '7e7afb135e50490a281dafc0aafb6dac',
