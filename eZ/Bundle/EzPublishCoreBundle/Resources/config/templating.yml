@@ -120,7 +120,7 @@ services:
 
     ezpublish.block_view.matcher_factory:
         class: %ezpublish.view.matcher_factory.class%
-        arguments: [@ezpublish.api.repository]
+        arguments: [@ezpublish.api.repository, 'eZ\Publish\Core\MVC\Symfony\Matcher\Block']
         calls:
             - [setContainer, [@service_container]]
             - [setMatchConfig, [$block_view$]]
@@ -225,8 +225,6 @@ services:
             - @security.authorization_checker
             - @ezpublish.view.configurator
             - @ezpublish.view.view_parameters.injector.dispatcher
-        calls:
-            - [setDefaultTemplates, ["$default_view_templates.content$"]]
 
     ezpublish.view_builder.block:
         class: %ezpublish.view_builder.block.class%
