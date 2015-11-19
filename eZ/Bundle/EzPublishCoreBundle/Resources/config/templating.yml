@@ -225,8 +225,6 @@ services:
             - @security.authorization_checker
             - @ezpublish.view.configurator
             - @ezpublish.view.view_parameters.injector.dispatcher
-        calls:
-            - [setDefaultTemplates, ["$default_view_templates.content$"]]
 
     ezpublish.view_builder.block:
         class: %ezpublish.view_builder.block.class%
