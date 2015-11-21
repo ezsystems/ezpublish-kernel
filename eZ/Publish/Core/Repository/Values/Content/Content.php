@@ -126,7 +126,7 @@ class Content extends APIContent
      * If not set the initialLanguage of the content version is used.
      *
      * @param string $fieldDefIdentifier
-     * @param null $languageCode
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
      */
