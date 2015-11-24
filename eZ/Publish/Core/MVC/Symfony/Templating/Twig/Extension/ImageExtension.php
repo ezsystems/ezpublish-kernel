@@ -69,6 +69,12 @@ class ImageExtension extends Twig_Extension
                     "Couldn't create variation '{$variationName}' for image with id {$field->value->id} because source image can't be found"
                 );
             }
+        } catch (InvalidArgumentException $e) {
+            if (isset($this->logger)) {
+                $this->logger->error(
+                    "Couldn't create variation '{$variationName}' for image with id {$field->value->id} because an image could not be created from the given input"
+                );
+            }
         }
     }
 }
