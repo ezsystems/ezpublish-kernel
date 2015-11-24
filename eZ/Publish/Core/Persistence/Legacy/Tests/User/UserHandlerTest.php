@@ -1037,4 +1037,41 @@ class UserHandlerTest extends TestCase
         self::assertSame($loadedDraft->originalId, $originalRoleId);
         self::assertEquals($draft, $loadedDraft);
     }
+
+    public function testRoleDraftOnlyHavePolicyDraft()
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php');
+        $handler = $this->getUserHandler();
+        $originalRoleId = 3;
+        $originalRole = $handler->loadRole($originalRoleId);
+        $originalPolicies = [];
+        foreach ($originalRole->policies as $policy) {
+            $originalPolicies[$policy->id] = $policy;
+        }
+
+        $draft = $handler->createRoleDraft($originalRoleId);
+        $loadedDraft = $handler->loadRole($draft->id, Persistence\User\Role::STATUS_DRAFT);
+        self::assertSame($loadedDraft->originalId, $originalRoleId);
+        self::assertEquals($draft, $loadedDraft);
+        foreach ($loadedDraft->policies as $policy) {
+            self::assertTrue(isset($originalPolicies[$policy->originalId]));
+        }
+
+        // Now add a new policy. Original ID of the new one must be the same as its actual ID.
+        $newPolicyModule = 'foo';
+        $newPolicyFunction = 'bar';
+        $policy = new Persistence\User\Policy(['module' => $newPolicyModule, 'function' => $newPolicyFunction]);
+        $policyDraft = $handler->addPolicyByRoleDraft($loadedDraft->id, $policy);
+
+        // Test again by reloading the draft.
+        $loadedDraft = $handler->loadRole($draft->id, Persistence\User\Role::STATUS_DRAFT);
+        foreach ($loadedDraft->policies as $policy) {
+            if ($policy->id != $policyDraft->id) {
+                continue;
+            }
+
+            self::assertNotNull($policy->originalId);
+            self::assertSame($policy->id, $policy->originalId);
+        }
+    }
 }

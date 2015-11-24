@@ -18,6 +18,9 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * @deprecated Deprecated since 6.0, will be removed in 6.1. Use the ServiceAwareMatcherFactory instead.
+ */
 class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, ContainerAwareInterface
 {
     /**
@@ -32,6 +35,12 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, Cont
 
     public function __construct(ConfigResolverInterface $configResolver, Repository $repository)
     {
+        @trigger_error(
+            "ContentMatcherFactory is deprecated, and will be removed in ezpublish-kernel 6.1.\n" .
+            'Use the ServiceAwareMatcherFactory with the relative namespace as a constructor argument.',
+            E_USER_DEPRECATED
+        );
+
         $this->configResolver = $configResolver;
         parent::__construct(
             $repository,

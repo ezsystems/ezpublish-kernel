@@ -16,6 +16,9 @@ use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use InvalidArgumentException;
 
+/**
+ * @deprecated since 6.0 location view in general is deprecated. Use content view instead.
+ */
 class LocationMatcherFactory extends ContentBasedMatcherFactory
 {
     /**
@@ -30,6 +33,12 @@ class LocationMatcherFactory extends ContentBasedMatcherFactory
      */
     protected function doMatch(MatcherInterface $matcher, View $view)
     {
+        @trigger_error(
+            "LocationMatcherFactory is deprecated, and will be removed in ezpublish-kernel 6.1.\n" .
+            'Use the ServiceAwareMatcherFactory with the relative namespace as a constructor argument.',
+            E_USER_DEPRECATED
+        );
+
         if (!$view instanceof LocationValueView) {
             throw new InvalidArgumentException('Value object must be a valid Location instance');
         }

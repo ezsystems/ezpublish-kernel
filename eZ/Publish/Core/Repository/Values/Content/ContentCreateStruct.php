@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 /**
  * This class is used for creating a new content object.
  *
- * @property-write \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+ * @property \eZ\Publish\API\Repository\Values\Content\Field[] $fields
  */
 class ContentCreateStruct extends APIContentCreateStruct
 {

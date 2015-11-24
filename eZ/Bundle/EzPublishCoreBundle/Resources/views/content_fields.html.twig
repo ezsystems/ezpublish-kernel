@@ -396,6 +396,7 @@
  #   - alias (image variation name). Defaults to "original" (e.g. image originally uploaded)
  #   - parameters.width. Allows forcing width of the image in the HTML
  #   - parameters.height. Allows forcing height of the image in the HTML
+ #   - parameters.class. Allows setting CSS custom class name for the image
  #}
 {% block ezimage_field %}
 {% spaceless %}
@@ -405,7 +406,7 @@
     {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
     {% set width = parameters.width is defined ? parameters.width : imageAlias.width %}
     {% set height = parameters.height is defined ? parameters.height : imageAlias.height %}
-    <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}" />
+    <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %} class="{{ parameters.class }}"{% endif %} />
 </figure>
 {% endif %}
 {% endspaceless %}

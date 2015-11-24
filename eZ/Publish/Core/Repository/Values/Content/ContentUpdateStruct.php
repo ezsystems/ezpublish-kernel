@@ -16,14 +16,14 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 /**
  * This class is used for updating the fields of a content object draft.
  *
- * @property-write array $fields
+ * @property \eZ\Publish\API\Repository\Values\Content\Field[] $fields
  */
 class ContentUpdateStruct extends APIContentUpdateStruct
 {
     /**
      * Field collection.
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     public $fields = array();
 

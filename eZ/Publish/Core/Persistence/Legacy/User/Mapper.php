@@ -74,13 +74,19 @@ class Mapper
         $policies = array();
         foreach ($data as $row) {
             $policyId = $row['ezpolicy_id'];
-            if (!isset($policies[$policyId]) &&
-                 ($policyId !== null)) {
+            if (!isset($policies[$policyId]) && ($policyId !== null)) {
+                $originalId = null;
+                if ($row['ezpolicy_original_id']) {
+                    $originalId = (int)$row['ezpolicy_original_id'];
+                } elseif ($row['ezrole_version']) {
+                    $originalId = (int)$policyId;
+                }
+
                 $policies[$policyId] = new Policy(
                     array(
-                        'id' => (int)$row['ezpolicy_id'],
+                        'id' => (int)$policyId,
                         'roleId' => (int)$row['ezrole_id'],
-                        'originalId' => $row['ezpolicy_original_id'] ? (int)$row['ezpolicy_original_id'] : null,
+                        'originalId' => $originalId,
                         'module' => $row['ezpolicy_module_name'],
                         'function' => $row['ezpolicy_function_name'],
                         'limitations' => '*', // limitations must be '*' if not a non empty array of limitations

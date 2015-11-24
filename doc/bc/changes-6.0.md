@@ -224,6 +224,11 @@ Changes affecting version compatibility with former or future versions.
   as its argument. Implementations should check the type of value the View contains, depending on what it is matching
   against (`LocationValueView`, `ContentValueView`, `BlockValueView`.
 
+* The AbstractMatcherFactory, as well as the classes inheriting from it, are deprecated.
+  `ServiceAwareMatcherFactory`, or its parent `ClassNameMatcherFactory` can be used instead.
+  The match configuration can be  provided using dynamic settings in the services definitions, and a relative namespace
+  can be set using the constructor.
+
 ## Removed features
 
 * `getLegacyKernel()` shorthand method in `eZ\Bundle\EzPublishCoreBundle\Controller` has been removed.
@@ -238,7 +243,7 @@ Changes affecting version compatibility with former or future versions.
       system:
           my_siteaccess:
               legacy_mode: true
-              
+
   # New setting
   ez_publish_legacy:
       system:

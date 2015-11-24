@@ -60,4 +60,16 @@ abstract class Content extends ValueObject
      * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} with field identifier as keys
      */
     abstract public function getFieldsByLanguage($languageCode = null);
+
+    /**
+     * This method returns the field for a given field definition identifier and language.
+     *
+     * If not set the initialLanguage of the content version is used.
+     *
+     * @param string $fieldDefIdentifier
+     * @param string|null $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
+     */
+    abstract public function getField($fieldDefIdentifier, $languageCode = null);
 }

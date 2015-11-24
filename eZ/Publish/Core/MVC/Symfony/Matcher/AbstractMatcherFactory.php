@@ -21,6 +21,8 @@ use InvalidArgumentException;
  *
  * Implementors can define MATCHER_RELATIVE_NAMESPACE constant. If so, getMatcher() will return instances of objects relative
  * to this namespace if $matcherIdentifier argument doesn't begin with a '\' (FQ class name).
+ *
+ * @deprecated Deprecated since 6.0, will be removed in 6.1. Use ClassNameMatcherFactory instead.
  */
 abstract class AbstractMatcherFactory implements MatcherFactoryInterface
 {
@@ -54,8 +56,14 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      */
     protected $alreadyMatched;
 
-    public function __construct(Repository $repository, array $matchConfig)
+    public function __construct(Repository $repository, array $matchConfig = [])
     {
+        @trigger_error(
+            "BlockMatcherFactory is deprecated, and will be removed in ezpublish-kernel 6.1.\n" .
+            'Use the ServiceAwareMatcherFactory with the relative namespace as a constructor argument instead.',
+            E_USER_DEPRECATED
+        );
+
         $this->repository = $repository;
         $this->matchConfig = $matchConfig;
         $this->matchers = array();

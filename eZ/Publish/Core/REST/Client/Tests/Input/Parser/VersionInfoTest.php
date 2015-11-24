@@ -14,6 +14,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\RequestParser;
 
 class VersionInfoTest extends BaseTest
 {
@@ -56,6 +57,12 @@ class VersionInfoTest extends BaseTest
                 '_href' => '/content/objects/10',
             ),
         );
+
+        $this->getRequestParserMock()
+            ->expects($this->once())
+            ->method('parseHref')
+            ->with('/content/objects/10', 'contentId')
+            ->will($this->returnValue(10));
 
         $result = $relationParser->parse($inputArray, $this->getParsingDispatcherMock());
 
@@ -171,7 +178,7 @@ class VersionInfoTest extends BaseTest
     public function testParsedContentInfoId($parsedVersionInfo)
     {
         $this->assertEquals(
-            '/content/objects/10',
+            10,
             $parsedVersionInfo->contentInfoId
         );
     }
@@ -183,10 +190,13 @@ class VersionInfoTest extends BaseTest
      */
     protected function getParser()
     {
-        return new Input\Parser\VersionInfo(
+        $parser = new Input\Parser\VersionInfo(
             new ParserTools(),
             $this->getContentServiceMock()
         );
+        $parser->setRequestParser($this->getRequestParserMock());
+
+        return $parser;
     }
 
     /**
@@ -205,5 +215,19 @@ class VersionInfoTest extends BaseTest
         }
 
         return $this->contentServiceMock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\REST\Common\RequestParser
+     */
+    protected function getRequestParserMock()
+    {
+        static $parser = null;
+
+        if (!isset($parser)) {
+            $parser =$this->getMock('eZ\Publish\Core\REST\Common\RequestParser');
+        }
+
+        return $parser;
     }
 }

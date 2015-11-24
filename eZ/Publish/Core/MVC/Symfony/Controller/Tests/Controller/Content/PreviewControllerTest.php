@@ -48,7 +48,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
     /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker */
     protected $locationProvider;
 
-    private $controllerChecker;
+    protected $controllerChecker;
 
     protected function setUp()
     {

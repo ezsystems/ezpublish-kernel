@@ -12,20 +12,6 @@ class CleanInstaller extends DbBasedInstaller implements Installer
 {
     public function createConfiguration()
     {
-        $this->copyConfigurationFile(
-            __DIR__ . '/../Resources/config_templates/clean/ezpublish.yml',
-            'ezpublish/config/ezpublish.yml'
-        );
-
-        $this->copyConfigurationFile(
-            __DIR__ . '/../Resources/config_templates/common/ezpublish_dev.yml',
-            'ezpublish/config/ezpublish_dev.yml'
-        );
-
-        $this->copyConfigurationFile(
-            __DIR__ . '/../Resources/config_templates/common/ezpublish_prod.yml',
-            'ezpublish/config/ezpublish_prod.yml'
-        );
     }
 
     public function importSchema()

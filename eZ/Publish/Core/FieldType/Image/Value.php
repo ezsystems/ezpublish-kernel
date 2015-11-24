@@ -28,8 +28,9 @@ class Value extends BaseValue
     /**
      * Image id.
      *
+     * Required.
+     *
      * @var mixed
-     * @required
      */
     public $id;
 
@@ -43,16 +44,18 @@ class Value extends BaseValue
     /**
      * Display file name of the image.
      *
+     * Required.
+     *
      * @var string
-     * @required
      */
     public $fileName;
 
     /**
      * Size of the image file.
      *
+     * Required.
+     *
      * @var int
-     * @required
      */
     public $fileSize;
 

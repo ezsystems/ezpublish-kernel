@@ -11,6 +11,33 @@ parameters:
     ezsettings.default.content_view: {}
     ezsettings.default.block_view: {}
 
+
+    # Default view templates
+    ezplatform.default_view_templates.content.full: 'EzPublishCoreBundle:default:content/full.html.twig'
+    ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
+    ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
+    ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
+
+    ezsettings.default.content_view_defaults:
+        full:
+            default:
+                template: %ezplatform.default_view_templates.content.full%
+                match: []
+        line:
+            default:
+                template: %ezplatform.default_view_templates.content.line%
+                match: []
+        embed:
+            default:
+                template: %ezplatform.default_view_templates.content.embed%
+                match: []
+
+    ezsettings.default.block_view_defaults:
+        block:
+            default:
+                template: %ezplatform.default_view_templates.block%
+                match: []
+
     # Common settings
     ezpublish.repositories: {}
     ezsettings.default.repository: ~

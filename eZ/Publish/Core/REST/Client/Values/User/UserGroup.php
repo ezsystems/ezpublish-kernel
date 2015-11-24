@@ -77,6 +77,21 @@ class UserGroup extends APIUserGroup
         return $this->content->getFieldsByLanguage($languageCode);
     }
 
+    /**
+     * This method returns the field for a given field definition identifier and language.
+     *
+     * If not set the initialLanguage of the content version is used.
+     *
+     * @param string $fieldDefIdentifier
+     * @param string|null $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
+     */
+    public function getField($fieldDefIdentifier, $languageCode = null)
+    {
+        return $this->content->getField($fieldDefIdentifier, $languageCode);
+    }
+
     public function __get($property)
     {
         switch ($property) {

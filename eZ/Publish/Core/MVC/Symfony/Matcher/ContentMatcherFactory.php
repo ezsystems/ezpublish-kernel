@@ -14,6 +14,9 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use InvalidArgumentException;
 
+/**
+ * @deprecated Deprecated since 6.0, will be removed in 6.1. Use the ClassNameMatcherFactory instead.
+ */
 class ContentMatcherFactory extends ContentBasedMatcherFactory
 {
     /**

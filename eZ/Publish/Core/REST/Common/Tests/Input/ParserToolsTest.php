@@ -100,6 +100,24 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testNormalParseBooleanValue()
+    {
+        $tools = $this->getParserTools();
+
+        $this->assertTrue($tools->parseBooleanValue('true'));
+        $this->assertTrue($tools->parseBooleanValue(true));
+        $this->assertFalse($tools->parseBooleanValue('false'));
+        $this->assertFalse($tools->parseBooleanValue(false));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testUnexpectedValueParseBooleanValue()
+    {
+        $this->getParserTools()->parseBooleanValue('whatever but not a boolean');
+    }
+
     protected function getParserTools()
     {
         return new ParserTools();

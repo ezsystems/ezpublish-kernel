@@ -302,7 +302,7 @@ trait EzRest
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
-    protected function convertResponseBodyToObject($responseBody, $contentTypeHeader)
+    public function convertResponseBodyToObject($responseBody, $contentTypeHeader)
     {
         try {
             $this->responseObject = $this->getKernel()->getContainer()->get('ezpublish_rest.input.dispatcher')->parse(

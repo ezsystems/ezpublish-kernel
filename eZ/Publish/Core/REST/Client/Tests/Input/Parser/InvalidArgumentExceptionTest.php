@@ -17,9 +17,6 @@ class InvalidArgumentExceptionTest extends BaseTest
 {
     /**
      * Tests parsing of InvalidArgumentException error message.
-     *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Section with ID "23" not found.
      */
     public function testParse()
     {
@@ -30,7 +27,9 @@ class InvalidArgumentExceptionTest extends BaseTest
             'errorCode' => '406',
         );
 
-        $parser->parse($inputArray, $this->getParsingDispatcherMock());
+        $exception = $parser->parse($inputArray, $this->getParsingDispatcherMock());
+        self::assertInstanceOf('eZ\Publish\API\Repository\Exceptions\InvalidArgumentException', $exception);
+        self::assertEquals('Section with ID "23" not found.', $exception->getMessage());
     }
 
     /**
