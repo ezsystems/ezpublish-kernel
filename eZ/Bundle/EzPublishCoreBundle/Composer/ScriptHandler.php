@@ -90,13 +90,11 @@ ________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\___________
 
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
-<options=bold>You may now complete the eZ Platform installation with ezplatform:install command, example of use:</options=bold>
-<comment>    $ php ezpublish/console ezplatform:install --env prod demo</comment>
+<options=bold>Please read the INSTALL.md file to complete the installation.</options>
 
-<options=bold>After executing this, you can launch your browser* and get started.</options=bold>
+<options=bold>Assuming that your database information were correctly entered, you may install a clean database by running the install command:</options>
+<comment>    $ php ezpublish/console --env=prod ezplatform:install clean</comment>
 
-
-* Assuming you have setup directory permissions and configured your web server (Apache/Nginx) correctly (see Install.md and doc/ folder in eZ Platform <root-directory>).
 EOT
         );
     }
