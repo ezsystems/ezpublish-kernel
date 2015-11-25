@@ -96,12 +96,12 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      * @param ContentType|SPIType $contentType
-     * @param array|null $fieldFilterLanguages languages to filter fields on
-     * @param string|null $alwaysAvailableLanguageCode Language to fallback to if a given field is not found among the filtered languages
+     * @param array|null $fieldLanguages Language codes to filter fields on
+     * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $fieldLanguages
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null, array $fieldFilterLanguages = null, $alwaysAvailableLanguageCode = null)
+    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null, array $fieldLanguages = null, $fieldAlwaysAvailableLanguage = null)
     {
         if ($contentType === null) {
             $contentType = $this->contentTypeHandler->load(
@@ -111,7 +111,7 @@ class DomainMapper
 
         return new Content(
             array(
-                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldFilterLanguages, $alwaysAvailableLanguageCode),
+                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldLanguages, $fieldAlwaysAvailableLanguage),
                 'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo),
             )
         );
@@ -124,12 +124,12 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
      * @param ContentType|SPIType $contentType
-     * @param array|null $fieldFilterLanguages languages to filter fields on
-     * @param string|null $alwaysAvailableLanguageCode Language to fallback to if a given field is not found among the filtered languages
+     * @param array|null $languages Language codes to filter fields on
+     * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $languages
      *
      * @return array
      */
-    public function buildDomainFields(array $spiFields, $contentType, array $fieldFilterLanguages = null, $alwaysAvailableLanguageCode = null)
+    public function buildDomainFields(array $spiFields, $contentType, array $languages = null, $alwaysAvailableLanguage = null)
     {
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
@@ -141,9 +141,9 @@ class DomainMapper
         }
 
         $fieldInFilterLanguagesMap = array();
-        if ($fieldFilterLanguages !== null && $alwaysAvailableLanguageCode !== null) {
+        if ($languages !== null && $alwaysAvailableLanguage !== null) {
             foreach ($spiFields as $spiField) {
-                if (in_array($spiField->languageCode, $fieldFilterLanguages)) {
+                if (in_array($spiField->languageCode, $languages)) {
                     $fieldInFilterLanguagesMap[$spiField->fieldDefinitionId] = true;
                 }
             }
@@ -156,15 +156,15 @@ class DomainMapper
                 continue;
             }
 
-            if ($fieldFilterLanguages !== null && !in_array($spiField->languageCode, $fieldFilterLanguages)) {
-                // If filtering is enabled we ignore fields in other languages then $fieldFilterLanguages, if:
-                if ($alwaysAvailableLanguageCode === null) {
+            if ($languages !== null && !in_array($spiField->languageCode, $languages)) {
+                // If filtering is enabled we ignore fields in other languages then $fieldLanguages, if:
+                if ($alwaysAvailableLanguage === null) {
                     // Ignore field if we don't have $alwaysAvailableLanguageCode fallback
                     continue;
                 } elseif (!empty($fieldInFilterLanguagesMap[$spiField->fieldDefinitionId])) {
                     // Ignore field if it exists in one of the filtered languages
                     continue;
-                } elseif ($spiField->languageCode !== $alwaysAvailableLanguageCode) {
+                } elseif ($spiField->languageCode !== $alwaysAvailableLanguage) {
                     // Also ignore if field is not in $alwaysAvailableLanguageCode
                     continue;
                 }
