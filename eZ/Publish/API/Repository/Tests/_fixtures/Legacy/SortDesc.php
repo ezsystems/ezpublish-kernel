@@ -10,6 +10,28 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
+        'id' => 12,
+        'title' => 'Administrator users',
+      ),
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
+    )),
+    1 =>
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' =>
+      array(
+        'id' => 13,
+        'title' => 'Editors',
+      ),
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
+    )),
+    2 =>
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' =>
+      array(
         'id' => 4,
         'title' => 'Users',
       ),
@@ -17,7 +39,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => null,
        'highlight' => null,
     )),
-    1 =>
+    3 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
@@ -28,34 +50,12 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => null,
        'highlight' => null,
     )),
-    2 =>
+    4 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 11,
         'title' => 'Members',
-      ),
-       'score' => null,
-       'index' => null,
-       'highlight' => null,
-    )),
-    3 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' =>
-      array(
-        'id' => 12,
-        'title' => 'Administrator users',
-      ),
-       'score' => null,
-       'index' => null,
-       'highlight' => null,
-    )),
-    4 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' =>
-      array(
-        'id' => 13,
-        'title' => 'Editors',
       ),
        'score' => null,
        'index' => null,
