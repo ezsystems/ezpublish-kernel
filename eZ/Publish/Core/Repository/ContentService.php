@@ -383,22 +383,24 @@ class ContentService implements ContentServiceInterface
                 $versionNo = $spiContentInfo->currentVersionNo;
             }
 
-            // Set main language on $languages filter if not empty and $useAlwaysAvailable being true
-            if (!empty($languages) && $useAlwaysAvailable) {
+            $loadLanguages = $languages;
+            $alwaysAvailableLanguageCode = null;
+            // Set main language on $languages filter if not empty (all) and $useAlwaysAvailable being true
+            if (!empty($loadLanguages) && $useAlwaysAvailable) {
                 if (!isset($spiContentInfo)) {
                     $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($id);
                 }
 
                 if ($spiContentInfo->alwaysAvailable) {
-                    $languages[] = $spiContentInfo->mainLanguageCode;
-                    $languages = array_unique($languages);
+                    $loadLanguages[] = $alwaysAvailableLanguageCode = $spiContentInfo->mainLanguageCode;
+                    $loadLanguages = array_unique($loadLanguages);
                 }
             }
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(
                 $id,
                 $versionNo,
-                $languages
+                $loadLanguages
             );
         } catch (APINotFoundException $e) {
             throw new NotFoundException(
@@ -412,7 +414,12 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->domainMapper->buildContentDomainObject($spiContent);
+        return $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            null,
+            empty($languages) ? null : $languages,
+            $alwaysAvailableLanguageCode
+        );
     }
 
     /**

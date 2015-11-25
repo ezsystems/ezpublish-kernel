@@ -96,10 +96,12 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      * @param ContentType|SPIType $contentType
+     * @param array|null $fieldFilterLanguages languages to filter fields on
+     * @param string|null $alwaysAvailableLanguageCode Language to fallback to if a given field is not found among the filtered languages
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null)
+    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null, array $fieldFilterLanguages = null, $alwaysAvailableLanguageCode = null)
     {
         if ($contentType === null) {
             $contentType = $this->contentTypeHandler->load(
@@ -109,7 +111,7 @@ class DomainMapper
 
         return new Content(
             array(
-                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType),
+                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldFilterLanguages, $alwaysAvailableLanguageCode),
                 'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo),
             )
         );
@@ -118,20 +120,33 @@ class DomainMapper
     /**
      * Returns an array of domain fields created from given array of SPI fields.
      *
+     * @throws InvalidArgumentType On invalid $contentType
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
      * @param ContentType|SPIType $contentType
+     * @param array|null $fieldFilterLanguages languages to filter fields on
+     * @param string|null $alwaysAvailableLanguageCode Language to fallback to if a given field is not found among the filtered languages
      *
      * @return array
      */
-    public function buildDomainFields(array $spiFields, $contentType)
+    public function buildDomainFields(array $spiFields, $contentType, array $fieldFilterLanguages = null, $alwaysAvailableLanguageCode = null)
     {
-        $fieldIdentifierMap = array();
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
 
+        $fieldIdentifierMap = array();
         foreach ($contentType->fieldDefinitions as $fieldDefinitions) {
             $fieldIdentifierMap[$fieldDefinitions->id] = $fieldDefinitions->identifier;
+        }
+
+        $fieldInFilterLanguagesMap = array();
+        if ($fieldFilterLanguages !== null && $alwaysAvailableLanguageCode !== null) {
+            foreach ($spiFields as $spiField) {
+                if (in_array($spiField->languageCode, $fieldFilterLanguages)) {
+                    $fieldInFilterLanguagesMap[$spiField->fieldDefinitionId] = true;
+                }
+            }
         }
 
         $fields = array();
@@ -139,6 +154,20 @@ class DomainMapper
             // We ignore fields in content not part of the content type
             if (!isset($fieldIdentifierMap[$spiField->fieldDefinitionId])) {
                 continue;
+            }
+
+            if ($fieldFilterLanguages !== null && !in_array($spiField->languageCode, $fieldFilterLanguages)) {
+                // If filtering is enabled we ignore fields in other languages then $fieldFilterLanguages, if:
+                if ($alwaysAvailableLanguageCode === null) {
+                    // Ignore field if we don't have $alwaysAvailableLanguageCode fallback
+                    continue;
+                } elseif (!empty($fieldInFilterLanguagesMap[$spiField->fieldDefinitionId])) {
+                    // Ignore field if it exists in one of the filtered languages
+                    continue;
+                } elseif ($spiField->languageCode !== $alwaysAvailableLanguageCode) {
+                    // Also ignore if field is not in $alwaysAvailableLanguageCode
+                    continue;
+                }
             }
 
             $fields[] = new Field(
