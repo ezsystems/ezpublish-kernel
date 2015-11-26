@@ -150,7 +150,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     }
 
     /**
-     * @param Field $content
+     * @param Field $field
      * @param string $fieldTypeIdentifier
      * @param array $params
      * @param int $type Either self::VIEW or self::EDIT
