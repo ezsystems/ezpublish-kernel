@@ -2189,7 +2189,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
      */
-    public function testLoadContentByContentInfoWithSecondParameter()
+    public function testLoadContentByContentInfoWithLanguageParameters()
     {
         $repository = $this->getRepository();
 
@@ -2251,6 +2251,72 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertEquals($expected, $actual);
+
+        // Will return a content instance with fields in "eng-GB" (versions prior to 6.0.0-beta9 returned "eng-US" also)
+        $reloadedContent = $contentService->loadContentByContentInfo(
+            $publishedContent->contentInfo,
+            array(
+                'eng-GB',
+            ),
+            null,
+            true
+        );
+
+        $actual = $this->normalizeFields($reloadedContent->getFields());
+
+        $expected = array(
+            new Field(
+                array(
+                    'id' => 0,
+                    'value' => true,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'description',
+                )
+            ),
+            new Field(
+                array(
+                    'id' => 0,
+                    'value' => true,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'name',
+                )
+            ),
+        );
+
+        $this->assertEquals($expected, $actual);
+
+        // Will return a content instance with fields in main language "eng-US", as "fre-FR" does not exists
+        $reloadedContent = $contentService->loadContentByContentInfo(
+            $publishedContent->contentInfo,
+            array(
+                'fre-FR',
+            ),
+            null,
+            true
+        );
+
+        $actual = $this->normalizeFields($reloadedContent->getFields());
+
+        $expected = array(
+            new Field(
+                array(
+                    'id' => 0,
+                    'value' => true,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'description',
+                )
+            ),
+            new Field(
+                array(
+                    'id' => 0,
+                    'value' => true,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'name',
+                )
+            ),
+        );
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -2258,10 +2324,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
-     *
-     * @todo Fix method name to be more descriptive
      */
-    public function testLoadContentByContentInfoWithThirdParameter()
+    public function testLoadContentByContentInfoWithVersionNumberParameter()
     {
         $repository = $this->getRepository();
 
@@ -2299,7 +2363,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithThirdParameter
      */
-    public function testLoadContentByContentInfoThrowsNotFoundExceptionWithThirdParameter()
+    public function testLoadContentByContentInfoThrowsNotFoundExceptionWithVersionNumberParameter()
     {
         $repository = $this->getRepository();
 
