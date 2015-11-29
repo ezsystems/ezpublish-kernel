@@ -108,4 +108,13 @@ class ContentView extends BaseView implements View, ContentValueView, LocationVa
     {
         return $this->isEmbed;
     }
+
+    /**
+     * Returns the contained ContentType id.
+     * @return mixed
+     */
+    public function getContentTypeId()
+    {
+        return $this->content->contentInfo->contentTypeId;
+    }
 }

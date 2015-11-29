@@ -7,7 +7,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 /**
  * A view that contains a Content.
  */
-interface ContentValueView
+interface ContentValueView extends ContentTypeView
 {
     /**
      * Returns the Content.

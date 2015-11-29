@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ContentTypeView;
 use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 
@@ -52,14 +53,18 @@ class ContentType extends MultipleValued
 
     public function match(View $view)
     {
-        if (!$view instanceof ContentValueView) {
+        if ($view instanceof ContentTypeView) {
+            $contentTypeIdentifier = $this->repository
+                ->getContentTypeService()
+                ->loadContentType($view->getContentTypeId())->identifier;
+        } else if ($view instanceof ContentValueView) {
+            $contentTypeIdentifier = $this->repository
+                ->getContentTypeService()
+                ->loadContentType($view->getContent()->contentInfo->contentTypeId)->identifier;
+        } else {
             return false;
         }
 
-        $contentType = $this->repository
-            ->getContentTypeService()
-            ->loadContentType($view->getContent()->contentInfo->contentTypeId);
-
-        return isset($this->values[$contentType->identifier]);
+        return isset($this->values[$contentTypeIdentifier]);
     }
 }
