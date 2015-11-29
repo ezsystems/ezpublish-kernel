@@ -22,6 +22,7 @@ parameters:
     ezpublish.templating.extension.routing.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
     ezpublish.templating.field_block_renderer.twig.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
     ezpublish.twig.extension.field_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
+    ezpublish.twig.extension.content_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentRenderingExtension
     ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
     ezpublish.twig.extension.rich_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RichTextExtension
 
@@ -185,6 +186,15 @@ services:
             - @ezpublish.api.service.content_type
             - @ezpublish.fieldType.parameterProviderRegistry
             - @ezpublish.translation_helper
+        tags:
+            - { name: twig.extension }
+
+    ezpublish.twig.extension.content_rendering:
+        class: %ezpublish.twig.extension.content_rendering.class%
+        arguments:
+            - @ezpublish.view_controller_listener
+            - @kernel
+            - @controller_resolver
         tags:
             - { name: twig.extension }
 
