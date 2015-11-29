@@ -13,12 +13,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\MVC\Symfony\View\Renderer;
 use eZ\Publish\Core\MVC\Symfony\View\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -102,7 +99,7 @@ class ContentRenderingExtension extends Twig_Extension
             '_controller' => 'ez_content:viewAction',
             'contentId' => $content->id,
             'content' => $content,
-            'viewType' => 'embed'
+            'viewType' => 'embed',
         ]);
 
         $controller = $this->controllerResolver->getController($request);
@@ -116,7 +113,6 @@ class ContentRenderingExtension extends Twig_Extension
                     HttpKernelInterface::SUB_REQUEST
                 )
             );
-
 
             $arguments = $this->controllerResolver->getArguments($request, $event->getController());
             $response = call_user_func_array($event->getController(), $arguments);
