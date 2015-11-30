@@ -116,7 +116,7 @@ class ConsoleContext extends EzContext implements Context, SnippetAcceptingConte
         }
         $php = escapeshellarg($phpPath);
         $phpArgs = implode(' ', array_map('escapeshellarg', $arguments));
-        $console = escapeshellarg('ezpublish/console');
+        $console = escapeshellarg('app/console');
         $cmd = escapeshellarg($command);
 
         $console .= ' --env=' . escapeshellarg('behat');

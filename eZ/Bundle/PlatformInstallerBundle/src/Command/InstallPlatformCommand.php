@@ -106,15 +106,15 @@ class InstallPlatformCommand extends Command
 
     private function checkPermissions()
     {
-        if (!is_writable('ezpublish/config')) {
-            $this->output->writeln('ezpublish/config is not writable');
+        if (!is_writable('app/config')) {
+            $this->output->writeln('app/config is not writable');
             exit(self::EXIT_MISSING_PERMISSIONS);
         }
     }
 
     private function checkParameters()
     {
-        $parametersFile = 'ezpublish/config/parameters.yml';
+        $parametersFile = 'app/config/parameters.yml';
         if (!is_file($parametersFile)) {
             $this->output->writeln("Required configuration file $parametersFile not found");
             exit(self::EXIT_PARAMETERS_NOT_FOUND);
@@ -250,7 +250,7 @@ class InstallPlatformCommand extends Command
         $php = escapeshellarg($phpPath) . ($phpArgs ? ' ' . $phpArgs : '');
 
         // Make sure to pass along relevant global Symfony options to console command
-        $console = escapeshellarg('ezpublish/console');
+        $console = escapeshellarg('app/console');
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
             $console .= ' -' . str_repeat('v', $output->getVerbosity() - 1);
         }
