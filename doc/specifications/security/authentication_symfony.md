@@ -75,7 +75,7 @@ This setting can be set by SiteAccess, via [`default_page` setting](../misc/defa
 
 To use Symfony authentication with eZ Publish, the configuration goes as follows:
 
-*ezpublish/config/security.yml*
+*app/config/security.yml*
 ```yaml
 security:
     firewalls:
@@ -87,7 +87,7 @@ security:
             logout: ~
 ```
 
-*ezpublish/config/routing.yml*
+*app/config/routing.yml*
 ```yaml
 login:
     path:   /login
@@ -136,8 +136,8 @@ Further explanation can be found in the [multiple user providers specification](
 * Authenticated user is injected in legacy kernel.
 
 ## Upgrade notes
-* In `ezpublish/config/security.yml`, you must remove `ezpublish: true` from `ezpublish_front` firewall.
-* In `ezpublish/config/routing.yml`, you must add `login`, `login_check` and `logout` routes
+* In `app/config/security.yml`, you must remove `ezpublish: true` from `ezpublish_front` firewall.
+* In `app/config/routing.yml`, you must add `login`, `login_check` and `logout` routes
   (see above in [Configuration][])
 * In your templates, change your links pointing to `/user/login` and `/user/logout` to appropriate login/login_check/logout routes:
 
