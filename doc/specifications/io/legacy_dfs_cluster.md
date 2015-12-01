@@ -59,17 +59,17 @@ on the NFS mount in order to be able to read and write files.
 
 ## Web server rewrite rules.
 The default eZ Publish rewrite rules will let image requests be served directly from disk. With native support,
-files matching `^/var/([^/]+/)?storage/images(-versioned)?/.*` have to be sent to the normal inex.php
+files matching `^/var/([^/]+/)?storage/images(-versioned)?/.*` have to be sent to the normal app.php
 
 In any case, this specific rewrite rule must be placed without the ones that "ignore" image files and just let the
 web server serve the files.
 
 ### Apache
 ```
-RewriteRule ^/var/([^/]+/)?storage/images(-versioned)?/.* /index.php [L]
+RewriteRule ^/var/([^/]+/)?storage/images(-versioned)?/.* /app.php [L]
 ```
 
 ### nginx
 ```
-rewrite "^/var/([^/]+/)?storage/images(-versioned)?/(.*)" "/index.php" break;
+rewrite "^/var/([^/]+/)?storage/images(-versioned)?/(.*)" "/app.php" break;
 ```
