@@ -80,7 +80,7 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
         }
 
         // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
-        $pathinfo = $request->getPathInfo();
+        $pathinfo = rawurldecode($request->getPathInfo());
         if ($siteAccess->matcher instanceof URILexer) {
             $semanticPathinfo = $siteAccess->matcher->analyseURI($pathinfo);
         } else {
