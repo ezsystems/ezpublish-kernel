@@ -121,7 +121,7 @@ XML;
   <limitations>
     <limitation identifier="Class">
       <values>
-        <ref href="13"/>
+        <ref href="2"/>
       </values>
     </limitation>
   </limitations>
