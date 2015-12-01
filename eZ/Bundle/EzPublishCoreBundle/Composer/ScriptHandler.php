@@ -64,7 +64,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
     public static function dumpAssetsHelpText(CommandEvent $event)
     {
         $event->getIO()->write('<info>To dump eZ Publish production assets, execute the following:</info>');
-        $event->getIO()->write('    php ezpublish/console assetic:dump --env=prod web');
+        $event->getIO()->write('    php app/console assetic:dump --env=prod web');
         $event->getIO()->write('');
     }
 
