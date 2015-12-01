@@ -91,6 +91,12 @@ class SectionServiceTest extends ServiceTest
                 0,
             ),
             array(
+                'isSectionUsed',
+                array($section),
+                true,
+                0,
+            ),
+            array(
                 'assignSection',
                 array($contentInfo, $section),
                 null,

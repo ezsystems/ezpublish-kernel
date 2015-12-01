@@ -145,6 +145,42 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Counts the number of role policies using section with $id in their limitations.
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    public function countPoliciesUsingSection($id)
+    {
+        try {
+            return $this->innerGateway->countPoliciesUsingSection($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Counts the number of role assignments using section with $id in their limitations.
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    public function countRoleAssignmentsUsingSection($id)
+    {
+        try {
+            return $this->innerGateway->countRoleAssignmentsUsingSection($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Deletes the Section with $id.
      *
      * @param int $id

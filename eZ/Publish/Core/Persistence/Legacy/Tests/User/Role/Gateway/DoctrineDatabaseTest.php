@@ -126,6 +126,13 @@ class DoctrineDatabaseTest extends TestCase
                     'limit_value' => '',
                     'role_id' => '5',
                 ],
+                [
+                    'contentobject_id' => '11',
+                    'id' => '40',
+                    'limit_identifier' => 'Section',
+                    'limit_value' => '3',
+                    'role_id' => '4',
+                ],
             ],
             $gateway->loadRoleAssignmentsByGroupId(11)
         );

@@ -217,6 +217,25 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::countRoleAssignmentsUsingSection
+     */
+    public function testCountRoleAssignmentsUsingSection()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../../../User/_fixtures/roles.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $result = $gateway->countRoleAssignmentsUsingSection(2);
+
+        $this->assertSame(
+            1,
+            $result
+        );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::deleteSection
      */
     public function testDeleteSection()

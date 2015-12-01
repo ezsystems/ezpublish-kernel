@@ -207,6 +207,81 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Counts the number of role policies using section with $id in their limitations.
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    public function countPoliciesUsingSection($id)
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $query->expr->count(
+                $this->dbHandler->quoteColumn('id', 'ezpolicy_limitation')
+            )
+        )->from(
+            $this->dbHandler->quoteTable('ezpolicy_limitation'),
+            $this->dbHandler->quoteTable('ezpolicy_limitation_value')
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('id', 'ezpolicy_limitation'),
+                    $this->dbHandler->quoteColumn('limitation_id', 'ezpolicy_limitation_value')
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('identifier', 'ezpolicy_limitation'),
+                    $query->bindValue('Section', null, \PDO::PARAM_STR)
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('value', 'ezpolicy_limitation_value'),
+                    $query->bindValue($id, null, \PDO::PARAM_INT)
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
+    }
+
+    /**
+     * Counts the number of role assignments using section with $id in their limitations.
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    public function countRoleAssignmentsUsingSection($id)
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $query->expr->count(
+                $this->dbHandler->quoteColumn('id', 'ezuser_role')
+            )
+        )->from(
+            $this->dbHandler->quoteTable('ezuser_role')
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('limit_identifier', 'ezuser_role'),
+                    $query->bindValue('Section', null, \PDO::PARAM_STR)
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('limit_value', 'ezuser_role'),
+                    $query->bindValue($id, null, \PDO::PARAM_INT)
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
+    }
+
+    /**
      * Deletes the Section with $id.
      *
      * @param int $id

@@ -282,6 +282,48 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::policiesCount
+     */
+    public function testPoliciesCount()
+    {
+        $handler = $this->getSectionHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects($this->once())
+            ->method('countPoliciesUsingSection')
+            ->with(
+                $this->equalTo(1)
+            )
+            ->will(
+                $this->returnValue(7)
+            );
+
+        $result = $handler->policiesCount(1);
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::countRoleAssignmentsUsingSection
+     */
+    public function testCountRoleAssignmentsUsingSection()
+    {
+        $handler = $this->getSectionHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects($this->once())
+            ->method('countRoleAssignmentsUsingSection')
+            ->with(
+                $this->equalTo(1)
+            )
+            ->will(
+                $this->returnValue(0)
+            );
+
+        $handler->countRoleAssignmentsUsingSection(1);
+    }
+
+    /**
      * Returns the section handler to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler

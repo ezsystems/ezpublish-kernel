@@ -109,5 +109,19 @@ return array(
             'limit_value' => '',
             'role_id' => '5',
         ),
+        array(
+            'contentobject_id' => '13',
+            'id' => '39',
+            'limit_identifier' => 'Section',
+            'limit_value' => '2',
+            'role_id' => '5',
+        ),
+        array(
+            'contentobject_id' => '11',
+            'id' => '40',
+            'limit_identifier' => 'Section',
+            'limit_value' => '3',
+            'role_id' => '4',
+        ),
     ),
 );

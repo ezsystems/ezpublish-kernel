@@ -79,6 +79,58 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::policiesCount
+     */
+    public function testPoliciesCount()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+        $this->cacheMock
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('sectionHandler')
+            ->will($this->returnValue($innerHandler));
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('policiesCount')
+            ->with(1)
+            ->will($this->returnValue(7));
+
+        $handler = $this->persistenceCacheHandler->sectionHandler();
+        $handler->policiesCount(1);
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::countRoleAssignmentsUsingSection
+     */
+    public function testCountRoleAssignmentsUsingSection()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+        $this->cacheMock
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('sectionHandler')
+            ->will($this->returnValue($innerHandler));
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('countRoleAssignmentsUsingSection')
+            ->with(1)
+            ->will($this->returnValue(0));
+
+        $handler = $this->persistenceCacheHandler->sectionHandler();
+        $handler->countRoleAssignmentsUsingSection(1);
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::create
      */
     public function testCreate()
