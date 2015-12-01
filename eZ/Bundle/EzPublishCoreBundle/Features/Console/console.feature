@@ -1,4 +1,4 @@
-Feature: ezpublish/console
+Feature: app/console
     Scenario: Commands use the default siteaccess if not specified
         When I run a console script without specifying a siteaccess
         Then it is executed with the default one

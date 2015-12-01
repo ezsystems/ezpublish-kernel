@@ -93,7 +93,7 @@ ________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\___________
 <options=bold>Please read the INSTALL.md file to complete the installation.</options>
 
 <options=bold>Assuming that your database information were correctly entered, you may install a clean database by running the install command:</options>
-<comment>    $ php ezpublish/console --env=prod ezplatform:install clean</comment>
+<comment>    $ php app/console --env=prod ezplatform:install clean</comment>
 
 EOT
         );
