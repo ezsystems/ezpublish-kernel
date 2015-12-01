@@ -44,7 +44,7 @@ You can override `getUser()` to return whatever user class you want, as long as 
 
 Here is a very simple example using the in-memory user provider.
 
-*ezpublish/config/security.yml*
+*app/config/security.yml*
 ```yaml
 security:
     providers:
