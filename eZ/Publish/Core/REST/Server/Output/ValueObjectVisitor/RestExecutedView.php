@@ -95,6 +95,20 @@ class RestExecutedView extends ValueObjectVisitor
         );
         $generator->endAttribute('href');
 
+        // BEGIN Result metadata
+        $generator->startValueElement('count', $data->searchResults->totalCount);
+        $generator->endValueElement('count');
+
+        $generator->startValueElement('time', $data->searchResults->time);
+        $generator->endValueElement('time');
+
+        $generator->startValueElement('timedOut', $generator->serializeBool($data->searchResults->timedOut));
+        $generator->endValueElement('timedOut');
+
+        $generator->startValueElement('maxScore', $data->searchResults->maxScore);
+        $generator->endValueElement('maxScore');
+        // END Result metadata
+
         // BEGIN searchHits
         $generator->startHashElement('searchHits');
         $generator->startList('searchHit');
