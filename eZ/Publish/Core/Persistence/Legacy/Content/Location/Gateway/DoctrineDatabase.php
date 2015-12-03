@@ -307,6 +307,7 @@ class DoctrineDatabase extends Gateway
             '/',
             array_slice(explode('/', $sourceNodeData['path_identification_string']), 0, -1)
         );
+
         foreach ($rows as $row) {
             // Prefixing ensures correct replacement when old parent is root node
             $newPathString = str_replace(
@@ -344,8 +345,25 @@ class DoctrineDatabase extends Gateway
                 ->set(
                     $this->handler->quoteColumn('parent_node_id'),
                     $query->bindValue($newParentId)
-                )
-                ->where(
+                );
+
+            if ($destinationNodeData['is_hidden'] || $destinationNodeData['is_invisible']) {
+                // CASE 1: Mark whole tree as invisible if destination is invisible and/or hidden
+                $query->set(
+                    $this->handler->quoteColumn('is_invisible'),
+                    $query->bindValue(1)
+                );
+            } elseif (!$sourceNodeData['is_hidden'] && $sourceNodeData['is_invisible']) {
+                // CASE 2: source is only invisible, we will need to re-calculate whole moved tree visibility
+                $query->set(
+                    $this->handler->quoteColumn('is_invisible'),
+                    $query->bindValue($this->isHiddenByParent($newPathString, $rows) ? 1 : 0)
+                );
+            } else {
+                // CASE 3: keep invisible flags as is (source is either hidden or not hidden/invisible at all)
+            }
+
+            $query->where(
                     $query->expr->eq(
                         $this->handler->quoteColumn('node_id'),
                         $query->bindValue($row['node_id'])
@@ -353,6 +371,19 @@ class DoctrineDatabase extends Gateway
                 );
             $query->prepare()->execute();
         }
+    }
+
+    private function isHiddenByParent($pathString, array $rows)
+    {
+        $parentNodeIds = explode('/', trim($pathString, '/'));
+        array_pop($parentNodeIds);// remove self
+        foreach ($rows as $row) {
+            if ($row['is_hidden'] &&  in_array($row['node_id'], $parentNodeIds)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
