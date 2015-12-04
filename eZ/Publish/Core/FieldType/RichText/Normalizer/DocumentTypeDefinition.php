@@ -98,7 +98,7 @@ class DocumentTypeDefinition extends Normalizer
     {
         if ($this->expression === null) {
             $this->expression =
-                '/(<\?xml.*\?>)([ \t\n\r]*)(<' .
+                '/(<\?xml.*\?>)?([ \t\n\r]*)(<' .
                 preg_quote($this->documentElement, '/') .
                 '.*xmlns="' .
                 preg_quote($this->namespace, '/') .

@@ -101,6 +101,29 @@ xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
      * @param string $documentElement
      * @param string $namespace
      * @param string $dtdPath
+     * @param string $input Ignored
+     */
+    public function testAcceptNoXmlDeclaration($documentElement, $namespace, $dtdPath, $input)
+    {
+        $normalizer = $this->getNormalizer($documentElement, $namespace, $dtdPath);
+
+        $this->assertTrue($normalizer->accept(<<<XML
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
+  <p>You will need chili pepper, black pepper, bat wings (dried and grounded) and tomato juice.</p>
+  <p>Then you combine the ingredients and shake.</p>
+  <p>Serve chilled.</p>
+  <p>The price is 165¥.</p>
+</section>
+XML
+));
+    }
+
+    /**
+     * @dataProvider providerForTestNormalize
+     *
+     * @param string $documentElement
+     * @param string $namespace
+     * @param string $dtdPath
      * @param string $input
      * @param string $expectedOutput
      * @param string $expectedSaved
@@ -129,14 +152,6 @@ xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/pound.dtd',
                 '`eZ` flavored **markdown**',
-            ),
-            array(
-                'section',
-                'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
-                __DIR__ . '/_fixtures/pound.dtd',
-                '<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
-  <p>Where is my prolog at...</p>
-</section>',
             ),
             array(
                 'section',
