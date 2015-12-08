@@ -82,16 +82,6 @@ class Type extends FieldType
                             ),
                             "[$settingKey]"
                         );
-                    } elseif (empty($settingValue)) {
-                        $validationErrors[] = new ValidationError(
-                            "FieldType '%fieldType%' expects setting '%setting%' to contain at least one option",
-                            null,
-                            array(
-                                'fieldType' => $this->getFieldTypeIdentifier(),
-                                'setting' => $settingKey,
-                            ),
-                            "[$settingKey]"
-                        );
                     }
                     break;
                 default:
