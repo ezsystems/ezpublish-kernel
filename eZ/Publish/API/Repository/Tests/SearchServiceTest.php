@@ -887,6 +887,116 @@ class SearchServiceTest extends BaseTest
         );
     }
 
+    public function getRelationFieldFilterContentSearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+
+        return array(
+            0 => array(
+                array(
+                    'filter' => new Criterion\FieldRelation(
+                        'image',
+                        Criterion\Operator::IN,
+                        array(1, 4, 10)
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ),
+                $fixtureDir . 'FieldRelation.php',
+            ),
+            1 => array(
+                array(
+                    'filter' => new Criterion\FieldRelation(
+                        'image',
+                        Criterion\Operator::IN,
+                        array(4, 49)
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ),
+                $fixtureDir . 'FieldRelationAll.php',
+            ),
+            2 => array(
+                array(
+                    'filter' => new Criterion\FieldRelation(
+                        'image',
+                        Criterion\Operator::IN,
+                        array(4)
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ),
+                $fixtureDir . 'FieldRelation.php',
+            ),
+            3 => array(
+                array(
+                    'filter' => new Criterion\FieldRelation(
+                        'image',
+                        Criterion\Operator::CONTAINS,
+                        array(1, 4, 10)
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ),
+                $fixtureDir . 'MatchNone.php',
+            ),
+            4 => array(
+                array(
+                    'filter' => new Criterion\FieldRelation(
+                        'image',
+                        Criterion\Operator::CONTAINS,
+                        array(4, 49)
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ),
+                $fixtureDir . 'MatchNone.php',
+            ),
+            5 => array(
+                array(
+                    'filter' => new Criterion\FieldRelation(
+                        'image',
+                        Criterion\Operator::CONTAINS,
+                        array(4)
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ),
+                $fixtureDir . 'FieldRelation.php',
+            ),
+        );
+    }
+
+    /**
+     * Purely for creating relation data needed for testFindRelationFieldContentInfoFiltered().
+     */
+    public function testRelationContentCreation()
+    {
+        $repository = $this->getRepository();
+        $galleryType = $repository->getContentTypeService()->loadContentTypeByIdentifier('gallery');
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
+        $createStruct->setField('name', 'Image gallery');
+        $createStruct->setField('image', 49);// Images folder
+        $draft = $contentService->createContent($createStruct);
+        $contentService->publishVersion($draft->getVersionInfo());
+
+        $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
+        $createStruct->setField('name', 'User gallery');
+        $createStruct->setField('image', 4);// User folder
+        $draft = $contentService->createContent($createStruct);
+        $contentService->publishVersion($draft->getVersionInfo());
+    }
+
+    /**
+     * Test for FieldRelation using findContentInfo() method.
+     *
+     * @dataProvider getRelationFieldFilterContentSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testRelationContentCreation
+     */
+    public function testFindRelationFieldContentInfoFiltered($queryData, $fixture, $closure = null)
+    {
+        $this->getRepository(false);// To make sure repo is setup w/o removing data from testRelationContentCreation
+        $query = new Query($queryData);
+        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true, true, false);
+    }
+
     public function testFindSingle()
     {
         $repository = $this->getRepository();
@@ -2693,7 +2803,6 @@ class SearchServiceTest extends BaseTest
      * sort field working.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testSortModifiedField()
     {
@@ -4180,8 +4289,9 @@ class SearchServiceTest extends BaseTest
      * @param string $fixture
      * @param null|callable $closure
      * @param bool $info
+     * @param bool $id
      */
-    protected function assertQueryFixture(Query $query, $fixture, $closure = null, $ignoreScore = true, $info = false)
+    protected function assertQueryFixture(Query $query, $fixture, $closure = null, $ignoreScore = true, $info = false, $id = true)
     {
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -4235,12 +4345,12 @@ class SearchServiceTest extends BaseTest
         }
 
         if ($ignoreScore) {
-            foreach (array($fixture, $result) as $result) {
-                $property = new \ReflectionProperty(get_class($result), 'maxScore');
+            foreach (array($fixture, $result) as $set) {
+                $property = new \ReflectionProperty(get_class($set), 'maxScore');
                 $property->setAccessible(true);
-                $property->setValue($result, 0.0);
+                $property->setValue($set, 0.0);
 
-                foreach ($result->searchHits as $hit) {
+                foreach ($set->searchHits as $hit) {
                     $property = new \ReflectionProperty(get_class($hit), 'score');
                     $property->setAccessible(true);
                     $property->setValue($hit, 0.0);
@@ -4248,24 +4358,20 @@ class SearchServiceTest extends BaseTest
             }
         }
 
-        foreach ($result->searchHits as $hit) {
-            $property = new \ReflectionProperty(get_class($hit), 'index');
-            $property->setAccessible(true);
-            $property->setValue($hit, null);
+        foreach (array($fixture, $result) as $set) {
+            foreach ($set->searchHits as $hit) {
+                $property = new \ReflectionProperty(get_class($hit), 'index');
+                $property->setAccessible(true);
+                $property->setValue($hit, null);
 
-            $property = new \ReflectionProperty(get_class($hit), 'matchedTranslation');
-            $property->setAccessible(true);
-            $property->setValue($hit, null);
-        }
+                $property = new \ReflectionProperty(get_class($hit), 'matchedTranslation');
+                $property->setAccessible(true);
+                $property->setValue($hit, null);
 
-        foreach ($fixture->searchHits as $hit) {
-            $property = new \ReflectionProperty(get_class($hit), 'index');
-            $property->setAccessible(true);
-            $property->setValue($hit, null);
-
-            $property = new \ReflectionProperty(get_class($hit), 'matchedTranslation');
-            $property->setAccessible(true);
-            $property->setValue($hit, null);
+                if (!$id) {
+                    $hit->valueObject['id'] = null;
+                }
+            }
         }
 
         $this->assertEquals(
