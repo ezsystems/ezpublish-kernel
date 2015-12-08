@@ -144,6 +144,12 @@ class ViewController extends Controller
      */
     public function viewLocation($locationId, $viewType, $layout = false, array $params = array())
     {
+        trigger_error(
+            "ViewController::viewLocation() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
+            'Use ViewController::viewAction() instead.',
+            E_USER_DEPRECATED
+        );
+
         $this->performAccessChecks();
         $response = $this->buildResponse();
 
@@ -198,6 +204,12 @@ class ViewController extends Controller
      */
     public function embedLocation($locationId, $viewType, $layout = false, array $params = array())
     {
+        trigger_error(
+            "ViewController::embedLocation() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
+            'Use ViewController::viewAction() instead.',
+            E_USER_DEPRECATED
+        );
+
         $this->performAccessChecks();
         $response = $this->buildResponse();
 
@@ -274,6 +286,12 @@ class ViewController extends Controller
      */
     public function viewContent($contentId, $viewType, $layout = false, array $params = array())
     {
+        trigger_error(
+            "ViewController::viewContent() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
+            'Use ViewController::viewAction() instead.',
+            E_USER_DEPRECATED
+        );
+
         if ($viewType === 'embed') {
             return $this->embedContent($contentId, $viewType, $layout, $params);
         }
@@ -323,6 +341,12 @@ class ViewController extends Controller
      */
     public function embedContent($contentId, $viewType, $layout = false, array $params = array())
     {
+        trigger_error(
+            "ViewController::embedContent() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
+            'Use ViewController::viewAction() instead.',
+            E_USER_DEPRECATED
+        );
+
         $this->performAccessChecks();
         $response = $this->buildResponse();
 
