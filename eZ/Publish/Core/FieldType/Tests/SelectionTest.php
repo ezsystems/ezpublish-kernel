@@ -346,12 +346,6 @@ class SelectionTest extends FieldTypeTest
                     'options' => 23,
                 ),
             ),
-            array(
-                array(
-                    // options must not be empty
-                    'options' => [],
-                ),
-            ),
         );
     }
 
