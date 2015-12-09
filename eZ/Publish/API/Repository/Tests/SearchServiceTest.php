@@ -981,6 +981,8 @@ class SearchServiceTest extends BaseTest
         $createStruct->setField('image', 4);// User folder
         $draft = $contentService->createContent($createStruct);
         $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
     }
 
     /**
