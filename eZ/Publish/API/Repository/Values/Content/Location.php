@@ -42,7 +42,12 @@ abstract class Location extends ValueObject
     const SORT_FIELD_CLASS_NAME = 7;
     const SORT_FIELD_PRIORITY = 8;
     const SORT_FIELD_NAME = 9;
+
+    /**
+     * @deprecated
+     */
     const SORT_FIELD_MODIFIED_SUBNODE = 10;
+
     const SORT_FIELD_NODE_ID = 11;
     const SORT_FIELD_CONTENTOBJECT_ID = 12;
 

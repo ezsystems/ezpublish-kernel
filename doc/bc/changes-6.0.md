@@ -229,6 +229,12 @@ Changes affecting version compatibility with former or future versions.
   The match configuration can be  provided using dynamic settings in the services definitions, and a relative namespace
   can be set using the constructor.
 
+* API Location::SORT_FIELD_MODIFIED_SUBNODE deprecated
+
+  This feature is not exposed in eZ Platform in anyway, and this remaining constant will
+  be removed in a future version together with the need to keep this column updated on tree
+  operations, which caused deadlocks in legacy.
+
 ## Removed features
 
 * `getLegacyKernel()` shorthand method in `eZ\Bundle\EzPublishCoreBundle\Controller` has been removed.
