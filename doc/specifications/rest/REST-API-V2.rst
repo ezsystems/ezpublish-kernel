@@ -219,7 +219,7 @@ Overview
 In the content module there are the root collections objects, locations, trash and sections
 
 ================================================================= =================== ======================= ============================ ================ ==============
-        :Resource:                                                      POST                GET                  PATCH/PUT                   DELETE            COPY
+Resource                                                          POST                GET                      PATCH/PUT                   DELETE           COPY
 ----------------------------------------------------------------- ------------------- ----------------------- ---------------------------- ---------------- --------------
 /                                                                 .                   list root resources     .                            .
 /content/objects                                                  create new content  .                       .                            .
@@ -2289,7 +2289,7 @@ Create View
           Content-Length: <length>
           Location: /views
 .. parsed-literal::
-View_
+          View_
 
 :Error codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -3260,7 +3260,7 @@ Overview
 --------
 
 ================================================== =================== =================== ======================= =======================
-      Resource                                           POST             GET                 PUT/PATCH               DELETE
+Resource                                           POST                GET                 PUT/PATCH               DELETE
 -------------------------------------------------- ------------------- ------------------- ----------------------- -----------------------
 /content/typegroups                                create new group    load all groups     .                       .
 /content/typegroups/<ID>                           .                   load group          update group            delete group
@@ -4260,31 +4260,31 @@ User Management
 Overview
 --------
 
-============================================= ===================== ===================== ===================== ============================= ============= =====================
-Resource                                      POST                  GET                   PUT                   DELETE                        HEAD          PUBLISH
---------------------------------------------- --------------------- --------------------- --------------------- ----------------------------- ------------- ---------------------
-/user/groups                                  .                     load all topl. groups .                     .                             .             .
-/user/groups/root                             .                     redirect to root      .                     .                             .             .
-/user/groups/<path>                           .                     load user group       update user group     delete user group             .             .
-/user/groups/<path>/users                     .                     load users of group   .                     .                             .             .
-/user/groups/<path>/subgroups                 create user group     load sub groups       .                     remove all sub groups         .             .
-/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .                             .             .
-/user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group      .             .
-/user/users                                   create user           list users            .                     .                             Verify users  .
-/user/users/<ID>                              update user           load user             .                     delete user                   .             .
-/user/users/<ID>/groups                       .                     load groups of user   add to group          .                             .             .
-/user/users/<ID>/drafts                       .                     list all drafts owned .                     .                             .             .
-                                                                    by the user                                                               .             .
-/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .                             .             .
-/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user       .             .
-/user/roles                                   create new role       load all roles        .                     .                             .             .
-/user/roles/<ID>                              .                     load role             update role           delete role                   .             .
-/user/roles/<ID>/draft                        .                     load draft for role   update role draft     .                             .             publish a role draft
-/user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role .             .
-/user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy                 .             .
-/user/sessions                                create session        .                     .                     .                             .             .
-/user/sessions/<sessionID>                    .                     .                     .                     delete session                .             .
-============================================= ===================== ===================== ===================== ============================= ============= =====================
+============================================= ===================== ======================= ===================== ============================= ============= =====================
+Resource                                      POST                  GET                     PUT                   DELETE                        HEAD          PUBLISH
+--------------------------------------------- --------------------- ----------------------- --------------------- ----------------------------- ------------- ---------------------
+/user/groups                                  .                     load all topl. groups   .                     .                             .             .
+/user/groups/root                             .                     redirect to root        .                     .                             .             .
+/user/groups/<path>                           .                     load user group         update user group     delete user group             .             .
+/user/groups/<path>/users                     .                     load users of group     .                     .                             .             .
+/user/groups/<path>/subgroups                 create user group     load sub groups         .                     remove all sub groups         .             .
+/user/groups/<path>/roles                     assign role to group  load roles of group     .                     .                             .             .
+/user/groups/<path>/roles/<ID>                .                     .                       .                     unassign role from group      .             .
+/user/users                                   create user           list users              .                     .                             Verify users  .
+/user/users/<ID>                              update user           load user               .                     delete user                   .             .
+/user/users/<ID>/groups                       .                     load groups of user     add to group          .                             .             .
+/user/users/<ID>/drafts                       .                     list all drafts owned   .                     .                             .             .
+                                                                    by the user
+/user/users/<ID>/roles                        assign role to user   load roles of group     .                     .                             .             .
+/user/users/<ID>/roles/<ID>                   .                     load roleassignment     .                     unassign role from user       .             .
+/user/roles                                   create new role       load all roles          .                     .                             .             .
+/user/roles/<ID>                              .                     load role               update role           delete role                   .             .
+/user/roles/<ID>/draft                        .                     load draft for role     update role draft     .                             .             publish a role draft
+/user/roles/<ID>/policies                     create policy         load policies           .                     delete all policies from role .             .
+/user/roles/<ID>/policies/<ID>                .                     load policy             update policy         delete policy                 .             .
+/user/sessions                                create session        .                       .                     .                             .             .
+/user/sessions/<sessionID>                    .                     .                       .                     delete session                .             .
+============================================= ===================== ======================= ===================== ============================= ============= =====================
 
 
 Managing Users and Groups
@@ -5377,9 +5377,9 @@ Load Role draft
 :Method: GET
 :Description: loads a role draft by original role <ID>.
 :Headers:
-        :Accept:
-             :application/vnd.ez.api.Role+xml:  if set the user list returned in xml format (see Role_)
-         :application/vnd.ez.api.Role+json:  if set the user list is returned in json format (see Role_)
+    :Accept:
+        :application/vnd.ez.api.Role+xml:  if set the user list returned in xml format (see Role_)
+        :application/vnd.ez.api.Role+json:  if set the user list is returned in json format (see Role_)
     :If-None-Match: <etag>
 :Response:
 
@@ -5392,7 +5392,7 @@ Load Role draft
           Content-Length: <length>
 
 .. parsed-literal::
-Role_
+          Role_
 
 :Error Codes:
     :401: If the user has no permission to read roles
@@ -5437,7 +5437,7 @@ Update Role draft
         :Accept:
              :application/vnd.ez.api.Role+xml:  if set the updated role is returned in xml format (see Role_)
              :application/vnd.ez.api.Role+json:  if set the updated role is returned in json format (see Role_)
-    :Content-Type:
+        :Content-Type:
              :application/vnd.ez.api.RoleInput+json: the RoleInput  schema encoded in json
              :application/vnd.ez.api.RoleInput+xml: the RoleInput  schema encoded in xml
         :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
@@ -5451,7 +5451,7 @@ Update Role draft
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-Role_
+          Role_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -5472,7 +5472,7 @@ Publish Role draft
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-Role_
+          Role_
 
 :Error Codes:
     :401: If the user is not authorized to publish this content type draft
@@ -9625,4 +9625,3 @@ ErrorMessage XML Schema
       </xsd:complexType>
       <xsd:element name="ErrorMessage" type="vnd.ez.api.ErrorMessage"></xsd:element>
     </xsd:schema>
-
