@@ -329,7 +329,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithSecondParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithLanguageParameters
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
@@ -360,7 +360,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithThirdParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithVersionNumberParameter
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithThirdParameter()
     {

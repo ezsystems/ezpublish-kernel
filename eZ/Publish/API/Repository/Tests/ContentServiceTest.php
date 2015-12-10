@@ -2361,7 +2361,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithThirdParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithVersionNumberParameter
      */
     public function testLoadContentByContentInfoThrowsNotFoundExceptionWithVersionNumberParameter()
     {
