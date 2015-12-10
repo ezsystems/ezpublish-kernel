@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as Cachin
 use Exception;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Filesystem\Filesystem;
+use eZ\Publish\Core\Base\Container\Compiler;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -375,6 +376,10 @@ class Legacy extends SetupFactory
                 'io_root_dir',
                 self::$ioRootDir . '/' . $containerBuilder->getParameter('storage_dir')
             );
+
+            $containerBuilder->addCompilerPass(new Compiler\Search\SearchEngineSignalSlotPass('legacy'));
+            $containerBuilder->addCompilerPass(new Compiler\Search\AggregateFieldValueMapperPass());
+            $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
 
             self::$serviceContainer = new ServiceContainer(
                 $containerBuilder,

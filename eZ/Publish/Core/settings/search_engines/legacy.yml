@@ -2,11 +2,13 @@ imports:
     - {resource: search_engines/legacy/criterion_handlers_common.yml}
     - {resource: search_engines/legacy/criterion_handlers_content.yml}
     - {resource: search_engines/legacy/criterion_handlers_location.yml}
+    - {resource: search_engines/legacy/field_value_mappers.yml}
     - {resource: search_engines/legacy/services.yml}
     - {resource: search_engines/legacy/sort_clause_handlers_common.yml}
     - {resource: search_engines/legacy/sort_clause_handlers_content.yml}
     - {resource: search_engines/legacy/sort_clause_handlers_location.yml}
     - {resource: search_engines/legacy/slots.yml}
+    - {resource: search_engines/common.yml}
 
 parameters:
     ezpublish.spi.search.legacy.class: eZ\Publish\Core\Search\Legacy\Content\Handler
@@ -17,6 +19,8 @@ parameters:
 
     ezpublish.search.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
     ezpublish.search.connection.class: Doctrine\DBAL\Connection
+
+    ezpublish.search.legacy.mapper.fulltext.class: eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper
 
 services:
     # Legacy Search Engine semantic configuration will override connection service to the one
@@ -67,14 +71,25 @@ services:
     ezpublish.search.legacy.gateway.location:
         alias: ezpublish.search.legacy.gateway.location.exception_conversion
 
+    ezpublish.search.legacy.mapper.fulltext:
+        class: %ezpublish.search.legacy.mapper.fulltext.class%
+        arguments:
+            - @ezpublish.search.common.field_registry
+            - @ezpublish.spi.persistence.content_type_handler
+
+    ezpublish.search.legacy.fulltext_mapper:
+        alias: ezpublish.search.legacy.mapper.fulltext
+
     ezpublish.spi.search.legacy:
         class: %ezpublish.spi.search.legacy.class%
         arguments:
             - @ezpublish.search.legacy.gateway.content
             - @ezpublish.search.legacy.gateway.location
+            - @ezpublish.search.legacy.gateway.wordIndexer
             - @ezpublish.persistence.legacy.content.mapper
             - @ezpublish.persistence.legacy.location.mapper
             - @ezpublish.spi.persistence.language_handler
+            - @ezpublish.search.legacy.fulltext_mapper
         tags:
             - {name: ezpublish.searchEngine, alias: legacy}
         lazy: true

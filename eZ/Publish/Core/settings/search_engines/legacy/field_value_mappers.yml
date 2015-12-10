@@ -1,0 +1,3 @@
+parameters:
+    ezpublish.search.common.field_value_mapper.date.class: eZ\Publish\Core\Search\Legacy\Content\FieldValueMapper\DateMapper
+    ezpublish.search.common.field_value_mapper.float.class: eZ\Publish\Core\Search\Legacy\Content\FieldValueMapper\FloatMapper
