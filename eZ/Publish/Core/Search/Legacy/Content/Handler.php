@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway as WordIndexerGateway;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -64,6 +65,13 @@ class Handler implements SearchHandlerInterface
     protected $locationGateway;
 
     /**
+     * Word indexer gateway.
+     *
+     * @var \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway
+     */
+    protected $indexerGateway;
+
+    /**
      * Content mapper.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
@@ -89,6 +97,7 @@ class Handler implements SearchHandlerInterface
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Gateway $gateway
      * @param \eZ\Publish\Core\Search\Legacy\Content\Location\Gateway $locationGateway
+     * @param \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway $indexerGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
@@ -96,12 +105,14 @@ class Handler implements SearchHandlerInterface
     public function __construct(
         Gateway $gateway,
         LocationGateway $locationGateway,
+        WordIndexerGateway $indexerGateway,
         ContentMapper $contentMapper,
         LocationMapper $locationMapper,
         LanguageHandler $languageHandler
     ) {
         $this->gateway = $gateway;
         $this->locationGateway = $locationGateway;
+        $this->indexerGateway = $indexerGateway;
         $this->contentMapper = $contentMapper;
         $this->locationMapper = $locationMapper;
         $this->languageHandler = $languageHandler;
@@ -307,7 +318,7 @@ class Handler implements SearchHandlerInterface
      */
     public function indexContent(Content $content)
     {
-        // Not implemented in Legacy Storage Engine
+        $this->indexerGateway->index($content);
     }
 
     /**
@@ -315,7 +326,7 @@ class Handler implements SearchHandlerInterface
      */
     public function indexLocation(Location $location)
     {
-        // Not implemented in Legacy Storage Engine
+        // Not needed with Legacy Storage/Search Engine
     }
 
     /**
@@ -326,7 +337,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent($contentId, $versionId = null)
     {
-        // Not implemented in Legacy Storage Engine
+        $this->indexerGateway->remove($contentId, $versionId);
     }
 
     /**
@@ -337,6 +348,6 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        // Not implemented in Legacy Storage Engine
+        // Not needed with Legacy Storage/Search Engine
     }
 }

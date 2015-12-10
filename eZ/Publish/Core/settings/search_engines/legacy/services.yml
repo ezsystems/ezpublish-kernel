@@ -1,6 +1,7 @@
 parameters:
     ezpublish.search.legacy.gateway.content.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\DoctrineDatabase
     ezpublish.search.legacy.gateway.content.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\ExceptionConversion
+    ezpublish.search.legacy.gateway.wordIndexer.class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway\DoctrineDatabase
     ezpublish.search.legacy.gateway.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
     ezpublish.search.legacy.gateway.location.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion
 
@@ -21,6 +22,13 @@ services:
     # To disable exception conversion layer override this alias so that it points to inner gateway
     ezpublish.search.legacy.gateway.content:
         alias: ezpublish.search.legacy.gateway.content.exception_conversion
+
+
+    ezpublish.search.legacy.gateway.wordIndexer:
+        class: %ezpublish.search.legacy.gateway.wordIndexer.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.content_type_handler
 
     ezpublish.search.legacy.gateway.location.inner:
         class: %ezpublish.search.legacy.gateway.location.class%
