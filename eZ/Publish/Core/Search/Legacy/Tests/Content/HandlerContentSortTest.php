@@ -99,9 +99,16 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                 $this->getLanguageHandler()
             ),
             $this->getMock('eZ\\Publish\\Core\\Search\\Legacy\\Content\\Location\\Gateway'),
+            new Content\WordIndexer\Gateway\DoctrineDatabase(
+                $this->getDatabaseHandler(),
+                $this->getContentTypeHandler(),
+                $this->getDefinitionBasedTransformationProcessor(),
+                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler())
+            ),
             $this->getContentMapperMock(),
             $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper'),
-            $this->getLanguageHandler()
+            $this->getLanguageHandler(),
+            $this->getFullTextMapper($this->getContentTypeHandler())
         );
     }
 
