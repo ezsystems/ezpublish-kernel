@@ -17,8 +17,8 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 
 /**
  * Extension of Symfony default router implementing RequestMatcherInterface.
@@ -101,7 +101,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
 
         // Now putting back SiteAccess URI if needed.
         if ($isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer) {
-            if ($referenceType == self::ABSOLUTE_URL || $referenceType == self::NETWORK_PATH) {
+            if ($referenceType === self::ABSOLUTE_URL || $referenceType === self::NETWORK_PATH) {
                 $scheme = $context->getScheme();
                 $port = '';
                 if ($scheme === 'http' && $this->context->getHttpPort() != 80) {

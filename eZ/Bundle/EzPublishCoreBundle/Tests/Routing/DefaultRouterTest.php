@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 use ReflectionObject;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultRouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -143,10 +144,10 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedUrl The URL we're expecting to be finally generated, with siteaccess
      * @param string $saName The SiteAccess name
      * @param bool $isMatcherLexer True if the siteaccess matcher is URILexer
-     * @param bool $absolute True if generated link needs to be absolute
+     * @param int $referenceType The type of reference to be generated (one of the constants)
      * @param string $routeName
      */
-    public function testGenerateWithSiteAccess($urlGenerated, $relevantUri, $expectedUrl, $saName, $isMatcherLexer, $absolute, $routeName)
+    public function testGenerateWithSiteAccess($urlGenerated, $relevantUri, $expectedUrl, $saName, $isMatcherLexer, $referenceType, $routeName)
     {
         $routeName = $routeName ?: __METHOD__;
         $nonSiteAccessAwareRoutes = array('_dontwantsiteaccess');
@@ -204,24 +205,24 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
         $router->setContext($requestContext);
         $router->setNonSiteAccessAwareRoutes($nonSiteAccessAwareRoutes);
 
-        $this->assertSame($expectedUrl, $router->generate($routeName, array(), $absolute));
+        $this->assertSame($expectedUrl, $router->generate($routeName, array(), $referenceType));
     }
 
     public function providerGenerateWithSiteAccess()
     {
         return array(
-            array('/foo/bar', '/foo/bar', '/foo/bar', 'test_siteaccess', false, false, null),
-            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', false, true, null),
-            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/test_siteaccess/foo/bar', 'test_siteaccess', true, true, null),
-            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', true, true, '_dontwantsiteaccess'),
-            array('http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/test_siteaccess/foo/bar', 'test_siteaccess', true, true, null),
-            array('http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/foo/bar', 'test_siteaccess', true, true, '_dontwantsiteaccess'),
-            array('https://ezpublish.dev/secured', '/secured', 'https://ezpublish.dev/test_siteaccess/secured', 'test_siteaccess', true, true, null),
-            array('https://ezpublish.dev:445/secured', '/secured', 'https://ezpublish.dev:445/test_siteaccess/secured', 'test_siteaccess', true, true, null),
-            array('http://ezpublish.dev:8080/foo/root_folder/bar/baz', '/bar/baz', 'http://ezpublish.dev:8080/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, true, null),
-            array('/foo/bar/baz', '/foo/bar/baz', '/test_siteaccess/foo/bar/baz', 'test_siteaccess', true, false, null),
-            array('/foo/root_folder/bar/baz', '/bar/baz', '/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, false, null),
-            array('/foo/bar/baz', '/foo/bar/baz', '/foo/bar/baz', 'test_siteaccess', true, false, '_dontwantsiteaccess'),
+            array('/foo/bar', '/foo/bar', '/foo/bar', 'test_siteaccess', false, UrlGeneratorInterface::ABSOLUTE_PATH, null),
+            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', false, UrlGeneratorInterface::ABSOLUTE_URL, null),
+            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/test_siteaccess/foo/bar', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_URL, null),
+            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_URL, '_dontwantsiteaccess'),
+            array('http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/test_siteaccess/foo/bar', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_URL, null),
+            array('http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/foo/bar', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_URL, '_dontwantsiteaccess'),
+            array('https://ezpublish.dev/secured', '/secured', 'https://ezpublish.dev/test_siteaccess/secured', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_URL, null),
+            array('https://ezpublish.dev:445/secured', '/secured', 'https://ezpublish.dev:445/test_siteaccess/secured', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_URL, null),
+            array('http://ezpublish.dev:8080/foo/root_folder/bar/baz', '/bar/baz', 'http://ezpublish.dev:8080/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_URL, null),
+            array('/foo/bar/baz', '/foo/bar/baz', '/test_siteaccess/foo/bar/baz', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_PATH, null),
+            array('/foo/root_folder/bar/baz', '/bar/baz', '/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_PATH, null),
+            array('/foo/bar/baz', '/foo/bar/baz', '/foo/bar/baz', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_PATH, '_dontwantsiteaccess'),
         );
     }
 

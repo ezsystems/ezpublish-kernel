@@ -12,8 +12,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use Symfony\Component\Routing\RequestContext;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
 
 class GeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -45,22 +46,22 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     public function generateProvider()
     {
         return array(
-            array('foo_bar', array(), false),
-            array('foo_bar', array(), true),
-            array('foo_bar', array('some' => 'thing'), true),
-            array(new Location(), array(), false),
-            array(new Location(), array(), true),
-            array(new Location(), array('some' => 'thing'), true),
-            array(new \stdClass(), array(), false),
-            array(new \stdClass(), array(), true),
-            array(new \stdClass(), array('some' => 'thing'), true),
+            array('foo_bar', array(), UrlGeneratorInterface::ABSOLUTE_PATH),
+            array('foo_bar', array(), UrlGeneratorInterface::ABSOLUTE_URL),
+            array('foo_bar', array('some' => 'thing'), UrlGeneratorInterface::ABSOLUTE_URL),
+            array(new Location(), array(), UrlGeneratorInterface::ABSOLUTE_PATH),
+            array(new Location(), array(), UrlGeneratorInterface::ABSOLUTE_URL),
+            array(new Location(), array('some' => 'thing'), UrlGeneratorInterface::ABSOLUTE_URL),
+            array(new \stdClass(), array(), UrlGeneratorInterface::ABSOLUTE_PATH),
+            array(new \stdClass(), array(), UrlGeneratorInterface::ABSOLUTE_URL),
+            array(new \stdClass(), array('some' => 'thing'), UrlGeneratorInterface::ABSOLUTE_URL),
         );
     }
 
     /**
      * @dataProvider generateProvider
      */
-    public function testSimpleGenerate($urlResource, array $parameters, $absolute)
+    public function testSimpleGenerate($urlResource, array $parameters, $referenceType)
     {
         $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
         $this->generator->setSiteAccess(new SiteAccess('test', 'fake', $matcher));
@@ -83,17 +84,17 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
             ->with($uri)
             ->will($this->returnValue($uri));
 
-        if ($absolute) {
+        if ($referenceType === UrlGeneratorInterface::ABSOLUTE_URL) {
             $fullUri = $requestContext->getScheme() . '://' . $requestContext->getHost() . $baseUrl . $uri;
         }
 
-        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters, $absolute));
+        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters, $referenceType));
     }
 
     /**
      * @dataProvider generateProvider
      */
-    public function testGenerateWithSiteAccessNoReverseMatch($urlResource, array $parameters, $absolute)
+    public function testGenerateWithSiteAccessNoReverseMatch($urlResource, array $parameters, $referenceType)
     {
         $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
         $this->generator->setSiteAccess(new SiteAccess('test', 'test', $matcher));
@@ -116,7 +117,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
             ->with($uri)
             ->will($this->returnValue($uri));
 
-        if ($absolute) {
+        if ($referenceType === UrlGeneratorInterface::ABSOLUTE_URL) {
             $fullUri = $requestContext->getScheme() . '://' . $requestContext->getHost() . $baseUrl . $uri;
         }
 
@@ -129,6 +130,6 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
         $this->logger
             ->expects($this->once())
             ->method('notice');
-        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters + array('siteaccess' => $siteAccessName), $absolute));
+        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters + array('siteaccess' => $siteAccessName), $referenceType));
     }
 }
