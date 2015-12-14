@@ -1351,8 +1351,6 @@ INSERT INTO `ezpackage` (`id`, `install_date`, `name`, `version`) VALUES (1,1301
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',317,'content',0,3);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('login',319,'user',0,3);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('read',328,'content',0,1);
-INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('pdf',329,'content',0,1);
-INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',330,'ezoe',0,3);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('login',331,'user',0,1);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',332,'*',0,2);
 
