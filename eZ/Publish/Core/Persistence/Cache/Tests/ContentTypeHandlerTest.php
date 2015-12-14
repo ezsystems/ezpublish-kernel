@@ -1289,4 +1289,30 @@ class ContentTypeHandlerTest extends HandlerTest
         $handler = $this->persistenceCacheHandler->contentTypeHandler();
         $handler->publish(44);
     }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::getContentCount
+     */
+    public function testGetContentCount()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+        $this->cacheMock
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('contentTypeHandler')
+            ->will($this->returnValue($innerHandler));
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('getContentCount')
+            ->with(1)
+            ->will($this->returnValue(18));
+
+        $handler = $this->persistenceCacheHandler->contentTypeHandler();
+        $handler->getContentCount(1);
+    }
 }

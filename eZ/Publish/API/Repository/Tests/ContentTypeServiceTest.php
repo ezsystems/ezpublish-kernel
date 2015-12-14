@@ -3597,4 +3597,27 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'Folder content type not in media group after commit.'
         );
     }
+
+    /**
+     * Test for the isContentTypeUsed() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::isContentTypeUsed()
+     */
+    public function testIsContentTypeUsed()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $folderType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $eventType = $contentTypeService->loadContentTypeByIdentifier('event');
+
+        $isFolderUsed = $contentTypeService->isContentTypeUsed($folderType);
+        $isEventUsed = $contentTypeService->isContentTypeUsed($eventType);
+        /* END: Use Case */
+
+        $this->assertTrue($isFolderUsed);
+        $this->assertFalse($isEventUsed);
+    }
 }

@@ -1928,4 +1928,18 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         return new FieldDefinitionUpdateStruct();
     }
+
+    /**
+     * Returns true if the given content type $contentType has content instances.
+     *
+     * @since 6.0.1
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     *
+     * @return bool
+     */
+    public function isContentTypeUsed(APIContentType $contentType)
+    {
+        return $this->contentTypeHandler->getContentCount($contentType->id) > 0;
+    }
 }
