@@ -1,6 +1,6 @@
 {
     "name": "ezsystems/ezpublish-kernel",
-    "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
+    "description": "Kernel used by ezsystems/ezplatform and derivatives. Provides the Content Repository, its APIs, and the application's Symfony framework integration.",
     "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
     "suggest": {
@@ -58,11 +58,5 @@
     },
     "config": {
         "process-timeout": 3000
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "6.0.x-dev"
-        },
-        "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
     }
 }
