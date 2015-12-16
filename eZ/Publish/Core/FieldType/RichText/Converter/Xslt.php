@@ -77,7 +77,10 @@ class Xslt extends XmlBase implements Converter
 
             $newEl = $xslDoc->createElement('xsl:import');
             $hrefAttr = $xslDoc->createAttribute('href');
-            $hrefAttr->value = $stylesheet;
+
+            // Prevents showing XSLTProcessor::importStylesheet() warning on Windows file system
+            $hrefAttr->value = str_replace('\\', '/', $stylesheet);
+
             $newEl->appendChild($hrefAttr);
             $xslDoc->documentElement->insertBefore($newEl, $insertBeforeEl);
         }
