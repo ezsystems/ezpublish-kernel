@@ -27,7 +27,7 @@ matrix:
     - php: 5.6
       env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0@beta as 2.8.0"
     - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.8.0@beta as 2.8.0"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="^2.8"
     - php: 5.6
       env: BEHAT_OPTS="--profile=core --tags='~@broken'"
 # 7.0
