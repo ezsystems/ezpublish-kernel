@@ -16,11 +16,11 @@ if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE $DB_NAME;" -U postgr
 # Setup github key to avoid api rate limit
 ./bin/.travis/install_composer_github_key.sh
 
-# Switch to another Symfony version if asked for
-if [ "$SYMFONY_VERSION" != "" ] ; then composer require --no-update symfony/symfony="$SYMFONY_VERSION" ; fi;
-
 # Install packages using composer
 composer install -v --no-progress --no-interaction
+
+# Switch to another Symfony version if asked for
+if [ "$SYMFONY_VERSION" != "" ] ; then composer require symfony/symfony="$SYMFONY_VERSION" ; fi;
 
 # Setup Solr / Elastic search if asked for
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
