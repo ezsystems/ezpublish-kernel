@@ -75,6 +75,13 @@ class SiteAccessMatchListener implements EventSubscriberInterface
             return;
         }
 
+        // The `getSiteAccessFromRequest()` method must be called, because it not only returns the matched siteaccess,
+        // but also initializes the siteAccess property in `$this->siteAccessRouter`.
+        // If the siteAccess property is not initialized, when calling `path(...)` inside an esi block, the following error occurs:
+        // >
+        // Notice: Trying to get property of non-object in vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/MVC/Symfony/SiteAccess/Router.php on line 223
+        $originalSiteaccess = $this->getSiteAccessFromRequest($request->attributes->get('_ez_original_request', $request));
+
         // We have a serialized siteaccess object from a fragment (sub-request), we need to get it back.
         if ($request->attributes->has('serialized_siteaccess')) {
             $request->attributes->set(
@@ -87,7 +94,7 @@ class SiteAccessMatchListener implements EventSubscriberInterface
             // "_ez_original_request" attribute is present in the case of user context hash generation (aka "user hash request").
             $request->attributes->set(
                 'siteaccess',
-                $this->getSiteAccessFromRequest($request->attributes->get('_ez_original_request', $request))
+                $originalSiteaccess
             );
         }
 
