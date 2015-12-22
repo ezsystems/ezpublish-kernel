@@ -78,6 +78,10 @@ class ContentExtension extends Twig_Extension
                 array($this, 'getTranslatedFieldValue')
             ),
             new Twig_SimpleFunction(
+                'ez_field',
+                array($this, 'getTranslatedField')
+            ),
+            new Twig_SimpleFunction(
                 'ez_is_field_empty',
                 array($this, 'isFieldEmpty')
             ),
@@ -123,6 +127,21 @@ class ContentExtension extends Twig_Extension
         }
 
         throw new InvalidArgumentType('$content', 'eZ\Publish\API\Repository\Values\Content\Content or eZ\Publish\API\Repository\Values\Content\ContentInfo', $content);
+    }
+
+    /**
+     * Returns the translated field, very similar to getTranslatedFieldValue but this returns the whole field.
+     * To be used with ez_image_alias for example, which requires the whole field.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $fieldDefIdentifier Identifier for the field we want to get.
+     * @param string $forcedLanguage Locale we want the field in (e.g. "cro-HR"). Null by default (takes current locale).
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field
+     */
+    public function getTranslatedField(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
+    {
+        return $this->translationHelper->getTranslatedField($content, $fieldDefIdentifier, $forcedLanguage);
     }
 
     /**
