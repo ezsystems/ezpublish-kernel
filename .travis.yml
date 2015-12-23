@@ -13,21 +13,18 @@ matrix:
 #    - php: hhvm
 #      env: TEST_CONFIG="phpunit.xml"
   include:
-# 5.4
-    - php: 5.4
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
 # 5.5
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
 # 5.6
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="^2.8"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.7.0"
     - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="^2.8"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.7.0"
     - php: 5.6
       env: BEHAT_OPTS="--profile=core --tags='~@broken'"
 # 7.0
