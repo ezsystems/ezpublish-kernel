@@ -10,10 +10,11 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 
 /**
@@ -79,11 +80,11 @@ abstract class Generator implements SiteAccessAware
      * @param mixed $urlResource Type can be anything, depending on the context. It's up to the router to pass the appropriate value to the implementor.
      * @param array $parameters Arbitrary hash of parameters to generate a link.
      *                          SiteAccess name can be provided as 'siteaccess' to generate a link to it (cross siteaccess link).
-     * @param bool $absolute
+     * @param int $referenceType The type of reference to be generated (one of the constants)
      *
      * @return string
      */
-    public function generate($urlResource, array $parameters, $absolute = false)
+    public function generate($urlResource, array $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $siteAccess = $this->siteAccess;
         $requestContext = $this->requestContext;
@@ -109,7 +110,7 @@ abstract class Generator implements SiteAccessAware
 
         $url = $requestContext->getBaseUrl() . $url;
 
-        if ($absolute) {
+        if ($referenceType === UrlGeneratorInterface::ABSOLUTE_URL) {
             $url = $this->generateAbsoluteUrl($url, $requestContext);
         }
 
