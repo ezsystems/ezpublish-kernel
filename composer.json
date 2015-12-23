@@ -7,7 +7,7 @@
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
     "require": {
-        "php": ">=5.4.4",
+        "php": "~5.5|~7.0",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-intl": "*",
@@ -39,7 +39,6 @@
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
         "mockery/mockery": "~0.9.4",
         "symfony/assetic-bundle": "~2.3",
-        "zendframework/zend-code": "~2.4.3",
         "ezsystems/behatbundle": "dev-master"
     },
     "replace": {
