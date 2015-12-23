@@ -14,7 +14,8 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -22,8 +23,10 @@ use Symfony\Component\Security\Http\HttpUtils;
 /**
  * SiteAccess match listener.
  */
-class SiteAccessListener extends ContainerAware implements EventSubscriberInterface
+class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */

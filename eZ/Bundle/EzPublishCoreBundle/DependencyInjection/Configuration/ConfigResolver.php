@@ -14,7 +14,8 @@ use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * This class will help you get settings for a specific scope.
@@ -33,8 +34,10 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  * 2. SiteAccess name
  * 3. "default"
  */
-class ConfigResolver extends ContainerAware implements VersatileScopeInterface, SiteAccessAware
+class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     const SCOPE_GLOBAL = 'global',
           SCOPE_DEFAULT = 'default';
 

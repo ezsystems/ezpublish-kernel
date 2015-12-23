@@ -11,14 +11,17 @@
 namespace eZ\Publish\Core\REST\Server;
 
 use eZ\Publish\API\Repository\Repository;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
-abstract class Controller extends ContainerAware
+abstract class Controller implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */

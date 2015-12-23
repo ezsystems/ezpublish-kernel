@@ -16,17 +16,14 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\BlockMatcherFactory as BaseFactory;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @deprecated Deprecated since 6.0, will be removed in 6.1. Use the ServiceAwareMatcherFactory instead.
  */
 class BlockMatcherFactory extends BaseFactory implements SiteAccessAware, ContainerAwareInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
+    use ContainerAwareTrait;
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -46,11 +43,6 @@ class BlockMatcherFactory extends BaseFactory implements SiteAccessAware, Contai
             $repository,
             $this->configResolver->getParameter('block_view')
         );
-    }
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     /**
