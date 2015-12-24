@@ -9,13 +9,12 @@
 namespace eZ\Bundle\EzPublishIOBundle\ApiLoader;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Factory of IO handlers, given an alias.
  */
-class HandlerFactory implements ContainerAwareInterface
+class HandlerFactory
 {
     use ContainerAwareTrait;
 

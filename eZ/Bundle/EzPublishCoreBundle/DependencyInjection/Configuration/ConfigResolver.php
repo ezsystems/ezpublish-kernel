@@ -14,7 +14,6 @@ use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -34,7 +33,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  * 2. SiteAccess name
  * 3. "default"
  */
-class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, ContainerAwareInterface
+class ConfigResolver implements VersatileScopeInterface, SiteAccessAware
 {
     use ContainerAwareTrait;
 

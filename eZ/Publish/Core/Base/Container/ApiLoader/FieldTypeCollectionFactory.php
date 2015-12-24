@@ -10,10 +10,9 @@
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class FieldTypeCollectionFactory implements ContainerAwareInterface
+class FieldTypeCollectionFactory
 {
     use ContainerAwareTrait;
 

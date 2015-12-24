@@ -11,11 +11,10 @@
 namespace eZ\Bundle\EzPublishLegacySearchEngineBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use InvalidArgumentException;
 
-class ConnectionFactory implements ContainerAwareInterface
+class ConnectionFactory
 {
     use ContainerAwareTrait;
 

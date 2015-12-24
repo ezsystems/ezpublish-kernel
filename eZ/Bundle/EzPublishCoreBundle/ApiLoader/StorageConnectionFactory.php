@@ -10,11 +10,10 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use InvalidArgumentException;
 
-class StorageConnectionFactory implements ContainerAwareInterface
+class StorageConnectionFactory
 {
     use ContainerAwareTrait;
 

@@ -11,7 +11,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -19,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  *
  * Service "ezpublish.cache_pool", selects a Stash cache service based on siteaccess[-group] setting "cache_pool_name"
  */
-class CacheFactory implements ContainerAwareInterface
+class CacheFactory
 {
     use ContainerAwareTrait;
 
