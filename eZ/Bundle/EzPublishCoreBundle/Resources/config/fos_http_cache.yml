@@ -7,3 +7,5 @@ user_context:
     enabled: true
     hash_cache_ttl: 600
     user_hash_header: X-User-Hash
+    user_identifier_headers:
+        - Authorization
