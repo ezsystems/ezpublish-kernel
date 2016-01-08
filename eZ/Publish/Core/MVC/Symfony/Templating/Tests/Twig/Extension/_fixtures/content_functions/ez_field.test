@@ -1,0 +1,49 @@
+--TEST--
+"ez_field" function
+--TEMPLATE--
+{{ ez_field( content, "testfield" ).value }}
+{{ ez_field( content, "testfield", "eng-GB" ).value }}
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'article',
+        array(
+            'ezrichtext' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            )
+        )
+    )
+)
+--EXPECT--
+foo2
+foo2
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'article',
+        array(
+            'ezrichtext' => array(
+                array(
+                    'id' => 5,
+                    'fieldDefIdentifier' => 'testfield',
+                    'value' => 'bar3',
+                    'languageCode' => 'eng-GB'
+                ),
+                array(
+                    'id' => 5,
+                    'fieldDefIdentifier' => 'testfield',
+                    'value' => 'foo2',
+                    'languageCode' => 'fre-FR'
+                ),
+            )
+        )
+    )
+)
+--EXPECT--
+foo2
+bar3

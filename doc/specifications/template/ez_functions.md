@@ -68,6 +68,13 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
   Example: `ez_trans_prop( versionInfo, 'name' )` will provide the same result as using `ez_content_name( content )`, in
       both cases `VersionInfo->getName( $lang )` is internally used in prioritized language order, with main language fallback.
       
+* ez_field
+
+  _Since 6.0_
+
+  `Field|null = ez_field( Content $content, string $fieldDefIdentifier[, string $forcedLanguage] )`
+
+  Just like ez_field_value except it returns the whole translated Field.
 
 
 ## Rendering helpers
