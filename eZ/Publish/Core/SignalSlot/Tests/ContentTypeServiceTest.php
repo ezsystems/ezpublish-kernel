@@ -310,6 +310,12 @@ class ContentTypeServiceTest extends ServiceTest
                 array($fieldDefinitionUpdateStruct),
                 0,
             ),
+            array(
+                'isContentTypeUsed',
+                array($contentType),
+                true,
+                0,
+            ),
         );
     }
 }
