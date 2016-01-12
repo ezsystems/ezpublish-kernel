@@ -111,6 +111,9 @@ class CommonTest extends AbstractParserTestCase
         );
     }
 
+    /**
+     * Test defaults.
+     */
     public function testNonExistentSettings()
     {
         $this->load();
