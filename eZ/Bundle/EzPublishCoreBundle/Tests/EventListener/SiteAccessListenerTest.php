@@ -80,6 +80,7 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
             array('/foo/bar/(some)/thing/orphan/(other)', '/foo/bar', '/(some)/thing/orphan/(other)', array('some' => 'thing/orphan', 'other' => '')),
             array('/my_siteaccess/foo/bar/(some)/thing', '/foo/bar', '/(some)/thing', array('some' => 'thing')),
             array('/foo/bar/(some)/thing/(toto_titi)/tata_tutu', '/foo/bar', '/(some)/thing/(toto_titi)/tata_tutu', array('some' => 'thing', 'toto_titi' => 'tata_tutu')),
+            array('/foo/%E8%B5%A4/%28some%29/thing', '/foo/赤', '/(some)/thing', array('some' => 'thing')),
         );
     }
 
@@ -92,6 +93,7 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
         $expectedVPString,
         array $expectedVPArray
     ) {
+        $uri = rawurldecode($uri);
         $semanticPathinfoPos = strpos($uri, $expectedSemanticPathinfo);
         if ($semanticPathinfoPos !== 0) {
             $semanticPathinfo = substr($uri, $semanticPathinfoPos);
