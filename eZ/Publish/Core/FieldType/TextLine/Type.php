@@ -14,6 +14,7 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
@@ -47,6 +48,7 @@ class Type extends FieldType
     public function validateValidatorConfiguration($validatorConfiguration)
     {
         $validationErrors = array();
+        $validator = new StringLengthValidator();
 
         foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
             if ($validatorIdentifier !== 'StringLengthValidator') {
@@ -57,34 +59,9 @@ class Type extends FieldType
                         'validator' => $validatorIdentifier,
                     )
                 );
-
                 continue;
             }
-            foreach ($constraints as $name => $value) {
-                switch ($name) {
-                    case 'minStringLength':
-                    case 'maxStringLength':
-                        if ($value !== null && !is_integer($value)) {
-                            $validationErrors[] = new ValidationError(
-                                "Validator parameter '%parameter%' value must be of integer type",
-                                null,
-                                array(
-                                    'parameter' => $name,
-                                ),
-                                "[$validatorIdentifier][$name]"
-                            );
-                        }
-                        break;
-                    default:
-                        $validationErrors[] = new ValidationError(
-                            "Validator parameter '%parameter%' is unknown",
-                            null,
-                            array(
-                                'parameter' => $name,
-                            )
-                        );
-                }
-            }
+            $validationErrors += $validator->validateConstraints($constraints);
         }
 
         return $validationErrors;
