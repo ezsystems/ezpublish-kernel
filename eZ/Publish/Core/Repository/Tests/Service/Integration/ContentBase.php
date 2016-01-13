@@ -1544,6 +1544,39 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertGreaterThanOrEqual($time, $publishedContent->contentInfo->modificationDate->getTimestamp());
     }
 
+    public function testPublishVersionDoesNotChangePublishedDate()
+    {
+        list($draftContent, $contentType) = $this->createTestContent();
+
+        $contentService = $this->repository->getContentService();
+
+        $versionInfo = $contentService->loadVersionInfoById(
+            $draftContent->id,
+            $draftContent->getVersionInfo()->versionNo
+        );
+
+        $publishedContent = $contentService->publishVersion($versionInfo);
+
+        sleep(1);
+
+        /* BEGIN: Use Case */
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+        $republishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $publishedContent->contentInfo->publishedDate->getTimestamp(),
+            $republishedContent->contentInfo->publishedDate->getTimestamp()
+        );
+        $this->assertGreaterThan(
+            $publishedContent->contentInfo->modificationDate->getTimestamp(),
+            $republishedContent->contentInfo->modificationDate->getTimestamp()
+        );
+    }
+
     /**
      * Test for the publishVersion() method.
      *
