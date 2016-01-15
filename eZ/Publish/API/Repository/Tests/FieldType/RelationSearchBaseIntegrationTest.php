@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
@@ -107,5 +108,36 @@ abstract class RelationSearchBaseIntegrationTest extends SearchBaseIntegrationTe
         );
 
         return $normalized;
+    }
+
+    public function testCopyContentCopiesFieldRelations()
+    {
+        $content = $this->updateContent($this->getValidUpdateFieldData());
+        $contentService = $this->getRepository()->getContentService();
+
+        $copy = $contentService->copyContent(
+            $content->contentInfo,
+            new LocationCreateStruct(['parentLocationId' => 2])
+        );
+
+        $copy = $contentService->loadContent($copy->id, null, 2);
+        $this->assertEquals(
+            $this->normalizeRelations(
+                $this->getUpdateExpectedRelations($copy)
+            ),
+            $this->normalizeRelations(
+                $this->getRepository()->getContentService()->loadRelations($copy->versionInfo)
+            )
+        );
+
+        $firstVersion = $contentService->loadContent($copy->id, null, 1);
+        $this->assertEquals(
+            $this->normalizeRelations(
+                $this->getCreateExpectedRelations($firstVersion)
+            ),
+            $this->normalizeRelations(
+                $this->getRepository()->getContentService()->loadRelations($firstVersion->versionInfo)
+            )
+        );
     }
 }
