@@ -432,10 +432,12 @@ CREATE TABLE ezuser (
   contentobject_id integer NOT NULL DEFAULT 0,
   email text(150) NOT NULL,
   login text(150) NOT NULL,
+  login_normalized text(150) NOT NULL,
   password_hash text(50),
   password_hash_type integer NOT NULL DEFAULT 1,
   PRIMARY KEY (contentobject_id)
 );
+CREATE UNIQUE INDEX ezuser_login ON ezuser (login_normalized);
 
 CREATE TABLE ezuser_role (
   contentobject_id integer,

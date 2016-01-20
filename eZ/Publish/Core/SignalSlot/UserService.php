@@ -258,6 +258,8 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user for the given login and password.
      *
+     * {@inheritdoc}
+     *
      * @param string $login
      * @param string $password the plain password
      *
@@ -274,6 +276,8 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user for the given login.
      *
+     * {@inheritdoc}
+     *
      * @param string $login
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -288,8 +292,7 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user for the given email.
      *
-     * Returns an array of Users since eZ Publish has under certain circumstances allowed
-     * several users having same email in the past (by means of a configuration option).
+     * {@inheritdoc}
      *
      * @param string $email
      *
