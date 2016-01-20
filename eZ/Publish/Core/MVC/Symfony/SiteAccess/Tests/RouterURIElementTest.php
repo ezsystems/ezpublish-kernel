@@ -37,7 +37,9 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
             $this->getMock('Psr\\Log\\LoggerInterface'),
             'default_sa',
             array(
-                'URIElement' => 1,
+                'URIElement' => array(
+                    'value' => 1,
+                ),
                 'Map\\URI' => array(
                     'first_sa' => 'first_sa',
                     'second_sa' => 'second_sa',
@@ -116,7 +118,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $matcher = new URIElementMatcher(array(), array());
+        $matcher = new URIElementMatcher(array());
         $this->assertSame('uri:element', $matcher->getName());
     }
 
@@ -128,7 +130,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
      */
     public function testAnalyseURI($uri, $expectedFixedUpURI)
     {
-        $matcher = new URIElementMatcher(1);
+        $matcher = new URIElementMatcher(array(1));
         $matcher->setRequest(
             new SimplifiedRequest(array('pathinfo' => $uri))
         );
@@ -143,7 +145,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
      */
     public function testAnalyseLink($fullUri, $linkUri)
     {
-        $matcher = new URIElementMatcher(1);
+        $matcher = new URIElementMatcher(array(1));
         $matcher->setRequest(
             new SimplifiedRequest(array('pathinfo' => $fullUri))
         );
@@ -163,7 +165,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
      */
     public function testReverseMatch($siteAccessName, $originalPathinfo)
     {
-        $matcher = new URIElementMatcher(1);
+        $matcher = new URIElementMatcher(array(1));
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => $originalPathinfo)));
         $result = $matcher->reverseMatch($siteAccessName);
         $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement', $result);
@@ -185,7 +187,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
-        $matcher = new URIElementMatcher(1);
+        $matcher = new URIElementMatcher(array(1));
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => '/foo/bar')));
         $sa = new SiteAccess('test', 'test', $matcher);
         $serializedSA1 = serialize($sa);

@@ -37,10 +37,15 @@ class HostElement implements VersatileMatcher
     /**
      * Constructor.
      *
-     * @param int $elementNumber Number of elements to take into account.
+     * @param array|int $elementNumber Number of elements to take into account.
      */
     public function __construct($elementNumber)
     {
+        if (is_array($elementNumber)) {
+            // DI config parser will create an array with 'value' => number
+            $elementNumber = current($elementNumber);
+        }
+
         $this->elementNumber = (int)$elementNumber;
     }
 
