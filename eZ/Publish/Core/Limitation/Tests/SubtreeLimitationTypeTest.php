@@ -558,6 +558,8 @@ class SubtreeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
+        // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
+        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\Subtree', $criterion);
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
             $criterion
@@ -580,6 +582,8 @@ class SubtreeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
+        // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
+        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\Subtree', $criterion);
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
             $criterion

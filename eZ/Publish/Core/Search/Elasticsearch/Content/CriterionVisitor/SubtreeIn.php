@@ -14,7 +14,6 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as D
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
-use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree;
 
 /**
  * Visits the Subtree criterion.
@@ -31,7 +30,7 @@ class SubtreeIn extends CriterionVisitor
     public function canVisit(Criterion $criterion)
     {
         return
-            ($criterion instanceof Criterion\Subtree || $criterion instanceof PermissionSubtree) &&
+            $criterion instanceof Criterion\Subtree &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ

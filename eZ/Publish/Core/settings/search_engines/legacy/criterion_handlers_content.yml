@@ -38,15 +38,18 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
-    ezpublish.search.legacy.gateway.criterion_handler.content.subtree:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.subtree.class%
-        tags:
-            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
-
+    # Needs to be before subtree, as permission_subtree extends it.
+    # Only needed for Content Search on SQL engines where applying Permissions Subtree criterion on all possible
+    # locations leads to peformance issues: https://jira.ez.no/browse/EZP-23037
     ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
         class: %ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.subtree:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.subtree.class%
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
