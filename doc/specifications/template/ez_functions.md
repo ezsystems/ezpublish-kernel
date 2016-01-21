@@ -70,7 +70,7 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
       
 * ez_field
 
-  _Since 6.0_
+  _Since 6.1_
 
   `Field|null = ez_field( Content $content, string $fieldDefIdentifier[, string $forcedLanguage] )`
 
