@@ -439,6 +439,28 @@ class TextLineTest extends FieldTypeTest
                     ),
                 ),
             ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'minStringLength' => -23,
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'maxStringLength' => -42,
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'maxStringLength' => 23,
+                        'minStringLength' => 42,
+                    ),
+                ),
+            ),
         );
     }
 

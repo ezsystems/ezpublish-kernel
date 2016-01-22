@@ -45,9 +45,17 @@ class StringLengthValidator extends Validator
             switch ($name) {
                 case 'minStringLength':
                 case 'maxStringLength':
-                    if ($value !== false && !is_integer($value)) {
+                    if ($value !== false && !is_integer($value) && !(null === $value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
+                            null,
+                            array(
+                                'parameter' => $name,
+                            )
+                        );
+                    } elseif ($value < 0) {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value can't be negative",
                             null,
                             array(
                                 'parameter' => $name,
@@ -66,7 +74,33 @@ class StringLengthValidator extends Validator
             }
         }
 
+        // if no errors above, check if minStringLength is shorter or equal than maxStringLength
+        if (empty($validationErrors) && !$this->validateConstraintsOrder($constraints)) {
+            $validationErrors[] = new ValidationError(
+                "Validator parameter 'maxStringLength' can't be shorter than validator parameter 'minStringLength' value",
+                null,
+                array(
+                    'parameter' => 'minStringLength',
+                )
+            );
+        }
+
         return $validationErrors;
+    }
+
+    /**
+     * Check if max string length is greater or equal than min string length in
+     * case both are set. Returns also true in case one of them is not set.
+     *
+     * @param $constraints
+     *
+     * @return bool
+     */
+    protected function validateConstraintsOrder($constraints)
+    {
+        return !isset($constraints['minStringLength']) ||
+            !isset($constraints['maxStringLength']) ||
+            ($constraints['minStringLength'] <= $constraints['maxStringLength']);
     }
 
     /**
