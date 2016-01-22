@@ -33,6 +33,7 @@ class RestTrashItem extends ValueObjectVisitor
         $visitor->setHeader('Content-Type', $generator->getMediaType('TrashItem'));
 
         $trashItem = $data->trashItem;
+        $contentInfo = $trashItem->getContentInfo();
 
         $generator->startAttribute(
             'href',
@@ -89,7 +90,7 @@ class RestTrashItem extends ValueObjectVisitor
         $generator->startObjectElement('Content');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $trashItem->contentId))
+            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $contentInfo->id))
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Content');
@@ -105,11 +106,11 @@ class RestTrashItem extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadContent',
-                array('contentId' => $trashItem->contentId)
+                array('contentId' => $contentInfo->id)
             )
         );
         $generator->endAttribute('href');
-        $visitor->visitValueObject(new RestContentValue($trashItem->contentInfo));
+        $visitor->visitValueObject(new RestContentValue($contentInfo));
         $generator->endObjectElement('ContentInfo');
 
         $generator->endObjectElement('TrashItem');

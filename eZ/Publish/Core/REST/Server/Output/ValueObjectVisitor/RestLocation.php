@@ -34,6 +34,7 @@ class RestLocation extends ValueObjectVisitor
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('LocationUpdate'));
 
         $location = $data->location;
+        $contentInfo = $location->getContentInfo();
 
         $generator->startAttribute(
             'href',
@@ -105,7 +106,7 @@ class RestLocation extends ValueObjectVisitor
         $generator->startObjectElement('Content');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $location->contentId))
+            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $contentInfo->id))
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Content');
@@ -132,11 +133,11 @@ class RestLocation extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadContent',
-                array('contentId' => $location->contentId)
+                array('contentId' => $contentInfo->id)
             )
         );
         $generator->endAttribute('href');
-        $visitor->visitValueObject(new RestContentValue($location->contentInfo));
+        $visitor->visitValueObject(new RestContentValue($contentInfo));
         $generator->endObjectElement('ContentInfo');
 
         $generator->endObjectElement('Location');
