@@ -96,7 +96,6 @@ class InstallPlatformCommand extends Command
 
         $installer->setOutput($output);
 
-        $installer->createConfiguration();
         $installer->importSchema();
         $installer->importData();
         $installer->importBinaries();

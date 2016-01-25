@@ -22,7 +22,7 @@ class IOTest extends AbstractParserTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->container->setParameter('ezsettings.default.var_dir', 'var');
+        $this->container->setParameter('ezsettings.default.var_dir', 'var');// PS: Does not seem to take effect
         $this->container->setParameter('ezsettings.default.storage_dir', 'storage');
         $this->container->setParameter('ezsettings.ezdemo_site.var_dir', 'var/ezdemo_site');
     }
@@ -76,10 +76,6 @@ class IOTest extends AbstractParserTestCase
      */
     public function testComplexIoLegacyUrlPrefix()
     {
-        $this->container->setParameter('ezsettings.default.var_dir', 'var');
-        $this->container->setParameter('ezsettings.default.storage_dir', 'storage');
-        $this->container->setParameter('ezsettings.ezdemo_site.var_dir', 'var/ezdemo_site');
-
         $this->load();
 
         // Should have been defined & converted in ezdemo_site
@@ -93,10 +89,6 @@ class IOTest extends AbstractParserTestCase
      */
     public function testComplexIoRootDir()
     {
-        $this->container->setParameter('ezsettings.default.var_dir', 'var');
-        $this->container->setParameter('ezsettings.default.storage_dir', 'storage');
-        $this->container->setParameter('ezsettings.ezdemo_site.var_dir', 'var/ezdemo_site');
-
         $this->load();
 
         // Should have been defined & converted in ezdemo_site
