@@ -133,6 +133,7 @@ services:
     ezpublish_rest.controller.root:
         class: %ezpublish_rest.controller.root.class%
         parent: ezpublish_rest.controller.base
+        arguments: [ "$rest$" ]
 
     ezpublish_rest.controller.section:
         class: %ezpublish_rest.controller.section.class%

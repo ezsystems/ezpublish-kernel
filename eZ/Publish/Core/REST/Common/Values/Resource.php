@@ -13,25 +13,26 @@ namespace eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * This class represents the root resource.
+ * This class represents a resource.
  */
-class Root extends RestValue
+class Resource extends RestValue
 {
-    /**
-     * @var Resource[]
-     */
-    protected $resources;
+    public $name;
 
-    public function __construct($resources)
-    {
-        $this->resources = $resources;
-    }
+    public $mediaType;
+
+    public $href;
 
     /**
-     * @return \Resource[]
+     * Resource constructor.
+     * @param $name
+     * @param $mediaType
+     * @param $href
      */
-    public function getResources()
+    public function __construct($name, $mediaType, $href)
     {
-        return $this->resources;
+        $this->name = $name;
+        $this->mediaType = $mediaType;
+        $this->href = $href;
     }
 }

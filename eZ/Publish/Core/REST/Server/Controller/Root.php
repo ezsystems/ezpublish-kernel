@@ -20,13 +20,27 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 class Root extends RestController
 {
     /**
+     * @var Values\Resource[]
+     */
+    private $resources;
+
+    public function __construct($restConfig)
+    {
+        $definition = $restConfig['resources'];
+
+        foreach ($definition as $name => $resource) {
+            $this->resources[] = new Values\Resource($name, $resource['mediaType'], $resource['href']);
+        }
+    }
+
+    /**
      * List the root resources of the eZ Publish installation.
      *
      * @return \eZ\Publish\Core\REST\Common\Values\Root
      */
     public function loadRootResource()
     {
-        return new Values\Root();
+        return new Values\Root($this->resources);
     }
 
     /**

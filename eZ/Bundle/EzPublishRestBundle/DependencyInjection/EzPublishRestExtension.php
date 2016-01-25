@@ -27,7 +27,6 @@ class EzPublishRestExtension extends Extension implements PrependExtensionInterf
         $loader->load('value_object_visitors.yml');
         $loader->load('input_parsers.yml');
         $loader->load('security.yml');
-        $loader->load('default_settings.yml');
     }
 
     public function prepend(ContainerBuilder $container)
