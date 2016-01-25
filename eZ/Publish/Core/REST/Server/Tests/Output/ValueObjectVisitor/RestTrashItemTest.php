@@ -44,6 +44,8 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                     'contentInfo' => new ContentInfo(
                         array(
                             'id' => 84,
+                             'contentTypeId' => 4,
+                             'name' => 'A Node, long lost in the trash',
                         )
                     ),
                     'sortField' => TrashItem::SORT_FIELD_NAME,
@@ -64,11 +66,23 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             array('locationPath' => '1/2/21'),
             '/content/locations/1/2/21'
         );
+
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
             array('contentId' => $trashItem->trashItem->contentInfo->id),
             "/content/objects/{$trashItem->trashItem->contentInfo->id}"
         );
+
+        // Expected twice, second one here for ContentInfo
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array('contentId' => $trashItem->trashItem->contentInfo->id),
+            "/content/objects/{$trashItem->trashItem->contentInfo->id}"
+        );
+
+        $this->getVisitorMock()->expects($this->once())
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -124,6 +138,48 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid <TrashItem> attributes.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains ContentInfo element.
+     *
+     * @param string $result
+     *
+     * @depends testVisit
+     */
+    public function testResultContainsContentInfoElement($result)
+    {
+        $this->assertXMLTag(
+            array(
+                'tag' => 'ContentInfo',
+            ),
+            $result,
+            'Invalid <ContentInfo> element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains Location element attributes.
+     *
+     * @param string $result
+     *
+     * @depends testVisit
+     */
+    public function testResultContainsContentInfoAttributes($result)
+    {
+        $this->assertXMLTag(
+            array(
+                'tag' => 'ContentInfo',
+                'attributes' => array(
+                    'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
+                    'href' => '/content/objects/84',
+                ),
+            ),
+            $result,
+            'Invalid <ContentInfo> attributes.',
             false
         );
     }

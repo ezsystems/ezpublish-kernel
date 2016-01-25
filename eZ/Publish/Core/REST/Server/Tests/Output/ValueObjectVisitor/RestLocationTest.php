@@ -82,6 +82,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             '/content/objects/1/2/21/42/urlaliases'
         );
 
+        // Expected twice, second one here for ContentInfo
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
             array('contentId' => $location->location->contentId),

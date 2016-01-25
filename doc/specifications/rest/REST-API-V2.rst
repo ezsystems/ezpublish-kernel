@@ -7799,6 +7799,14 @@ Trash XML Schema
               <xsd:element name="Content" type="ref" />
               <xsd:element name="sortField" type="sortFieldType" />
               <xsd:element name="sortOrder" type="sortOrderType" />
+              <xsd:element name="ContentInfo" type="vnd.ez.api.ContentInfo">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    ContentInfo related to the Content
+                    this TrashItem is part of.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
             </xsd:all>
           </xsd:extension>
         </xsd:complexContent>

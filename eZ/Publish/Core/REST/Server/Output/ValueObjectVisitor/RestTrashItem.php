@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
  * RestTrashItem value object visitor.
@@ -31,31 +32,34 @@ class RestTrashItem extends ValueObjectVisitor
         $generator->startObjectElement('TrashItem');
         $visitor->setHeader('Content-Type', $generator->getMediaType('TrashItem'));
 
+        $trashItem = $data->trashItem;
+        $contentInfo = $trashItem->getContentInfo();
+
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadTrashItem', array('trashItemId' => $data->trashItem->id))
+            $this->router->generate('ezpublish_rest_loadTrashItem', array('trashItemId' => $trashItem->id))
         );
         $generator->endAttribute('href');
 
-        $generator->startValueElement('id', $data->trashItem->id);
+        $generator->startValueElement('id', $trashItem->id);
         $generator->endValueElement('id');
 
-        $generator->startValueElement('priority', $data->trashItem->priority);
+        $generator->startValueElement('priority', $trashItem->priority);
         $generator->endValueElement('priority');
 
         $generator->startValueElement(
             'hidden',
-            $this->serializeBool($generator, $data->trashItem->hidden)
+            $this->serializeBool($generator, $trashItem->hidden)
         );
         $generator->endValueElement('hidden');
 
         $generator->startValueElement(
             'invisible',
-            $this->serializeBool($generator, $data->trashItem->invisible)
+            $this->serializeBool($generator, $trashItem->invisible)
         );
         $generator->endValueElement('invisible');
 
-        $pathStringParts = explode('/', trim($data->trashItem->pathString, '/'));
+        $pathStringParts = explode('/', trim($trashItem->pathString, '/'));
         $pathStringParts = array_slice($pathStringParts, 0, count($pathStringParts) - 1);
 
         $generator->startObjectElement('ParentLocation', 'Location');
@@ -71,31 +75,43 @@ class RestTrashItem extends ValueObjectVisitor
         $generator->endAttribute('href');
         $generator->endObjectElement('ParentLocation');
 
-        $generator->startValueElement('pathString', $data->trashItem->pathString);
+        $generator->startValueElement('pathString', $trashItem->pathString);
         $generator->endValueElement('pathString');
 
-        $generator->startValueElement('depth', $data->trashItem->depth);
+        $generator->startValueElement('depth', $trashItem->depth);
         $generator->endValueElement('depth');
 
         $generator->startValueElement('childCount', $data->childCount);
         $generator->endValueElement('childCount');
 
-        $generator->startValueElement('remoteId', $data->trashItem->remoteId);
+        $generator->startValueElement('remoteId', $trashItem->remoteId);
         $generator->endValueElement('remoteId');
 
         $generator->startObjectElement('Content');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $data->trashItem->contentId))
+            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $contentInfo->id))
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Content');
 
-        $generator->startValueElement('sortField', $this->serializeSortField($data->trashItem->sortField));
+        $generator->startValueElement('sortField', $this->serializeSortField($trashItem->sortField));
         $generator->endValueElement('sortField');
 
-        $generator->startValueElement('sortOrder', $this->serializeSortOrder($data->trashItem->sortOrder));
+        $generator->startValueElement('sortOrder', $this->serializeSortOrder($trashItem->sortOrder));
         $generator->endValueElement('sortOrder');
+
+        $generator->startObjectElement('ContentInfo', 'ContentInfo');
+        $generator->startAttribute(
+            'href',
+            $this->router->generate(
+                'ezpublish_rest_loadContent',
+                array('contentId' => $contentInfo->id)
+            )
+        );
+        $generator->endAttribute('href');
+        $visitor->visitValueObject(new RestContentValue($contentInfo));
+        $generator->endObjectElement('ContentInfo');
 
         $generator->endObjectElement('TrashItem');
     }
