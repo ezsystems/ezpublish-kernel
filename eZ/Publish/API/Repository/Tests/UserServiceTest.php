@@ -1245,6 +1245,28 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadUserByLogin() method.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::loadUserByLogin()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByLogin
+     */
+    public function testLoadUserByLoginThrowsNotFoundExceptionForLoginWithWrongCase()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $this->createUserVersion1();
+
+        // This call will fail with a "NotFoundException", because the given
+        // login does not exist.
+        $userService->loadUserByLogin('USER');
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadUsersByEmail() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUsersByEmail()
