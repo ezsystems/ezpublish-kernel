@@ -199,4 +199,41 @@ EOT;
         $this->converter->toStorageValue($fieldValue, $storageFieldValue);
         $this->assertXmlStringEqualsXmlString(self::PAGE_XML_REFERENCE, $storageFieldValue->dataText);
     }
+
+    /**
+     * Test converting from XML to storage and back.
+     */
+    public function testFromStorageAndBack()
+    {
+        $xml = <<<EOF
+<?xml version="1.0"?>
+<page>
+  <zone id="id_ee94402090bb170600a8dab9e1bd1c5a">
+    <block id="id_ef9fee870c65c676b2f7136431b73f37">
+      <name>My Block</name>
+      <type>my_block_type</type>
+      <view>default</view>
+      <overflow_id></overflow_id>
+      <custom_attributes>
+        <copytext></copytext>
+      </custom_attributes>
+      <rotation>
+        <interval>0</interval>
+        <type>0</type>
+        <value></value>
+        <unit></unit>
+      </rotation>
+      <zone_id>ee94402090bb170600a8dab9e1bd1c5a</zone_id>
+    </block>
+    <zone_identifier>zone_1</zone_identifier>
+  </zone>
+  <zone_layout>my_zone_layout</zone_layout>
+</page>
+
+EOF;
+
+        $page = $this->converter->restoreValueFromXmlString($xml);
+        $newXml = $this->converter->generateXmlString($page);
+        $this->assertEquals($xml, $newXml);
+    }
 }

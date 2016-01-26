@@ -219,7 +219,6 @@ class PageConverter implements Converter
                     $this->addNewXmlElement($dom, $blockNode, 'overflow_id', $attrValue);
                     break;
                 case 'rotation':
-                case 'customAttributes':
                     if ($attrValue === null) {
                         continue 2;
                     }
@@ -228,7 +227,19 @@ class PageConverter implements Converter
                     $blockNode->appendChild($node);
 
                     foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
-                        $this->addNewXmlElement($dom, $blockNode, $arrayItemKey, $arrayItemValue);
+                        $this->addNewXmlElement($dom, $node, $arrayItemKey, $arrayItemValue);
+                    }
+                    break;
+                case 'customAttributes':
+                    if ($attrValue === null) {
+                        continue 2;
+                    }
+
+                    $node = $dom->createElement('custom_attributes');
+                    $blockNode->appendChild($node);
+
+                    foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
+                        $this->addNewXmlElement($dom, $node, $arrayItemKey, $arrayItemValue);
                     }
                     break;
                 case 'attributes':
