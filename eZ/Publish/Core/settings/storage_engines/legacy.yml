@@ -16,7 +16,7 @@ parameters:
     ezpublish.spi.search.legacy.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\MainHandler
     ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-    ezpublish.persistence.connection.class: Doctrine\DBAL\Driver\Connection
+    ezpublish.persistence.connection.class: Doctrine\DBAL\Connection
     ezpublish.spi.persistence.legacy.transactionhandler.class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
 
 services:

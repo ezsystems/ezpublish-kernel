@@ -1,6 +1,6 @@
 parameters:
     ezpublish.search.legacy.connection.factory.class: eZ\Bundle\EzPublishLegacySearchEngineBundle\ApiLoader\ConnectionFactory
-    ezpublish.search.legacy.connection.class: Doctrine\DBAL\Driver\Connection
+    ezpublish.search.legacy.connection.class: Doctrine\DBAL\Connection
 
 services:
     ezpublish.search.legacy.connection.factory:
