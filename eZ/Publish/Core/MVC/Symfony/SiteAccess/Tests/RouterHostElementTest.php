@@ -38,7 +38,9 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
             $this->getMock('Psr\\Log\\LoggerInterface'),
             'default_sa',
             array(
-                'HostElement' => 2,
+                'HostElement' => array(
+                    'value' => 2,
+                ),
                 'Map\\URI' => array(
                     'first_sa' => 'first_sa',
                     'second_sa' => 'second_sa',
@@ -127,7 +129,7 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
         $matcher = new HostMapMatcher(array('host' => 'foo'), array());
         $this->assertSame('host:map', $matcher->getName());
 
-        $matcherHostElement = new HostElement(1);
+        $matcherHostElement = new HostElement(array(1));
         $this->assertSame('host:element', $matcherHostElement->getName());
     }
 
@@ -136,7 +138,7 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
      */
     public function testReverseMatch($siteAccessName, $elementNumber, SimplifiedRequest $request, $expectedHost)
     {
-        $matcher = new HostElement($elementNumber);
+        $matcher = new HostElement(array($elementNumber));
         $matcher->setRequest($request);
         $result = $matcher->reverseMatch($siteAccessName);
         $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement', $result);
@@ -155,14 +157,14 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
 
     public function testReverseMatchFail()
     {
-        $matcher = new HostElement(3);
+        $matcher = new HostElement(array(3));
         $matcher->setRequest(new SimplifiedRequest(array('host' => 'ez.no')));
         $this->assertNull($matcher->reverseMatch('foo'));
     }
 
     public function testSerialize()
     {
-        $matcher = new HostElement(1);
+        $matcher = new HostElement(array(1));
         $matcher->setRequest(new SimplifiedRequest(array('host' => 'ez.no', 'pathinfo' => '/foo/bar')));
         $sa = new SiteAccess('test', 'test', $matcher);
         $serializedSA1 = serialize($sa);

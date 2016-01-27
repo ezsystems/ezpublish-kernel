@@ -37,7 +37,9 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
             $this->getMock('Psr\\Log\\LoggerInterface'),
             'default_sa',
             array(
-                'URIElement' => 2,
+                'URIElement' => array(
+                    'value' => 2,
+                ),
                 'Map\\URI' => array(
                     'first_sa' => 'first_sa',
                     'second_sa' => 'second_sa',
@@ -123,6 +125,22 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      */
     public function testAnalyseURI($level, $uri, $expectedFixedUpURI)
     {
+        $matcher = new URIElementMatcher(array($level));
+        $matcher->setRequest(
+            new SimplifiedRequest(array('pathinfo' => $uri))
+        );
+        $this->assertSame($expectedFixedUpURI, $matcher->analyseURI($uri));
+    }
+
+    /**
+     * @param int $level
+     * @param string $uri
+     * @param string $expectedFixedUpURI
+     *
+     * @dataProvider analyseProvider
+     */
+    public function testAnalyseURILevelAsInt($level, $uri, $expectedFixedUpURI)
+    {
         $matcher = new URIElementMatcher($level);
         $matcher->setRequest(
             new SimplifiedRequest(array('pathinfo' => $uri))
@@ -139,7 +157,7 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      */
     public function testAnalyseLink($level, $fullUri, $linkUri)
     {
-        $matcher = new URIElementMatcher($level);
+        $matcher = new URIElementMatcher(array($level));
         $matcher->setRequest(
             new SimplifiedRequest(array('pathinfo' => $fullUri))
         );
@@ -170,7 +188,7 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     public function testReverseMatch($siteAccessName, $originalPathinfo)
     {
         $expectedSiteAccessPath = implode('/', explode('_', $siteAccessName));
-        $matcher = new URIElementMatcher(2);
+        $matcher = new URIElementMatcher(array(2));
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => $originalPathinfo)));
 
         $result = $matcher->reverseMatch($siteAccessName);
@@ -190,14 +208,14 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
 
     public function testReverseMatchFail()
     {
-        $matcher = new URIElementMatcher(2);
+        $matcher = new URIElementMatcher(array(2));
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => '/my/siteaccess/foo/bar')));
         $this->assertNull($matcher->reverseMatch('another_siteaccess_again_dont_tell_me'));
     }
 
     public function testSerialize()
     {
-        $matcher = new URIElementMatcher(2);
+        $matcher = new URIElementMatcher(array(2));
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => '/foo/bar')));
         $sa = new SiteAccess('test', 'test', $matcher);
         $serializedSA1 = serialize($sa);
