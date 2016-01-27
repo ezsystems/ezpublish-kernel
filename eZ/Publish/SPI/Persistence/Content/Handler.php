@@ -177,9 +177,9 @@ interface Handler
     public function listVersions($contentId);
 
     /**
-     * Copy Content with Fields and Versions from $contentId in $version.
+     * Copy Content with Fields, Versions & Relations from $contentId in $version.
      *
-     * Copies all fields from $contentId in $version (or all versions if false)
+     * Copies all fields and relations from $contentId in $version (or all versions if false)
      * to a new object which is returned. Version numbers are maintained.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found

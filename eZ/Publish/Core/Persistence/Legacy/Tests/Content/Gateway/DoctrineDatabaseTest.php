@@ -2024,6 +2024,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
                 ($dbHandler = $this->getDatabaseHandler()),
+                $this->getDatabaseConnection(),
                 new DoctrineDatabase\QueryBuilder($dbHandler),
                 $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()

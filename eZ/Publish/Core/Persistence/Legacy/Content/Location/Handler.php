@@ -208,7 +208,8 @@ class Handler implements BaseLocationHandler
      * for each location to a new content object without any additional version
      * information. Relations are not copied. URLs are not touched at all.
      *
-     * @todo update subtree modification time, optionally retain dates and set creator
+     * @todo Either move to async/batch or find ways toward optimizing away operations per object.
+     * @todo Optionally retain dates and set creator
      *
      * @param mixed $sourceId
      * @param mixed $destinationParentId

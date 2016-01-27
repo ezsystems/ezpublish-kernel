@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -39,11 +40,20 @@ use PDO;
 class DoctrineDatabase extends Gateway
 {
     /**
-     * Doctrine database handler.
+     * eZ Doctrine database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
+
+    /**
+     * The native Doctrine connection.
+     *
+     * Meant to be used to transition from eZ/Zeta interface to Doctrine.
+     *
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
 
     /**
      * Query builder.
@@ -70,17 +80,20 @@ class DoctrineDatabase extends Gateway
      * Creates a new gateway based on $db.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
+     * @param \Doctrine\DBAL\Connection $connection
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder $queryBuilder
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(
         DatabaseHandler $db,
+        Connection $connection,
         QueryBuilder $queryBuilder,
         LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator
     ) {
         $this->dbHandler = $db;
+        $this->connection = $connection;
         $this->queryBuilder = $queryBuilder;
         $this->languageHandler = $languageHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
@@ -1829,5 +1842,35 @@ class DoctrineDatabase extends Gateway
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Batch method for copying all relation meta data for copied Content object.
+     *
+     * {@inheritdoc}
+     *
+     * @param int $originalContentId
+     * @param int $copiedContentId
+     * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
+     */
+    public function copyRelations($originalContentId, $copiedContentId, $versionNo = null)
+    {
+        // Given we can retain all columns, we just create copies with new `from_contentobject_id` using INSERT INTO SELECT
+        $sql = 'INSERT INTO ezcontentobject_link ( contentclassattribute_id, from_contentobject_id, from_contentobject_version, relation_type, to_contentobject_id )
+                SELECT  L2.contentclassattribute_id, :copied_id, L2.from_contentobject_version, L2.relation_type, L2.to_contentobject_id
+                FROM    ezcontentobject_link AS L2
+                WHERE   L2.from_contentobject_id = :original_id';
+
+        if ($versionNo) {
+            $stmt = $this->connection->prepare($sql . ' AND L2.from_contentobject_version = :version');
+            $stmt->bindValue('version', $versionNo, PDO::PARAM_INT);
+        } else {
+            $stmt = $this->connection->prepare($sql);
+        }
+
+        $stmt->bindValue('original_id', $originalContentId, PDO::PARAM_INT);
+        $stmt->bindValue('copied_id', $copiedContentId, PDO::PARAM_INT);
+
+        $stmt->execute();
     }
 }

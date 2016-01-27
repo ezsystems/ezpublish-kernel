@@ -1133,6 +1133,7 @@ class ContentHandlerTest extends TestCase
     public function testCopySingleVersion()
     {
         $handler = $this->getPartlyMockedHandler(array('load', 'internalCreate'));
+        $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
 
         $handler->expects(
@@ -1164,8 +1165,23 @@ class ContentHandlerTest extends TestCase
             $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'),
             $this->equalTo(32)
         )->will(
-            $this->returnValue(new Content())
+            $this->returnValue(
+                new Content(
+                    [
+                        'versionInfo' => new VersionInfo(['contentInfo' => new ContentInfo(['id' => 24])]),
+                    ]
+                )
+            )
         );
+
+        $gatewayMock->expects($this->once())
+            ->method('copyRelations')
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(24),
+                $this->equalTo(32)
+            )
+            ->will($this->returnValue(null));
 
         $result = $handler->copy(23, 32);
 
@@ -1312,6 +1328,15 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo('Test'),
                 $this->equalTo('eng-US')
             );
+
+        $gatewayMock->expects($this->once())
+            ->method('copyRelations')
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(24),
+                $this->equalTo(null)
+            )
+            ->will($this->returnValue(null));
 
         $result = $handler->copy(23);
 
