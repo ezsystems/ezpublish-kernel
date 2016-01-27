@@ -21,8 +21,10 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  */
-class RelationIntegrationTest extends RelationSearchBaseIntegrationTest
+class RelationIntegrationTest extends SearchBaseIntegrationTest
 {
+    use RelationSearchBaseIntegrationTestTrait;
+
     /**
      * Get name of tested field type.
      *

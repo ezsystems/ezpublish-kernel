@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group field-type
  * @group relation
  */
-abstract class RelationSearchBaseIntegrationTest extends SearchBaseIntegrationTest
+trait RelationSearchBaseIntegrationTestTrait
 {
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
@@ -137,6 +137,33 @@ abstract class RelationSearchBaseIntegrationTest extends SearchBaseIntegrationTe
             ),
             $this->normalizeRelations(
                 $this->getRepository()->getContentService()->loadRelations($firstVersion->versionInfo)
+            )
+        );
+    }
+
+    public function testSubtreeCopyContentCopiesFieldRelations()
+    {
+        $contentService = $this->getRepository()->getContentService();
+        $locationService = $this->getRepository()->getLocationService();
+        $content = $this->updateContent($this->getValidUpdateFieldData());
+
+        $location = $locationService->createLocation(
+            $content->getVersionInfo()->getContentInfo(),
+            $locationService->newLocationCreateStruct(2)
+        );
+
+        $copiedLocation = $locationService->copySubtree(
+            $location,
+            $locationService->loadLocation(43)
+        );
+
+        $copy = $contentService->loadContent($copiedLocation->getContentInfo()->id);
+        $this->assertEquals(
+            $this->normalizeRelations(
+                $this->getCreateExpectedRelations($copy)
+            ),
+            $this->normalizeRelations(
+                $this->getRepository()->getContentService()->loadRelations($copy->versionInfo)
             )
         );
     }
