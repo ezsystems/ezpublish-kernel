@@ -16,6 +16,9 @@ Changes affecting version compatibility with former or future versions.
   generate system config. Configuration & code generation will be kept separated from database and content installation
   going forward.
 
+* Passing an `int` argument to the `HostElement` and `URIElement` SiteAccess Matchers constructor is deprecated
+  and will be removed in the future, a single-element array ( 'value' => $number ) should be used instead.
+
 
 ## Removed features
 
