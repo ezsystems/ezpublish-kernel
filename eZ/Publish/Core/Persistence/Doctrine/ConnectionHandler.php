@@ -26,7 +26,7 @@ class ConnectionHandler implements DatabaseHandler
     /**
      * @param string|array $dsn
      *
-     * @return \Doctrine\DBAL\Driver\Connection
+     * @return \Doctrine\DBAL\Connection
      */
     public static function createConnectionFromDSN($dsn)
     {

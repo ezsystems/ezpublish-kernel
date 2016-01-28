@@ -44,6 +44,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $handler;
 
     /**
+     * Doctrine Database connection -- to not be constructed twice for one test.
+     *
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Property which holds the state if this is the initial test run, so that
      * we should set up the database, or if this is any of the following test
      * runs, where it is sufficient to reset the database.
@@ -72,7 +79,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get a Doctrine database connection handler.
+     * Get a eZ Doctrine database connection handler.
      *
      * Get a ConnectionHandler, which can be used to interact with the configured
      * database. The database connection string is read from an optional
@@ -84,11 +91,25 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     public function getDatabaseHandler()
     {
         if (!$this->handler) {
-            $this->handler = ConnectionHandler::createFromDSN($this->getDsn());
+            $this->handler = ConnectionHandler::createFromConnection($this->getDatabaseConnection());
             $this->db = $this->handler->getName();
         }
 
         return $this->handler;
+    }
+
+    /**
+     * Get native Doctrine database connection.
+     *
+     * @return \Doctrine\DBAL\Connection
+     */
+    public function getDatabaseConnection()
+    {
+        if (!$this->connection) {
+            $this->connection = ConnectionHandler::createConnectionFromDSN($this->getDsn());
+        }
+
+        return $this->connection;
     }
 
     /**

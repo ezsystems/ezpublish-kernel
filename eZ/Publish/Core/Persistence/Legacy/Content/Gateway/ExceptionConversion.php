@@ -708,4 +708,24 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * Batch method for copying all relation meta data for copied Content object.
+     *
+     * {@inheritdoc}
+     *
+     * @param int $originalContentId
+     * @param int $copiedContentId
+     * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
+     */
+    public function copyRelations($originalContentId, $copiedContentId, $versionNo = null)
+    {
+        try {
+            return $this->innerGateway->copyRelations($originalContentId, $copiedContentId, $versionNo);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
 }

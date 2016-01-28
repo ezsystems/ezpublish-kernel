@@ -572,12 +572,9 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Copy Content with Fields and Versions from $contentId in $version.
+     * Copy Content with Fields, Versions & Relations from $contentId in $version.
      *
-     * Copies all fields from $contentId in $versionNo (or all versions if null)
-     * to a new object which is returned. Version numbers are maintained.
-     *
-     * @todo Should relations be copied? Which ones?
+     * {@inheritdoc}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found
      *
@@ -597,10 +594,11 @@ class Handler implements BaseContentHandler
             $this->load($contentId, $currentVersionNo)
         );
         $content = $this->internalCreate($createStruct, $currentVersionNo);
-        $contentType = $this->contentTypeHandler->load($createStruct->typeId);
 
         // If version was not passed also copy other versions
         if (!isset($versionNo)) {
+            $contentType = $this->contentTypeHandler->load($createStruct->typeId);
+
             foreach ($this->listVersions($contentId) as $versionInfo) {
                 if ($versionInfo->versionNo === $currentVersionNo) {
                     continue;
@@ -628,6 +626,12 @@ class Handler implements BaseContentHandler
                     );
                 }
             }
+
+            // Batch copy relations for all versions
+            $this->contentGateway->copyRelations($contentId, $content->versionInfo->contentInfo->id);
+        } else {
+            // Batch copy relations for published version
+            $this->contentGateway->copyRelations($contentId, $content->versionInfo->contentInfo->id, $versionNo);
         }
 
         return $content;

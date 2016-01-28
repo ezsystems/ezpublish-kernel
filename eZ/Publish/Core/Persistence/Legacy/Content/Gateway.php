@@ -376,4 +376,19 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadVersionedNameData($rows);
+
+    /**
+     * Batch method for copying all relation meta data for copied Content object.
+     *
+     * Is meant to be used during content copy, so assumes the following:
+     * - version number is the same
+     * - content type, and hence content type attribute is the same
+     * - relation type is the same
+     * - target relation is the same
+     *
+     * @param int $originalContentId
+     * @param int $copiedContentId
+     * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
+     */
+    abstract public function copyRelations($originalContentId, $copiedContentId, $versionNo = null);
 }

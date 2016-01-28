@@ -15,7 +15,7 @@ parameters:
     ezpublish.search.legacy.gateway.location.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion
 
     ezpublish.search.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-    ezpublish.search.connection.class: Doctrine\DBAL\Driver\Connection
+    ezpublish.search.connection.class: Doctrine\DBAL\Connection
 
 services:
     # Legacy Search Engine semantic configuration will override connection service to the one

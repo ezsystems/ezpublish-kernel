@@ -22,8 +22,10 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  */
-class RichTextIntegrationTest extends RelationSearchBaseIntegrationTest
+class RichTextIntegrationTest extends SearchBaseIntegrationTest
 {
+    use RelationSearchBaseIntegrationTestTrait;
+
     /**
      * @var \DOMDocument
      */

@@ -1,7 +1,7 @@
 parameters:
     ezpublish.persistence.connection.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory
     ezpublish.api.repository_configuration_provider.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-    ezpublish.persistence.connection.class: Doctrine\DBAL\Driver\Connection
+    ezpublish.persistence.connection.class: Doctrine\DBAL\Connection
 
 services:
     ezpublish.api.repository_configuration_provider:

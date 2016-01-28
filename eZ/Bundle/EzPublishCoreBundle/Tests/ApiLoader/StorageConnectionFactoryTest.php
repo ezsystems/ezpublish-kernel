@@ -46,14 +46,14 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with("doctrine.dbal.{$doctrineConnection}_connection")
-            ->will($this->returnValue($this->getMock('Doctrine\DBAL\Driver\Connection')));
+            ->will($this->returnValue($this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock()));
 
         $repositoryConfigurationProvider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $factory = new StorageConnectionFactory($repositoryConfigurationProvider);
         $factory->setContainer($container);
         $connection = $factory->getConnection();
         $this->assertInstanceOf(
-            'Doctrine\DBAL\Driver\Connection',
+            'Doctrine\DBAL\Connection',
             $connection
         );
     }
