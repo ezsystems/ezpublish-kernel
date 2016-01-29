@@ -663,11 +663,19 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 
         $this->assertIsValidHashValue($actualResult);
 
-        $this->assertEquals(
-            $expectedResult,
-            $actualResult,
-            'toHash() method did not create expected result.'
-        );
+        if (is_object($expectedResult) || is_array($expectedResult)) {
+            $this->assertEquals(
+                $expectedResult,
+                $actualResult,
+                'toHash() method did not create expected result.'
+            );
+        } else {
+            $this->assertSame(
+                $expectedResult,
+                $actualResult,
+                'toHash() method did not create expected result.'
+            );
+        }
     }
 
     /**
@@ -684,11 +692,19 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 
         $actualResult = $fieldType->fromHash($inputHash);
 
-        $this->assertEquals(
-            $expectedResult,
-            $actualResult,
-            'fromHash() method did not create expected result.'
-        );
+        if (is_object($expectedResult) || is_array($expectedResult)) {
+            $this->assertEquals(
+                $expectedResult,
+                $actualResult,
+                'fromHash() method did not create expected result.'
+            );
+        } else {
+            $this->assertSame(
+                $expectedResult,
+                $actualResult,
+                'fromHash() method did not create expected result.'
+            );
+        }
     }
 
     public function testEmptyValueIsEmpty()
