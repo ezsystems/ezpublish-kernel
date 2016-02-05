@@ -10,36 +10,33 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\Core\REST\Server\Input\Parser\RoleAssignInput;
 
-class RoleAssignInputTest extends BaseTest
+class RoleAssignInputTwoDotZeroTest extends BaseTest
 {
     /**
      * Tests the RoleAssignInput parser.
      */
     public function testParse()
     {
-        $inputArray = array(
-            'Role' => array(
-                '_href' => '/user/roles/42',
-            ),
-            'limitation' => array(
-                '_identifier' => 'Section',
-                'values' => array(
-                    'ref' => array(
-                        array(
-                            '_href' => 1,
-                        ),
-                        array(
-                            '_href' => 2,
-                        ),
-                        array(
-                            '_href' => 3,
-                        ),
-                    ),
-                ),
-            ),
-        );
+        $limitation = [
+            '_identifier' => 'Section',
+            'values' => [
+                'ref' => [['_href' => '/content/sections/1']],
+            ],
+        ];
+
+        $inputArray = [
+            'Role' => ['_href' => '/user/roles/42'],
+            'limitation' => $limitation,
+        ];
+
+        $this->getParsingDispatcherMock()
+            ->expects($this->once())
+            ->method('parse')
+            ->with($limitation, 'application/vnd.ez.api.internal.limitation.Section')
+            ->will($this->returnValue(new SectionLimitation()));
 
         $roleAssignInput = $this->getParser();
         $result = $roleAssignInput->parse($inputArray, $this->getParsingDispatcherMock());
@@ -61,18 +58,6 @@ class RoleAssignInputTest extends BaseTest
             $result->limitation,
             'Limitation not created correctly.'
         );
-
-        $this->assertEquals(
-            'Section',
-            $result->limitation->getIdentifier(),
-            'Limitation identifier not created correctly.'
-        );
-
-        $this->assertEquals(
-            array(1, 2, 3),
-            $result->limitation->limitationValues,
-            'Limitation values not created correctly.'
-        );
     }
 
     /**
@@ -89,13 +74,13 @@ class RoleAssignInputTest extends BaseTest
                 'values' => array(
                     'ref' => array(
                         array(
-                            '_href' => 1,
+                            '_href' => '/content/sections/1',
                         ),
                         array(
-                            '_href' => 2,
+                            '_href' => '/content/sections/2',
                         ),
                         array(
-                            '_href' => 3,
+                            '_href' => '/content/sections/3',
                         ),
                     ),
                 ),
@@ -121,13 +106,13 @@ class RoleAssignInputTest extends BaseTest
                 'values' => array(
                     'ref' => array(
                         array(
-                            '_href' => 1,
+                            '_href' => '/content/sections/1',
                         ),
                         array(
-                            '_href' => 2,
+                            '_href' => '/content/sections/2',
                         ),
                         array(
-                            '_href' => 3,
+                            '_href' => '/content/sections/3',
                         ),
                     ),
                 ),
@@ -154,37 +139,16 @@ class RoleAssignInputTest extends BaseTest
                 'values' => array(
                     'ref' => array(
                         array(
-                            '_href' => 1,
+                            '_href' => '/content/sections/1',
                         ),
                         array(
-                            '_href' => 2,
+                            '_href' => '/content/sections/2',
                         ),
                         array(
-                            '_href' => 3,
+                            '_href' => '/content/sections/3',
                         ),
                     ),
                 ),
-            ),
-        );
-
-        $roleAssignInput = $this->getParser();
-        $roleAssignInput->parse($inputArray, $this->getParsingDispatcherMock());
-    }
-
-    /**
-     * Test Limitation parser throwing exception on missing values.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid format for limitation values in Limitation.
-     */
-    public function testParseExceptionOnMissingLimitationValues()
-    {
-        $inputArray = array(
-            'Role' => array(
-                '_href' => '/user/roles/42',
-            ),
-            'limitation' => array(
-                '_identifier' => 'Section',
             ),
         );
 
