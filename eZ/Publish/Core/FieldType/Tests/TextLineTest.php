@@ -365,6 +365,15 @@ class TextLineTest extends FieldTypeTest
                     ),
                 ),
             ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'minStringLength' => 3,
+                        'maxStringLength' => 42,
+                        'defaultValue' => 'eZ Platform',
+                    ),
+                ),
+            ),
         );
     }
 
@@ -461,6 +470,25 @@ class TextLineTest extends FieldTypeTest
                     ),
                 ),
             ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                         'minStringLength' => 23,
+                         'maxStringLength' => 42,
+                         'defaultValue' => 'eZ Platform',
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'minStringLength' => 2,
+                        'maxStringLength' => 4,
+                        'defaultValue' => 'eZ Platform',
+                    ),
+                ),
+            ),
+
         );
     }
 
