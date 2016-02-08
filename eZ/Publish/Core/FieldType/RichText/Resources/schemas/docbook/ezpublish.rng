@@ -611,9 +611,7 @@
     <define name="db.link.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
     <define name="ez.xhtml.class.attribute">
       <optional>
-        <attribute name="ezxhtml:class">
-          <data type="string"><param name="pattern">[A-Za-z][A-Za-z0-9_\-]*</param></data>
-        </attribute>
+        <attribute name="ezxhtml:class"><text/></attribute>
       </optional>
     </define>
   </div>
