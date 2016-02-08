@@ -17,6 +17,8 @@ class RoleTest extends RESTFunctionalTestCase
     /**
      * @covers POST /user/roles
      *
+     * BC compatible mode, will return a role
+     *
      * @return string The created role href
      */
     public function testCreateRole()
@@ -34,12 +36,7 @@ class RoleTest extends RESTFunctionalTestCase
   </descriptions>
 </RoleInput>
 XML;
-        $request = $this->createHttpRequest(
-            'POST',
-            '/api/ezp/v2/user/roles?publish=true',
-            'RoleInput+xml',
-            'Role+json'
-        );
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/roles', 'RoleInput+xml', 'Role+json');
         $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 
@@ -50,6 +47,46 @@ XML;
         $this->addCreatedElement($href);
 
         return $href;
+    }
+
+    /**
+     * @covers POST /user/roles
+     *
+     * BC incompatible mode, will return a role draft
+     *
+     * @return string The created role draft href
+     */
+    public function testCreateRoleWithDraft()
+    {
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<RoleInput>
+  <identifier>testCreateRoleDraft</identifier>
+  <mainLanguageCode>eng-GB</mainLanguageCode>
+  <names>
+    <value languageCode="eng-GB">testCreateRoleDraft</value>
+  </names>
+  <descriptions>
+    <value languageCode="eng-GB">testCreateRoleDraft description</value>
+  </descriptions>
+</RoleInput>
+XML;
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/user/roles?publish=false',
+            'RoleInput+xml',
+            'RoleDraft+json'
+        );
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
+
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
+        return $href . '/draft';
     }
 
     /**
@@ -79,11 +116,77 @@ XML;
 
     /**
      * @depends testCreateRole
+     * @covers POST /user/roles/{roleId}
+     *
+     * @return string The created role draft href
+     */
+    public function testCreateRoleDraft($roleHref)
+    {
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<RoleInput>
+  <identifier>testCreateRoleDraft</identifier>
+  <mainLanguageCode>eng-GB</mainLanguageCode>
+  <names>
+    <value languageCode="eng-GB">testCreateRoleDraft</value>
+  </names>
+  <descriptions>
+    <value languageCode="eng-GB">testCreateRoleDraft description</value>
+  </descriptions>
+</RoleInput>
+XML;
+        $request = $this->createHttpRequest(
+            'POST',
+            $roleHref,
+            'RoleInput+xml',
+            'RoleDraft+json'
+        );
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
+
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
+        return $href . '/draft';
+    }
+
+    /**
+     * @depends testCreateRoleDraft
+     * @covers GET /user/roles/{roleId}/draft
+     */
+    public function testLoadRoleDraft($roleDraftHref)
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', $roleDraftHref)
+        );
+
+        self::assertHttpResponseCodeEquals($response, 200);
+    }
+
+    /**
+     * @depends testCreateRole
+     * @covers GET /user/roles/{roleId}/draftByRoleId
+     */
+    public function testLoadRoleDraftByRoleId($roleHref)
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', $roleHref)
+        );
+
+        self::assertHttpResponseCodeEquals($response, 200);
+    }
+
+    /**
+     * @depends testCreateRole
      * @covers PATCH /user/roles/{roleId}
      */
     public function testUpdateRole($roleHref)
     {
         $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
 <RoleInput>
   <identifier>testUpdateRole</identifier>
   <mainLanguageCode>eng-GB</mainLanguageCode>
@@ -101,6 +204,33 @@ XML;
         $response = $this->sendHttpRequest($request);
 
         // @todo Fix failure Notice: Trying to get property of non-object in \/home\/bertrand\/www\/ezpublish-kernel\/eZ\/Publish\/Core\/Persistence\/Cache\/UserHandler.php line 174
+        self::assertHttpResponseCodeEquals($response, 200);
+    }
+
+    /**
+     * @depends testCreateRoleDraft
+     * @covers PATCH /user/roles/{roleId}/draft
+     */
+    public function testUpdateRoleDraft($roleDraftHref)
+    {
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<RoleInput>
+  <identifier>testUpdateRoleDraft</identifier>
+  <mainLanguageCode>eng-GB</mainLanguageCode>
+  <names>
+    <value languageCode="eng-GB">testUpdateRoleDraft</value>
+  </names>
+  <descriptions>
+    <value languageCode="eng-GB">testUpdateRoleDraft description</value>
+  </descriptions>
+</RoleInput>
+XML;
+
+        $request = $this->createHttpRequest('PATCH', $roleDraftHref, 'RoleInput+xml', 'RoleDraft+json');
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
@@ -128,6 +258,46 @@ XML;
 </PolicyCreate>
 XML;
         $request = $this->createHttpRequest('POST', "$roleHref/policies", 'PolicyCreate+xml', 'Policy+json');
+        $request->setContent($xml);
+
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
+
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
+        return $href;
+    }
+
+    /**
+     * @covers POST /user/roles/{roleId}/policiesByRoleDraft
+     * @depends testCreateRoleDraft
+     *
+     * @return string The created policy href
+     */
+    public function testAddPolicyByRoleDraft($roleDraftHref)
+    {
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<PolicyCreate>
+  <module>content</module>
+  <function>create</function>
+  <limitations>
+    <limitation identifier="Class">
+      <values>
+        <ref href="1"/>
+      </values>
+    </limitation>
+  </limitations>
+</PolicyCreate>
+XML;
+        $request = $this->createHttpRequest(
+            'POST',
+            $this->roleDraftHrefToRoleHref($roleDraftHref) . '/policiesByRoleDraft',
+            'PolicyCreate+xml',
+            'Policy+json'
+        );
         $request->setContent($xml);
 
         $response = $this->sendHttpRequest($request);
@@ -186,6 +356,37 @@ XML;
 XML;
 
         $request = $this->createHttpRequest('PATCH', $policyHref, 'PolicyUpdate+xml', 'Policy+json');
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 200);
+    }
+
+    /**
+     * @covers PATCH /user/roles/{roleId}/policiesByRoleDraft/{policyId}
+     * @depends testAddPolicyByRoleDraft
+     */
+    public function testUpdatePolicyByRoleDraft($policyHref)
+    {
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<PolicyUpdate>
+  <limitations>
+    <limitation identifier="Class">
+      <values>
+        <ref href="1"/>
+      </values>
+    </limitation>
+  </limitations>
+</PolicyUpdate>
+XML;
+
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $this->policyHrefToPolicyDraftHref($policyHref),
+            'PolicyUpdate+xml',
+            'Policy+json'
+        );
         $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 
@@ -372,6 +573,19 @@ XML;
     }
 
     /**
+     * @covers DELETE /user/roles/{roleId}/policiesByRoleDraft/{policyId}
+     * @depends testAddPolicyByRoleDraft
+     */
+    public function testRemovePolicyByRoleDraft($policyHref)
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('DELETE', $this->policyHrefToPolicyDraftHref($policyHref))
+        );
+
+        self::assertHttpResponseCodeEquals($response, 204);
+    }
+
+    /**
      * @covers DELETE /user/roles/{roleId}/policies
      * @depends testCreateRole
      */
@@ -395,5 +609,58 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 204);
+    }
+
+    /**
+     * @covers PUBLISH /user/roles/{roleId}/draft
+     * @depends testCreateRoleDraft
+     */
+    public function testPublishRoleDraft($roleDraftHref)
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('PUBLISH', $roleDraftHref)
+        );
+
+        self::assertHttpResponseCodeEquals($response, 201);
+    }
+
+    /**
+     * @covers DELETE /user/roles/{roleId}/draft
+     * @depends testCreateRoleDraft
+     */
+    public function testDeleteRoleDraft($roleDraftHref)
+    {
+        // we need to create a role draft first since we published the previous one in testPublishRoleDraft
+        $roleHref = $this->testCreateRoleDraft($this->roleDraftHrefToRoleHref($roleDraftHref));
+
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('DELETE', $roleHref)
+        );
+
+        self::assertHttpResponseCodeEquals($response, 204);
+    }
+
+    /**
+     * Helper method for changing a roledraft href to a role href.
+     *
+     * @param string $roleDraftHref Role draft href
+     *
+     * @return string Role href
+     */
+    private function roleDraftHrefToRoleHref($roleDraftHref)
+    {
+        return str_replace('/draft', '', $roleDraftHref);
+    }
+
+    /**
+     * Helper method for changing a policy href to a policy by role draft href.
+     *
+     * @param string $policyHref Policy href
+     *
+     * @return string Policy by role draft href
+     */
+    private function policyHrefToPolicyDraftHref($policyHref)
+    {
+        return str_replace('/policies/', '/policiesByRoleDraft/', $policyHref);
     }
 }
