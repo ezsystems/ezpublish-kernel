@@ -697,7 +697,7 @@ class DoctrineDatabase extends Gateway
             $q->bindValue($value->sortKeyInt, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('sort_key_string'),
-            $q->bindValue($value->sortKeyString)
+            $q->bindValue(mb_substr($value->sortKeyString, 0, 255))
         )->set(
             $this->dbHandler->quoteColumn('language_id'),
             $q->bindValue(
@@ -778,7 +778,7 @@ class DoctrineDatabase extends Gateway
             $q->bindValue($value->sortKeyInt, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('sort_key_string'),
-            $q->bindValue($value->sortKeyString)
+            $q->bindValue(mb_substr($value->sortKeyString, 0, 255))
         );
     }
 
