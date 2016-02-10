@@ -51,6 +51,7 @@ matrix:
 branches:
   only:
     - master
+    - "6.1"
 
 # setup requirements for running unit/integration/behat tests
 before_script:
