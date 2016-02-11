@@ -1,6 +1,8 @@
-==========================
-eZ Publish REST API V2 RFC
-==========================
+=======================
+eZ Platform REST API V2
+=======================
+
+*This document was previously called "eZ Publish REST API V2" given this version of the REST API first was introduced with eZ Publish Platform 5.0.*
 
 .. contents:: Table of Contents
 
