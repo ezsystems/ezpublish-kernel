@@ -43,6 +43,22 @@ class DocbookTest extends PHPUnit_Framework_TestCase
                     'ezlink must not occur in the descendants of link',
                 ),
             ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para ezxhtml:class="listening loud indie rock">Nada Surf - Happy Kid</para>
+</section>
+',
+                array(),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para ezxhtml:class="">Nada Surf - Happy Kid</para>
+</section>
+',
+                array(),
+            ),
         );
     }
 
