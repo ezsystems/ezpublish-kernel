@@ -22,7 +22,7 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      * Params that are always returned by this view.
      * @var array
      */
-    private $valueParams = ['location' => null, 'content' => null];
+    private $valueParams = ['content' => null];
 
     /**
      * @dataProvider constructProvider
