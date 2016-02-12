@@ -66,8 +66,10 @@ class Configuration extends SiteAccessConfiguration
                     ->example(
                         array(
                             'main' => array(
-                                'engine' => 'legacy',
-                                'connection' => 'my_doctrine_connection_name',
+                                'storage' => array(
+                                    'engine' => 'legacy',
+                                    'connection' => 'my_doctrine_connection_name',
+                                ),
                             ),
                         )
                     )
