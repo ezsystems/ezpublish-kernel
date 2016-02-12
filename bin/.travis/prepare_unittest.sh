@@ -12,10 +12,29 @@ if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE $DB_NAME;" -U postgr
 echo "> Setup github auth key to not reach api limit"
 cp bin/.travis/composer-auth.json ~/.composer/auth.json
 
-# Switch to another Symfony version if asked for (with composer update to not use composer.lock if present)
+COMPOSER_UPDATE=""
+
+# solr package search API integration tests
+if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
+    echo "> Require ezsystems/ezplatform-solr-search-engine:dev-master"
+    composer require --no-update ezsystems/ezplatform-solr-search-engine:dev-master
+    COMPOSER_UPDATE="true"
+
+    # required to satisfy the requirements of ezsystems/ezplatform-solr-search-engine:dev-master
+    # (so that composer resolves ezpublish-kernel's self.version)
+    git checkout -b 6.1
+fi
+
+# Switch to another Symfony version if asked for
 if [ "$SYMFONY_VERSION" != "" ] ; then
-    echo "> Install dependencies through Composer (with custom Symfony version: ${SYMFONY_VERSION})"
+    echo "> Update symfony/symfony requirement to ${SYMFONY_VERSION}"
     composer require --no-update symfony/symfony="${SYMFONY_VERSION}"
+    COMPOSER_UPDATE="true"
+fi
+
+# Install packages with composer update if asked for to make sure not use composer.lock if present
+if [ "$COMPOSER_UPDATE" = "true" ] ; then
+    echo "> Install dependencies through Composer (using update as other packages was requested)"
     composer update --no-progress --no-interaction --prefer-dist
 else
     echo "> Install dependencies through Composer"
@@ -24,7 +43,4 @@ fi
 
 # Setup Solr / Elastic search if asked for
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
-if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
-    composer require -v --no-progress --no-interaction ezsystems/ezplatform-solr-search-engine:dev-master
-    ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh
-fi
+if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh; fi
