@@ -93,6 +93,8 @@ class FieldNameResolver
      * $name specific field type and field from its Indexable implementation
      * can be targeted.
      *
+     * @deprecated since 6.2, use getFieldTypes instead
+     *
      * @see \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface
      * @see \eZ\Publish\SPI\FieldType\Indexable
      *
@@ -109,8 +111,37 @@ class FieldNameResolver
         $fieldTypeIdentifier = null,
         $name = null
     ) {
+        $fieldTypeNameMap = $this->getFieldTypes($criterion, $fieldDefinitionIdentifier, $fieldTypeIdentifier, $name);
+
+        return array_keys($fieldTypeNameMap);
+    }
+
+    /**
+     * For the given parameters returns a set of search backend field names/types to search on.
+     *
+     * The method will check for custom fields if given $criterion implements
+     * CustomFieldInterface. With optional parameters $fieldTypeIdentifier and
+     * $name specific field type and field from its Indexable implementation
+     * can be targeted.
+     *
+     * @see \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface
+     * @see \eZ\Publish\SPI\FieldType\Indexable
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param string $fieldDefinitionIdentifier
+     * @param null|string $fieldTypeIdentifier
+     * @param null|string $name
+     *
+     * @return array
+     */
+    public function getFieldTypes(
+        Criterion $criterion,
+        $fieldDefinitionIdentifier,
+        $fieldTypeIdentifier = null,
+        $name = null
+    ) {
         $fieldMap = $this->getSearchableFieldMap();
-        $fieldNames = [];
+        $fieldTypeNameMap = [];
 
         foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
             // First check if field exists in the current ContentType, there is nothing to do if it doesn't
@@ -126,7 +157,7 @@ class FieldNameResolver
                 continue;
             }
 
-            $fieldNames[] = $this->getIndexFieldName(
+            $fieldName = $this->getIndexFieldName(
                 $criterion,
                 $contentTypeIdentifier,
                 $fieldDefinitionIdentifier,
@@ -134,9 +165,13 @@ class FieldNameResolver
                 $name,
                 false
             );
+            $fieldType = $this->fieldRegistry->getType(
+                $fieldIdentifierMap[$fieldDefinitionIdentifier]['field_type_identifier']
+            );
+            $fieldTypeNameMap[$fieldName] = $fieldType;
         }
 
-        return $fieldNames;
+        return $fieldTypeNameMap;
     }
 
     /**
