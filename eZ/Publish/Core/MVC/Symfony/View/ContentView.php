@@ -87,7 +87,12 @@ class ContentView extends BaseView implements View, ContentValueView, LocationVa
 
     protected function getInternalParameters()
     {
-        return ['location' => $this->location, 'content' => $this->content];
+        $parameters = ['content' => $this->content];
+        if ($this->location !== null) {
+            $parameters['location'] = $this->location;
+        }
+
+        return $parameters;
     }
 
     /**

@@ -141,7 +141,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
             ->method('render')
             ->with(
                 $templateIdentifier,
-                $params + array('content' => $content, 'location' => null, 'viewbaseLayout' => $this->viewBaseLayout))
+                $params + array('content' => $content, 'viewbaseLayout' => $this->viewBaseLayout))
             ->will($this->returnValue($expectedTemplateResult));
 
         self::assertSame($expectedTemplateResult, $this->viewManager->renderContent($content, 'customViewType', $params));
@@ -171,7 +171,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
 
         // Configuring template engine behaviour
         $params += array('content' => $content, 'viewbaseLayout' => $this->viewBaseLayout);
-        $expectedTemplateResult = array_keys($params + ['location' => null]);
+        $expectedTemplateResult = array_keys($params);
         $this->templateEngineMock
             ->expects($this->never())
             ->method('render');
