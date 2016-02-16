@@ -1,18 +1,17 @@
 <?php
 /**
- * File containing the MinkTrait
+ * File containing the MinkTrait.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
-
 namespace EzSystems\PlatformBehatBundle\Context\Browser;
 
 use Behat\Mink\Mink;
 
 /**
- * This makes possible for (mink) contexts to extend other classes than (Raw)MinkContext
+ * This makes possible for (mink) contexts to extend other classes than (Raw)MinkContext.
  */
 trait MinkTrait
 {
@@ -31,7 +30,7 @@ trait MinkTrait
      *
      * @param Mink $mink Mink session manager
      */
-    public function setMink( Mink $mink )
+    public function setMink(Mink $mink)
     {
         $this->mink = $mink;
     }
@@ -61,7 +60,7 @@ trait MinkTrait
      *
      * @param array $parameters
      */
-    public function setMinkParameters( array $parameters )
+    public function setMinkParameters(array $parameters)
     {
         $this->minkParameters = $parameters;
     }
@@ -73,9 +72,9 @@ trait MinkTrait
      *
      * @return mixed
      */
-    public function getMinkParameter( $name )
+    public function getMinkParameter($name)
     {
-        return isset( $this->minkParameters[$name] ) ? $this->minkParameters[$name] : null;
+        return isset($this->minkParameters[$name]) ? $this->minkParameters[$name] : null;
     }
 
     /**
@@ -85,7 +84,7 @@ trait MinkTrait
      * @param string $name  The key of the parameter
      * @param string $value The value of the parameter
      */
-    public function setMinkParameter( $name, $value )
+    public function setMinkParameter($name, $value)
     {
         $this->minkParameters[$name] = $value;
     }
@@ -97,9 +96,9 @@ trait MinkTrait
      *
      * @return Session
      */
-    public function getSession( $name = null )
+    public function getSession($name = null)
     {
-        return $this->getMink()->getSession( $name );
+        return $this->getMink()->getSession($name);
     }
 
     /**
@@ -109,9 +108,9 @@ trait MinkTrait
      *
      * @return WebAssert
      */
-    public function assertSession( $name = null )
+    public function assertSession($name = null)
     {
-        return $this->getMink()->assertSession( $name );
+        return $this->getMink()->assertSession($name);
     }
 
     /**
@@ -122,11 +121,11 @@ trait MinkTrait
      *
      * @return string
      */
-    public function locatePath( $path )
+    public function locatePath($path)
     {
-        $startUrl = rtrim( $this->getMinkParameter( 'base_url' ), '/' ) . '/';
+        $startUrl = rtrim($this->getMinkParameter('base_url'), '/') . '/';
 
-        return 0 !== strpos( $path, 'http' ) ? $startUrl . ltrim( $path, '/' ) : $path;
+        return 0 !== strpos($path, 'http') ? $startUrl . ltrim($path, '/') : $path;
     }
 
     /**
@@ -137,12 +136,19 @@ trait MinkTrait
      * @param string $filepath Desired filepath, defaults to
      *                         upload_tmp_dir, falls back to sys_get_temp_dir()
      */
-    public function saveScreenshot( $filename = null, $filepath = null )
+    public function saveScreenshot($filename = null, $filepath = null)
     {
         // Under Cygwin, uniqid with more_entropy must be set to true.
         // No effect in other environments.
-        $filename = $filename ?: sprintf( '%s_%s_%s.%s', $this->getMinkParameter( 'browser_name' ), date( 'c' ), uniqid( '', true ), 'png' );
-        $filepath = $filepath ? $filepath : ( ini_get( 'upload_tmp_dir' ) ? ini_get( 'upload_tmp_dir' ) : sys_get_temp_dir() );
-        file_put_contents( $filepath . '/' . $filename, $this->getSession()->getScreenshot() );
+        $filename = $filename ?: sprintf(
+            '%s_%s_%s.%s',
+            $this->getMinkParameter('browser_name'),
+            date('c'),
+            uniqid('', true),
+            'png'
+        );
+        $filepath = $filepath ? $filepath :
+            (ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir());
+        file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
     }
 }

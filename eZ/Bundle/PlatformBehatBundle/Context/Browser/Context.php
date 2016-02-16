@@ -6,17 +6,15 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
-
 namespace EzSystems\PlatformBehatBundle\Context\Browser;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkAwareContext;
-use EzSystems\PlatformBehatBundle\Context\Browser\SubContext;
 use EzSystems\BehatBundle\Helper\Xpath;
 use PHPUnit_Framework_Assert as Assertion;
 
 /**
- * Context has wide (generic) browser helper methods and classes
+ * Context has wide (generic) browser helper methods and classes.
  */
 class Context implements MinkAwareContext
 {
@@ -33,9 +31,8 @@ class Context implements MinkAwareContext
      * @var array Array to map identifier to urls, should be set by child classes.
      *
      * Important:
-     *  this is an associative array( ex: array( 'key' => '/some/url') ) they keys
-     *  should be set (on contexts) as lower cases since the
-     *  FeatureContext::getPathByPageIdentifier() will check for lower case
+     *  this is an associative array( ex: array( 'key' => '/some/url') ) the keys
+     *  should be set on contexts(case insensitive)
      */
     public $pageIdentifierMap = array();
 
@@ -64,24 +61,24 @@ class Context implements MinkAwareContext
     public function prepareHelpers()
     {
         // initialize Helpers
-        $this->xpath = new Xpath( $this->getSession() );
+        $this->xpath = new Xpath($this->getSession());
     }
 
     /**
-     * Initialize with generic information
+     * Initialize with generic information.
      */
     public function __construct()
     {
         // add home to the page identifiers
         $this->pageIdentifierMap += array(
-            'home'   => '/',
-            'login'  => '/login',
-            'logout' => '/logout'
+            'home' => '/',
+            'login' => '/login',
+            'logout' => '/logout',
         );
     }
 
     /**
-     * Getter for Xpath
+     * Getter for Xpath.
      *
      * @return \EzSystems\BehatBundle\Helper\Xpath
      */
@@ -91,7 +88,7 @@ class Context implements MinkAwareContext
     }
 
     /**
-     * Returns the path associated with $pageIdentifier
+     * Returns the path associated with $pageIdentifier.
      *
      * @param string $pageIdentifier
      *
@@ -99,35 +96,32 @@ class Context implements MinkAwareContext
      *
      * @throws \RuntimeException If $pageIdentifier is not set
      */
-    public function getPathByPageIdentifier( $pageIdentifier )
+    public function getPathByPageIdentifier($pageIdentifier)
     {
-        if ( !isset( $this->pageIdentifierMap[strtolower( $pageIdentifier )] ) )
-        {
-            throw new \RuntimeException( "Unknown page identifier '{$pageIdentifier}'." );
+        if (!isset($this->pageIdentifierMap[strtolower($pageIdentifier)])) {
+            throw new \RuntimeException("Unknown page identifier '{$pageIdentifier}'.");
         }
 
-        return $this->pageIdentifierMap[strtolower( $pageIdentifier )];
+        return $this->pageIdentifierMap[strtolower($pageIdentifier)];
     }
 
     /**
      * This should be seen as a complement to self::getTagsFor() where it will
      * get the respective tags from there and will make a valid Xpath string with
-     * all OR's needed
+     * all OR's needed.
      *
      * @param array  $tags  Array of tags strings (ex: array( "a", "p", "h3", "table" ) )
      * @param string $xpath String to be concatenated to each tag
      *
      * @return string Final xpath
      */
-    public function concatTagsWithXpath( array $tags, $xpath = null )
+    public function concatTagsWithXpath(array $tags, $xpath = null)
     {
-        $finalXpath = "";
-        for ( $i = 0; !empty( $tags[$i] ); $i++ )
-        {
+        $finalXpath = '';
+        for ($i = 0; !empty($tags[$i]); ++$i) {
             $finalXpath .= "//{$tags[$i]}$xpath";
-            if ( !empty( $tags[$i + 1] ) )
-            {
-                $finalXpath .= " | ";
+            if (!empty($tags[$i + 1])) {
+                $finalXpath .= ' | ';
             }
         }
 
@@ -136,7 +130,7 @@ class Context implements MinkAwareContext
 
     /**
      * With this function we get a centralized way to define what are the possible
-     * tags for a type of data
+     * tags for a type of data.
      *
      * @param string $type Type of text (ie: if header/title, or list element, ...)
      *
@@ -144,35 +138,33 @@ class Context implements MinkAwareContext
      *
      * @throws \Behat\Behat\Exception\InvalidArgumentException If the $type isn't defined
      */
-    public function getTagsFor( $type )
+    public function getTagsFor($type)
     {
-        switch ( strtolower( $type ) )
-        {
-            case "topic":
-            case "header":
-            case "title":
-                return array( "h1", "h2", "h3" );
-            case "list":
-                return array( "li" );
-            case "input":
-                return array( "input", "select", "textarea", );
+        switch (strtolower($type)) {
+            case 'topic':
+            case 'header':
+            case 'title':
+                return array('h1', 'h2', 'h3');
+            case 'list':
+                return array('li');
+            case 'input':
+                return array('input', 'select', 'textarea');
         }
 
-        throw new \InvalidArgumentException( "Tag's for '$type' type not defined" );
+        throw new \InvalidArgumentException("Tag's for '$type' type not defined");
     }
 
     /**
-     * Returns $url without its query string
+     * Returns $url without its query string.
      *
      * @param string $url
      *
      * @return string Complete url without the query string
      */
-    public function getUrlWithoutQueryString( $url )
+    public function getUrlWithoutQueryString($url)
     {
-        if ( strpos( $url, '?' ) !== false )
-        {
-            $url = substr( $url, 0, strpos( $url, '?' ) );
+        if (strpos($url, '?') !== false) {
+            $url = substr($url, 0, strpos($url, '?'));
         }
 
         return $url;
@@ -182,107 +174,99 @@ class Context implements MinkAwareContext
      * Checks if links exist and in the following order (if intended)
      * Notice: if there are 3 links and we omit the middle link it will also be
      *  correct. It only checks order, not if there should be anything in
-     *  between them
+     *  between them.
      *
      * @param array $links Array with link text/title
      * @param Behat\Mink\Element\NodeElement[] $available
-     * @param boolean $checkOrder Boolean to verify (or not) the link order
-     *
-     * @return void
+     * @param bool $checkOrder Boolean to verify (or not) the link order
      *
      * @throws \PHPUnit_Framework_AssertionFailedError
      */
-    protected function checkLinksExistence( array $links, array $available, $checkOrder = false )
+    protected function checkLinksExistence(array $links, array $available, $checkOrder = false)
     {
         $i = $passed = 0;
         $last = '';
         $messageAfter = '';
-        foreach ( $links as $link )
-        {
-            if ( ! $checkOrder )
-            {
+        foreach ($links as $link) {
+            if (!$checkOrder) {
                 $i = 0;
             }
 
             // find the object
-            while (
-                !empty( $available[$i] )
-                && strpos( $available[$i]->getText(), $link ) === false
-            )
-                $i++;
+            while (!empty($available[$i])
+                && strpos($available[$i]->getText(), $link) === false
+            ) {
+                ++$i;
+            }
 
-            if ( $checkOrder && ! empty( $last ) )
-            {
+            if ($checkOrder && !empty($last)) {
                 $messageAfter = "after '$last'";
             }
 
             // check if the link was found or the $i >= $count
             $test = true;
-            if ( empty( $available[$i] ) )
-            {
+            if (empty($available[$i])) {
                 $test = false;
             }
-            Assertion::assertTrue( $test, "Couldn't find '$link'" . $messageAfter );
+            Assertion::assertTrue($test, "Couldn't find '$link'" . $messageAfter);
 
-            $passed++;
+            ++$passed;
             $last = $link;
         }
 
         Assertion::assertEquals(
-            count( $links ),
+            count($links),
             $passed,
-            "Expected to evaluate '" . count( $links ) . "' links evaluated '{$passed}'"
+            "Expected to evaluate '" . count($links) . "' links evaluated '{$passed}'"
         );
     }
 
     /**
-     * Fetchs the first integer in the string
+     * Fetchs the first integer in the string.
      *
-     * @param string $string Text 
+     * @param string $string Text
      *
-     * @return int Integer found on text 
+     * @return int Integer found on text
      *
      * @throws \PHPUnit_Framework_AssertionFailedError
      */
-    public function getNumberFromString( $string )
+    public function getNumberFromString($string)
     {
-        preg_match( '/(?P<digit>\d+)/', $string, $result );
-        Assertion::assertNotEmpty( $result['digit'], "Expected to find a number in '$string' found none" );
+        preg_match('/(?P<digit>\d+)/', $string, $result);
+        Assertion::assertNotEmpty($result['digit'], "Expected to find a number in '$string' found none");
+
         return (int)$result['digit'];
     }
 
     /**
      * Verifies if a row as the expected columns, position of columns can be added
-     * for a more accurated assertion
+     * for a more accurated assertion.
      *
      * @param \Behat\Mink\Element\NodeElement $row Table row node element
      * @param string[] $columns Column text to assert
      * @param string[]|int[] $columnsPositions Columns positions in int or string (number must be in string)
      *
-     * @return boolean
+     * @return bool
      *
      * @throws \PHPUnit_Framework_AssertionFailedError
      */
-    public function existTableRow( NodeElement $row, array $columns, array $columnsPositions = null )
+    public function existTableRow(NodeElement $row, array $columns, array $columnsPositions = null)
     {
         // find which kind of column is in this row
-        $elType = $row->find( 'xpath', "/th" );
-        $type = ( empty( $elType ) ) ? '/td' : '/th';
+        $elType = $row->find('xpath', '/th');
+        $type = (empty($elType)) ? '/td' : '/th';
 
-        $max = count( $columns );
-        for ( $i = 0; $i < $max; $i++ )
-        {
-            $position = "";
-            if ( !empty( $columnsPositions[$i] ) )
-            {
-                $position = "[{$this->getNumberFromString( $columnsPositions[$i] )}]";
+        $max = count($columns);
+        for ($i = 0; $i < $max; ++$i) {
+            $position = '';
+            if (!empty($columnsPositions[$i])) {
+                $position = "[{$this->getNumberFromString($columnsPositions[$i])}]";
             }
 
-            $el = $row->find( "xpath", "$type$position" );
+            $el = $row->find('xpath', "$type$position");
 
             // check if match with expected if not return false
-            if ( $el === null || $columns[$i] !== $el->getText() )
-            {
+            if ($el === null || $columns[$i] !== $el->getText()) {
                 return false;
             }
         }
@@ -292,7 +276,7 @@ class Context implements MinkAwareContext
     }
 
     /**
-     * Find a(all) table row(s) that match the column text
+     * Find a(all) table row(s) that match the column text.
      *
      * @param string        $text       Text to be found
      * @param string|int    $column     In which column the text should be found
@@ -300,42 +284,34 @@ class Context implements MinkAwareContext
      *
      * @return \Behat\Mink\Element\NodeElement[]
      */
-    public function getTableRow( $text, $column = null, $tableXpath = null )
+    public function getTableRow($text, $column = null, $tableXpath = null)
     {
         // check column
-        if ( !empty( $column ) )
-        {
-            if ( is_integer( $column ) )
-            {
+        if (!empty($column)) {
+            if (is_integer($column)) {
                 $columnNumber = "[$column]";
+            } else {
+                $columnNumber = "[{$this->getNumberFromString($column)}]";
             }
-            else
-            {
-                $columnNumber = "[{$this->getNumberFromString( $column )}]";
-            }
-        }
-        else
-        {
-            $columnNumber = "";
+        } else {
+            $columnNumber = '';
         }
 
         // get all possible elements
         $elements = array_merge(
-            $this->getXpath()->findXpath( "$tableXpath//tr/th$columnNumber" ),
-            $this->getXpath()->findXpath( "$tableXpath//tr/td$columnNumber" )
+            $this->getXpath()->findXpath("$tableXpath//tr/th$columnNumber"),
+            $this->getXpath()->findXpath("$tableXpath//tr/td$columnNumber")
         );
 
         $foundXpath = array();
-        $total = count( $elements );
+        $total = count($elements);
         $i = 0;
-        while ( $i < $total )
-        {
-            if ( strpos( $elements[$i]->getText(), $text ) !== false )
-            {
+        while ($i < $total) {
+            if (strpos($elements[$i]->getText(), $text) !== false) {
                 $foundXpath[] = $elements[$i]->getParent();
             }
 
-            $i++;
+            ++$i;
         }
 
         return $foundXpath;
@@ -344,7 +320,7 @@ class Context implements MinkAwareContext
     /**
      * Find and return the row (<tr>) where the passed element is
      * This is useful when you intend to know if another element is in the same
-     * row
+     * row.
      *
      * @param \Behat\Mink\Element\NodeElement $element The element in the intended row
      *
@@ -352,21 +328,19 @@ class Context implements MinkAwareContext
      *
      * @throws \PHPUnit_Framework_AssertionFailedError
      */
-    public function findRow( NodeElement $element )
+    public function findRow(NodeElement $element)
     {
         $initialTag = $element->getTagName();
 
-        while (
-            strtolower( $element->getTagName() ) !== "tr"
-            && strtolower( $element->getTagName() ) !== "body"
-        )
-        {
+        while (strtolower($element->getTagName()) !== 'tr'
+            && strtolower($element->getTagName()) !== 'body'
+        ) {
             $element = $element->getParent();
         }
 
         Assertion::assertEquals(
-            strtolower( $element->getTagName() ),
-            "tr",
+            strtolower($element->getTagName()),
+            'tr',
             "Couldn't find a parent of '$initialTag' that is a table row"
         );
 
@@ -375,7 +349,7 @@ class Context implements MinkAwareContext
 
     /**
      * In a list of elements returns a certain element (found through xpath) that
-     * is after a specific element (that is also found through xpath)
+     * is after a specific element (that is also found through xpath).
      *
      * <code>
      * findElementAfterElement(
@@ -391,33 +365,25 @@ class Context implements MinkAwareContext
      *
      * @return \Behat\Mink\Element\NodeElement|null Element if found null otherwise
      */
-    public function findElementAfterElement( array $elements, $firstXpath, $secondXpath )
+    public function findElementAfterElement(array $elements, $firstXpath, $secondXpath)
     {
         $foundFirstXpath = false;
-        foreach ( $elements as $element )
-        {
+        foreach ($elements as $element) {
             // choose what xpath to use
-            if ( ! $foundFirstXpath )
-            {
+            if (!$foundFirstXpath) {
                 $xpath = $firstXpath;
-            }
-            else
-            {
+            } else {
                 $xpath = $secondXpath;
             }
 
-            $foundElement = $element->find( "xpath", $xpath );
+            $foundElement = $element->find('xpath', $xpath);
 
             // element found, if first start to look for the second one
             // if second, than return this one
-            if ( !empty( $foundElement) )
-            {
-                if ( !$foundFirstXpath )
-                {
+            if (!empty($foundElement)) {
+                if (!$foundFirstXpath) {
                     $foundFirstXpath = true;
-                }
-                else
-                {
+                } else {
                     return $foundElement;
                 }
             }
@@ -427,28 +393,26 @@ class Context implements MinkAwareContext
     }
 
     /**
-     * Verifies if the element has 'special' configuration on a attribute (default -> style)
+     * Verifies if the element has 'special' configuration on a attribute (default -> style).
      *
      * @param \Behat\Mink\Element\NodeElement $el The element that we want to test
      * @param string $characteristic Verify a specific characteristic from attribute
      * @param string $attribute Verify a specific attribute
      *
-     * @return boolean
+     * @return bool
      */
-    public function isElementEmphasized( NodeElement $el, $characteristic = null, $attribute = "style" )
+    public function isElementEmphasized(NodeElement $el, $characteristic = null, $attribute = 'style')
     {
         // verify it has the attribute we're looking for
-        if ( !$el->hasAttribute( $attribute ) )
-        {
+        if (!$el->hasAttribute($attribute)) {
             return false;
         }
 
         // get the attribute
-        $attr = $el->getAttribute( $attribute );
+        $attr = $el->getAttribute($attribute);
 
         // check if want to test specific characteristic and if it is present
-        if ( !empty( $characteristic ) && strpos( $attr, $characteristic ) === false )
-        {
+        if (!empty($characteristic) && strpos($attr, $characteristic) === false) {
             return false;
         }
 
@@ -457,76 +421,64 @@ class Context implements MinkAwareContext
     }
 
     /**
-     * This method works is a complement to the $mainAttributes var
+     * This method works is a complement to the $mainAttributes var.
      *
      * @param  string $block This should be an identifier for the block to use
      *
-     * @return null|string XPath for the 
+     * @return null|string XPath for the block
      *
      * @see $this->mainAttributes
      */
-    public function makeXpathForBlock( $block = null )
+    public function makeXpathForBlock($block = null)
     {
-        if ( empty( $block ) )
-        {
+        if (empty($block)) {
             return null;
         }
 
-        $parameter = ( isset( $this->mainAttributes[strtolower( $block )] ) ) ?
-            $this->mainAttributes[strtolower( $block )] :
-            NULL;
+        $parameter = (isset($this->mainAttributes[strtolower($block)])) ?
+            $this->mainAttributes[strtolower($block)] :
+            null;
 
-        Assertion::assertNotNull( $parameter, "Element {$block} is not defined" );
+        Assertion::assertNotNull($parameter, "Element {$block} is not defined");
 
-        $xpath = $this->mainAttributes[strtolower( $block )];
+        $xpath = $this->mainAttributes[strtolower($block)];
         // check if value is a composed array
-        if ( is_array( $xpath ) )
-        {
+        if (is_array($xpath)) {
             // if there is an xpath defined look no more!
-            if ( isset( $xpath['xpath'] ) )
-            {
+            if (isset($xpath['xpath'])) {
                 return $xpath['xpath'];
             }
 
-            $nuXpath = "";
+            $nuXpath = '';
             // verify if there is a tag
-            if ( isset( $xpath['tag'] ) )
-            {
-                if ( strpos( $xpath['tag'], "/" ) === 0 || strpos( $xpath['tag'], "(" ) === 0 )
-                {
+            if (isset($xpath['tag'])) {
+                if (strpos($xpath['tag'], '/') === 0 || strpos($xpath['tag'], '(') === 0) {
                     $nuXpath = $xpath['tag'];
-                }
-                else
-                {
-                    $nuXpath = "//" . $xpath['tag'];
+                } else {
+                    $nuXpath = '//' . $xpath['tag'];
                 }
 
-                unset( $xpath['tag'] );
-            }
-            else
-            {
-                $nuXpath = "//*";
+                unset($xpath['tag']);
+            } else {
+                $nuXpath = '//*';
             }
 
-            foreach ( $xpath as $key => $value )
-            {
-                switch ( $key )
-                {
-                    case "text":
-                        $att = "text()";
+            foreach ($xpath as $key => $value) {
+                switch ($key) {
+                    case 'text':
+                        $att = 'text()';
                         break;
                     default:
                         $att = "@$key";
                 }
-                $nuXpath .= "[contains($att, {$this->getXpath()->literal( $value )})]";
+                $nuXpath .= "[contains($att, {$this->getXpath()->literal($value)})]";
             }
 
             return $nuXpath;
         }
 
         //  if the string is an Xpath
-        if ( strpos( $xpath, "/" ) === 0 || strpos( $xpath, "(" ) === 0 )
-        {
+        if (strpos($xpath, '/') === 0 || strpos($xpath, '(') === 0) {
             return $xpath;
         }
 

@@ -9,7 +9,7 @@
 namespace EzSystems\PlatformBehatBundle\Context\Browser\SubContext;
 
 /**
- * Authentication methods
+ * Authentication methods.
  */
 trait Authentication
 {
@@ -19,16 +19,13 @@ trait Authentication
      *
      * Logs in a (new) user with the role identified by ':role' assigned.
      */
-    public function iAmLoggedInAsAn( $role )
+    public function iAmLoggedInAsAn($role)
     {
-        if ( $role == 'Anonymous' )
-        {
+        if ($role == 'Anonymous') {
             $this->iAmNotLoggedIn();
-        }
-        else
-        {
-            $credentials = $this->getCredentialsFor( $role );
-            $this->iAmLoggedInAsWithPassword( $credentials['login'], $credentials['password'] );
+        } else {
+            $credentials = $this->getCredentialsFor($role);
+            $this->iAmLoggedInAsWithPassword($credentials['login'], $credentials['password']);
         }
     }
 
@@ -38,13 +35,13 @@ trait Authentication
      * Performs the login action with username ':user' and password ':password'.
      * Checks that the resulting page is the homepage.
      */
-    public function iAmLoggedInAsWithPassword( $user, $password )
+    public function iAmLoggedInAsWithPassword($user, $password)
     {
-        $this->iAmOnPage( 'login' );
-        $this->fillFieldWithValue( 'Username', $user );
-        $this->fillFieldWithValue( 'Password', $password );
-        $this->iClickAtButton( 'Login' );
-        $this->iShouldBeOnPage( 'home' );
+        $this->iAmOnPage('login');
+        $this->fillFieldWithValue('Username', $user);
+        $this->fillFieldWithValue('Password', $password);
+        $this->iClickAtButton('Login');
+        $this->iShouldBeOnPage('home');
     }
 
     /**
@@ -55,7 +52,7 @@ trait Authentication
      */
     public function iAmNotLoggedIn()
     {
-        $this->iAmOnPage( 'logout' );
-        $this->iShouldBeOnPage( 'home' );
+        $this->iAmOnPage('logout');
+        $this->iShouldBeOnPage('home');
     }
 }
