@@ -983,34 +983,13 @@ class User extends RestController
         $request->attributes->set('password', $sessionInput->password);
 
         try {
-            $csrfToken = '';
             $csrfTokenManager = $this->container->get('security.csrf.token_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE);
             $session = $request->getSession();
-            if ($session->isStarted()) {
-                if ($csrfTokenManager) {
-                    $csrfToken = $request->headers->get('X-CSRF-Token');
-                    if (
-                        !$csrfTokenManager->isTokenValid(
-                            new CsrfToken(
-                                $this->container->getParameter('ezpublish_rest.csrf_token_intention'),
-                                $csrfToken
-                            )
-                        )
-                    ) {
-                        throw new UnauthorizedException('Missing or invalid CSRF token', $csrfToken);
-                    }
-                }
-            }
-
             $authenticator = $this->container->get('ezpublish_rest.session_authenticator');
             $token = $authenticator->authenticate($request);
-            // If CSRF token has not been generated yet (i.e. session not started), we generate it now.
-            // This will seamlessly start the session.
-            if (!$csrfToken) {
-                $csrfToken = $csrfTokenManager->getToken(
-                    $this->container->getParameter('ezpublish_rest.csrf_token_intention')
-                )->getValue();
-            }
+            $csrfToken = $csrfTokenManager->getToken(
+                $this->container->getParameter('ezpublish_rest.csrf_token_intention')
+            )->getValue();
 
             return new Values\UserSession(
                 $token->getUser()->getAPIUser(),
