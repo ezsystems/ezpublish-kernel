@@ -14,7 +14,6 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree;
 
 /**
  * Location subtree criterion handler.
@@ -30,7 +29,7 @@ class Subtree extends CriterionHandler
      */
     public function accept(Criterion $criterion)
     {
-        return ($criterion instanceof Criterion\Subtree || $criterion instanceof PermissionSubtree);
+        return $criterion instanceof Criterion\Subtree;
     }
 
     /**
