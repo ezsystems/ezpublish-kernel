@@ -3,7 +3,11 @@
 # File for setting up system for unit/integration testing
 
 # Disable xdebug to speed things up as we don't currently generate coverge on travis
-if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] ; then phpenv config-rm xdebug.ini ; fi
+# And make sure we use UTF-8 encoding
+if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] ; then
+    phpenv config-rm xdebug.ini
+    echo "default_charset = UTF-8" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+fi
 
 # Setup DB
 if [ "$DB" = "mysql" ] ; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
