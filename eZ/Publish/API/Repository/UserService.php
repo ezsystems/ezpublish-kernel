@@ -148,7 +148,7 @@ interface UserService
     /**
      * Loads a user for the given login and password.
      *
-     * Since 6.1 $login is handled case insensitive across all storage engines and database backends, however if login
+     * Since 6.1 login is case-insensitive across all storage engines and database backends, however if login
      * is part of the password hash this method will essentially be case sensitive.
      *
      * @param string $login
@@ -164,7 +164,7 @@ interface UserService
     /**
      * Loads a user for the given login.
      *
-     * Since 6.1 $login is handled case insensitive across all storage engines and database backends, like was the case
+     * Since 6.1 login is case-insensitive across all storage engines and database backends, like was the case
      * with mysql before in eZ Publish 3.x/4.x/5.x.
      *
      * @param string $login
@@ -178,7 +178,7 @@ interface UserService
     /**
      * Loads a user for the given email.
      *
-     * Note: This method loads user by $email where $email might be case insensitive on certain storage engines!
+     * Note: This method loads user by $email where $email might be case-insensitive on certain storage engines!
      *
      * Returns an array of Users since eZ Publish has under certain circumstances allowed
      * several users having same email in the past (by means of a configuration option).
