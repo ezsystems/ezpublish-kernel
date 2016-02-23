@@ -10,7 +10,7 @@ if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] ; then
 fi
 
 # Setup DB
-if [ "$DB" = "mysql" ] ; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
+if [ "$DB" = "mysql" ] ; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" -uroot ; fi
 if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
 
 echo "> Setup github auth key to not reach api limit"
