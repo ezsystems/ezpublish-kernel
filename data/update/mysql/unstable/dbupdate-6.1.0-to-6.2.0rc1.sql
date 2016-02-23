@@ -6,7 +6,7 @@ UPDATE ezsite_data SET value='6.2.0' WHERE name='ezpublish-version';
 -- EZP-19123: Make ezuser.login case in-sensitive across databases
 --
 
-ALTER TABLE ezuser ADD COLUMN login_normalized varchar(150) NOT NULL DEFAULT '';
+ALTER TABLE ezuser ADD COLUMN login_normalized varchar(150) NOT NULL DEFAULT '' AFTER login;
 UPDATE ezuser SET login_normalized=LOWER(login);
 
 -- Note: As part of EZP-19123, it was decided to not allow duplicate login with different case, this should not have
