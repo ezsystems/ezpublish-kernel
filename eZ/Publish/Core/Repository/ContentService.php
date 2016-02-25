@@ -1454,13 +1454,14 @@ class ContentService implements ContentServiceInterface
             throw new BadStateException('$versionInfo', 'Only versions in draft status can be published.');
         }
 
+        $currentTime = time();
         if ($publicationDate === null && $versionInfo->versionNo === 1) {
-            $publicationDate = time();
+            $publicationDate = $currentTime;
         }
 
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
         $metadataUpdateStruct->publicationDate = $publicationDate;
-        $metadataUpdateStruct->modificationDate = time();
+        $metadataUpdateStruct->modificationDate = $currentTime;
 
         $spiContent = $this->persistenceHandler->contentHandler()->publish(
             $versionInfo->getContentInfo()->id,
