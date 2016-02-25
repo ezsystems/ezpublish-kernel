@@ -74,11 +74,16 @@ class Role extends RestController
     /**
      * Create new role.
      *
+     * Defaults to publishing the role, but you can create a draft instead by setting the POST parameter publish=false
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedRole
      */
     public function createRole(Request $request)
     {
-        $publish = ($request->query->has('publish') && $request->query->get('publish') === 'true');
+        $publish = (
+            !$request->query->has('publish') ||
+            ($request->query->has('publish') && $request->query->get('publish') === 'true')
+        );
 
         try {
             $roleDraft = $this->roleService->createRole(
@@ -104,11 +109,47 @@ class Role extends RestController
         }
 
         if ($publish) {
+            @trigger_error(
+                "Create and publish role in the same operation is deprecated, and will be removed in the future.\n" .
+                'Instead, publish the role draft using Role::publishRoleDraft().',
+                E_USER_DEPRECATED
+            );
+
             $this->roleService->publishRoleDraft($roleDraft);
 
             $role = $this->roleService->loadRole($roleDraft->id);
 
             return new Values\CreatedRole(['role' => new Values\RestRole($role)]);
+        }
+
+        return new Values\CreatedRole(['role' => new Values\RestRole($roleDraft)]);
+    }
+
+    /**
+     * Creates a new RoleDraft for an existing Role.
+     *
+     * @since 6.2
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the Role already has a Role Draft that will need to be removed first,
+     *                                                                  or if the authenticated user is not allowed to create a role
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if a policy limitation in the $roleCreateStruct is not valid
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedRole
+     */
+    public function createRoleDraft($roleId, Request $request)
+    {
+        try {
+            $roleDraft = $this->roleService->createRoleDraft(
+                $this->roleService->loadRole($roleId)
+            );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
+        } catch (UnauthorizedException $e) {
+            throw new ForbiddenException($e->getMessage());
+        } catch (LimitationValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (Exceptions\Parser $e) {
+            throw new BadRequestException($e->getMessage());
         }
 
         return new Values\CreatedRole(['role' => new Values\RestRole($roleDraft)]);
@@ -244,7 +285,7 @@ class Role extends RestController
         $this->roleService->publishRoleDraft($roleDraft);
         $publishedRole = $this->roleService->loadRole($roleDraft->id);
 
-        return new Values\RestRole($publishedRole);
+        return new Values\CreatedRole(['role' => new Values\RestRole($publishedRole)]);
     }
 
     /**
@@ -258,6 +299,24 @@ class Role extends RestController
     {
         $this->roleService->deleteRole(
             $this->roleService->loadRole($roleId)
+        );
+
+        return new Values\NoContent();
+    }
+
+    /**
+     * Delete a role draft by ID.
+     *
+     * @since 6.2
+     *
+     * @param $roleId
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     */
+    public function deleteRoleDraft($roleId)
+    {
+        $this->roleService->deleteRoleDraft(
+            $this->roleService->loadRoleDraft($roleId)
         );
 
         return new Values\NoContent();
@@ -342,6 +401,59 @@ class Role extends RestController
             throw new BadRequestException($e->getMessage());
         }
 
+        return new Values\CreatedPolicy(
+            array(
+                'policy' => $this->getLastAddedPolicy($role),
+            )
+        );
+    }
+
+    /**
+     * Adds a policy to a role draft.
+     *
+     * @since 6.2
+     *
+     * @param $roleId
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedPolicy
+     */
+    public function addPolicyByRoleDraft($roleId, Request $request)
+    {
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
+            )
+        );
+
+        try {
+            $role = $this->roleService->addPolicyByRoleDraft(
+                $this->roleService->loadRoleDraft($roleId),
+                $createStruct
+            );
+        } catch (LimitationValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        }
+
+        return new Values\CreatedPolicy(
+            array(
+                'policy' => $this->getLastAddedPolicy($role),
+            )
+        );
+    }
+
+    /**
+     * Get the last added policy for $role.
+     *
+     * This is needed because the RoleService addPolicy() and addPolicyByRoleDraft() methods return the role,
+     * not the policy.
+     *
+     * @param $role \eZ\Publish\API\Repository\Values\User\Role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     */
+    private function getLastAddedPolicy($role)
+    {
         $policies = $role->getPolicies();
 
         $policyToReturn = $policies[0];
@@ -351,11 +463,7 @@ class Role extends RestController
             }
         }
 
-        return new Values\CreatedPolicy(
-            array(
-                'policy' => $policyToReturn,
-            )
-        );
+        return $policyToReturn;
     }
 
     /**
@@ -378,6 +486,44 @@ class Role extends RestController
         );
 
         $role = $this->roleService->loadRole($roleId);
+        foreach ($role->getPolicies() as $policy) {
+            if ($policy->id == $policyId) {
+                try {
+                    return $this->roleService->updatePolicy(
+                        $policy,
+                        $updateStruct
+                    );
+                } catch (LimitationValidationException $e) {
+                    throw new BadRequestException($e->getMessage());
+                }
+            }
+        }
+
+        throw new Exceptions\NotFoundException("Policy not found: '{$request->getPathInfo()}'.");
+    }
+
+    /**
+     * Updates a policy.
+     *
+     * @since 6.2
+     *
+     * @param $roleId
+     * @param $policyId
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     */
+    public function updatePolicyByRoleDraft($roleId, $policyId, Request $request)
+    {
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
+            )
+        );
+
+        $role = $this->roleService->loadRoleDraft($roleId);
         foreach ($role->getPolicies() as $policy) {
             if ($policy->id == $policyId) {
                 try {
@@ -418,6 +564,39 @@ class Role extends RestController
 
         if ($policy !== null) {
             $this->roleService->deletePolicy($policy);
+
+            return new Values\NoContent();
+        }
+
+        throw new Exceptions\NotFoundException("Policy not found: '{$request->getPathInfo()}'.");
+    }
+
+    /**
+     * Remove a policy from a role draft.
+     *
+     * @since 6.2
+     *
+     * @param $roleId
+     * @param $policyId
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     */
+    public function removePolicyByRoleDraft($roleId, $policyId, Request $request)
+    {
+        $roleDraft = $this->roleService->loadRoleDraft($roleId);
+
+        $policy = null;
+        foreach ($roleDraft->getPolicies() as $rolePolicy) {
+            if ($rolePolicy->id == $policyId) {
+                $policy = $rolePolicy;
+                break;
+            }
+        }
+
+        if ($policy !== null) {
+            $this->roleService->removePolicyByRoleDraft($roleDraft, $policy);
 
             return new Values\NoContent();
         }

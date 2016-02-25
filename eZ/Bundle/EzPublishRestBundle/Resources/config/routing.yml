@@ -746,6 +746,14 @@ ezpublish_rest_createRole:
     methods: [POST]
     requirements:
 
+ezpublish_rest_createRoleDraft:
+    path: /user/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:createRoleDraft
+    methods: [POST]
+    requirements:
+        roleId: \d+
+
 ezpublish_rest_loadRole:
     path: /user/roles/{roleId}
     defaults:
@@ -758,6 +766,14 @@ ezpublish_rest_loadRoleDraft:
     path: /user/roles/{roleId}/draft
     defaults:
         _controller: ezpublish_rest.controller.role:loadRoleDraft
+    methods: [GET]
+    requirements:
+        roleId: \d+
+
+ezpublish_rest_loadRoleDraftByRoleId:
+    path: /user/roles/{roleId}/draftByRoleId
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadRoleDraftByRoleId
     methods: [GET]
     requirements:
         roleId: \d+
@@ -794,6 +810,14 @@ ezpublish_rest_deleteRole:
     requirements:
         roleId: \d+
 
+ezpublish_rest_deleteRoleDraft:
+    path: /user/roles/{roleId}/draft
+    defaults:
+        _controller: ezpublish_rest.controller.role:deleteRoleDraft
+    methods: [DELETE]
+    requirements:
+        roleId: \d+
+
 ezpublish_rest_loadPolicies:
     path: /user/roles/{roleId}/policies
     defaults:
@@ -810,6 +834,14 @@ ezpublish_rest_addPolicy:
     requirements:
         roleId: \d+
 
+ezpublish_rest_addPolicyByRoleDraft:
+    path: /user/roles/{roleId}/policiesByRoleDraft
+    defaults:
+        _controller: ezpublish_rest.controller.role:addPolicyByRoleDraft
+    methods: [POST]
+    requirements:
+        roleId: \d+
+
 ezpublish_rest_deletePolicies:
     path: /user/roles/{roleId}/policies
     defaults:
@@ -817,6 +849,15 @@ ezpublish_rest_deletePolicies:
     methods: [DELETE]
     requirements:
         roleId: \d+
+
+ezpublish_rest_removePolicyByRoleDraft:
+    path: /user/roles/{roleId}/policiesByRoleDraft/{policyId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:removePolicyByRoleDraft
+    methods: [DELETE]
+    requirements:
+        roleId: \d+
+        policyId: \d+
 
 ezpublish_rest_loadPolicy:
     path: /user/roles/{roleId}/policies/{policyId}
@@ -831,6 +872,15 @@ ezpublish_rest_updatePolicy:
     path: /user/roles/{roleId}/policies/{policyId}
     defaults:
         _controller: ezpublish_rest.controller.role:updatePolicy
+    methods: [PATCH]
+    requirements:
+        roleId: \d+
+        policyId: \d+
+
+ezpublish_rest_updatePolicyByRoleDraft:
+    path: /user/roles/{roleId}/policiesByRoleDraft/{policyId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:updatePolicyByRoleDraft
     methods: [PATCH]
     requirements:
         roleId: \d+
