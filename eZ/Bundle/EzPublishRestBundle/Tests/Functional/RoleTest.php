@@ -168,12 +168,12 @@ XML;
 
     /**
      * @depends testCreateRole
-     * @covers GET /user/roles/{roleId}/draftByRoleId
+     * @covers GET /user/roles/{roleId}/draft
      */
     public function testLoadRoleDraftByRoleId($roleHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', $roleHref)
+            $this->createHttpRequest('GET', $roleHref . '/draft')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);

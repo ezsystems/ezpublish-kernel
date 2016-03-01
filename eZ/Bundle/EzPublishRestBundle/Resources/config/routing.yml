@@ -770,14 +770,6 @@ ezpublish_rest_loadRoleDraft:
     requirements:
         roleId: \d+
 
-ezpublish_rest_loadRoleDraftByRoleId:
-    path: /user/roles/{roleId}/draftByRoleId
-    defaults:
-        _controller: ezpublish_rest.controller.role:loadRoleDraftByRoleId
-    methods: [GET]
-    requirements:
-        roleId: \d+
-
 ezpublish_rest_updateRole:
     path: /user/roles/{roleId}
     defaults:
