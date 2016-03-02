@@ -1974,6 +1974,7 @@ INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_
 INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (42,31,'','',1);
 INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (13,32,'Subtree','/1/2/',3);
 INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (13,33,'Subtree','/1/43/',3);
+INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (13,35,'Subtree','/1/5/14/',3);
 INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (12,34,'','',2);
 
 INSERT INTO `ezuser_setting` (`is_enabled`, `max_login`, `user_id`) VALUES (1,1000,10);
