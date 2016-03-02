@@ -138,10 +138,15 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
             );
         }
 
+        $userId = $currentUser->getUserId();
+
         /*
          * @var $object ContentInfo
          */
-        return $object->ownerId === $currentUser->getUserId();
+        $isOwner = $object->ownerId === $userId;
+        $isSelf = $object->id === $userId;
+
+        return $isOwner || $isSelf;
     }
 
     /**
