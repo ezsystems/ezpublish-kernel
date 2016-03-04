@@ -50,8 +50,7 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventDispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->userHashMatcher = $this->getMock('\Symfony\Component\HttpFoundation\RequestMatcherInterface');
-        $this->listener = new SiteAccessMatchListener($this->saRouter, $this->eventDispatcher, $this->userHashMatcher);
+        $this->listener = new SiteAccessMatchListener($this->saRouter, $this->eventDispatcher);
     }
 
     public function testGetSubscribedEvents()
@@ -60,32 +59,6 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
             array(KernelEvents::REQUEST => array('onKernelRequest', 45)),
             SiteAccessMatchListener::getSubscribedEvents()
         );
-    }
-
-    public function testOnKernelRequestUserHashNoOriginalRequest()
-    {
-        $request = new Request();
-        $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
-            $request,
-            HttpKernelInterface::MASTER_REQUEST
-        );
-
-        $this->userHashMatcher
-            ->expects($this->once())
-            ->method('matches')
-            ->with($request)
-            ->will($this->returnValue(true));
-
-        $this->saRouter
-            ->expects($this->never())
-            ->method('match');
-        $this->eventDispatcher
-            ->expects($this->never())
-            ->method('dispatch');
-
-        $this->listener->onKernelRequest($event);
-        $this->assertFalse($request->attributes->has('siteaccess'));
     }
 
     public function testOnKernelRequestSerializedSA()
@@ -98,12 +71,6 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->userHashMatcher
-            ->expects($this->once())
-            ->method('matches')
-            ->with($request)
-            ->will($this->returnValue(false));
 
         $this->saRouter
             ->expects($this->never())
@@ -130,12 +97,6 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->userHashMatcher
-            ->expects($this->once())
-            ->method('matches')
-            ->with($request)
-            ->will($this->returnValue(false));
 
         $this->saRouter
             ->expects($this->never())
@@ -164,12 +125,6 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->userHashMatcher
-            ->expects($this->once())
-            ->method('matches')
-            ->with($request)
-            ->will($this->returnValue(false));
 
         $simplifiedRequest = new SimplifiedRequest(
             array(
@@ -213,12 +168,6 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->userHashMatcher
-            ->expects($this->once())
-            ->method('matches')
-            ->with($request)
-            ->will($this->returnValue(true));
 
         $simplifiedRequest = new SimplifiedRequest(
             array(

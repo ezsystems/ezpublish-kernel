@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
@@ -38,21 +37,10 @@ class SiteAccessMatchListener implements EventSubscriberInterface
      */
     protected $eventDispatcher;
 
-    /**
-     * Request matcher for user context hash requests.
-     *
-     * @var RequestMatcherInterface
-     */
-    private $userContextRequestMatcher;
-
-    public function __construct(
-        SiteAccessRouter $siteAccessRouter,
-        EventDispatcherInterface $eventDispatcher,
-        RequestMatcherInterface $userContextRequestMatcher
-    ) {
+    public function __construct(SiteAccessRouter $siteAccessRouter, EventDispatcherInterface $eventDispatcher)
+    {
         $this->siteAccessRouter = $siteAccessRouter;
         $this->eventDispatcher = $eventDispatcher;
-        $this->userContextRequestMatcher = $userContextRequestMatcher;
     }
 
     public static function getSubscribedEvents()
