@@ -156,6 +156,7 @@ EOF;
                 'language' => $language,
             ),
             'location' => $location,
+            'content' => $content,
             'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
             'layout' => true,
             'params' => array(
