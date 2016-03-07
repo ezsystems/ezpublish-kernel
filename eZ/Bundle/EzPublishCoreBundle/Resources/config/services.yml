@@ -28,6 +28,8 @@ parameters:
     ezpublish.view_controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
     ezpublish.exception_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ExceptionListener
 
+    ezpublish.fields_groups.list.class: eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList
+
 services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
@@ -171,3 +173,14 @@ services:
 
     ezpublish.query_type.registry:
         class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
+
+    ezpublish.fields_groups.list:
+        class: %ezpublish.fields_groups.list.class%
+        factory: [@ezpublish.fields_groups.list.repository_settings_factory, "build"]
+        arguments:
+            - @translator
+
+    ezpublish.fields_groups.list.repository_settings_factory:
+        class: eZ\Publish\Core\Helper\FieldsGroups\RepositoryConfigFieldsGroupsListFactory
+        arguments:
+            - @ezpublish.api.repository_configuration_provider

@@ -317,6 +317,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'engine' => 'elasticsearch',
                     'connection' => 'blabla',
                 ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
+                ),
             ),
             'foo' => array(
                 'storage' => array(
@@ -326,6 +330,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'search' => array(
                     'engine' => 'solr',
                     'connection' => 'lalala',
+                ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
                 ),
             ),
         );
@@ -355,6 +363,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'engine' => '%ezpublish.api.search_engine.default%',
                     'connection' => null,
                     'config' => array(),
+                ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
                 ),
             ),
         );
@@ -389,6 +401,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => null,
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
+                ),
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -421,6 +437,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'engine' => '%ezpublish.api.search_engine.default%',
                     'connection' => null,
                     'config' => array(),
+                ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
                 ),
             ),
         );
@@ -465,6 +485,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'default',
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
+                ),
             ),
             'foo' => array(
                 'search' => array(
@@ -476,6 +500,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'engine' => 'sqlng',
                     'connection' => 'default',
                     'config' => array(),
+                ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
                 ),
             ),
         );
@@ -507,6 +535,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'engine' => '%ezpublish.api.search_engine.default%',
                     'connection' => null,
                     'config' => array(),
+                ),
+                'fields_groups' => array(
+                    'list' => ['content'],
+                    'default' => 'content',
                 ),
             ),
         );

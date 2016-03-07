@@ -69,6 +69,8 @@ parameters:
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
     ezsettings.default.content.tree_root.location_id: 2 # Root locationId for routing and link generation. Useful for multisite apps with one repository.
     ezsettings.default.content.tree_root.excluded_uri_prefixes: [] # URI prefixes that are allowed to be outside the content tree
+    ezsettings.default.content.field_groups.list: ['content', 'metadata']
+    ezsettings.default.content.field_groups.default: 'content'
 
     # FieldType settings
     # Default XSL stylesheets for RichText rendering to HTML5.
