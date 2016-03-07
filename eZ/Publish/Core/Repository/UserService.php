@@ -80,7 +80,7 @@ class UserService implements UserServiceInterface
             'defaultUserPlacement' => 12,
             'userClassID' => 4,// @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
-            'hashType' => User::PASSWORD_HASH_MD5_USER,
+            'hashType' => User::PASSWORD_BCRYPT,
             'siteName' => 'ez.no',
         );
     }
@@ -574,18 +574,8 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue('password', $password);
         }
 
-        // Randomize login time to protect against timing attacks
-        usleep(mt_rand(0, 30000));
-
         $spiUser = $this->userHandler->loadByLogin($login);
-        $passwordHash = $this->createPasswordHash(
-            $login,
-            $password,
-            $this->settings['siteName'],
-            $spiUser->hashAlgorithm
-        );
-
-        if ($spiUser->passwordHash !== $passwordHash) {
+        if (!$this->verifyPassword($login, $password, $spiUser)) {
             throw new NotFoundException('user', $login);
         }
 
@@ -1114,6 +1104,41 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Verifies if the provided login and password are valid.
+     * 
+     * @param string $login User login
+     * @param string $password User password
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser Loaded user handler
+     *
+     * @return bool return true if the login and password are sucessfully
+     * validate and false, if not.
+     */
+    protected function verifyPassword($login, $password, $spiUser)
+    {
+        if ($spiUser->hashAlgorithm == User::PASSWORD_BCRYPT) {
+            if (password_verify($password, $spiUser->passwordHash)) {
+                return true;
+            }
+        } else {
+            // Randomize login time to protect against timing attacks
+            usleep(mt_rand(0, 30000));
+
+            $passwordHash = $this->createPasswordHash(
+                $login,
+                $password,
+                $this->settings['siteName'],
+                $spiUser->hashAlgorithm
+            );
+
+            if ($passwordHash == $spiUser->passwordHash) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns password hash based on user data and site settings.
      *
      * @param string $login User login
@@ -1137,6 +1162,9 @@ class UserService implements UserServiceInterface
 
             case User::PASSWORD_HASH_PLAINTEXT:
                 return $password;
+
+            case User::PASSWORD_BCRYPT:
+                return password_hash($password, PASSWORD_BCRYPT);
 
             default:
                 return md5($password);

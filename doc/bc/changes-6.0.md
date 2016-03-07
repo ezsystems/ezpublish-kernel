@@ -174,6 +174,11 @@ Changes affecting version compatibility with former or future versions.
   
 * Internal `limitationMap` repository service setting (for `RoleService`) has been renamed to `policyMap`.
 
+* Increase password security
+  EZP-24744 - Increase password security introduced a new encryption for the user password, BCRYPT.
+  This will allow the password to be stored with encryption instead of the present method md5 hash.
+  Caution - Using the PASSWORD_BCRYPT, will result in the password parameter being truncated to a maximum length of 72 characters
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.

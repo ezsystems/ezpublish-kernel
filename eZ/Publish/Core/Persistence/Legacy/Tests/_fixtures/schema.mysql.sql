@@ -483,7 +483,7 @@ CREATE TABLE ezuser (
   email varchar(150) NOT NULL DEFAULT '',
   login varchar(150) NOT NULL DEFAULT '',
   login_normalized varchar(150) NOT NULL DEFAULT '',
-  password_hash varchar(50) DEFAULT NULL,
+  password_hash varchar(255) DEFAULT NULL,
   password_hash_type int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (contentobject_id),
   UNIQUE KEY `ezuser_login` (`login_normalized`)
