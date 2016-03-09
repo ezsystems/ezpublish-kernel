@@ -57,4 +57,18 @@ class FragmentListenerFactoryTest extends PHPUnit_Framework_TestCase
             array('/_fragment/something', false),
         );
     }
+
+    public function testBuildFragmentListenerNoRequest()
+    {
+        $factory = new FragmentListenerFactory();
+        $factory->setRequestStack(new RequestStack());
+
+        $listener = $factory->buildFragmentListener(
+            new UriSigner('my_precious_secret'),
+            '/_fragment',
+            'Symfony\Component\HttpKernel\EventListener\FragmentListener'
+        );
+
+        $this->assertNull($listener);
+    }
 }
