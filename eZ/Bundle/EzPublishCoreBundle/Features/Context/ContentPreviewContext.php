@@ -6,6 +6,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use EzSystems\BehatBundle\Context\Browser\Context as BrowserContext;
@@ -13,30 +14,29 @@ use PHPUnit_Framework_Assert as Assertion;
 
 class ContentPreviewContext extends BrowserContext implements Context, SnippetAcceptingContext
 {
-    private $currentDraft;
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext */
+    private $contentContext;
 
-    /**
-     * @Given /^I create an article draft$/
-     */
-    public function iCreateAnArticleDraft()
+    /** @BeforeScenario */
+    public function gatherContexts(BeforeScenarioScope $scope)
     {
-        $draft = $this->createArticleDraft('Preview draft ' . date('c'));
-        $this->currentDraft = $draft;
+        $environment = $scope->getEnvironment();
+
+        $this->contentContext = $environment->getContext('eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext');
     }
 
     /**
-     * That would be a blog post.
-     *
      * @Given /^I create a draft for a content type that uses a custom location controller$/
      */
-    public function iCreateDraftContentTypeWithCustomLocationController()
+    public function iCreateDraftOfContentTypeWithCustomLocationController()
     {
-        $fields = array(
-            'title' => 'Preview draft ' . date('c'),
-            'body' => '<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This is a paragraph.</para></section>',
+        $this->contentContext->createDraft(
+            'blog_post',
+            [
+                'title' => 'Preview draft ' . date('c'),
+                'body' => '<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This is a paragraph.</para></section>',
+            ]
         );
-        $draft = $this->getBasicContentManager()->createContentDraft(2, 'blog_post', $fields);
-        $this->currentDraft = $draft;
     }
 
     /**
@@ -44,10 +44,7 @@ class ContentPreviewContext extends BrowserContext implements Context, SnippetAc
      */
     public function iPreviewThisDraft()
     {
-        if (!$this->currentDraft instanceof Content) {
-            throw new \Exception("'this draft' is not set. Bad context ?");
-        }
-        $this->visit($this->mapToVersionViewUri($this->currentDraft->versionInfo));
+        $this->visit($this->mapToVersionViewUri($this->contentContext->getCurrentDraft()->versionInfo));
     }
 
     /**
@@ -91,5 +88,29 @@ class ContentPreviewContext extends BrowserContext implements Context, SnippetAc
             $message = 'An exception occured during rendering:' . implode("\n", $exceptionLines);
             Assertion::assertTrue(false, $message);
         }
+    }
+
+    /**
+     * @Then /^I see a preview of this draft$/
+     */
+    public function iSeeAPreviewOfTheCurrentDraft()
+    {
+        $this->assertSession()->elementContains(
+            'xpath',
+            "//span[@class='ezstring-field']",
+            $this->contentContext->getCurrentDraft()->getFieldValue('name')->text
+        );
+    }
+
+    /**
+     * This could belong in the content context.
+     *
+     * @Given /^I modify a field from the draft$/
+     */
+    public function iModifyAFieldFromTheDraft()
+    {
+        $this->contentContext->updateDraft(
+            ['name' => 'MODIFIED - ' . $this->contentContext->getCurrentDraft()->getFieldValue('name')->text]
+        );
     }
 }
