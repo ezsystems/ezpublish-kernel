@@ -23,16 +23,19 @@ class FragmentListenerFactory
 
     public function buildFragmentListener(UriSigner $uriSigner, $fragmentPath, $fragmentListenerClass)
     {
+        // no request when executing over CLI
+        if (!$request = $this->getCurrentRequest()) {
+            return null;
+        }
+
         // Ensure that current pathinfo ends with configured fragment path.
         // If so, consider it as the fragment path.
         // This ensures to have URI siteaccess compatible fragment paths.
-        $pathInfo = $this->getCurrentRequest()->getPathInfo();
+        $pathInfo = $request->getPathInfo();
         if (substr($pathInfo, -strlen($fragmentPath)) === $fragmentPath) {
             $fragmentPath = $pathInfo;
         }
 
-        $fragmentListener = new $fragmentListenerClass($uriSigner, $fragmentPath);
-
-        return $fragmentListener;
+        return new $fragmentListenerClass($uriSigner, $fragmentPath);
     }
 }
