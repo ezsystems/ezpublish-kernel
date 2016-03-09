@@ -13,4 +13,6 @@ core:
                 - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Exception
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext:
+                    repository: @ezpublish.api.repository
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ExceptionContext
