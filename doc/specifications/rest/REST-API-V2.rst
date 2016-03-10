@@ -5258,7 +5258,8 @@ Create Role / Role Draft
 ````````````````````````
 :Resource: /user/roles
 :Method: POST
-:Description: Creates a new role, or role draft if you set the POST parameter publish=false.
+:Description: Creates a new role or role draft
+:Parameters: :publish: (default true) If true the content type is published after creation
 :Headers:
     :Accept:
          :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
