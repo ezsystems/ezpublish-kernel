@@ -55,8 +55,11 @@ class Flysystem implements IOMetadataHandler
 
         $spiBinaryFile = new SPIBinaryFile();
         $spiBinaryFile->id = $spiBinaryFileId;
-        $spiBinaryFile->mtime = new DateTime('@' . $info['timestamp']);
         $spiBinaryFile->size = $info['size'];
+        
+        if (isset($info['timestamp'])) {
+            $spiBinaryFile->mtime = new DateTime('@' . $info['timestamp']);
+        }
 
         return $spiBinaryFile;
     }
