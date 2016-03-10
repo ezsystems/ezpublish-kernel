@@ -30,7 +30,7 @@
         "doctrine/doctrine-bundle": "~1.3",
         "liip/imagine-bundle": "~1.0",
         "oneup/flysystem-bundle": "~0.4",
-        "friendsofsymfony/http-cache-bundle": "~1.2",
+        "friendsofsymfony/http-cache-bundle": ">=1.2, <=1.3.6",
         "sensio/framework-extra-bundle": "~3.0"
     },
     "require-dev": {
