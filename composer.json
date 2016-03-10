@@ -59,6 +59,7 @@
         "process-timeout": 3000
     },
     "extra": {
+        "_branch-alias-comment_": "!! Update alias in bin/.travis/prepare_behat.sh on changes/branch-offs !!",
         "branch-alias": {
             "dev-master": "6.3.x-dev"
         }
