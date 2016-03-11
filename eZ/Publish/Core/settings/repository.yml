@@ -3,6 +3,7 @@ parameters:
     ezpublish.api.repository.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\RepositoryFactory
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
     ezpublish.field_type_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
+    ezpublish.field_type_nameable_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
     ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
 
@@ -36,11 +37,17 @@ services:
         calls:
             - [setContainer, [@service_container]]
 
+    ezpublish.field_type_nameable_collection.factory:
+        class: %ezpublish.field_type_nameable_collection.factory.class%
+        calls:
+            - [setContainer, [@service_container]]
+
     ezpublish.api.repository.factory:
         class: %ezpublish.api.repository.factory.class%
         arguments:
             - %ezpublish.api.inner_repository.class%
             - @ezpublish.field_type_collection.factory
+            - @ezpublish.field_type_nameable_collection.factory
         calls:
             - [setContainer, [@service_container]]
 

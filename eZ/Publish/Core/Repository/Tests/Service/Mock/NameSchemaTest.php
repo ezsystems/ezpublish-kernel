@@ -277,8 +277,26 @@ class NameSchemaTest extends BaseServiceMockTest
             $methods,
             array(
                 $this->getPersistenceMock()->contentTypeHandler(),
-                $this->getFieldTypeRegistryMock(),
+                $this->getContentTypeDomainMapperMock(),
+                $this->getNameableFieldTypeRegistryMock(),
             )
         );
+    }
+
+    protected $contentTypeDomainMapperMock;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
+     */
+    protected function getContentTypeDomainMapperMock()
+    {
+        if (!isset($this->contentTypeDomainMapperMock)) {
+            $this->contentTypeDomainMapperMock = $this
+                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\ContentTypeDomainMapper')
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->contentTypeDomainMapperMock;
     }
 }
