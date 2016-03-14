@@ -214,9 +214,16 @@ class Mapper
         $results = array();
         foreach ($contentInfos as $contentId => $contentInfo) {
             foreach ($versionInfos[$contentId] as $versionId => $versionInfo) {
+                // Fallback to just main language name if versioned name data is missing
+                if (isset($versionedNameData[$contentId][$versionInfo->versionNo])) {
+                    $names = $versionedNameData[$contentId][$versionInfo->versionNo];
+                } else {
+                    $names = [$contentInfo->mainLanguageCode => $contentInfo->name];
+                }
+
                 $content = new Content();
                 $content->versionInfo = $versionInfo;
-                $content->versionInfo->names = $versionedNameData[$contentId][$versionInfo->versionNo];
+                $content->versionInfo->names = $names;
                 $content->versionInfo->contentInfo = $contentInfo;
                 $content->fields = array_values($fields[$contentId][$versionId]);
                 $results[] = $content;
