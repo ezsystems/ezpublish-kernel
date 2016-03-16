@@ -4263,7 +4263,7 @@ Overview
 --------
 
 ============================================= ===================== ======================= ===================== ============================= ============= =====================
-Resource                                      POST                  GET                     PUT                   DELETE                        HEAD          PUBLISH
+Resource                                      POST                  GET                     PATCH/PUT             DELETE                        HEAD          PUBLISH
 --------------------------------------------- --------------------- ----------------------- --------------------- ----------------------------- ------------- ---------------------
 /user/groups                                  .                     load all topl. groups   .                     .                             .             .
 /user/groups/root                             .                     redirect to root        .                     .                             .             .
@@ -4279,9 +4279,9 @@ Resource                                      POST                  GET         
                                                                     by the user
 /user/users/<ID>/roles                        assign role to user   load roles of group     .                     .                             .             .
 /user/users/<ID>/roles/<ID>                   .                     load roleassignment     .                     unassign role from user       .             .
-/user/roles                                   create new role       load all roles          .                     .                             .             .
-/user/roles/<ID>                              .                     load role               update role           delete role                   .             .
-/user/roles/<ID>/draft                        .                     load draft for role     update role draft     .                             .             publish a role draft
+/user/roles                                   create role/draft     load all roles          .                     .                             .             .
+/user/roles/<ID>                              create role draft     load role               update role           delete role                   .             .
+/user/roles/<ID>/draft                        .                     load draft for role     update role draft     delete role draft             .             publish a role draft
 /user/roles/<ID>/policies                     create policy         load policies           .                     delete all policies from role .             .
 /user/roles/<ID>/policies/<ID>                .                     load policy             update policy         delete policy                 .             .
 /user/sessions                                create session        .                       .                     .                             .             .
@@ -5254,11 +5254,12 @@ XML Example
 Managing Roles and Policies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create Role
-```````````
+Create Role / Role Draft
+````````````````````````
 :Resource: /user/roles
 :Method: POST
-:Description: Creates a new role
+:Description: Creates a new role or role draft
+:Parameters: :publish: (default true) If true the role is published after creation
 :Headers:
     :Accept:
          :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
@@ -5276,15 +5277,28 @@ Create Role
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+
+          or:
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>/draft
+          Accept-Patch:  application/vnd.ez.api.RoleUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
 .. parsed-literal::
           Role_
 
+          or:
+
+          RoleDraft_
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this role
+    :401: If the user is not authorized to create this role / role draft
 
-XML Example
-'''''''''''
+XML Example for returning a role
+''''''''''''''''''''''''''''''''
 
 .. code:: http
 
@@ -5314,6 +5328,105 @@ XML Example
     <?xml version="1.0" encoding="UTF-8"?>
     <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml">
       <identifier>NewRole</identifier>
+      <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
+    </Role>
+
+XML Example for returning a role draft
+''''''''''''''''''''''''''''''''''''''
+
+.. code:: http
+
+    POST /user/roles?publish=false HTTP/1.1
+    Accept: application/vnd.ez.api.RoleDraft+xml
+    Content-Type: application/vnd.ez.api.RoleInput+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleInput>
+      <identifier>NewRole</identifier>
+    </RoleInput>
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/roles/11
+    Accept-Patch: application/vnd.ez.api.RoleUpdate+xml
+    ETag: "465897639450694836"
+    Content-Type: application/vnd.ez.api.RoleDraft+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Role href="/user/roles/11" media-type="application/vnd.ez.api.RoleDraft+xml">
+      <identifier>NewRole</identifier>
+      <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
+    </Role>
+
+
+
+Create Role Draft
+`````````````````
+:Resource: /user/roles/<ID>
+:Method: POST
+:Description: Creates a new role draft from an existing role.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
+         :application/vnd.ez.api.Role+json:  if set the new user is returned in json format (see Role_)
+    :Content-Type:
+         :application/vnd.ez.api.RoleInput+json: the RoleInput_  schema encoded in json
+         :application/vnd.ez.api.RoleInput+xml: the RoleInput_  schema encoded in xml
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>/draft
+          Accept-Patch:  application/vnd.ez.api.RoleUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+
+          RoleDraft_
+
+:Error Codes:
+    :401: If the user is not authorized to create this role / role draft
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    POST /user/roles/5 HTTP/1.1
+    Accept: application/vnd.ez.api.RoleDraft+xml
+    Content-Type: application/vnd.ez.api.RoleInput+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleInput>
+      <identifier>MyRole</identifier>
+    </RoleInput>
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/roles/11
+    Accept-Patch: application/vnd.ez.api.RoleUpdate+xml
+    ETag: "465897639450694836"
+    Content-Type: application/vnd.ez.api.RoleDraft+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Role href="/user/roles/11" media-type="application/vnd.ez.api.RoleDraft+xml">
+      <identifier>MyRole</identifier>
       <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
     </Role>
 
@@ -5494,6 +5607,20 @@ Delete Role
 
 :Error Codes:
     :401: If the user is not authorized to delete this role
+
+Delete Role Draft
+`````````````````
+:Resource: /user/roles/<ID>/draft
+:Method: DELETE
+:Description: The given role draft is deleted.
+:Response:
+
+.. code:: http
+
+        HTTP/1.1 204 No Content
+
+:Error Codes:
+        :401: If the user is not authorized to delete this role
 
 Load Roles for User or User Group
 `````````````````````````````````
