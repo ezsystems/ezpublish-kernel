@@ -379,7 +379,7 @@ class Role extends RestController
     /**
      * Adds a policy to role.
      *
-     * @param $roleId
+     * @param $roleId int ID of a role or a role draft
      *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedPolicy
      */
@@ -393,6 +393,13 @@ class Role extends RestController
         );
 
         try {
+            // First try to treat $roleId as a role draft ID.
+            $role = $this->roleService->addPolicyByRoleDraft(
+                $this->roleService->loadRoleDraft($roleId),
+                $createStruct
+            );
+        } catch (NotFoundException $e) {
+            // Then try to treat $roleId as a role ID.
             $role = $this->roleService->addPolicy(
                 $this->roleService->loadRole($roleId),
                 $createStruct
@@ -412,6 +419,7 @@ class Role extends RestController
      * Adds a policy to a role draft.
      *
      * @since 6.2
+     * @deprecated since 6.3, use {@see addPolicy}
      *
      * @param $roleId
      *
@@ -469,8 +477,8 @@ class Role extends RestController
     /**
      * Updates a policy.
      *
-     * @param $roleId
-     * @param $policyId
+     * @param $roleId int ID of a role or a role draft
+     * @param $policyId int ID of a policy
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
      *
@@ -485,16 +493,34 @@ class Role extends RestController
             )
         );
 
-        $role = $this->roleService->loadRole($roleId);
-        foreach ($role->getPolicies() as $policy) {
-            if ($policy->id == $policyId) {
-                try {
-                    return $this->roleService->updatePolicy(
-                        $policy,
-                        $updateStruct
-                    );
-                } catch (LimitationValidationException $e) {
-                    throw new BadRequestException($e->getMessage());
+        try {
+            // First try to treat $roleId as a role draft ID.
+            $role = $this->roleService->loadRoleDraft($roleId);
+            foreach ($role->getPolicies() as $policy) {
+                if ($policy->id == $policyId) {
+                    try {
+                        return $this->roleService->updatePolicy(
+                            $policy,
+                            $updateStruct
+                        );
+                    } catch (LimitationValidationException $e) {
+                        throw new BadRequestException($e->getMessage());
+                    }
+                }
+            }
+        } catch (NotFoundException $e) {
+            // Then try to treat $roleId as a role ID.
+            $role = $this->roleService->loadRole($roleId);
+            foreach ($role->getPolicies() as $policy) {
+                if ($policy->id == $policyId) {
+                    try {
+                        return $this->roleService->updatePolicy(
+                            $policy,
+                            $updateStruct
+                        );
+                    } catch (LimitationValidationException $e) {
+                        throw new BadRequestException($e->getMessage());
+                    }
                 }
             }
         }
@@ -506,6 +532,7 @@ class Role extends RestController
      * Updates a policy.
      *
      * @since 6.2
+     * @deprecated since 6.3, use {@see updatePolicy}
      *
      * @param $roleId
      * @param $policyId
@@ -543,8 +570,8 @@ class Role extends RestController
     /**
      * Delete a policy from role.
      *
-     * @param $roleId
-     * @param $policyId
+     * @param $roleId int ID of a role or a role draft
+     * @param $policyId int ID of a policy
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
      *
@@ -552,20 +579,40 @@ class Role extends RestController
      */
     public function deletePolicy($roleId, $policyId, Request $request)
     {
-        $role = $this->roleService->loadRole($roleId);
+        try {
+            // First try to treat $roleId as a role draft ID.
+            $roleDraft = $this->roleService->loadRoleDraft($roleId);
 
-        $policy = null;
-        foreach ($role->getPolicies() as $rolePolicy) {
-            if ($rolePolicy->id == $policyId) {
-                $policy = $rolePolicy;
-                break;
+            $policy = null;
+            foreach ($roleDraft->getPolicies() as $rolePolicy) {
+                if ($rolePolicy->id == $policyId) {
+                    $policy = $rolePolicy;
+                    break;
+                }
             }
-        }
 
-        if ($policy !== null) {
-            $this->roleService->deletePolicy($policy);
+            if ($policy !== null) {
+                $this->roleService->removePolicyByRoleDraft($roleDraft, $policy);
 
-            return new Values\NoContent();
+                return new Values\NoContent();
+            }
+        } catch (NotFoundException $e) {
+            // Then try to treat $roleId as a role ID.
+            $role = $this->roleService->loadRole($roleId);
+
+            $policy = null;
+            foreach ($role->getPolicies() as $rolePolicy) {
+                if ($rolePolicy->id == $policyId) {
+                    $policy = $rolePolicy;
+                    break;
+                }
+            }
+
+            if ($policy !== null) {
+                $this->roleService->deletePolicy($policy);
+
+                return new Values\NoContent();
+            }
         }
 
         throw new Exceptions\NotFoundException("Policy not found: '{$request->getPathInfo()}'.");
@@ -575,6 +622,7 @@ class Role extends RestController
      * Remove a policy from a role draft.
      *
      * @since 6.2
+     * @deprecated since 6.3, use {@see deletePolicy}
      *
      * @param $roleId
      * @param $policyId

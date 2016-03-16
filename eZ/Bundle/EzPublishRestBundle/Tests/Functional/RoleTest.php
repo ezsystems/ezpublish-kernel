@@ -168,19 +168,6 @@ XML;
 
     /**
      * @depends testCreateRole
-     * @covers GET /user/roles/{roleId}/draftByRoleId
-     */
-    public function testLoadRoleDraftByRoleId($roleHref)
-    {
-        $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', $roleHref)
-        );
-
-        self::assertHttpResponseCodeEquals($response, 200);
-    }
-
-    /**
-     * @depends testCreateRole
      * @covers PATCH /user/roles/{roleId}
      */
     public function testUpdateRole($roleHref)
@@ -271,7 +258,7 @@ XML;
     }
 
     /**
-     * @covers POST /user/roles/{roleId}/policiesByRoleDraft
+     * @covers POST /user/roles/{roleId}/policies
      * @depends testCreateRoleDraft
      *
      * @return string The created policy href
@@ -294,7 +281,7 @@ XML;
 XML;
         $request = $this->createHttpRequest(
             'POST',
-            $this->roleDraftHrefToRoleHref($roleDraftHref) . '/policiesByRoleDraft',
+            $this->roleDraftHrefToRoleHref($roleDraftHref) . '/policies',
             'PolicyCreate+xml',
             'Policy+json'
         );
@@ -363,7 +350,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /user/roles/{roleId}/policiesByRoleDraft/{policyId}
+     * @covers PATCH /user/roles/{roleId}/policies/{policyId}
      * @depends testAddPolicyByRoleDraft
      */
     public function testUpdatePolicyByRoleDraft($policyHref)
@@ -381,12 +368,7 @@ XML;
 </PolicyUpdate>
 XML;
 
-        $request = $this->createHttpRequest(
-            'PATCH',
-            $this->policyHrefToPolicyDraftHref($policyHref),
-            'PolicyUpdate+xml',
-            'Policy+json'
-        );
+        $request = $this->createHttpRequest('PATCH', $policyHref, 'PolicyUpdate+xml', 'Policy+json');
         $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 
@@ -573,13 +555,13 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/roles/{roleId}/policiesByRoleDraft/{policyId}
+     * @covers DELETE /user/roles/{roleId}/policies/{policyId}
      * @depends testAddPolicyByRoleDraft
      */
     public function testRemovePolicyByRoleDraft($policyHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('DELETE', $this->policyHrefToPolicyDraftHref($policyHref))
+            $this->createHttpRequest('DELETE', $policyHref)
         );
 
         self::assertHttpResponseCodeEquals($response, 204);
@@ -650,17 +632,5 @@ XML;
     private function roleDraftHrefToRoleHref($roleDraftHref)
     {
         return str_replace('/draft', '', $roleDraftHref);
-    }
-
-    /**
-     * Helper method for changing a policy href to a policy by role draft href.
-     *
-     * @param string $policyHref Policy href
-     *
-     * @return string Policy by role draft href
-     */
-    private function policyHrefToPolicyDraftHref($policyHref)
-    {
-        return str_replace('/policies/', '/policiesByRoleDraft/', $policyHref);
     }
 }
