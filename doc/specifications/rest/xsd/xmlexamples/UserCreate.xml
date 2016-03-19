@@ -7,12 +7,12 @@
   <password>john-does-password</password>
   <fields>
     <field>
-      <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>John</value>
     </field>
     <field>
-      <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>Doe</value>
     </field>

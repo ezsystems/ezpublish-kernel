@@ -14,17 +14,17 @@
   <remoteId>remoteId12345678</remoteId>
   <fields>
     <field>
-      <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>This is a title</value>
     </field>
     <field>
-      <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>This is a summary</value>
     </field>
     <field>
-      <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>
         <authors>

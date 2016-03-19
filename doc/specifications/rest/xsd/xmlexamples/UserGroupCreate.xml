@@ -4,12 +4,12 @@
   <remoteId>remoteId-qwert098</remoteId>
   <fields>
     <field>
-      <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>UserGroup</value>
     </field>
     <field>
-      <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>Group Descruption</value>
     </field>

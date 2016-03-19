@@ -6,7 +6,7 @@
   <xsd:complexType name="fieldOutputValueType">
     <xsd:all>
       <xsd:element name="id" type="xsd:integer" />
-      <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+      <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
       <xsd:element name="languageCode" type="xsd:string" />
       <xsd:element name="value" type="fieldValueType" />
     </xsd:all>
@@ -29,7 +29,7 @@
               <xsd:complexContent>
                 <xsd:extension base="ref">
                   <xsd:sequence>
-                    <xsd:element name="Relation" type="vnd.ez.api.Relation"
+                    <xsd:element name="Relation" type="relationValueType"
                       minOccurs="0" maxOccurs="unbounded" />
                   </xsd:sequence>
                 </xsd:extension>

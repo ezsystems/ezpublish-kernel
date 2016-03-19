@@ -7,7 +7,7 @@
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
-          <xsd:element name="Version" minOccurs="0" type="versionType" />
+          <xsd:element name="Version" minOccurs="0" type="versionInfoType" />
         </xsd:all>
       </xsd:extension>
     </xsd:complexContent>
