@@ -8150,12 +8150,10 @@ SessionInput XML Schema
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:complexType name="vnd.ez.api.SessionInput">
-        <xsd:complexContent>
-          <xsd:all>
-            <xsd:element name="login" type="xsd:string"/>
-            <xsd:element name="password" type="xsd:string" />
-          </xsd:all>
-        </xsd:complexContent>
+        <xsd:all>
+          <xsd:element name="login" type="xsd:string"/>
+          <xsd:element name="password" type="xsd:string" />
+        </xsd:all>
       </xsd:complexType>
       <xsd:element name="SessionInput" type="vnd.ez.api.SessionInput"></xsd:element>
     </xsd:schema>
@@ -9366,7 +9364,7 @@ UserGroup XML Schema
         <xsd:complexContent>
           <xsd:extension base="contentInfoType">
             <xsd:sequence>
-              <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
+              <xsd:element name="Content" type="vnd.ez.api.Version" />
               <xsd:element name="ParentUserGroup" type="ref" />
               <xsd:element name="Subgroups" type="ref" />
               <xsd:element name="Users" type="ref" />
@@ -9378,17 +9376,17 @@ UserGroup XML Schema
       <xsd:complexType name="vnd.ez.api.UserGroupList">
         <xsd:complexContent>
           <xsd:extension base="ref">
-            <xsd:all>
+            <xsd:sequence>
               <xsd:element name="User" type="vnd.ez.api.UserGroup"
                 maxOccurs="unbounded" />
-            </xsd:all>
+            </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.UserGroupRefList">
         <xsd:complexContent>
           <xsd:extension base="ref">
-            <xsd:all>
+            <xsd:sequence>
               <xsd:element name="UserGroup" minOccurs="1" maxOccurs="unbounded">
                 <xsd:complexType>
                   <xsd:all>
@@ -9396,7 +9394,7 @@ UserGroup XML Schema
                   </xsd:all>
                 </xsd:complexType>
               </xsd:element>
-            </xsd:all>
+            </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
@@ -9496,7 +9494,7 @@ User XML Schema
               <xsd:element name="login" type="xsd:string" />
               <xsd:element name="email" type="xsd:string" />
               <xsd:element name="enabled" type="xsd:boolean" />
-              <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
+              <xsd:element name="Content" type="vnd.ez.api.Version" />
               <xsd:element name="Roles" type="ref" />
               <xsd:element name="UserGroups" type="ref" />
             </xsd:all>
@@ -9506,20 +9504,20 @@ User XML Schema
       <xsd:complexType name="vnd.ez.api.UserList">
         <xsd:complexContent>
           <xsd:extension base="ref">
-            <xsd:all>
+            <xsd:sequence>
               <xsd:element name="User" type="vnd.ez.api.User"
                 maxOccurs="unbounded" />
-            </xsd:all>
+            </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.UserRefList">
         <xsd:complexContent>
           <xsd:extension base="ref">
-            <xsd:all>
+            <xsd:sequence>
               <xsd:element name="User" type="ref"
                 maxOccurs="unbounded" />
-            </xsd:all>
+            </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>

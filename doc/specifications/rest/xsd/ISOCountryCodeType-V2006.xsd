@@ -149,7 +149,7 @@
       </xsd:enumeration>
       <xsd:enumeration value="BL">
         <xsd:annotation>
-          <xsd:documentation>SAINT BARTHÉLEMY</xsd:documentation>
+          <xsd:documentation>SAINT BARTHÃ‰LEMY</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="BM">

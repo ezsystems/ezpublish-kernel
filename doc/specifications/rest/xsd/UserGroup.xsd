@@ -9,7 +9,7 @@
     <xsd:complexContent>
       <xsd:extension base="contentInfoType">
         <xsd:sequence>
-          <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
+          <xsd:element name="Content" type="vnd.ez.api.Version" />
           <xsd:element name="ParentUserGroup" type="ref" />
           <xsd:element name="Subgroups" type="ref" />
           <xsd:element name="Users" type="ref" />
@@ -21,25 +21,25 @@
   <xsd:complexType name="vnd.ez.api.UserGroupList">
     <xsd:complexContent>
       <xsd:extension base="ref">
-        <xsd:all>
-          <xsd:eleemnt name="User" type="vnd.ez.api.UserGroup"
+        <xsd:sequence>
+          <xsd:element name="User" type="vnd.ez.api.UserGroup"
             maxOccurs="unbounded" />
-        </xsd:all>
+        </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
   <xsd:complexType name="vnd.ez.api.UserGroupRefList">
     <xsd:complexContent>
       <xsd:extension base="ref">
-        <xsd:all>
-          <xsd:eleemnt name="UserGroup" minOccurs="1" maxOccurs="unbounded">
+        <xsd:sequence>
+          <xsd:element name="UserGroup" minOccurs="1" maxOccurs="unbounded">
             <xsd:complexType>
               <xsd:all>
                 <xsd:element name="unassign" type="controllerRef" minOccurs="0"/>
               </xsd:all>
             </xsd:complexType>
-          </xsd:eleemnt>
-        </xsd:all>
+          </xsd:element>
+        </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
