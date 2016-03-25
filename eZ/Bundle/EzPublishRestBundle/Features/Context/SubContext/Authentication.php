@@ -10,12 +10,10 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
-use eZ\Publish\Core\REST\Server\Values\SessionInput;
-
 trait Authentication
 {
     /**
-     * @var eZ\Publish\Core\REST\Server\Values\UserSession
+     * @var \eZ\Publish\Core\REST\Server\Values\UserSession
      */
     protected $userSession;
 
@@ -79,6 +77,23 @@ trait Authentication
         $this->sendRequest();
 
         $this->userSession = $this->getResponseObject();
+
+        if (!$this->userSession instanceof \eZ\Publish\Core\REST\Server\Values\UserSession) {
+            if ($this->userSession instanceof \eZ\Publish\Core\REST\Client\Values\ErrorMessage) {
+                $message = sprintf(
+                    "Unexpected '%s' in HTTP request response: %s",
+                    $this->userSession->message,
+                    $this->userSession->description
+                );
+            } else {
+                $message = false;
+            }
+            throw new \RuntimeException(
+                $message ?: 'UserSession value expected, got ' . get_class($this->userSession),
+                0,
+                isset($exceptionValue) ? $exceptionValue : null
+            );
+        }
 
         $this->resetDriver();
 
