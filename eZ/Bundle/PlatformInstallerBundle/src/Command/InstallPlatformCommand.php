@@ -105,8 +105,8 @@ class InstallPlatformCommand extends Command
 
     private function checkPermissions()
     {
-        if (!is_writable('app/config')) {
-            $this->output->writeln('app/config is not writable');
+        if (!is_writable('web/var')) {
+            $this->output->writeln('web/var is not writable');
             exit(self::EXIT_MISSING_PERMISSIONS);
         }
     }
