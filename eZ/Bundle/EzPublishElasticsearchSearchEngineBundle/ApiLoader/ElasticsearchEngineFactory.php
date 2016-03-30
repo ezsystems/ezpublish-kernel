@@ -11,9 +11,10 @@
 namespace eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class ElasticsearchEngineFactory
+class ElasticsearchEngineFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 

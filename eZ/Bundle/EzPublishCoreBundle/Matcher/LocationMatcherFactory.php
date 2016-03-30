@@ -15,12 +15,13 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory as BaseMatcherFactory;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @deprecated Deprecated since 6.0, will be removed in 6.1. Location view in general is deprecated. Use content view instead.
  */
-class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAware
+class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAware, ContainerAwareInterface
 {
     use ContainerAwareTrait;
 

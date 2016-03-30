@@ -10,9 +10,10 @@
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader\Storage;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class ExternalStorageRegistryFactory
+class ExternalStorageRegistryFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
