@@ -980,6 +980,41 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testUpdateLocationWithSameRemoteId()
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $locationId and remote ID is the IDs of the same, existing location
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation($locationId);
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+
+        // Remote ID of an existing location with the same locationId
+        $updateStruct->remoteId = '3f6d92f8044aed134f32153517850f5a';
+
+        // Sets some random priority to confirm the update
+        $updateStruct->priority = 2;
+
+        $location = $locationService->updateLocation($originalLocation, $updateStruct);
+
+        // Checks that the location was updated
+        $this->assertEquals(2, $location->priority);
+
+        // Checks that remoteId remains the same
+        $this->assertEquals($originalLocation->remoteId, $location->remoteId);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateLocationThrowsInvalidArgumentException()
@@ -988,13 +1023,14 @@ class LocationServiceTest extends BaseTest
 
         $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
-        // $locationId is the ID of an existing location
+        // $locationId and remoteId is the IDs of an existing, but not the same, location
         $locationService = $repository->getLocationService();
 
         $originalLocation = $locationService->loadLocation($locationId);
 
         $updateStruct = $locationService->newLocationUpdateStruct();
-        // Remote ID of an existing location
+
+        // Remote ID of an existing location with a different locationId
         $updateStruct->remoteId = 'f3e90596361e31d496d4026eb624c983';
 
         // Throws exception, since remote ID is already taken
