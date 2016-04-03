@@ -22,13 +22,6 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Identifier of the custom field.
-     *
-     * @var string
-     */
-    protected $customFieldIdentifier = 'user_account';
-
-    /**
      * Get name of tested field type.
      *
      * @return string
@@ -356,6 +349,10 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     protected function createContent($fieldData, $contentType = null)
     {
+        if ($contentType === null) {
+            $contentType = $this->testCreateContentType();
+        }
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -364,13 +361,13 @@ class UserIntegrationTest extends BaseIntegrationTest
             'hans',
             'hans@example.com',
             'password',
-            'eng-US'
+            'eng-US',
+            $contentType
         );
         $userCreate->enabled = true;
 
         // Set some fields required by the user ContentType
-        $userCreate->setField('first_name', 'Example');
-        $userCreate->setField('last_name', 'User');
+        $userCreate->setField('name', 'Example User');
 
         // ID of the "Editors" user group in an eZ Publish demo installation
         $group = $userService->loadUserGroup(13);
@@ -439,6 +436,19 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     public function testAddFieldDefinition()
+    {
+        $this->markTestIncomplete(
+            'Currently cannot be tested since user can be properly created only through UserService'
+        );
+    }
+
+    /**
+     * @param mixed $failingValue
+     * @param string $expectedException
+     *
+     * @dataProvider provideInvalidUpdateFieldData
+     */
+    public function testUpdateContentFails($failingValue, $expectedException)
     {
         $this->markTestIncomplete(
             'Currently cannot be tested since user can be properly created only through UserService'
