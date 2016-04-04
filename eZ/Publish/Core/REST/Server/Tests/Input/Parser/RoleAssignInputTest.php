@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\Core\REST\Server\Input\Parser\RoleAssignInput;
 
-class RoleAssignInputTwoDotZeroTest extends BaseTest
+class RoleAssignInputTest extends BaseTest
 {
     /**
      * Tests the RoleAssignInput parser.
