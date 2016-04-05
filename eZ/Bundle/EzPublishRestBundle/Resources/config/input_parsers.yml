@@ -65,6 +65,9 @@ parameters:
     ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata
     ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Visibility
 
+    ezpublish_rest.input.parser.internal.route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\RouteBasedLimitationParser
+    ezpublish_rest.input.parser.internal.path_string_route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\PathStringRouteBasedLimitationParser
+
     # REST client
     ezpublish_rest.input.parser.Content.class: eZ\Publish\Core\REST\Client\Input\Parser\Content
     ezpublish_rest.input.parser.ContentInfo.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentInfo
@@ -563,6 +566,26 @@ services:
         class: %ezpublish_rest.input.parser.internal.criterion.Visibility.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Visibility }
+
+    # role limitation parsers
+
+    ezpublish_rest.input.parser.internal.limitation.Subtree:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.internal.path_string_route_based_limitation.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.limitation.Subtree }
+        arguments:
+            - 'locationPath'
+            - 'eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation'
+
+    ezpublish_rest.input.parser.internal.limitation.Section:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.internal.route_based_limitation.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.limitation.Section }
+        arguments:
+            - 'sectionId'
+            - 'eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation'
 
     # Rest client
 

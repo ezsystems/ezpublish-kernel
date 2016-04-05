@@ -76,12 +76,13 @@ class TestCase extends PHPUnit_Framework_TestCase
         $responseCode = $response->getStatusCode();
         if ($responseCode != $expected) {
             $errorMessageString = '';
-            if ($response->getHeader('Content-Type') == 'application/vnd.ez.api.ErrorMessage+xml') {
+            if (strpos($response->getHeader('Content-Type'), 'application/vnd.ez.api.ErrorMessage+xml') !== false) {
                 $body = \simplexml_load_string($response->getContent());
                 $errorMessageString = $body->errorDescription;
-            } elseif (($response->getHeader('Content-Type') == 'application/vnd.ez.api.ErrorMessage+json')) {
+            } elseif (strpos($response->getHeader('Content-Type'), 'application/vnd.ez.api.ErrorMessage+json') !== false) {
                 $body = json_decode($response->getContent());
-                $errorMessageString = "Error message: {$body->ErrorMessage->errorDescription}";
+                $errorMessageString = "Error message: {$body->ErrorMessage->errorDescription}\n" .
+                    "In {$body->ErrorMessage->file}:{$body->ErrorMessage->line}";
             }
 
             self::assertEquals($expected, $responseCode, $errorMessageString);

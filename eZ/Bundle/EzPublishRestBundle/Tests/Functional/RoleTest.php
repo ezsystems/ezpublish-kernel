@@ -11,6 +11,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 class RoleTest extends RESTFunctionalTestCase
 {
@@ -385,14 +386,49 @@ XML;
      */
     public function testAssignRoleToUser($roleHref)
     {
-        self::markTestSkipped('@todo fixme');
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <RoleAssignInput>
   <Role href="{$roleHref}" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
-  <limitation identifier="Section">
+</RoleAssignInput>
+XML;
+
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/user/users/10/roles',
+            'RoleAssignInput+xml',
+            'RoleAssignmentList+json'
+        );
+        $request->setContent($xml);
+
+        $response = $this->sendHttpRequest($request);
+        $roleAssignmentArray = json_decode($response->getContent(), true);
+
+        self::assertHttpResponseCodeEquals($response, 200);
+
+        return $roleAssignmentArray['RoleAssignmentList']['RoleAssignment'][0]['_href'];
+    }
+
+    /**
+     * @covers       POST /user/users/{userId}/roles
+     *
+     * @param string $roleHref
+     * @param array $limitation
+     *
+     * @return string assigned role href
+     * @dataProvider provideLimitations
+     */
+    public function testAssignRoleToUserWithLimitation(array $limitation)
+    {
+        $roleHref = $this->createAndPublishRole(__METHOD__ . '_' . $limitation['identifier']);
+
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<RoleAssignInput>
+  <Role href="{$roleHref}" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
+  <limitation identifier="{$limitation['identifier']}">
       <values>
-          <ref href="/api/ezp/v2/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+          <ref href="{$limitation['href']}" media-type="application/vnd.ez.api.{$limitation['identifier']}+xml" />
       </values>
   </limitation>
 </RoleAssignInput>
@@ -412,6 +448,14 @@ XML;
         self::assertHttpResponseCodeEquals($response, 200);
 
         return $roleAssignmentArray['RoleAssignmentList']['RoleAssignment'][0]['_href'];
+    }
+
+    public function provideLimitations()
+    {
+        return [
+            [['identifier' => 'Section', 'href' => '/api/ezp/v2/content/sections/1']],
+            [['identifier' => 'Subtree', 'href' => '/api/ezp/v2/content/locations/1/2']],
+        ];
     }
 
     /**
@@ -448,7 +492,6 @@ XML;
      */
     public function testAssignRoleToUserGroup($roleHref)
     {
-        self::markTestSkipped('@todo fixme');
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <RoleAssignInput>
@@ -637,5 +680,42 @@ XML;
     private function roleDraftHrefToRoleHref($roleDraftHref)
     {
         return str_replace('/draft', '', $roleDraftHref);
+    }
+
+    /**
+     * Creates and publishes a role with $identifier.
+     *
+     * @param string $identifier
+     *
+     * @return string The href of the published role
+     */
+    private function createAndPublishRole($identifier)
+    {
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<RoleInput>
+  <identifier>$identifier</identifier>
+  <mainLanguageCode>eng-GB</mainLanguageCode>
+  <names>
+    <value languageCode="eng-GB">$identifier</value>
+  </names>
+  <descriptions>
+    <value languageCode="eng-GB">$identifier description</value>
+  </descriptions>
+</RoleInput>
+XML;
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/user/roles',
+            'RoleInput+xml',
+            'RoleDraft+json'
+        );
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
+
+        return $response->getHeader('Location');
     }
 }
