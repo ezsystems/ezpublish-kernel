@@ -5576,18 +5576,17 @@ Update Role draft
 
 Publish Role draft
 ``````````````````
-:Resource: /user/roles/<ID/draft
+:Resource: /user/roles/<ID>/draft
 :Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
 :Description: Publishes a role draft
 :Response:
 
 .. code:: http
 
-          HTTP/1.1 200 OK
+          HTTP/1.1 204 No Content
+          Location: /api/ezp/v2/user/roles/<ID>
           Content-Type: <depending on accept header>
-          Content-Length: <length>
-.. parsed-literal::
-          Role_
+          Content-Length: 0
 
 :Error Codes:
     :401: If the user is not authorized to publish this content type draft

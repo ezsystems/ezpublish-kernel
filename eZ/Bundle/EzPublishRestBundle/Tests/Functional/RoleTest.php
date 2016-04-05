@@ -646,7 +646,12 @@ XML;
             $this->createHttpRequest('PUBLISH', $roleDraftHref)
         );
 
-        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseCodeEquals($response, 204);
+        self::assertHttpResponseHasHeader(
+            $response,
+            'Location',
+            '/api/ezp/v2/user/roles/' . preg_replace('/.*roles\/(\d+).*/', '$1', $roleDraftHref)
+        );
     }
 
     /**
