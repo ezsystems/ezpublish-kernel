@@ -683,7 +683,7 @@ XML;
     }
 
     /**
-     * Creates and published a role with $identifier.
+     * Creates and publishes a role with $identifier.
      *
      * @param string $identifier
      *
@@ -706,7 +706,7 @@ XML;
 XML;
         $request = $this->createHttpRequest(
             'POST',
-            '/api/ezp/v2/user/roles?publish=false',
+            '/api/ezp/v2/user/roles',
             'RoleInput+xml',
             'RoleDraft+json'
         );
@@ -716,17 +716,6 @@ XML;
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
-        $this->addCreatedElement($href);
-
-        $roleDraftHref = $href . '/draft';
-
-        $response = $this->sendHttpRequest(
-            $this->createHttpRequest('PUBLISH', $roleDraftHref)
-        );
-
-        self::assertHttpResponseCodeEquals($response, 201);
-
-        return $href;
+        return $response->getHeader('Location');
     }
 }
