@@ -26,6 +26,14 @@ class ContentPreviewContext extends BrowserContext implements Context, SnippetAc
     }
 
     /**
+     * @BeforeScenario
+     */
+    public static function suppressDepreciationNotices(\Behat\Behat\Hook\Scope\BeforeScenarioScope $scope)
+    {
+        error_reporting(E_ALL & ~E_USER_DEPRECATED);
+    }
+
+    /**
      * @Given /^I create a draft for a content type that uses a custom location controller$/
      */
     public function iCreateDraftOfContentTypeWithCustomLocationController()
