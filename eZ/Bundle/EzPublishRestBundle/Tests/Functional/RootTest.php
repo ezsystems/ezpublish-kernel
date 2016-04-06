@@ -32,7 +32,7 @@ class RootTest extends RESTFunctionalTestCase
 
     /**
      * @dataProvider getRandomUriSet
-     * @covers       GET /<wrongUri>
+     * @covers GET /<wrongUri>
      */
     public function testCatchAll($uri)
     {
