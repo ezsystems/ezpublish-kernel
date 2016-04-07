@@ -995,9 +995,9 @@ class LocationServiceTest extends BaseTest
         $updateStruct = $locationService->newLocationUpdateStruct();
 
         // Remote ID of an existing location with the same locationId
-        $updateStruct->remoteId = '3f6d92f8044aed134f32153517850f5a';
+        $updateStruct->remoteId = $originalLocation->remoteId;
 
-        // Sets some random priority to confirm the update
+        // Sets one of the properties to be able to confirm location gets updated, here: priority
         $updateStruct->priority = 2;
 
         $location = $locationService->updateLocation($originalLocation, $updateStruct);
