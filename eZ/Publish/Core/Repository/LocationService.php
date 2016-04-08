@@ -478,7 +478,7 @@ class LocationService implements LocationServiceInterface
         if ($locationUpdateStruct->remoteId !== null) {
             try {
                 $existingLocation = $this->loadLocationByRemoteId($locationUpdateStruct->remoteId);
-                if ($existingLocation !== null) {
+                if ($existingLocation !== null && $existingLocation->id !== $loadedLocation->id) {
                     throw new InvalidArgumentException('locationUpdateStruct', 'location with provided remote ID already exists');
                 }
             } catch (APINotFoundException $e) {
