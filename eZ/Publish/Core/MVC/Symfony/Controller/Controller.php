@@ -10,13 +10,15 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
-abstract class Controller extends ContainerAware
+abstract class Controller implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * Returns value for $parameterName and fallbacks to $defaultValue if not defined.
      *

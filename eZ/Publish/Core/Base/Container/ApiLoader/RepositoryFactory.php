@@ -15,11 +15,14 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-class RepositoryFactory extends ContainerAware
+class RepositoryFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var string
      */

@@ -16,17 +16,14 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\ContentMatcherFactory as BaseFactory;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @deprecated Deprecated since 6.0, will be removed in 6.1. Use the ServiceAwareMatcherFactory instead.
  */
 class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, ContainerAwareInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
+    use ContainerAwareTrait;
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -46,11 +43,6 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, Cont
             $repository,
             $this->configResolver->getParameter('content_view')
         );
-    }
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     /**
