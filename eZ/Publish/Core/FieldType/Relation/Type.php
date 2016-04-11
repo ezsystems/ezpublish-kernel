@@ -121,7 +121,7 @@ class Type extends FieldType
      */
     public function getName(SPIValue $value)
     {
-        throw new \RuntimeException('@todo Implement this method');
+        return (string)$value->destinationContentId;
     }
 
     /**
