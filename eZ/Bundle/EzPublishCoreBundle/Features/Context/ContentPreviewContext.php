@@ -10,10 +10,13 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use EzSystems\BehatBundle\Context\Browser\Context as BrowserContext;
+use EzSystems\PlatformBehatBundle\Context\SubContext\NoticeSupressor;
 use PHPUnit_Framework_Assert as Assertion;
 
 class ContentPreviewContext extends BrowserContext implements Context, SnippetAcceptingContext
 {
+    use NoticeSupressor;
+
     /** @var \eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext */
     private $contentContext;
 
@@ -23,14 +26,6 @@ class ContentPreviewContext extends BrowserContext implements Context, SnippetAc
         $environment = $scope->getEnvironment();
 
         $this->contentContext = $environment->getContext('eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext');
-    }
-
-    /**
-     * @BeforeScenario
-     */
-    public static function suppressDepreciationNotices(\Behat\Behat\Hook\Scope\BeforeScenarioScope $scope)
-    {
-        error_reporting(E_ALL & ~E_USER_DEPRECATED);
     }
 
     /**
