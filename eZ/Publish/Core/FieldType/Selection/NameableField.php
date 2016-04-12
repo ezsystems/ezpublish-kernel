@@ -24,7 +24,7 @@ class NameableField implements Nameable
      *
      * @return string
      */
-    public function getName(SPIValue $value, FieldDefinition $fieldDefinition, $languageCode)
+    public function getFieldName(SPIValue $value, FieldDefinition $fieldDefinition, $languageCode)
     {
         if (empty($value->selection)) {
             return '';

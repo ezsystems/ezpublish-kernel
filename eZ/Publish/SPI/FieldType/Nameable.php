@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * {
  *     public function __construct(ContentHandler $contentHandler){...}
  *
- *     publish function getName(Value $value, FieldDefinition $fieldDefinition, $languageCode)
+ *     publish function getFieldName(Value $value, FieldDefinition $fieldDefinition, $languageCode)
  *     {
  *         // This will only return main language but gives an example of use
  *         return $this->contentHandler->loadContentInfo($value->destinationContentId)->name;
@@ -50,5 +50,5 @@ interface Nameable
      *
      * @return string
      */
-    public function getName(Value $value, FieldDefinition $fieldDefinition, $languageCode);
+    public function getFieldName(Value $value, FieldDefinition $fieldDefinition, $languageCode);
 }

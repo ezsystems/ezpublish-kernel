@@ -259,7 +259,7 @@ class NameSchemaService
                     $fieldDefinition->fieldTypeIdentifier
                 );
 
-                $fieldTitles[$fieldDefinitionIdentifier] = $nameableFieldTypeService->getName(
+                $fieldTitles[$fieldDefinitionIdentifier] = $nameableFieldTypeService->getFieldName(
                     $fieldMap[$fieldDefinitionIdentifier][$languageCode],
                     $fieldDefinition,
                     $languageCode
