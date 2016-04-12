@@ -53,7 +53,7 @@ interface FieldType
      *
      * The used $value can be assumed to be already accepted by {@link * acceptValue()}.
      *
-     * @deprecated Since 6.3/5.4.6, use \eZ\Publish\SPI\FieldType\Nameable
+     * @deprecated Since 6.3/5.4.7, use \eZ\Publish\SPI\FieldType\Nameable
      * @param \eZ\Publish\SPI\FieldType\Value $value
      *
      * @return string

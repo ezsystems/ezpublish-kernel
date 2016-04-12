@@ -32,7 +32,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * ```
  *
  *
- * @since 6.3/5.4.6
+ * @since 6.3/5.4.7
  */
 interface Nameable
 {
