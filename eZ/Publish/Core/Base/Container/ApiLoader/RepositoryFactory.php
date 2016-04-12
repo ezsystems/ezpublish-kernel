@@ -36,16 +36,27 @@ class RepositoryFactory implements ContainerAwareInterface
     protected $fieldTypeCollectionFactory;
 
     /**
+     * Collection of fieldTypes, lazy loaded via a closure.
+     *
+     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
+     */
+    protected $fieldTypeNameableCollectionFactory;
+
+    /**
      * Collection of limitation types for the RoleService.
      *
      * @var \eZ\Publish\SPI\Limitation\Type[]
      */
     protected $roleLimitations = array();
 
-    public function __construct($repositoryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory)
-    {
+    public function __construct(
+        $repositoryClass,
+        FieldTypeCollectionFactory $fieldTypeCollectionFactory,
+        FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory
+    ) {
         $this->repositoryClass = $repositoryClass;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
+        $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
     }
 
     /**
@@ -66,6 +77,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $searchHandler,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
+                'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
                 ),

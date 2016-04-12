@@ -463,7 +463,7 @@ class PageTest extends FieldTypeTest
     {
         return array(
             array($this->getEmptyValueExpectation(), ''),
-            array(new PageValue($this->getPageReference()), ''),
+            array(new PageValue($this->getPageReference()), '2ZonesLayout1'),
         );
     }
 

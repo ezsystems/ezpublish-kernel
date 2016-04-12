@@ -30,6 +30,7 @@ interface FieldType
     /**
      * Returns a human readable string representation from the given $value.
      *
+     * @deprecated Since 6.3/5.4.6, functionality moved to \eZ\Publish\SPI\FieldType\Nameable
      * @param mixed $value
      *
      * @return string

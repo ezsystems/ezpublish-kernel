@@ -236,7 +236,7 @@ class Type extends FieldType
      */
     public function getName(SPIValue $value)
     {
-        return '';
+        return (string)$value;
     }
 
     /**

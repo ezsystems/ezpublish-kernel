@@ -116,7 +116,7 @@ class Type extends FieldType
             $result = $value->xml->documentElement->textContent;
         }
 
-        return trim($result);
+        return trim(preg_replace('/\s\s+/', ' ', $result));
     }
 
     /**
