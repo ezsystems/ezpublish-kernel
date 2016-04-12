@@ -10,12 +10,12 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use EzSystems\BehatBundle\Context\Browser\Context as BrowserContext;
-use EzSystems\PlatformBehatBundle\Context\SubContext\NoticeSupressor;
+use EzSystems\PlatformBehatBundle\Context\SubContext\DeprecationNoticeSupressor;
 use PHPUnit_Framework_Assert as Assertion;
 
 class ContentPreviewContext extends BrowserContext implements Context, SnippetAcceptingContext
 {
-    use NoticeSupressor;
+    use DeprecationNoticeSupressor;
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext */
     private $contentContext;
