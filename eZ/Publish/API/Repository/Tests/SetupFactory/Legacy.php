@@ -167,6 +167,8 @@ class Legacy extends SetupFactory
     {
         $data = $this->getInitialData();
         $handler = $this->getDatabaseHandler();
+        $connection = $handler->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
         $this->cleanupVarDir($this->getInitialVarDir());
 
         // @todo FIXME: Needs to be in fixture
@@ -176,11 +178,9 @@ class Legacy extends SetupFactory
         $data['ezkeyword'] = array();
 
         foreach ($data as $table => $rows) {
-            // Cleanup before inserting
-            $deleteQuery = $handler->createDeleteQuery();
-            $deleteQuery->deleteFrom($handler->quoteIdentifier($table));
-            $stmt = $deleteQuery->prepare();
-            $stmt->execute();
+            // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
+            $q = $dbPlatform->getTruncateTableSql($handler->quoteIdentifier($table));
+            $connection->executeUpdate($q);
 
             // Check that at least one row exists
             if (!isset($rows[0])) {
