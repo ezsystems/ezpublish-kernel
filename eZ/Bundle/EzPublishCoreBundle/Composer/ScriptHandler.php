@@ -79,23 +79,31 @@ class ScriptHandler extends DistributionBundleScriptHandler
     {
         $event->getIO()->write(<<<'EOT'
 
-________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\________________________________________/\\\\\_________________________________________________
- ________________\////////////\\\____________\/\\\/////////\\\_\////\\\______________________________________/\\\///__________________________________________________
-  __________________________/\\\/_____________\/\\\_______\/\\\____\/\\\_______________________/\\\__________/\\\______________________________________________________
-   _____/\\\\\\\\__________/\\\/_______________\/\\\\\\\\\\\\\/_____\/\\\_____/\\\\\\\\\_____/\\\\\\\\\\\__/\\\\\\\\\_______/\\\\\_____/\\/\\\\\\\_____/\\\\\__/\\\\\___
-    ___/\\\/////\\\_______/\\\/_________________\/\\\/////////_______\/\\\____\////////\\\___\////\\\////__\////\\\//______/\\\///\\\__\/\\\/////\\\__/\\\///\\\\\///\\\_
-     __/\\\\\\\\\\\______/\\\/___________________\/\\\________________\/\\\______/\\\\\\\\\\_____\/\\\_________\/\\\_______/\\\__\//\\\_\/\\\___\///__\/\\\_\//\\\__\/\\\_
-      _\//\\///////_____/\\\/_____________________\/\\\________________\/\\\_____/\\\/////\\\_____\/\\\_/\\_____\/\\\______\//\\\__/\\\__\/\\\_________\/\\\__\/\\\__\/\\\_
-       __\//\\\\\\\\\\__/\\\\\\\\\\\\\\\___________\/\\\______________/\\\\\\\\\_\//\\\\\\\\/\\____\//\\\\\______\/\\\_______\///\\\\\/___\/\\\_________\/\\\__\/\\\__\/\\\_
-        ___\//////////__\///////////////____________\///______________\/////////___\////////\//______\/////_______\///__________\/////_____\///__________\///___\///___\///__
+      ________      ____    ___             __       ___         
+     /\_____  \    /\  _`\ /\_ \           /\ \__  /'___\ 
+   __\/____//'/'   \ \ \_\ \//\ \      __  \ \ ,_\/\ \__/  ___   _ __    ___ ___
+ /'__`\   //'/'     \ \ ,__/ \ \ \   /'__`\ \ \ \/\ \ ,__\/ __`\/\`'__\/' __` __`\  
+/\  __/  //'/'___    \ \ \/   \_\ \_/\ \L\.\_\ \ \_\ \ \_/\ \L\ \ \ \/ /\ \/\ \/\ \ 
+\ \____\ /\_______\   \ \_\   /\____\ \__/.\_\\ \__\\ \_\\ \____/\ \_\ \ \_\ \_\ \_\
+ \/____/ \/_______/    \/_/   \/____/\/__/\/_/ \/__/ \/_/ \/___/  \/_/  \/_/\/_/\/_/
 
 
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
-<options=bold>Please read the INSTALL.md file to complete the installation.</options>
+<options=bold>Quick Install:</options>
+<options=italic>Assuming user you execute commands with below is same that extracted/installed the software.</options>
+<comment>    $  export SYMFONY_ENV="prod"</comment>
+<comment>    $  php app/console ezplatform:install clean</comment>
+<comment>    $  php app/console assetic:dump</comment>
+<comment>    $  php app/console server:run</comment>
 
-<options=bold>Assuming that your database information were correctly entered, you may install a clean database by running the install command:</options>
-<comment>    $ php app/console --env=prod ezplatform:install clean</comment>
+Note:
+- "ezplatform:install" also has "demo" option on demo distributions, use "--help" argument to see available options.
+- For development use you can enable full debugging by setting SYMFONY_ENV to "dev".
+- The last command will give you url to frontend of installation, add "/ez" to reach backend.
+
+<options=italic>For full install instructions, including setting up directory permissions, see install instructions in <fg=yellow>INSTALL.md</fg=yellow>
+or <fg=yellow>README.md</fg=yellow>.</options>
 
 EOT
         );
