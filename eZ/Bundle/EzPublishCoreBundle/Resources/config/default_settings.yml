@@ -18,6 +18,8 @@ parameters:
     ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
 
+    ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+
     ezsettings.default.content_view_defaults:
         full:
             default:
@@ -136,7 +138,7 @@ parameters:
 
     # Security settings
     ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"
-    ezsettings.default.security.base_layout: %ezpublish.content_view.viewbase_layout%
+    ezsettings.default.security.base_layout: %ezsettings.default.pagelayout%
 
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp
