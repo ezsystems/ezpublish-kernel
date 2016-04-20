@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
+use eZ\Publish\API\Repository\Values\Content\LocationFilter;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -483,5 +484,10 @@ class Handler implements BaseLocationHandler
     public function changeMainLocation($contentId, $locationId)
     {
         $this->treeHandler->changeMainLocation($contentId, $locationId);
+    }
+
+    public function filter(LocationFilter $filter, array $languageSettings = [])
+    {
+        // TODO: Implement filter() method.
     }
 }

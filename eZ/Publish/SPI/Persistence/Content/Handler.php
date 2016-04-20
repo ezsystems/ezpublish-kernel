@@ -11,6 +11,7 @@
 namespace eZ\Publish\SPI\Persistence\Content;
 
 // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
+use eZ\Publish\API\Repository\Values\Content\Filter;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
@@ -256,4 +257,14 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct);
+
+    /**
+     * Finds Content items for the given filter.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Filter $filter
+     * @param array $languageSettings
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\FilterResult
+     */
+    public function filter(Filter $filter, array $languageSettings = []);
 }

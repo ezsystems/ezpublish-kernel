@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\LocationFilter;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -199,4 +200,19 @@ interface LocationService
      * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
     public function newLocationUpdateStruct();
+
+    /**
+     * Finds Locations for the given filter.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationFilter $filter
+     * @param array $languageSettings
+     * @param boolean $filterOnUserPermissions
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\FilterResult
+     */
+    public function filterLocations(
+        LocationFilter $filter,
+        array $languageSettings = [],
+        $filterOnUserPermissions = true
+    );
 }

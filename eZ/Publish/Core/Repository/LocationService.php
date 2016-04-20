@@ -10,17 +10,18 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\LocationFilter;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
+use eZ\Publish\API\Repository\Values\Content\Search\FilterResult;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
@@ -135,7 +136,7 @@ class LocationService implements LocationServiceInterface
             throw new UnauthorizedException('content', 'read');
         } elseif ($contentReadCriterion !== true) {
             // Query if there are any content in subtree current user don't have access to
-            $query = new Query(
+            $query = new LocationFilter(
                 array(
                     'limit' => 0,
                     'filter' => new CriterionLogicalAnd(
@@ -146,7 +147,7 @@ class LocationService implements LocationServiceInterface
                     ),
                 )
             );
-            $result = $this->repository->getSearchService()->findContent($query, array(), false);
+            $result = $this->filterLocations($query, array(), false);
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'read');
             }
@@ -273,10 +274,11 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned
+     * @param array $languageSettings
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(APILocation $location, $offset = 0, $limit = 25)
+    public function loadLocationChildren(APILocation $location, $offset = 0, $limit = 25, array $languageSettings = [])
     {
         if (!$this->domainMapper->isValidLocationSortField($location->sortField)) {
             throw new InvalidArgumentValue('sortField', $location->sortField, 'Location');
@@ -295,21 +297,22 @@ class LocationService implements LocationServiceInterface
         }
 
         $childLocations = array();
-        $searchResult = $this->searchChildrenLocations(
+        $filterResult = $this->searchChildrenLocations(
             $location->id,
             $location->sortField,
             $location->sortOrder,
             $offset,
-            $limit
+            $limit,
+            $languageSettings
         );
-        foreach ($searchResult->searchHits as $searchHit) {
+        foreach ($filterResult->searchHits as $searchHit) {
             $childLocations[] = $searchHit->valueObject;
         }
 
         return new LocationList(
             array(
                 'locations' => $childLocations,
-                'totalCount' => $searchResult->totalCount,
+                'totalCount' => $filterResult->totalCount,
             )
         );
     }
@@ -318,20 +321,22 @@ class LocationService implements LocationServiceInterface
      * Returns the number of children which are readable by the current user of a location object.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param array $languageSettings
      *
      * @return int
      */
-    public function getLocationChildCount(APILocation $location)
+    public function getLocationChildCount(APILocation $location, array $languageSettings = [])
     {
-        $searchResult = $this->searchChildrenLocations(
+        $filterResult = $this->searchChildrenLocations(
             $location->id,
             $location->sortField,
             $location->sortOrder,
             0,
-            0
+            0,
+            $languageSettings
         );
 
-        return $searchResult->totalCount;
+        return $filterResult->totalCount;
     }
 
     /**
@@ -342,17 +347,19 @@ class LocationService implements LocationServiceInterface
      * @param int $sortOrder
      * @param int $offset
      * @param int $limit
+     * @param array $languageSettings
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\FilterResult
      */
     protected function searchChildrenLocations(
         $parentLocationId,
         $sortField = null,
         $sortOrder = APILocation::SORT_ORDER_ASC,
         $offset = 0,
-        $limit = -1
+        $limit = -1,
+        array $languageSettings = []
     ) {
-        $query = new LocationQuery(
+        $query = new LocationFilter(
             array(
                 'filter' => new Criterion\ParentLocationId($parentLocationId),
                 'offset' => $offset >= 0 ? (int)$offset : 0,
@@ -364,7 +371,7 @@ class LocationService implements LocationServiceInterface
             $query->sortClauses = array($this->getSortClauseBySortField($sortField, $sortOrder));
         }
 
-        return $this->repository->getSearchService()->findLocations($query);
+        return $this->filterLocations($query, $languageSettings);
     }
 
     /**
@@ -625,7 +632,7 @@ class LocationService implements LocationServiceInterface
             throw new UnauthorizedException('content', 'read');
         } elseif ($contentReadCriterion !== true) {
             // Query if there are any content in subtree current user don't have access to
-            $query = new Query(
+            $query = new LocationFilter(
                 array(
                     'limit' => 0,
                     'filter' => new CriterionLogicalAnd(
@@ -636,7 +643,7 @@ class LocationService implements LocationServiceInterface
                     ),
                 )
             );
-            $result = $this->repository->getSearchService()->findContent($query, array(), false);
+            $result = $this->filterLocations($query, [], false);
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'read');
             }
@@ -699,23 +706,23 @@ class LocationService implements LocationServiceInterface
         /** Check remove access to descendants
          * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
          */
-        $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion('content', 'remove');
-        if ($contentReadCriterion === false) {
+        $contentRemoveCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion('content', 'remove');
+        if ($contentRemoveCriterion === false) {
             throw new UnauthorizedException('content', 'remove');
-        } elseif ($contentReadCriterion !== true) {
+        } elseif ($contentRemoveCriterion !== true) {
             // Query if there are any content in subtree current user don't have access to
-            $query = new Query(
+            $query = new LocationFilter(
                 array(
                     'limit' => 0,
                     'filter' => new CriterionLogicalAnd(
                         array(
                             new CriterionSubtree($location->pathString),
-                            new CriterionLogicalNot($contentReadCriterion),
+                            new CriterionLogicalNot($contentRemoveCriterion),
                         )
                     ),
                 )
             );
-            $result = $this->repository->getSearchService()->findContent($query, array(), false);
+            $result = $this->filterLocations($query, [], false);
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'remove');
             }
@@ -808,6 +815,111 @@ class LocationService implements LocationServiceInterface
 
             default:
                 return new SortClause\Location\Path($sortOrder);
+        }
+    }
+
+    public function filterLocations(
+        LocationFilter $filter,
+        array $languageSettings = [],
+        $filterOnUserPermissions = true
+    ) {
+        $filter = clone $filter;
+
+        $this->validateFilterCriteria([$filter->filter]);
+        $this->validateFilterSortClauses($filter);
+
+        /** @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler */
+        $hasSomeAccess = $permissionsCriterionHandler->addPermissionsCriterion($filter->filter);
+        if ($filterOnUserPermissions && !$hasSomeAccess) {
+            return new FilterResult(
+                [
+                    'time' => 0,
+                    'totalCount' => 0,
+                ]
+            );
+        }
+
+        $filterResult = $this->persistenceHandler->locationHandler()->filter(
+            $filter,
+            $languageSettings
+        );
+
+        foreach ($filterResult->searchHits as $hit) {
+            /** @var \eZ\Publish\SPI\Persistence\Content\Location $spiLocation */
+            $spiLocation = $hit->valueObject;
+            $hit->valueObject = $this->domainMapper->buildLocationDomainObject($spiLocation);
+        }
+
+        return $filterResult;
+    }
+
+    /**
+     * Checks that provided filter criteria can be handled.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion[] $criteria
+     */
+    private function validateFilterCriteria(array $criteria)
+    {
+        foreach ($criteria as $criterion) {
+            if ($criterion instanceof Criterion\FullText) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'FullText criterion cannot be used in Location filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\Field) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'Field criterion cannot be used in Location filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\FieldRelation) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'FieldRelation criterion cannot be used in Location filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\MapLocationDistance) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'MapLocationDistance criterion cannot be used in Location filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\LogicalOperator) {
+                $this->validateFilterCriteria($criterion->criteria);
+            }
+        }
+    }
+
+    /**
+     * Checks that provided filter sort clauses can be handled.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationFilter $filter
+     */
+    private function validateFilterSortClauses(LocationFilter $filter)
+    {
+        foreach ($filter->sortClauses as $sortClause) {
+            if ($sortClause instanceof SortClause\Field) {
+                throw new InvalidArgumentException(
+                    '$filter->sortClauses',
+                    'Field sort clause cannot be used in Location filtering'
+                );
+            }
+
+            if ($sortClause instanceof SortClause\MapLocationDistance) {
+                throw new InvalidArgumentException(
+                    '$filter->sortClauses',
+                    'MapLocationDistance sort clause cannot be used in Location filtering'
+                );
+            }
         }
     }
 }

@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Filter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
@@ -709,5 +710,10 @@ class Handler implements BaseContentHandler
         return $this->mapper->extractRelationsFromRows(
             $this->contentGateway->loadReverseRelations($destinationContentId, $type)
         );
+    }
+
+    public function filter(Filter $filter, array $languageSettings = [])
+    {
+        // TODO: Implement filter() method.
     }
 }

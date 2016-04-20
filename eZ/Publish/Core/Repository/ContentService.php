@@ -12,6 +12,10 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Filter;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Search\FilterResult;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -1917,5 +1921,170 @@ class ContentService implements ContentServiceInterface
     public function newTranslationValues()
     {
         return new TranslationValues();
+    }
+
+    /**
+     * Internal method for finding Content items for the given filter.
+     *
+     * Returns SPI search hits.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Filter $filter
+     * @param array $languageSettings
+     * @param boolean $filterOnUserPermissions
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\FilterResult
+     */
+    private function internalFilterContentInfo(
+        Filter $filter,
+        array $languageSettings = [],
+        $filterOnUserPermissions = true
+    ) {
+        $filter = clone $filter;
+
+        $this->validateFilterCriteria([$filter->filter]);
+        $this->validateFilterSortClauses($filter);
+
+        /** @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler */
+        $hasSomeAccess = $permissionsCriterionHandler->addPermissionsCriterion($filter->filter);
+        if ($filterOnUserPermissions && !$hasSomeAccess) {
+            return new FilterResult(
+                [
+                    'time' => 0,
+                    'totalCount' => 0,
+                ]
+            );
+        }
+
+        return $this->persistenceHandler->contentHandler()->filter(
+            $filter,
+            $languageSettings
+        );
+    }
+
+    public function filterContentInfo(
+        Filter $filter,
+        array $languageSettings = [],
+        $filterOnUserPermissions = true
+    ) {
+        $filterResult = $this->internalFilterContentInfo(
+            $filter,
+            $languageSettings,
+            $filterOnUserPermissions
+        );
+
+        foreach ($filterResult->searchHits as $hit) {
+            /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo */
+            $spiContentInfo = $hit->valueObject;
+            $hit->valueObject = $this->domainMapper->buildContentInfoDomainObject($spiContentInfo);
+        }
+
+        return $filterResult;
+    }
+
+    public function filterContent(
+        Filter $filter,
+        array $languageSettings = [],
+        $filterOnUserPermissions = true
+    ) {
+        $filterResult = $this->internalFilterContentInfo(
+            $filter,
+            $languageSettings,
+            $filterOnUserPermissions
+        );
+
+        foreach ($filterResult->searchHits as $hit) {
+            /** @var \eZ\Publish\SPI\Persistence\Content $spiContent */
+            $spiContent = $hit->valueObject;
+            $hit->valueObject = $this->internalLoadContent(
+                $spiContent->versionInfo->contentInfo->id,
+                [$hit->matchedTranslation]
+            );
+        }
+
+        return $filterResult;
+    }
+
+    /**
+     * Checks that provided filter criteria can be handled.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion[] $criteria
+     */
+    private function validateFilterCriteria(array $criteria)
+    {
+        foreach ($criteria as $criterion) {
+            if ($criterion instanceof Criterion\Location) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'Location criterion cannot be used in Content filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\FullText) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'FullText criterion cannot be used in Content filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\Field) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'Field criterion cannot be used in Content filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\FieldRelation) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'FieldRelation criterion cannot be used in Content filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\MapLocationDistance) {
+                throw new InvalidArgumentException(
+                    '$filter->filter',
+                    'MapLocationDistance criterion cannot be used in Content filtering'
+                );
+            }
+
+            if ($criterion instanceof Criterion\LogicalOperator) {
+                $this->validateFilterCriteria($criterion->criteria);
+            }
+        }
+    }
+
+    /**
+     * Checks that provided filter sort clauses can be handled.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Filter $filter
+     */
+    private function validateFilterSortClauses(Filter $filter)
+    {
+        foreach ($filter->sortClauses as $sortClause) {
+            if ($sortClause instanceof SortClause\Location) {
+                throw new InvalidArgumentException(
+                    '$filter->sortClauses',
+                    'Location sort clauses cannot be used in Content filtering'
+                );
+            }
+
+            if ($sortClause instanceof SortClause\Field) {
+                throw new InvalidArgumentException(
+                    '$filter->sortClauses',
+                    'Field sort clause cannot be used in Content filtering'
+                );
+            }
+
+            if ($sortClause instanceof SortClause\MapLocationDistance) {
+                throw new InvalidArgumentException(
+                    '$filter->sortClauses',
+                    'MapLocationDistance sort clause cannot be used in Content filtering'
+                );
+            }
+        }
     }
 }

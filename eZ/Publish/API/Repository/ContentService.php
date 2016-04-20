@@ -11,6 +11,7 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Filter;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationValues;
@@ -432,4 +433,34 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
      */
     public function newTranslationValues();
+
+    /**
+     * Finds ContentInfo items for the given filter.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Filter $filter
+     * @param array $languageSettings
+     * @param boolean $filterOnUserPermissions
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\FilterResult
+     */
+    public function filterContentInfo(
+        Filter $filter,
+        array $languageSettings = [],
+        $filterOnUserPermissions = true
+    );
+
+    /**
+     * Finds Content items for the given filter.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Filter $filter
+     * @param array $languageSettings
+     * @param boolean $filterOnUserPermissions
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\FilterResult
+     */
+    public function filterContent(
+        Filter $filter,
+        array $languageSettings = [],
+        $filterOnUserPermissions = true
+    );
 }

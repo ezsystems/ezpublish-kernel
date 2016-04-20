@@ -11,6 +11,7 @@
 namespace eZ\Publish\SPI\Persistence\Content\Location;
 
 use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationFilter;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -193,4 +194,14 @@ interface Handler
      * @param mixed $locationId
      */
     public function changeMainLocation($contentId, $locationId);
+
+    /**
+     * Finds Locations for the given filter.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationFilter $filter
+     * @param array $languageSettings
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\FilterResult
+     */
+    public function filter(LocationFilter $filter, array $languageSettings = []);
 }

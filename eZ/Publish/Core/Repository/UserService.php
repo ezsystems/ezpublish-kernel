@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\LocationFilter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
@@ -217,24 +218,34 @@ class UserService implements UserServiceInterface
      */
     protected function searchSubGroups($locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = 25)
     {
-        $searchQuery = new LocationQuery();
+        $filter = new LocationFilter();
 
-        $searchQuery->offset = $offset;
-        $searchQuery->limit = $limit;
+        $filter->offset = $offset;
+        $filter->limit = $limit;
 
-        $searchQuery->filter = new CriterionLogicalAnd(
+        $filter->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId($this->settings['userGroupClassID']),
                 new CriterionParentLocationId($locationId),
             )
         );
 
-        $searchQuery->sortClauses = array();
         if ($sortField !== null) {
-            $searchQuery->sortClauses[] = $this->getSortClauseBySortField($sortField, $sortOrder);
+            $filter->sortClauses[] = $this->getSortClauseBySortField($sortField, $sortOrder);
         }
 
-        return $this->repository->getSearchService()->findLocations($searchQuery, array(), false);
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler */
+        /** @var \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper */
+
+        $filterResult = $locationHandler->filter($filter, []);
+
+        foreach ($filterResult->searchHits as $hit) {
+            /** @var \eZ\Publish\SPI\Persistence\Content\Location $spiLocation */
+            $spiLocation = $hit->valueObject;
+            $hit->valueObject = $domainMapper->buildLocationDomainObject($spiLocation);
+        }
+
+        return $filterResult;
     }
 
     /**
@@ -897,26 +908,30 @@ class UserService implements UserServiceInterface
             }
         }
 
-        $searchQuery = new LocationQuery();
+        $filter = new LocationFilter();
 
-        $searchQuery->offset = $offset;
-        $searchQuery->limit = $limit;
-        $searchQuery->performCount = false;
+        $filter->offset = $offset;
+        $filter->limit = $limit;
+        $filter->performCount = false;
 
-        $searchQuery->filter = new CriterionLogicalAnd(
+        $filter->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId($this->settings['userGroupClassID']),
                 new CriterionLocationId($parentLocationIds),
             )
         );
 
-        $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler */
 
-        $userGroups = array();
-        foreach ($searchResult->searchHits as $resultItem) {
+        $filterResult = $locationHandler->filter($filter, []);
+
+        $userGroups = [];
+        foreach ($filterResult->searchHits as $hit) {
+            /** @var \eZ\Publish\SPI\Persistence\Content\Location $spiLocation */
+            $spiLocation = $hit->valueObject;
             $userGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $spiLocation->contentId
                 )
             );
         }
@@ -947,31 +962,35 @@ class UserService implements UserServiceInterface
             $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
-        $searchQuery = new LocationQuery();
+        $filter = new LocationFilter();
 
-        $searchQuery->filter = new CriterionLogicalAnd(
+        $filter->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId($this->settings['userClassID']),
                 new CriterionParentLocationId($mainGroupLocation->id),
             )
         );
 
-        $searchQuery->offset = $offset;
-        $searchQuery->limit = $limit;
-        $searchQuery->performCount = false;
+        $filter->offset = $offset;
+        $filter->limit = $limit;
+        $filter->performCount = false;
 
-        $searchQuery->sortClauses = array(
+        $filter->sortClauses = array(
             $this->getSortClauseBySortField($mainGroupLocation->sortField, $mainGroupLocation->sortOrder),
         );
 
-        $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler */
 
-        $users = array();
-        foreach ($searchResult->searchHits as $resultItem) {
+        $filterResult = $locationHandler->filter($filter, []);
+
+        $users = [];
+        foreach ($filterResult->searchHits as $hit) {
+            /** @var \eZ\Publish\SPI\Persistence\Content\Location $spiLocation */
+            $spiLocation = $hit->valueObject;
             $users[] = $this->buildDomainUserObject(
-                $this->userHandler->load($resultItem->valueObject->contentInfo->id),
+                $this->userHandler->load($spiLocation->contentId),
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $spiLocation->contentId
                 )
             );
         }
