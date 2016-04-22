@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -681,12 +682,18 @@ class LocationService implements LocationServiceInterface
     /**
      * Deletes $location and all its descendants.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the user is trying delete the root location
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
     public function deleteLocation(APILocation $location)
     {
+        // children of location 1 is not allowed to be deleted
+        if ($location->parentLocationId === 1) {
+            throw new ForbiddenException('Root location cannot be deleted');
+        }
+
         $location = $this->loadLocation($location->id);
 
         if (!$this->repository->canUser('content', 'manage_locations', $location->getContentInfo())) {

@@ -2082,4 +2082,20 @@ class LocationServiceTest extends BaseTest
             $overwrite
         );
     }
+
+    /**
+     * Test for the deleteLocation() method when trying to delete root location.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
+     */
+    public function testDeleteRootLocationShowThrowForbiddenException()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation(2);
+        $locationService->deleteLocation($location);
+    }
 }

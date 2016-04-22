@@ -38,6 +38,7 @@ interface TrashService
      *
      * Content is left untouched.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the user is trying trash the root location
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location

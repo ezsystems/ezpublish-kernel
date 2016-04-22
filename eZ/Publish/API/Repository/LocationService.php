@@ -178,6 +178,7 @@ interface LocationService
     /**
      * Deletes $location and all its descendants.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the user is trying delete the root location
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location

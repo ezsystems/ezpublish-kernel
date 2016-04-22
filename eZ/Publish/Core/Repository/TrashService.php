@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
@@ -106,6 +107,7 @@ class TrashService implements TrashServiceInterface
      *
      * Content is left untouched.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the user is trying trash the root location
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
@@ -114,6 +116,11 @@ class TrashService implements TrashServiceInterface
      */
     public function trash(Location $location)
     {
+        // children of location 1 is not allowed to be trashed
+        if ($location->parentLocationId === 1) {
+            throw new ForbiddenException('Root location cannot be sent to trash');
+        }
+
         if (!is_numeric($location->id)) {
             throw new InvalidArgumentValue('id', $location->id, 'Location');
         }

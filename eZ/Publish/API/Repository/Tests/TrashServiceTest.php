@@ -595,4 +595,19 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         return $remoteIds;
     }
+
+    /**
+     * Test trashing root location.
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     */
+    public function testTrashShouldThrowForbiddenExceptionIfRoot()
+    {
+        $locationService = $this->getRepository()->getLocationService();
+        $trashService = $this->getRepository()->getTrashService();
+
+        $rootLocation = $locationService->loadLocation(2);
+        $trashService->trash($rootLocation);
+    }
 }
