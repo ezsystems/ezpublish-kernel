@@ -259,18 +259,18 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     /**
      * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationCopied
      */
-    public function locationCopied($locationId, $oldParentId, $newParentId)
+    public function locationCopied($locationId, $newLocationId, $newParentId)
     {
         $this->logger->logCall(
             __METHOD__,
             array(
-                'location' => $locationId,
-                'oldParent' => $oldParentId,
+                'oldLocation' => $locationId,
+                'newLocation' => $newLocationId,
                 'newParent' => $newParentId,
             )
         );
 
-        return $this->persistenceHandler->urlAliasHandler()->locationCopied($locationId, $oldParentId, $newParentId);
+        return $this->persistenceHandler->urlAliasHandler()->locationCopied($locationId, $newLocationId, $newParentId);
     }
 
     /**
