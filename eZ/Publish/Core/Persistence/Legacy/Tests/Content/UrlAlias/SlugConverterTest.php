@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
+use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
+use eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased;
+use eZ\Publish\Core\Persistence\Utf8Converter;
 
 /**
  * Test case for URL slug converter.
@@ -153,6 +156,101 @@ class SlugConverterTest extends TestCase
         $this->assertEquals(
             $returnValue,
             $slugConverter->getUniqueCounterValue($text, $isRootLevel)
+        );
+    }
+
+    public function cleanupTextData()
+    {
+        return [
+            [
+                '.Ph\'nglui mglw\'nafh, Cthulhu R\'lyeh wgah\'nagl fhtagn!?...',
+                'url_cleanup',
+                'Ph-nglui-mglw-nafh-Cthulhu-R-lyeh-wgah-nagl-fhtagn!',
+            ],
+            [
+                '.Ph\'nglui mglw\'nafh, Cthulhu R\'lyeh wgah\'nagl fhtagn!?...',
+                'url_cleanup_iri',
+                'Ph\'nglui-mglw\'nafh,-Cthulhu-R\'lyeh-wgah\'nagl-fhtagn!',
+            ],
+            [
+                '.Ph\'nglui mglw\'nafh, Cthulhu R\'lyeh wgah\'nagl fhtagn!?...',
+                'url_cleanup_compat',
+                'ph_nglui_mglw_nafh_cthulhu_r_lyeh_wgah_nagl_fhtagn',
+            ],
+        ];
+    }
+
+    /**
+     * Test for the cleanupText() method.
+     *
+     * @dataProvider cleanupTextData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter::cleanupText
+     */
+    public function testCleanupText($text, $method, $expected)
+    {
+        $testMethod = new \ReflectionMethod(
+            '\eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter',
+            'cleanupText'
+        );
+        $testMethod->setAccessible(true);
+
+        $actual = $testMethod->invoke($this->getMockedSlugConverter(), $text, $method);
+
+        $this->assertEquals(
+            $expected,
+            $actual
+        );
+    }
+
+    public function convertData()
+    {
+        return [
+            [
+                '.Ph\'nglui mglw\'nafh, Cthulhu R\'lyeh wgah\'nagl fhtagn!?...',
+                '\'_1\'',
+                'urlalias',
+                'Ph-nglui-mglw-nafh-Cthulhu-R-lyeh-wgah-nagl-fhtagn!',
+            ],
+            [
+                '.Ph\'nglui mglw\'nafh, Cthulhu R\'lyeh wgah\'nagl fhtagn!?...',
+                '\'_1\'',
+                'urlalias_iri',
+                'Ph\'nglui-mglw\'nafh,-Cthulhu-R\'lyeh-wgah\'nagl-fhtagn!',
+            ],
+            [
+                '.Ph\'nglui mglw\'nafh, Cthulhu R\'lyeh wgah\'nagl fhtagn!?...',
+                '\'_1\'',
+                'urlalias_compat',
+                'ph_nglui_mglw_nafh_cthulhu_r_lyeh_wgah_nagl_fhtagn',
+            ],
+        ];
+    }
+
+    /**
+     * Test for the convert() method.
+     *
+     * @dataProvider convertData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter::convert
+     * @depends testCleanupText
+     */
+    public function testConvertNoMocking($text, $defaultText, $transformation, $expected)
+    {
+        $transformationProcessor = new PreprocessedBased(
+            new PcreCompiler(
+                new Utf8Converter()
+            ),
+            [
+                __DIR__ . '../../../../../Tests/TransformationProcessor/_fixtures/transformations/ascii.tr.result',
+                __DIR__ . '../../../../../Tests/TransformationProcessor/_fixtures/transformations/basic.tr.result',
+                __DIR__ . '../../../../../Tests/TransformationProcessor/_fixtures/transformations/latin.tr.result',
+                __DIR__ . '../../../../../Tests/TransformationProcessor/_fixtures/transformations/search.tr.result',
+            ]
+        );
+        $slugConverter = new SlugConverter($transformationProcessor);
+
+        $this->assertEquals(
+            $expected,
+            $slugConverter->convert($text, $defaultText, $transformation)
         );
     }
 
