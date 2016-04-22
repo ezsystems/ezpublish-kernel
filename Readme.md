@@ -84,7 +84,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     # If you want to test against mysql or postgres instead of sqlite, define one of these with referance to a empty test db:
     # export DATABASE="mysql://root@localhost/$DB_NAME"
     # export DATABASE="pgsql://postgres@localhost/$DB_NAME"
-    php -d memory_limit=-1 vendor/bin/phpunit -c phpunit-integration-legacy-solr.xml
+    php -d memory_limit=-1 vendor/bin/phpunit -c phpunit-integration-legacy.xml
     ```
     
     To run integration tests against Solr, see https://github.com/ezsystems/ezplatform-solr-search-engine.
