@@ -1525,7 +1525,7 @@ class LocationServiceTest extends BaseTest
                 'alwaysAvailable' => true,
                 'isHistory' => false,
                 'isCustom' => false,
-                'forward' => false
+                'forward' => false,
             ],
             '49-2e5bc8831f7ae6a29530e7f1bbf2de9c' => [
                 'id' => '49-2e5bc8831f7ae6a29530e7f1bbf2de9c',
@@ -1536,7 +1536,7 @@ class LocationServiceTest extends BaseTest
                 'alwaysAvailable' => true,
                 'isHistory' => false,
                 'isCustom' => false,
-                'forward' => false
+                'forward' => false,
             ],
             '49-45b963397aa40d4a0063e0d85e4fe7a1' => [
                 'type' => 0,
@@ -1546,8 +1546,8 @@ class LocationServiceTest extends BaseTest
                 'alwaysAvailable' => true,
                 'isHistory' => false,
                 'isCustom' => false,
-                'forward' => false
-            ]
+                'forward' => false,
+            ],
         ];
 
         $this->assertGeneratedAliases($locationList->locations, $urlAliasService, $expectedAliases);
@@ -2154,7 +2154,7 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Assert generated aliases to expected alias return
+     * Assert generated aliases to expected alias return.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
      * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
