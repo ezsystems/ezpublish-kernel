@@ -1484,6 +1484,48 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the copySubtree() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testCopySubtreeWithAliases()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+        /* BEGIN: Use Case */
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to copy
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        // Copy location "Media" to "Demo Design"
+        $copiedLocation = $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
+
+        // Load copied subtree items
+        $locationList = $locationService->loadLocationChildren($copiedLocation);
+
+        $this->assertGeneratedAliases($locationList->locations, $urlAliasService);
+        /* END: Use Case */
+    }
+
+    /**
      * Asserts that given Content has default ContentStates.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
@@ -2081,5 +2123,19 @@ class LocationServiceTest extends BaseTest
             ),
             $overwrite
         );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     */
+    protected function assertGeneratedAliases(array $locations, $urlAliasService)
+    {
+        foreach ($locations as $location) {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+                $urlAliasService->reverseLookup($location)
+            );
+        }
     }
 }
