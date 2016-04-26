@@ -72,8 +72,6 @@ class IO extends AbstractParser
     public function postMap(array $config, ContextualizerInterface $contextualizer)
     {
         $container = $contextualizer->getContainer();
-        $configResolver = $container->get('ezpublish.config.resolver.core');
-        $configResolver->setContainer($container);
 
         // complex parameters dependencies
         foreach (array_merge($config['siteaccess']['list'], array_keys($config['siteaccess']['groups'])) as $scope) {

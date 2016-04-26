@@ -172,6 +172,7 @@ services:
         arguments:
             - %ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources%
             - @ezpublish.config.resolver
+        lazy: true
 
     ezpublish.fieldType.ezrichtext.validator.docbook:
         class: %ezpublish.fieldType.ezrichtext.validator.xml.class%
