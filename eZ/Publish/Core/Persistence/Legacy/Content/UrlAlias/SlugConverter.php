@@ -33,7 +33,6 @@ class SlugConverter
                     'endline_search_normalize',
                     'tab_search_normalize',
                     'specialwords_search_normalize',
-                    'punctuation_normalize',
 
                     //transform
                     'apostrophe_to_doublequote',
@@ -74,7 +73,6 @@ class SlugConverter
                     'endline_search_normalize',
                     'tab_search_normalize',
                     'specialwords_search_normalize',
-                    'punctuation_normalize',
 
                     //transform
                     'apostrophe_to_doublequote',
