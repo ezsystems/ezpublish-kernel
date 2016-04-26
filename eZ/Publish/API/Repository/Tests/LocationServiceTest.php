@@ -1506,51 +1506,19 @@ class LocationServiceTest extends BaseTest
         $locationToCopy = $locationService->loadLocation($mediaLocationId);
         $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
-        // Copy location "Media" to "Demo Design"
-        $copiedLocation = $locationService->copySubtree(
+        // Copy location "Media" to "Design"
+        $locationService->copySubtree(
             $locationToCopy,
             $newParentLocation
         );
 
-        // Load copied subtree items
-        $locationList = $locationService->loadLocationChildren($copiedLocation);
-
-        $expectedAliases = [
-            '49-59b514174bffe4ae402b3d63aad79fe0' => [
-                'id' => '49-59b514174bffe4ae402b3d63aad79fe0',
-                'type' => 0,
-                'destination' => 70,
-                'path' => '/Design/Plain-site/Media/Images',
-                'languageCodes' => ['eng-US'],
-                'alwaysAvailable' => true,
-                'isHistory' => false,
-                'isCustom' => false,
-                'forward' => false,
-            ],
-            '49-2e5bc8831f7ae6a29530e7f1bbf2de9c' => [
-                'id' => '49-2e5bc8831f7ae6a29530e7f1bbf2de9c',
-                'type' => 0,
-                'destination' => 72,
-                'path' => '/Design/Plain-site/Media/Multimedia',
-                'languageCodes' => ['eng-US'],
-                'alwaysAvailable' => true,
-                'isHistory' => false,
-                'isCustom' => false,
-                'forward' => false,
-            ],
-            '49-45b963397aa40d4a0063e0d85e4fe7a1' => [
-                'type' => 0,
-                'destination' => 71,
-                'path' => '/Design/Plain-site/Media/Files',
-                'languageCodes' => ['eng-US'],
-                'alwaysAvailable' => true,
-                'isHistory' => false,
-                'isCustom' => false,
-                'forward' => false,
-            ],
+        $expectedSubItemAliases = [
+            '/Design/Plain-site/Media/Multimedia',
+            '/Design/Plain-site/Media/Images',
+            '/Design/Plain-site/Media/Files',
         ];
 
-        $this->assertGeneratedAliases($locationList->locations, $urlAliasService, $expectedAliases);
+        $this->assertGeneratedAliases($urlAliasService, $expectedSubItemAliases);
     }
 
     /**
@@ -2156,21 +2124,14 @@ class LocationServiceTest extends BaseTest
     /**
      * Assert generated aliases to expected alias return.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
      * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
      * @param array $expectedAliases
      */
-    protected function assertGeneratedAliases(array $locations, $urlAliasService, $expectedAliases)
+    protected function assertGeneratedAliases($urlAliasService, $expectedAliases)
     {
-        foreach ($locations as $location) {
-            $urlAlias = $urlAliasService->reverseLookup($location);
-
-            $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
-                $urlAlias
-            );
-
-            $this->assertPropertiesCorrect($expectedAliases[$urlAlias->id], $urlAlias);
+        foreach ($expectedAliases as $expectedAlias) {
+            $urlAlias = $urlAliasService->lookup($expectedAlias);
+            $this->assertPropertiesCorrect(['type' => 0], $urlAlias);
         }
     }
 }
