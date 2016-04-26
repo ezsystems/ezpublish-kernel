@@ -11,16 +11,16 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Composer;
 
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
-use Composer\Script\CommandEvent;
+use Composer\Script\Event;
 
 class ScriptHandler extends DistributionBundleScriptHandler
 {
     /**
      * Dump minified assets for prod environment under the web root directory.
      *
-     * @param $event CommandEvent A instance
+     * @param $event Event A instance
      */
-    public static function dumpAssets(CommandEvent $event)
+    public static function dumpAssets(Event $event)
     {
         $options = self::getOptions($event);
         $appDir = $options['symfony-app-dir'];
@@ -59,9 +59,9 @@ class ScriptHandler extends DistributionBundleScriptHandler
      * Typically to use this instead on composer update as dump command uses prod environment where cache is not cleared,
      * causing it to sometimes crash when cache needs to be cleared.
      *
-     * @param $event CommandEvent A instance
+     * @param $event Event A instance
      */
-    public static function dumpAssetsHelpText(CommandEvent $event)
+    public static function dumpAssetsHelpText(Event $event)
     {
         $event->getIO()->write('<info>To dump eZ Publish production assets, execute the following:</info>');
         $event->getIO()->write('    php app/console assetic:dump --env=prod web');
@@ -71,9 +71,9 @@ class ScriptHandler extends DistributionBundleScriptHandler
     /**
      * Just dump welcome text on how to install eZ Platform.
      *
-     * @param $event CommandEvent A instance
+     * @param $event Event A instance
      */
-    public static function installWelcomeText(CommandEvent $event)
+    public static function installWelcomeText(Event $event)
     {
         $event->getIO()->write(<<<'EOT'
 
