@@ -45,7 +45,7 @@ class InstantCachePurger implements GatewayCachePurger
     }
 
     /**
-     * @deprecated as of 6.0. Will be removed in 6.1. Use purgeForContent() instead.
+     * @deprecated as of 6.0. Will be removed in 7.0. Use purgeForContent() instead.
      *
      * @param mixed $cacheElements
      *
