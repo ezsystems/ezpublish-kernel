@@ -5,6 +5,8 @@ parameters:
 
     ezpublish_rest.cors_options_provider.class: eZ\Bundle\EzPublishRestBundle\CorsOptions\RestProvider
 
+    ezpublish_rest.root_resource_builder.class: eZ\Publish\Core\REST\Server\Service\ExpressionRouterRootResourceBuilder
+
     ezpublish_rest.controller.base.class: eZ\Publish\Core\REST\Server\Controller
     ezpublish_rest.controller.binary_content.class: eZ\Publish\Core\REST\Server\Controller\BinaryContent
     ezpublish_rest.controller.content.class: eZ\Publish\Core\REST\Server\Controller\Content
@@ -121,6 +123,10 @@ services:
         calls:
             - [setRequestStack, [@request_stack]]
 
+    ezpublish_rest.root_resource_builder:
+         class: %ezpublish_rest.root_resource_builder.class%
+         arguments: [@router, @ezpublish_rest.templated_router, "$rest_root_resources$"]
+
     ezpublish_rest.controller.base:
         class: %ezpublish_rest.controller.base.class%
         calls:
@@ -133,6 +139,7 @@ services:
     ezpublish_rest.controller.root:
         class: %ezpublish_rest.controller.root.class%
         parent: ezpublish_rest.controller.base
+        arguments: [@ezpublish_rest.root_resource_builder]
 
     ezpublish_rest.controller.section:
         class: %ezpublish_rest.controller.section.class%
