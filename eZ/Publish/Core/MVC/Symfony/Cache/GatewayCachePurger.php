@@ -19,7 +19,7 @@ interface GatewayCachePurger
      * Triggers the cache purge of given $cacheElements.
      * It's up to the implementor to decide whether to purge $cacheElements right away or to delegate to a separate process.
      *
-     * @deprecated as of 6.0. Will be removed in 6.1. Use purgeForContent() instead.
+     * @deprecated as of 6.0. Will be removed in 7.0. Use purgeForContent() instead.
      *
      * @param mixed $cacheElements
      *
