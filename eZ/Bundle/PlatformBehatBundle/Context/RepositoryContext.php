@@ -28,14 +28,22 @@ trait RepositoryContext
     /**
      * @var eZ\Publish\API\Repository\Repository
      */
-    protected $repository;
+    private $repository;
 
     /**
-     * @param eZ\Publish\API\Repository\Repository $repository
+     * @param $repository eZ\Publish\API\Repository\Repository $repository
      */
-    public function setRepository(Repository $repository)
+    protected function setRepository(Repository $repository)
     {
         $this->repository = $repository;
+    }
+
+    /**
+     * @return eZ\Publish\API\Repository\Repository $repository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
     }
 
     /**
