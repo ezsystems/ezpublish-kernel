@@ -61,8 +61,8 @@
     "extra": {
         "_ci_branch-comment_": "Keep ci branch up-to-date with master or branch if on stable. ci is never on github but convention used for ci behat testing!",
         "branch-alias": {
-            "dev-master": "6.3.x-dev",
-            "dev-tmp_ci_branch": "6.3.x-dev"
+            "dev-master": "6.4.x-dev",
+            "dev-tmp_ci_branch": "6.4.x-dev"
         }
     }
 }
