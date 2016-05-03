@@ -27,4 +27,23 @@ use EzSystems\PlatformBehatBundle\Context\SubContext\DeprecationNoticeSupressor;
 class MyContextUsesDeprecatedCode implements Context
 {
     use DeprecationNoticeSupressor;
+...
+```
+
+##### Using the Repository
+To ease the usage and maintainability of the repository dependent
+Behat Contexts a trait called `RespositoryContext` was created.
+This trait includes all the methods, variables related directly
+with the repository. To use this all that is needed is to use it
+in your own Contexts. Ex:
+
+``` php
+...
+/**
+ * My very own Behat Context
+ */
+class MyContext implements Context
+{
+    use RepositoryContext;
+...
 ```
