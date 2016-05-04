@@ -65,6 +65,7 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
     public function fixupURIProvider()
     {
         return array(
+            array('/foo', '/'),
             array('/my_siteaccess/foo/bar', '/foo/bar'),
             array('/foo/foo/bar', '/foo/bar'),
             array('/foo/foo/bar?something=foo&bar=toto', '/foo/bar?something=foo&bar=toto'),
