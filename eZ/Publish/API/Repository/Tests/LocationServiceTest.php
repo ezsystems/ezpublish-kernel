@@ -2143,8 +2143,7 @@ class LocationServiceTest extends BaseTest
      */
     private function assertAliasesBeforeCopy($urlAliasService, array $expectedSubItemAliases)
     {
-        foreach ($expectedSubItemAliases as $aliasUrl)
-        {
+        foreach ($expectedSubItemAliases as $aliasUrl) {
             try {
                 $urlAliasService->lookup($aliasUrl);
                 $this->fail('We didn\'t expect to find alias, but it was found');
