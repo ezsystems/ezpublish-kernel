@@ -48,6 +48,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         );
 
         $this->cache->clear('urlAlias', 'location', $locationId);
+        $this->cache->clear('urlAlias', 'url');
 
         $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
             $locationId,
@@ -213,7 +214,12 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         } elseif ($urlAliasId === self::NOT_FOUND) {
             throw new NotFoundException('UrlAlias', $url);
         } else {
-            $urlAlias = $this->loadUrlAlias($urlAliasId);
+            try {
+                $urlAlias = $this->loadUrlAlias($urlAliasId);
+            } catch (NotFoundException $e) {
+                $cache->set(self::NOT_FOUND);
+                throw $e;
+            }
         }
 
         return $urlAlias;
