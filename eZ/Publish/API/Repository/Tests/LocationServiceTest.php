@@ -1506,17 +1506,19 @@ class LocationServiceTest extends BaseTest
         $locationToCopy = $locationService->loadLocation($mediaLocationId);
         $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
-        // Copy location "Media" to "Design"
-        $locationService->copySubtree(
-            $locationToCopy,
-            $newParentLocation
-        );
-
         $expectedSubItemAliases = [
             '/Design/Plain-site/Media/Multimedia',
             '/Design/Plain-site/Media/Images',
             '/Design/Plain-site/Media/Files',
         ];
+
+        $this->assertAliasesBeforeCopy($urlAliasService, $expectedSubItemAliases);
+
+        // Copy location "Media" to "Design"
+        $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
 
         $this->assertGeneratedAliases($urlAliasService, $expectedSubItemAliases);
     }
@@ -2127,11 +2129,28 @@ class LocationServiceTest extends BaseTest
      * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
      * @param array $expectedAliases
      */
-    protected function assertGeneratedAliases($urlAliasService, $expectedAliases)
+    protected function assertGeneratedAliases($urlAliasService, array $expectedAliases)
     {
         foreach ($expectedAliases as $expectedAlias) {
             $urlAlias = $urlAliasService->lookup($expectedAlias);
             $this->assertPropertiesCorrect(['type' => 0], $urlAlias);
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param array $expectedSubItemAliases
+     */
+    private function assertAliasesBeforeCopy($urlAliasService, array $expectedSubItemAliases)
+    {
+        foreach ($expectedSubItemAliases as $aliasUrl)
+        {
+            try {
+                $urlAliasService->lookup($aliasUrl);
+                $this->fail('We didn\'t expect to find alias, but it was found');
+            } catch (\Exception $e) {
+                $this->assertTrue(true); // OK - alias was not found
+            }
         }
     }
 }

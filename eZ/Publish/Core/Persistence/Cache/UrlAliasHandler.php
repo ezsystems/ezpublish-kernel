@@ -270,7 +270,15 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             )
         );
 
-        return $this->persistenceHandler->urlAliasHandler()->locationCopied($locationId, $newLocationId, $newParentId);
+        $return = $this->persistenceHandler->urlAliasHandler()->locationCopied(
+            $locationId,
+            $newLocationId,
+            $newParentId
+        );
+
+        $this->cache->clear('urlAlias');//TIMBER! (Will have to load url aliases for location to be able to clear specific entries)
+
+        return $return;
     }
 
     /**
