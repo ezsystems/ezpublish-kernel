@@ -262,6 +262,36 @@ class TrashServiceTest extends BaseTrashServiceTest
      * Test for the recover() method.
      *
      * @see \eZ\Publish\API\Repository\TrashService::recover()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     */
+    public function testAliasesForRemovedItems()
+    {
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
+
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+
+        $this->assertAliasExists('/Media');
+        $mediaLocation = $locationService->loadLocationByRemoteId($mediaRemoteId);
+
+        $locationService->loadLocations($mediaLocation->contentInfo);
+
+        $trashItem = $trashService->trash($mediaLocation);
+        $this->assertAliasNotExists('/Media');
+
+        $this->createNewContentInPlaceTrashedOne($mediaLocation);
+        $this->assertAliasExists('/Media');
+
+        $trashService->recover($trashItem);
+        $this->assertAliasExists('/Media');
+        $this->assertAliasExists('/Media2');
+    }
+
+    /**
+     * Test for the recover() method.
+     *
+     * @see \eZ\Publish\API\Repository\TrashService::recover()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
      */
     public function testRecoverDoesNotRestoreChildLocations()
@@ -594,5 +624,53 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Inline */
 
         return $remoteIds;
+    }
+
+    /**
+     * @param Location $mediaLocation
+     */
+    protected function createNewContentInPlaceTrashedOne($mediaLocation)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $newContent = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $newContent->setField('name', 'Media');
+
+        $location = $locationService->newLocationCreateStruct($mediaLocation->parentLocationId);
+
+        $draftContent = $contentService->createContent($newContent, [$location]);
+
+        return $contentService->publishVersion($draftContent->versionInfo);
+    }
+
+    /**
+     * @param string $urlPath Url alias path
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    private function assertAliasExists($urlPath)
+    {
+        $urlAlias = $this->getRepository()->getURLAliasService()->lookup($urlPath);
+
+        $this->assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\URLAlias', $urlAlias);
+
+        return $urlAlias;
+    }
+
+    /**
+     * @param string $urlPath Url alias path
+     */
+    private function assertAliasNotExists($urlPath)
+    {
+        try {
+            $this->getRepository()->getURLAliasService()->lookup($urlPath);
+            $this->fail(sprintf('%s alias should not exists, but it exists.', $urlPath));
+        } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 }

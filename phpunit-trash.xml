@@ -1,0 +1,22 @@
+<?xml version = '1.0' encoding = 'utf-8'?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="bootstrap.php"
+         processIsolation="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         colors="true"
+         >
+    <php>
+        <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Legacy" />
+        <env name="backendVersion" value="5" />
+        <env name="fixtureDir" value="Legacy" />
+    </php>
+    <testsuites>
+        <testsuite name="eZ\Publish\API\Repository">
+            <file>eZ/Publish/API/Repository/Tests/LocationServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/TrashServiceTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
