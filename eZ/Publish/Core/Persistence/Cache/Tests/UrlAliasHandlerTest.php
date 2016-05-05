@@ -96,10 +96,8 @@ class UrlAliasHandlerTest extends HandlerTest
             ->will($this->returnValue(new UrlAlias(array('id' => 55))));
 
         $this->cacheMock
-            ->expects($this->once())
-            ->method('clear')
-            ->with('urlAlias', 'location', 44)
-            ->will($this->returnValue(null));
+            ->expects($this->atLeastOnce())
+            ->method('clear');
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->publishUrlAliasForLocation(44, 2, 'name', 'eng-GB', true);

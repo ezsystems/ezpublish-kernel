@@ -668,6 +668,7 @@ class TrashServiceTest extends BaseTrashServiceTest
     {
         try {
             $this->getRepository()->getURLAliasService()->lookup($urlPath);
+            $this->fail(sprintf('Alias [%s] already exists.', $urlPath));
         } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
             $this->assertTrue(true);
         }
