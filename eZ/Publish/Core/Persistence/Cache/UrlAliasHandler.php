@@ -214,12 +214,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         } elseif ($urlAliasId === self::NOT_FOUND) {
             throw new NotFoundException('UrlAlias', $url);
         } else {
-            try {
-                $urlAlias = $this->loadUrlAlias($urlAliasId);
-            } catch (NotFoundException $e) {
-                $cache->set(self::NOT_FOUND);
-                throw $e;
-            }
+            $urlAlias = $this->loadUrlAlias($urlAliasId);
         }
 
         return $urlAlias;
