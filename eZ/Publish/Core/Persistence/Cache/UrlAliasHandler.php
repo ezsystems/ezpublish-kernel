@@ -306,8 +306,8 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
      * @fixme We can also think about some handler for take the whole logic to recognize with elements should be cleaned
      * @fixme There should be also considered some functionality that cleans all sub-items when locationId is given
      *
-     * @param integer|null $locationId
-     * @param integer|null $aliasId
+     * @param int|null $locationId
+     * @param int|null $aliasId
      * @param string|null $url
      */
     protected function cleanUrlAliases($locationId = null, $aliasId = null, $url = null)

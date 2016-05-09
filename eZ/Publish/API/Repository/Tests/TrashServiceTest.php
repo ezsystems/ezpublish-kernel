@@ -645,7 +645,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
     /**
      * @param Repository $repository
-     * @param integer $parentLocationId
+     * @param int $parentLocationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
