@@ -10,6 +10,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -270,22 +272,36 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
+        $urlAliasService = $repository->getURLAliasService();
         $locationService = $repository->getLocationService();
 
-        $this->assertAliasExists('/Media');
+        // Double ->lookup() call because there where issue that one call was not enough to spot bug
+        $urlAliasService->lookup('/Media');
+        $trashedLocationAlias = $urlAliasService->lookup('/Media');
+
         $mediaLocation = $locationService->loadLocationByRemoteId($mediaRemoteId);
-
-        $locationService->loadLocations($mediaLocation->contentInfo);
-
+        $urlAliasService->reverseLookup($mediaLocation);
         $trashItem = $trashService->trash($mediaLocation);
-        $this->assertAliasNotExists('/Media');
+        $this->assertAliasNotExists($urlAliasService, '/Media');
 
-        $this->createNewContentInPlaceTrashedOne($mediaLocation);
-        $this->assertAliasExists('/Media');
+        $this->createNewContentInPlaceTrashedOne($repository, $mediaLocation->parentLocationId);
 
-        $trashService->recover($trashItem);
-        $this->assertAliasExists('/Media');
-        $this->assertAliasExists('/Media2');
+        $createdLocationAlias = $urlAliasService->lookup('/Media');
+
+        $this->assertNotEquals(
+            $trashedLocationAlias->destination,
+            $createdLocationAlias->destination,
+            'Destination for /media url should changed'
+        );
+
+        $recoveredLocation = $trashService->recover($trashItem);
+        $recoveredLocationAlias = $urlAliasService->lookup('/Media2');
+        $recoveredLocationAliasReverse = $urlAliasService->reverseLookup($recoveredLocation);
+
+        $this->assertEquals($recoveredLocationAlias->destination, $recoveredLocationAliasReverse->destination);
+
+        $this->assertNotEquals($recoveredLocationAliasReverse->destination, $trashedLocationAlias->destination);
+        $this->assertNotEquals($recoveredLocationAliasReverse->destination, $createdLocationAlias->destination);
     }
 
     /**
@@ -621,17 +637,20 @@ class TrashServiceTest extends BaseTrashServiceTest
                 $remoteIds[] = $grandChild->remoteId;
             }
         }
+
         /* END: Inline */
 
         return $remoteIds;
     }
 
     /**
-     * @param Location $mediaLocation
+     * @param Repository $repository
+     * @param integer $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function createNewContentInPlaceTrashedOne($mediaLocation)
+    protected function createNewContentInPlaceTrashedOne(Repository $repository, $parentLocationId)
     {
-        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
         $contentTypeService = $repository->getContentTypeService();
@@ -640,7 +659,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $newContent = $contentService->newContentCreateStruct($contentType, 'eng-US');
         $newContent->setField('name', 'Media');
 
-        $location = $locationService->newLocationCreateStruct($mediaLocation->parentLocationId);
+        $location = $locationService->newLocationCreateStruct($parentLocationId);
 
         $draftContent = $contentService->createContent($newContent, [$location]);
 
@@ -648,13 +667,14 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * @param URLAliasService $urlAliasService
      * @param string $urlPath Url alias path
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    private function assertAliasExists($urlPath)
+    private function assertAliasExists(URLAliasService $urlAliasService, $urlPath)
     {
-        $urlAlias = $this->getRepository()->getURLAliasService()->lookup($urlPath);
+        $urlAlias = $urlAliasService->lookup($urlPath);
 
         $this->assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\URLAlias', $urlAlias);
 
@@ -662,13 +682,14 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * @param URLAliasService $urlAliasService
      * @param string $urlPath Url alias path
      */
-    private function assertAliasNotExists($urlPath)
+    private function assertAliasNotExists(URLAliasService $urlAliasService, $urlPath)
     {
         try {
             $this->getRepository()->getURLAliasService()->lookup($urlPath);
-            $this->fail(sprintf('Alias [%s] already exists.', $urlPath));
+            $this->fail(sprintf('Alias [%s] should not exists', $urlPath));
         } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
             $this->assertTrue(true);
         }
