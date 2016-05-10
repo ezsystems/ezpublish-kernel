@@ -251,26 +251,33 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
-
         $this->cache->clear('urlAlias');//TIMBER! (Will have to load url aliases for location to be able to clear specific entries)
+
         return $return;
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationCopied
      */
-    public function locationCopied($locationId, $oldParentId, $newParentId)
+    public function locationCopied($locationId, $newLocationId, $newParentId)
     {
         $this->logger->logCall(
             __METHOD__,
             array(
-                'location' => $locationId,
-                'oldParent' => $oldParentId,
+                'oldLocation' => $locationId,
+                'newLocation' => $newLocationId,
                 'newParent' => $newParentId,
             )
         );
 
-        return $this->persistenceHandler->urlAliasHandler()->locationCopied($locationId, $oldParentId, $newParentId);
+        $return = $this->persistenceHandler->urlAliasHandler()->locationCopied(
+            $locationId,
+            $newLocationId,
+            $newParentId
+        );
+        $this->cache->clear('urlAlias', 'url'); // required due to caching not found aliases
+
+        return $return;
     }
 
     /**

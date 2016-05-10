@@ -32,7 +32,7 @@ class UrlAliasHandlerTest extends HandlerTest
             //array( 'lookup', array( '/url' ) ),
             //array( 'loadUrlAlias', array( 88 ) ),
             //array( 'locationMoved', array( 44, 2, 45 ) ),
-            array('locationCopied', array(44, 2, 45)),
+            //array( 'locationCopied', array( 44, 2, 45 ) ),
             //array( 'locationDeleted', array( 44 ) ),
         );
     }
