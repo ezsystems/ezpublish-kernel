@@ -46,8 +46,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
                 'alwaysAvailable' => $alwaysAvailable,
             )
         );
-
-        $this->cache->clear('urlAlias', 'location', $locationId);
+        $this->cache->clear('urlAlias');
 
         $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
             $locationId,
@@ -205,7 +204,13 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             try {
                 $this->logger->logCall(__METHOD__, array('url' => $url));
                 $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
-                $cache->set($urlAlias->id);
+                $urlAliasId = $urlAlias->id;
+                $cache->set($urlAliasId);
+
+                // we must cache here also urlAlias object to be consistent with next call
+                // @fixme If the cache mechanism would be cleaning up all related items, this wouldn't be necessary
+                $cacheUrlId = $this->cache->getItem('urlAlias', $urlAliasId);
+                $cacheUrlId->set($urlAlias);
             } catch (APINotFoundException $e) {
                 $cache->set(self::NOT_FOUND);
                 throw $e;
@@ -288,7 +293,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $this->logger->logCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->urlAliasHandler()->locationDeleted($locationId);
 
-        $this->cache->clear('urlAlias', 'location', $locationId);
+        $this->cache->clear('urlAlias');
 
         return $return;
     }
