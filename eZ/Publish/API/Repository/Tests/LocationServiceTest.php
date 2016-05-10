@@ -1484,6 +1484,46 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the copySubtree() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testCopySubtreeWithAliases()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // Publish demo installation
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+
+        $locationService = $repository->getLocationService();
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        $expectedSubItemAliases = [
+            '/Design/Plain-site/Media/Multimedia',
+            '/Design/Plain-site/Media/Images',
+            '/Design/Plain-site/Media/Files',
+        ];
+
+        $this->assertAliasesBeforeCopy($urlAliasService, $expectedSubItemAliases);
+
+        // Copy location "Media" to "Design"
+        $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
+
+        $this->assertGeneratedAliases($urlAliasService, $expectedSubItemAliases);
+    }
+
+    /**
      * Asserts that given Content has default ContentStates.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
@@ -2081,5 +2121,35 @@ class LocationServiceTest extends BaseTest
             ),
             $overwrite
         );
+    }
+
+    /**
+     * Assert generated aliases to expected alias return.
+     *
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param array $expectedAliases
+     */
+    protected function assertGeneratedAliases($urlAliasService, array $expectedAliases)
+    {
+        foreach ($expectedAliases as $expectedAlias) {
+            $urlAlias = $urlAliasService->lookup($expectedAlias);
+            $this->assertPropertiesCorrect(['type' => 0], $urlAlias);
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param array $expectedSubItemAliases
+     */
+    private function assertAliasesBeforeCopy($urlAliasService, array $expectedSubItemAliases)
+    {
+        foreach ($expectedSubItemAliases as $aliasUrl) {
+            try {
+                $urlAliasService->lookup($aliasUrl);
+                $this->fail('We didn\'t expect to find alias, but it was found');
+            } catch (\Exception $e) {
+                $this->assertTrue(true); // OK - alias was not found
+            }
+        }
     }
 }
