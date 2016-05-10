@@ -172,8 +172,8 @@ class LocationService implements LocationServiceInterface
             }
 
             $this->persistenceHandler->urlAliasHandler()->locationCopied(
+                $loadedSubtree->id,
                 $newLocation->id,
-                $loadedSubtree->parentLocationId,
                 $loadedTargetLocation->id
             );
 

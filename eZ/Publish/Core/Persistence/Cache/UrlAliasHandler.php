@@ -47,7 +47,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             )
         );
 
-        $this->cache->clear('urlAlias', 'location', $locationId);
+        $this->cleanUrlAliases($locationId);
 
         $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
             $locationId,
@@ -205,7 +205,13 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             try {
                 $this->logger->logCall(__METHOD__, array('url' => $url));
                 $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
-                $cache->set($urlAlias->id);
+                $urlAliasId = $urlAlias->id;
+                $cache->set($urlAliasId);
+
+                // we must cache here also urlAlias object to be consistent with next call
+                // @fixme If the cache mechanism would be cleaning up all related items, this wouldn't be necessary
+                $cacheUrlId = $this->cache->getItem('urlAlias', $urlAliasId);
+                $cacheUrlId->set($urlAlias);
             } catch (APINotFoundException $e) {
                 $cache->set(self::NOT_FOUND);
                 throw $e;
@@ -251,26 +257,33 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
+        $this->cleanUrlAliases($locationId);
 
-        $this->cache->clear('urlAlias');//TIMBER! (Will have to load url aliases for location to be able to clear specific entries)
         return $return;
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationCopied
      */
-    public function locationCopied($locationId, $oldParentId, $newParentId)
+    public function locationCopied($locationId, $newLocationId, $newParentId)
     {
         $this->logger->logCall(
             __METHOD__,
             array(
-                'location' => $locationId,
-                'oldParent' => $oldParentId,
+                'oldLocation' => $locationId,
+                'newLocation' => $newLocationId,
                 'newParent' => $newParentId,
             )
         );
 
-        return $this->persistenceHandler->urlAliasHandler()->locationCopied($locationId, $oldParentId, $newParentId);
+        $return = $this->persistenceHandler->urlAliasHandler()->locationCopied(
+            $locationId,
+            $newLocationId,
+            $newParentId
+        );
+        $this->cleanUrlAliases($newParentId);
+
+        return $return;
     }
 
     /**
@@ -281,8 +294,25 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $this->logger->logCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->urlAliasHandler()->locationDeleted($locationId);
 
-        $this->cache->clear('urlAlias', 'location', $locationId);
+        $this->cleanUrlAliases($locationId);
 
         return $return;
+    }
+
+    /**
+     * As aliases can be generated for location, alias url and for alias id, we need to clear them all.
+     *
+     * @fixme We can take the use of additional data and try to recognize other elements that should be cleaned
+     * @fixme We can also think about some handler for take the whole logic to recognize with elements should be cleaned
+     * @fixme There should be also considered some functionality that cleans all sub-items when locationId is given
+     *
+     * @param int|null $locationId
+     * @param int|null $aliasId
+     * @param string|null $url
+     */
+    protected function cleanUrlAliases($locationId = null, $aliasId = null, $url = null)
+    {
+        // @todo This solves all problems but this is not perfect performance solution
+        $this->cache->clear('urlAlias');
     }
 }
