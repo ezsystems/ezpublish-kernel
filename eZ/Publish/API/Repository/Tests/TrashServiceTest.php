@@ -261,6 +261,33 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * Test for the trash() method.
+     *
+     * @see \eZ\Publish\API\Repository\TrashService::recover()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testNotFoundAliasAfterRemoveIt()
+    {
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
+
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        // Double ->lookup() call because there where issue that one call was not enough to spot bug
+        $urlAliasService->lookup('/Media');
+        $urlAliasService->lookup('/Media');
+
+        $mediaLocation = $locationService->loadLocationByRemoteId($mediaRemoteId);
+        $trashService->trash($mediaLocation);
+
+        $urlAliasService->lookup('/Media');
+    }
+
+    /**
      * Test for the recover() method.
      *
      * @see \eZ\Publish\API\Repository\TrashService::recover()
@@ -280,7 +307,6 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashedLocationAlias = $urlAliasService->lookup('/Media');
 
         $mediaLocation = $locationService->loadLocationByRemoteId($mediaRemoteId);
-        $urlAliasService->reverseLookup($mediaLocation);
         $trashItem = $trashService->trash($mediaLocation);
         $this->assertAliasNotExists($urlAliasService, '/Media');
 
