@@ -587,32 +587,46 @@ class UrlAliasHandlerTest extends HandlerTest
 
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::lookup
+     * @group justme
      */
     public function testLookupIsMiss()
     {
+        $urlAlias = new UrlAlias(array('id' => 55));
+
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $urlAliasIdCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
-        $urlAliasIdCacheItem
+        $missedUrlAliasIdCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $missedUrlAliasIdCacheItem
             ->expects($this->once())
             ->method('get')
             ->will($this->returnValue(null));
 
-        $urlAliasIdCacheItem
+        $missedUrlAliasIdCacheItem
             ->expects($this->once())
             ->method('isMiss')
             ->will($this->returnValue(true));
 
-        $urlAliasIdCacheItem
+        $missedUrlAliasIdCacheItem
             ->expects($this->once())
             ->method('set')
             ->with(55);
 
-        $this->cacheMock
+        $newUrlAliasCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $newUrlAliasCacheItem
             ->expects($this->once())
-            ->method('getItem')
-            ->with('urlAlias', 'url', '/url')
-            ->will($this->returnValue($urlAliasIdCacheItem));
+             ->method('set')
+            ->with($urlAlias);
+
+        $this->cacheMock
+                ->expects($this->at(0))
+                ->method('getItem')
+                ->with('urlAlias', 'url', '/url')
+                ->will($this->returnValue($missedUrlAliasIdCacheItem));
+        $this->cacheMock
+             ->expects($this->at(1))
+                ->method('getItem')
+                ->with('urlAlias', 55)
+                ->will($this->returnValue($newUrlAliasCacheItem));
 
         $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
         $this->persistenceHandlerMock
@@ -624,7 +638,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('lookup')
             ->with('/url')
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue($urlAlias));
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->lookup('/url');
