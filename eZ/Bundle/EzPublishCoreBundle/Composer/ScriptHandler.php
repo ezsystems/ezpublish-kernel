@@ -91,14 +91,14 @@ class ScriptHandler extends DistributionBundleScriptHandler
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
 <options=bold>Quick Install:</>
-Assuming user you execute commands with below is same that extracted/installed the software.
+(Assuming the CLI user you execute commands with below is same that extracted/installed the software)
 <comment>    $  export SYMFONY_ENV="prod"</comment>
-<comment>    $  php app/console ezplatform:install clean</comment>
+<comment>    $  php app/console ezplatform:install <type></comment>
 <comment>    $  php app/console assetic:dump</comment>
 <comment>    $  php app/console server:run</comment>
 
 Note:
-- "ezplatform:install" also has "demo" option on demo distributions, use "--help" argument to see available options.
+- "ezplatform:install" has different installer <type>s depending on your install, see <fg=green>INSTALL.md</> or <fg=green>README.md</> for which one to use.
 - For development use you can enable full debugging by setting SYMFONY_ENV to "dev".
 - Last command will give you url to frontend of installation, add "/ez" to reach backend.
 
