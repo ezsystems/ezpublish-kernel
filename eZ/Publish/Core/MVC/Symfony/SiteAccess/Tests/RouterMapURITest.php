@@ -16,14 +16,20 @@ use PHPUnit_Framework_TestCase;
 
 class RouterMapURITest extends PHPUnit_Framework_TestCase
 {
-    public function testSetGetRequest()
+    /**
+     * @param array  $config
+     * @param string $pathinfo
+     * @param string $expectedMapKey
+     *
+     * @dataProvider setRequestProvider
+     */
+    public function testSetGetRequest($config, $pathinfo, $expectedMapKey)
     {
-        $request = new SimplifiedRequest(array('pathinfo' => '/bar/baz'));
-        $mapKey = 'bar';
-        $matcher = new URIMapMatcher(array('foo' => $mapKey));
+        $request = new SimplifiedRequest(array('pathinfo' => $pathinfo ));
+        $matcher = new URIMapMatcher($config);
         $matcher->setRequest($request);
         $this->assertSame($request, $matcher->getRequest());
-        $this->assertSame($mapKey, $matcher->getMapKey());
+        $this->assertSame($expectedMapKey, $matcher->getMapKey());
     }
 
     /**
@@ -62,10 +68,19 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
         $this->assertSame($fullUri, $unserializedMatcher->analyseLink($linkUri));
     }
 
+    public function setRequestProvider()
+    {
+        return array(
+            array(array('foo' => 'bar'), '/bar/baz', 'bar'),
+            array(array('foo' => 'Äpfel'), '/%C3%84pfel/foo', 'Äpfel'),
+        );
+    }
+
     public function fixupURIProvider()
     {
         return array(
             array('/foo', '/'),
+            array('/Äpfel', '/'),
             array('/my_siteaccess/foo/bar', '/foo/bar'),
             array('/foo/foo/bar', '/foo/bar'),
             array('/foo/foo/bar?something=foo&bar=toto', '/foo/bar?something=foo&bar=toto'),
