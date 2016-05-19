@@ -46,8 +46,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
                 'alwaysAvailable' => $alwaysAvailable,
             )
         );
-
-        $this->cache->clear('urlAlias', 'location', $locationId);
+        $this->clearLocation($locationId);
 
         $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
             $locationId,
@@ -251,7 +250,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
-        $this->cache->clear('urlAlias');//TIMBER! (Will have to load url aliases for location to be able to clear specific entries)
+        $this->cache->clear('urlAlias', 'url');//TIMBER! (Will have to load url aliases for location to be able to clear specific entries)
 
         return $return;
     }
@@ -288,8 +287,27 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $this->logger->logCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->urlAliasHandler()->locationDeleted($locationId);
 
-        $this->cache->clear('urlAlias', 'location', $locationId);
+        $this->clearLocation($locationId);
 
         return $return;
+    }
+
+    /**
+     * @param $locationId
+     */
+    protected function clearLocation($locationId)
+    {
+        $locationCache = $this->cache->getItem('urlAlias', 'location', $locationId);
+
+        if ($locationCache->isMiss()) {
+            // we need to clear all if we don't have location id in cache
+            $this->cache->clear('urlAlias');
+        } else {
+            $urlAliasIds = $locationCache->get();
+            foreach ((array) $urlAliasIds as $urlAliasId) {
+                $this->cache->clear('urlAlias', $urlAliasId);
+            }
+            $this->cache->clear('urlAlias', 'url');
+        }
     }
 }
