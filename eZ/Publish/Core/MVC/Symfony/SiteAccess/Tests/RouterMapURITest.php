@@ -25,7 +25,7 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
      */
     public function testSetGetRequest($config, $pathinfo, $expectedMapKey)
     {
-        $request = new SimplifiedRequest(array('pathinfo' => $pathinfo ));
+        $request = new SimplifiedRequest(array('pathinfo' => $pathinfo));
         $matcher = new URIMapMatcher($config);
         $matcher->setRequest($request);
         $this->assertSame($request, $matcher->getRequest());
