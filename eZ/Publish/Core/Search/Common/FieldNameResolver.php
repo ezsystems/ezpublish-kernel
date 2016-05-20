@@ -208,16 +208,16 @@ class FieldNameResolver
             return null;
         }
 
-        $fieldName = $this->getIndexFieldName(
+        $fieldName = array_keys($this->getIndexFieldName(
             $sortClause,
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,
             $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier]['field_type_identifier'],
             $name,
             true
-        );
+        ));
 
-        return reset(array_keys($fieldName));
+        return reset($fieldName);
     }
 
     /**
