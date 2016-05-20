@@ -157,7 +157,7 @@ class FieldNameResolver
                 continue;
             }
 
-            $fieldName = $this->getIndexFieldName(
+            $fieldNameWithSearchType = $this->getIndexFieldName(
                 $criterion,
                 $contentTypeIdentifier,
                 $fieldDefinitionIdentifier,
@@ -165,10 +165,11 @@ class FieldNameResolver
                 $name,
                 false
             );
-            $fieldType = $this->fieldRegistry->getType(
-                $fieldIdentifierMap[$fieldDefinitionIdentifier]['field_type_identifier']
-            );
-            $fieldTypeNameMap[$fieldName] = $fieldType;
+
+            $fieldNames = array_keys($fieldNameWithSearchType);
+            $fieldName = reset($fieldNames);
+
+            $fieldTypeNameMap[$fieldName] = $fieldNameWithSearchType[$fieldName];
         }
 
         return $fieldTypeNameMap;
@@ -207,7 +208,7 @@ class FieldNameResolver
             return null;
         }
 
-        return $this->getIndexFieldName(
+        $fieldName = $this->getIndexFieldName(
             $sortClause,
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,
@@ -215,6 +216,8 @@ class FieldNameResolver
             $name,
             true
         );
+
+        return reset(array_keys($fieldName));
     }
 
     /**
@@ -246,7 +249,7 @@ class FieldNameResolver
                 $fieldDefinitionIdentifier
             )
         ) {
-            return $customFieldName;
+            return [$customFieldName => null];
         }
 
         // Else, generate field name from field type's index definition
@@ -271,7 +274,7 @@ class FieldNameResolver
             );
         }
 
-        return $this->nameGenerator->getTypedName(
+        $field = $this->nameGenerator->getTypedName(
             $this->nameGenerator->getName(
                 $name,
                 $fieldDefinitionIdentifier,
@@ -279,5 +282,7 @@ class FieldNameResolver
             ),
             $indexDefinition[$name]
         );
+
+        return [$field => $indexDefinition[$name]];
     }
 }
