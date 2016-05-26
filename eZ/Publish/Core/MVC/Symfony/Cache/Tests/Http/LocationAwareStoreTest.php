@@ -122,40 +122,6 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         $this->store->purgeByRequest($request);
     }
 
-    public function testPurgeByRequestMultipleLocationsBC()
-    {
-        $fs = $this->getFilesystemMock();
-        $this->store->setFilesystem($fs);
-        $locationIds = array(123, 456, 789);
-        $i = 0;
-        foreach ($locationIds as $locationId) {
-            $locationCacheDir = $this->store->getLocationCacheDir($locationId);
-            $staleCacheDir = str_replace(LocationAwareStore::LOCATION_CACHE_DIR, LocationAwareStore::LOCATION_STALE_CACHE_DIR, $locationCacheDir);
-
-            $fs
-                ->expects($this->at($i++))
-                ->method('exists')
-                ->with($locationCacheDir)
-                ->will($this->returnValue(true));
-            $fs
-                ->expects($this->at($i++))
-                ->method('mkdir')
-                ->with($staleCacheDir);
-            $fs
-                ->expects($this->at($i++))
-                ->method('mirror')
-                ->with($locationCacheDir, $staleCacheDir);
-            $fs
-                ->expects($this->at($i++))
-                ->method('remove')
-                ->with(array($staleCacheDir, $this->store->getLocationCacheLockName($locationId), $locationCacheDir));
-        }
-
-        $request = Request::create('/', 'PURGE');
-        $request->headers->set('X-Group-Location-Id', implode('; ', $locationIds));
-        $this->store->purgeByRequest($request);
-    }
-
     public function testPurgeByRequestMultipleLocations()
     {
         $fs = $this->getFilesystemMock();

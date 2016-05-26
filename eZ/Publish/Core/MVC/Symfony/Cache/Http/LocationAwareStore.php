@@ -132,7 +132,7 @@ class LocationAwareStore extends Store implements ContentPurger
      */
     public function purgeByRequest(Request $request)
     {
-        if (!$request->headers->has('X-Location-Id') && !$request->headers->has('X-Group-Location-Id')) {
+        if (!$request->headers->has('X-Location-Id')) {
             return $this->purge($request->getUri());
         }
 
@@ -142,11 +142,7 @@ class LocationAwareStore extends Store implements ContentPurger
             return $this->purgeAllContent();
         }
 
-        // Usage of X-Group-Location-Id is deprecated.
-        if ($request->headers->has('X-Group-Location-Id')) {
-            $aLocationId = explode('; ', $request->headers->get('X-Group-Location-Id'));
-        } elseif ($locationId[0] === '(' && substr($locationId, -1) === ')') {
-            // Equivalent to X-Group-Location-Id, using a simple Regexp:
+        if ($locationId[0] === '(' && substr($locationId, -1) === ')') {
             // (123|456|789) => Purge for #123, #456 and #789 location IDs.
             $aLocationId = explode('|', substr($locationId, 1, -1));
         } else {
