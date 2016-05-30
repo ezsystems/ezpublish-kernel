@@ -55,7 +55,7 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('X-Location-Id' => "^($locationId)$"));
+            ->with(array('xkey' => "^(location-$locationId)$"));
 
         $this->purgeClient->purge($locationId);
     }
@@ -63,12 +63,12 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider purgeTestProvider
      */
-    public function testPurge(array $locationIds)
+    public function testPurge(array $locationIds, $headerString)
     {
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('X-Location-Id' => '^(' . implode('|', $locationIds) . ')$'));
+            ->with(array('xkey' => "^($headerString)$"));
 
         $this->purgeClient->purge($locationIds);
     }
@@ -76,9 +76,9 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
     public function purgeTestProvider()
     {
         return array(
-            array(array(123)),
-            array(array(123, 456)),
-            array(array(123, 456, 789)),
+            array(array(123), 'location-123'),
+            array(array(123, 456), 'location-123|location-456'),
+            array(array(123, 456, 789), 'location-123|location-456|location-789'),
         );
     }
 
@@ -87,7 +87,7 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('X-Location-Id' => '.*'));
+            ->with(array('xkey' => '.*'));
 
         $this->purgeClient->purgeAll();
     }

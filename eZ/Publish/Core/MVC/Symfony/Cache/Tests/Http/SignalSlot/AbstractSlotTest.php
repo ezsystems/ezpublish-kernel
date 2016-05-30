@@ -12,19 +12,17 @@ use PHPUnit_Framework_TestCase;
 
 abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements SlotTest
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AbstractSlot */
     protected $slot;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cachePurgerMock;
-
-    private $contentId = 42;
+    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $purgeClientMock;
 
     private static $signal;
 
     public function setUp()
     {
-        $this->cachePurgerMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger');
+        $this->purgeClientMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface');
         $this->slot = $this->createSlot();
         self::$signal = $this->createSignal();
     }
@@ -33,15 +31,15 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
     {
         $class = $this->getSlotClass();
 
-        return new $class($this->cachePurgerMock);
+        return new $class($this->purgeClientMock);
     }
 
     /**
      * @return \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getCachePurger()
+    protected function getPurgeClientMock()
     {
-        return $this->cachePurgerMock;
+        return $this->purgeClientMock;
     }
 
     /**
@@ -49,8 +47,8 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
      */
     public function testDoesNotReceiveOtherSignals($signal)
     {
-        $this->cachePurgerMock->expects($this->never())->method('purgeForContent');
-        $this->cachePurgerMock->expects($this->never())->method('purgeAll');
+        $this->purgeClientMock->expects($this->never())->method('purge');
+        $this->purgeClientMock->expects($this->never())->method('purgeAll');
 
         $this->slot->receive($signal);
     }

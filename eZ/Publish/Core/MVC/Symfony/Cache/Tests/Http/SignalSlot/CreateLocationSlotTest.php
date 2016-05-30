@@ -10,11 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal;
 
-class CreateLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class CreateLocationSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {
-        return new CreateLocationSignal(['contentId' => self::getContentId()]);
+        return new CreateLocationSignal(['contentId' => static::$contentId]);
     }
 
     public function getSlotClass()

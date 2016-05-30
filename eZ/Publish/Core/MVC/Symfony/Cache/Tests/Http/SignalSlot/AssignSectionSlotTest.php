@@ -10,11 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
 
-class AssignSectionSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class AssignSectionSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {
-        return new AssignSectionSignal(['contentId' => self::getContentId()]);
+        return new AssignSectionSignal(['contentId' => static::$contentId]);
     }
 
     public function getSlotClass()

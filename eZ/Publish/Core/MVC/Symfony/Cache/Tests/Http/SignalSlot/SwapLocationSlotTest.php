@@ -13,7 +13,7 @@ use eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal;
 /**
  * @todo Fixme
  */
-class SwapLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class SwapLocationSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public function setUp()
     {
@@ -22,7 +22,7 @@ class SwapLocationSlotTest extends AbstractPurgeForContentSlotTest implements Sl
 
     public static function createSignal()
     {
-        return new SwapLocationSignal(['content1Id' => self::getContentId()]);
+        return new SwapLocationSignal(['content1Id' => static::$contentId]);
     }
 
     public function getSlotClass()

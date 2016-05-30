@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
@@ -14,8 +12,8 @@ use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * LocalPurgeClient emulates an Http PURGE request received by the cache store.
- * Handy for mono-server.
+ * LocalPurgeClient emulates an Http PURGE request to be received by the Proxy Tag cache store.
+ * Handy for single-serve using Symfony Proxy..
  */
 class LocalPurgeClient implements PurgeClientInterface
 {
@@ -24,15 +22,13 @@ class LocalPurgeClient implements PurgeClientInterface
      */
     protected $cacheStore;
 
-    public function __construct(RequestAwarePurger $cacheStore)
+    public function __construct(ContentPurger $cacheStore)
     {
         $this->cacheStore = $cacheStore;
     }
 
     /**
-     * Triggers the cache purge $locationIds.
-     *
-     * @param mixed $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
+     * @inheritdoc
      */
     public function purge($locationIds)
     {
@@ -40,17 +36,32 @@ class LocalPurgeClient implements PurgeClientInterface
             return;
         }
 
-        if (!is_array($locationIds)) {
-            $locationIds = array($locationIds);
+        $this->purgeByTags(
+            array_map(
+                function ($locationId) {
+                    return 'location-' . $locationId;
+                },
+                (array)$locationIds
+            )
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function purgeByTags(array $tags)
+    {
+        if (empty($tags)) {
+            return;
         }
 
-        $purgeRequest = Request::create('http://localhost/', 'BAN');
-        $purgeRequest->headers->set('X-Location-Id', '(' . implode('|', $locationIds) . ')');
+        $purgeRequest = Request::create('http://localhost/', 'PURGE');
+        $purgeRequest->headers->set('xkey', implode(' ', $tags));
         $this->cacheStore->purgeByRequest($purgeRequest);
     }
 
     /**
-     * Purges all content elements currently in cache.
+     * @inheritdoc
      */
     public function purgeAll()
     {

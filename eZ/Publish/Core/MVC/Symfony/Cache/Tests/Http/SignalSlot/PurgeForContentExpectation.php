@@ -14,7 +14,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
  */
 interface PurgeForContentExpectation
 {
-    public static function getContentId();
+    public static function generateTags();
 
     public function testReceivePurgesCacheForContent($signal);
 }

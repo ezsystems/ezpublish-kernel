@@ -10,13 +10,31 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal;
 
-class RecoverSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class RecoverSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
-    protected static $locationIds = [43];
+    protected static $locationId = 43;
+    protected static $parentLocationId = 45;
 
     public static function createSignal()
     {
-        return new RecoverSignal(['contentId' => self::getContentId(), 'newParentLocationId' => 43]);
+        return new RecoverSignal(
+            [
+                'contentId' => static::$contentId,
+                'newLocationId' => static::$locationId,
+                'newParentLocationId' => static::$parentLocationId
+            ]
+        );
+    }
+
+
+    public static function generateTags()
+    {
+        return [
+            'content-'.static::$contentId,
+            'relation-'.static::$contentId,
+            'location-'.static::$parentLocationId,
+            'parent-'.static::$parentLocationId,
+        ];
     }
 
     public function getSlotClass()

@@ -10,11 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal;
 
-class UpdateLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class UpdateLocationSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {
-        return new UpdateLocationSignal(['contentId' => self::getContentId()]);
+        return new UpdateLocationSignal(['contentId' => static::$contentId]);
     }
 
     public function getSlotClass()

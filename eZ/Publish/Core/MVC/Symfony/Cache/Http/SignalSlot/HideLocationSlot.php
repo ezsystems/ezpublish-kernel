@@ -15,8 +15,19 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling HideLocationSignal.
  */
-class HideLocationSlot extends PurgeForContentHttpCacheSlot
+class HideLocationSlot extends AbstractContentSlot
 {
+    /**
+     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal $signal
+     */
+    protected function generateTags(Signal $signal)
+    {
+        $tags = parent::generateTags($signal);
+        $tags[] = 'path-'.$signal->locationId;
+
+        return $tags;
+    }
+
     protected function supports(Signal $signal)
     {
         return $signal instanceof Signal\LocationService\HideLocationSignal;

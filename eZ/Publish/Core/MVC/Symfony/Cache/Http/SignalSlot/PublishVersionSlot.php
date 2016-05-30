@@ -15,7 +15,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling PublishVersionSignal.
  */
-class PublishVersionSlot extends PurgeForContentHttpCacheSlot
+class PublishVersionSlot extends AbstractContentSlot
 {
     protected function supports(Signal $signal)
     {

@@ -15,27 +15,23 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling SwapLocationSignal.
  */
-class SwapLocationSlot extends HttpCacheSlot
+class SwapLocationSlot extends AbstractContentSlot
 {
     /**
-     * Not required by this implementation.
+     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal $signal
      */
-    protected function extractContentId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return null;
+        return [
+            'location-'.$signal->location1Id,
+            'parent-'.$signal->location1Id,
+            'location-'.$signal->location1Id,
+            'parent-'.$signal->location2Id,
+        ];
     }
 
     protected function supports(Signal $signal)
     {
         return $signal instanceof Signal\LocationService\SwapLocationSignal;
-    }
-
-    /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal $signal
-     */
-    protected function purgeHttpCache(Signal $signal)
-    {
-        $this->httpCacheClearer->purgeForContent($signal->content1Id);
-        $this->httpCacheClearer->purgeForContent($signal->content2Id);
     }
 }

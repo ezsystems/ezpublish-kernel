@@ -144,7 +144,7 @@ class Location extends RestController
                 $location,
                 $this->locationService->getLocationChildCount($location)
             ),
-            array('locationId' => $location->id)
+            array('location' => $location->id)
         );
     }
 
@@ -335,7 +335,7 @@ class Location extends RestController
 
         return new Values\CachedValue(
             new Values\LocationList($restLocations, $request->getPathInfo()),
-            array('locationId' => $contentInfo->mainLocationId)
+            array('location' => $contentInfo->mainLocationId)
         );
     }
 
@@ -367,7 +367,7 @@ class Location extends RestController
 
         return new Values\CachedValue(
             new Values\LocationList($restLocations, $request->getPathInfo()),
-            array('locationId' => $locationId)
+            array('location' => $locationId)
         );
     }
 

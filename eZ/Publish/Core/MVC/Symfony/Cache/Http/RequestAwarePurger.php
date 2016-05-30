@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Interface allowing implementor (cache Store) to purge Http cache from a request object.
+ *
+ * @package  eZ\Publish\Core\MVC\Symfony\Cache\Http\ProxyCacheStore
  */
 interface RequestAwarePurger
 {

@@ -17,14 +17,14 @@ use eZ\Publish\Core\SignalSlot\Signal;
  *
  * @todo This might be incomplete: what about the user's own http cache (user hash) ?
  */
-class AssignUserToUserGroupSlot extends PurgeForContentHttpCacheSlot
+class AssignUserToUserGroupSlot extends AbstractContentSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal $signal
      */
-    protected function extractContentId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return $signal->userId;
+        return ['content-'.$signal->userId, 'content-'.$signal->userGroupId];
     }
 
     protected function supports(Signal $signal)

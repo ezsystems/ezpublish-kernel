@@ -10,11 +10,18 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal;
 
-class CopyContentSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class CopyContentSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
+    protected static $parentLocationId = 59;
+
     public static function createSignal()
     {
-        return new CopyContentSignal(['srcContentId' => 66, 'dstContentId' => self::getContentId()]);
+        return new CopyContentSignal(['dstContentId' => static::$contentId, 'dstParentLocationId' => static::$parentLocationId]);
+    }
+
+    public static function generateTags()
+    {
+        return ['content-'.static::$contentId, 'location-'.static::$parentLocationId, 'path-'.static::$parentLocationId];
     }
 
     public function getSlotClass()

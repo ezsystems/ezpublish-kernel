@@ -56,8 +56,20 @@ class CachedValue extends ValueObjectVisitor
             }
         }
 
-        if (isset($data->cacheTags['locationId'])) {
-            $visitor->getResponse()->headers->set('X-Location-Id', $data->cacheTags['locationId']);
+        if (!empty($data->cacheTags)) {
+            // See doc/specifications/cache/multi_tagging.md
+            $tags = [];
+            foreach ($data->cacheTags as $tag => $values) {
+                foreach ((array)$values as $value) {
+                    $tags[] = $tag . '-'. $value;
+                }
+            }
+
+            $response->headers->set(
+                'xkey',
+                $tags,
+                false
+            );
         }
     }
 

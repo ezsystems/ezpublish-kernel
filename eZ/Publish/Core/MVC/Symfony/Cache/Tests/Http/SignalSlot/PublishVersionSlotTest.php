@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
 
-class PublishVersionSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class PublishVersionSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public function getSlotClass()
     {
@@ -19,7 +19,7 @@ class PublishVersionSlotTest extends AbstractPurgeForContentSlotTest implements 
 
     public static function createSignal()
     {
-        return new PublishVersionSignal(['contentId' => self::getContentId()]);
+        return new PublishVersionSignal(['contentId' => static::$contentId]);
     }
 
     public static function getReceivedSignalClasses()

@@ -24,7 +24,7 @@ class CachedValue extends RestValue
 
     /**
      * Associative array of cache tags.
-     * Example: array( 'locationId' => 59 ).
+     * Example: array( 'location' => 59, 'content' =>  55).
      *
      * @var mixed[]
      */
@@ -43,7 +43,14 @@ class CachedValue extends RestValue
 
     protected function checkCacheTags($tags)
     {
-        $invalidTags = array_diff(array_keys($tags), array('locationId'));
+        if (!empty($tags['locationId'])) {
+            // locationId is @deprecated (we can't call trigger_error as it will output text in response even in prod)
+            $tags['location'] = $tags['locationId'];
+            unset($tags['locationId']);
+        }
+
+        // @todo make this extensible
+        $invalidTags = array_diff(array_keys($tags), array('location', 'content', 'content-type', 'parent'));
         if (count($invalidTags) > 0) {
             throw new InvalidArgumentException(
                 'cacheTags',
