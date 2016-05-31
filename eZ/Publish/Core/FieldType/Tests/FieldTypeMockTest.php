@@ -27,7 +27,9 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             false
         );
 
-        $stub->applyDefaultSettings(new \DateTime());
+        $fieldSettings = new \DateTime();
+
+        $stub->applyDefaultSettings($fieldSettings);
     }
 
     /**
@@ -174,7 +176,9 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             false
         );
 
-        $stub->applyDefaultValidatorConfiguration(new \DateTime());
+        $validatorConfiguration = new \DateTime();
+
+        $stub->applyDefaultValidatorConfiguration($validatorConfiguration);
     }
 
     public function testApplyDefaultValidatorConfigurationEmpty()
