@@ -205,6 +205,9 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
                 $this->logger->logCall(__METHOD__, array('url' => $url));
                 $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
                 $cache->set($urlAlias->id);
+
+                $urlAliasCache = $this->cache->getItem('urlAlias', $urlAlias->id);
+                $urlAliasCache->set($urlAlias);
             } catch (APINotFoundException $e) {
                 $cache->set(self::NOT_FOUND);
                 throw $e;
