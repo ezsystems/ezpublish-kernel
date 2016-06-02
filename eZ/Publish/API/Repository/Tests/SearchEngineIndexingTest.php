@@ -168,4 +168,38 @@ class SearchEngineIndexingTest extends BaseTest
             $result->searchHits[0]->valueObject->id
         );
     }
+
+    public function testUpdateLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $rootLocationId = 2;
+        $locationToUpdate = $locationService->loadLocation($rootLocationId);
+
+        $criterion = new Criterion\LogicalAnd([
+            new Criterion\LocationId($rootLocationId),
+            new Criterion\Location\Priority(Criterion\Operator::GT, 0),
+        ]);
+
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(0, $result->totalCount);
+
+        $locationUpdateStruct = $locationService->newLocationUpdateStruct();
+        $locationUpdateStruct->priority = 4;
+        $locationService->updateLocation($locationToUpdate, $locationUpdateStruct);
+
+        $this->refreshSearch($repository);
+
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $locationToUpdate->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
 }
