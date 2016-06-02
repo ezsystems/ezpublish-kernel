@@ -5,6 +5,7 @@ parameters:
     ezpublish.search.slot.delete_content.class: eZ\Publish\Core\Search\Common\Slot\DeleteContent
     ezpublish.search.slot.delete_version.class: eZ\Publish\Core\Search\Common\Slot\DeleteVersion
     ezpublish.search.slot.create_location.class: eZ\Publish\Core\Search\Common\Slot\CreateLocation
+    ezpublish.search.slot.update_location.class: eZ\Publish\Core\Search\Common\Slot\UpdateLocation
     ezpublish.search.slot.delete_location.class: eZ\Publish\Core\Search\Common\Slot\DeleteLocation
     ezpublish.search.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
     ezpublish.search.slot.create_user_group.class: eZ\Publish\Core\Search\Common\Slot\CreateUserGroup
@@ -55,6 +56,12 @@ services:
         class: %ezpublish.search.slot.create_location.class%
         tags:
             - {name: ezpublish.search.slot, signal: LocationService\CreateLocationSignal}
+
+    ezpublish.search.slot.update_location:
+        parent: ezpublish.search.slot
+        class: %ezpublish.search.slot.update_location.class%
+        tags:
+            - {name: ezpublish.search.slot, signal: LocationService\UpdateLocationSignal}
 
     ezpublish.search.slot.delete_location:
         parent: ezpublish.search.slot
