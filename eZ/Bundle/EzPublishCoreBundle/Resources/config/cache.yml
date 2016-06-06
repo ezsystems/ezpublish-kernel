@@ -80,3 +80,10 @@ services:
         arguments: [@ezpublish.api.repository]
         tags:
             - { name: ezpublish.http_cache.event_subscriber }
+
+    ezpublish.cache_warmer.config_resolver_cleanup:
+        class: eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ConfigResolverCleanup
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+            - { name: kernel.cache_warmer }
