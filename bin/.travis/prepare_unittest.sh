@@ -21,7 +21,7 @@ COMPOSER_UPDATE=""
 # solr package search API integration tests
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
     echo "> Require ezsystems/ezplatform-solr-search-engine:dev-master"
-    composer require --no-update ezsystems/ezplatform-solr-search-engine:dev-master
+    composer require --no-update ezsystems/ezplatform-solr-search-engine dev-EZP-25792-fix-index-sub-items@dev
     COMPOSER_UPDATE="true"
 fi
 
