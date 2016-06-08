@@ -78,7 +78,7 @@ class FieldNameResolver
      *  )
      * </code>
      *
-     * @return array
+     * @return array[]
      */
     protected function getSearchableFieldMap()
     {
@@ -103,7 +103,7 @@ class FieldNameResolver
      * @param null|string $fieldTypeIdentifier
      * @param null|string $name
      *
-     * @return array
+     * @return string[]
      */
     public function getFieldNames(
         Criterion $criterion,
@@ -132,7 +132,7 @@ class FieldNameResolver
      * @param null|string $fieldTypeIdentifier
      * @param null|string $name
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Search\FieldType[<string:fieldName>]
      */
     public function getFieldTypes(
         Criterion $criterion,
