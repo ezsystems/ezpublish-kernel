@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values;
 class PathStringRouteBasedLimitationParser extends RouteBasedLimitationParser
 {
     /**
-     * Prefixes the value parsed by the parent with a '/'.
+     * Prefixes the value parsed by the parent with a '/', and ensures it also ends with a '/'.
      *
      * @param $limitationValue
      *
@@ -25,6 +25,6 @@ class PathStringRouteBasedLimitationParser extends RouteBasedLimitationParser
      */
     protected function parseIdFromHref($limitationValue)
     {
-        return '/' . ltrim(parent::parseIdFromHref($limitationValue), '/');
+        return '/' . trim(parent::parseIdFromHref($limitationValue), '/') . '/';
     }
 }
