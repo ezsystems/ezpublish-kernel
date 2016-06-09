@@ -7,7 +7,7 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
-class GenericDataKey extends BaseParser
+class DataKeyValueObjectClass extends BaseParser
 {
     /** @var string $dataKey */
     protected $dataKey;
@@ -16,10 +16,10 @@ class GenericDataKey extends BaseParser
     protected $valueObjectClass;
 
     /**
-     * GenericDataKey constructor.
+     * DataKeyValueObjectClass constructor.
      * 
-     * @param $dataKey
-     * @param $valueObjectClass
+     * @param string $dataKey
+     * @param string $valueObjectClass
      */
     public function __construct($dataKey, $valueObjectClass)
     {
@@ -37,10 +37,14 @@ class GenericDataKey extends BaseParser
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
+        if (!array_key_exists($this->dataKey, $data)) {
+            throw new Exceptions\Parser("The <{$this->dataKey}> sort clause doesn't exist in the input structure");
+        }
+
         $direction = $data[$this->dataKey];
 
         if (!in_array($direction, [Query::SORT_ASC, Query::SORT_DESC])) {
-            throw new Exceptions\Parser("Invalid direction format in <{$direction}> sort clause");
+            throw new Exceptions\Parser("Invalid direction format in <{$this->dataKey}> sort clause");
         }
 
         return new $this->valueObjectClass($direction);

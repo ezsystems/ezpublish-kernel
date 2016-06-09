@@ -65,7 +65,7 @@ parameters:
     ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata
     ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Visibility
 
-    ezpublish_rest.input.parser.internal.sortclause.GenericDataKey.class: eZ\Publish\Core\REST\Server\Input\Parser\SortClause\GenericDataKey
+    ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class: eZ\Publish\Core\REST\Server\Input\Parser\SortClause\DataKeyValueObjectClass
 
     ezpublish_rest.input.parser.internal.route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\RouteBasedLimitationParser
     ezpublish_rest.input.parser.internal.path_string_route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\PathStringRouteBasedLimitationParser
@@ -571,7 +571,7 @@ services:
 
     ezpublish_rest.input.parser.internal.sortclause.DatePublished:
         parent: ezpublish_rest.input.parser
-        class: '%ezpublish_rest.input.parser.internal.sortclause.GenericDataKey.class%'
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
         arguments:
             - 'DatePublished'
             - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished'
