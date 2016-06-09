@@ -15,7 +15,7 @@ class PathStringRouteBasedLimitationParserTest extends BaseTest
             '_identifier' => 'Subtree',
             'values' => [
                 'ref' => [
-                    ['_href' => '/content/locations/1/2/3/4'],
+                    ['_href' => '/content/locations/1/2/3/4/'],
                 ],
             ],
         ];
@@ -40,7 +40,7 @@ class PathStringRouteBasedLimitationParserTest extends BaseTest
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array('/content/locations/1/2/3/4', 'pathString', '1/2/3/4'),
+            array('/content/locations/1/2/3/4/', 'pathString', '1/2/3/4/'),
         );
     }
 }
