@@ -25,7 +25,7 @@ class PathStringRouteBasedLimitationParserTest extends BaseTest
         self::assertInstanceOf('stdClass', $result);
         self::assertObjectHasAttribute('limitationValues', $result);
         self::assertArrayHasKey(0, $result->limitationValues);
-        self::assertEquals('/1/2/3/4', $result->limitationValues[0]);
+        self::assertEquals('/1/2/3/4/', $result->limitationValues[0]);
     }
 
     /**
