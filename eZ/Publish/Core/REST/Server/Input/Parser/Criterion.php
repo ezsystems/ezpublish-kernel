@@ -49,6 +49,24 @@ abstract class Criterion extends BaseParser
         }
     }
 
+    /**
+     * Dispatches parsing of a sort clause name + direction to its own parser.
+     *
+     * @param string $sortClauseName
+     * @param string $direction
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     */
+    public function dispatchSortClause($sortClauseName, $direction, ParsingDispatcher $parsingDispatcher)
+    {
+        $mediaType = $this->getSortClauseMediaType($sortClauseName);
+
+        return $parsingDispatcher->parse(array($sortClauseName => $direction), $mediaType);
+    }
+
     protected function getCriterionMediaType($criterionName)
     {
         $criterionName = str_replace('Criterion', '', $criterionName);
@@ -57,5 +75,10 @@ abstract class Criterion extends BaseParser
         }
 
         return 'application/vnd.ez.api.internal.criterion.' . $criterionName;
+    }
+
+    protected function getSortClauseMediaType($sortClauseName)
+    {
+        return 'application/vnd.ez.api.internal.sortclause.' . $sortClauseName;
     }
 }
