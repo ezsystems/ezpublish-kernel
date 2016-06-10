@@ -42,6 +42,8 @@ class ViewProvider implements Configurator
                     $view->setControllerReference($controllerReference);
                 }
 
+                $view->addParameters($providerView->getParameters());
+
                 return;
             }
         }

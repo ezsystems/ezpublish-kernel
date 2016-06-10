@@ -11,22 +11,22 @@ namespace eZ\Publish\Core\QueryType;
 interface QueryTypeRegistry
 {
     /**
-     * Registers $queryType as $name.
+     * Registers $queryType.
      *
      * @param string $name
      * @param \eZ\Publish\Core\QueryType\QueryType $queryType
      */
-    public function addQueryType($name, QueryType $queryType);
+    public function addQueryType(QueryType $queryType);
 
     /**
      * Registers QueryTypes from the $queryTypes array.
      *
-     * @param \eZ\Publish\Core\QueryType\QueryType[] $queryTypes An array of QueryTypes, with their name as the index
+     * @param \eZ\Publish\Core\QueryType\QueryType[] $queryTypes An array of QueryTypes.
      */
     public function addQueryTypes(array $queryTypes);
 
     /**
-     * Get the QueryType $name.
+     * Get the QueryType named $name.
      *
      * @param string $name
      *

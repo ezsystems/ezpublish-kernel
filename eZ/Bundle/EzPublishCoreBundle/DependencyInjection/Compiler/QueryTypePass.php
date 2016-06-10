@@ -5,6 +5,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use Exception;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,23 +17,28 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class QueryTypePass implements CompilerPassInterface
 {
+    /** @var \Symfony\Component\DependencyInjection\Reference[] */
+    private $queryTypeRefs = [];
+
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('ezpublish.query_type.registry')) {
             return;
         }
 
-        $queryTypes = [];
+        $queryTypesRefs = [];
+
+        // array of QueryType classes. Used to prevent double handling between services & convention definitions.
+        $queryTypesClasses = [];
 
         // tagged query types
-        $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.query_type');
-        foreach ($taggedServiceIds as $taggedServiceId => $tags) {
+        foreach ($container->findTaggedServiceIds('ezpublish.query_type') as $taggedServiceId => $tags) {
             $queryTypeDefinition = $container->getDefinition($taggedServiceId);
-            $queryTypeClass = $queryTypeDefinition->getClass();
+            $queryTypeClassName = $queryTypeDefinition->getClass();
 
             for ($i = 0, $count = count($tags); $i < $count; ++$i) {
-                // TODO: Check for duplicates
-                $queryTypes[$queryTypeClass::getName()] = new Reference($taggedServiceId);
+                $queryTypesRefs[] = new Reference($taggedServiceId);
+                $queryTypesClasses[$queryTypeClassName] = true;
             }
         }
 
@@ -48,30 +54,48 @@ class QueryTypePass implements CompilerPassInterface
                     continue;
                 }
 
-                $queryTypeServices = [];
+                $conventionQueryTypeDefs = [];
                 $bundleQueryTypeNamespace = substr($bundleClass, 0, strrpos($bundleClass, '\\') + 1) . 'QueryType';
                 foreach (glob($bundleQueryTypesDir . DIRECTORY_SEPARATOR . '*QueryType.php') as $queryTypeFilePath) {
                     $queryTypeFileName = basename($queryTypeFilePath, '.php');
                     $queryTypeClassName = $bundleQueryTypeNamespace . '\\' . $queryTypeFileName;
+                    if (isset($queryTypesClasses[$queryTypeClassName])) {
+                        continue;
+                    }
                     if (!class_exists($queryTypeClassName)) {
                         throw new Exception("Expected $queryTypeClassName to be defined in $queryTypeFilePath");
                     }
 
-                    $queryTypeReflectionClass = new ReflectionClass($queryTypeClassName);
-                    if (!$queryTypeReflectionClass->implementsInterface('eZ\Publish\Core\QueryType\QueryType')) {
-                        throw new Exception("$queryTypeClassName needs to implement eZ\\Publish\\Core\\QueryType\\QueryType");
-                    }
+                    $this->checkInterface($queryTypeClassName);
 
                     $serviceId = 'ezpublish.query_type.convention.' . strtolower($bundleName) . '_' . strtolower($queryTypeFileName);
-                    $queryTypeServices[$serviceId] = new Definition($queryTypeClassName);
-
-                    $queryTypes[$queryTypeClassName::getName()] = new Reference($serviceId);
+                    $queryTypeDefinition = new Definition($queryTypeClassName);
+                    $conventionQueryTypeDefs[$serviceId] = $queryTypeDefinition;
+                    $queryTypesRefs[] = new Reference($serviceId);
                 }
-                $container->addDefinitions($queryTypeServices);
+                $container->addDefinitions($conventionQueryTypeDefs);
             }
         }
 
-        $aggregatorDefinition = $container->getDefinition('ezpublish.query_type.registry');
-        $aggregatorDefinition->addMethodCall('addQueryTypes', [$queryTypes]);
+        $registryDef = $container->getDefinition('ezpublish.query_type.registry');
+        $registryDef->addMethodCall('addQueryTypes', [$queryTypesRefs]);
+    }
+
+    /**
+     * Checks that $queryTypeClassName implements the QueryType interface.
+     *
+     * @param string $queryTypeClassName
+     *
+     * @throws InvalidArgumentException
+     */
+    private function checkInterface($queryTypeClassName)
+    {
+        $queryTypeReflectionClass = new ReflectionClass($queryTypeClassName);
+        if (!$queryTypeReflectionClass->implementsInterface('eZ\Publish\Core\QueryType\QueryType')) {
+            throw new InvalidArgumentException(
+                "QueryTypeClass $queryTypeClassName",
+                'needs to implement eZ\Publish\Core\QueryType\QueryType'
+            );
+        }
     }
 }

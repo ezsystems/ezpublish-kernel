@@ -12,7 +12,14 @@ core:
                 - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Content
                 - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Exception
             contexts:
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\NavigationContext:
+                    router: @router
+                    urlAliasService: @ezpublish.api.service.url_alias
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext:
                     repository: @ezpublish.api.repository
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ExceptionContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ViewTemplateContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ViewConfigurationContext:
+                    configResolver: @ezpublish.config.resolver
+                    locationService: @ezpublish.api.service.location

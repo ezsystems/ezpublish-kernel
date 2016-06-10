@@ -12,6 +12,7 @@ parameters:
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.content.download.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
     ezpublish.controller.content.download_redirection.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadRedirectionController
+    ezpublish.controller.content.query.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\QueryController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
     # Param converters
@@ -29,6 +30,8 @@ parameters:
     ezpublish.exception_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ExceptionListener
 
     ezpublish.fields_groups.list.class: eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList
+    
+    ezpublish.query_type.registry.class: eZ\Publish\Core\QueryType\QueryTypeNameRegistry
 
 services:
     # Siteaccess is injected in the container at runtime
@@ -172,7 +175,7 @@ services:
             - { name: kernel.event_subscriber }
 
     ezpublish.query_type.registry:
-        class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
+        class: %ezpublish.query_type.registry.class%
 
     ezpublish.fields_groups.list:
         class: %ezpublish.fields_groups.list.class%
@@ -184,3 +187,11 @@ services:
         class: eZ\Publish\Core\Helper\FieldsGroups\RepositoryConfigFieldsGroupsListFactory
         arguments:
             - @ezpublish.api.repository_configuration_provider
+    ezpublish.controller.content.query:
+        class: %ezpublish.controller.content.query.class%
+        arguments:
+            - @ezpublish.query_type.registry
+            - @ezpublish.api.service.search
+
+    ez_query:
+        alias: ezpublish.controller.content.query
