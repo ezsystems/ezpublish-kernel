@@ -132,7 +132,7 @@ class FieldNameResolver
      * @param null|string $fieldTypeIdentifier
      * @param null|string $name
      *
-     * @return \eZ\Publish\SPI\Search\FieldType[<string:fieldName>]
+     * @return array<string, \eZ\Publish\SPI\Search\FieldType>
      */
     public function getFieldTypes(
         Criterion $criterion,
