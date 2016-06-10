@@ -57,9 +57,13 @@ abstract class Query extends CriterionParser
         }
 
         // SortClauses
-        // -- SortClause
-        // ---- SortField
+        // -- [SortClauseName: direction|data]
         if (array_key_exists('SortClauses', $data)) {
+            $sortClauses = [];
+            foreach ($data['SortClauses'] as $sortClauseName => $sortClauseData) {
+                $sortClauses[] = $this->dispatchSortClause($sortClauseName, $sortClauseData, $parsingDispatcher);
+            }
+            $query->sortClauses = $sortClauses;
         }
 
         // FacetBuilders
