@@ -45,7 +45,7 @@ class DataKeyValueObjectClassTest extends BaseTest
     public function testParseExceptionOnMissingSortClause()
     {
         $inputArray = array(
-            'name' => "Keep on mocking in the free world",
+            'name' => 'Keep on mocking in the free world',
         );
 
         $dataKeyValueObjectClass = $this->getParser();
