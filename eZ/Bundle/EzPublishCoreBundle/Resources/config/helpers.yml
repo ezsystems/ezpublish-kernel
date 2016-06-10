@@ -13,6 +13,7 @@ services:
     # Helpers
     ezpublish.translation_helper:
         class: %ezpublish.translation_helper.class%
+        lazy: true
         arguments:
             - @ezpublish.config.resolver
             - @ezpublish.api.service.content
