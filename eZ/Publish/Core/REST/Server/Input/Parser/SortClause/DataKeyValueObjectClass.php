@@ -37,6 +37,10 @@ class DataKeyValueObjectClass extends BaseParser
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
+        if (!class_exists($this->valueObjectClass)) {
+            throw new Exceptions\Parser("Value object class <{$this->valueObjectClass}> is not defined");
+        }
+
         if (!array_key_exists($this->dataKey, $data)) {
             throw new Exceptions\Parser("The <{$this->dataKey}> sort clause doesn't exist in the input structure");
         }
