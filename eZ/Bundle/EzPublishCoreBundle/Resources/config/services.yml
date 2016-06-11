@@ -184,3 +184,17 @@ services:
         class: eZ\Publish\Core\Helper\FieldsGroups\RepositoryConfigFieldsGroupsListFactory
         arguments:
             - @ezpublish.api.repository_configuration_provider
+
+    ezpublish.query_type.mapper.content_view:
+        class: eZ\Publish\Core\QueryType\ContentViewQueryTypeMapper
+        arguments:
+            - "@ezpublish.query_type.registry"
+
+    ezpublish.controller.query:
+        class: eZ\Publish\Core\MVC\Symfony\Controller\Content\QueryController
+        arguments:
+            - "@ezpublish.query_type.mapper.content_view"
+            - "@ezpublish.api.service.search"
+
+    ez_query:
+        alias: ezpublish.controller.query
