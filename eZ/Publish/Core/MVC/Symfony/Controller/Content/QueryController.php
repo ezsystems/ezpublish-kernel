@@ -79,6 +79,6 @@ class QueryController
         $searchResults = $this->searchService->$method(
             $this->contentViewQueryTypeMapper->map($view)
         );
-        $view->addParameters([$view->getParameter('variable') => $searchResults]);
+        $view->addParameters([$view->getParameter('query')['assign_results_to'] => $searchResults]);
     }
 }

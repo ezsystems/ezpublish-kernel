@@ -31,32 +31,26 @@ class ContentViewQueryTypeMapper implements QueryTypeMapper
             throw new InvalidArgumentException('query', "Missing required 'query' view parameter");
         }
 
-        $queryType = $this->queryTypeRegistry->getQueryType(
-            $contentView->getParameter('query')
-        );
+        $queryOptions = $contentView->getParameter('query');
+        $queryType = $this->queryTypeRegistry->getQueryType($queryOptions['query_type']);
 
-        $queryParameters = $contentView->hasParameter('queryParameters') ?
-            $this->extractParameters($contentView, $queryType) :
-            [];
-
-        return $queryType->getQuery($queryParameters);
+        return $queryType->getQuery($this->extractParameters($contentView));
     }
 
     /**
      * @param ContentView $contentView
-     * @param QueryType $queryType
      *
      * @return array
      */
-    public function extractParameters(ContentView $contentView, QueryType $queryType)
+    public function extractParameters(ContentView $contentView)
     {
-        $queryParameters = $contentView->getParameter('queryParameters');
-        $supportedQueryParameters = array_flip($queryType->getSupportedParameters());
-        foreach ($queryParameters as $queryParameterName => $queryParameterValue) {
-            if (!isset($supportedQueryParameters[$queryParameterName])) {
-                throw new InvalidArgumentException("parameter $queryParameterName", 'unsupported query parameter');
+        $queryParameters = [];
+
+        $queryOptions = $contentView->getParameter('query');
+        if (isset($queryOptions['parameters'])) {
+            foreach ($queryOptions['parameters'] as $name => $value) {
+                $queryParameters[$name] = $this->evaluateExpression($contentView, $value);
             }
-            $queryParameters[$queryParameterName] = $this->evaluateExpression($contentView, $queryParameterValue);
         }
 
         return $queryParameters;
@@ -70,15 +64,19 @@ class ContentViewQueryTypeMapper implements QueryTypeMapper
      */
     public function evaluateExpression(ContentView $contentView, $queryParameterValue)
     {
-        $language = new ExpressionLanguage();
+        if (substr($queryParameterValue, 0, 2) === '@=') {
+            $language = new ExpressionLanguage();
 
-        return $language->evaluate(
-            substr($queryParameterValue, 2),
-            [
-                'view' => $contentView,
-                'location' => $contentView->getLocation(),
-                'content' => $contentView->getContent(),
-            ]
-        );
+            return $language->evaluate(
+                substr($queryParameterValue, 2),
+                [
+                    'view' => $contentView,
+                    'location' => $contentView->getLocation(),
+                    'content' => $contentView->getContent(),
+                ]
+            );
+        } else {
+            return $queryParameterValue;
+        }
     }
 }
