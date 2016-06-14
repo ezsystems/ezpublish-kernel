@@ -168,6 +168,12 @@ class RestContent extends ValueObjectVisitor
         $generator->endValueElement('mainLanguageCode');
 
         $generator->startValueElement(
+            'currentVersionNo',
+            $contentInfo->currentVersionNo
+        );
+        $generator->endValueElement('currentVersionNo');
+
+        $generator->startValueElement(
             'alwaysAvailable',
             $this->serializeBool($generator, $contentInfo->alwaysAvailable)
         );
