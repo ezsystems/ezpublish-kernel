@@ -65,6 +65,8 @@ parameters:
     ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata
     ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Visibility
 
+    ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class: eZ\Publish\Core\REST\Server\Input\Parser\SortClause\DataKeyValueObjectClass
+
     ezpublish_rest.input.parser.internal.route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\RouteBasedLimitationParser
     ezpublish_rest.input.parser.internal.path_string_route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\PathStringRouteBasedLimitationParser
 
@@ -566,6 +568,60 @@ services:
         class: %ezpublish_rest.input.parser.internal.criterion.Visibility.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Visibility }
+
+    ezpublish_rest.input.parser.internal.sortclause.ContentId:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'ContentId'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentId'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.ContentId }
+
+    ezpublish_rest.input.parser.internal.sortclause.ContentName:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'ContentName'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.ContentName }
+
+    ezpublish_rest.input.parser.internal.sortclause.DateModified:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'DateModified'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.DateModified }
+
+    ezpublish_rest.input.parser.internal.sortclause.DatePublished:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'DatePublished'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.DatePublished }
+
+    ezpublish_rest.input.parser.internal.sortclause.SectionIdentifier:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'SectionIdentifier'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.SectionIdentifier }
+
+    ezpublish_rest.input.parser.internal.sortclause.SectionName:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'SectionName'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionName'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.SectionName }
 
     # role limitation parsers
 

@@ -2155,7 +2155,7 @@ Create View
 XML Example
 '''''''''''
 
-Perform a query on images withing the media section, sorted by name, limiting results to 10.
+Perform a query on images within the media section, sorted by name, limiting results to 10.
 
 .. code:: http
 
@@ -2177,9 +2177,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
-          <SortClause>
-            <SortField>NAME</SortField>
-          </SortClause>
+          <ContentName>ascending</ContentName>
         </SortClauses>
         <FacetBuilders>
           <contentTypeFacetBuilder/>
@@ -2208,9 +2206,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
-          <SortClause>
-            <SortField>NAME</SortField>
-          </SortClause>
+          <ContentName>ascending</ContentName>
         </SortClauses>
         <FacetBuilders>
           <contentTypeFacetBuilder/>
