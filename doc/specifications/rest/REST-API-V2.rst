@@ -617,6 +617,7 @@ XML Example
       <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
 
@@ -783,6 +784,7 @@ JSON Example
         },
         "lastModificationDate": "2012-02-12T12:30:00",
         "mainLanguageCode": "eng-US",
+        "currentVersionNo": "1",
         "alwaysAvailable": true
       }
     }
@@ -876,6 +878,7 @@ XML Example
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
 
@@ -971,6 +974,7 @@ In this example
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>ger-DE</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>false</alwaysAvailable>
     </Content>
 
@@ -6748,6 +6752,7 @@ Content XML Schema
                 minOccurs="0" />
               <xsd:element name="lastModificationDate" type="xsd:dateTime" />
               <xsd:element name="mainLanguageCode" type="xsd:string" />
+              <xsd:element name="currentVersionNo" type="xsd:int" />
               <xsd:element name="alwaysAvailable" type="xsd:boolean" />
             </xsd:all>
             <xsd:attribute name="id" type="xsd:int" />
