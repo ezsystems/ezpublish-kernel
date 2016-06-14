@@ -10,6 +10,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 use Behat\Behat\Context\Context;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Adds extra YAML configuration through ezplatform_behat.yml.
+ *
+ * New configuration blocks are added to unique files, and added to the imports.
+ * Existing configuration strings re-use the same file if applicable.
+ */
 class YamlConfigurationContext implements Context
 {
     private static $platformConfigurationFilePath = 'app/config/ezplatform_behat.yml';
