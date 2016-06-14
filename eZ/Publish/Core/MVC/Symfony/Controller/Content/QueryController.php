@@ -9,8 +9,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\QueryType\ContentViewQueryTypeMapper;
 
 /**
- * A content view controller that runs queries based on query parameters
- * from the view configuration.
+ * A content view controller that runs queries based on the matched view configuration.
  *
  * The action used depends on which type of search is needed: location, content or contentInfo.
  */
@@ -19,7 +18,7 @@ class QueryController
     /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
-    /** @var ContentViewQueryTypeMapper */
+    /** @var \eZ\Publish\Core\QueryType\ContentViewQueryTypeMapper */
     private $contentViewQueryTypeMapper;
 
     public function __construct(
