@@ -8,6 +8,12 @@ use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\QueryType\ContentViewQueryTypeMapper;
 
+/**
+ * A content view controller that runs queries based on query parameters
+ * from the view configuration.
+ *
+ * The action used depends on which type of search is needed: location, content or contentInfo.
+ */
 class QueryController
 {
     /** @var \eZ\Publish\API\Repository\SearchService */
@@ -24,6 +30,12 @@ class QueryController
         $this->searchService = $searchService;
     }
 
+    /**
+     * Runs a content search.
+     *
+     * @param ContentView $view
+     * @return ContentView
+     */
     public function contentQueryAction(ContentView $view)
     {
         $this->runQuery($view, 'findContent');
@@ -31,6 +43,12 @@ class QueryController
         return $view;
     }
 
+    /**
+     * Runs a location search.
+     *
+     * @param ContentView $view
+     * @return ContentView
+     */
     public function locationQueryAction(ContentView $view)
     {
         $this->runQuery($view, 'findLocations');
@@ -38,6 +56,12 @@ class QueryController
         return $view;
     }
 
+    /**
+     * Runs a contentInfo search.
+     *
+     * @param ContentView $view
+     * @return ContentView
+     */
     public function contentInfoQueryAction(ContentView $view)
     {
         $this->runQuery($view, 'findContentInfo');
@@ -46,9 +70,12 @@ class QueryController
     }
 
     /**
+     * Runs the Query defined in $view using $method on SearchService.
+     *
      * @param ContentView $view
+     * @param string $method Name of the SearchService method to run.
      */
-    public function runQuery(ContentView $view, $method)
+    private function runQuery(ContentView $view, $method)
     {
         $searchResults = $this->searchService->$method(
             $this->contentViewQueryTypeMapper->map($view)
