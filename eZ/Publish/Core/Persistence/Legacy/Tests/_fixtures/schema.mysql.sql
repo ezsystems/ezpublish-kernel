@@ -484,7 +484,8 @@ CREATE TABLE ezuser (
   login varchar(150) NOT NULL DEFAULT '',
   password_hash varchar(50) DEFAULT NULL,
   password_hash_type int(11) NOT NULL DEFAULT 1,
-  PRIMARY KEY (contentobject_id)
+  PRIMARY KEY (contentobject_id),
+  UNIQUE KEY `ezuser_login` (`login`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS ezuser_role;

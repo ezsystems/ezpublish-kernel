@@ -436,6 +436,7 @@ CREATE TABLE ezuser (
   password_hash_type integer NOT NULL DEFAULT 1,
   PRIMARY KEY (contentobject_id)
 );
+CREATE UNIQUE INDEX ezuser_login ON ezuser (login COLLATE NOCASE);
 
 CREATE TABLE ezuser_role (
   contentobject_id integer,

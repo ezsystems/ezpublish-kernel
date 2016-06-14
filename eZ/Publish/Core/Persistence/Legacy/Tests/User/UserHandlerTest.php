@@ -195,11 +195,11 @@ class UserHandlerTest extends TestCase
 
         $handler->create($user = $this->getValidUser());
 
-        $user->login = 'new_login';
+        $user->login = 'New_lögin';
         $handler->update($user);
 
         $this->assertQueryResult(
-            array(array(42, 'kore@example.org', 'new_login', 1234567890, '2')),
+            array(array(42, 'kore@example.org', 'New_lögin', 1234567890, '2')),
             $this->handler->createSelectQuery()->select('*')->from('ezuser'),
             'Expected user data to be updated.'
         );
