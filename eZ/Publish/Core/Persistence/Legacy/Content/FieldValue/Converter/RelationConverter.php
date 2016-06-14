@@ -67,10 +67,10 @@ class RelationConverter implements Converter
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
         // Selection method, 0 = browse, 1 = dropdown
-        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'];
+        $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'];
 
         // Selection root, location ID
-        $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'];
+        $storageDef->dataInt2 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'];
     }
 
     /**
