@@ -55,9 +55,6 @@ class DoctrineDatabase extends Gateway
                 $this->handler->quoteColumn('login'),
                 $query->bindValue($user->login)
             )->set(
-                $this->handler->quoteColumn('login_normalized'),
-                $query->bindValue(mb_strtolower($user->login, 'UTF-8'))
-            )->set(
                 $this->handler->quoteColumn('email'),
                 $query->bindValue($user->email)
             )->set(
@@ -182,8 +179,8 @@ class DoctrineDatabase extends Gateway
             )
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn('login_normalized', 'ezuser'),
-                $query->bindValue(mb_strtolower($login, 'UTF-8'), null, \PDO::PARAM_STR)
+                $this->handler->quoteColumn('login', 'ezuser'),
+                $query->bindValue($login, null, \PDO::PARAM_STR)
             )
         );
 
@@ -245,9 +242,6 @@ class DoctrineDatabase extends Gateway
             ->set(
                 $this->handler->quoteColumn('login'),
                 $query->bindValue($user->login)
-            )->set(
-                $this->handler->quoteColumn('login_normalized'),
-                $query->bindValue(mb_strtolower($user->login, 'UTF-8'))
             )->set(
                 $this->handler->quoteColumn('email'),
                 $query->bindValue($user->email)
