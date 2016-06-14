@@ -185,15 +185,15 @@ services:
         arguments:
             - @ezpublish.api.repository_configuration_provider
 
-    ezpublish.query_type.mapper.content_view:
-        class: eZ\Publish\Core\QueryType\ContentViewQueryTypeMapper
+    ezpublish.query_type_content_view_mapper:
+        class: eZ\Publish\Core\QueryType\QueryParameterContentViewQueryTypeMapper
         arguments:
             - "@ezpublish.query_type.registry"
 
     ezpublish.controller.query:
         class: eZ\Publish\Core\MVC\Symfony\Controller\Content\QueryController
         arguments:
-            - "@ezpublish.query_type.mapper.content_view"
+            - "@ezpublish.query_type_content_view_mapper"
             - "@ezpublish.api.service.search"
 
     ez_query:
