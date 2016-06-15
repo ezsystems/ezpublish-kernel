@@ -39,7 +39,7 @@ use Symfony\Component\EventDispatcher\Event;
 class PreContentViewEvent extends Event
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View
+     * @var \eZ\Publish\Core\MVC\Symfony\View\View
      */
     private $contentView;
 
@@ -49,7 +49,7 @@ class PreContentViewEvent extends Event
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\View
+     * @return \eZ\Publish\Core\MVC\Symfony\View\View
      */
     public function getContentView()
     {
