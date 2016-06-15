@@ -512,7 +512,6 @@ CREATE TABLE ezuser (
     contentobject_id integer DEFAULT 0 NOT NULL,
     email character varying(150) DEFAULT ''::character varying NOT NULL,
     login character varying(150) DEFAULT ''::character varying NOT NULL,
-    login_normalized character varying(150) DEFAULT ''::character varying NOT NULL,
     password_hash character varying(50),
     password_hash_type integer DEFAULT 1 NOT NULL
 );
@@ -730,7 +729,7 @@ CREATE INDEX ezurlalias_ml_text ON ezurlalias_ml USING btree (text, id, link);
 
 CREATE INDEX ezurlalias_ml_text_lang ON ezurlalias_ml USING btree (text, lang_mask, parent);
 
-CREATE UNIQUE INDEX ezuser_login ON ezuser USING btree (login_normalized);
+CREATE UNIQUE INDEX ezuser_login ON ezuser USING btree ((lower(login)));
 
 CREATE INDEX hash_key ON ezuser_accountkey USING btree (hash_key);
 
