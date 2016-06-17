@@ -5,6 +5,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Limitation;
 
 use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Generic limitation value parser.
@@ -17,7 +18,9 @@ use eZ\Publish\API\Repository\Values;
 class PathStringRouteBasedLimitationParser extends RouteBasedLimitationParser
 {
     /**
-     * Prefixes the value parsed by the parent with a '/', and ensures it also ends with a '/'.
+     * Prefixes the value parsed by the parent with a '/'.
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser if the '_href' attribute doesn't end with a slash, since 6.4
      *
      * @param $limitationValue
      *
@@ -25,6 +28,10 @@ class PathStringRouteBasedLimitationParser extends RouteBasedLimitationParser
      */
     protected function parseIdFromHref($limitationValue)
     {
-        return '/' . trim(parent::parseIdFromHref($limitationValue), '/') . '/';
+        if (substr($limitationValue['_href'], -1) !== '/') {
+            throw new Exceptions\Parser("The '_href' attribute must end with a slash.");
+        }
+
+        return '/' . ltrim(parent::parseIdFromHref($limitationValue), '/');
     }
 }

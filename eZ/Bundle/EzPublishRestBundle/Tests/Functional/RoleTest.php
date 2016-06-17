@@ -454,7 +454,7 @@ XML;
     {
         return [
             [['identifier' => 'Section', 'href' => '/api/ezp/v2/content/sections/1']],
-            [['identifier' => 'Subtree', 'href' => '/api/ezp/v2/content/locations/1/2']],
+            [['identifier' => 'Subtree', 'href' => '/api/ezp/v2/content/locations/1/2/']],
         ];
     }
 
