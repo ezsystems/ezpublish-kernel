@@ -16,9 +16,13 @@ parameters:
     ezplatform.default_view_templates.content.full: 'EzPublishCoreBundle:default:content/full.html.twig'
     ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
     ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
+    ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
 
     ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+
+    # List of content type identifiers to display as image when embedded
+    ezplatform.content_view.image_embed_content_types_identifiers: ['image']
 
     ezsettings.default.content_view_defaults:
         full:
@@ -30,6 +34,10 @@ parameters:
                 template: %ezplatform.default_view_templates.content.line%
                 match: []
         embed:
+            image:
+                template: '%ezplatform.default_view_templates.content.embed_image%'
+                match:
+                    Identifier\ContentType: '%ezplatform.content_view.image_embed_content_types_identifiers%'
             default:
                 template: %ezplatform.default_view_templates.content.embed%
                 match: []
