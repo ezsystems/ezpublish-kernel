@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  * @group relation
+ * @deprecated 6.1 use RelationSearchBaseIntegrationTestTrait instead.
  */
 abstract class RelationBaseIntegrationTest extends BaseIntegrationTest
 {
