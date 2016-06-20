@@ -437,35 +437,37 @@ class Type extends FieldType
     }
 
     /**
-     * @todo handle embeds when implemented
+     * {@inheritdoc}
      */
     protected function getRelatedObjectIds(Value $fieldValue, $relationType)
     {
         if ($relationType === Relation::EMBED) {
-            $tagName = 'embed';
+            $tagNames = ['ezembedinline', 'ezembed'];
         } else {
-            $tagName = 'link';
+            $tagNames = ['link', 'ezlink'];
         }
 
         $contentIds = array();
         $locationIds = array();
         $xpath = new \DOMXPath($fieldValue->xml);
         $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
-        $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
 
-        /** @var \DOMElement $link */
-        foreach ($xpath->query($xpathExpression) as $link) {
-            preg_match('~^(.+)://([^#]*)?(#.*|\\s*)?$~', $link->getAttribute('xlink:href'), $matches);
-            list(, $scheme, $id) = $matches;
+        foreach ($tagNames as $tagName) {
+            $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
+            /** @var \DOMElement $element */
+            foreach ($xpath->query($xpathExpression) as $element) {
+                preg_match('~^(.+)://([^#]*)?(#.*|\\s*)?$~', $element->getAttribute('xlink:href'), $matches);
+                list(, $scheme, $id) = $matches;
 
-            if (empty($id)) {
-                continue;
-            }
+                if (empty($id)) {
+                    continue;
+                }
 
-            if ($scheme === 'ezcontent') {
-                $contentIds[] = $id;
-            } elseif ($scheme === 'ezlocation') {
-                $locationIds[] = $id;
+                if ($scheme === 'ezcontent') {
+                    $contentIds[] = $id;
+                } elseif ($scheme === 'ezlocation') {
+                    $locationIds[] = $id;
+                }
             }
         }
 
