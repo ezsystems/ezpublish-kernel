@@ -437,14 +437,14 @@ class Type extends FieldType
     }
 
     /**
-     * @todo handle embeds when implemented
+     * {@inheritdoc}
      */
     protected function getRelatedObjectIds(Value $fieldValue, $relationType)
     {
         if ($relationType === Relation::EMBED) {
-            $tagName = 'embed';
+            $tagName = 'ezembed|ezembedinline';
         } else {
-            $tagName = 'link';
+            $tagName = 'link|ezlink';
         }
 
         $contentIds = array();

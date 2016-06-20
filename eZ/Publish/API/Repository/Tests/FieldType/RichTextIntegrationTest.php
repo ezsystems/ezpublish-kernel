@@ -31,11 +31,13 @@ class RichTextIntegrationTest extends SearchBaseIntegrationTest
      */
     private $createdDOMValue;
 
+    /**
+     * @var \DOMDocument
+     */
     private $updatedDOMValue;
 
-    protected function setUp()
+    public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        parent::setUp();
         $this->createdDOMValue = new DOMDocument();
         $this->createdDOMValue->loadXML(<<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
@@ -52,9 +54,18 @@ EOT
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para><link xlink:href="ezlocation://60" xlink:show="none">link1</link></para>
     <para><link xlink:href="ezcontent://56" xlink:show="none">link2</link></para>
+    <ezembed xlink:href="ezcontent://56" view="embed" xml:id="embed-id-1" ezxhtml:class="embed-class" ezxhtml:align="left">
+      <ezconfig>
+        <ezvalue key="size">medium</ezvalue>
+        <ezvalue key="offset">10</ezvalue>
+        <ezvalue key="limit">5</ezvalue>
+      </ezconfig>
+    </ezembed>
 </section>
 EOT
         );
+
+        parent::__construct($name, $data, $dataName);
     }
 
     /**
@@ -104,6 +115,15 @@ EOT
             new Relation(
                 array(
                     'type' => Relation::LINK,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(56),
+                )
+            ),
+            new Relation(
+                array(
+                    // @todo Won't be possible to add before we break how we store relations with legacy kernel.
+                    //'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::EMBED,
                     'sourceContentInfo' => $content->contentInfo,
                     'destinationContentInfo' => $contentService->loadContentInfo(56),
                 )
@@ -195,23 +215,11 @@ EOT
     /**
      * Get initial field data for valid object creation.
      *
-     * @todo add embeds when implemented
-     *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        $doc = new DOMDocument();
-        $doc->loadXML(<<<EOT
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
-    <para><link xlink:href="ezlocation://58" xlink:show="none">link1</link></para>
-    <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link></para>
-</section>
-EOT
-        );
-
-        return new RichTextValue($doc);
+        return new RichTextValue($this->createdDOMValue);
     }
 
     /**
@@ -508,7 +516,7 @@ EOT;
     </para>
 </section>
 ',
-            ), /*, @TODO adapt and enable when embeds are implemented
+            ), /*, @TODO adapt and enable when embeds are implemented with remote id support
             array(
                 // test embed
             '<?xml version="1.0" encoding="utf-8"?>
