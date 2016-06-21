@@ -605,6 +605,15 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.DatePublished }
 
+    ezpublish_rest.input.parser.internal.sortclause.Depth:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'LocationDepth'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Depth'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.LocationDepth }
+
     ezpublish_rest.input.parser.internal.sortclause.Priority:
         parent: ezpublish_rest.input.parser
         class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
