@@ -705,8 +705,20 @@ class UserService implements UserServiceInterface
             }
         }
 
-        if ($userUpdateStruct->password !== null && (!is_string($userUpdateStruct->password) || empty($userUpdateStruct->password))) {
+        // Cannot update certain fields without the password.
+        $passwordRequired = false;
+        if ($userUpdateStruct->login !== null) {
+            $passwordRequired = true;
+        }
+
+        $passwordMissing = $passwordRequired && $userUpdateStruct->password === null;
+        $passwordInvalid = $userUpdateStruct->password !== null && (!is_string($userUpdateStruct->password) || empty($userUpdateStruct->password));
+        if ($passwordMissing || $passwordInvalid) {
             throw new InvalidArgumentValue('password', $userUpdateStruct->password, 'UserUpdateStruct');
+        }
+
+        if ($userUpdateStruct->login !== null && (!is_string($userUpdateStruct->login) || empty($userUpdateStruct->login))) {
+            throw new InvalidArgumentValue('login', $userUpdateStruct->password, 'UserUpdateStruct');
         }
 
         if ($userUpdateStruct->enabled !== null && !is_bool($userUpdateStruct->enabled)) {
@@ -742,15 +754,16 @@ class UserService implements UserServiceInterface
                 );
             }
 
+            $login = $userUpdateStruct->login ?: $loadedUser->login;
             $this->userHandler->update(
                 new SPIUser(
                     array(
                         'id' => $loadedUser->id,
-                        'login' => $loadedUser->login,
+                        'login' => $login,
                         'email' => $userUpdateStruct->email ?: $loadedUser->email,
                         'passwordHash' => $userUpdateStruct->password ?
                             $this->createPasswordHash(
-                                $loadedUser->login,
+                                $login,
                                 $userUpdateStruct->password,
                                 $this->settings['siteName'],
                                 $this->settings['hashType']

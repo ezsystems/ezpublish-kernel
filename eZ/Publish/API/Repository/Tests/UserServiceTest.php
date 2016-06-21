@@ -1613,6 +1613,76 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the updateUser() method.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
+     */
+    public function testUpdateUserLoginUpdatesLogin()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set new values for password and maxLogin
+        $userUpdate->login = 'my-new-login';
+        $userUpdate->password = 'my-new-password';
+
+        // Updated the user record.
+        $userVersion2 = $userService->updateUser($user, $userUpdate);
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array(
+                'login' => $userUpdate->login,
+                'passwordHash' => $this->createHash(
+                    $userUpdate->login,
+                    $userUpdate->password,
+                    $user->hashAlgorithm
+                )
+            ),
+            array(
+                'login' => $userVersion2->login,
+                'passwordHash' => $userVersion2->passwordHash,
+            )
+        );
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserLoginUpdatesLogin
+     */
+    public function testUpdateUserLoginWithoutPasswordThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set new values for login
+        $userUpdate->login = 'my-new-login';
+
+        // This call will fail with a "InvalidArgumentException" because the
+        // the field "login" cannot be updated without supplying "password".
+        $userVersion2 = $userService->updateUser($user, $userUpdate);
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadUserGroupsOfUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()

@@ -18,6 +18,13 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class UserUpdateStruct extends ValueObject
 {
     /**
+     * If set the login is updated with this value.
+     *
+     * @var string|null
+     */
+    public $login;
+
+    /**
      * If set the email address is updated with this value.
      *
      * @var string|null
