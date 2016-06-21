@@ -26,12 +26,12 @@ trait RepositoryContext
     private $adminUserId = 14;
 
     /**
-     * @var eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Repository
      */
     private $repository;
 
     /**
-     * @param $repository eZ\Publish\API\Repository\Repository $repository
+     * @param $repository \eZ\Publish\API\Repository\Repository $repository
      */
     protected function setRepository(Repository $repository)
     {
@@ -39,7 +39,7 @@ trait RepositoryContext
     }
 
     /**
-     * @return eZ\Publish\API\Repository\Repository $repository
+     * @return \eZ\Publish\API\Repository\Repository $repository
      */
     public function getRepository()
     {
