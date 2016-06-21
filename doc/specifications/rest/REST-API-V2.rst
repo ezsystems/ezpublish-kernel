@@ -7175,6 +7175,13 @@ View XML Schema
         </xsd:restriction>
       </xsd:simpleType>
 
+      <xsd:simpleType name="sortClauseDirectionEnumType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="ascending" />
+          <xsd:enumeration value="descending" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
       <xsd:complexType name="fieldCriterionType">
         <xsd:all>
           <xsd:element name="target" type="xsd:string">
@@ -7245,17 +7252,17 @@ View XML Schema
       </xsd:complexType>
 
       <xsd:complexType name="sortClauseType">
-        <xsd:sequence>
-          <xsd:element name="SortClause">
-            <xsd:complexType>
-              <xsd:all>
-                <xsd:element name="SortField" type="sortClauseEnumType" />
-                <xsd:element name="TargetData" type="xsd:anyType"
-                  minOccurs="0" />
-              </xsd:all>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:sequence>
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
+          <xsd:element name="ContentId" type="sortClauseDirectionEnumType" />
+          <xsd:element name="ContentName" type="sortClauseDirectionEnumType" />
+          <xsd:element name="DateModified" type="sortClauseDirectionEnumType" />
+          <xsd:element name="DatePublished" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationDepth" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationPath" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationPriority" type="sortClauseDirectionEnumType" />
+          <xsd:element name="SectionIdentifier" type="sortClauseDirectionEnumType" />
+          <xsd:element name="SectionName" type="sortClauseDirectionEnumType" />
+        </xsd:choice>
       </xsd:complexType>
 
       <xsd:complexType name="facetBuilderType">
