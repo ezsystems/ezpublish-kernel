@@ -605,6 +605,15 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.DatePublished }
 
+    ezpublish_rest.input.parser.internal.sortclause.Priority:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
+        arguments:
+            - 'LocationPriority'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Priority'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.LocationPriority }
+
     ezpublish_rest.input.parser.internal.sortclause.SectionIdentifier:
         parent: ezpublish_rest.input.parser
         class: '%ezpublish_rest.input.parser.internal.sortclause.DataKeyValueObjectClass.class%'
