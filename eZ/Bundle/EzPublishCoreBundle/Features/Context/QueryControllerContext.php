@@ -211,7 +211,8 @@ class QueryControllerContext extends RawMinkContext implements Context
 
         PHPUnit_Framework_Assert::assertTrue(
             $variableFound,
-            "The $twigVariableName twig variable was not set"
+            "The $twigVariableName twig variable was not set. Page output:\n" .
+            $page->getHtml()
         );
     }
 }

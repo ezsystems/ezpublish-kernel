@@ -61,6 +61,7 @@ branches:
     - "6.1"
     - "6.2"
     - "6.3"
+    - "tmp_travis_behat_error"
 
 # setup requirements for running unit/integration/behat tests
 before_script:
