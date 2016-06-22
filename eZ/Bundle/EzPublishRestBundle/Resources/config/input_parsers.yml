@@ -587,7 +587,7 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.ContentName }
 
-        ezpublish_rest.input.parser.internal.sortclause.date_modified:
+    ezpublish_rest.input.parser.internal.sortclause.date_modified:
         parent: ezpublish_rest.input.parser
         class: '%ezpublish_rest.input.parser.internal.sortclause.data_key_value_object.class%'
         arguments:
