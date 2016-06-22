@@ -15,6 +15,7 @@ parameters:
     # Default view templates
     ezplatform.default_view_templates.content.full: 'EzPublishCoreBundle:default:content/full.html.twig'
     ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
+    ezplatform.default_view_templates.content.text_linked: 'EzPublishCoreBundle:default:content/text_linked.html.twig'
     ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
     ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
@@ -32,6 +33,10 @@ parameters:
         line:
             default:
                 template: %ezplatform.default_view_templates.content.line%
+                match: []
+        text_linked:
+            default:
+                template: %ezplatform.default_view_templates.content.text_linked%
                 match: []
         embed:
             image:
