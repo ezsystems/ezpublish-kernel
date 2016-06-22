@@ -1210,6 +1210,7 @@ class UserService implements UserServiceInterface
                 return true;
             }
         }
+
         return false;
     }
 
