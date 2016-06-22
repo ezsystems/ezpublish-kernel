@@ -16,6 +16,29 @@ use Composer\Script\Event;
 class ScriptHandler extends DistributionBundleScriptHandler
 {
     /**
+     * Clears the Symfony cache.
+     *
+     * Overloaded to clear project containers first before booting up Symfony container as part of clearCache() =>
+     * cache:clear call. Since this will crash with RuntimeException if bundles have been removed or added when for
+     * instance moving between git branches and running `composer install/update` afterwards.
+     *
+     * @param Event $event
+     */
+    public static function clearCache(Event $event)
+    {
+        $options = static::getOptions($event);
+        $cacheDir = $options['symfony-app-dir'] . '/cache';
+
+        // Take Symfony 3.0 directory structure into account if configured.
+        if (isset($options['symfony-var-dir']) && is_dir($options['symfony-var-dir'])) {
+            $cacheDir = $options['symfony-var-dir'] . '/cache';
+        }
+
+        array_map('unlink', glob($cacheDir . '/*/*ProjectContainer.php'));
+        parent::clearCache($event);
+    }
+
+    /**
      * Dump minified assets for prod environment under the web root directory.
      *
      * @param $event Event A instance
