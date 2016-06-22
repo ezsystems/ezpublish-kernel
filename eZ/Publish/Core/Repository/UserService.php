@@ -377,31 +377,20 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue('parentGroups', $parentGroups);
         }
 
-        if (!is_string($userCreateStruct->login) || empty($userCreateStruct->login)) {
+        if (!$this->isValidLogin($userCreateStruct->login)) {
             throw new InvalidArgumentValue('login', $userCreateStruct->login, 'UserCreateStruct');
         }
 
-        if (!is_string($userCreateStruct->email) || empty($userCreateStruct->email)) {
+        if (!$this->isValidEmail($userCreateStruct->email)) {
             throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
         }
 
-        if (!ezcMailTools::validateEmailAddress($userCreateStruct->email)) {
-            throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
-        }
-
-        if (!is_string($userCreateStruct->password) || empty($userCreateStruct->password)) {
+        if (!$this->isValidPassword($userCreateStruct->password)) {
             throw new InvalidArgumentValue('password', $userCreateStruct->password, 'UserCreateStruct');
         }
 
-        if (!is_bool($userCreateStruct->enabled)) {
+        if (!$this->isValidEnabled($userCreateStruct->enabled)) {
             throw new InvalidArgumentValue('enabled', $userCreateStruct->enabled, 'UserCreateStruct');
-        }
-
-        try {
-            $this->userHandler->loadByLogin($userCreateStruct->login);
-            throw new InvalidArgumentException('userCreateStruct', 'User with provided login already exists');
-        } catch (NotFoundException $e) {
-            // Do nothing
         }
 
         $contentService = $this->repository->getContentService();
@@ -601,11 +590,12 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException        if a user with the given credentials was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if an invalid login is specified
      */
     public function loadUserByLogin($login)
     {
-        if (!is_string($login) || empty($login)) {
+        if (!$this->isValidString($login)) {
             throw new InvalidArgumentValue('login', $login);
         }
 
@@ -695,37 +685,32 @@ class UserService implements UserServiceInterface
             return $user;
         }
 
-        if ($userUpdateStruct->email !== null) {
-            if (!is_string($userUpdateStruct->email) || empty($userUpdateStruct->email)) {
-                throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
-            }
-
-            if (!ezcMailTools::validateEmailAddress($userUpdateStruct->email)) {
-                throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
-            }
-        }
-
         // Cannot update certain fields without the password.
         $passwordRequired = false;
         if ($userUpdateStruct->login !== null) {
             $passwordRequired = true;
         }
 
+        // If password is required yet undefined, we can throw an invalid argument exception.
         $passwordMissing = $passwordRequired && $userUpdateStruct->password === null;
-        $passwordInvalid = $userUpdateStruct->password !== null && (!is_string($userUpdateStruct->password) || empty($userUpdateStruct->password));
+        $passwordInvalid = $userUpdateStruct->password !== null && !$this->isValidPassword($userUpdateStruct->password);
         if ($passwordMissing || $passwordInvalid) {
             throw new InvalidArgumentValue('password', $userUpdateStruct->password, 'UserUpdateStruct');
         }
 
-        if ($userUpdateStruct->login !== null && (!is_string($userUpdateStruct->login) || empty($userUpdateStruct->login))) {
-            throw new InvalidArgumentValue('login', $userUpdateStruct->password, 'UserUpdateStruct');
+        if ($userUpdateStruct->email !== null && !$this->isValidEmail($userUpdateStruct->email)) {
+            throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
         }
 
-        if ($userUpdateStruct->enabled !== null && !is_bool($userUpdateStruct->enabled)) {
+        if ($userUpdateStruct->login !== null && !$this->isValidLogin($userUpdateStruct->login)) {
+            throw new InvalidArgumentValue('login', $userUpdateStruct->login, 'UserUpdateStruct');
+        }
+
+        if ($userUpdateStruct->enabled !== null && !$this->isValidEnabled($userUpdateStruct->enabled)) {
             throw new InvalidArgumentValue('enabled', $userUpdateStruct->enabled, 'UserUpdateStruct');
         }
 
-        if ($userUpdateStruct->maxLogin !== null && !is_int($userUpdateStruct->maxLogin)) {
+        if ($userUpdateStruct->maxLogin !== null && !$this->isValidMaxLogin($userUpdateStruct->maxLogin)) {
             throw new InvalidArgumentValue('maxLogin', $userUpdateStruct->maxLogin, 'UserUpdateStruct');
         }
 
@@ -1207,5 +1192,84 @@ class UserService implements UserServiceInterface
             default:
                 return new SortClause\Location\Path($sortOrder);
         }
+    }
+
+    /**
+     * Given a login, determines if it is suitable for use.
+     *
+     * @param  string  $login
+     *
+     * @return boolean         Returns true when a login is both valid, and unclaimed.
+     */
+    private function isValidLogin($login)
+    {
+        if ($this->isValidString($login)) {
+            try {
+                $this->userHandler->loadByLogin($login);
+            } catch (NotFoundException $e) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Given an email address, determines if it is suitable for use.
+     *
+     * @param  string  $email
+     *
+     * @return boolean         Returns true when an email address is valid.
+     */
+    private function isValidEmail($email)
+    {
+        return $this->isValidString($email) && ezcMailTools::validateEmailAddress($email);
+    }
+
+    /**
+     * Given a password, returns true if it is suitable for use.
+     *
+     * @param  string  $password
+     *
+     * @return boolean            Returns true when a password is valid.
+     */
+    private function isValidPassword($password)
+    {
+        return $this->isValidString($password);
+    }
+
+    /**
+     * Given an enabled status, determines if it is suitable for use.
+     *
+     * @param  boolean  $enabled
+     *
+     * @return boolean           Returns true when an enabled value is valid.
+     */
+    private function isValidEnabled($enabled)
+    {
+        return is_bool($enabled);
+    }
+
+    /**
+     * Given a max login value, determines if it is suitable for use.
+     *
+     * @param  integer  $maxLogin
+     *
+     * @return boolean             Returns true when a valid max login value is presented.
+     */
+    private function isValidMaxLogin($maxLogin)
+    {
+        return is_int($maxLogin);
+    }
+
+    /**
+     * Determines if a value is a usable string (length greater than 0).
+     *
+     * @param  string  $string
+     *
+     * @return boolean         Returns true when we have a string longer than 0.
+     */
+    private function isValidString($string)
+    {
+        return is_string($string) && !empty($string);
     }
 }
