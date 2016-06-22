@@ -1,0 +1,9 @@
+{% set image_field_identifier = ez_first_filled_image_field_identifier(content) %}
+
+{% if image_field_identifier is not null %}
+    {{ ez_render_field(
+       content,
+       image_field_identifier,
+       { parameters: { alias: objectParameters.size } }
+    ) }}
+{% endif %}
