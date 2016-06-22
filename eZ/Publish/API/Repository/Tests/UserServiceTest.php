@@ -1645,7 +1645,7 @@ class UserServiceTest extends BaseTest
                     $userUpdate->login,
                     $userUpdate->password,
                     $user->hashAlgorithm
-                )
+                ),
             ),
             array(
                 'login' => $userVersion2->login,

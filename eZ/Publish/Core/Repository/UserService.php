@@ -1199,7 +1199,7 @@ class UserService implements UserServiceInterface
      *
      * @param  string  $login
      *
-     * @return boolean         Returns true when a login is both valid, and unclaimed.
+     * @return bool            Returns true when a login is both valid, and unclaimed.
      */
     private function isValidLogin($login)
     {
@@ -1218,7 +1218,7 @@ class UserService implements UserServiceInterface
      *
      * @param  string  $email
      *
-     * @return boolean         Returns true when an email address is valid.
+     * @return bool            Returns true when an email address is valid.
      */
     private function isValidEmail($email)
     {
@@ -1230,7 +1230,7 @@ class UserService implements UserServiceInterface
      *
      * @param  string  $password
      *
-     * @return boolean            Returns true when a password is valid.
+     * @return bool               Returns true when a password is valid.
      */
     private function isValidPassword($password)
     {
@@ -1240,9 +1240,9 @@ class UserService implements UserServiceInterface
     /**
      * Given an enabled status, determines if it is suitable for use.
      *
-     * @param  boolean  $enabled
+     * @param  bool     $enabled
      *
-     * @return boolean           Returns true when an enabled value is valid.
+     * @return bool              Returns true when an enabled value is valid.
      */
     private function isValidEnabled($enabled)
     {
@@ -1252,9 +1252,9 @@ class UserService implements UserServiceInterface
     /**
      * Given a max login value, determines if it is suitable for use.
      *
-     * @param  integer  $maxLogin
+     * @param  int  $maxLogin
      *
-     * @return boolean             Returns true when a valid max login value is presented.
+     * @return bool             Returns true when a valid max login value is presented.
      */
     private function isValidMaxLogin($maxLogin)
     {
@@ -1266,7 +1266,7 @@ class UserService implements UserServiceInterface
      *
      * @param  string  $string
      *
-     * @return boolean         Returns true when we have a string longer than 0.
+     * @return bool            Returns true when we have a string longer than 0.
      */
     private function isValidString($string)
     {
