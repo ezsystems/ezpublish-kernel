@@ -94,6 +94,27 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * The timestamp index can be unset with some handlers, like AWS/S3.
+     */
+    public function testLoadNoTimestamp()
+    {
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getMetadata')
+            ->with('prefix/my/file.png')
+            ->will(
+                $this->returnValue(
+                    array(
+                        'size' => 123,
+                    )
+                )
+            );
+
+        $spiBinaryFile = $this->handler->load('prefix/my/file.png');
+        $this->assertNull($spiBinaryFile->mtime);
+    }
+
+    /**
      * @expectedException \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException
      */
     public function testLoadNotFound()
