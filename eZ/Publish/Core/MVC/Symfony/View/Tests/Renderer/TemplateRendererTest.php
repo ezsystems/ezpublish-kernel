@@ -74,6 +74,7 @@ class TemplateRendererTest extends PHPUnit_Framework_TestCase
     protected function createView()
     {
         $view = new ContentView();
+
         return $view;
     }
 }
