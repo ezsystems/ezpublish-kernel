@@ -29,13 +29,9 @@ matrix:
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
 # 5.6
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.7.0"
-    - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.7.0"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb" SYMFONY_VERSION="~2.7.0"
     - php: 5.6
       env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 PHP_IMAGE=ezsystems/php:5.6-v0 SYMFONY_ENV=behat SYMFONY_DEBUG=1
 # 7.0
