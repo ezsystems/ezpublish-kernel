@@ -5,6 +5,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\Renderer;
 
+use eZ\Publish\Core\MVC\Exception\NoViewTemplateException;
 use eZ\Publish\Core\MVC\Symfony\View\Renderer;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -34,6 +35,8 @@ class TemplateRenderer implements Renderer
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
      *
+     * @throws NoViewTemplateException
+     *
      * @return string
      */
     public function render(View $view)
@@ -46,6 +49,10 @@ class TemplateRenderer implements Renderer
         $templateIdentifier = $view->getTemplateIdentifier();
         if ($templateIdentifier instanceof Closure) {
             return $templateIdentifier($view->getParameters());
+        }
+
+        if ($view->getTemplateIdentifier() === null) {
+            throw new NoViewTemplateException($view);
         }
 
         return $this->templateEngine->render(
