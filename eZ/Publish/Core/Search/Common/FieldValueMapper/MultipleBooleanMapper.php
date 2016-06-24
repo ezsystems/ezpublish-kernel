@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the MultipleBooleanMapper document field value mapper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\MultipleBooleanField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw document field values to something Solr can index.
+ * Maps raw field values to something search engine can understand.
  */
 class MultipleBooleanMapper extends FieldValueMapper
 {

@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\FloatField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw document field values to something Solr can index.
+ * Maps raw field values to something search engine can understand.
  */
 class FloatMapper extends FieldValueMapper
 {
