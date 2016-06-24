@@ -61,7 +61,7 @@ class Aggregate extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Solr representation.
+     * Map field value to a proper search engine representation.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *

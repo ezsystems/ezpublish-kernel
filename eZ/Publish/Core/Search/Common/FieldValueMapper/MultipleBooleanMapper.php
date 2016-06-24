@@ -32,7 +32,7 @@ class MultipleBooleanMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Solr representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *

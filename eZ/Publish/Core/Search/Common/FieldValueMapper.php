@@ -27,7 +27,7 @@ abstract class FieldValueMapper
     abstract public function canMap(Field $field);
 
     /**
-     * Map field value to a proper Solr representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
