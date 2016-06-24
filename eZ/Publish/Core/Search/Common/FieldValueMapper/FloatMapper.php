@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\FloatField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw document field values to something Solr can index.
+ * Maps raw field values to something search engine can understand.
  */
 class FloatMapper extends FieldValueMapper
 {
@@ -32,7 +32,7 @@ class FloatMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Solr representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -44,7 +44,7 @@ class FloatMapper extends FieldValueMapper
     }
 
     /**
-     * Convert to a proper Solr representation.
+     * Convert to a proper search engine representation.
      *
      * @param mixed $value
      *

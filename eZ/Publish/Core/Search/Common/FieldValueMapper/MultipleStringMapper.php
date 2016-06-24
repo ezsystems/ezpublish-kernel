@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the MultipleStringMapper document field value mapper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw document field values to something Solr can index.
+ * Maps raw field values to something search engine can understand.
  */
 class MultipleStringMapper extends StringMapper
 {
@@ -33,7 +33,7 @@ class MultipleStringMapper extends StringMapper
     }
 
     /**
-     * Map field value to a proper Solr representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *

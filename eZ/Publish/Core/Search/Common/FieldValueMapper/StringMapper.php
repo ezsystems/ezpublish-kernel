@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the StringMapper document field value mapper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Search\Field;
 use DOMDocument;
 
 /**
- * Maps raw document field values to something Solr can index.
+ * Maps raw field values to something search engine can understand.
  */
 class StringMapper extends FieldValueMapper
 {
@@ -35,7 +35,7 @@ class StringMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Solr representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -47,7 +47,7 @@ class StringMapper extends FieldValueMapper
     }
 
     /**
-     * Convert to a proper Solr representation.
+     * Convert to a proper search engine representation.
      *
      * @param mixed $value
      *
