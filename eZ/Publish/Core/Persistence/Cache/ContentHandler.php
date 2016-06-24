@@ -165,6 +165,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
         $this->cache->clear('content', $contentId, $versionNo);
+        $this->cache->clear('urlAlias'); // Yet another "TIMBER!" in case of content title change (and so nice content URL)
         $this->cache
             ->getItem('content', $contentId, $versionNo, self::ALL_TRANSLATIONS_KEY)
             ->set($content);
