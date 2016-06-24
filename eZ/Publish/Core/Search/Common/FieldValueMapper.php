@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\Search\Common;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 abstract class FieldValueMapper
 {
@@ -27,11 +27,11 @@ abstract class FieldValueMapper
     abstract public function canMap(Field $field);
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
-     * @return mixed
+     * @return mixed|null Returns null on empty value
      */
     abstract public function map(Field $field);
 }

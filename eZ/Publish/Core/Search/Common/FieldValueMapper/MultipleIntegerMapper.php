@@ -21,7 +21,7 @@ class MultipleIntegerMapper extends IntegerMapper
     /**
      * Check if field can be mapped.
      *
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return bool
      */
@@ -33,7 +33,7 @@ class MultipleIntegerMapper extends IntegerMapper
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return array
      */

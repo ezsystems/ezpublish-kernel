@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\GeoLocationField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps GeoLocationField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class GeoLocationMapper extends FieldValueMapper
 {
@@ -32,17 +32,18 @@ class GeoLocationMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
-     * @return mixed
+     * @return mixed|null Returns null on empty value
      */
     public function map(Field $field)
     {
-        return array(
-            'lat' => $field->value['latitude'],
-            'lon' => $field->value['longitude'],
-        );
+        if ($field->value['latitude'] === null || $field->value['longitude'] === null) {
+            return null;
+        }
+
+        return sprintf('%F,%F', $field->value['latitude'], $field->value['longitude']);
     }
 }

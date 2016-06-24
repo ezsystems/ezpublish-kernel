@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\IdentifierField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps IdentifierField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class IdentifierMapper extends FieldValueMapper
 {
@@ -32,9 +32,9 @@ class IdentifierMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */
@@ -44,7 +44,7 @@ class IdentifierMapper extends FieldValueMapper
     }
 
     /**
-     * Convert to a proper Elasticsearch representation.
+     * Convert to a proper Solr representation.
      *
      * @param mixed $value
      *

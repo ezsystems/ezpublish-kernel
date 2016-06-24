@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Maps raw document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class Aggregate extends FieldValueMapper
 {
@@ -61,7 +61,7 @@ class Aggregate extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *

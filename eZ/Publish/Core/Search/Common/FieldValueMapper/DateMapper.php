@@ -18,7 +18,7 @@ use InvalidArgumentException;
 use Exception;
 
 /**
- * Maps DateField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class DateMapper extends FieldValueMapper
 {
@@ -35,7 +35,7 @@ class DateMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
