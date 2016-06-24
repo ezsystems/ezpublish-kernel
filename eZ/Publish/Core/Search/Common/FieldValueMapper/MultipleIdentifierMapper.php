@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Search\FieldType\MultipleIdentifierField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps MultipleIdentifierField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class MultipleIdentifierMapper extends IdentifierMapper
 {
@@ -31,7 +31,7 @@ class MultipleIdentifierMapper extends IdentifierMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *

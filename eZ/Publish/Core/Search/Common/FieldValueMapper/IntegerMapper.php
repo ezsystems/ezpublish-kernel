@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\IntegerField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps IntegerField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class IntegerMapper extends FieldValueMapper
 {
@@ -32,7 +32,7 @@ class IntegerMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -44,11 +44,11 @@ class IntegerMapper extends FieldValueMapper
     }
 
     /**
-     * Convert to a proper Elasticsearch representation.
+     * Convert to a proper Solr representation.
      *
      * @param mixed $value
      *
-     * @return string
+     * @return int
      */
     protected function convert($value)
     {

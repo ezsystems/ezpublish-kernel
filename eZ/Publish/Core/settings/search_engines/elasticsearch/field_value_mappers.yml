@@ -1,0 +1,2 @@
+parameters:
+    ezpublish.search.common.field_value_mapper.geo_location.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\GeoLocationMapper

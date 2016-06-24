@@ -13,9 +13,10 @@ namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Search\Field;
+use DOMDocument;
 
 /**
- * Maps raw document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class StringMapper extends FieldValueMapper
 {
@@ -34,7 +35,7 @@ class StringMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -46,7 +47,7 @@ class StringMapper extends FieldValueMapper
     }
 
     /**
-     * Convert to a proper Elasticsearch representation.
+     * Convert to a proper Solr representation.
      *
      * @param mixed $value
      *
@@ -55,6 +56,10 @@ class StringMapper extends FieldValueMapper
     protected function convert($value)
     {
         // Remove non-printable characters
-        return preg_replace('([\x00-\x09\x0B\x0C\x1E\x1F]+)', '', (string)$value);
+        return preg_replace(
+            '([\x00-\x09\x0B\x0C\x1E\x1F]+)',
+            '',
+            (string)($value instanceof DOMDocument ? $value->saveXML() : $value)
+        );
     }
 }

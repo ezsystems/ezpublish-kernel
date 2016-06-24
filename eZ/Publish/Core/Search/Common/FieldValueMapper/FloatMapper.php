@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\FloatField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps FloatField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class FloatMapper extends FieldValueMapper
 {
@@ -32,7 +32,7 @@ class FloatMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -40,6 +40,19 @@ class FloatMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (float)$field->value;
+        return $this->fixupFloat($field->value);
+    }
+
+    /**
+     * Convert to a proper Solr representation.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function fixupFloat($value)
+    {
+        // This will force the '.' as decimal separator and not depend on the locale
+        return sprintf('%F', (float)$value);
     }
 }

@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\BooleanField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps BooleanField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Solr can index.
  */
 class BooleanMapper extends FieldValueMapper
 {
@@ -32,7 +32,7 @@ class BooleanMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *

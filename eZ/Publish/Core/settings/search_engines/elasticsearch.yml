@@ -3,6 +3,7 @@ imports:
     - {resource: search_engines/elasticsearch/criterion_visitors_content.yml}
     - {resource: search_engines/elasticsearch/criterion_visitors_location.yml}
     - {resource: search_engines/elasticsearch/facet_builder_visitors.yml}
+    - {resource: search_engines/elasticsearch/field_value_mappers.yml}
     - {resource: search_engines/elasticsearch/services.yml}
     - {resource: search_engines/elasticsearch/sort_clause_visitors_content.yml}
     - {resource: search_engines/elasticsearch/sort_clause_visitors_location.yml}

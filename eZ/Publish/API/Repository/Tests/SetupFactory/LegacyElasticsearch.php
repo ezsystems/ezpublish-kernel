@@ -49,6 +49,7 @@ class LegacyElasticsearch extends Legacy
             $containerBuilder = include $config['container_builder_path'];
 
             /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('search_engines/elasticsearch.yml');
             $loader->load('tests/integration_legacy_elasticsearch.yml');
 
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherContentPass());

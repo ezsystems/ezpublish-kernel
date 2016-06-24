@@ -364,6 +364,7 @@ class Legacy extends SetupFactory
             $containerBuilder = include $config['container_builder_path'];
 
             /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('search_engines/legacy.yml');
             $loader->load('tests/integration_legacy.yml');
 
             $this->externalBuildContainer($containerBuilder);
