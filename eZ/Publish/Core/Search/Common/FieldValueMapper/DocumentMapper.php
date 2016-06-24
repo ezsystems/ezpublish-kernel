@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\FieldType\DocumentField;
 use eZ\Publish\SPI\Search\Field;
 

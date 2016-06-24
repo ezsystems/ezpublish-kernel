@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -22,14 +22,14 @@ class Aggregate extends FieldValueMapper
     /**
      * Array of available mappers.
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper[]
+     * @var \eZ\Publish\Core\Search\Common\FieldValueMapper[]
      */
     protected $mappers = array();
 
     /**
      * Construct from optional mapper array.
      *
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper[] $mappers
+     * @param \eZ\Publish\Core\Search\Common\FieldValueMapper[] $mappers
      */
     public function __construct(array $mappers = array())
     {
@@ -41,7 +41,7 @@ class Aggregate extends FieldValueMapper
     /**
      * Adds mapper.
      *
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper $mapper
+     * @param \eZ\Publish\Core\Search\Common\FieldValueMapper $mapper
      */
     public function addMapper(FieldValueMapper $mapper)
     {

@@ -54,9 +54,9 @@ class LegacyElasticsearch extends Legacy
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherContentPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateFacetBuilderVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateFieldValueMapperPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorContentPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorLocationPass());
+            $containerBuilder->addCompilerPass(new Compiler\Search\AggregateFieldValueMapperPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\SignalSlotPass());
 

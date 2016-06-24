@@ -1,5 +1,6 @@
 imports:
     - {resource: search_engines/slots.yml}
+    - {resource: search_engines/field_value_mappers.yml}
 
 parameters:
     ezpublish.search.common.field_registry.class: eZ\Publish\Core\Search\Common\FieldRegistry
@@ -25,6 +26,7 @@ parameters:
         ez_geolocation: 'gl'
         ez_document: 'doc'
         ez_fulltext: 'fulltext'
+    ezpublish.search.common.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Common\FieldValueMapper\Aggregate
 
 services:
     # Note: services tagged with 'ezpublish.fieldType.indexable'
@@ -44,3 +46,8 @@ services:
             - @ezpublish.search.common.field_registry
             - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.search.common.field_name_generator
+
+    # Note: services tagged with 'ezpublish.search.common.field_value_mapper'
+    # are registered to this one using compilation pass
+    ezpublish.search.common.field_value_mapper.aggregate:
+        class: %ezpublish.search.common.field_value_mapper.aggregate.class%
