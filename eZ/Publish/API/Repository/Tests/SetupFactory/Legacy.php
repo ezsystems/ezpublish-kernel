@@ -231,9 +231,6 @@ class Legacy extends SetupFactory
 
     protected function cleanupVarDir($sourceDir)
     {
-        if ($this->getServiceContainer()->getInnerContainer()->has('ezpublish.core.io.flysystem.default_filesystem')) {
-            $this->getServiceContainer()->getInnerContainer()->get('ezpublish.core.io.flysystem.default_filesystem')->flushCache();
-        }
         $fs = new Filesystem();
         $varDir = self::$ioRootDir . '/var';
         if ($fs->exists($varDir)) {
