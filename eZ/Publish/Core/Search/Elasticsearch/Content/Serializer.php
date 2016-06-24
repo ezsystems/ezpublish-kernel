@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\SPI\Search\FieldType\DocumentField;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
 
 /**
  * Serializer serializes a Document to a string that can be passed
@@ -22,7 +23,7 @@ class Serializer
     /**
      * Field value mapper.
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper
+     * @var \eZ\Publish\Core\Search\Common\FieldValueMapper
      */
     protected $fieldValueMapper;
 
@@ -34,7 +35,7 @@ class Serializer
     protected $nameGenerator;
 
     /**
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper $fieldValueMapper
+     * @param \eZ\Publish\Core\Search\Common\FieldValueMapper $fieldValueMapper
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $nameGenerator
      */
     public function __construct(

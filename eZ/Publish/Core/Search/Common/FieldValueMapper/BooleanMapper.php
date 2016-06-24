@@ -1,23 +1,23 @@
 <?php
 
 /**
- * File containing the GeoLocationMapper document field value mapper class.
+ * File containing the BooleanMapper document field value mapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType\GeoLocationField;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
+use eZ\Publish\SPI\Search\FieldType\BooleanField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps GeoLocationField document field values to something Elasticsearch can index.
+ * Maps BooleanField document field values to something Elasticsearch can index.
  */
-class GeoLocationMapper extends FieldValueMapper
+class BooleanMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped.
@@ -28,7 +28,7 @@ class GeoLocationMapper extends FieldValueMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof GeoLocationField;
+        return $field->type instanceof BooleanField;
     }
 
     /**
@@ -40,9 +40,6 @@ class GeoLocationMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return array(
-            'lat' => $field->value['latitude'],
-            'lon' => $field->value['longitude'],
-        );
+        return (boolean)$field->value;
     }
 }

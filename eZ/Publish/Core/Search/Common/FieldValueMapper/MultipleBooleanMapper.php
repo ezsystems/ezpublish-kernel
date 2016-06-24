@@ -1,23 +1,23 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
+ * File containing the MultipleBooleanMapper document field value mapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType\FloatField;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
+use eZ\Publish\SPI\Search\FieldType\MultipleBooleanField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps FloatField document field values to something Elasticsearch can index.
+ * Maps MultipleBooleanField document field values to something Elasticsearch can index.
  */
-class FloatMapper extends FieldValueMapper
+class MultipleBooleanMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped.
@@ -28,7 +28,7 @@ class FloatMapper extends FieldValueMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof FloatField;
+        return $field->type instanceof MultipleBooleanField;
     }
 
     /**
@@ -40,6 +40,12 @@ class FloatMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (float)$field->value;
+        $values = array();
+
+        foreach ((array)$field->value as $value) {
+            $values[] = (boolean)$value;
+        }
+
+        return $values;
     }
 }
