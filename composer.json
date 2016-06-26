@@ -6,8 +6,6 @@
     "suggest": {
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "~5.5|~7.0",
         "ext-ctype": "*",
