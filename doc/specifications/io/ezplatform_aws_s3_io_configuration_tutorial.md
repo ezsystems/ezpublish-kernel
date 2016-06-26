@@ -94,7 +94,7 @@ and <region> with the amazon region that matches the one you chose when
 you created the bucket.
 
 ### Flysystem S3 adapter
-eZ Platform uses Flysyste to handle content binary files. Let's create
+eZ Platform uses Flysystem to handle content binary files. Let's create
 one that uses our S3 service:
 
 ```
