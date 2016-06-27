@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Search\FieldType\MultipleIdentifierField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common multiple identifier field value mapper implementation.
  */
 class MultipleIdentifierMapper extends IdentifierMapper
 {

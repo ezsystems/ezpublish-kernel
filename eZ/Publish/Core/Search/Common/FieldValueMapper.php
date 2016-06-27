@@ -14,6 +14,12 @@ use eZ\Publish\SPI\Search\Field;
 
 /**
  * Maps raw field values to something search engine can understand.
+ * This is used when indexing Content and matching Content fields.
+ * Actual format of the returned value depends on the search engine
+ * implementation, meaning engines should override common implementation
+ * as needed, but the same input should be handled across engines.
+ *
+ * @see \eZ\Publish\SPI\Search\FieldType
  */
 abstract class FieldValueMapper
 {

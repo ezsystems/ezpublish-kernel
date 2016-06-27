@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\PriceField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common price field value mapper implementation.
  */
 class PriceMapper extends FieldValueMapper
 {

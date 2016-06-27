@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Search\Field;
 use DOMDocument;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common string field value mapper implementation.
  */
 class StringMapper extends FieldValueMapper
 {

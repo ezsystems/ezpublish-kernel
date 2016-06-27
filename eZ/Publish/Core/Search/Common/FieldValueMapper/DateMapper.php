@@ -18,7 +18,7 @@ use InvalidArgumentException;
 use Exception;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common date field value mapper implementation.
  */
 class DateMapper extends FieldValueMapper
 {

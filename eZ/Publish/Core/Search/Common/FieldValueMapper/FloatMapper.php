@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\FloatField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common float field value mapper implementation.
  */
 class FloatMapper extends FieldValueMapper
 {

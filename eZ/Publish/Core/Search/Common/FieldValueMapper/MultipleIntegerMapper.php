@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType\MultipleIntegerField;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common multiple integer field value mapper implementation.
  */
 class MultipleIntegerMapper extends IntegerMapper
 {

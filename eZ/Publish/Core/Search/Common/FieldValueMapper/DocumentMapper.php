@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\DocumentField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common document field value mapper implementation.
  */
 class DocumentMapper extends FieldValueMapper
 {
