@@ -1868,7 +1868,7 @@ INSERT INTO `ezsection` (`id`, `identifier`, `locale`, `name`, `navigation_part_
 INSERT INTO `ezsection` (`id`, `identifier`, `locale`, `name`, `navigation_part_identifier`) VALUES (5,'design','','Design','ezvisualnavigationpart');
 
 INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-release','1');
-INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-version','6.1.0');
+INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-version','6.4.0');
 
 INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832197,23,1,0,1448832197,'b728a39b2818dc1a558b07b9e8b7aef0','https://doc.ez.no/display/USERGUIDE/');
 INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832277,24,1,0,1448832277,'d77b69a7ce26e6c87a7253f1fc50fc10','https://doc.ez.no/display/TECHDOC/');
