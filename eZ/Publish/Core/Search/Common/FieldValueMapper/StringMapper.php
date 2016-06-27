@@ -13,7 +13,6 @@ namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Search\Field;
-use DOMDocument;
 
 /**
  * Common string field value mapper implementation.
@@ -59,7 +58,7 @@ class StringMapper extends FieldValueMapper
         return preg_replace(
             '([\x00-\x09\x0B\x0C\x1E\x1F]+)',
             '',
-            (string)($value instanceof DOMDocument ? $value->saveXML() : $value)
+            (string)$value
         );
     }
 }
