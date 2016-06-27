@@ -5,7 +5,6 @@ parameters:
     ezpublish.search.legacy.gateway.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
     ezpublish.search.legacy.gateway.location.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion
     ezpublish.search.legacy.repository.searchIndex.class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex
-    ezpublish.search.legacy.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Legacy\Content\FieldValueMapper
 
 services:
     ezpublish.search.legacy.gateway.content.inner:
@@ -55,8 +54,3 @@ services:
         class: %ezpublish.search.legacy.repository.searchIndex.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
-
-    # Note: services tagged with 'ezpublish.search.legacy.content.field_value_mapper'
-    # are registered to this one using compilation pass
-    ezpublish.search.legacy.content.field_value_mapper.aggregate:
-        class: %ezpublish.search.legacy.content.field_value_mapper.aggregate.class%

@@ -8,9 +8,8 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Legacy\Content\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper\DateMapper as CommonDateMapper;
 use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
 use DateTime;
 use InvalidArgumentException;
 use Exception;
@@ -18,20 +17,8 @@ use Exception;
 /**
  * Maps DateField document field values to something legacy search engine can index.
  */
-class DateMapper extends FieldValueMapper
+class DateMapper extends CommonDateMapper
 {
-    /**
-     * Check if field can be mapped.
-     *
-     * @param Field $field
-     *
-     * @return mixed
-     */
-    public function canMap(Field $field)
-    {
-        return $field->type instanceof FieldType\DateField;
-    }
-
     /**
      * Map field value to a proper legacy search engine representation.
      *

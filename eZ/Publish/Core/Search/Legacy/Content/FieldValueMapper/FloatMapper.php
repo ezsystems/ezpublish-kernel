@@ -8,27 +8,14 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Legacy\Content\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper\FloatMapper as CommonFloatMapper;
 use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps FloatField document field values to something legacy search engine can index.
  */
-class FloatMapper extends FieldValueMapper
+class FloatMapper extends CommonFloatMapper
 {
-    /**
-     * Check if field can be mapped.
-     *
-     * @param Field $field
-     *
-     * @return bool
-     */
-    public function canMap(Field $field)
-    {
-        return $field->type instanceof FieldType\FloatField;
-    }
-
     /**
      * Map field value to a proper legacy search engine representation.
      *

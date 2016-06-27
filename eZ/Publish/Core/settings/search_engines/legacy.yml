@@ -2,6 +2,7 @@ imports:
     - {resource: search_engines/legacy/criterion_handlers_common.yml}
     - {resource: search_engines/legacy/criterion_handlers_content.yml}
     - {resource: search_engines/legacy/criterion_handlers_location.yml}
+    - {resource: search_engines/legacy/field_value_mappers.yml}
     - {resource: search_engines/legacy/services.yml}
     - {resource: search_engines/legacy/sort_clause_handlers_common.yml}
     - {resource: search_engines/legacy/sort_clause_handlers_content.yml}

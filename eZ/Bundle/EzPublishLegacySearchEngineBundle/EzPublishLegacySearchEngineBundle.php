@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriteriaConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\SortClauseConverterPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\AggregateFieldValueMapperPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\AggregateFieldValueMapperPass;
 
 class EzPublishLegacySearchEngineBundle extends Bundle
 {

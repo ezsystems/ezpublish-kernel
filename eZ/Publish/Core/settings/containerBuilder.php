@@ -58,6 +58,6 @@ $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriteriaConverterP
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverterPass());
 
-$containerBuilder->addCompilerPass(new Compiler\Search\Legacy\AggregateFieldValueMapperPass());
+$containerBuilder->addCompilerPass(new Compiler\Search\AggregateFieldValueMapperPass());
 
 return $containerBuilder;

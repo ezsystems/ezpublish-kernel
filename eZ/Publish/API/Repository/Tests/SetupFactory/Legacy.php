@@ -381,7 +381,7 @@ class Legacy extends SetupFactory
             );
 
             $containerBuilder->addCompilerPass(new Compiler\Search\SignalSlotPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\AggregateFieldValueMapperPass());
+            $containerBuilder->addCompilerPass(new Compiler\Search\AggregateFieldValueMapperPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
 
             self::$serviceContainer = new ServiceContainer(
