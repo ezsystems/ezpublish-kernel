@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common multiple string field value mapper implementation.
  */
 class MultipleStringMapper extends StringMapper
 {

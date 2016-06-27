@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\IdentifierField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common identifier field value mapper implementation.
  */
 class IdentifierMapper extends FieldValueMapper
 {

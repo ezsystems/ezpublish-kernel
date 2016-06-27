@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common aggregate mapper implementation.
  */
 class Aggregate extends FieldValueMapper
 {

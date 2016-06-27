@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\BooleanField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common boolean field value mapper implementation.
  */
 class BooleanMapper extends FieldValueMapper
 {

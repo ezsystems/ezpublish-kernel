@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\IntegerField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common integer field value mapper implementation.
  */
 class IntegerMapper extends FieldValueMapper
 {

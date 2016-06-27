@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\GeoLocationField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common geo location field value mapper implementation.
  */
 class GeoLocationMapper extends FieldValueMapper
 {

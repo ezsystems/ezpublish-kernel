@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Search\FieldType\MultipleBooleanField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common multiple boolean field value mapper implementation.
  */
 class MultipleBooleanMapper extends FieldValueMapper
 {
