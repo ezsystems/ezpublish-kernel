@@ -4492,6 +4492,30 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createUpdatedDraftVersion2();
 
+        $location = $locationService->loadLocation(
+            $draft->getVersionInfo()->getContentInfo()->mainLocationId
+        );
+
+        // Load and assert URL aliases before publishing updated Content, so that
+        // SPI cache is warmed up and cache invalidation is also tested.
+        $aliases = $urlAliasService->listLocationAliases($location, false);
+
+        $this->assertAliasesCorrect(
+            array(
+                '/Design/Plain-site/An-awesome-forum' => array(
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location->id,
+                    'path' => '/Design/Plain-site/An-awesome-forum',
+                    'languageCodes' => array('eng-US'),
+                    'alwaysAvailable' => true,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ),
+            ),
+            $aliases
+        );
+
         // Automatically marks old aliases for the content as history
         // and creates new aliases, based on the changes
         $liveContent = $contentService->publishVersion($draft->getVersionInfo());
