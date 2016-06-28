@@ -12,8 +12,12 @@ namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation as APIParentDepthLimitation;
@@ -102,23 +106,84 @@ class ParentDepthLimitationType extends AbstractPersistenceLimitationType implem
             throw new InvalidArgumentException('$value', 'Must be of type: APIParentDepthLimitation');
         }
 
-        // Parent Limitations are usually used by content/create where target is specified, so we return false if not provided.
+        if ($object instanceof ContentCreateStruct) {
+            return $this->evaluateForContentCreateStruct($value, $targets);
+        } elseif ($object instanceof Content) {
+            $object = $object->getVersionInfo()->getContentInfo();
+        } elseif ($object instanceof VersionInfo) {
+            $object = $object->getContentInfo();
+        } elseif (!$object instanceof ContentInfo) {
+            throw new InvalidArgumentException(
+                '$object',
+                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
+            );
+        }
+
+        // Load locations if no specific placement was provided
+        if (empty($targets)) {
+            if ($object->published) {
+                $targets = $this->persistence->locationHandler()->loadLocationsByContent($object->id);
+            } else {
+                // @todo Need support for draft locations to to work correctly
+                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent($object->id);
+            }
+        }
+
+        // Parent Limitations are usually used by content/create where target is specified,
+        // so we return false if not provided.
         if (empty($targets)) {
             return false;
         }
 
         foreach ($targets as $target) {
-            if ($target instanceof LocationCreateStruct) {
-                $depth = $this->persistence->locationHandler()->load($target->parentLocationId)->depth;
-            } elseif ($target instanceof Location || $target instanceof SPILocation) {
+            if ($target instanceof Location || $target instanceof SPILocation) {
                 $depth = $target->depth;
             } else {
                 throw new InvalidArgumentException(
                     '$targets',
-                    'Must contain objects of type: Location or LocationCreateStruct'
+                    'Must contain objects of type: Location'
                 );
             }
 
+            // All placements must match
+            if (!in_array($depth, $value->limitationValues)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Evaluate permissions for ContentCreateStruct against LocationCreateStruct placements.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $targets does not contain
+     *         objects of type LocationCreateStruct
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
+     * @param array|null $targets
+     *
+     * @return bool
+     */
+    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets = null)
+    {
+        // If targets is empty/null return false as user does not have access
+        // to content w/o location with this limitation
+        if (empty($targets)) {
+            return false;
+        }
+
+        foreach ($targets as $target) {
+            if (!$target instanceof LocationCreateStruct) {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                );
+            }
+
+            $depth = $this->persistence->locationHandler()->load($target->parentLocationId)->depth;
+
+            // All placements must match
             if (!in_array($depth, $value->limitationValues)) {
                 return false;
             }
