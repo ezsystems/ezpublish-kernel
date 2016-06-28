@@ -38,19 +38,6 @@ class FloatMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return $this->fixupFloat($field->value);
-    }
-
-    /**
-     * Convert to a proper search engine representation.
-     *
-     * @param mixed $value
-     *
-     * @return string
-     */
-    protected function fixupFloat($value)
-    {
-        // This will force the '.' as decimal separator and not depend on the locale
-        return sprintf('%F', (float)$value);
+        return sprintf('%F', (float)$field->value);
     }
 }
