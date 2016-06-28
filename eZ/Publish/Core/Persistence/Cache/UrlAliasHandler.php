@@ -311,6 +311,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
                 $this->cache->clear('urlAlias', $urlAliasId);
             }
             $this->cache->clear('urlAlias', 'url');
+            $locationCache->clear();
         }
     }
 }
