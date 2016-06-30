@@ -1,21 +1,21 @@
 <?php
 
 /**
- * File containing the IdentifierMapper document field value mapper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\FieldType\IdentifierField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps IdentifierField document field values to something Elasticsearch can index.
+ * Common identifier field value mapper implementation.
  */
 class IdentifierMapper extends FieldValueMapper
 {
@@ -32,9 +32,9 @@ class IdentifierMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper search engine representation.
      *
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */
@@ -44,7 +44,7 @@ class IdentifierMapper extends FieldValueMapper
     }
 
     /**
-     * Convert to a proper Elasticsearch representation.
+     * Convert to a proper search engine representation.
      *
      * @param mixed $value
      *

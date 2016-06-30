@@ -1,22 +1,23 @@
 <?php
 
 /**
- * File containing the MultipleIdentifierMapper document field value mapper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\SPI\Search\FieldType\MultipleIdentifierField;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
+use eZ\Publish\SPI\Search\FieldType\MultipleBooleanField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps MultipleIdentifierField document field values to something Elasticsearch can index.
+ * Common multiple boolean field value mapper implementation.
  */
-class MultipleIdentifierMapper extends IdentifierMapper
+class MultipleBooleanMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped.
@@ -27,11 +28,11 @@ class MultipleIdentifierMapper extends IdentifierMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof MultipleIdentifierField;
+        return $field->type instanceof MultipleBooleanField;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -41,8 +42,8 @@ class MultipleIdentifierMapper extends IdentifierMapper
     {
         $values = array();
 
-        foreach ($field->value as $value) {
-            $values[] = $this->convert($value);
+        foreach ((array)$field->value as $value) {
+            $values[] = (boolean)$value;
         }
 
         return $values;
