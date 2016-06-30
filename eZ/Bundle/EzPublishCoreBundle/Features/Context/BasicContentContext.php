@@ -30,12 +30,12 @@ class BasicContentContext implements Context
     private $contentPaths = array();
 
     /**
-     * @var eZ\Publish\B\Repository\ContentTypeService
+     * @var eZ\Publish\API\Repository\ContentTypeService
      */
     private $contentTypeService;
 
     /**
-     * @var eZ\Publish\B\Repository\ContentService
+     * @var eZ\Publish\API\Repository\ContentService
      */
     private $contentService;
 
@@ -76,7 +76,7 @@ class BasicContentContext implements Context
     /**
      * Publishes a content draft.
      *
-     * @param Content $content
+     * @param eZ\Publish\API\Repository\Values\Content\Content $content
      */
     public function publishDraft(Content $content)
     {
@@ -86,12 +86,12 @@ class BasicContentContext implements Context
     /**
      * Creates a content draft.
      *
-     * @param Location $parentLocationId
+     * @param eZ\Publish\API\Repository\Values\Content\Location $parentLocationId
      * @param string $contentTypeIdentifier
      * @param string $languageCode
      * @param array $fields Fields, as primitives understood by setField
      *
-     *@return Content an unpublished Content draft
+     * @return eZ\Publish\API\Repository\Values\Content\Content an unpublished Content draft
      */
     public function createContentDraft($parentLocationId, $contentTypeIdentifier, $fields, $languageCode = null)
     {
@@ -115,7 +115,7 @@ class BasicContentContext implements Context
      * @param array $fields
      * @param mixed $contentType The content type identifier
      *
-     * @return mixed|string
+     * @return mixed location id of the created content
      */
     public function createContentWithPath($path, $fields, $contentType)
     {

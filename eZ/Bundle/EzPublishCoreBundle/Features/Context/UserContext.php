@@ -125,7 +125,7 @@ class UserContext implements Context
      * @param $password account password for user to create
      * @param $parentGroup pathstring wherein to create user
      *
-     * @return user created
+     * @return eZ\Publish\API\Repository\Values\User\User
      */
     protected function createUser($username, $email, $password, $parentGroup = null, $fields = array())
     {
