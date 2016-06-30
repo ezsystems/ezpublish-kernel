@@ -64,7 +64,7 @@ services:
         arguments: [@service_container]
 
     fos_http_cache.user_context.anonymous_request_matcher:
-        class: %fos_http_cache.user_context.anonymous_request_matcher.class%
+        class: FOS\HttpCacheBundle\UserContext\AnonymousRequestMatcher
         arguments: [{'session_name_prefix': 'eZSESSID'}]
 
     ezpublish.cache_clear.content.base_locations_listener:
