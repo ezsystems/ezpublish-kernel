@@ -212,7 +212,7 @@ class FieldTypeContext implements Context
                 $this->publishContentType();
                 break;
             case self::CONTENT_PUBLISHED:
-                $this->publishContent($field, $value);
+                $this->createAndPublishContent($field, $value);
                 break;
         }
     }
@@ -223,12 +223,13 @@ class FieldTypeContext implements Context
     }
 
     /**
-     * Publishes the content.
+     * Creates and publishes the content with a given field and
+     * based on the internal ContentType.
      *
      * @param string The field name
      * @param mixed The field value
      */
-    private function publishContent($field, $value)
+    private function createAndPublishContent($field, $value)
     {
         $languageCode = self::DEFAULT_LANGUAGE;
 
