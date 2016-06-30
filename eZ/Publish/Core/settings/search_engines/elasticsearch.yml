@@ -24,7 +24,7 @@ services:
     ezpublish.search.elasticsearch.serializer:
         class: %ezpublish.search.elasticsearch.serializer.class%
         arguments:
-            - @ezpublish.search.elasticsearch.content.field_value_mapper.aggregate
+            - @ezpublish.search.common.field_value_mapper.aggregate
             - @ezpublish.search.common.field_name_generator
 
     ezpublish.search.elasticsearch.mapper.standard:

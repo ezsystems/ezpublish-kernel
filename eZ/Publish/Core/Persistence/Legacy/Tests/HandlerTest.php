@@ -274,6 +274,9 @@ class HandlerTest extends TestCase
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $config['container_builder_path'];
 
+            /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('search_engines/legacy.yml');
+
             $containerBuilder->setParameter(
                 'languages',
                 array('eng-US', 'eng-GB')

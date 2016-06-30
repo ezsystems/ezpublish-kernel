@@ -8,14 +8,14 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
 use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\FieldType\FloatField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common float field value mapper implementation.
  */
 class FloatMapper extends FieldValueMapper
 {
@@ -40,6 +40,19 @@ class FloatMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (float)$field->value;
+        return $this->fixupFloat($field->value);
+    }
+
+    /**
+     * Convert to a proper search engine representation.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function fixupFloat($value)
+    {
+        // This will force the '.' as decimal separator and not depend on the locale
+        return sprintf('%F', (float)$value);
     }
 }

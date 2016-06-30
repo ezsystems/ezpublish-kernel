@@ -191,9 +191,16 @@ class HandlerLocationTest extends LanguageAwareTestCase
                 ),
                 $this->getLanguageHandler()
             ),
+            new Content\WordIndexer\Gateway\DoctrineDatabase(
+                $this->getDatabaseHandler(),
+                $this->getContentTypeHandler(),
+                $transformationProcessor,
+                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler())
+            ),
             $this->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper')->disableOriginalConstructor()->getMock(),
             $this->getLocationMapperMock(),
-            $this->getLanguageHandler()
+            $this->getLanguageHandler(),
+            $this->getFullTextMapper($this->getContentTypeHandler())
         );
     }
 

@@ -8,27 +8,30 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
 use eZ\Publish\Core\Search\Common\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType\FloatField;
+use eZ\Publish\SPI\Search\FieldType\DateField;
 use eZ\Publish\SPI\Search\Field;
+use DateTime;
+use InvalidArgumentException;
+use Exception;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common date field value mapper implementation.
  */
-class FloatMapper extends FieldValueMapper
+class DateMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
-     * @return bool
+     * @return mixed
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof FloatField;
+        return $field->type instanceof DateField;
     }
 
     /**
@@ -40,6 +43,16 @@ class FloatMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (float)$field->value;
+        if (is_numeric($field->value)) {
+            $date = new DateTime("@{$field->value}");
+        } else {
+            try {
+                $date = new DateTime($field->value);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException('Invalid date provided: ' . $field->value);
+            }
+        }
+
+        return $date->format('Y-m-d\\TH:i:s\\Z');
     }
 }

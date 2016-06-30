@@ -1,23 +1,23 @@
 <?php
 
 /**
- * File containing the IntegerMapper document field value mapper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType\IntegerField;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
+use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps IntegerField document field values to something Elasticsearch can index.
+ * Common string field value mapper implementation.
  */
-class IntegerMapper extends FieldValueMapper
+class StringMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped.
@@ -28,11 +28,13 @@ class IntegerMapper extends FieldValueMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof IntegerField;
+        return
+            $field->type instanceof FieldType\StringField ||
+            $field->type instanceof FieldType\TextField;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -44,7 +46,7 @@ class IntegerMapper extends FieldValueMapper
     }
 
     /**
-     * Convert to a proper Elasticsearch representation.
+     * Convert to a proper search engine representation.
      *
      * @param mixed $value
      *
@@ -52,6 +54,11 @@ class IntegerMapper extends FieldValueMapper
      */
     protected function convert($value)
     {
-        return (int)$value;
+        // Remove non-printable characters
+        return preg_replace(
+            '([\x00-\x09\x0B\x0C\x1E\x1F]+)',
+            '',
+            (string)$value
+        );
     }
 }
