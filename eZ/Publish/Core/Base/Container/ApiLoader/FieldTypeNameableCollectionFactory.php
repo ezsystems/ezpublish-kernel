@@ -11,10 +11,13 @@
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
 use eZ\Publish\Core\FieldType\NameableFieldTypeFallback;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class FieldTypeNameableCollectionFactory extends ContainerAware
+class FieldTypeNameableCollectionFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * Collection of fieldTypes, lazy loaded via a closure.
      *
