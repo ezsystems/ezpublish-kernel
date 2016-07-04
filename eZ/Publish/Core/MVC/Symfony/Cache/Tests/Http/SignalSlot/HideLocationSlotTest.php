@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\HideLocationSignal;
 
 class HideLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
@@ -24,6 +24,6 @@ class HideLocationSlotTest extends AbstractPurgeForContentSlotTest implements Sl
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal'];
+        return ['eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\HideLocationSignal'];
     }
 }

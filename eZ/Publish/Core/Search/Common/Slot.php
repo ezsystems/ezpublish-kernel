@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\Search\Common;
 
-use eZ\Publish\Core\SignalSlot\Slot as BaseSlot;
+use eZ\Publish\Core\Repository\SignalSlot\Slot as BaseSlot;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;

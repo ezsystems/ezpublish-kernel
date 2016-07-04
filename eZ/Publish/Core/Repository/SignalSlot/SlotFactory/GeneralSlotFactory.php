@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * File containing the GeneralSlotFactory class.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
+ * @version //autogentag//
+ */
+namespace eZ\Publish\Core\Repository\SignalSlot\SlotFactory;
+
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\SlotFactory;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+
+/**
+ * Slot factory that is able to lookup slots based on identifier.
+ *
+ * @deprecated Slot factories are not needed any more.
+ */
+class GeneralSlotFactory extends SlotFactory
+{
+    /**
+     * @var \eZ\Publish\Core\Repository\SignalSlot\Slot[]
+     */
+    protected $slots = array();
+
+    /**
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Slot[] $slots
+     */
+    public function __construct(array $slots = array())
+    {
+        $this->slots = $slots;
+    }
+
+    /**
+     * Returns a Slot with the given $slotIdentifier.
+     *
+     * @param string $slotIdentifier
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException When no slot is found
+     *
+     * @return \eZ\Publish\Core\Repository\SignalSlot\Slot
+     */
+    public function getSlot($slotIdentifier)
+    {
+        if (!isset($this->slots[$slotIdentifier])) {
+            throw new NotFoundException('slot', $slotIdentifier);
+        }
+
+        return $this->slots[$slotIdentifier];
+    }
+}

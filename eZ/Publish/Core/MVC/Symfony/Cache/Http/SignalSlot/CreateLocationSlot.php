@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * A slot handling CreateLocationSignal.
@@ -18,7 +18,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateLocationSlot extends PurgeForContentHttpCacheSlot
 {
     /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
      */
     public function supports(Signal $signal)
     {

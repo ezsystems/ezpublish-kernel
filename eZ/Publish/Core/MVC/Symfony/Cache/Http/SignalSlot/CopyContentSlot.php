@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * A slot handling CopyContentSignal.
@@ -18,7 +18,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CopyContentSlot extends PurgeForContentHttpCacheSlot
 {
     /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CopyContentSignal $signal
      */
     protected function extractContentId(Signal $signal)
     {

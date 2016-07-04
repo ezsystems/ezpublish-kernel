@@ -23,9 +23,9 @@ parameters:
     ezpublish.api.service.language.class: eZ\Publish\Core\Repository\DomainLogic\LanguageService
 
     # Signal Slot API wrapper
-    ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
-    ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
-    ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\SignalDispatcherTransactionWrapper
+    ezpublish.signalslot.repository.class: eZ\Publish\Core\Repository\SignalSlot\Repository
+    ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
+    ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class: eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher\SignalDispatcherTransactionWrapper
 
 services:
     # API

@@ -10,8 +10,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
 
 /**
  * An abstract HTTP Cache purging Slot that purges cache for a Content.
@@ -24,7 +24,7 @@ abstract class PurgeForContentHttpCacheSlot extends HttpCacheSlot
     /**
      * Purges all caches.
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
      *
      * @return mixed
      */
@@ -36,7 +36,7 @@ abstract class PurgeForContentHttpCacheSlot extends HttpCacheSlot
     /**
      * Default implementation that returns the contentId property's value.
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\AssignSectionSignal $signal
      */
     protected function extractContentId(Signal $signal)
     {

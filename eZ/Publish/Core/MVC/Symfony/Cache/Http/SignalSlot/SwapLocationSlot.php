@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * A slot handling SwapLocationSignal.
@@ -31,7 +31,7 @@ class SwapLocationSlot extends HttpCacheSlot
     }
 
     /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\SwapLocationSignal $signal
      */
     protected function purgeHttpCache(Signal $signal)
     {

@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * RemoveAliasesSignal class.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
+ * @version //autogentag//
+ */
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService;
+
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
+
+/**
+ * RemoveAliasesSignal class.
+ */
+class RemoveAliasesSignal extends Signal
+{
+    /**
+     * AliasList.
+     *
+     * @var mixed
+     */
+    public $aliasList;
+}

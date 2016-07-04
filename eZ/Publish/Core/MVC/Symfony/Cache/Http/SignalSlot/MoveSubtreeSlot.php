@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * A slot handling MoveSubtreeSignal.

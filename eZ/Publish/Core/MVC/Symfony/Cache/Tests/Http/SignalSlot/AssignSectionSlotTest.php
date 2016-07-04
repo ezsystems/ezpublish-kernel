@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\AssignSectionSignal;
 
 class AssignSectionSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
@@ -24,6 +24,6 @@ class AssignSectionSlotTest extends AbstractPurgeForContentSlotTest implements S
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal'];
+        return ['eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\AssignSectionSignal'];
     }
 }

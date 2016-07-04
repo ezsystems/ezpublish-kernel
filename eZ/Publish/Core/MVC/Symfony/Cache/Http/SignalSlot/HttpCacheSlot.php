@@ -11,8 +11,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
 
 /**
  * A abstract legacy slot covering common functions needed for legacy slots.
@@ -44,7 +44,7 @@ abstract class HttpCacheSlot extends Slot
     /**
      * Checks if $signal is supported by this handler.
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
      *
      * @return bool
      */
@@ -53,7 +53,7 @@ abstract class HttpCacheSlot extends Slot
     /**
      * Purges the HTTP cache for $signal.
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
      *
      * @return mixed
      */

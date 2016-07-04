@@ -10,8 +10,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
 
 /**
  * An abstract slot for clearing all http caches.
@@ -21,7 +21,7 @@ abstract class PurgeAllHttpCacheSlot extends HttpCacheSlot
     /**
      * Purges all caches.
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
      *
      * @return mixed
      */

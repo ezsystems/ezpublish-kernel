@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * A slot handling UpdateUserSignal.
@@ -18,7 +18,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateUserSlot extends PurgeForContentHttpCacheSlot
 {
     /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserSignal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\UpdateUserSignal $signal
      */
     protected function extractContentId(Signal $signal)
     {

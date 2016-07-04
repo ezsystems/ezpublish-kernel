@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CopyContentSignal;
 
 class CopyContentSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
@@ -24,6 +24,6 @@ class CopyContentSlotTest extends AbstractPurgeForContentSlotTest implements Slo
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal'];
+        return ['eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CopyContentSignal'];
     }
 }
