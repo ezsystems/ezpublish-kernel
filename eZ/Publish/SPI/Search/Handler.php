@@ -76,34 +76,4 @@ interface Handler
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
     public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null);
-
-    /**
-     * Indexes a content object.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     */
-    public function indexContent(Content $content);
-
-    /**
-     * Deletes a content object from the index.
-     *
-     * @param int $contentId
-     * @param int|null $versionId
-     */
-    public function deleteContent($contentId, $versionId = null);
-
-    /**
-     * Indexes a Location in the index storage.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
-     */
-    public function indexLocation(Location $location);
-
-    /**
-     * Deletes a location from the index.
-     *
-     * @param mixed $locationId
-     * @param mixed $contentId
-     */
-    public function deleteLocation($locationId, $contentId);
 }
