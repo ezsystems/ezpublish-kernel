@@ -1,11 +1,18 @@
 {
-    "name": "ezsystems/ezpublish-kernel",
+    "name": "sport1online/ezpublish-kernel",
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
     "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
     "suggest": {
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/sport1online/ezpublish-legacy"
+        }
+    ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.4",
         "ext-ctype": "*",
@@ -34,10 +41,10 @@
         "oneup/flysystem-bundle": "~0.4",
         "friendsofsymfony/http-cache-bundle": "~1.2",
         "symfony/expression-language": "~2.4",
+        "sport1online/ezpublish-legacy": "@dev",
         "sensio/framework-extra-bundle": "~3.0"
     },
     "require-dev": {
-        "ezsystems/ezpublish-legacy": "@dev",
         "mikey179/vfsStream": "1.1.0",
         "phpunit/phpunit": "~4.1.3",
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
@@ -45,6 +52,7 @@
         "symfony/assetic-bundle": "~2.3"
     },
     "replace": {
+        "ezsystems/ezpublish-kernel": "*",
         "ezsystems/ezpublish": "*",
         "ezsystems/ezpublish-api": "self.version",
         "ezsystems/ezpublish-spi": "self.version"
