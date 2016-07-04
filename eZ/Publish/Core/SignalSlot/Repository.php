@@ -121,14 +121,14 @@ class Repository implements RepositoryInterface
     /**
      * Instance of URL alias service.
      *
-     * @var \eZ\Publish\Core\Repository\URLAliasService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\URLAliasService
      */
     protected $urlAliasService;
 
     /**
      * Instance of URL wildcard service.
      *
-     * @var \eZ\Publish\Core\Repository\URLWildcardService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService
      */
     protected $urlWildcardService;
 

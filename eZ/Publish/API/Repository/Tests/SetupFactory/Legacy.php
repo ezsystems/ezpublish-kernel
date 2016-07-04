@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as CachingLanguageHandler;
 use Exception;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserReference;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -292,8 +292,8 @@ class Legacy extends SetupFactory
     protected function getInitialData()
     {
         if (!isset(self::$initialData)) {
-            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
-            // self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/full_dump.php';
+            self::$initialData = include __DIR__ . '/../../../../Core/Repository/DomainLogic/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
+            // self::$initialData = include __DIR__ . '/../../../../Core/Repository/DomainLogic/Tests/Service/Legacy/_fixtures/full_dump.php';
         }
 
         return self::$initialData;

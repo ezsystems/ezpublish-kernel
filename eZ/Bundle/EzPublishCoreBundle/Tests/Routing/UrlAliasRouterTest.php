@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use Symfony\Component\Routing\RequestContext;
 use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;

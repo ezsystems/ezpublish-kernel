@@ -15,8 +15,8 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Limitation\ParentDepthLimitationType;
-use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentCreateStruct;
 
 /**
  * Test Case for LimitationType.

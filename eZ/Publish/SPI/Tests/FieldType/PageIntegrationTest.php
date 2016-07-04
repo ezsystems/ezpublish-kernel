@@ -58,7 +58,7 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $contentService = $this->getMockBuilder('eZ\Publish\Core\Repository\ContentService')
+        $contentService = $this->getMockBuilder('eZ\Publish\Core\Repository\DomainLogic\ContentService')
             ->disableOriginalConstructor()->getMock();
         $pageService = new FieldType\Page\PageService($contentService);
         $hashConverter = new FieldType\Page\HashConverter();

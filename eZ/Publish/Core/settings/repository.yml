@@ -1,26 +1,26 @@
 parameters:
     # API
     ezpublish.api.repository.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\RepositoryFactory
-    ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
+    ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\DomainLogic\Repository
     ezpublish.field_type_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
     ezpublish.field_type_nameable_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
     ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
 
     # API services
-    ezpublish.api.service.content.class: eZ\Publish\Core\Repository\ContentService
-    ezpublish.api.service.content_type.class: eZ\Publish\Core\Repository\ContentTypeService
-    ezpublish.api.service.field_type.class: eZ\Publish\Core\Repository\FieldTypeService
-    ezpublish.api.service.role.class: eZ\Publish\Core\Repository\RoleService
-    ezpublish.api.service.object_state.class: eZ\Publish\Core\Repository\ObjectStateService
-    ezpublish.api.service.url_wildcard.class: eZ\Publish\Core\Repository\URLWildcardService
-    ezpublish.api.service.url_alias.class: eZ\Publish\Core\Repository\URLAliasService
-    ezpublish.api.service.user.class: eZ\Publish\Core\Repository\UserService
-    ezpublish.api.service.search.class: eZ\Publish\Core\Repository\SearchService
-    ezpublish.api.service.section.class: eZ\Publish\Core\Repository\SectionService
-    ezpublish.api.service.trash.class: eZ\Publish\Core\Repository\TrashService
-    ezpublish.api.service.location.class: eZ\Publish\Core\Repository\LocationService
-    ezpublish.api.service.language.class: eZ\Publish\Core\Repository\LanguageService
+    ezpublish.api.service.content.class: eZ\Publish\Core\Repository\DomainLogic\ContentService
+    ezpublish.api.service.content_type.class: eZ\Publish\Core\Repository\DomainLogic\ContentTypeService
+    ezpublish.api.service.field_type.class: eZ\Publish\Core\Repository\DomainLogic\FieldTypeService
+    ezpublish.api.service.role.class: eZ\Publish\Core\Repository\DomainLogic\RoleService
+    ezpublish.api.service.object_state.class: eZ\Publish\Core\Repository\DomainLogic\ObjectStateService
+    ezpublish.api.service.url_wildcard.class: eZ\Publish\Core\Repository\DomainLogic\URLWildcardService
+    ezpublish.api.service.url_alias.class: eZ\Publish\Core\Repository\DomainLogic\URLAliasService
+    ezpublish.api.service.user.class: eZ\Publish\Core\Repository\DomainLogic\UserService
+    ezpublish.api.service.search.class: eZ\Publish\Core\Repository\DomainLogic\SearchService
+    ezpublish.api.service.section.class: eZ\Publish\Core\Repository\DomainLogic\SectionService
+    ezpublish.api.service.trash.class: eZ\Publish\Core\Repository\DomainLogic\TrashService
+    ezpublish.api.service.location.class: eZ\Publish\Core\Repository\DomainLogic\LocationService
+    ezpublish.api.service.language.class: eZ\Publish\Core\Repository\DomainLogic\LanguageService
 
     # Signal Slot API wrapper
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository

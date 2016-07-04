@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectState;
 
 /**
  * Parser for ContentObjectStates.

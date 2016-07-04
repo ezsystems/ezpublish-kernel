@@ -27,7 +27,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
      */
     protected function getMockContentService()
     {
-        return $this->getMockBuilder('eZ\Publish\Core\Repository\ContentService')
+        return $this->getMockBuilder('eZ\Publish\Core\Repository\DomainLogic\ContentService')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -37,7 +37,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
      */
     protected function getMockLocationService()
     {
-        return $this->getMockBuilder('eZ\Publish\Core\Repository\LocationService')
+        return $this->getMockBuilder('eZ\Publish\Core\Repository\DomainLogic\LocationService')
             ->disableOriginalConstructor()
             ->getMock();
     }

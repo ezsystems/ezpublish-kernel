@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ObjectStateList;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectState;
 
 class ObjectStateListTest extends ValueObjectVisitorBaseTest
 {

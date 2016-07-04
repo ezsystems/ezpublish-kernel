@@ -27,7 +27,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
-use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Query\Criterion\PermissionSubtree;
 
 /**
  * SubtreeLimitation is a Content Limitation & a Role Limitation.

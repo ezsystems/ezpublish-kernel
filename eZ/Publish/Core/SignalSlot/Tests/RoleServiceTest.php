@@ -10,17 +10,17 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\Core\Repository\Values\User\PolicyDraft;
-use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\PolicyDraft;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
-use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
-use eZ\Publish\Core\Repository\Values\User\Role;
-use eZ\Publish\Core\Repository\Values\User\RoleDraft;
-use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\PolicyCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\PolicyUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\Role;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\RoleDraft;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
-use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
-use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\RoleService;
 

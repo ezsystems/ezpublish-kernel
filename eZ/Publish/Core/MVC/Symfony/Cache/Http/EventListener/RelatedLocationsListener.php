@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class RelatedLocationsListener implements EventSubscriberInterface
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Repository
      */
     private $repository;
 

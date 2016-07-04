@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserReference;
 use Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider as BaseAnonymousProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 

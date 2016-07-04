@@ -15,9 +15,9 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\Core\Repository\Values\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content;
 use eZ\Publish\Core\REST\Server\Values\RestExecutedView;
-use eZ\Publish\Core\Repository\Values\Content as ApiValues;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content as ApiValues;
 
 class RestExecutedViewTest extends ValueObjectVisitorBaseTest
 {

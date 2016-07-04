@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\Trash;
 use eZ\Publish\Core\REST\Server\Values\RestTrashItem;
-use eZ\Publish\Core\Repository\Values\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content;
 
 class TrashTest extends ValueObjectVisitorBaseTest
 {

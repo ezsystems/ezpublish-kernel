@@ -14,7 +14,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree as PermissionSubtreeCriterion;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Query\Criterion\PermissionSubtree as PermissionSubtreeCriterion;
 
 /**
  * PermissionSubtree criterion handler.

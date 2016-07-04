@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserReference;
 use PHPUnit_Framework_TestCase;
 
 class AnonymousAuthenticationProviderTest extends PHPUnit_Framework_TestCase

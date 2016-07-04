@@ -13,7 +13,7 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationListType;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**

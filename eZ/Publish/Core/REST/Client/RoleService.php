@@ -23,9 +23,9 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruc
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\Repository\Values\User\RoleDraft;
-use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
-use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\RoleDraft;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
 use eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\REST\Client\Values\User\Role;

@@ -11,8 +11,8 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\Core\SignalSlot\Repository;
-use eZ\Publish\Core\Repository\Values\User\User;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
 class RepositoryTest extends PHPUnit_Framework_TestCase
@@ -22,7 +22,7 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
      */
     public function testServiceMethod($method, $innerClass, $class)
     {
-        $innerRepository = $this->getMockBuilder('eZ\\Publish\Core\\Repository\\Repository')
+        $innerRepository = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository')
             ->disableOriginalConstructor()
             ->getMock();
         $innerRepository->expects($this->once())
@@ -115,7 +115,7 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
      */
     public function testAggregation($method, $parameters, $return)
     {
-        $innerRepository = $this->getMockBuilder('eZ\\Publish\Core\\Repository\\Repository')
+        $innerRepository = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository')
             ->disableOriginalConstructor()
             ->getMock();
         $innerRepository->expects($this->once())

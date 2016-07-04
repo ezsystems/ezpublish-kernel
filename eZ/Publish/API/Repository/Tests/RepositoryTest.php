@@ -11,7 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use Exception;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserReference;
 
 /**
  * Test case for operations in the Repository using in memory storage.

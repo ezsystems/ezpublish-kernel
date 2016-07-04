@@ -12,8 +12,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use PHPUnit_Framework_TestCase;
 

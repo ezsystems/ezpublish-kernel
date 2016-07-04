@@ -45,7 +45,7 @@ class StorageHandlerTest extends TestCase
     /**
      * Mock for versionInfo.
      *
-     * @var \eZ\Publish\Core\Repository\Values\Content\VersionInfo
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo
      */
     protected $versionInfoMock;
 

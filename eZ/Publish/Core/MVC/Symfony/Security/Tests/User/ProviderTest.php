@@ -13,9 +13,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Security\User\Provider;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
 use PHPUnit_Framework_TestCase;
 
 class ProviderTest extends PHPUnit_Framework_TestCase
