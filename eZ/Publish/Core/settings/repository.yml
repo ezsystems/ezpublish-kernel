@@ -66,91 +66,91 @@ services:
         lazy: true
 
     ezpublish.api.service.content:
-        class: %ezpublish.api.service.content.class%
+        class: eZ\Publish\Core\Repository\ContentService
         factory:
             - @ezpublish.api.repository
             - getContentService
         lazy: true
 
     ezpublish.api.service.content_type:
-        class: %ezpublish.api.service.content_type.class%
+        class: eZ\Publish\Core\Repository\ContentTypeService
         factory:
             - @ezpublish.api.repository
             - getContentTypeService
         lazy: true
 
     ezpublish.api.service.field_type:
-        class: %ezpublish.api.service.field_type.class%
+        class: eZ\Publish\Core\Repository\FieldTypeService
         factory:
             - @ezpublish.api.repository
             - getFieldTypeService
         lazy: true
 
     ezpublish.api.service.role:
-        class: %ezpublish.api.service.role.class%
+        class: eZ\Publish\Core\Repository\RoleService
         factory:
             - @ezpublish.api.repository
             - getRoleService
         lazy: true
 
     ezpublish.api.service.object_state:
-        class: %ezpublish.api.service.object_state.class%
+        class: eZ\Publish\Core\Repository\ObjectStateService
         factory:
             - @ezpublish.api.repository
             - getObjectStateService
         lazy: true
 
     ezpublish.api.service.url_wildcard:
-        class: %ezpublish.api.service.url_wildcard.class%
+        class: eZ\Publish\Core\Repository\URLWildcardService
         factory:
             - @ezpublish.api.repository
             - getURLWildcardService
         lazy: true
 
     ezpublish.api.service.url_alias:
-        class: %ezpublish.api.service.url_alias.class%
+        class: eZ\Publish\Core\Repository\URLAliasService
         factory:
             - @ezpublish.api.repository
             - getURLAliasService
         lazy: true
 
     ezpublish.api.service.user:
-        class: %ezpublish.api.service.user.class%
+        class: eZ\Publish\Core\Repository\UserService
         factory:
             - @ezpublish.api.repository
             - getUserService
         lazy: true
 
     ezpublish.api.service.search:
-        class: %ezpublish.api.service.search.class%
+        class: eZ\Publish\Core\Repository\SearchService
         factory:
             - @ezpublish.api.repository
             - getSearchService
         lazy: true
 
     ezpublish.api.service.section:
-        class: %ezpublish.api.service.section.class%
+        class: eZ\Publish\Core\Repository\SectionService
         factory:
             - @ezpublish.api.repository
             - getSectionService
         lazy: true
 
     ezpublish.api.service.trash:
-        class: %ezpublish.api.service.trash.class%
+        class: eZ\Publish\Core\Repository\TrashService
         factory:
             - @ezpublish.api.repository
             - getTrashService
         lazy: true
 
     ezpublish.api.service.location:
-        class: %ezpublish.api.service.location.class%
+        class: eZ\Publish\Core\Repository\LocationService
         factory:
             - @ezpublish.api.repository
             - getLocationService
         lazy: true
 
     ezpublish.api.service.language:
-        class: %ezpublish.api.service.language.class%
+        class: eZ\Publish\Core\Repository\LanguageService
         factory:
             - @ezpublish.api.repository
             - getContentLanguageService
