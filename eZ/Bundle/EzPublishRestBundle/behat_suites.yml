@@ -16,9 +16,18 @@ rest:
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
                     driver: BuzzDriver
                     type: xml
+                - eZ\Bundle\EzPublishRestBundle\Features\Context\UserContentContext:
+                    contentService: @ezpublish.api.service.content
+                    contentTypeService: @ezpublish.api.service.content_type
+                    userService: @ezpublish.api.service.user
+        # TODO: Needs to be updated for guzzle driver version in use now.
         guzzle:
             paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
             contexts:
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
                     driver: GuzzleDriver
                     type: json
+                - eZ\Bundle\EzPublishRestBundle\Features\Context\UserContentContext:
+                    contentService: @ezpublish.api.service.content
+                    contentTypeService: @ezpublish.api.service.content_type
+                    userService: @ezpublish.api.service.user
