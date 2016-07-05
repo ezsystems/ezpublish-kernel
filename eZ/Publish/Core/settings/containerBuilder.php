@@ -25,6 +25,13 @@ $containerBuilder = new ContainerBuilder();
 // Track current file for changes
 $containerBuilder->addResource(new FileResource(__FILE__));
 
+// Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
+if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
+    $containerBuilder
+        ->register('ezpublish.cache_pool.driver', 'Stash\Driver\Redis')
+        ->addArgument(['servers' => [['server' => getenv('CACHE_HOST') ?: '127.0.0.1']]]);
+}
+
 $settingsPath = $installDir . '/eZ/Publish/Core/settings/';
 $loader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
 

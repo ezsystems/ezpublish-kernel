@@ -9,6 +9,11 @@ if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] ; then
     echo "default_charset = UTF-8" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 fi
 
+# Enable redis
+if [ "$CUSTOM_CACHE_POOL" = "singleredis" ] ; then
+    echo extension = redis.so >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+fi
+
 # Setup DB
 if [ "$DB" = "mysql" ] ; then
     # https://github.com/travis-ci/travis-ci/issues/3049
