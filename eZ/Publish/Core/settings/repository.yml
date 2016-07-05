@@ -22,6 +22,9 @@ parameters:
     ezpublish.api.service.location.class: eZ\Publish\Core\Repository\LocationService
     ezpublish.api.service.language.class: eZ\Publish\Core\Repository\LanguageService
 
+    # Permission implementation of Repository
+    ezpublish.permission.repository.class: eZ\Publish\Core\Repository\Permission\Repository
+
     # Signal Slot API wrapper
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
@@ -136,6 +139,12 @@ services:
         factory: ["@ezpublish.api.repository.factory", buildService]
         arguments: [@ezpublish.api.repository, ContentLanguage]
         lazy: true
+
+    # Permission implementation of Repository
+    ezpublish.permission.repository:
+        class: %ezpublish.permission.repository.class%
+        arguments:
+            - @ezpublish.api.inner_repository
 
     # Signal Slot API wrapper
     ezpublish.signalslot.repository:
