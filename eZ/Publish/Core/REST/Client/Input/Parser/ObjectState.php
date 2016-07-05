@@ -14,7 +14,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectState as CoreObjectState;
 
 /**
  * Parser for ObjectState.

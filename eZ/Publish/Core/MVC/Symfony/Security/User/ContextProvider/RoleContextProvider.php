@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserRoleAssignment;
 use FOS\HttpCache\UserContext\ContextProviderInterface;
 use FOS\HttpCache\UserContext\UserContext;
 
@@ -21,7 +21,7 @@ use FOS\HttpCache\UserContext\UserContext;
 class RoleContextProvider implements ContextProviderInterface
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Repository
      */
     protected $repository;
 

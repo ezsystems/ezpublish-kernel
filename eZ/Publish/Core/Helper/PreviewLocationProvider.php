@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Helper;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as PersistenceLocationHandler;
 
 /**

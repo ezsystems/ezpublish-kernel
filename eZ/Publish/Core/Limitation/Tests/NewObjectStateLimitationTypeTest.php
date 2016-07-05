@@ -17,10 +17,10 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Limitation\NewObjectStateLimitationType;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectState;
 
 /**
  * Test Case for LimitationType.

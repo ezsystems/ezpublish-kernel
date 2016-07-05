@@ -13,9 +13,9 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\View\Manager;
 use eZ\Publish\Core\MVC\Symfony\View\View;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -60,7 +60,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->templateEngineMock = $this->getMock('Symfony\\Component\\Templating\\EngineInterface');
         $this->eventDispatcherMock = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
-        $this->repositoryMock = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
+        $this->repositoryMock = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configResolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
@@ -251,7 +251,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $contentService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
+        $contentService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -305,7 +305,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $contentService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
+        $contentService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService')
             ->disableOriginalConstructor()
             ->getMock();
 

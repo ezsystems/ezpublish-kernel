@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\RestLocation;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestLocationRootNodeTest extends RestLocationTest

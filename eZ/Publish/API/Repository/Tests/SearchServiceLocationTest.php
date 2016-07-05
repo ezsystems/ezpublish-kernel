@@ -11,7 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;

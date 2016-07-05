@@ -16,7 +16,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\FieldType\Page\Value;
-use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
 use PHPUnit_Framework_TestCase;
 
 class PageServiceTest extends PHPUnit_Framework_TestCase

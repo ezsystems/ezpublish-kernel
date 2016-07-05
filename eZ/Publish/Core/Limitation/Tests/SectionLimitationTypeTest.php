@@ -19,8 +19,8 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Limitation\SectionLimitationType;
-use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 

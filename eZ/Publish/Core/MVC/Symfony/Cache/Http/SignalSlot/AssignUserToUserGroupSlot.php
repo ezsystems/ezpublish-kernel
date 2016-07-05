@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * A slot handling AssignUserToUserGroupSignal.
@@ -20,7 +20,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class AssignUserToUserGroupSlot extends PurgeForContentHttpCacheSlot
 {
     /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal $signal
      */
     protected function extractContentId(Signal $signal)
     {

@@ -9,7 +9,7 @@
 namespace EzSystems\PlatformBehatBundle\Context;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserReference;
 
 /**
  * Repository Context Trait.

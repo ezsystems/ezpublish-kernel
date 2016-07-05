@@ -26,7 +26,7 @@ class UrlAliasGenerator extends Generator
     const INTERNAL_CONTENT_VIEW_ROUTE = '_ez_content_view';
 
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Repository
      */
     private $repository;
 
@@ -214,13 +214,13 @@ class UrlAliasGenerator extends Generator
      *
      * @param int $locationId
      *
-     * @return \eZ\Publish\Core\Repository\Values\Content\Location
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location
      */
     public function loadLocation($locationId)
     {
         return $this->repository->sudo(
             function (Repository $repository) use ($locationId) {
-                /* @var $repository \eZ\Publish\Core\Repository\Repository */
+                /* @var $repository \eZ\Publish\Core\Repository\DomainLogic\Repository */
                 return $repository->getLocationService()->loadLocation($locationId);
             }
         );

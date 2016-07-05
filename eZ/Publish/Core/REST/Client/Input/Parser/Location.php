@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
-use eZ\Publish\Core\Repository\Values;
+use eZ\Publish\Core\Repository\DomainLogic\Values;
 
 /**
  * Parser for Location.

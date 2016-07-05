@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
 class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
@@ -66,7 +66,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
         $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
         $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository';
         $this->repository = $repository = $this
             ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()

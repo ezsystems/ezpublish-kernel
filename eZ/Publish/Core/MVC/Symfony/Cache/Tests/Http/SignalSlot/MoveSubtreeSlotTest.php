@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
 
 class MoveSubtreeSlotTest extends AbstractPurgeAllSlotTest implements SlotTest
 {
@@ -24,6 +24,6 @@ class MoveSubtreeSlotTest extends AbstractPurgeAllSlotTest implements SlotTest
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal'];
+        return ['eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\MoveSubtreeSignal'];
     }
 }

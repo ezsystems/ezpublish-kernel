@@ -14,9 +14,9 @@ parameters:
     ezpublish.api.storage_engine.default: legacy
     ezpublish.api.search_engine.default: legacy
 
-    ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
-    ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
-    ezpublish.api.version.class: eZ\Publish\Core\Repository\Values\Content\VersionInfo
+    ezpublish.api.content.class: eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content
+    ezpublish.api.location.class: eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location
+    ezpublish.api.version.class: eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo
 
 services:
     # API

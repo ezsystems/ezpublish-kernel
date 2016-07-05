@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;

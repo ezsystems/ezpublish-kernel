@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\StatusLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Limitation\StatusLimitationType;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 
 /**

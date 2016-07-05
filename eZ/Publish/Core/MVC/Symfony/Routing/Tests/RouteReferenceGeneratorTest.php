@@ -14,7 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\RoleInput;
-use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\RoleCreateStruct;
 
 class RoleInputTest extends BaseTest
 {
@@ -94,7 +94,7 @@ class RoleInputTest extends BaseTest
     protected function getRoleServiceMock()
     {
         $roleServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\RoleService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\RoleService',
             array(),
             array(),
             '',

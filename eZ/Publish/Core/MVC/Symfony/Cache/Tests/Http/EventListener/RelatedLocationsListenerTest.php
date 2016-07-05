@@ -14,9 +14,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\RelatedLocationsListener;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
-use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\Relation;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use PHPUnit_Framework_TestCase;
 
 class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
@@ -45,7 +45,7 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->repository = $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\Repository')
+            ->getMockBuilder('\eZ\Publish\Core\Repository\DomainLogic\Repository')
             ->disableOriginalConstructor()
             ->setMethods(['getContentService', 'getLocationService'])
             ->getMock();

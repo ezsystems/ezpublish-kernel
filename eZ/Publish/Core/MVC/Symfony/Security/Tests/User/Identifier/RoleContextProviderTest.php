@@ -30,7 +30,7 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->repositoryMock = $this
-            ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
+            ->getMockBuilder('eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository')
             ->disableOriginalConstructor()
             ->setMethods(array('getRoleService', 'getCurrentUser'))
             ->getMock();
@@ -125,7 +125,7 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
     private function generateRoleAssignmentMock(array $properties = array())
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Values\\User\\UserRoleAssignment')
+            ->getMockBuilder('eZ\\Publish\\Core\\Repository\\DomainLogic\\Values\\User\\UserRoleAssignment')
             ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
     }

@@ -32,7 +32,7 @@ class Renderer implements RendererInterface
     const RESOURCE_TYPE_LOCATION = 1;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Repository
      */
     protected $repository;
 
