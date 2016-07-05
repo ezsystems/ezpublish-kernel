@@ -30,7 +30,7 @@
         "doctrine/doctrine-bundle": "~1.3",
         "liip/imagine-bundle": "~1.0",
         "oneup/flysystem-bundle": "~0.4",
-        "friendsofsymfony/http-cache-bundle": ">=1.2, <=1.3.6",
+        "friendsofsymfony/http-cache-bundle": "dev-anonymous_request_hash-1.3",
         "sensio/framework-extra-bundle": "~3.0"
     },
     "require-dev": {
@@ -64,5 +64,11 @@
             "dev-master": "6.5.x-dev",
             "dev-tmp_ci_branch": "6.5.x-dev"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:bdunogier/FOSHttpCacheBundle.git"
+        }
+    ]
 }
