@@ -149,7 +149,7 @@ services:
     # Signal Slot API wrapper
     ezpublish.signalslot.repository:
         class: %ezpublish.signalslot.repository.class%
-        arguments: [@ezpublish.api.inner_repository, @ezpublish.signalslot.signal_dispatcher_transaction_wrapper]
+        arguments: [@ezpublish.permission.repository, @ezpublish.signalslot.signal_dispatcher_transaction_wrapper]
         lazy: true
 
     ezpublish.signalslot.signal_dispatcher_transaction_wrapper:
