@@ -55,6 +55,9 @@ services:
             - [setContainer, [@service_container]]
 
     ezpublish.api.inner_repository:
+        alias: ezpublish.permission.repository
+
+    ezpublish.domain_logic.repository:
         class: %ezpublish.api.inner_repository.class%
         factory: ["@ezpublish.api.repository.factory", buildRepository]
         arguments:
@@ -144,7 +147,7 @@ services:
     ezpublish.permission.repository:
         class: %ezpublish.permission.repository.class%
         arguments:
-            - @ezpublish.api.inner_repository
+            - @ezpublish.domain_logic.repository
 
     # Signal Slot API wrapper
     ezpublish.signalslot.repository:
