@@ -67,80 +67,93 @@ services:
 
     ezpublish.api.service.content:
         class: %ezpublish.api.service.content.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Content]
+        factory:
+            - @ezpublish.api.repository
+            - getContentService
         lazy: true
 
     ezpublish.api.service.content_type:
         class: %ezpublish.api.service.content_type.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ContentType]
+        factory:
+            - @ezpublish.api.repository
+            - getContentTypeService
         lazy: true
 
     ezpublish.api.service.field_type:
         class: %ezpublish.api.service.field_type.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, FieldType]
+        factory:
+            - @ezpublish.api.repository
+            - getFieldTypeService
         lazy: true
 
     ezpublish.api.service.role:
         class: %ezpublish.api.service.role.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Role]
+        factory:
+            - @ezpublish.api.repository
+            - getRoleService
         lazy: true
 
     ezpublish.api.service.object_state:
         class: %ezpublish.api.service.object_state.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ObjectState]
+        factory:
+            - @ezpublish.api.repository
+            - getObjectStateService
         lazy: true
 
     ezpublish.api.service.url_wildcard:
         class: %ezpublish.api.service.url_wildcard.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, URLWildcard]
+        factory:
+            - @ezpublish.api.repository
+            - getURLWildcardService
         lazy: true
 
     ezpublish.api.service.url_alias:
         class: %ezpublish.api.service.url_alias.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, URLAlias]
+        factory:
+            - @ezpublish.api.repository
+            - getURLAliasService
         lazy: true
 
     ezpublish.api.service.user:
         class: %ezpublish.api.service.user.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, User]
+        factory:
+            - @ezpublish.api.repository
+            - getUserService
         lazy: true
 
     ezpublish.api.service.search:
         class: %ezpublish.api.service.search.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Search]
+        factory:
+            - @ezpublish.api.repository
+            - getSearchService
         lazy: true
 
     ezpublish.api.service.section:
         class: %ezpublish.api.service.section.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Section]
+        factory:
+            - @ezpublish.api.repository
+            - getSectionService
         lazy: true
 
     ezpublish.api.service.trash:
         class: %ezpublish.api.service.trash.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Trash]
+        factory:
+            - @ezpublish.api.repository
+            - getTrashService
         lazy: true
 
     ezpublish.api.service.location:
         class: %ezpublish.api.service.location.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Location]
+        factory:
+            - @ezpublish.api.repository
+            - getLocationService
         lazy: true
 
     ezpublish.api.service.language:
         class: %ezpublish.api.service.language.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ContentLanguage]
+        factory:
+            - @ezpublish.api.repository
+            - getContentLanguageService
         lazy: true
 
     # Permission implementation of Repository
