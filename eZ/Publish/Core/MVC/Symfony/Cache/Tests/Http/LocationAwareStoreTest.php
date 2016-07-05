@@ -48,22 +48,22 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
 
     public function testGetPath()
     {
-        $prefix = LocationAwareStore::LOCATION_CACHE_DIR . '/123/';
-        $path = $this->store->getPath("$prefix/en" . sha1('someContent'));
-        $this->assertTrue(strpos($path, __DIR__ . "/$prefix") === 0);
+        $prefix = LocationAwareStore::LOCATION_CACHE_DIR . DIRECTORY_SEPARATOR . '123' . DIRECTORY_SEPARATOR;
+        $path = $this->store->getPath($prefix . DIRECTORY_SEPARATOR . 'en' . sha1('someContent'));
+        $this->assertTrue(strpos($path, __DIR__ . DIRECTORY_SEPARATOR . $prefix) === 0);
     }
 
     public function testGetStalePath()
     {
         // Generate the lock file to force using the stale cache dir
         $locationId = 123;
-        $prefix = LocationAwareStore::LOCATION_CACHE_DIR . "/$locationId";
-        $prefixStale = LocationAwareStore::LOCATION_STALE_CACHE_DIR . "/$locationId";
+        $prefix = LocationAwareStore::LOCATION_CACHE_DIR . DIRECTORY_SEPARATOR . $locationId;
+        $prefixStale = LocationAwareStore::LOCATION_STALE_CACHE_DIR . DIRECTORY_SEPARATOR . $locationId;
         $lockFile = $this->store->getLocationCacheLockName($locationId);
         file_put_contents($lockFile, getmypid());
 
-        $path = $this->store->getPath("$prefix/en" . sha1('someContent'));
-        $this->assertTrue(strpos($path, __DIR__ . "/$prefixStale") === 0);
+        $path = $this->store->getPath($prefix . DIRECTORY_SEPARATOR . 'en' . sha1('someContent'));
+        $this->assertTrue(strpos($path, __DIR__ . DIRECTORY_SEPARATOR . $prefixStale) === 0);
         @unlink($lockFile);
     }
 
