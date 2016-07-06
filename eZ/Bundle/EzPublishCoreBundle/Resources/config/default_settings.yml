@@ -77,6 +77,8 @@ parameters:
     ezsettings.default.io.url_prefix: "$var_dir$/$storage_dir$"
     ezsettings.default.io.legacy_url_prefix: "$var_dir$/$storage_dir$"
     ezsettings.default.io.root_dir: "%webroot_dir%/$var_dir$/$storage_dir$"
+    ezsettings.default.io.permissions.files: 0644
+    ezsettings.default.io.permissions.directories: 0755
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
