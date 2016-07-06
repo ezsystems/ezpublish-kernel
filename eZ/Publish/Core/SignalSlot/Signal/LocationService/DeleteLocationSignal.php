@@ -14,6 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * DeleteLocationSignal class
  * @package eZ\Publish\Core\SignalSlot\Signal\LocationService
+ *
+ * @deprecated since 6.5, now {@link DeleteSubtreeSignal} and {@link RemoveLocationAssigmentSignal} is used instead.
  */
 class DeleteLocationSignal extends Signal
 {

@@ -14,6 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * DeleteContentSignal class
  * @package eZ\Publish\Core\SignalSlot\Signal\ContentService
+ *
+ * If Content has locations the systems will emmit {@link ..\LocationServide\DeleteSubtreeSignal} for each assigned location.
  */
 class DeleteContentSignal extends Signal
 {

@@ -181,11 +181,41 @@ interface LocationService
     /**
      * Deletes $location and all its descendants.
      *
+     * @deprecated Since 6.5, as this had conflicting meanings, this is now exposed as {@link deleteSubtree()} and {@link removeLocationAssignment()}.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
     public function deleteLocation( Location $location );
+
+    /**
+     * Deletes $location and all its descendants in the given subtree.
+     *
+     * This will also delete all content which does not have other locations outside the given subtree.
+     *
+     * @since 6.5
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     */
+    public function deleteSubtree(Location $location);
+
+
+    /**
+     * Remove $location assignment.
+     *
+     * If last location assignment is removed content will end up without location.
+     *
+     * @since 6.5
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to remove this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If location has children.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     */
+    public function removeLocationAssignment(Location $location);
 
     /**
      * Instantiates a new location create class
