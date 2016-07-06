@@ -29,7 +29,7 @@ class SetupFactory extends APILegacySetupFactory
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
-    protected function getServiceContainer()
+    public function getServiceContainer()
     {
         if (!isset(static::$serviceContainer)) {
             $config = include __DIR__ . '/../../../../../../../../config.php';

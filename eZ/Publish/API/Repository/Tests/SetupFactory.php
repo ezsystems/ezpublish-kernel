@@ -43,4 +43,13 @@ abstract class SetupFactory
      * @return mixed
      */
     abstract public function getConfigValue($configKey);
+
+    /**
+     * Returns the service container used for initialization of the repository.
+     *
+     * Most tests should not use this at all!!
+     *
+     * @return \eZ\Publish\Core\Base\ServiceContainer
+     */
+    abstract public function getServiceContainer();
 }
