@@ -334,7 +334,7 @@ class NameSchemaTest extends PHPUnit_Framework_TestCase
                     $contentTypeHandlerMock,
                     $contentTypeDomainMapper,
                     $nameableFieldTypeRegistry,
-                    $settings
+                    $settings,
                 ]
             )
             ->getMock();
