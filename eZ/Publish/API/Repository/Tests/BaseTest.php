@@ -415,12 +415,16 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         while (true) {
             $repositoryReflection = new \ReflectionObject($repository);
-            // If the repository is decorated, we need to recurse in the "repository" property
-            if (!$repositoryReflection->hasProperty('repository')) {
+            // If the repository is decorated, we need to recurse in the
+            // "repository" or "innerRepository" property
+            if ($repositoryReflection->hasProperty('repository')) {
+                $repositoryProperty = $repositoryReflection->getProperty('repository');
+            } elseif ($repositoryReflection->hasProperty('innerRepository')) {
+                $repositoryProperty = $repositoryReflection->getProperty('innerRepository');
+            } else {
                 break;
             }
 
-            $repositoryProperty = $repositoryReflection->getProperty('repository');
             $repositoryProperty->setAccessible(true);
             $repository = $repositoryProperty->getValue($repository);
         }
