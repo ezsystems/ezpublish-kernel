@@ -25,7 +25,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
-use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
 use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
 
 /**
