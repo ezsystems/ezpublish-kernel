@@ -109,6 +109,7 @@ class ContentViewBuilder implements ViewBuilder
             $view->setLocation($location);
         }
 
+        $this->viewParametersInjector->injectViewParameters($view, $parameters);
         $this->viewConfigurator->configure($view);
 
         // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
@@ -119,8 +120,6 @@ class ContentViewBuilder implements ViewBuilder
                 $view->setControllerReference(new ControllerReference('ez_content:embedAction'));
             }
         }
-
-        $this->viewParametersInjector->injectViewParameters($view, $parameters);
 
         return $view;
     }
