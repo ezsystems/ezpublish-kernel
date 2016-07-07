@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\Search\Common\Slot;
 use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
+use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
 use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
 /**
@@ -34,7 +35,7 @@ abstract class AbstractSubtree extends Slot
                 );
             }
 
-            if ($this->searchHandler instanceof ContentIndexer) {
+            if ($this->searchHandler instanceof ContentIndexer || $this->searchHandler instanceof FullTextIndexer) {
                 if (isset($processedContentIdSet[$contentId])) {
                     continue;
                 }

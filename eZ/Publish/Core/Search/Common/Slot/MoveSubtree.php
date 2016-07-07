@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
 use eZ\Publish\SPI\Search\Indexer;
+use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
 
 /**
  * A Search Engine slot handling MoveSubtreeSignal.
@@ -30,7 +31,7 @@ class MoveSubtree extends AbstractSubtree
             return;
         }
 
-        if (!$this->searchHandler instanceof Indexer) {
+        if (!$this->searchHandler instanceof Indexer || $this->searchHandler instanceof FullTextIndexer) {
             return;
         }
 

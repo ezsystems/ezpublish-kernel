@@ -14,6 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
 use eZ\Publish\SPI\Search\Indexer;
 use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
+use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
 use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
 /**
@@ -42,7 +43,7 @@ class Recover extends Slot
         );
 
         foreach ($subtreeIds as $contentId) {
-            if ($this->searchHandler instanceof ContentIndexer) {
+            if ($this->searchHandler instanceof ContentIndexer || $this->searchHandler instanceof FullTextIndexer) {
                 $contentInfo = $contentHandler->loadContentInfo($contentId);
                 $this->searchHandler->indexContent(
                     $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
