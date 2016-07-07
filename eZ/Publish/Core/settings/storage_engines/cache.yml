@@ -23,6 +23,7 @@ parameters:
 services:
     ezpublish.cache_pool:
         class: %ezpublish.cache_pool.class%
+        arguments: [@?ezpublish.cache_pool.driver]
 
     ezpublish.cache_pool.spi.cache.decorator:
         class: %ezpublish.cache_pool.spi.cache.decorator.class%

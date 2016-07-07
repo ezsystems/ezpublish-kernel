@@ -351,7 +351,7 @@ class Legacy extends SetupFactory
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
-    protected function getServiceContainer()
+    public function getServiceContainer()
     {
         if (!isset(self::$serviceContainer)) {
             $config = include __DIR__ . '/../../../../../../config.php';
