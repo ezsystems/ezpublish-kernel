@@ -25,6 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -47,7 +48,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, ContentIndexer
 {
     /**
      * Content locator gateway.
@@ -306,14 +307,6 @@ class Handler implements SearchHandlerInterface
      * @param \eZ\Publish\SPI\Persistence\Content $content
      */
     public function indexContent(Content $content)
-    {
-        // Not implemented in Legacy Storage Engine
-    }
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
-     */
-    public function indexLocation(Location $location)
     {
         // Not implemented in Legacy Storage Engine
     }

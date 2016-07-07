@@ -19,8 +19,10 @@ use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
+use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, ContentIndexer, LocationIndexer
 {
     /**
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
