@@ -20,7 +20,7 @@ addons:
 env:
   global:
     # For functional tests
-    - COMPOSE_FILE="doc/docker-compose/prod.yml:doc/docker-compose/dev.yml:doc/docker-compose/selenium.yml"
+    - COMPOSE_FILE="doc/docker-compose/base-dev.yml:doc/docker-compose/selenium.yml"
 
 matrix:
   fast_finish: true
