@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
 /**
  * A Search Engine slot handling TrashSignal.
@@ -29,9 +30,11 @@ class Trash extends Slot
             return;
         }
 
-        $this->searchHandler->deleteLocation(
-            $signal->locationId,
-            $signal->contentId
-        );
+        if ($this->searchHandler instanceof LocationIndexer) {
+            $this->searchHandler->deleteLocation(
+                $signal->locationId,
+                $signal->contentId
+            );
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
+use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
 /**
  * A Search Engine slot handling CopySubtreeSignal.
@@ -29,17 +31,26 @@ class CopySubtree extends Slot
             return;
         }
 
+        if (!$this->searchHandler instanceof ContentIndexer && !$this->searchHandler instanceof LocationIndexer) {
+            return;
+        }
+
         $contentHandler = $this->persistenceHandler->contentHandler();
 
         foreach ($this->persistenceHandler->locationHandler()->loadSubtreeIds($signal->targetNewSubtreeId) as $contentId) {
             $contentInfo = $contentHandler->loadContentInfo($contentId);
-            $this->searchHandler->indexContent(
-                $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
-            );
 
-            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
-            foreach ($locations as $location) {
-                $this->searchHandler->indexLocation($location);
+            if ($this->searchHandler instanceof ContentIndexer) {
+                $this->searchHandler->indexContent(
+                    $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
+                );
+            }
+
+            if ($this->searchHandler instanceof LocationIndexer) {
+                $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
+                foreach ($locations as $location) {
+                    $this->searchHandler->indexLocation($location);
+                }
             }
         }
     }

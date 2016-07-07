@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
+use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
 /**
  * A Search Engine slot handling RecoverSignal.
@@ -29,17 +31,28 @@ class Recover extends Slot
             return;
         }
 
+        if (!$this->searchHandler instanceof ContentIndexer && !$this->searchHandler instanceof LocationIndexer) {
+            return;
+        }
+
         $contentHandler = $this->persistenceHandler->contentHandler();
+        $subtreeIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds(
+            $signal->newLocationId
+        );
 
-        foreach ($this->persistenceHandler->locationHandler()->loadSubtreeIds($signal->newLocationId) as $contentId) {
-            $contentInfo = $contentHandler->loadContentInfo($contentId);
-            $this->searchHandler->indexContent(
-                $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
-            );
+        foreach ($subtreeIds as $contentId) {
+            if ($this->searchHandler instanceof ContentIndexer) {
+                $contentInfo = $contentHandler->loadContentInfo($contentId);
+                $this->searchHandler->indexContent(
+                    $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
+                );
+            }
 
-            $this->searchHandler->indexLocation(
-                $this->persistenceHandler->locationHandler()->load($signal->newLocationId)
-            );
+            if ($this->searchHandler instanceof LocationIndexer) {
+                $this->searchHandler->indexLocation(
+                    $this->persistenceHandler->locationHandler()->load($signal->newLocationId)
+                );
+            }
         }
     }
 }

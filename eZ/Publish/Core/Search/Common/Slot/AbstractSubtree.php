@@ -11,6 +11,8 @@
 namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
+use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
 /**
  * A base Search Engine slot providing indexing of the subtree.
@@ -26,24 +28,28 @@ abstract class AbstractSubtree extends Slot
         $subtreeIds = $locationHandler->loadSubtreeIds($locationId);
 
         foreach ($subtreeIds as $locationId => $contentId) {
-            $this->searchHandler->indexLocation(
-                $locationHandler->load($locationId)
-            );
-
-            if (isset($processedContentIdSet[$contentId])) {
-                continue;
+            if ($this->searchHandler instanceof LocationIndexer) {
+                $this->searchHandler->indexLocation(
+                    $locationHandler->load($locationId)
+                );
             }
 
-            $this->searchHandler->indexContent(
-                $contentHandler->load(
-                    $contentId,
-                    $contentHandler->loadContentInfo($contentId)->currentVersionNo
-                )
-            );
+            if ($this->searchHandler instanceof ContentIndexer) {
+                if (isset($processedContentIdSet[$contentId])) {
+                    continue;
+                }
 
-            // Content could be found in multiple Locations of the subtree,
-            // but we need to (re)index it only once
-            $processedContentIdSet[$contentId] = true;
+                $this->searchHandler->indexContent(
+                    $contentHandler->load(
+                        $contentId,
+                        $contentHandler->loadContentInfo($contentId)->currentVersionNo
+                    )
+                );
+
+                // Content could be found in multiple Locations of the subtree,
+                // but we need to (re)index it only once
+                $processedContentIdSet[$contentId] = true;
+            }
         }
     }
 }

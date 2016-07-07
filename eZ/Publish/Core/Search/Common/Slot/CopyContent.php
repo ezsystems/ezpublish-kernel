@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
+use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
 /**
  * A Search Engine slot handling CopyContentSignal.
@@ -29,18 +31,22 @@ class CopyContent extends Slot
             return;
         }
 
-        $this->searchHandler->indexContent(
-            $this->persistenceHandler->contentHandler()->load(
-                $signal->dstContentId,
-                $signal->dstVersionNo
-            )
-        );
+        if ($this->searchHandler instanceof ContentIndexer) {
+            $this->searchHandler->indexContent(
+                $this->persistenceHandler->contentHandler()->load(
+                    $signal->dstContentId,
+                    $signal->dstVersionNo
+                )
+            );
+        }
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
-            $signal->dstContentId
-        );
-        foreach ($locations as $location) {
-            $this->searchHandler->indexLocation($location);
+        if ($this->searchHandler instanceof LocationIndexer) {
+            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+                $signal->dstContentId
+            );
+            foreach ($locations as $location) {
+                $this->searchHandler->indexLocation($location);
+            }
         }
     }
 }
