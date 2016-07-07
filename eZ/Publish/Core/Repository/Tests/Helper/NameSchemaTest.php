@@ -10,18 +10,18 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test case for NameSchema service.
  */
-abstract class NameSchemaBase extends BaseServiceTest
+class NameSchemaTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method.
@@ -31,7 +31,7 @@ abstract class NameSchemaBase extends BaseServiceTest
      */
     public function testResolve($nameSchema, $expectedName)
     {
-        $service = $this->repository->getNameSchemaService();
+        $service = $this->getNameSchemaServiceMock();
 
         list($content, $contentType) = $this->buildTestObjects();
 
@@ -52,15 +52,7 @@ abstract class NameSchemaBase extends BaseServiceTest
      */
     public function testResolveWithSettings()
     {
-        $service = $this->repository->getNameSchemaService();
-
-        $this->setConfiguration(
-            $service,
-            array(
-                'limit' => 38,
-                'sequence' => '...',
-            )
-        );
+        $service = $this->getNameSchemaServiceMock();
 
         list($content, $contentType) = $this->buildTestObjects();
 
@@ -289,17 +281,62 @@ abstract class NameSchemaBase extends BaseServiceTest
     }
 
     /**
-     * @param object $service
-     * @param array $configuration
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
-    protected function setConfiguration($service, array $configuration)
+    protected function getNameSchemaServiceMock()
     {
-        $refObject = new \ReflectionObject($service);
-        $refProperty = $refObject->getProperty('settings');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue(
-            $service,
-            $configuration
-        );
+        $contentTypeHandlerMock = $this
+            ->getMockBuilder('eZ\Publish\SPI\Persistence\Content\Type\Handler')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $contentTypeDomainMapper = $this
+            ->getMockBuilder('eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $fieldTypeMock = $this
+            ->getMockBuilder('eZ\Publish\SPI\FieldType\Nameable')
+            ->setMethods(['getFieldName'])
+            ->getMockForAbstractClass();
+        $fieldTypeMock
+            ->expects($this->any())
+            ->method('getFieldName')
+            ->with($this->isInstanceOf('eZ\Publish\SPI\FieldType\Value'))
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return (string)$value;
+                    }
+                )
+            );
+
+        $nameableFieldTypeRegistry = $this
+            ->getMockBuilder('eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry')
+            ->setMethods(['getFieldType'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nameableFieldTypeRegistry
+            ->expects($this->any())
+            ->method('getFieldType')
+            ->will($this->returnValue($fieldTypeMock));
+
+        $settings = [
+            'limit' => 38,
+            'sequence' => '...',
+        ];
+
+        return $this
+            ->getMockBuilder('eZ\Publish\Core\Repository\Helper\NameSchemaService')
+            ->setMethods(['resolveUrlAliasSchema', 'resolveNameSchema'])
+            ->setConstructorArgs(
+                [
+                    $contentTypeHandlerMock,
+                    $contentTypeDomainMapper,
+                    $nameableFieldTypeRegistry,
+                    $settings,
+                ]
+            )
+            ->getMock();
     }
 }

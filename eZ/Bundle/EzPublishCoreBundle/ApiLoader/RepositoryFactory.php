@@ -119,6 +119,8 @@ class RepositoryFactory implements ContainerAwareInterface
     }
 
     /**
+     * @deprecated Since 6.5, use given $repository as a factory directly
+     *
      * Returns a service based on a name string (content => contentService, etc).
      *
      * @param \eZ\Publish\API\Repository\Repository $repository

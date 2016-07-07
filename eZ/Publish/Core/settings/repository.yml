@@ -22,6 +22,9 @@ parameters:
     ezpublish.api.service.location.class: eZ\Publish\Core\Repository\LocationService
     ezpublish.api.service.language.class: eZ\Publish\Core\Repository\LanguageService
 
+    # Permission implementation of Repository
+    ezpublish.permission.repository.class: eZ\Publish\Core\Repository\Permission\Repository
+
     # Signal Slot API wrapper
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
@@ -52,6 +55,9 @@ services:
             - [setContainer, [@service_container]]
 
     ezpublish.api.inner_repository:
+        alias: ezpublish.permission.repository
+
+    ezpublish.domain_logic.repository:
         class: %ezpublish.api.inner_repository.class%
         factory: ["@ezpublish.api.repository.factory", buildRepository]
         arguments:
@@ -60,87 +66,106 @@ services:
         lazy: true
 
     ezpublish.api.service.content:
-        class: %ezpublish.api.service.content.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Content]
+        class: eZ\Publish\Core\Repository\ContentService
+        factory:
+            - @ezpublish.api.repository
+            - getContentService
         lazy: true
 
     ezpublish.api.service.content_type:
-        class: %ezpublish.api.service.content_type.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ContentType]
+        class: eZ\Publish\Core\Repository\ContentTypeService
+        factory:
+            - @ezpublish.api.repository
+            - getContentTypeService
         lazy: true
 
     ezpublish.api.service.field_type:
-        class: %ezpublish.api.service.field_type.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, FieldType]
+        class: eZ\Publish\Core\Repository\FieldTypeService
+        factory:
+            - @ezpublish.api.repository
+            - getFieldTypeService
         lazy: true
 
     ezpublish.api.service.role:
-        class: %ezpublish.api.service.role.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Role]
+        class: eZ\Publish\Core\Repository\RoleService
+        factory:
+            - @ezpublish.api.repository
+            - getRoleService
         lazy: true
 
     ezpublish.api.service.object_state:
-        class: %ezpublish.api.service.object_state.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ObjectState]
+        class: eZ\Publish\Core\Repository\ObjectStateService
+        factory:
+            - @ezpublish.api.repository
+            - getObjectStateService
         lazy: true
 
     ezpublish.api.service.url_wildcard:
-        class: %ezpublish.api.service.url_wildcard.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, URLWildcard]
+        class: eZ\Publish\Core\Repository\URLWildcardService
+        factory:
+            - @ezpublish.api.repository
+            - getURLWildcardService
         lazy: true
 
     ezpublish.api.service.url_alias:
-        class: %ezpublish.api.service.url_alias.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, URLAlias]
+        class: eZ\Publish\Core\Repository\URLAliasService
+        factory:
+            - @ezpublish.api.repository
+            - getURLAliasService
         lazy: true
 
     ezpublish.api.service.user:
-        class: %ezpublish.api.service.user.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, User]
+        class: eZ\Publish\Core\Repository\UserService
+        factory:
+            - @ezpublish.api.repository
+            - getUserService
         lazy: true
 
     ezpublish.api.service.search:
-        class: %ezpublish.api.service.search.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Search]
+        class: eZ\Publish\Core\Repository\SearchService
+        factory:
+            - @ezpublish.api.repository
+            - getSearchService
         lazy: true
 
     ezpublish.api.service.section:
-        class: %ezpublish.api.service.section.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Section]
+        class: eZ\Publish\Core\Repository\SectionService
+        factory:
+            - @ezpublish.api.repository
+            - getSectionService
         lazy: true
 
     ezpublish.api.service.trash:
-        class: %ezpublish.api.service.trash.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Trash]
+        class: eZ\Publish\Core\Repository\TrashService
+        factory:
+            - @ezpublish.api.repository
+            - getTrashService
         lazy: true
 
     ezpublish.api.service.location:
-        class: %ezpublish.api.service.location.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Location]
+        class: eZ\Publish\Core\Repository\LocationService
+        factory:
+            - @ezpublish.api.repository
+            - getLocationService
         lazy: true
 
     ezpublish.api.service.language:
-        class: %ezpublish.api.service.language.class%
-        factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ContentLanguage]
+        class: eZ\Publish\Core\Repository\LanguageService
+        factory:
+            - @ezpublish.api.repository
+            - getContentLanguageService
         lazy: true
+
+    # Permission implementation of Repository
+    ezpublish.permission.repository:
+        class: %ezpublish.permission.repository.class%
+        arguments:
+            - @ezpublish.domain_logic.repository
 
     # Signal Slot API wrapper
     ezpublish.signalslot.repository:
         class: %ezpublish.signalslot.repository.class%
-        arguments: [@ezpublish.api.inner_repository, @ezpublish.signalslot.signal_dispatcher_transaction_wrapper]
+        arguments: [@ezpublish.permission.repository, @ezpublish.signalslot.signal_dispatcher_transaction_wrapper]
         lazy: true
 
     ezpublish.signalslot.signal_dispatcher_transaction_wrapper:
