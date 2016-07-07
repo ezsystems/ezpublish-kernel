@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\SPI\Search\Indexer;
 use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
 use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
 
@@ -31,7 +32,7 @@ class CreateUser extends Slot
             return;
         }
 
-        if (!$this->searchHandler instanceof ContentIndexer && !$this->searchHandler instanceof LocationIndexer) {
+        if (!$this->searchHandler instanceof Indexer) {
             return;
         }
 

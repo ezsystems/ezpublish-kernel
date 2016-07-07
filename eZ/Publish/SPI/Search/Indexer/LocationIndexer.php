@@ -7,11 +7,12 @@
 namespace eZ\Publish\SPI\Search\Indexer;
 
 use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Search\Indexer;
 
 /**
  * Indexer for handlers that index Locations.
  */
-interface LocationIndexer
+interface LocationIndexer extends Indexer
 {
     /**
      * Indexes a Location in the index storage.
@@ -19,12 +20,4 @@ interface LocationIndexer
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      */
     public function indexLocation(Location $location);
-
-    /**
-     * Deletes a location from the index.
-     *
-     * @param string|int $locationId
-     * @param string|int $contentId
-     */
-    public function deleteLocation($locationId, $contentId);
 }

@@ -12,8 +12,7 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
-use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
+use eZ\Publish\SPI\Search\Indexer;
 
 /**
  * A Search Engine slot handling MoveUserGroupSignal.
@@ -31,7 +30,7 @@ class MoveUserGroup extends AbstractSubtree
             return;
         }
 
-        if (!$this->searchHandler instanceof ContentIndexer && !$this->searchHandler instanceof LocationIndexer) {
+        if (!$this->searchHandler instanceof Indexer) {
             return;
         }
 

@@ -12,8 +12,7 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
-use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
+use eZ\Publish\SPI\Search\Indexer;
 
 /**
  * A Search Engine slot handling DeleteLocationSignal.
@@ -31,7 +30,7 @@ class DeleteLocation extends Slot
             return;
         }
 
-        if (!$this->searchHandler instanceof LocationIndexer && !$this->searchHandler instanceof ContentIndexer) {
+        if (!$this->searchHandler instanceof Indexer) {
             return;
         }
 

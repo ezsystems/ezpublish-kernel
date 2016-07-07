@@ -7,11 +7,12 @@
 namespace eZ\Publish\SPI\Search\Indexer;
 
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Search\Indexer;
 
 /**
  * Indexer for handlers that index Content.
  */
-interface ContentIndexer
+interface ContentIndexer extends Indexer
 {
     /**
      * Indexes a content object.
@@ -19,12 +20,4 @@ interface ContentIndexer
      * @param \eZ\Publish\SPI\Persistence\Content $content
      */
     public function indexContent(Content $content);
-
-    /**
-     * Deletes a content object from the index.
-     *
-     * @param string|int $contentId
-     * @param int|null $versionId
-     */
-    public function deleteContent($contentId, $versionId = null);
 }
