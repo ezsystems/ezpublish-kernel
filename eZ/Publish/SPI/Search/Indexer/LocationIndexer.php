@@ -1,21 +1,17 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Search\Indexer;
 
 use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
- * Indexer for handlers that needs to index complete content model data to power queries against the search index.
+ * Indexer for handlers that index Locations.
  */
-interface FullContentDomainIndexer extends FullTextIndexer
+interface LocationIndexer
 {
     /**
      * Indexes a Location in the index storage.
@@ -27,8 +23,8 @@ interface FullContentDomainIndexer extends FullTextIndexer
     /**
      * Deletes a location from the index.
      *
-     * @param mixed $locationId
-     * @param mixed $contentId
+     * @param string|int $locationId
+     * @param string|int $contentId
      */
     public function deleteLocation($locationId, $contentId);
 }
