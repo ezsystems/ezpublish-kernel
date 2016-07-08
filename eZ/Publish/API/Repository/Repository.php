@@ -184,6 +184,13 @@ interface Repository
     public function getFieldTypeService();
 
     /**
+     * Get PermissionService.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionService
+     */
+    public function getPermissionService();
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
