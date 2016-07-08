@@ -10,6 +10,8 @@ rest:
                     contentService: @ezpublish.api.service.content
                     contentTypeService: @ezpublish.api.service.content_type
                     userService: @ezpublish.api.service.user
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentTypeContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentTypeGroupContext
         fullXml:
             paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
             contexts:
@@ -20,6 +22,8 @@ rest:
                     contentService: @ezpublish.api.service.content
                     contentTypeService: @ezpublish.api.service.content_type
                     userService: @ezpublish.api.service.user
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentTypeContext
+                - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentTypeGroupContext
         # TODO: Needs to be updated for guzzle driver version in use now.
         guzzle:
             paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
