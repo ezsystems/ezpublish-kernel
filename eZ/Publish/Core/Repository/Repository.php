@@ -895,9 +895,14 @@ class Repository implements RepositoryInterface
      */
     protected function getPermissionsCriterionHandler()
     {
-        return $this->permissionsCriterionHandler !== null ?
-            $this->permissionsCriterionHandler :
-            $this->permissionsCriterionHandler = new PermissionsCriterionHandler($this);
+        if ($this->permissionsCriterionHandler === null) {
+            $this->permissionsCriterionHandler = new PermissionsCriterionHandler(
+                $this->getPermissionService(),
+                $this->getLimitationService()
+            );
+        }
+
+        return $this->permissionsCriterionHandler;
     }
 
     /**
