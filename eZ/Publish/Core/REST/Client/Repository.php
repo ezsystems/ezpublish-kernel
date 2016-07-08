@@ -464,6 +464,16 @@ class Repository implements APIRepository
     }
 
     /**
+     * Get PermissionService.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionService
+     */
+    public function getPermissionService()
+    {
+        throw new \RuntimeException('@todo: Implement');
+    }
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
