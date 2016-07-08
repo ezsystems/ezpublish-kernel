@@ -14,7 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\User\Limitation;
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\PermissionService as PermissionServiceInterface;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
 use RuntimeException;
 
 /**
@@ -23,13 +24,27 @@ use RuntimeException;
 class PermissionsCriterionHandler
 {
     /**
+     * @var \eZ\Publish\API\Repository\PermissionService
+     */
+    private $permissionService;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
+     */
+    private $limitationService;
+
+    /**
      * Constructor.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\PermissionService $permissionService
+     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      */
-    public function __construct(RepositoryInterface $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        PermissionServiceInterface $permissionService,
+        LimitationService $limitationService
+    ) {
+        $this->permissionService = $permissionService;
+        $this->limitationService = $limitationService;
     }
 
     /**
@@ -66,7 +81,7 @@ class PermissionsCriterionHandler
     /**
      * Get content-read Permission criteria if needed and return false if no access at all.
      *
-     * @uses \eZ\Publish\API\Repository::hasAccess()
+     * @uses \eZ\Publish\API\Repository\PermissionService::hasAccess()
      *
      * @throws \RuntimeException If empty array of limitations are provided from hasAccess()
      *
@@ -77,7 +92,7 @@ class PermissionsCriterionHandler
      */
     public function getPermissionsCriterion($module = 'content', $function = 'read')
     {
-        $permissionSets = $this->repository->hasAccess($module, $function);
+        $permissionSets = $this->permissionService->hasAccess($module, $function);
         if ($permissionSets === false || $permissionSets === true) {
             return $permissionSets;
         }
@@ -92,14 +107,13 @@ class PermissionsCriterionHandler
          * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
          * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
          */
-        $currentUserRef = $this->repository->getCurrentUserReference();
+        $currentUserRef = $this->permissionService->getCurrentUserReference();
         $roleAssignmentOrCriteria = array();
-        $roleService = $this->repository->getRoleService();
         foreach ($permissionSets as $permissionSet) {
             // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash
             $policyOrCriteria = array();
             /**
-             * @var \eZ\Publish\API\Repository\Values\User\Policy
+             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
              */
             foreach ($permissionSet['policies'] as $policy) {
                 $limitations = $policy->getLimitations();
@@ -109,7 +123,7 @@ class PermissionsCriterionHandler
 
                 $limitationsAndCriteria = array();
                 foreach ($limitations as $limitation) {
-                    $type = $roleService->getLimitationType($limitation->getIdentifier());
+                    $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
                     $limitationsAndCriteria[] = $type->getCriterion($limitation, $currentUserRef);
                 }
 
@@ -125,7 +139,7 @@ class PermissionsCriterionHandler
              */
             if ($permissionSet['limitation'] instanceof Limitation) {
                 // We need to match both the limitation AND *one* of the policies, aka; roleLimit AND policies(OR)
-                $type = $roleService->getLimitationType($permissionSet['limitation']->getIdentifier());
+                $type = $this->limitationService->getLimitationType($permissionSet['limitation']->getIdentifier());
                 if (!empty($policyOrCriteria)) {
                     $roleAssignmentOrCriteria[] = new LogicalAnd(
                         array(
