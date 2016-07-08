@@ -15,12 +15,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\User\Limitation;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
-use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use Exception;
 use RuntimeException;
 
@@ -44,6 +42,8 @@ class Repository implements RepositoryInterface
     protected $searchHandler;
 
     /**
+     * @deprecated since 6.5, current user handling is moved to PermissionService
+     *
      * Currently logged in user object if already loaded.
      *
      * @var \eZ\Publish\API\Repository\Values\User\User|null
@@ -51,18 +51,13 @@ class Repository implements RepositoryInterface
     protected $currentUser;
 
     /**
+     * @deprecated since 6.5, current user handling is moved to PermissionService
+     *
      * Currently logged in user reference for permission purposes.
      *
      * @var \eZ\Publish\API\Repository\Values\User\UserReference
      */
     protected $currentUserRef;
-
-    /**
-     * Counter for the current sudo nesting level {@see sudo()}.
-     *
-     * @var int
-     */
-    private $sudoNestingLevel = 0;
 
     /**
      * Instance of content service.
@@ -302,6 +297,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Get current user.
      *
      * Loads the full user object if not already loaded, if you only need to know user id use {@see getCurrentUserReference()}
@@ -310,16 +307,18 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUser()
     {
+        $currentUser = $this->getPermissionService()->getCurrentUser();
+
         if ($this->currentUser === null) {
-            $this->currentUser = $this->getUserService()->loadUser(
-                $this->currentUserRef->getUserId()
-            );
+            $this->currentUser = $currentUser;
         }
 
-        return $this->currentUser;
+        return $currentUser;
     }
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Get current user reference.
      *
      * @since 5.4.5
@@ -327,10 +326,12 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUserReference()
     {
-        return $this->currentUserRef;
+        return $this->getPermissionService()->getCurrentUserReference();
     }
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -351,6 +352,8 @@ class Repository implements RepositoryInterface
             $this->currentUser = null;
             $this->currentUserRef = $user;
         }
+
+        return $this->getPermissionService()->setCurrentUser($user);
     }
 
     /**
@@ -378,20 +381,12 @@ class Repository implements RepositoryInterface
      */
     public function sudo(\Closure $callback, RepositoryInterface $outerRepository = null)
     {
-        ++$this->sudoNestingLevel;
-        try {
-            $returnValue = $callback($outerRepository !== null ? $outerRepository : $this);
-        } catch (Exception $e) {
-            --$this->sudoNestingLevel;
-            throw $e;
-        }
-
-        --$this->sudoNestingLevel;
-
-        return $returnValue;
+        return $this->getPermissionService()->sudo($callback, $outerRepository);
     }
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Check if user has access to a given module / function.
      *
      * Low level function, use canUser instead if you have objects to check against.
@@ -404,67 +399,12 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess($module, $function, APIUserReference $user = null)
     {
-        // Full access if sudo nesting level is set by {@see sudo()}
-        if ($this->sudoNestingLevel > 0) {
-            return true;
-        }
-
-        if ($user === null) {
-            $user = $this->getCurrentUserReference();
-        }
-
-        // Uses SPI to avoid triggering permission checks in Role/User service
-        $permissionSets = array();
-        $roleDomainMapper = $this->getRoleDomainMapper();
-        $limitationService = $this->getLimitationService();
-        $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($user->getUserId(), true);
-        foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            $permissionSet = array('limitation' => null, 'policies' => array());
-
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole($spiRoleAssignment->roleId);
-            foreach ($spiRole->policies as $spiPolicy) {
-                if ($spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null) {
-                    return true;
-                }
-
-                if ($spiPolicy->module !== $module && $spiPolicy->module !== '*') {
-                    continue;
-                }
-
-                if ($spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null) {
-                    return true;
-                }
-
-                if ($spiPolicy->function !== $function && $spiPolicy->function !== '*') {
-                    continue;
-                }
-
-                if ($spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null) {
-                    return true;
-                }
-
-                $permissionSet['policies'][] = $roleDomainMapper->buildDomainPolicyObject($spiPolicy);
-            }
-
-            if (!empty($permissionSet['policies'])) {
-                if ($spiRoleAssignment->limitationIdentifier !== null) {
-                    $permissionSet['limitation'] = $limitationService
-                        ->getLimitationType($spiRoleAssignment->limitationIdentifier)
-                        ->buildValue($spiRoleAssignment->values);
-                }
-
-                $permissionSets[] = $permissionSet;
-            }
-        }
-
-        if (!empty($permissionSets)) {
-            return $permissionSets;
-        }
-
-        return false;// No policies matching $module and $function, or they contained limitations
+        return $this->getPermissionService()->hasAccess($module, $function, $user);
     }
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Check if user has access to a given action on a given value object.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -482,88 +422,7 @@ class Repository implements RepositoryInterface
      */
     public function canUser($module, $function, ValueObject $object, $targets = null)
     {
-        $permissionSets = $this->hasAccess($module, $function);
-        if ($permissionSets === false || $permissionSets === true) {
-            return $permissionSets;
-        }
-
-        if ($targets instanceof ValueObject) {
-            $targets = array($targets);
-        } elseif ($targets !== null && !is_array($targets)) {
-            throw new InvalidArgumentType(
-                '$targets',
-                'null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]',
-                $targets
-            );
-        }
-
-        $limitationService = $this->getLimitationService();
-        $currentUserRef = $this->getCurrentUserReference();
-        foreach ($permissionSets as $permissionSet) {
-            /**
-             * First deal with Role limitation if any.
-             *
-             * Here we accept ACCESS_GRANTED and ACCESS_ABSTAIN, the latter in cases where $object and $targets
-             * are not supported by limitation.
-             *
-             * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
-             */
-            if ($permissionSet['limitation'] instanceof Limitation) {
-                $type = $limitationService->getLimitationType($permissionSet['limitation']->getIdentifier());
-                $accessVote = $type->evaluate($permissionSet['limitation'], $currentUserRef, $object, $targets);
-                if ($accessVote === LimitationType::ACCESS_DENIED) {
-                    continue;
-                }
-            }
-
-            /**
-             * Loop over all policies.
-             *
-             * These are already filtered by hasAccess and given hasAccess did not return boolean
-             * there must be some, so only return true if one of them says yes.
-             *
-             * @var \eZ\Publish\API\Repository\Values\User\Policy
-             */
-            foreach ($permissionSet['policies'] as $policy) {
-                $limitations = $policy->getLimitations();
-
-                /*
-                 * Return true if policy gives full access (aka no limitations)
-                 */
-                if ($limitations === '*') {
-                    return true;
-                }
-
-                /*
-                 * Loop over limitations, all must return ACCESS_GRANTED for policy to pass.
-                 * If limitations was empty array this means same as '*'
-                 */
-                $limitationsPass = true;
-                foreach ($limitations as $limitation) {
-                    $type = $limitationService->getLimitationType($limitation->getIdentifier());
-                    $accessVote = $type->evaluate($limitation, $currentUserRef, $object, $targets);
-                    /*
-                     * For policy limitation atm only support ACCESS_GRANTED
-                     *
-                     * Reasoning: Right now, use of a policy limitation not valid for a policy is per definition a
-                     * BadState. To reach this you would have to configure the "policyMap" wrongly, like using
-                     * Node (Location) limitation on state/assign. So in this case Role Limitations will return
-                     * ACCESS_ABSTAIN (== no access here), and other limitations will throw InvalidArgument above,
-                     * both cases forcing dev to investigate to find miss configuration. This might be relaxed in
-                     * the future if valid use cases for ACCESS_ABSTAIN on policy limitations becomes known.
-                     */
-                    if ($accessVote !== LimitationType::ACCESS_GRANTED) {
-                        $limitationsPass = false;
-                        break;// Break to next policy, all limitations must pass
-                    }
-                }
-                if ($limitationsPass) {
-                    return true;
-                }
-            }
-        }
-
-        return false;// None of the limitation sets wanted to let you in, sorry!
+        return $this->getPermissionService()->canUser($module, $function, $object, $targets);
     }
 
     /**

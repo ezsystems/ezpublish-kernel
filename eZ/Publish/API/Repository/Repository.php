@@ -19,6 +19,8 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 interface Repository
 {
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Get current user.
      *
      * Loads the full user object if not already loaded, if you only need to know user id use {@see getCurrentUserReference()}
@@ -28,6 +30,8 @@ interface Repository
     public function getCurrentUser();
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Get current user reference.
      *
      * @since 5.4.5
@@ -36,6 +40,8 @@ interface Repository
     public function getCurrentUserReference();
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -43,6 +49,8 @@ interface Repository
     public function setCurrentUser(UserReference $user);
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -52,6 +60,8 @@ interface Repository
     public function hasAccess($module, $function, UserReference $user = null);
 
     /**
+     * @deprecated since 6.5, the method is moved to PermissionService
+     *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
      *
