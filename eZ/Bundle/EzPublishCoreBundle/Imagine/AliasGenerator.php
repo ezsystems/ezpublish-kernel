@@ -98,14 +98,14 @@ class AliasGenerator implements VariationHandler
 
         $originalPath = $imageValue->id;
 
-        try {
-            $originalBinary = $this->dataLoader->find($originalPath);
-        } catch (NotLoadableException $e) {
-            throw new SourceImageNotFoundException($originalPath, 0, $e);
-        }
-
         // Create the image alias only if it does not already exist.
         if ($variationName !== IORepositoryResolver::VARIATION_ORIGINAL && !$this->ioResolver->isStored($originalPath, $variationName)) {
+            try {
+                $originalBinary = $this->dataLoader->find($originalPath);
+            } catch (NotLoadableException $e) {
+                throw new SourceImageNotFoundException($originalPath, 0, $e);
+            }
+
             if ($this->logger) {
                 $this->logger->debug("Generating '$variationName' variation on $originalPath, field #$fieldId ($fieldDefIdentifier)");
             }
