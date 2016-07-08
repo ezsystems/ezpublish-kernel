@@ -133,6 +133,13 @@ class Repository implements RepositoryInterface
     protected $urlWildcardService;
 
     /**
+     * Instance of permission service.
+     *
+     * @var \eZ\Publish\Core\Repository\PermissionService
+     */
+    protected $permissionService;
+
+    /**
      * Constructor.
      *
      * Construct repository object from aggregated repository and signal
@@ -463,6 +470,25 @@ class Repository implements RepositoryInterface
         $this->fieldTypeService = new FieldTypeService($this->repository->getFieldTypeService(), $this->signalDispatcher);
 
         return $this->fieldTypeService;
+    }
+
+    /**
+     * Get PermissionService.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionService
+     */
+    public function getPermissionService()
+    {
+        if ($this->permissionService !== null) {
+            return $this->permissionService;
+        }
+
+        $this->permissionService = new PermissionService(
+            $this->repository->getPermissionService(),
+            $this->signalDispatcher
+        );
+
+        return $this->permissionService;
     }
 
     /**

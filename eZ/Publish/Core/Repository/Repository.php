@@ -184,6 +184,13 @@ class Repository implements RepositoryInterface
     protected $urlWildcardService;
 
     /**
+     * Instance of permission service.
+     *
+     * @var \eZ\Publish\Core\Repository\PermissionService
+     */
+    protected $permissionService;
+
+    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -876,6 +883,28 @@ class Repository implements RepositoryInterface
         $this->fieldTypeService = new FieldTypeService($this->getFieldTypeRegistry());
 
         return $this->fieldTypeService;
+    }
+
+    /**
+     * Get PermissionService.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionService
+     */
+    public function getPermissionService()
+    {
+        if ($this->permissionService === null) {
+            $this->permissionService = new PermissionService(
+                $this,
+                $this->getUserService(),
+                $this->getRoleDomainMapper(),
+                $this->getLimitationService(),
+                $this->persistenceHandler->userHandler(),
+                $this->currentUserRef,
+                $this->currentUser
+            );
+        }
+
+        return $this->permissionService;
     }
 
     /**
