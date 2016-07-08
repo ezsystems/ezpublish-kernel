@@ -37,11 +37,6 @@ trait Authentication
             default:
                 throw new \Exception("Unknown auth type: '{$this->authType}'.");
         }
-
-        // also authenticate the user on the local repository instance
-        $this->getRepository()->setCurrentUser(
-            $this->getRepository()->getUserService()->loadUserByLogin($credentials['login'])
-        );
     }
 
     /**
