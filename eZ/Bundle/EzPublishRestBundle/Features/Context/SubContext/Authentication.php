@@ -111,7 +111,7 @@ trait Authentication
     {
         if ($this->userSession) {
             $this->resetDriver();
-            $this->createRequest('post', "/user/sessions/{$this->userSession->sessionId}");
+            $this->createRequest('delete', "/user/sessions/{$this->userSession->sessionId}");
             $this->restDriver->setHeader('cookie', "{$this->userSession->sessionName}={$this->userSession->sessionId}");
             $this->restDriver->setHeader('x-csrf-token', $this->userSession->csrfToken);
             $this->sendRequest();
