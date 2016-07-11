@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexing;
 use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
 use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
 use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
@@ -29,17 +28,21 @@ class SetContentState extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\ObjectStateService\SetContentStateSignal) {
+        if (!$signal instanceof Signal\ObjectStateService\SetContentStateSignal || !$this->canIndex()) {
             return;
         }
 
-        if (!$this->searchHandler instanceof Indexing || $this->searchHandler instanceof FullTextIndexing) {
+        if (
+            $this->searchHandler instanceof FullTextIndexing &&
+            !$this->searchHandler instanceof ContentIndexing &&
+            !$this->searchHandler instanceof LocationIndexing
+        ) {
             return;
         }
 
         $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->contentId);
 
-        if ($this->searchHandler instanceof ContentIndexing) {
+        if ($this->canIndexContent()) {
             $this->searchHandler->indexContent(
                 $this->persistenceHandler->contentHandler()->load(
                     $contentInfo->id,
@@ -48,7 +51,7 @@ class SetContentState extends Slot
             );
         }
 
-        if ($this->searchHandler instanceof LocationIndexing) {
+        if ($this->canIndexLocation()) {
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
             foreach ($locations as $location) {
                 $this->searchHandler->indexLocation($location);

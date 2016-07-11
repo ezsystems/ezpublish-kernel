@@ -12,8 +12,9 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexing;
+use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
 use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
+use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A Search Engine slot handling MoveSubtreeSignal.
@@ -27,11 +28,15 @@ class MoveSubtree extends AbstractSubtree
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\LocationService\MoveSubtreeSignal) {
+        if (!$signal instanceof Signal\LocationService\MoveSubtreeSignal || !$this->canIndex()) {
             return;
         }
 
-        if (!$this->searchHandler instanceof Indexing || $this->searchHandler instanceof FullTextIndexing) {
+        if (
+            $this->searchHandler instanceof FullTextIndexing &&
+            !$this->searchHandler instanceof ContentIndexing &&
+            !$this->searchHandler instanceof LocationIndexing
+        ) {
             return;
         }
 

@@ -29,11 +29,7 @@ class Recover extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\TrashService\RecoverSignal) {
-            return;
-        }
-
-        if (!$this->searchHandler instanceof Indexing) {
+        if (!$signal instanceof Signal\TrashService\RecoverSignal || !$this->canIndex()) {
             return;
         }
 
@@ -43,18 +39,23 @@ class Recover extends Slot
         );
 
         foreach ($subtreeIds as $contentId) {
-            if ($this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing) {
+            if ($this->canIndexContent()) {
                 $contentInfo = $contentHandler->loadContentInfo($contentId);
                 $this->searchHandler->indexContent(
                     $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
                 );
             }
 
-            if ($this->searchHandler instanceof LocationIndexing) {
+            if ($this->canIndexLocation()) {
                 $this->searchHandler->indexLocation(
                     $this->persistenceHandler->locationHandler()->load($signal->newLocationId)
                 );
             }
         }
+    }
+
+    protected function canIndexContent()
+    {
+        return $this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing;
     }
 }

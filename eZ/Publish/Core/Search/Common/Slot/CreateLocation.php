@@ -12,9 +12,6 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexing;
-use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
-use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A Search Engine slot handling CreateLocationSignal.
@@ -28,11 +25,7 @@ class CreateLocation extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\LocationService\CreateLocationSignal) {
-            return;
-        }
-
-        if (!$this->searchHandler instanceof Indexing) {
+        if (!$signal instanceof Signal\LocationService\CreateLocationSignal || !$this->canIndex()) {
             return;
         }
 
@@ -40,7 +33,7 @@ class CreateLocation extends Slot
             $signal->contentId
         );
 
-        if ($this->searchHandler instanceof ContentIndexing) {
+        if ($this->canIndexContent()) {
             $this->searchHandler->indexContent(
                 $this->persistenceHandler->contentHandler()->load(
                     $signal->contentId,
@@ -49,7 +42,7 @@ class CreateLocation extends Slot
             );
         }
 
-        if ($this->searchHandler instanceof LocationIndexing) {
+        if ($this->canIndexLocation()) {
             $this->searchHandler->indexLocation(
                 $this->persistenceHandler->locationHandler()->load($signal->locationId)
             );

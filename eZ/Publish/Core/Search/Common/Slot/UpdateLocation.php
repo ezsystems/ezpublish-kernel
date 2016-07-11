@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexing;
 use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
 use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
 use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
@@ -29,11 +28,15 @@ class UpdateLocation extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\LocationService\UpdateLocationSignal) {
+        if (!$signal instanceof Signal\LocationService\UpdateLocationSignal || !$this->canIndex()) {
             return;
         }
 
-        if (!$this->searchHandler instanceof Indexing || $this->searchHandler instanceof FullTextIndexing) {
+        if (
+            $this->searchHandler instanceof FullTextIndexing &&
+            !$this->searchHandler instanceof ContentIndexing &&
+            !$this->searchHandler instanceof LocationIndexing
+        ) {
             return;
         }
 
@@ -41,7 +44,7 @@ class UpdateLocation extends Slot
             $signal->contentId
         );
 
-        if ($this->searchHandler instanceof ContentIndexing) {
+        if ($this->canIndexContent()) {
             $this->searchHandler->indexContent(
                 $this->persistenceHandler->contentHandler()->load(
                     $signal->contentId,
@@ -50,7 +53,7 @@ class UpdateLocation extends Slot
             );
         }
 
-        if ($this->searchHandler instanceof LocationIndexing) {
+        if ($this->canIndexLocation()) {
             $this->searchHandler->indexLocation(
                 $this->persistenceHandler->locationHandler()->load($signal->locationId)
             );

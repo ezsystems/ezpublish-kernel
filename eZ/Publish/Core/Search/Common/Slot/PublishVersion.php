@@ -14,7 +14,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
 use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
 use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
-use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A Search Engine slot handling PublishVersionSignal.
@@ -28,21 +27,26 @@ class PublishVersion extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\ContentService\PublishVersionSignal) {
+        if (!$signal instanceof Signal\ContentService\PublishVersionSignal || !$this->canIndex()) {
             return;
         }
 
-        if ($this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing) {
+        if ($this->canIndexContent()) {
             $this->searchHandler->indexContent(
                 $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->versionNo)
             );
         }
 
-        if ($this->searchHandler instanceof LocationIndexing) {
+        if ($this->canIndexLocation()) {
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($signal->contentId);
             foreach ($locations as $location) {
                 $this->searchHandler->indexLocation($location);
             }
         }
+    }
+
+    protected function canIndexContent()
+    {
+        return $this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing;
     }
 }

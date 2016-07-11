@@ -14,7 +14,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
 use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
 use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
-use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A Search Engine slot handling CopyContentSignal.
@@ -28,11 +27,11 @@ class CopyContent extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\ContentService\CopyContentSignal) {
+        if (!$signal instanceof Signal\ContentService\CopyContentSignal || !$this->canIndex()) {
             return;
         }
 
-        if ($this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing) {
+        if ($this->canIndexContent()) {
             $this->searchHandler->indexContent(
                 $this->persistenceHandler->contentHandler()->load(
                     $signal->dstContentId,
@@ -41,7 +40,7 @@ class CopyContent extends Slot
             );
         }
 
-        if ($this->searchHandler instanceof LocationIndexing) {
+        if ($this->canIndexLocation()) {
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
                 $signal->dstContentId
             );
@@ -49,5 +48,10 @@ class CopyContent extends Slot
                 $this->searchHandler->indexLocation($location);
             }
         }
+    }
+
+    protected function canIndexContent()
+    {
+        return $this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing;
     }
 }

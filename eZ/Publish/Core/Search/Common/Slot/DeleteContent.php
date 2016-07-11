@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexing;
 
 /**
  * A Search Engine slot handling DeleteContentSignal.
@@ -26,11 +25,7 @@ class DeleteContent extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\ContentService\DeleteContentSignal) {
-            return;
-        }
-
-        if (!$this->searchHandler instanceof Indexing) {
+        if (!$signal instanceof Signal\ContentService\DeleteContentSignal || !$this->canIndex()) {
             return;
         }
 

@@ -12,10 +12,8 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexing;
 use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
 use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
-use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A Search Engine slot handling CopySubtreeSignal.
@@ -29,11 +27,7 @@ class CopySubtree extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\LocationService\CopySubtreeSignal) {
-            return;
-        }
-
-        if (!$this->searchHandler instanceof Indexing) {
+        if (!$signal instanceof Signal\LocationService\CopySubtreeSignal || !$this->canIndex()) {
             return;
         }
 
@@ -43,18 +37,23 @@ class CopySubtree extends Slot
         foreach ($subtreeIds as $contentId) {
             $contentInfo = $contentHandler->loadContentInfo($contentId);
 
-            if ($this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing) {
+            if ($this->canIndexContent()) {
                 $this->searchHandler->indexContent(
                     $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
                 );
             }
 
-            if ($this->searchHandler instanceof LocationIndexing) {
+            if ($this->canIndexLocation()) {
                 $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
                 foreach ($locations as $location) {
                     $this->searchHandler->indexLocation($location);
                 }
             }
         }
+    }
+
+    protected function canIndexContent()
+    {
+        return $this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing;
     }
 }

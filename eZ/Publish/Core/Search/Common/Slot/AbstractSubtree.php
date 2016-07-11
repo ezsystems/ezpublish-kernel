@@ -11,9 +11,6 @@
 namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
-use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
-use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A base Search Engine slot providing indexing of the subtree.
@@ -29,13 +26,13 @@ abstract class AbstractSubtree extends Slot
         $subtreeIds = $locationHandler->loadSubtreeIds($locationId);
 
         foreach ($subtreeIds as $locationId => $contentId) {
-            if ($this->searchHandler instanceof LocationIndexing) {
+            if ($this->canIndexLocation()) {
                 $this->searchHandler->indexLocation(
                     $locationHandler->load($locationId)
                 );
             }
 
-            if ($this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing) {
+            if ($this->canIndexContent()) {
                 if (isset($processedContentIdSet[$contentId])) {
                     continue;
                 }
