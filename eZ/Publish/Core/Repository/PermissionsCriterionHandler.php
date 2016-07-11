@@ -113,7 +113,7 @@ class PermissionsCriterionHandler
             // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash
             $policyOrCriteria = array();
             /**
-             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
+             * @var \eZ\Publish\API\Repository\Values\User\Policy
              */
             foreach ($permissionSet['policies'] as $policy) {
                 $limitations = $policy->getLimitations();
