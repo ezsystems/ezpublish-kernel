@@ -7,9 +7,9 @@
 namespace eZ\Publish\SPI\Search;
 
 /**
- * Indexer for handlers that index stuff.
+ * Interface for indexing in search backend.
  */
-interface Indexer
+interface Indexing
 {
     /**
      * Deletes a content object from the index.

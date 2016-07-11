@@ -12,10 +12,10 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexer;
-use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
-use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
-use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
+use eZ\Publish\SPI\Search\Indexing;
+use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
+use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
+use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A Search Engine slot handling CreateUserSignal.
@@ -33,7 +33,7 @@ class CreateUser extends Slot
             return;
         }
 
-        if (!$this->searchHandler instanceof Indexer) {
+        if (!$this->searchHandler instanceof Indexing) {
             return;
         }
 
@@ -41,7 +41,7 @@ class CreateUser extends Slot
             $signal->userId
         );
 
-        if ($this->searchHandler instanceof ContentIndexer || $this->searchHandler instanceof FullTextIndexer) {
+        if ($this->searchHandler instanceof ContentIndexing || $this->searchHandler instanceof FullTextIndexing) {
             $this->searchHandler->indexContent(
                 $this->persistenceHandler->contentHandler()->load(
                     $userContentInfo->id,
@@ -50,7 +50,7 @@ class CreateUser extends Slot
             );
         }
 
-        if ($this->searchHandler instanceof LocationIndexer) {
+        if ($this->searchHandler instanceof LocationIndexing) {
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
                 $userContentInfo->id
             );

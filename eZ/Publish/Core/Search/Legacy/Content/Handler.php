@@ -25,7 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
-use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
+use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -48,7 +48,7 @@ use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface, FullTextIndexer
+class Handler implements SearchHandlerInterface, FullTextIndexing
 {
     /**
      * Content locator gateway.

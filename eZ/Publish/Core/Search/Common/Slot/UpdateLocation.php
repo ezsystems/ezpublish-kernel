@@ -12,10 +12,10 @@ namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
-use eZ\Publish\SPI\Search\Indexer;
-use eZ\Publish\SPI\Search\Indexer\ContentIndexer;
-use eZ\Publish\SPI\Search\Indexer\FullTextIndexer;
-use eZ\Publish\SPI\Search\Indexer\LocationIndexer;
+use eZ\Publish\SPI\Search\Indexing;
+use eZ\Publish\SPI\Search\Indexing\ContentIndexing;
+use eZ\Publish\SPI\Search\Indexing\FullTextIndexing;
+use eZ\Publish\SPI\Search\Indexing\LocationIndexing;
 
 /**
  * A Search Engine slot handling UpdateLocationSignal.
@@ -33,7 +33,7 @@ class UpdateLocation extends Slot
             return;
         }
 
-        if (!$this->searchHandler instanceof Indexer || $this->searchHandler instanceof FullTextIndexer) {
+        if (!$this->searchHandler instanceof Indexing || $this->searchHandler instanceof FullTextIndexing) {
             return;
         }
 
@@ -41,7 +41,7 @@ class UpdateLocation extends Slot
             $signal->contentId
         );
 
-        if ($this->searchHandler instanceof ContentIndexer) {
+        if ($this->searchHandler instanceof ContentIndexing) {
             $this->searchHandler->indexContent(
                 $this->persistenceHandler->contentHandler()->load(
                     $signal->contentId,
@@ -50,7 +50,7 @@ class UpdateLocation extends Slot
             );
         }
 
-        if ($this->searchHandler instanceof LocationIndexer) {
+        if ($this->searchHandler instanceof LocationIndexing) {
             $this->searchHandler->indexLocation(
                 $this->persistenceHandler->locationHandler()->load($signal->locationId)
             );
