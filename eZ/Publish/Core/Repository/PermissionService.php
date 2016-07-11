@@ -233,7 +233,7 @@ class PermissionService implements PermissionServiceInterface
              * These are already filtered by hasAccess and given hasAccess did not return boolean
              * there must be some, so only return true if one of them says yes.
              *
-             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
+             * @var \eZ\Publish\API\Repository\Values\User\Policy
              */
             foreach ($permissionSet['policies'] as $policy) {
                 $limitations = $policy->getLimitations();

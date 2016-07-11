@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth as DepthMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
 
 class DepthTest extends BaseTest
