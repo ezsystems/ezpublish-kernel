@@ -32,7 +32,7 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
         $this->repositoryMock = $this
             ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
             ->disableOriginalConstructor()
-            ->setMethods(array('getRoleService', 'getCurrentUser'))
+            ->setMethods(array('getRoleService', 'getCurrentUser', 'getPermissionService'))
             ->getMock();
 
         $this->roleServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\RoleService');
@@ -41,6 +41,10 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getRoleService')
             ->will($this->returnValue($this->roleServiceMock));
+        $this->repositoryMock
+            ->expects($this->any())
+            ->method('getPermissionService')
+            ->will($this->returnValue($this->getPermissionServiceMock($this->repositoryMock)));
     }
 
     public function testSetIdentity()
@@ -150,5 +154,34 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(get_class($limitationMock)));
 
         return $limitationMock;
+    }
+
+    protected function getPermissionServiceMock($repository)
+    {
+        return $this
+            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionService')
+            ->setMethods(null)
+            ->setConstructorArgs(
+                [
+                    $repository,
+                    $this
+                        ->getMockBuilder('eZ\Publish\API\Repository\UserService')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
+                        ->disableOriginalConstructor()
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\SPI\Persistence\User\Handler')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
+                        ->getMock(),
+                ]
+            )
+            ->getMock();
     }
 }

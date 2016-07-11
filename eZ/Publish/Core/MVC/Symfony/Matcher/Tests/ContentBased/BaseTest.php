@@ -88,4 +88,33 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
     }
+
+    protected function getPermissionServiceMock($repository)
+    {
+        return $this
+            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionService')
+            ->setMethods(null)
+            ->setConstructorArgs(
+                [
+                    $repository,
+                    $this
+                        ->getMockBuilder('eZ\Publish\API\Repository\UserService')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
+                        ->disableOriginalConstructor()
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\SPI\Persistence\User\Handler')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
+                        ->getMock(),
+                ]
+            )
+            ->getMock();
+    }
 }
