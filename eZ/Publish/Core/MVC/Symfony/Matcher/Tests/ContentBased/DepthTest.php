@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth as DepthMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -152,6 +152,10 @@ class DepthTest extends BaseTest
             ->expects($this->once())
             ->method('getLocationService')
             ->will($this->returnValue($locationServiceMock));
+        $repository
+            ->expects($this->once())
+            ->method('getPermissionService')
+            ->will($this->returnValue($this->getPermissionServiceMock($repository)));
 
         return $repository;
     }
