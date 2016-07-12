@@ -41,7 +41,7 @@ class Repository implements RepositoryInterface
     protected $searchHandler;
 
     /**
-     * @deprecated since 6.5, current user handling is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionService.
      *
      * Currently logged in user object if already loaded.
      *
@@ -50,7 +50,7 @@ class Repository implements RepositoryInterface
     protected $currentUser;
 
     /**
-     * @deprecated since 6.5, current user handling is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionService.
      *
      * Currently logged in user reference for permission purposes.
      *
@@ -296,7 +296,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
      *
      * Get current user.
      *
@@ -316,7 +316,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
      *
      * Get current user reference.
      *
@@ -329,7 +329,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.
      *
@@ -384,7 +384,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::hasAccess() instead.
      *
      * Check if user has access to a given module / function.
      *
@@ -402,7 +402,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::canUser() instead.
      *
      * Check if user has access to a given action on a given value object.
      *

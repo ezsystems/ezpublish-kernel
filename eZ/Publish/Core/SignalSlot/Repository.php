@@ -155,6 +155,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -165,6 +167,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     *
      * Get current user ref.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
@@ -175,6 +179,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -212,6 +218,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::hasAccess() instead.
+     *
      * Check if user has access to a given module / function.
      *
      * Low level function, use canUser instead if you have objects to check against.
@@ -228,6 +236,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::canUser() instead.
+     *
      * Check if user has access to a given action on a given value object.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
