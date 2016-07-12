@@ -40,7 +40,7 @@ interface Repository
     public function getCurrentUserReference();
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, the method is moved to PermissionService, method setCurrentUserReference()
      *
      * Sets the current user to the given $user.
      *

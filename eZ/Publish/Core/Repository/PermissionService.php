@@ -116,7 +116,7 @@ class PermissionService implements PermissionServiceInterface
         return $this->currentUserRef;
     }
 
-    public function setCurrentUser(APIUserReference $user)
+    public function setCurrentUserReference(APIUserReference $user)
     {
         $id = $user->getUserId();
         if (!$id) {
