@@ -165,9 +165,6 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
                 [
                     $repository,
                     $this
-                        ->getMockBuilder('eZ\Publish\API\Repository\UserService')
-                        ->getMock(),
-                    $this
                         ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
                         ->disableOriginalConstructor()
                         ->getMock(),
