@@ -20,3 +20,10 @@ services:
 
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.elasticsearch
+
+    ezpublish.signalslot.signal_dispatcher.factory:
+        class: %ezpublish.signalslot.signal_dispatcher.factory.class%
+        arguments:
+            - "%ezpublish.signalslot.signal_dispatcher.class%"
+            - "elastic_test"
+            - "%ezpublish.repositories%"

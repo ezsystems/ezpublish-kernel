@@ -47,11 +47,28 @@ $loader->load('storage_engines/cache.yml');
 $loader->load('storage_engines/legacy.yml');
 $loader->load('storage_engines/shortcuts.yml');
 $loader->load('search_engines/common.yml');
-$loader->load('search_engines/slots.yml');
 $loader->load('settings.yml');
 $loader->load('utils.yml');
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
+
+// needed by @ezpublish.signalslot.signal_dispatcher:
+$containerBuilder->setParameter(
+    'ezpublish.repositories',
+    [
+        'default' => [
+            'search' => [
+                'engine' => 'legacy',
+                'connection' => 'default',
+            ],
+        ],
+        'elastic_test' => [
+            'search' => [
+                'engine' => 'elasticsearch',
+            ],
+        ],
+    ]
+);
 
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeCollectionPass());
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeNameableCollectionPass());

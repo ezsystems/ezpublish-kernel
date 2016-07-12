@@ -7,6 +7,7 @@ imports:
     - {resource: search_engines/elasticsearch/services.yml}
     - {resource: search_engines/elasticsearch/sort_clause_visitors_content.yml}
     - {resource: search_engines/elasticsearch/sort_clause_visitors_location.yml}
+    - {resource: search_engines/elasticsearch/slots.yml}
 
 parameters:
     ezpublish.search.elasticsearch.connection.server: http://localhost:9200/

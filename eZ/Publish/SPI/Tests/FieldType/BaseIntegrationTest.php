@@ -591,6 +591,24 @@ abstract class BaseIntegrationTest extends TestCase
             $this->getDsn()
         );
 
+        // needed by @ezpublish.signalslot.signal_dispatcher:
+        $containerBuilder->setParameter(
+            'ezpublish.repositories',
+            [
+                'default' => [
+                    'search' => [
+                        'engine' => 'legacy',
+                        'connection' => 'default',
+                    ],
+                ],
+                'elastic_test' => [
+                    'search' => [
+                        'engine' => 'elasticsearch',
+                    ],
+                ],
+            ]
+        );
+
         $containerBuilder->compile();
 
         return $containerBuilder;

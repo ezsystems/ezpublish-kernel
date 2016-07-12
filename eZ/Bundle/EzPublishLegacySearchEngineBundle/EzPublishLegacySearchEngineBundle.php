@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriteriaConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\SortClauseConverterPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\SearchEngineSignalSlotPass;
 
 class EzPublishLegacySearchEngineBundle extends Bundle
 {
@@ -25,6 +27,9 @@ class EzPublishLegacySearchEngineBundle extends Bundle
         $container->addCompilerPass(new CriteriaConverterPass());
         $container->addCompilerPass(new CriterionFieldValueHandlerRegistryPass());
         $container->addCompilerPass(new SortClauseConverterPass());
+
+        $container->addCompilerPass(new FieldRegistryPass());
+        $container->addCompilerPass(new SearchEngineSignalSlotPass('legacy'));
     }
 
     public function getContainerExtension()

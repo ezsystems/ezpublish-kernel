@@ -1,0 +1,60 @@
+parameters:
+    ezpublish.search.legacy.slot.class: eZ\Publish\Core\Search\Common\Slot
+    ezpublish.search.legacy.slot.publish_version.class: eZ\Publish\Core\Search\Common\Slot\PublishVersion
+    ezpublish.search.legacy.slot.copy_content.class: eZ\Publish\Core\Search\Common\Slot\CopyContent
+    ezpublish.search.legacy.slot.delete_content.class: eZ\Publish\Core\Search\Common\Slot\DeleteContent
+    ezpublish.search.legacy.slot.delete_version.class: eZ\Publish\Core\Search\Common\Slot\DeleteVersion
+    ezpublish.search.legacy.slot.copy_subtree.class: eZ\Publish\Core\Search\Common\Slot\CopySubtree
+    ezpublish.search.legacy.slot.trash.class: eZ\Publish\Core\Search\Common\Slot\Trash
+    ezpublish.search.legacy.slot.recover.class: eZ\Publish\Core\Search\Common\Slot\Recover
+
+services:
+    ezpublish.search.legacy.slot:
+        class: %ezpublish.search.legacy.slot.class%
+        abstract: true
+        arguments:
+            - @ezpublish.api.inner_repository
+            - @ezpublish.api.persistence_handler
+            - @ezpublish.spi.search
+
+    ezpublish.search.legacy.slot.publish_version:
+        parent: ezpublish.search.legacy.slot
+        class: %ezpublish.search.legacy.slot.publish_version.class%
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\PublishVersionSignal}
+
+    ezpublish.search.legacy.slot.copy_content:
+        parent: ezpublish.search.legacy.slot
+        class: %ezpublish.search.legacy.slot.copy_content.class%
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\CopyContentSignal}
+
+    ezpublish.search.legacy.slot.delete_content:
+        parent: ezpublish.search.legacy.slot
+        class: %ezpublish.search.legacy.slot.delete_content.class%
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\DeleteContentSignal}
+
+    ezpublish.search.legacy.slot.delete_version:
+        parent: ezpublish.search.legacy.slot
+        class: %ezpublish.search.legacy.slot.delete_version.class%
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\DeleteVersionSignal}
+
+    ezpublish.search.legacy.slot.copy_subtree:
+        parent: ezpublish.search.legacy.slot
+        class: %ezpublish.search.legacy.slot.copy_subtree.class%
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: LocationService\CopySubtreeSignal}
+
+    ezpublish.search.legacy.slot.trash:
+        parent: ezpublish.search.legacy.slot
+        class: %ezpublish.search.legacy.slot.trash.class%
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: TrashService\TrashSignal}
+
+    ezpublish.search.legacy.slot.recover:
+        parent: ezpublish.search.legacy.slot
+        class: %ezpublish.search.legacy.slot.recover.class%
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: TrashService\RecoverSignal}
