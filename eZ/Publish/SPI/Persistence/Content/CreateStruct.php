@@ -79,4 +79,11 @@ class CreateStruct extends ValueObject
      * @var int
      */
     public $modified;
+
+    /**
+     * Publishing date, if not defined it should be set on {@link MetadataUpdateStruct} on publish.
+     *
+     * @var int|null
+     */
+    public $published;
 }

@@ -71,7 +71,16 @@ abstract class ContentCreateStruct extends ContentStruct
     /**
      * Modification date. If not given the current timestamp is used.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     public $modificationDate;
+
+    /**
+     * If set this value overrides the publication date of the content. (Used in staging scenarios).
+     *
+     * If not given the current timestamp is used.
+     *
+     * @var \DateTime|null
+     */
+    public $publishedDate;
 }
