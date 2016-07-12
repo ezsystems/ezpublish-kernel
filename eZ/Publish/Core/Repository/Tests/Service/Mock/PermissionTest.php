@@ -930,6 +930,11 @@ class PermissionTest extends BaseServiceMockTest
         $permissionServiceMock = $this->getPermissionServiceMock(null);
         $userReferenceMock = $this->getUserReferenceMock();
 
+        $userReferenceMock
+            ->expects($this->once())
+            ->method('getUserId')
+            ->will($this->returnValue(42));
+
         $permissionServiceMock->setCurrentUserReference($userReferenceMock);
 
         self::assertSame(
@@ -945,11 +950,6 @@ class PermissionTest extends BaseServiceMockTest
     {
         $permissionServiceMock = $this->getPermissionServiceMock(null);
         $userReferenceMock = $this->getUserReferenceMock();
-
-        $userReferenceMock
-            ->expects($this->once())
-            ->method('getUserId')
-            ->will($this->returnValue('Anonymous User ID'));
 
         self::assertSame(
             $userReferenceMock,
