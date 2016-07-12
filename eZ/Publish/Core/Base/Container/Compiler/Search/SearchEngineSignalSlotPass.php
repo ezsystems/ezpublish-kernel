@@ -41,6 +41,7 @@ class SearchEngineSignalSlotPass implements CompilerPassInterface
         $tags = $container->findTaggedServiceIds('ezpublish.search.slot')
                 + $container->findTaggedServiceIds($searchEngineSlotTagName);
 
+        $signalDispatcherSlots = [];
         foreach ($tags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['signal'])) {
@@ -51,10 +52,14 @@ class SearchEngineSignalSlotPass implements CompilerPassInterface
                     );
                 }
 
-                $signalDispatcherDef->addMethodCall('addSlot', [
-                    $this->searchEngineAlias, $attribute['signal'], new Reference($id),
-                ]);
+                $signalDispatcherSlots[] = [
+                    'searchEngineAlias' => $this->searchEngineAlias,
+                    'signalIdentifier' => $attribute['signal'],
+                    'slot' => new Reference($id),
+                ];
             }
         }
+
+        $signalDispatcherDef->addMethodCall('addSlots', [$signalDispatcherSlots]);
     }
 }

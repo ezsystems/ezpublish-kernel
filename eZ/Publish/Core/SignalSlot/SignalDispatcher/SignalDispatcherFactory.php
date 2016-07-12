@@ -13,6 +13,11 @@ use eZ\Publish\Core\SignalSlot\Slot;
 class SignalDispatcherFactory
 {
     /**
+     * Relative namespace for internal signals.
+     */
+    const RELATIVE_SIGNAL_NAMESPACE = 'eZ\\Publish\\Core\\SignalSlot\\Signal';
+
+    /**
      * @var string
      */
     private $signalDispatcherClass;
@@ -49,22 +54,26 @@ class SignalDispatcherFactory
     }
 
     /**
-     * Add a signal slot to be attached to a dispatcher.
+     * Bulk add all signal slots if needed for a search engine.
      *
-     * @param $searchEngineAlias
-     * @param string $signal
-     * @param Slot $slot
+     * @param array $signalDispatcherSlots
      */
-    public function addSlot($searchEngineAlias, $signal, Slot $slot)
+    public function addSlots(array $signalDispatcherSlots)
     {
         $currentSearchEngineAlias = !empty($this->repositorySettings['search']['engine']) ? $this->repositorySettings['search']['engine'] : null;
-        if ($currentSearchEngineAlias !== $searchEngineAlias) {
-            return;
+        foreach ($signalDispatcherSlots as $signalDispatcherSlot) {
+            if ($currentSearchEngineAlias !== $signalDispatcherSlot['searchEngineAlias']) {
+                continue;
+            }
+
+            $signalIdentifier = $signalDispatcherSlot['signalIdentifier'];
+            if ($signalIdentifier[0] === '\\') {
+                $signalIdentifier = substr($signalIdentifier, 1);
+            } elseif ($signalIdentifier !== '*') {
+                $signalIdentifier = static::RELATIVE_SIGNAL_NAMESPACE . "\\$signalIdentifier";
+            }
+            $this->signalSlotMap[$signalIdentifier][] = $signalDispatcherSlot['slot'];
         }
-        $this->signalSlotMap[] = new SignalSlotMap([
-            'signalIdentifier' => $signal,
-            'slot' => $slot,
-        ]);
     }
 
     /**
@@ -74,14 +83,6 @@ class SignalDispatcherFactory
      */
     public function buildSignalDispatcher()
     {
-        /** @var $dispatcher \eZ\Publish\Core\SignalSlot\SignalDispatcher */
-        $dispatcher = new $this->signalDispatcherClass([]);
-        if ($dispatcher instanceof DefaultSignalDispatcher) {
-            foreach ($this->signalSlotMap as $map) {
-                $dispatcher->attach($map->signalIdentifier, $map->slot);
-            }
-        }
-
-        return $dispatcher;
+        return new $this->signalDispatcherClass($this->signalSlotMap);
     }
 }

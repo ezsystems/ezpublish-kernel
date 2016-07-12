@@ -82,6 +82,8 @@ class DefaultSignalDispatcher extends SignalDispatcher
      *
      * @param string $signalIdentifier
      * @param \eZ\Publish\Core\SignalSlot\Slot $slot
+     *
+     * @deprecated pass signal slots directly to the constructor ({@see __construct()})
      */
     public function attach($signalIdentifier, Slot $slot)
     {
