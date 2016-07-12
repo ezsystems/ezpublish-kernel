@@ -35,7 +35,7 @@ interface PermissionService
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
      */
-    public function setCurrentUser(UserReference $user);
+    public function setCurrentUserReference(UserReference $user);
 
     /**
      * @param string $module The module, aka controller identifier to check permissions on

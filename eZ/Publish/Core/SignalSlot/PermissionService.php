@@ -55,9 +55,9 @@ class PermissionService implements PermissionServiceInterface
         return $this->service->getCurrentUserReference();
     }
 
-    public function setCurrentUser(UserReference $user)
+    public function setCurrentUserReference(UserReference $user)
     {
-        return $this->service->setCurrentUser($user);
+        return $this->service->setCurrentUserReference($user);
     }
 
     public function hasAccess($module, $function, UserReference $user = null)
