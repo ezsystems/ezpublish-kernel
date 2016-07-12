@@ -19,7 +19,7 @@ class PermissionService implements PermissionServiceInterface
     /**
      * Aggregated service.
      *
-     * @var \eZ\Publish\API\Repository\FieldTypeService
+     * @var \eZ\Publish\API\Repository\PermissionService
      */
     protected $service;
 
@@ -45,24 +45,19 @@ class PermissionService implements PermissionServiceInterface
         $this->signalDispatcher = $signalDispatcher;
     }
 
-    public function getCurrentUser()
-    {
-        return $this->service->getCurrentUser();
-    }
-
     public function getCurrentUserReference()
     {
         return $this->service->getCurrentUserReference();
     }
 
-    public function setCurrentUserReference(UserReference $user)
+    public function setCurrentUserReference(UserReference $userReference)
     {
-        return $this->service->setCurrentUserReference($user);
+        return $this->service->setCurrentUserReference($userReference);
     }
 
-    public function hasAccess($module, $function, UserReference $user = null)
+    public function hasAccess($module, $function, UserReference $userReference = null)
     {
-        return $this->service->hasAccess($module, $function, $user);
+        return $this->service->hasAccess($module, $function, $userReference);
     }
 
     public function canUser($module, $function, ValueObject $object, $targets = null)
