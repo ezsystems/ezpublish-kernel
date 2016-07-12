@@ -79,7 +79,7 @@ class PermissionService implements PermissionServiceInterface
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
-     * @param \eZ\Publish\Core\Repository\Values\User\UserReference $userReference
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
     public function __construct(
