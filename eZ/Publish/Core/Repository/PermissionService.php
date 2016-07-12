@@ -8,8 +8,6 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\PermissionService as PermissionServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\UserService as UserServiceInterface;
-use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -40,11 +38,6 @@ class PermissionService implements PermissionServiceInterface
     private $repository;
 
     /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    private $userService;
-
-    /**
      * @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
      */
     private $roleDomainMapper;
@@ -60,13 +53,6 @@ class PermissionService implements PermissionServiceInterface
     private $userHandler;
 
     /**
-     * Currently logged in user object if already loaded.
-     *
-     * @var \eZ\Publish\API\Repository\Values\User\User|null
-     */
-    private $currentUser;
-
-    /**
      * Currently logged in user reference for permission purposes.
      *
      * @var \eZ\Publish\API\Repository\Values\User\UserReference
@@ -75,40 +61,23 @@ class PermissionService implements PermissionServiceInterface
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
     public function __construct(
         RepositoryInterface $repository,
-        UserServiceInterface $userService,
         RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService,
         UserHandler $userHandler,
-        APIUserReference $userReference,
-        User $user = null
+        APIUserReference $userReference
     ) {
         $this->repository = $repository;
-        $this->userService = $userService;
         $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
         $this->currentUserRef = $userReference;
-        $this->currentUser = $user;
-    }
-
-    public function getCurrentUser()
-    {
-        if ($this->currentUser === null) {
-            $this->currentUser = $this->userService->loadUser(
-                $this->currentUserRef->getUserId()
-            );
-        }
-
-        return $this->currentUser;
     }
 
     public function getCurrentUserReference()
@@ -116,36 +85,30 @@ class PermissionService implements PermissionServiceInterface
         return $this->currentUserRef;
     }
 
-    public function setCurrentUserReference(APIUserReference $user)
+    public function setCurrentUserReference(APIUserReference $userReference)
     {
-        $id = $user->getUserId();
+        $id = $userReference->getUserId();
         if (!$id) {
             throw new InvalidArgumentValue('$user->getUserId()', $id);
         }
 
-        if ($user instanceof User) {
-            $this->currentUser = $user;
-            $this->currentUserRef = new UserReference($id);
-        } else {
-            $this->currentUser = null;
-            $this->currentUserRef = $user;
-        }
+        $this->currentUserRef = $userReference;
     }
 
-    public function hasAccess($module, $function, APIUserReference $user = null)
+    public function hasAccess($module, $function, APIUserReference $userReference = null)
     {
         // Full access if sudo nesting level is set by {@see sudo()}
         if ($this->sudoNestingLevel > 0) {
             return true;
         }
 
-        if ($user === null) {
-            $user = $this->getCurrentUserReference();
+        if ($userReference === null) {
+            $userReference = $this->getCurrentUserReference();
         }
 
         // Uses SPI to avoid triggering permission checks in Role/User service
         $permissionSets = array();
-        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($user->getUserId(), true);
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($userReference->getUserId(), true);
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
             $permissionSet = array('limitation' => null, 'policies' => array());
 

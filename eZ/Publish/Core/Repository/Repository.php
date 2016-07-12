@@ -306,13 +306,13 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUser()
     {
-        $currentUser = $this->getPermissionService()->getCurrentUser();
-
         if ($this->currentUser === null) {
-            $this->currentUser = $currentUser;
+            $this->currentUser = $this->getUserService()->loadUser(
+                $this->getPermissionService()->getCurrentUserReference()->getUserId()
+            );
         }
 
-        return $currentUser;
+        return $this->currentUser;
     }
 
     /**
@@ -352,7 +352,7 @@ class Repository implements RepositoryInterface
             $this->currentUserRef = $user;
         }
 
-        return $this->getPermissionService()->setCurrentUser($user);
+        return $this->getPermissionService()->setCurrentUserReference($this->currentUserRef);
     }
 
     /**
@@ -753,12 +753,10 @@ class Repository implements RepositoryInterface
         if ($this->permissionService === null) {
             $this->permissionService = new PermissionService(
                 $this,
-                $this->getUserService(),
                 $this->getRoleDomainMapper(),
                 $this->getLimitationService(),
                 $this->persistenceHandler->userHandler(),
-                $this->currentUserRef,
-                $this->currentUser
+                $this->currentUserRef
             );
         }
 
