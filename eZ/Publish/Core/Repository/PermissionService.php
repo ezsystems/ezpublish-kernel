@@ -15,7 +15,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use Exception;
