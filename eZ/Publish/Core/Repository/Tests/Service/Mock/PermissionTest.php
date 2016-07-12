@@ -923,44 +923,37 @@ class PermissionTest extends BaseServiceMockTest
     }
 
     /**
-     * Test for the setCurrentUser() and getCurrentUser() methods.
+     * Test for the setCurrentUserReference() and getCurrentUserReference() methods.
      */
-    public function testSetAndGetCurrentUser()
+    public function testSetAndGetCurrentUserReference()
     {
         $permissionServiceMock = $this->getPermissionServiceMock(null);
-        $user = $this->getStubbedUser(42);
+        $userReferenceMock = $this->getUserReferenceMock();
 
-        $permissionServiceMock->setCurrentUser($user);
+        $permissionServiceMock->setCurrentUserReference($userReferenceMock);
 
         self::assertSame(
-            $user,
-            $permissionServiceMock->getCurrentUser()
+            $userReferenceMock,
+            $permissionServiceMock->getCurrentUserReference()
         );
     }
 
     /**
-     * Test for the getCurrentUser() method.
+     * Test for the getCurrentUserReference() method.
      */
-    public function testGetCurrentUserReturnsAnonymousUser()
+    public function testGetCurrentUserReferenceReturnsAnonymousUser()
     {
         $permissionServiceMock = $this->getPermissionServiceMock(null);
         $userReferenceMock = $this->getUserReferenceMock();
-        $userServiceMock = $this->getUserServiceMock();
 
         $userReferenceMock
             ->expects($this->once())
             ->method('getUserId')
             ->will($this->returnValue('Anonymous User ID'));
 
-        $userServiceMock
-            ->expects($this->once())
-            ->method('loadUser')
-            ->with('Anonymous User ID')
-            ->will($this->returnValue('Anonymous User'));
-
-        self::assertEquals(
-            'Anonymous User',
-            $permissionServiceMock->getCurrentUser()
+        self::assertSame(
+            $userReferenceMock,
+            $permissionServiceMock->getCurrentUserReference()
         );
     }
 
@@ -978,7 +971,6 @@ class PermissionTest extends BaseServiceMockTest
                 ->setConstructorArgs(
                     [
                         $this->getRepositoryMock(),
-                        $this->getUserServiceMock(),
                         $this->getRoleDomainMapperMock(),
                         $this->getLimitationServiceMock(),
                         $this->getPersistenceMock()->userHandler(),
@@ -1020,23 +1012,6 @@ class PermissionTest extends BaseServiceMockTest
         }
 
         return $this->repositoryMock;
-    }
-
-    protected $userServiceMock;
-
-    /**
-     * @return \eZ\Publish\API\Repository\UserService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getUserServiceMock($methods = [])
-    {
-        if ($this->userServiceMock === null) {
-            $this->userServiceMock = $this
-                ->getMockBuilder('eZ\\Publish\\API\\Repository\\UserService')
-                ->setMethods($methods)
-                ->getMock();
-        }
-
-        return $this->userServiceMock;
     }
 
     protected $roleDomainMapperMock;
