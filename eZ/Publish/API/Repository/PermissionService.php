@@ -38,9 +38,15 @@ interface PermissionService
     public function setCurrentUserReference(UserReference $user);
 
     /**
+     * Returns boolean value or an array of limitations describing user's permissions
+     * on the given module and function.
+     *
+     * Note: boolean value describes full access (true) or no access at all (false).
+     *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user User for which the
+     *        information is returned, current user will be used if null
      *
      * @return bool|array if limitations are on this function an array of limitations is returned
      */
