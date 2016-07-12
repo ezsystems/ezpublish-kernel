@@ -21,35 +21,35 @@ class ContentMetadataUpdateStruct extends ValueObject
     /**
      * If set this value changes the owner id of the content object.
      *
-     * @var mixed
+     * @var mixed|null
      */
     public $ownerId;
 
     /**
      * If set this value overrides the publication date of the content. (Used in staging scenarios).
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     public $publishedDate;
 
     /**
      * If set this value overrides the modification date. (Used for staging scenarios).
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     public $modificationDate;
 
     /**
      * If set the main language of the content object is changed.
      *
-     * @var string
+     * @var string|null
      */
     public $mainLanguageCode;
 
     /**
      * If set this value changes the always available flag.
      *
-     * @var bool
+     * @var bool|null
      */
     public $alwaysAvailable;
 
@@ -58,7 +58,7 @@ class ContentMetadataUpdateStruct extends ValueObject
      *
      * Needs to be a unique Content->remoteId string value.
      *
-     * @var string
+     * @var string|null
      */
     public $remoteId;
 
@@ -68,7 +68,7 @@ class ContentMetadataUpdateStruct extends ValueObject
      * If the content object has multiple locations,
      * $mainLocationId will point to the main one.
      *
-     * @var mixed
+     * @var mixed|null
      */
     public $mainLocationId;
 }
