@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 interface Repository
 {
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
      *
      * Get current user.
      *
@@ -30,7 +30,7 @@ interface Repository
     public function getCurrentUser();
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
      *
      * Get current user reference.
      *
@@ -40,7 +40,7 @@ interface Repository
     public function getCurrentUserReference();
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService, method setCurrentUserReference()
+     * @deprecated since 6.5, to be removed. Use PermissionService::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.
      *
@@ -49,7 +49,7 @@ interface Repository
     public function setCurrentUser(UserReference $user);
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::hasAccess() instead.
      *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
@@ -60,7 +60,7 @@ interface Repository
     public function hasAccess($module, $function, UserReference $user = null);
 
     /**
-     * @deprecated since 6.5, the method is moved to PermissionService
+     * @deprecated since 6.5, to be removed. Use PermissionService::canUser() instead.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
