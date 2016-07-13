@@ -90,7 +90,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         $repository
             ->expects($this->any())
             ->method('getPermissionService')
-            ->will($this->returnValue($this->getPermissionServiceMock($this->repository)));
+            ->will($this->returnValue($this->getPermissionServiceMock()));
 
         $urlAliasCharmap = array(
             '"' => '%22',
@@ -420,14 +420,13 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getPermissionServiceMock($repository)
+    protected function getPermissionServiceMock()
     {
         return $this
             ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionService')
             ->setMethods(null)
             ->setConstructorArgs(
                 [
-                    $repository,
                     $this
                         ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
                         ->disableOriginalConstructor()
