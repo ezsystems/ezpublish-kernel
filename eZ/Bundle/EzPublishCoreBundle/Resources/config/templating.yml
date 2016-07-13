@@ -58,6 +58,7 @@ services:
             - @ezpublish.api.repository
             - @ezpublish.translation_helper
             - @ezpublish.field_helper
+            - @ezpublish.config.resolver
             - @?logger
         tags:
             - {name: twig.extension}

@@ -17,6 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use Psr\Log\LoggerInterface;
@@ -45,6 +46,11 @@ class ContentExtension extends Twig_Extension
     protected $fieldHelper;
 
     /**
+     * @param ConfigResolverInterface $configResolver
+     */
+    protected $configResolver;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -53,11 +59,13 @@ class ContentExtension extends Twig_Extension
         Repository $repository,
         TranslationHelper $translationHelper,
         FieldHelper $fieldHelper,
+        ConfigResolverInterface $configResolver,
         LoggerInterface $logger = null
     ) {
         $this->repository = $repository;
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
+        $this->configResolver = $configResolver;
         $this->logger = $logger;
     }
 
@@ -100,6 +108,10 @@ class ContentExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'ez_first_filled_image_field_identifier',
                 array($this, 'getFirstFilledImageFieldIdentifier')
+            ),
+            new Twig_SimpleFunction(
+                'ez_google_maps_api_key',
+                array($this, 'getGoogleMapsApiKey')
             ),
         );
     }
@@ -307,5 +319,10 @@ class ContentExtension extends Twig_Extension
         }
 
         return null;
+    }
+
+    public function getGoogleMapsApiKey()
+    {
+        return $this->configResolver->getParameter('google_maps_api_key');
     }
 }
