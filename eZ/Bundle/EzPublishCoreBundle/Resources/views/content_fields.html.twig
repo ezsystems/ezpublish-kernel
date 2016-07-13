@@ -299,6 +299,7 @@
     {% set defaultZoom = 13 %}
     {% set defaultMapType = 'ROADMAP' %}
     {% set defaultDraggable = 'true' %}
+    {% set defaultScrollWheel = 'true' %}
 
     {% set hasContent = field.value is not null %}
     {% set latitude = field.value.latitude|default( 0 ) %}
@@ -308,6 +309,7 @@
 
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
     {% set mapType = parameters.mapType|default( defaultMapType ) %}
+    {% set scrollWheel = parameters.scrollWheel|default( defaultScrollWheel ) %}
 
     {% set mapWidth, mapHeight = defaultWidth, defaultHeight %}
     {% if parameters.width is defined %}
@@ -368,6 +370,7 @@
                         center: startPoint,
                         zoom: zoom,
                         draggable: draggable,
+                        scrollwheel: {{ scrollWheel }},
                         mapTypeId: google.maps.MapTypeId.{{ mapType }}
                     }),
                     position: startPoint
