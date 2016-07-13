@@ -36,7 +36,7 @@ class SearchEngineSignalSlotPass implements CompilerPassInterface
             return;
         }
 
-        $signalDispatcherDef = $container->getDefinition('ezpublish.signalslot.signal_dispatcher.factory');
+        $signalDispatcherFactoryDef = $container->getDefinition('ezpublish.signalslot.signal_dispatcher.factory');
         $searchEngineSlotTagName = sprintf('ezpublish.search.%s.slot', $this->searchEngineAlias);
         $tags = $container->findTaggedServiceIds('ezpublish.search.slot')
                 + $container->findTaggedServiceIds($searchEngineSlotTagName);
@@ -60,6 +60,6 @@ class SearchEngineSignalSlotPass implements CompilerPassInterface
             }
         }
 
-        $signalDispatcherDef->addMethodCall('addSlots', [$signalDispatcherSlots]);
+        $signalDispatcherFactoryDef->addMethodCall('addSlots', [$signalDispatcherSlots]);
     }
 }

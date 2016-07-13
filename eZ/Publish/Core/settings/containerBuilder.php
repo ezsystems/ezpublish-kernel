@@ -52,7 +52,7 @@ $loader->load('utils.yml');
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
-// needed by @ezpublish.signalslot.signal_dispatcher:
+// needed by @ezpublish.signalslot.signal_dispatcher.factory:
 $containerBuilder->setParameter(
     'ezpublish.repositories',
     [

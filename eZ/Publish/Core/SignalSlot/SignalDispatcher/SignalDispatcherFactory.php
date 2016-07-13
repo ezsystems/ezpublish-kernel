@@ -30,7 +30,7 @@ class SignalDispatcherFactory
     /**
      * @var array
      */
-    private $signalSlotMap;
+    private $signalSlotMap = [];
 
     /**
      * SignalDispatcherFactory constructor.
@@ -50,7 +50,6 @@ class SignalDispatcherFactory
             $repositoryAlias = array_shift($aliases);
         }
         $this->repositorySettings = isset($repositoriesSettings[$repositoryAlias]) ? $repositoriesSettings[$repositoryAlias] : [];
-        $this->signalSlotMap = [];
     }
 
     /**
