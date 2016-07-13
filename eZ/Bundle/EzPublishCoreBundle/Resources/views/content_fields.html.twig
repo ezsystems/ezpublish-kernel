@@ -299,6 +299,7 @@
     {% set defaultZoom = 13 %}
     {% set defaultMapType = 'ROADMAP' %}
     {% set defaultDraggable = 'true' %}
+    {% set defaultScrollWheel = 'true' %}
 
     {% set hasContent = field.value is not null %}
     {% set latitude = field.value.latitude|default( 0 ) %}
@@ -308,6 +309,7 @@
 
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
     {% set mapType = parameters.mapType|default( defaultMapType ) %}
+    {% set scrollWheel = parameters.scrollWheel|default( defaultScrollWheel ) %}
 
     {% set mapWidth, mapHeight = defaultWidth, defaultHeight %}
     {% if parameters.width is defined %}
@@ -347,7 +349,14 @@
     {% endif %}
 
     {% if hasContent and showMap %}
-        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <script>
+            if (typeof(mapsScriptLoaded) == 'undefined') {
+                var myScript = document.createElement('script');
+                myScript.src = '//maps.googleapis.com/maps/api/js?key={{ ezpublish.configResolver.parameter('google_maps_api_key') }}';
+                mapsScriptLoaded = true;
+                document.body.appendChild(myScript);
+            }
+        </script>
         <script type="text/javascript">
         (function(win, doc) {
             var mapView = function (mapId, latitude, longitude) {
@@ -361,6 +370,7 @@
                         center: startPoint,
                         zoom: zoom,
                         draggable: draggable,
+                        scrollwheel: {{ scrollWheel }},
                         mapTypeId: google.maps.MapTypeId.{{ mapType }}
                     }),
                     position: startPoint
