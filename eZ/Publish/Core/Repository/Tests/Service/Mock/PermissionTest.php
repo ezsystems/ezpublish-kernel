@@ -210,7 +210,8 @@ class PermissionTest extends BaseServiceMockTest
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $service = $this->getPermissionServiceMock(null);
-        $this->getRepositoryMock()
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock
             ->expects($this->any())
             ->method('getPermissionService')
             ->will($this->returnValue($service));
@@ -222,7 +223,8 @@ class PermissionTest extends BaseServiceMockTest
         $result = $service->sudo(
             function (Repository $repo) {
                 return $repo->hasAccess('test-module', 'test-function');
-            }
+            },
+            $repositoryMock
         );
 
         self::assertEquals(true, $result);
@@ -970,7 +972,6 @@ class PermissionTest extends BaseServiceMockTest
                 ->setMethods($methods)
                 ->setConstructorArgs(
                     [
-                        $this->getRepositoryMock(),
                         $this->getRoleDomainMapperMock(),
                         $this->getLimitationServiceMock(),
                         $this->getPersistenceMock()->userHandler(),

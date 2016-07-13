@@ -74,7 +74,6 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
             ->setMethods(null)
             ->setConstructorArgs(
                 [
-                    $this->repository,
                     $this
                         ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
                         ->disableOriginalConstructor()
