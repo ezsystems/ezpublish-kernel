@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\SignalSlot\SignalDispatcher;
 
-use eZ\Publish\Core\SignalSlot\Slot;
-
 class SignalDispatcherFactory
 {
     /**
@@ -55,23 +53,23 @@ class SignalDispatcherFactory
     /**
      * Bulk add all signal slots if needed for a search engine.
      *
-     * @param array $signalDispatcherSlots
+     * @param string $searchEngineAlias
+     * @param array $searchEngineSignalSlots [signal => array(slot1, slot2, ...)]
      */
-    public function addSlots(array $signalDispatcherSlots)
+    public function addSlotsForSearchEngine($searchEngineAlias, array $searchEngineSignalSlots)
     {
         $currentSearchEngineAlias = !empty($this->repositorySettings['search']['engine']) ? $this->repositorySettings['search']['engine'] : null;
-        foreach ($signalDispatcherSlots as $signalDispatcherSlot) {
-            if ($currentSearchEngineAlias !== $signalDispatcherSlot['searchEngineAlias']) {
-                continue;
-            }
+        if ($currentSearchEngineAlias !== $searchEngineAlias) {
+            return;
+        }
 
-            $signalIdentifier = $signalDispatcherSlot['signalIdentifier'];
+        foreach ($searchEngineSignalSlots as $signalIdentifier => $slots) {
             if ($signalIdentifier[0] === '\\') {
                 $signalIdentifier = substr($signalIdentifier, 1);
             } elseif ($signalIdentifier !== '*') {
                 $signalIdentifier = static::RELATIVE_SIGNAL_NAMESPACE . "\\$signalIdentifier";
             }
-            $this->signalSlotMap[$signalIdentifier][] = $signalDispatcherSlot['slot'];
+            $this->signalSlotMap[$signalIdentifier] = $slots;
         }
     }
 
