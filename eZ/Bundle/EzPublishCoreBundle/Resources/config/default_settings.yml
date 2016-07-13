@@ -70,6 +70,7 @@ parameters:
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"
     ezsettings.default.anonymous_user_id: 10            # The ID of the user to be used for everyone who is not logged in
+    ezsettings.default.google_maps_api_key: ~           # Google Maps APIs v3 key (https://developers.google.com/maps/documentation/javascript/get-api-key)
 
     # IO
     ezsettings.default.io.metadata_handler: "default"

@@ -65,6 +65,9 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 ->example('var/ezdemo_site')
                 ->info('The directory relative to web/ where files are stored. Default value is "var"')
             ->end()
+            ->scalarNode('google_maps_api_key')
+                ->info('Google Maps API Key')
+            ->end()
             ->scalarNode('storage_dir')
                 ->cannotBeEmpty()
                 ->info("Directory where to place new files for storage, it's relative to var directory. Default value is 'storage'")
@@ -158,6 +161,9 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         }
         if (isset($scopeSettings['binary_dir'])) {
             $contextualizer->setContextualParameter('binary_dir', $currentScope, $scopeSettings['binary_dir']);
+        }
+        if (isset($scopeSettings['google_maps_api_key'])) {
+            $contextualizer->setContextualParameter('google_maps_api_key', $currentScope, $scopeSettings['google_maps_api_key']);
         }
 
         // session_name setting is deprecated in favor of session.name
