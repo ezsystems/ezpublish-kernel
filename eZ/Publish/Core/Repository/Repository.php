@@ -380,7 +380,10 @@ class Repository implements RepositoryInterface
      */
     public function sudo(\Closure $callback, RepositoryInterface $outerRepository = null)
     {
-        return $this->getPermissionService()->sudo($callback, $outerRepository);
+        return $this->getPermissionService()->sudo(
+            $callback,
+            $outerRepository !== null ? $outerRepository : $this
+        );
     }
 
     /**
@@ -752,7 +755,6 @@ class Repository implements RepositoryInterface
     {
         if ($this->permissionService === null) {
             $this->permissionService = new PermissionService(
-                $this,
                 $this->getRoleDomainMapper(),
                 $this->getLimitationService(),
                 $this->persistenceHandler->userHandler(),

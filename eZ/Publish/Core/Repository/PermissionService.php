@@ -32,11 +32,6 @@ class PermissionService implements PermissionServiceInterface
     private $sudoNestingLevel = 0;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
-
-    /**
      * @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
      */
     private $roleDomainMapper;
@@ -59,20 +54,17 @@ class PermissionService implements PermissionServiceInterface
     private $currentUserRef;
 
     /**
-     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
      */
     public function __construct(
-        RepositoryInterface $repository,
         RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService,
         UserHandler $userHandler,
         APIUserReference $userReference
     ) {
-        $this->repository = $repository;
         $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
@@ -240,6 +232,8 @@ class PermissionService implements PermissionServiceInterface
     }
 
     /**
+     * @internal For internal use only, do not depend on this method.
+     *
      * Allows API execution to be performed with full access sand-boxed.
      *
      * The closure sandbox will do a catch all on exceptions and rethrow after
@@ -262,11 +256,11 @@ class PermissionService implements PermissionServiceInterface
      *
      * @return mixed
      */
-    public function sudo(\Closure $callback, RepositoryInterface $outerRepository = null)
+    public function sudo(\Closure $callback, RepositoryInterface $outerRepository)
     {
         ++$this->sudoNestingLevel;
         try {
-            $returnValue = $callback($outerRepository !== null ? $outerRepository : $this->repository);
+            $returnValue = $callback($outerRepository);
         } catch (Exception $e) {
             --$this->sudoNestingLevel;
             throw $e;
