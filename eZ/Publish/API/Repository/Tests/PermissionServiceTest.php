@@ -1,337 +1,50 @@
 <?php
 
 /**
- * File containing the RepositoryTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use Exception;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 
 /**
- * Test case for operations in the Repository using in memory storage.
+ *  Test case for operations in the PermissionService.
  *
- * @see eZ\Publish\API\Repository\Repository
+ * @see \eZ\Publish\API\Repository\PermissionService
  * @group integration
+ * @group permission
  */
-class RepositoryTest extends BaseTest
+class PermissionServiceTest extends BaseTest
 {
-    /**
-     * Test for the getContentService() method.
-     *
-     * @group content
-     * @group user
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getContentService()
-     */
-    public function testGetContentService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\ContentService',
-            $repository->getContentService()
-        );
-    }
-
-    /**
-     * Test for the getContentLanguageService() method.
-     *
-     * @group language
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getContentLanguageService()
-     */
-    public function testGetContentLanguageService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\LanguageService',
-            $repository->getContentLanguageService()
-        );
-    }
-
-    /**
-     * Test for the getContentTypeService() method.
-     *
-     * @group content-type
-     * @group field-type
-     * @group user
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
-     */
-    public function testGetContentTypeService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\ContentTypeService',
-            $repository->getContentTypeService()
-        );
-    }
-
-    /**
-     * Test for the getLocationService() method.
-     *
-     * @group location
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getLocationService()
-     */
-    public function testGetLocationService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\LocationService',
-            $repository->getLocationService()
-        );
-    }
-
-    /**
-     * Test for the getSectionService() method.
-     *
-     * @group section
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getSectionService()
-     */
-    public function testGetSectionService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\SectionService',
-            $repository->getSectionService()
-        );
-    }
-
-    /**
-     * Test for the getUserService() method.
-     *
-     * @group user
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getUserService()
-     */
-    public function testGetUserService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\UserService',
-            $repository->getUserService()
-        );
-    }
-
-    /**
-     * Test for the getTrashService() method.
-     *
-     * @group trash
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getTrashService()
-     */
-    public function testGetTrashService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\TrashService',
-            $repository->getTrashService()
-        );
-    }
-
-    /**
-     * Test for the getRoleService() method.
-     *
-     * @group role
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getRoleService()
-     */
-    public function testGetRoleService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\RoleService',
-            $repository->getRoleService()
-        );
-    }
-
-    /**
-     * Test for the getURLAliasService() method.
-     *
-     * @group url-alias
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getURLAliasService()
-     */
-    public function testGetURLAliasService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\URLAliasService',
-            $repository->getURLAliasService()
-        );
-    }
-
-    /**
-     * Test for the getUrlWildcardService() method.
-     *
-     * @group url-wildcard
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getUrlWildcardService()
-     */
-    public function testGetURLWildcardService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\URLWildcardService',
-            $repository->getURLWildcardService()
-        );
-    }
-
-    /**
-     * Test for the getObjectStateService().
-     *
-     * @group object-state
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getObjectStateService()
-     */
-    public function testGetObjectStateService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\ObjectStateService',
-            $repository->getObjectStateService()
-        );
-    }
-
-    /**
-     * Test for the getFieldTypeService().
-     *
-     * @group object-state
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getFieldTypeService()
-     */
-    public function testGetFieldTypeService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\FieldTypeService',
-            $repository->getFieldTypeService()
-        );
-    }
-
-    /**
-     * Test for the getSearchService() method.
-     *
-     * @group search
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getSearchService()
-     */
-    public function testGetSearchService()
-    {
-        $repository = $this->getRepository();
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\SearchService',
-            $repository->getSearchService()
-        );
-    }
-
-    /**
-     * Test for the getSearchService() method.
-     *
-     * @group permission
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getPermissionService()
-     */
-    public function testGetPermissionService()
-    {
-        $repository = $this->getRepository();
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\PermissionService',
-            $repository->getPermissionService()
-        );
-    }
-
-    /**
-     * Test for the commit() method.
-     *
-     * @see \eZ\Publish\API\Repository\Repository::commit()
-     */
-    public function testCommit()
-    {
-        $repository = $this->getRepository();
-
-        try {
-            $repository->beginTransaction();
-            $repository->commit();
-        } catch (Exception $e) {
-            // Cleanup hanging transaction on error
-            $repository->rollback();
-            throw $e;
-        }
-    }
-
-    /**
-     * Test for the commit() method.
-     *
-     * @see \eZ\Publish\API\Repository\Repository::commit()
-     * @expectedException \RuntimeException
-     */
-    public function testCommitThrowsRuntimeException()
-    {
-        $repository = $this->getRepository();
-        $repository->commit();
-    }
-
-    /**
-     * Test for the rollback() method.
-     *
-     * @see \eZ\Publish\API\Repository\Repository::rollback()
-     */
-    public function testRollback()
-    {
-        $repository = $this->getRepository();
-        $repository->beginTransaction();
-        $repository->rollback();
-    }
-
-    /**
-     * Test for the rollback() method.
-     *
-     * @see \eZ\Publish\API\Repository\Repository::rollback()
-     * @expectedException \RuntimeException
-     */
-    public function testRollbackThrowsRuntimeException()
-    {
-        $repository = $this->getRepository();
-        $repository->rollback();
-    }
-
     /**
      * Test for the getCurrentUser() method.
      *
-     * @group content
-     * @group user
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getCurrentUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::getCurrentUserReference()
      */
-    public function testGetCurrentUserReturnsAnonymousUser()
+    public function testGetCurrentUserReferenceReturnsAnonymousUserReference()
     {
         $repository = $this->getRepository();
         $anonymousUserId = $this->generateId('user', 10);
-        $repository->setCurrentUser(new UserReference($anonymousUserId));
+        $repository->getPermissionService()->setCurrentUserReference(
+            new UserReference($anonymousUserId)
+        );
 
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Only a UserReference has previously been set to the $repository
-        $anonymousUser = $repository->getCurrentUser();
+
+        $permissionService = $repository->getPermissionService();
+        $anonymousUserReference = $permissionService->getCurrentUserReference();
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\User',
-            $anonymousUser
+            'eZ\Publish\API\Repository\Values\User\UserReference',
+            $anonymousUserReference
         );
         $this->assertEquals(
-            $anonymousUser->id,
+            $anonymousUserReference->getUserId(),
             $repository->getUserService()->loadUser($anonymousUserId)->id
         );
     }
@@ -339,51 +52,49 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the setCurrentUser() method.
      *
-     * @group content
-     * @group user
-     *
-     * @see \eZ\Publish\API\Repository\Repository::setCurrentUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::setCurrentUserReference()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
-    public function testSetCurrentUser()
+    public function testSetCurrentUserReference()
     {
         $repository = $this->getRepository();
-        $repository->setCurrentUser(new UserReference($this->generateId('user', 10)));
+        $repository->getPermissionService()->setCurrentUserReference(
+            new UserReference(
+                $this->generateId('user', 10)
+            )
+        );
 
         $administratorUserId = $this->generateId('user', 14);
 
         /* BEGIN: Use Case */
         // $administratorUserId contains the ID of the administrator user
 
+        $permissionService = $repository->getPermissionService();
+
         $userService = $repository->getUserService();
 
         // Load administrator user
         $administratorUser = $userService->loadUser($administratorUserId);
 
-        // Set administrator user as current user
-        $repository->setCurrentUser($administratorUser);
+        // Set administrator user as current user reference
+        $permissionService->setCurrentUserReference($administratorUser);
         /* END: Use Case */
 
         $this->assertEquals(
             $administratorUserId,
-            $repository->getCurrentUserReference()->getUserId()
-        );
-
-        $this->assertEquals(
-            $administratorUser->getUserId(),
-            $repository->getCurrentUser()->getUserId()
+            $permissionService->getCurrentUserReference()->getUserId()
         );
 
         $this->assertSame(
             $administratorUser,
-            $repository->getCurrentUser()
+            $permissionService->getCurrentUserReference()
         );
     }
 
     /**
      * Test for the hasAccess() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess()
+     * @see \eZ\Publish\API\Repository\PermissionService::hasAccess()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testHasAccessWithAnonymousUserNo()
@@ -391,17 +102,20 @@ class RepositoryTest extends BaseTest
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
+
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
+
         $userService = $repository->getUserService();
+        $permissionService = $repository->getPermissionService();
 
         // Load anonymous user
         $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // This call will return false because anonymous user does not have access
         // to content removal
-        $hasAccess = $repository->hasAccess('content', 'remove', $anonymousUser);
+        $hasAccess = $permissionService->hasAccess('content', 'remove', $anonymousUser);
         /* END: Use Case */
 
         $this->assertFalse($hasAccess);
@@ -410,29 +124,32 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the hasAccess() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess()
+     * @see \eZ\Publish\API\Repository\PermissionService::hasAccess()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessWithAnonymousUserNo
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessWithAnonymousUserNo
      */
     public function testHasAccessForCurrentUserNo()
     {
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
+
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
+
         $userService = $repository->getUserService();
+        $permissionService = $repository->getPermissionService();
 
         // Load anonymous user
         $anonymousUser = $userService->loadUser($anonymousUserId);
 
-        // Set anonymous user as current user
-        $repository->setCurrentUser($anonymousUser);
+        // Set anonymous user as current user reference
+        $permissionService->setCurrentUserReference($anonymousUser);
 
         // This call will return false because anonymous user does not have access
         // to content removal
-        $hasAccess = $repository->hasAccess('content', 'remove');
+        $hasAccess = $permissionService->hasAccess('content', 'remove');
         /* END: Use Case */
 
         $this->assertFalse($hasAccess);
@@ -441,7 +158,7 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the hasAccess() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess()
+     * @see \eZ\Publish\API\Repository\PermissionService::hasAccess()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testHasAccessWithAdministratorUser()
@@ -454,12 +171,13 @@ class RepositoryTest extends BaseTest
         // $administratorUserId contains the ID of the administrator user
 
         $userService = $repository->getUserService();
+        $permissionService = $repository->getPermissionService();
 
         // Load administrator user
         $administratorUser = $userService->loadUser($administratorUserId);
 
         // This call will return true
-        $hasAccess = $repository->hasAccess('content', 'read', $administratorUser);
+        $hasAccess = $permissionService->hasAccess('content', 'read', $administratorUser);
         /* END: Use Case */
 
         $this->assertTrue($hasAccess);
@@ -468,10 +186,10 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the hasAccess() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess()
+     * @see \eZ\Publish\API\Repository\PermissionService::hasAccess()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessWithAdministratorUser
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testSetCurrentUserReference
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessWithAdministratorUser
      */
     public function testHasAccessForCurrentUserYes()
     {
@@ -483,15 +201,16 @@ class RepositoryTest extends BaseTest
         // $administratorUserId contains the ID of the administrator user
 
         $userService = $repository->getUserService();
+        $permissionService = $repository->getPermissionService();
 
         // Load administrator user
         $administratorUser = $userService->loadUser($administratorUserId);
 
-        // Set administrator user as current user
-        $repository->setCurrentUser($administratorUser);
+        // Set administrator user as current user reference
+        $permissionService->setCurrentUserReference($administratorUser);
 
         // This call will return true
-        $hasAccess = $repository->hasAccess('content', 'read');
+        $hasAccess = $permissionService->hasAccess('content', 'read');
         /* END: Use Case */
 
         $this->assertTrue($hasAccess);
@@ -500,9 +219,9 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the hasAccess() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess()
+     * @see \eZ\Publish\API\Repository\PermissionService::hasAccess()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testSetCurrentUserReference
      */
     public function testHasAccessLimited()
     {
@@ -511,12 +230,14 @@ class RepositoryTest extends BaseTest
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         // This call will return an array of permission sets describing user's access
         // to reading content
-        $permissionSets = $repository->hasAccess('content', 'read');
+        $permissionSets = $permissionService->hasAccess('content', 'read');
         /* END: Use Case */
 
         $this->assertInternalType(
@@ -529,10 +250,10 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessForCurrentUserNo
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessForCurrentUserNo
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCanUserForAnonymousUserNo()
@@ -549,19 +270,20 @@ class RepositoryTest extends BaseTest
 
         $contentService = $repository->getContentService();
         $userService = $repository->getUserService();
+        $permissionService = $repository->getPermissionService();
 
         // Load anonymous user
         $anonymousUser = $userService->loadUser($anonymousUserId);
 
-        // Set anonymous user as current user
-        $repository->setCurrentUser($anonymousUser);
+        // Set anonymous user as current user reference
+        $permissionService->setCurrentUserReference($anonymousUser);
 
         // Load the ContentInfo for "Home" frontpage
         $contentInfo = $contentService->loadContentInfo($homeId);
 
         // This call will return false because anonymous user does not have access
         // to content removal and hence no permission to remove given content
-        $canUser = $repository->canUser('content', 'remove', $contentInfo);
+        $canUser = $permissionService->canUser('content', 'remove', $contentInfo);
 
         // Performing an action without necessary permissions will fail with "UnauthorizedException"
         if (!$canUser) {
@@ -573,10 +295,10 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessForCurrentUserYes
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessForCurrentUserYes
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testCanUserForAdministratorUser()
@@ -592,18 +314,19 @@ class RepositoryTest extends BaseTest
 
         $contentService = $repository->getContentService();
         $userService = $repository->getUserService();
+        $permissionService = $repository->getPermissionService();
 
         // Load administrator user
         $administratorUser = $userService->loadUser($administratorUserId);
 
-        // Set administrator user as current user
-        $repository->setCurrentUser($administratorUser);
+        // Set administrator user as current user reference
+        $permissionService->setCurrentUserReference($administratorUser);
 
         // Load the ContentInfo for "Home" frontpage
         $contentInfo = $contentService->loadContentInfo($homeId);
 
         // This call will return true
-        $canUser = $repository->canUser('content', 'remove', $contentInfo);
+        $canUser = $permissionService->canUser('content', 'remove', $contentInfo);
 
         // Performing an action having necessary permissions will succeed
         $contentService->deleteContent($contentInfo);
@@ -616,10 +339,10 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      */
     public function testCanUserWithLimitationYes()
     {
@@ -632,8 +355,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
 
@@ -641,7 +366,7 @@ class RepositoryTest extends BaseTest
         $imagesFolder = $contentService->loadContent($imagesFolderId);
 
         // This call will return true
-        $canUser = $repository->canUser('content', 'read', $imagesFolder);
+        $canUser = $permissionService->canUser('content', 'read', $imagesFolder);
         /* END: Use Case */
 
         $this->assertTrue($canUser);
@@ -650,10 +375,10 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCanUserWithLimitationNo()
@@ -667,8 +392,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $userService = $repository->getUserService();
 
@@ -677,7 +404,7 @@ class RepositoryTest extends BaseTest
 
         // This call will return false as user with Editor role does not have
         // permission to read "Users" subtree
-        $canUser = $repository->canUser('content', 'read', $administratorUser);
+        $canUser = $permissionService->canUser('content', 'read', $administratorUser);
 
         $contentService = $repository->getContentService();
 
@@ -691,11 +418,11 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testSetCurrentUserReference
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCanUserThrowsInvalidArgumentException()
@@ -709,8 +436,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -720,18 +449,18 @@ class RepositoryTest extends BaseTest
         // This call will throw "InvalidArgumentException" because $userGroupContentType
         // is an instance of \eZ\Publish\API\Repository\Values\ContentType\ContentType,
         // which can not be checked for user access
-        $canUser = $repository->canUser('content', 'create', $userGroupContentType);
+        $canUser = $permissionService->canUser('content', 'create', $userGroupContentType);
         /* END: Use Case */
     }
 
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      */
     public function testCanUserWithTargetYes()
     {
@@ -744,8 +473,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -762,7 +493,7 @@ class RepositoryTest extends BaseTest
         $locationCreateStruct = $locationService->newLocationCreateStruct($homeLocationId);
 
         // This call will return true
-        $canUser = $repository->canUser(
+        $canUser = $permissionService->canUser(
             'content',
             'create',
             $contentCreateStruct,
@@ -786,11 +517,11 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCanUserWithTargetNo()
@@ -804,8 +535,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -823,7 +556,7 @@ class RepositoryTest extends BaseTest
 
         // This call will return false because user with Editor role has permission to
         // create "forum" type content only under "folder" type content.
-        $canUser = $repository->canUser(
+        $canUser = $permissionService->canUser(
             'content',
             'create',
             $contentCreateStruct,
@@ -843,11 +576,11 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      */
     public function testCanUserWithMultipleTargetsYes()
     {
@@ -862,8 +595,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -882,7 +617,7 @@ class RepositoryTest extends BaseTest
         $locationCreateStructs = array($locationCreateStruct1, $locationCreateStruct2);
 
         // This call will return true
-        $canUser = $repository->canUser(
+        $canUser = $permissionService->canUser(
             'content',
             'create',
             $contentCreateStruct,
@@ -903,11 +638,11 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCanUserWithMultipleTargetsNo()
@@ -923,8 +658,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -944,7 +681,7 @@ class RepositoryTest extends BaseTest
 
         // This call will return false because user with Editor role does not have permission to
         // create content in the "Administrator users" location subtree
-        $canUser = $repository->canUser(
+        $canUser = $permissionService->canUser(
             'content',
             'create',
             $contentCreateStruct,
@@ -961,11 +698,11 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testSetCurrentUserReference
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCanUserWithTargetThrowsInvalidArgumentException()
@@ -979,8 +716,10 @@ class RepositoryTest extends BaseTest
 
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
 
@@ -989,7 +728,7 @@ class RepositoryTest extends BaseTest
 
         // This call will throw "InvalidArgumentException" because $targets argument must be an
         // instance of \eZ\Publish\API\Repository\Values\ValueObject class or an array of the same
-        $canUser = $repository->canUser(
+        $canUser = $permissionService->canUser(
             'content',
             'remove',
             $contentInfo,
@@ -1001,13 +740,13 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetURLAliasService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testSetCurrentUserReference
+     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCanUserWithTargetThrowsInvalidArgumentExceptionVariant()
@@ -1017,8 +756,10 @@ class RepositoryTest extends BaseTest
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
-        // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionService = $repository->getPermissionService();
+
+        // Set created user as current user reference
+        $permissionService->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1032,10 +773,10 @@ class RepositoryTest extends BaseTest
         $contentCreateStruct->alwaysAvailable = true;
 
         $urlAliasService = $repository->getURLAliasService();
-        $rootUrlAlias = $urlAliasService->lookUp('/');
+        $rootUrlAlias = $urlAliasService->lookup('/');
 
         // This call will throw "InvalidArgumentException" because $rootAlias is not a valid target object
-        $canUser = $repository->canUser(
+        $canUser = $permissionService->canUser(
             'content',
             'create',
             $contentCreateStruct,
@@ -1047,7 +788,7 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the canUser() method.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testCanUserThrowsBadStateException()
