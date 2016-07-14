@@ -497,7 +497,7 @@ class PermissionServiceTest extends BaseTest
             'content',
             'create',
             $contentCreateStruct,
-            $locationCreateStruct
+            [$locationCreateStruct]
         );
 
         // Performing an action having necessary permissions will succeed
@@ -560,7 +560,7 @@ class PermissionServiceTest extends BaseTest
             'content',
             'create',
             $contentCreateStruct,
-            $locationCreateStruct
+            [$locationCreateStruct]
         );
 
         // Performing an action without necessary permissions will fail with "UnauthorizedException"
@@ -701,55 +701,13 @@ class PermissionServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\PermissionService::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testSetCurrentUserReference
-     * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testCanUserWithTargetThrowsInvalidArgumentException()
-    {
-        $repository = $this->getRepository();
-
-        $homeId = $this->generateId('object', 57);
-
-        /* BEGIN: Use Case */
-        // $homeId contains the ID of the "Home" frontpage
-
-        $user = $this->createUserVersion1();
-
-        $permissionService = $repository->getPermissionService();
-
-        // Set created user as current user reference
-        $permissionService->setCurrentUserReference($user);
-
-        $contentService = $repository->getContentService();
-
-        // Load the ContentInfo for "Home" frontpage
-        $contentInfo = $contentService->loadContentInfo($homeId);
-
-        // This call will throw "InvalidArgumentException" because $targets argument must be an
-        // instance of \eZ\Publish\API\Repository\Values\ValueObject class or an array of the same
-        $canUser = $permissionService->canUser(
-            'content',
-            'remove',
-            $contentInfo,
-            new \stdClass()
-        );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the canUser() method.
-     *
-     * @see \eZ\Publish\API\Repository\PermissionService::canUser()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetURLAliasService
      * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testSetCurrentUserReference
      * @depends eZ\Publish\API\Repository\Tests\PermissionServiceTest::testHasAccessLimited
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testCanUserWithTargetThrowsInvalidArgumentExceptionVariant()
+    public function testCanUserWithTargetThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -780,7 +738,7 @@ class PermissionServiceTest extends BaseTest
             'content',
             'create',
             $contentCreateStruct,
-            $rootUrlAlias
+            [$rootUrlAlias]
         );
         /* END: Use Case */
     }
