@@ -625,7 +625,7 @@ class PermissionTest extends BaseServiceMockTest
 
         self::assertEquals(
             $result,
-            $permissionServiceMock->canUser('test-module', 'test-function', $valueObject, $valueObject)
+            $permissionServiceMock->canUser('test-module', 'test-function', $valueObject, [$valueObject])
         );
     }
 
@@ -681,7 +681,7 @@ class PermissionTest extends BaseServiceMockTest
                 'test-module',
                 'test-function',
                 $valueObject,
-                $valueObject
+                [$valueObject]
             )
         );
     }
@@ -893,34 +893,8 @@ class PermissionTest extends BaseServiceMockTest
                 'test-module',
                 'test-function',
                 $valueObject,
-                $valueObject
+                [$valueObject]
             )
-        );
-    }
-
-    /**
-     * Test for the canUser() method.
-     *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testCanUserThrowsInvalidArgumentException()
-    {
-        $permissionServiceMock = $this->getPermissionServiceMock(['hasAccess']);
-
-        $permissionServiceMock
-            ->expects($this->once())
-            ->method('hasAccess')
-            ->with($this->equalTo('test-module'), $this->equalTo('test-function'))
-            ->will($this->returnValue(array()));
-
-        /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
-        $valueObject = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ValueObject');
-
-        $permissionServiceMock->canUser(
-            'test-module',
-            'test-function',
-            $valueObject,
-            'This is not a target'
         );
     }
 
