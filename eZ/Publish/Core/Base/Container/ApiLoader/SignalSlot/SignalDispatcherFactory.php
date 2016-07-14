@@ -6,7 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\SignalSlot\SignalDispatcher;
+namespace eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot;
 
 class SignalDispatcherFactory
 {
@@ -23,31 +23,20 @@ class SignalDispatcherFactory
     /**
      * @var array
      */
-    private $repositorySettings;
-
-    /**
-     * @var array
-     */
     private $signalSlotMap = [];
 
     /**
      * SignalDispatcherFactory constructor.
+     *
      * @param string $signalDispatcherClass
-     * @param string $repositoryAlias
-     * @param array $repositoriesSettings
+     * @param $searchEngineAlias
      */
     public function __construct(
         $signalDispatcherClass,
-        $repositoryAlias,
-        array $repositoriesSettings
+        $searchEngineAlias
     ) {
         $this->signalDispatcherClass = $signalDispatcherClass;
-
-        if ($repositoryAlias === null) {
-            $aliases = array_keys($repositoriesSettings);
-            $repositoryAlias = array_shift($aliases);
-        }
-        $this->repositorySettings = isset($repositoriesSettings[$repositoryAlias]) ? $repositoriesSettings[$repositoryAlias] : [];
+        $this->searchEngineAlias = $searchEngineAlias;
     }
 
     /**
@@ -58,8 +47,7 @@ class SignalDispatcherFactory
      */
     public function addSlotsForSearchEngine($searchEngineAlias, array $searchEngineSignalSlots)
     {
-        $currentSearchEngineAlias = !empty($this->repositorySettings['search']['engine']) ? $this->repositorySettings['search']['engine'] : null;
-        if ($currentSearchEngineAlias !== $searchEngineAlias) {
+        if ($this->searchEngineAlias !== $searchEngineAlias) {
             return;
         }
 

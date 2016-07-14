@@ -52,24 +52,6 @@ $loader->load('utils.yml');
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
-// needed by @ezpublish.signalslot.signal_dispatcher.factory:
-$containerBuilder->setParameter(
-    'ezpublish.repositories',
-    [
-        'default' => [
-            'search' => [
-                'engine' => 'legacy',
-                'connection' => 'default',
-            ],
-        ],
-        'elastic_test' => [
-            'search' => [
-                'engine' => 'elasticsearch',
-            ],
-        ],
-    ]
-);
-
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeCollectionPass());
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeNameableCollectionPass());
 $containerBuilder->addCompilerPass(new Compiler\RegisterLimitationTypePass());

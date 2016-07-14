@@ -26,7 +26,6 @@ parameters:
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
     ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\SignalDispatcherTransactionWrapper
-    ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\SignalDispatcherFactory
 
 services:
     # API
@@ -151,10 +150,3 @@ services:
     ezpublish.signalslot.signal_dispatcher:
         class: %ezpublish.signalslot.signal_dispatcher.class%
         factory: ["@ezpublish.signalslot.signal_dispatcher.factory", buildSignalDispatcher]
-
-    ezpublish.signalslot.signal_dispatcher.factory:
-        class: %ezpublish.signalslot.signal_dispatcher.factory.class%
-        arguments:
-            - "%ezpublish.signalslot.signal_dispatcher.class%"
-            - "$repository$"
-            - "%ezpublish.repositories%"

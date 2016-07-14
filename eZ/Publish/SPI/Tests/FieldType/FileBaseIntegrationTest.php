@@ -156,24 +156,6 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
             self::$tmpDir . '/var/ezdemo_site/storage'
         );
 
-        // needed by @ezpublish.signalslot.signal_dispatcher.factory:
-        $containerBuilder->setParameter(
-            'ezpublish.repositories',
-            [
-                'default' => [
-                    'search' => [
-                        'engine' => 'legacy',
-                        'connection' => 'default',
-                    ],
-                ],
-                'elastic_test' => [
-                    'search' => [
-                        'engine' => 'elasticsearch',
-                    ],
-                ],
-            ]
-        );
-
         $containerBuilder->compile();
 
         return $containerBuilder;
