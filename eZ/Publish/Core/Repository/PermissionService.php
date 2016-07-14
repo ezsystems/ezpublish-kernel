@@ -146,21 +146,15 @@ class PermissionService implements PermissionServiceInterface
         return false;// No policies matching $module and $function, or they contained limitations
     }
 
-    public function canUser($module, $function, ValueObject $object, $targets = null)
+    public function canUser($module, $function, ValueObject $object, array $targets = [])
     {
         $permissionSets = $this->hasAccess($module, $function);
         if ($permissionSets === false || $permissionSets === true) {
             return $permissionSets;
         }
 
-        if ($targets instanceof ValueObject) {
-            $targets = array($targets);
-        } elseif ($targets !== null && !is_array($targets)) {
-            throw new InvalidArgumentType(
-                '$targets',
-                'null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]',
-                $targets
-            );
+        if (empty($targets)) {
+            $targets = null;
         }
 
         $currentUserRef = $this->getCurrentUserReference();

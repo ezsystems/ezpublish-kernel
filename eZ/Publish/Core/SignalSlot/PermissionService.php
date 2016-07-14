@@ -60,7 +60,7 @@ class PermissionService implements PermissionServiceInterface
         return $this->service->hasAccess($module, $function, $userReference);
     }
 
-    public function canUser($module, $function, ValueObject $object, $targets = null)
+    public function canUser($module, $function, ValueObject $object, array $targets = [])
     {
         return $this->service->canUser($module, $function, $object, $targets);
     }
