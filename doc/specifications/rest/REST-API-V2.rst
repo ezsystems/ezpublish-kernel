@@ -875,6 +875,8 @@ XML Example
       <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
       <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
+      <ContentPermissions href="/permissions/value/content/objects/23"
+        media-type="application/vnd.ez.api.ContentPermissions+xml">
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
@@ -1906,6 +1908,8 @@ XML Example
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
       <UrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/locations/1/4/73/133/urlaliases"/>
+      <LocationPermissions href="/permissions/value/content/locations/1/4/73/133"
+        media-type="application/vnd.ez.api.LocationPermissions+xml">
     </Location>
 
 
@@ -6534,6 +6538,289 @@ Example
 
     HTTP/1.1 204 No Content
     Set-Cookie: eZSSID=deleted; Expires=Thu, 01-Jan-1970 00:00:01 GMT; Path=/; Domain=.example.net; HttpOnly
+
+
+
+Permissions
+===========
+
+
+Overview
+--------
+
+Roles and policies define specific forms of access to resources, and can be combined to achieve complex results.
+When interpreted they result in the permissions set for each user/resource combination.
+
+================================================================= =================== ======================= ============================ ================ ==============
+Resource                                                          POST                GET                      PATCH/PUT                   DELETE           COPY
+----------------------------------------------------------------- ------------------- ----------------------- ---------------------------- ---------------- --------------
+/permissions/value/content/objects/<ID>?target=<restUri>          .                   load permissions for a  .                            .                .
+                                                                                      content
+/permissions/value/content/locations/<path>                       .                   load permissions for a  .                            .                .
+                                                                                      location
+/permissions/value/content/locations/<path>/children              .                   load permissions for    .                            .                .
+                                                                                      children of a location
+================================================================= =================== ======================= ============================ ================ ==============
+
+
+Specification
+-------------
+
+Managing Permissions
+~~~~~~~~~~~~~~~~~~~~
+
+
+Load Permissions for a Content
+``````````````````````````````
+:Resource: /permissions/value/content/objects/<ID>?target=<restUri>
+:Method: GET
+:Description: Loads the permissions for the content object with the given id, for the current user. The optional target
+    parameter lets you specify which Location(s) you want permissions for. If not specified, or if multiple locations
+    are specified, the response may be a "yes" for a given function if one location allows it while another doesn't.
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.ContentPermissions+xml:  if set the permissions for the content object are returned in xml format (see Content_)
+        :application/vnd.ez.api.ContentPermissions+json:  if set the permissions for the content object are returned in json format (see Content_)
+    :If-None-Match: <etag> If the provided etag matches the current etag then a 304 Not Modified is returned. The etag changes if the meta data was changed - this happens also if there is a new published version.
+:Parameters:
+    :target: URI of the Location you want the permissions for. May be specified multiple times, for multiple Locations.
+:Response:
+
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<ETag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+Content_
+
+:Error Codes:
+    :404: If the ID is not found
+
+XML Example, with target
+''''''''''''''''''''''''
+
+.. code:: http
+
+    GET /permissions/value/content/objects/23?target=/api/ezp/v2/content/locations/1/23/88&target=/api/ezp/v2/content/locations/1/32/67 HTTP/1.1
+    Accept: application/vnd.ez.api.ContentPermissions+xml
+    If-None-Match: "12340577"
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    ETag: "12345678"
+    Content-Type: application/vnd.ez.api.ContentPermissions+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentPermissions href="/permissions/value/content/objects/23?target=/api/ezp/v2/content/locations/1/23/88&target=/api/ezp/v2/content/locations/1/32/67"
+      media-type="application/vnd.ez.api.ContentPermissions+xml">
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
+      <can function="read">true</can>
+      <can function="edit">
+        <limitation identifier="Language">
+          <values>
+            <value>eng-GB</value>
+            <value>nor-NO</value>
+          </values>
+        </limitation>
+      </can>
+      <can function="remove">true</can>
+    </ContentPermissions>
+
+XML Example, without target
+'''''''''''''''''''''''''''
+
+.. code:: http
+
+    GET /permissions/value/content/objects/23 HTTP/1.1
+    Accept: application/vnd.ez.api.ContentPermissions+xml
+    If-None-Match: "12340577"
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    ETag: "12345678"
+    Content-Type: application/vnd.ez.api.ContentPermissions+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentPermissions href="/permissions/value/content/objects/23"
+      media-type="application/vnd.ez.api.ContentPermissions+xml">
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
+      <can function="read">true</can>
+      <can function="edit">
+        <limitation identifier="Language">
+          <values>
+            <value>eng-GB</value>
+            <value>nor-NO</value>
+          </values>
+        </limitation>
+      </can>
+      <can function="create">
+        <limitation identifier="Subtree">
+          <values>
+            <ref href="/content/locations/1/23/88" media-type="application/vnd.ez.api.Location+xml" />
+            <ref href="/content/locations/1/32/67" media-type="application/vnd.ez.api.Location+xml" />
+          </values>
+        </limitation>
+      </can>
+      <can function="remove">true</can>
+    </ContentPermissions>
+
+Load Permissions for a Location
+```````````````````````````````
+:Resource: /permissions/value/content/locations/<path>
+:Method: GET
+:Description: loads the permissions for the location of the given path, for the current user.
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.LocationPermissions+xml:  if set the permissions for the location is returned in xml format (see Location_)
+        :application/vnd.ez.api.LocationPermissions+json:  if set the permissions for the location is returned in json format (see Location_)
+    :If-None-Match: <etag>
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Location: /permissions/value/content/locations/<path>
+          ETag: "<new etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+Location_
+
+:Error Codes:
+    :404: If the location with the given path does not exist
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    GET /permissions/value/content/locations/1/4/73/133 HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.LocationPermissions+xml
+    If-None-Match: "2345503255"
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    ETag: "2345563422"
+    Content-Type: application/vnd.ez.api.LocationPermissions+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <LocationPermissions href="/permissions/value/content/locations/1/4/73/133"
+      media-type="application/vnd.ez.api.LocationPermissions+xml">
+      <Location href="/content/locations/1/4/73/133" media-type="application/vnd.ez.api.Location+xml" />
+      <can function="read">true</can>
+      <can function="edit">
+        <limitation identifier="Language">
+          <values>
+            <value>eng-GB</value>
+            <value>nor-NO</value>
+          </values>
+        </limitation>
+      </can>
+      <can function="remove">true</can>
+      <can function="create">
+        <limitation identifier="ContentType">
+          <values>
+            <ref href="/content/types/1" media-type="application/vnd.ez.api.ContentType+xml" />
+            <ref href="/content/types/16" media-type="application/vnd.ez.api.ContentType+xml" />
+          </values>
+        </limitation>
+      </can>
+    </LocationPermissions>
+
+Load Permissions for children of a Location
+```````````````````````````````````````````
+:Resource: /permissions/value/content/locations/<path>/children
+:Method: GET
+:Description: loads the permissions for the location of the given path, for the current user.
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.LocationPermissionList+xml:  if set the permissions for the child locations are returned in xml format (see Location_)
+        :application/vnd.ez.api.LocationPermissionList+json:  if set the permissions for the child locations are returned in json format (see Location_)
+    :If-None-Match: <etag>
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Location: /permissions/value/content/locations/<path>/children
+          ETag: "<new etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+Location_
+
+:Error Codes:
+    :404: If the location with the given path does not exist
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    GET /permissions/value/content/locations/1/4/73/133/children HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.LocationPermissionList+xml
+    If-None-Match: "2345503255"
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    ETag: "2345563422"
+    Content-Type: application/vnd.ez.api.LocationPermissionList+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <LocationPermissionList href="/permissions/value/content/locations/1/4/73/133/children"
+      media-type="application/vnd.ez.api.LocationPermissionList+xml">
+      <LocationPermissions href="/permissions/value/content/locations/1/4/73/133/148"
+        media-type="application/vnd.ez.api.LocationPermissions+xml">
+        <Location href="/content/locations/1/4/73/133/148"
+          media-type="application/vnd.ez.api.Location+xml" />
+        <can function="read">true</can>
+        <can function="edit">
+          <limitation identifier="Language">
+            <values>
+              <value>eng-GB</value>
+              <value>nor-NO</value>
+            </values>
+          </limitation>
+        </can>
+        <can function="remove">true</can>
+        <can function="create">
+          <limitation identifier="ContentType">
+            <values>
+              <ref href="/content/types/1" media-type="application/vnd.ez.api.ContentType+xml" />
+              <ref href="/content/types/16" media-type="application/vnd.ez.api.ContentType+xml" />
+            </values>
+          </limitation>
+        </can>
+      </LocationPermissions>
+      <LocationPermissions href="/permissions/value/content/locations/1/4/73/133/149"
+        media-type="application/vnd.ez.api.LocationPermissions+xml">
+        <Location href="/content/locations/1/4/73/133/149"
+          media-type="application/vnd.ez.api.Location+xml" />
+        <can function="read">true</can>
+        <can function="edit">true</can>
+      </LocationPermissions>
+    </LocationPermissionList>
 
 
 
