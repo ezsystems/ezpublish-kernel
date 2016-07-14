@@ -52,7 +52,7 @@ Backend:
 
 ### Testing Locally
 
-This kernel contains a comprehensive set of unit, functional, and integration tests. At the time of writing, 9k unit tests, 5.6k integration tests, and several functional tests.
+This kernel contains a comprehensive set of unit, functional, and integration tests. At the time of writing, 9k unit tests, 8k integration tests, and several functional tests.
 
 **Dependencies**
 * **PHP 5 Modules**: php5\_intl php5\_xsl php5\_gd php5\_sqlite *(aka `pdo\_sqlite`)*
