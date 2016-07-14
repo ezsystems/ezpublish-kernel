@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
@@ -424,6 +425,18 @@ class Repository implements RepositoryInterface
      */
     public function canUser($module, $function, ValueObject $object, $targets = null)
     {
+        if ($targets instanceof ValueObject) {
+            $targets = array($targets);
+        } elseif ($targets === null) {
+            $targets = [];
+        } elseif (!is_array($targets)) {
+            throw new InvalidArgumentType(
+                '$targets',
+                'null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]',
+                $targets
+            );
+        }
+
         return $this->getPermissionService()->canUser($module, $function, $object, $targets);
     }
 
