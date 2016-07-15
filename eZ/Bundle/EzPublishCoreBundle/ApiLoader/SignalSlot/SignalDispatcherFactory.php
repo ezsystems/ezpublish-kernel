@@ -13,6 +13,16 @@ use eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory 
 class SignalDispatcherFactory extends BaseSignalDispatcherFactory
 {
     /**
+     * @var string
+     */
+    private $repositoryAlias;
+
+    /**
+     * @var array
+     */
+    private $repositoriesSettings;
+
+    /**
      * SignalDispatcherFactory constructor.
      *
      * @param string $signalDispatcherClass
@@ -24,11 +34,21 @@ class SignalDispatcherFactory extends BaseSignalDispatcherFactory
         $repositoryAlias,
         array $repositoriesSettings
     ) {
-        if ($repositoryAlias === null) {
-            $aliases = array_keys($repositoriesSettings);
-            $repositoryAlias = array_shift($aliases);
+        $this->repositoryAlias = $repositoryAlias;
+        $this->repositoriesSettings = $repositoriesSettings;
+        parent::__construct($signalDispatcherClass, $this->getSearchEngineAlias());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchEngineAlias()
+    {
+        if ($this->repositoryAlias === null) {
+            $aliases = array_keys($this->repositoriesSettings);
+            $this->repositoryAlias = array_shift($aliases);
         }
-        $searchEngineAlias = isset($repositoriesSettings[$repositoryAlias]['search']['engine']) ? $repositoriesSettings[$repositoryAlias]['search']['engine'] : [];
-        parent::__construct($signalDispatcherClass, $searchEngineAlias);
+
+        return isset($this->repositoriesSettings[$this->repositoryAlias]['search']['engine']) ? $this->repositoriesSettings[$this->repositoryAlias]['search']['engine'] : '';
     }
 }

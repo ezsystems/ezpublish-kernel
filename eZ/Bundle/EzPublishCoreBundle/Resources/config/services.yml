@@ -30,9 +30,6 @@ parameters:
 
     ezpublish.fields_groups.list.class: eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList
 
-    # SignalDispatcher factory
-    ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SignalSlot\SignalDispatcherFactory
-
 services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
@@ -201,18 +198,3 @@ services:
 
     ez_query:
         alias: ezpublish.controller.query
-
-    ezpublish.signalslot.signal_dispatcher_transaction_wrapper:
-        class: %ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class%
-        arguments: [@ezpublish.signalslot.signal_dispatcher]
-
-    ezpublish.signalslot.signal_dispatcher:
-        class: %ezpublish.signalslot.signal_dispatcher.class%
-        factory: ["@ezpublish.signalslot.signal_dispatcher.factory", buildSignalDispatcher]
-
-    ezpublish.signalslot.signal_dispatcher.factory:
-        class: %ezpublish.signalslot.signal_dispatcher.factory.class%
-        arguments:
-            - "%ezpublish.signalslot.signal_dispatcher.class%"
-            - "$repository$"
-            - "%ezpublish.repositories%"

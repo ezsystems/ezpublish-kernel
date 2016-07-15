@@ -26,6 +26,11 @@ class SignalDispatcherFactory
     private $signalSlotMap = [];
 
     /**
+     * @var string
+     */
+    private $searchEngineAlias;
+
+    /**
      * SignalDispatcherFactory constructor.
      *
      * @param string $signalDispatcherClass
@@ -40,6 +45,16 @@ class SignalDispatcherFactory
     }
 
     /**
+     * Get current search engine alias.
+     *
+     * @return string
+     */
+    public function getSearchEngineAlias()
+    {
+        return $this->searchEngineAlias;
+    }
+
+    /**
      * Bulk add all signal slots if needed for a search engine.
      *
      * @param string $searchEngineAlias
@@ -47,7 +62,7 @@ class SignalDispatcherFactory
      */
     public function addSlotsForSearchEngine($searchEngineAlias, array $searchEngineSignalSlots)
     {
-        if ($this->searchEngineAlias !== $searchEngineAlias) {
+        if ($this->getSearchEngineAlias() !== $searchEngineAlias) {
             return;
         }
 
