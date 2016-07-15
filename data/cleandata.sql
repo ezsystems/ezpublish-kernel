@@ -1870,9 +1870,9 @@ INSERT INTO `ezsection` (`id`, `identifier`, `locale`, `name`, `navigation_part_
 INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-release','1');
 INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-version','6.4.0');
 
-INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832197,23,1,0,1448832197,'b728a39b2818dc1a558b07b9e8b7aef0','https://doc.ez.no/display/USER/');
-INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832277,24,1,0,1448832277,'d77b69a7ce26e6c87a7253f1fc50fc10','https://doc.ez.no/display/DEVELOPER/');
-INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832412,25,1,0,1448832412,'fefcd099533d694500430bed1a32ca5b','https://doc.ez.no/display/DEVELOPER/Building+a+Bicycle+Route+Tracker+in+eZ+Platform');
+INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832197,23,1,0,1448832197,'f76e41d421b2a72232264943026a6ee5','https://doc.ez.no/display/USER/');
+INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832277,24,1,0,1448832277,'5ebaee4017bab35ed0157379fdeff0af','https://doc.ez.no/display/DEVELOPER/');
+INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832412,25,1,0,1448832412,'2657dfe060c0d56aca8ef8193e17ecf9','https://doc.ez.no/display/DEVELOPER/Building+a+Bicycle+Route+Tracker+in+eZ+Platform');
 INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832436,26,1,0,1448832436,'180577afbb87b0e2cfcb6758c62dfd5f','https://doc.ez.no/display/MAIN/Transitioning+from+eZ+Publish+to+eZ+Platform+and+eZ+Studio%3A+Feature+Comparison');
 INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832661,27,1,0,1448832661,'f9bf96304c434139d0ff5773b6eee157','https://github.com/ezsystems');
 INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832661,28,1,0,1448832661,'265d537bfba0e5ed4e85fbcd7f30ea84','http://share.ez.no');
