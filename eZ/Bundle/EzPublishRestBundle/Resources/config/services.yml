@@ -226,8 +226,6 @@ services:
 
     ezpublish_rest.request_listener:
         class: %ezpublish_rest.request_listener.class%
-        arguments:
-            - %ezpublish_rest.path_prefix%
         tags:
             - { name: kernel.event_subscriber }
 

@@ -19,43 +19,85 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestListenerTest extends EventListenerTest
 {
-    const REST_PREFIX = '/rest/prefix';
+    const REST_ROUTE = '/api/ezp/v2/rest-route';
+    const NON_REST_ROUTE = '/non-rest-route';
 
     public function provideExpectedSubscribedEventTypes()
     {
-        return array(
-            array(array(KernelEvents::REQUEST)),
-        );
+        return [
+            [
+                [KernelEvents::REQUEST],
+            ],
+        ];
+    }
+
+    public static function restRequestUrisProvider()
+    {
+        return [
+            ['/api/ezp/v2/true'],
+            ['/api/bundle-name/v2/true'],
+            ['/api/MyBundle12/v2/true'],
+            ['/api/ThisIs_Bundle123/v2/true'],
+            ['/api/my-bundle/v1/true'],
+            ['/api/my-bundle/v2/true'],
+            ['/api/my-bundle/v2.7/true'],
+            ['/api/my-bundle/v122.73/true'],
+        ];
+    }
+
+    public static function nonRestRequestsUrisProvider()
+    {
+        return [
+            ['/ap/ezp/v2/false'],
+            ['/api/bundle name/v2/false'],
+            ['/api/My/Bundle/v2/false'],
+            ['/api//v2/false'],
+            ['/api/my-bundle/v/false'],
+            ['/api/my-bundle/v2-2/false'],
+            ['/api/my-bundle/v2 7/false'],
+            ['/api/my-bundle/v/7/false'],
+        ];
     }
 
     public function testOnKernelRequestNotMasterRequest()
     {
-        $event = $this->getEvent(self::REST_PREFIX . '/', HttpKernelInterface::SUB_REQUEST);
-        $this->getEventListener()->onKernelRequest($event);
+        $request = $this->performFakeRequest(self::REST_ROUTE, HttpKernelInterface::SUB_REQUEST);
 
-        self::assertTrue(
-            $event->getRequest()->attributes->get('is_rest_request')
-        );
+        self::assertTrue($request->attributes->get('is_rest_request'));
     }
 
     public function testOnKernelRequestNotRestRequest()
     {
-        $event = $this->getEvent('/');
-        $this->getEventListener()->onKernelRequest($event);
+        $request = $this->performFakeRequest(self::NON_REST_ROUTE);
 
-        self::assertFalse(
-            $event->getRequest()->attributes->get('is_rest_request')
-        );
+        self::assertFalse($request->attributes->get('is_rest_request'));
     }
 
     public function testOnKernelRequestRestRequest()
     {
-        $event = $this->getEvent(self::REST_PREFIX . '/');
-        $this->getEventListener()->onKernelRequest($event);
+        $request = $this->performFakeRequest(self::REST_ROUTE);
 
-        self::assertTrue(
-            $event->getRequest()->attributes->get('is_rest_request')
-        );
+        self::assertTrue($request->attributes->get('is_rest_request'));
+    }
+
+    /**
+     * @dataProvider restRequestUrisProvider
+     */
+    public function testRestRequestVariations($uri)
+    {
+        $request = $this->performFakeRequest($uri);
+
+        self::assertTrue($request->attributes->get('is_rest_request'));
+    }
+
+    /**
+     * @dataProvider nonRestRequestsUrisProvider
+     */
+    public function testNonRestRequestVariations($uri)
+    {
+        $request = $this->performFakeRequest($uri);
+
+        self::assertFalse($request->attributes->get('is_rest_request'));
     }
 
     /**
@@ -64,7 +106,6 @@ class RequestListenerTest extends EventListenerTest
     protected function getEventListener()
     {
         return new RequestListener(
-            self::REST_PREFIX,
             $this->getVisitorDispatcherMock()
         );
     }
@@ -80,14 +121,18 @@ class RequestListenerTest extends EventListenerTest
     }
 
     /**
-     * @return GetResponseEvent
+     * @return Request
      */
-    public function getEvent($uri, $type = HttpKernelInterface::MASTER_REQUEST)
+    protected function performFakeRequest($uri, $type = HttpKernelInterface::MASTER_REQUEST)
     {
-        return new GetResponseEvent(
+        $event = new GetResponseEvent(
             $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
             Request::create($uri),
             $type
         );
+
+        $this->getEventListener()->onKernelRequest($event);
+
+        return $event->getRequest();
     }
 }
