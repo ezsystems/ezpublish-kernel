@@ -20,7 +20,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisito
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\AggregateFieldValueMapperPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\SearchEngineSignalSlotPass;
 
 class EzPublishElasticsearchSearchEngineBundle extends Bundle
 {
@@ -36,7 +36,7 @@ class EzPublishElasticsearchSearchEngineBundle extends Bundle
 
         // @todo two passes below should be common for search implementations, so maybe separate or Core bundle
         $container->addCompilerPass(new FieldRegistryPass());
-        $container->addCompilerPass(new SignalSlotPass());
+        $container->addCompilerPass(new SearchEngineSignalSlotPass('elasticsearch'));
     }
 
     public function getContainerExtension()

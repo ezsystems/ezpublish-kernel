@@ -1,5 +1,4 @@
 imports:
-    - {resource: search_engines/slots.yml}
     - {resource: search_engines/field_value_mappers.yml}
 
 parameters:

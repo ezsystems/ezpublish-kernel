@@ -18,6 +18,9 @@ parameters:
     ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
     ezpublish.api.version.class: eZ\Publish\Core\Repository\Values\Content\VersionInfo
 
+    # SignalDispatcher factory
+    ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SignalSlot\SignalDispatcherFactory
+
 services:
     # API
     ezpublish.api.repository.factory:
@@ -75,3 +78,11 @@ services:
         arguments: [@event_dispatcher]
         tags:
             - { name: ezpublish.api.slot, signal: '*' }
+
+    # SignalDispatcher Factory
+    ezpublish.signalslot.signal_dispatcher.factory:
+        class: %ezpublish.signalslot.signal_dispatcher.factory.class%
+        arguments:
+            - "%ezpublish.signalslot.signal_dispatcher.class%"
+            - "$repository$"
+            - "%ezpublish.repositories%"
