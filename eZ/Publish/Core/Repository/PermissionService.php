@@ -14,6 +14,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\PermissionResolver\PermissionInfoMapper\Content as ContentPermissionInfoMapper;
+use eZ\Publish\Core\Repository\PermissionResolver\PermissionInfoMapper\Aggregate as PermissionInfoMapper;
+use eZ\Publish\Core\Repository\PermissionResolver\PermissionResolver;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use Exception;
@@ -53,6 +56,11 @@ class PermissionService implements PermissionServiceInterface
     private $currentUserRef;
 
     /**
+     * @var \eZ\Publish\Core\Repository\PermissionResolver\PermissionInfoMapper
+     */
+    private $permissionInfoMapper;
+
+    /**
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
@@ -68,6 +76,16 @@ class PermissionService implements PermissionServiceInterface
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
         $this->currentUserRef = $userReference;
+
+        // TODO: inject
+        $permissionResolver = new PermissionResolver(
+            $this->roleDomainMapper,
+            $this->limitationService,
+            $this->userHandler
+        );
+        $this->permissionInfoMapper = new PermissionInfoMapper();
+        $contentPermissionInfoMapper = new ContentPermissionInfoMapper($permissionResolver);
+        $this->permissionInfoMapper->addMapper($contentPermissionInfoMapper);
     }
 
     public function getCurrentUserReference()
@@ -222,6 +240,15 @@ class PermissionService implements PermissionServiceInterface
         }
 
         return false;// None of the limitation sets wanted to let you in, sorry!
+    }
+
+    public function getPermissionInfo(ValueObject $object, APIUserReference $userReference = null)
+    {
+        if ($userReference === null) {
+            $userReference = $this->getCurrentUserReference();
+        }
+
+        return $this->permissionInfoMapper->map($object, $userReference);
     }
 
     /**

@@ -65,6 +65,11 @@ class PermissionService implements PermissionServiceInterface
         return $this->service->canUser($module, $function, $object, $targets);
     }
 
+    public function getPermissionInfo(ValueObject $object)
+    {
+        return $this->service->getPermissionInfo($object);
+    }
+
     public function sudo(Closure $callback)
     {
         return $this->service->sudo($callback, $this);
