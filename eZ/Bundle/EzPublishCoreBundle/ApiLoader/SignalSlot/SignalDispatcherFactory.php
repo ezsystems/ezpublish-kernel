@@ -36,7 +36,7 @@ class SignalDispatcherFactory extends BaseSignalDispatcherFactory
     ) {
         $this->repositoryAlias = $repositoryAlias;
         $this->repositoriesSettings = $repositoriesSettings;
-        parent::__construct($signalDispatcherClass, $this->getSearchEngineAlias());
+        parent::__construct($signalDispatcherClass, null);
     }
 
     /**
