@@ -35,3 +35,11 @@ install:
     - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/download/1.1.3/composer.phar
     - cd c:\projects\ezpublish-kernel
     - composer update --no-progress --ansi
+
+test_script:
+    - cd c:\projects\ezpublish-kernel
+    - copy /Y config.php-DEVELOPMENT config.php
+    - SET X=0
+    - vendor/bin/phpunit --colors=never -c phpunit.xml || SET X=!errorlevel!
+    - vendor/bin/phpunit --colors=never -c phpunit-integration-legacy.xml || SET X=!errorlevel!
+    - exit %X%
