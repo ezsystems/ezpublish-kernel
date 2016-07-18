@@ -60,6 +60,10 @@ class SectionTest extends BaseTest
             ->expects($this->once())
             ->method('getSectionService')
             ->will($this->returnValue($sectionServiceMock));
+        $repository
+            ->expects($this->any())
+            ->method('getPermissionService')
+            ->will($this->returnValue($this->getPermissionServiceMock()));
 
         return $repository;
     }

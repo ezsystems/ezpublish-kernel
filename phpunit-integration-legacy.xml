@@ -16,6 +16,7 @@
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/PermissionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceMaximumSupportedLanguagesTest.php</file>

@@ -131,6 +131,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -141,6 +143,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
@@ -151,6 +155,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -165,6 +171,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::hasAccess() instead.
+     *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -177,6 +185,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.5, to be removed. Use PermissionService::canUser() instead.
+     *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
      *
@@ -461,6 +471,16 @@ class Repository implements APIRepository
         }
 
         return $this->fieldTypeService;
+    }
+
+    /**
+     * Get PermissionService.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionService
+     */
+    public function getPermissionService()
+    {
+        throw new \RuntimeException('@todo: Implement');
     }
 
     /**
