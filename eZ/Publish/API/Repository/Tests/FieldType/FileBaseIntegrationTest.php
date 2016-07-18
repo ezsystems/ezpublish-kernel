@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
-use FileSystemIterator;
+use FilesystemIterator;
 use UnexpectedValueException;
 
 /**
@@ -115,14 +115,14 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     /**
      * Returns an iterator over the full storage dir.
      *
-     * @return Iterator
+     * @return \Iterator
      */
     protected static function getStorageDirIterator()
     {
         return new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                self::$installDir . '/' . self::$storageDir,
-                FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO
+                self::$installDir . DIRECTORY_SEPARATOR . self::$storageDir,
+                FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO
             ),
             RecursiveIteratorIterator::CHILD_FIRST
         );
@@ -130,8 +130,6 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
     /**
      * Removes the given directory path recursively.
-     *
-     * @param string $dir
      */
     protected static function cleanupStorageDir()
     {
@@ -160,7 +158,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected static function setUpIgnoredPath($ignoredFiles)
     {
         foreach ($ignoredFiles as $ignoredFile) {
-            $pathPartsArray = explode(DIRECTORY_SEPARATOR, $ignoredFile);
+            // Note: do not use here DIRECTORY_SEPARATOR - $ignoredFiles list comes from yaml settings
+            $pathPartsArray = explode('/', $ignoredFile);
             foreach ($pathPartsArray as $index => $directoryPart) {
                 if ($directoryPart == '') {
                     continue;
