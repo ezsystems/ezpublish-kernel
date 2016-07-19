@@ -28,7 +28,7 @@ class QueryTypePass implements CompilerPassInterface
         $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.query_type');
         foreach ($taggedServiceIds as $taggedServiceId => $tags) {
             $queryTypeDefinition = $container->getDefinition($taggedServiceId);
-            $queryTypeClass = $queryTypeDefinition->getClass();
+            $queryTypeClass = $container->getParameterBag()->resolveValue($queryTypeDefinition->getClass());
 
             for ($i = 0, $count = count($tags); $i < $count; ++$i) {
                 // TODO: Check for duplicates
