@@ -75,4 +75,24 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
             [['Test:Test' => new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype')]]
         );
     }
+
+    public function testConventionSkippedIfTagged()
+    {
+        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle']);
+
+        $def = new Definition();
+        $def->addTag('ezpublish.query_type');
+        $def->setClass(self::$queryTypeClass);
+        $serviceId = 'test.query_type';
+        $this->setDefinition($serviceId, $def);
+
+        $this->compile();
+
+        $this->assertContainerBuilderNotHasService('ezpublish.query_type.convention.querytypebundle_testquerytype');
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'ezpublish.query_type.registry',
+            'addQueryTypes',
+            [['Test:Test' => new Reference($serviceId)]]
+        );
+    }
 }
