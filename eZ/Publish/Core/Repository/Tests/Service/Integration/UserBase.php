@@ -177,10 +177,10 @@ abstract class UserBase extends BaseServiceTest
     /**
      * Test creating new user group throwing ContentFieldValidationException.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @covers \eZ\Publish\API\Repository\UserService::createUserGroup
      */
-    public function testCreateUserGroupThrowsContentValidationException()
+    public function testCreateUserGroupRequiredFieldEmpty()
     {
         $userService = $this->repository->getUserService();
 
@@ -194,12 +194,12 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
-     * Test creating new user group throwing ContentValidationException.
+     * Test creating new user group throwing ContentFieldValidationException.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @covers \eZ\Publish\API\Repository\UserService::createUserGroup
      */
-    public function testCreateUserGroupThrowsContentValidationExceptionVariation()
+    public function testCreateUserGroupRequiredFieldMissing()
     {
         $userService = $this->repository->getUserService();
 
@@ -413,10 +413,10 @@ abstract class UserBase extends BaseServiceTest
     /**
      * Test updating a user group throwing ContentFieldValidationException.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @covers \eZ\Publish\API\Repository\UserService::updateUserGroup
      */
-    public function testUpdateUserGroupThrowsContentValidationException()
+    public function testUpdateUserGroupRequiredFieldEmpty()
     {
         $userService = $this->repository->getUserService();
         $contentService = $this->repository->getContentService();
@@ -484,12 +484,12 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
-     * Test creating a user throwing ContentValidationException.
+     * Test creating a user throwing ContentFieldValidationException.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @covers \eZ\Publish\API\Repository\UserService::createUser
      */
-    public function testCreateUserThrowsContentValidationException()
+    public function testCreateUserRequiredFieldsEmpty()
     {
         $userService = $this->repository->getUserService();
 

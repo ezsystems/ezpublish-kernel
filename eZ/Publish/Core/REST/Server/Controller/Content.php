@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
+use eZ\Publish\Core\REST\Server\Exceptions\ContentFieldValidationException as RESTContentFieldValidationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -247,7 +248,7 @@ class Content extends RestController
         } catch (ContentValidationException $e) {
             throw new BadRequestException($e->getMessage());
         } catch (ContentFieldValidationException $e) {
-            throw new BadRequestException($e->getMessage());
+            throw new RESTContentFieldValidationException($e);
         }
 
         $contentValue = null;
@@ -476,7 +477,7 @@ class Content extends RestController
         } catch (ContentValidationException $e) {
             throw new BadRequestException($e->getMessage());
         } catch (ContentFieldValidationException $e) {
-            throw new BadRequestException($e->getMessage());
+            throw new RESTContentFieldValidationException($e);
         }
 
         $languages = null;

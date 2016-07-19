@@ -22,6 +22,8 @@ class ErrorMessage extends ValueObject
 
     protected $description;
 
+    protected $details;
+
     protected $trace;
 
     protected $file;
