@@ -62,7 +62,8 @@ class CreateIndexCommand extends ContainerAwareCommand
 
         if (!$this->searchHandler instanceof SearchHandler) {
             throw new RuntimeException(
-                'Expected to find Search Handler but found something else.'
+                'Expected to find Legacy Search Engine but found something else.' .
+                "Did you forget to configure the repository with 'legacy' search engine?"
             );
         }
     }
@@ -131,9 +132,6 @@ EOT
             $progress->advance($k);
         } while (($i += $bulkCount) < $totalCount);
 
-        // Make changes available for search
-        $this->searchHandler->commit();
-
         $progress->finish();
     }
 
@@ -141,7 +139,7 @@ EOT
      * Get content objects total count.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler
-     * @param int                                                   $contentObjectStatus ContentInfo constant
+     * @param int $contentObjectStatus ContentInfo constant
      *
      * @return int
      */
@@ -168,7 +166,8 @@ EOT
     private function logWarning(OutputInterface $output, ProgressHelper $progress, $message)
     {
         $progress->clear();
-        $output->write("\r"); // get rid of padding (side effect of displaying progress bar)
+        // get rid of padding (side effect of displaying progress bar)
+        $output->write("\r");
         $this->logger->warning($message);
         $progress->display();
     }
