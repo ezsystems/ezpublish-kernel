@@ -29,7 +29,7 @@ class DateMapper extends CommonDateMapper
     public function map(Field $field)
     {
         if (is_numeric($field->value)) {
-            $date = new DateTime("@{$field->value}");
+            return $field->value;
         } else {
             try {
                 $date = new DateTime($field->value);
