@@ -15,7 +15,6 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriterionFieldValueHan
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\SortClauseConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SearchEngineSignalSlotPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\AggregateFieldValueMapperPass;
 
 class EzPublishLegacySearchEngineBundle extends Bundle
 {
@@ -28,7 +27,6 @@ class EzPublishLegacySearchEngineBundle extends Bundle
         $container->addCompilerPass(new SortClauseConverterPass());
         $container->addCompilerPass(new FieldRegistryPass());
         $container->addCompilerPass(new SearchEngineSignalSlotPass('legacy'));
-        $container->addCompilerPass(new AggregateFieldValueMapperPass());
     }
 
     public function getContainerExtension()
