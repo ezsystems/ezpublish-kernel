@@ -32,8 +32,12 @@ class OutputVisitorPass implements CompilerPassInterface
 
         $definition = $container->getDefinition('ezpublish_rest.output.visitor.dispatcher');
 
+        $visitors = [];
+
         foreach ($container->findTaggedServiceIds('ezpublish_rest.output.visitor') as $id => $attributes) {
             foreach ($attributes as $attribute) {
+                $priority = isset($attribute['priority']) ? $attribute['priority'] : 0;
+
                 if (!isset($attribute['regexps'])) {
                     throw new \LogicException('ezpublish_rest.output.visitor service tag needs a "regexps" attribute to identify the Accept header. None given.');
                 }
@@ -50,12 +54,25 @@ class OutputVisitorPass implements CompilerPassInterface
                     throw new \LogicException('ezpublish_rest.output.visitor service tag needs a "regexps" attribute, either as an array or a string. Invalid value.');
                 }
 
-                foreach ($regexps as $regexp) {
-                    $definition->addMethodCall(
-                        'addVisitor',
-                        array($regexp, new Reference($id))
-                    );
-                }
+                $visitors[$priority][] = [
+                    'regexps' => $regexps,
+                    'reference' => new Reference($id),
+                ];
+            }
+        }
+
+        // sort by priority and flatten
+        krsort($visitors);
+        $visitors = call_user_func_array('array_merge', $visitors);
+
+        foreach ($visitors as $visitor) {
+            foreach ($visitor['regexps'] as $regexp) {
+                $definition->addMethodCall(
+                    'addVisitor', [
+                        $regexp,
+                        $visitor['reference'],
+                    ]
+                );
             }
         }
     }
