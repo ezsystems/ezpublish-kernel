@@ -83,6 +83,8 @@ services:
             - %ezpublish.siteaccess.match_config%
             - %ezpublish.siteaccess.list%
             - %ezpublish.siteaccess.class%
+        calls:
+            - [setSiteAccess, [@?ezpublish.siteaccess=]]
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
