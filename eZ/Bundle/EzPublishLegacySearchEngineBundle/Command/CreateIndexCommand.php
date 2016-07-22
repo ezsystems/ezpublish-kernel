@@ -8,21 +8,22 @@
  */
 namespace eZ\Bundle\EzPublishLegacySearchEngineBundle\Command;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\SPI\Persistence\Content;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Search\Legacy\Content\Handler as SearchHandler;
 use RuntimeException;
 use PDO;
 
 /**
- * Console command ezplatform:create_sql_search_index indexes content objects for legacy search engine.
+ * Console command ezplatform:create_sql_search_index indexes content objects for legacy search
+ * engine.
  */
 class CreateIndexCommand extends ContainerAwareCommand
 {
@@ -91,7 +92,9 @@ EOT
     {
         $bulkCount = $input->getArgument('bulk_count');
         // Indexing Content
-        $totalCount = $this->getContentObjectsTotalCount($this->databaseHandler, ContentInfo::STATUS_PUBLISHED);
+        $totalCount = $this->getContentObjectsTotalCount(
+            $this->databaseHandler, ContentInfo::STATUS_PUBLISHED
+        );
 
         $query = $this->databaseHandler->createSelectQuery();
         $query->select('id', 'current_version')
@@ -125,9 +128,13 @@ EOT
                 }
             }
 
-            $this->searchHandler->bulkIndex($contentObjects, function (Content $content, NotFoundException $e) use ($output, $progress) {
-                $this->logWarning($output, $progress, 'Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
-            });
+            $this->searchHandler->bulkIndex(
+                $contentObjects,
+                function (Content $content, NotFoundException $e) use ($output, $progress) {
+                    $this->logWarning($output, $progress, 'Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage()
+                    );
+                }
+            );
 
             $progress->advance($k);
         } while (($i += $bulkCount) < $totalCount);
