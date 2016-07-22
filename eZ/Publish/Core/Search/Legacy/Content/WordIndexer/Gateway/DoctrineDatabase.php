@@ -65,9 +65,9 @@ class DoctrineDatabase extends Gateway
     /**
      * Construct from handler handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler                     $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler                          $typeHandler
-     * @param \eZ\Publish\Core\Persistence\TransformationProcessor                      $transformationProcessor
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $typeHandler
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      * @param \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex $searchIndex
      */
     public function __construct(
@@ -113,7 +113,7 @@ class DoctrineDatabase extends Gateway
                 if (trim($word) === '') {
                     continue;
                 }
-                $word = $this->transformationProcessor->transformByGroup($word, 'lowercase'); // to keep consistency with {@see buildWordIDArray} method
+                $word = $this->transformationProcessor->transformByGroup($word, 'lowercase');
                 // words stored in search index are limited to 150 characters
                 if (mb_strlen($word) > 150) {
                     $word = mb_substr($word, 0, 150);
@@ -141,7 +141,12 @@ class DoctrineDatabase extends Gateway
         $wordIDArray = $this->buildWordIDArray(array_keys($indexArrayOnlyWords));
         $this->dbHandler->beginTransaction();
         for ($arrayCount = 0; $arrayCount < $wordCount; $arrayCount += 1000) {
-            $placement = $this->indexWords($fullTextData, array_slice($indexArray, $arrayCount, 1000), $wordIDArray, $placement);
+            $placement = $this->indexWords(
+                $fullTextData,
+                array_slice($indexArray, $arrayCount, 1000),
+                $wordIDArray,
+                $placement
+            );
         }
         $this->dbHandler->commit();
     }
@@ -149,8 +154,9 @@ class DoctrineDatabase extends Gateway
     /**
      * Indexes an array of FullTextData objects.
      *
-     * Note: on large amounts of data make sure to iterate with several calls to this function with a limited
-     * set of FullTextData objects. Amount you have memory for depends on server, size of FullTextData objects & PHP version.
+     * Note: on large amounts of data make sure to iterate with several calls to this function with
+     * a limited set of FullTextData objects. Amount you have memory for depends on server, size
+     * of FullTextData objects & PHP version.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\FullTextData[] $fullTextBulkData
      */

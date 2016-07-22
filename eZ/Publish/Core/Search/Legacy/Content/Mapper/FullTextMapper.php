@@ -17,7 +17,8 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Search\Legacy\Content\FullTextValue;
 
 /**
- * FullTextMapper maps Content object fields to FullTextValue objects which are searchable and therefore can be indexed by the legacy search engine.
+ * FullTextMapper maps Content object fields to FullTextValue objects which are searchable and
+ * therefore can be indexed by the legacy search engine.
  */
 class FullTextMapper
 {
@@ -68,7 +69,8 @@ class FullTextMapper
     }
 
     /**
-     * Returns an array of FullTextValue object containing searchable values of content object fields for the given $content.
+     * Returns an array of FullTextValue object containing searchable values of content object
+     * fields for the given $content.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
@@ -78,7 +80,9 @@ class FullTextMapper
     {
         $fullTextValues = [];
         foreach ($content->fields as $field) {
-            $fieldDefinition = $this->contentTypeHandler->getFieldDefinition($field->fieldDefinitionId, Content\Type::STATUS_DEFINED);
+            $fieldDefinition = $this->contentTypeHandler->getFieldDefinition(
+                $field->fieldDefinitionId, Content\Type::STATUS_DEFINED
+            );
             if (!$fieldDefinition->isSearchable) {
                 continue;
             }
@@ -123,6 +127,7 @@ class FullTextMapper
             }
         }
 
-        return !is_array($fullTextFieldValue) ? $fullTextFieldValue : implode(' ', $fullTextFieldValue); // some full text fields are stored as an array of strings
+        // some full text fields are stored as an array of strings
+        return !is_array($fullTextFieldValue) ? $fullTextFieldValue : implode(' ', $fullTextFieldValue);
     }
 }

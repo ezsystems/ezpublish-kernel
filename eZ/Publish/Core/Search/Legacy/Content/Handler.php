@@ -130,15 +130,15 @@ class Handler implements SearchHandlerInterface
     /**
      * Finds content objects for the given query.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Query criterion is not applicable to its target
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Also used to define which field languages are loaded for the returned content.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
-     * @return SearchResult if Query criterion is not applicable to its target
      *
-     * @throws NotImplementedException
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     public function findContent(Query $query, array $languageFilter = array())
     {

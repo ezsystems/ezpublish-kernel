@@ -46,9 +46,10 @@ class SearchIndex
     {
         $query = $this->dbHandler->createSelectQuery();
 
+        // use array_map as some DBMS-es do not cast integers to strings by default
         $query->select('*')
             ->from('ezsearch_word')
-            ->where($query->expr->in('word', array_map('strval', $words))); // some DBMS-es do not cast integers to strings by default
+            ->where($query->expr->in('word', array_map('strval', $words)));
 
         $stmt = $query->prepare();
         $stmt->execute();
@@ -108,7 +109,12 @@ class SearchIndex
     {
         $this->dbHandler->beginTransaction();
         $query = $this->dbHandler->createDeleteQuery();
-        $tables = ['ezsearch_object_word_link', 'ezsearch_return_count', 'ezsearch_search_phrase', 'ezsearch_word'];
+        $tables = [
+            'ezsearch_object_word_link',
+            'ezsearch_return_count',
+            'ezsearch_search_phrase',
+            'ezsearch_word',
+        ];
         foreach ($tables as $tbl) {
             $query->deleteFrom($tbl);
             $stmt = $query->prepare();
@@ -229,7 +235,7 @@ class SearchIndex
     /**
      * Update object count for words (legacy db table: ezsearch_word).
      *
-     * @param array $wordId  list of word IDs
+     * @param array $wordId list of word IDs
      * @param array $columns map of columns and values to be updated ([column => value])
      */
     private function updateWordObjectCount(array $wordId, array $columns)
