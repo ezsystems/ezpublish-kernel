@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\LoadableValueObjectReference;
 use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 
 /**
@@ -134,11 +135,14 @@ class RestContent extends ValueObjectVisitor
         $generator->endObjectElement('Locations');
 
         $generator->startObjectElement('Owner', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $contentInfo->ownerId))
+        $visitor->visitValueObject(
+            new LoadableValueObjectReference(
+                [
+                    'type' => 'User',
+                    'loadParameters' => ['userId' => $contentInfo->ownerId],
+                ]
+            )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Owner');
 
         // Modification date will not exist if we're visiting the content draft
