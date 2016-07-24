@@ -405,3 +405,8 @@ services:
         parent: hautelook.router.template
         calls:
             - [ setOption, [ strict_requirements, ~ ] ]
+
+    ezpublish_rest.value_href_generator:
+        class: eZ\Publish\Core\REST\Server\Output\RouteValueHrefGenerator
+        arguments:
+            - @router
