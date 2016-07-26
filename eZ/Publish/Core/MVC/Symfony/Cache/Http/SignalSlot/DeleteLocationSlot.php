@@ -36,12 +36,11 @@ class DeleteLocationSlot extends PurgeForContentHttpCacheSlot
     {
         try {
             $locationIds = $this->extractLocationIds($signal);
+
             return $this->httpCacheClearer->purgeForContent($this->extractContentId($signal), $locationIds);
         } catch (NotFoundException $e) {
             // if content was deleted as well by this operation then fall back to clear location and parent location cache.
             $this->httpCacheClearer->purge($locationIds);
         }
-
-
     }
 }

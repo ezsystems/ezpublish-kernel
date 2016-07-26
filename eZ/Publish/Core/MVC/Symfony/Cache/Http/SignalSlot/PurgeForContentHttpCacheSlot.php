@@ -11,7 +11,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
 
 /**
  * An abstract HTTP Cache purging Slot that purges cache for a Content.
@@ -59,9 +58,10 @@ abstract class PurgeForContentHttpCacheSlot extends HttpCacheSlot
         $locationIds = [];
         if (isset($signal->locationId)) {
             $locationIds[] = $signal->locationId;
-        } else if (isset($signal->parentLocationId)) {
+        } elseif (isset($signal->parentLocationId)) {
             $locationIds[] = $signal->parentLocationId;
         }
+
         return $locationIds;
     }
 }

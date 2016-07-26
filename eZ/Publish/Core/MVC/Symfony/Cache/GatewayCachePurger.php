@@ -21,11 +21,11 @@ interface GatewayCachePurger
      *
      * @deprecated as of 6.0. Will be removed in 7.0. Use purgeForContent() instead.
      *
-     * @param mixed $cacheElements
+     * @param array $locationIds
      *
      * @return mixed
      */
-    public function purge($cacheElements);
+    public function purge($locationIds);
 
     /**
      * Triggers cache purge for given content.
