@@ -14,13 +14,17 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Search\IndexerDataProvider;
+use eZ\Publish\SPI\Search\Indexing;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, Indexing
 {
     /**
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
@@ -380,5 +384,91 @@ class Handler implements SearchHandlerInterface
     public function flush()
     {
         $this->gateway->flush();
+    }
+
+    /**
+     * Create search engine index.
+     *
+     * @param $bulkCount
+     * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function createSearchIndex(
+        $bulkCount,
+        IndexerDataProvider $dataProvider,
+        OutputInterface $output,
+        LoggerInterface $logger
+    ) {
+        $this->setCommit(true);
+        $this->purgeIndex();
+
+        $totalCount = $dataProvider->getPublishedContentCount();
+
+        // get content objects current version ids generator
+        $contentCurrentVersionIds = $dataProvider->getContentObjects();
+
+        //Indexing Content
+        $output->writeln('Indexing Content...');
+
+        /* @var \Symfony\Component\Console\Helper\ProgressBar $progress */
+        $progress = new ProgressBar($output);
+        $progress->start($totalCount);
+        $i = 0;
+        do {
+            $contentObjects = array();
+
+            for ($k = 0; $k <= $bulkCount; ++$k) {
+                $row = $contentCurrentVersionIds->current();
+                // check if there is data
+                if ($row === null) {
+                    break;
+                }
+
+                $contentObjects[] = $dataProvider->loadContentObjectVersion($row['id'], $row['current_version']);
+            }
+
+            if (!empty($contentObjects)) {
+                $this->bulkIndexContent($contentObjects);
+            }
+
+            $progress->advance($k);
+        } while (($i += $bulkCount) < $totalCount);
+
+        $progress->finish();
+        $output->writeln('');
+
+        // Indexing Locations
+        $output->writeln('Indexing Locations...');
+
+        $progress = new ProgressBar($output);
+        $totalLocations = $dataProvider->getLocationsCount();
+
+        // get location nodes ids generator
+        $locationsNodesIds = $dataProvider->getLocations();
+
+        $progress->start($totalLocations);
+        $i = 0;
+        do {
+            $locations = array();
+
+            for ($k = 0; $k <= $bulkCount; ++$k) {
+                $locationId = $locationsNodesIds->current();
+                // check if there is data
+                if ($locationId === null) {
+                    break;
+                }
+
+                $locations[] = $dataProvider->loadLocation($locationId);
+            }
+
+            if (!empty($locations)) {
+                $this->bulkIndexLocations($locations);
+            }
+
+            $progress->advance($k);
+        } while (($i += $bulkCount) < $totalCount);
+
+        $progress->finish();
     }
 }
