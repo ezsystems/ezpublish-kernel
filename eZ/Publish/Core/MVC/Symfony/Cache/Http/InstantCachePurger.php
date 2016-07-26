@@ -45,31 +45,25 @@ class InstantCachePurger implements GatewayCachePurger
     }
 
     /**
-     * @deprecated as of 6.0. Will be removed in 7.0. Use purgeForContent() instead.
-     *
-     * @param mixed $cacheElements
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function purge($cacheElements)
+    public function purge($locationIds)
     {
-        $this->purgeClient->purge((array)$cacheElements);
+        $this->purgeClient->purge((array)$locationIds);
 
-        return $cacheElements;
+        return $locationIds;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function purgeAll()
     {
         $this->purgeClient->purgeAll();
     }
 
     /**
-     * Purge Content cache using location id's returned from ContentCacheClearEvent.
-     *
-     * @deprecated in 6.5, design flaw on deleted/trashed content, use purge() on cases you are affected by this for now.
-     *
-     * @param mixed $contentId
-     * @param array $locationIds Initial location id's from signal to take into account.
+     * {@inheritdoc}
      */
     public function purgeForContent($contentId, $locationIds = [])
     {

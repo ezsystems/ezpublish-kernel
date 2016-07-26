@@ -16,23 +16,24 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache;
 interface GatewayCachePurger
 {
     /**
-     * Triggers the cache purge of given $cacheElements.
-     * It's up to the implementor to decide whether to purge $cacheElements right away or to delegate to a separate process.
+     * Triggers the cache purge of given $locationIds.
      *
-     * @deprecated as of 6.0. Will be removed in 7.0. Use purgeForContent() instead.
+     * @deprecated as of 6.0, might be removed in a future major version. Use purgeForContent() instead when content exist.
      *
-     * @param mixed $cacheElements
+     * @param array $locationIds
      *
      * @return mixed
      */
-    public function purge($cacheElements);
+    public function purge($locationIds);
 
     /**
-     * Triggers cache purge for given content.
-     * If given content has several locations, cache will be purged for all of them.
+     * Purge Content cache using $locationIds and gather additional relevant cache to clear based on $contentId.
+     *
+     * @deprecated in 6.5, design flaw on deleted/trashed content, use purge() when content does not exist for now.
+     *             See EZP-25696 for potential future feature to solve this.
      *
      * @param mixed $contentId Content ID.
-     * @param array $locationIds
+     * @param array $locationIds Initial location id's from signal to take into account.
      */
     public function purgeForContent($contentId, $locationIds = []);
 
