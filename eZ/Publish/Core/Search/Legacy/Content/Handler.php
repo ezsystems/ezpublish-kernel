@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
@@ -16,6 +14,7 @@ use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway as WordIndexerGateway;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -25,6 +24,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -64,6 +64,13 @@ class Handler implements SearchHandlerInterface
     protected $locationGateway;
 
     /**
+     * Word indexer gateway.
+     *
+     * @var \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway
+     */
+    protected $indexerGateway;
+
+    /**
      * Content mapper.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
@@ -85,26 +92,39 @@ class Handler implements SearchHandlerInterface
     protected $languageHandler;
 
     /**
+     * FullText mapper.
+     *
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper
+     */
+    protected $mapper;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Gateway $gateway
      * @param \eZ\Publish\Core\Search\Legacy\Content\Location\Gateway $locationGateway
+     * @param \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway $indexerGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper $mapper
      */
     public function __construct(
         Gateway $gateway,
         LocationGateway $locationGateway,
+        WordIndexerGateway $indexerGateway,
         ContentMapper $contentMapper,
         LocationMapper $locationMapper,
-        LanguageHandler $languageHandler
+        LanguageHandler $languageHandler,
+        FullTextMapper $mapper
     ) {
         $this->gateway = $gateway;
         $this->locationGateway = $locationGateway;
+        $this->indexerGateway = $indexerGateway;
         $this->contentMapper = $contentMapper;
         $this->locationMapper = $locationMapper;
         $this->languageHandler = $languageHandler;
+        $this->mapper = $mapper;
     }
 
     /**
@@ -294,6 +314,7 @@ class Handler implements SearchHandlerInterface
      * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @throws NotImplementedException
      */
     public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
     {
@@ -307,7 +328,29 @@ class Handler implements SearchHandlerInterface
      */
     public function indexContent(Content $content)
     {
-        // Not implemented in Legacy Storage Engine
+        $fullTextValue = $this->mapper->mapContent($content);
+
+        $this->indexerGateway->index($fullTextValue);
+    }
+
+    /**
+     * Bulk index list of content objects.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content[] $contentList
+     * @param callable $errorCallback (Content $content, NotFoundException $e)
+     */
+    public function bulkIndex(array $contentList, callable $errorCallback)
+    {
+        $fullTextBulkData = [];
+        foreach ($contentList as $content) {
+            try {
+                $fullTextBulkData[] = $this->mapper->mapContent($content);
+            } catch (NotFoundException $e) {
+                $errorCallback($content, $e);
+            }
+        }
+
+        $this->indexerGateway->bulkIndex($fullTextBulkData);
     }
 
     /**
@@ -315,7 +358,7 @@ class Handler implements SearchHandlerInterface
      */
     public function indexLocation(Location $location)
     {
-        // Not implemented in Legacy Storage Engine
+        // Not needed with Legacy Storage/Search Engine
     }
 
     /**
@@ -326,7 +369,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent($contentId, $versionId = null)
     {
-        // Not implemented in Legacy Storage Engine
+        $this->indexerGateway->remove($contentId, $versionId);
     }
 
     /**
@@ -337,6 +380,24 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        // Not implemented in Legacy Storage Engine
+        // Not needed with Legacy Storage/Search Engine
+    }
+
+    /**
+     * Purges all contents from the index.
+     */
+    public function purgeIndex()
+    {
+        $this->indexerGateway->purgeIndex();
+    }
+
+    /**
+     * Commits the data to the index, making it available for search.
+     *
+     * @param bool $flush
+     */
+    public function commit($flush = false)
+    {
+        // Not needed with Legacy Storage/Search Engine
     }
 }

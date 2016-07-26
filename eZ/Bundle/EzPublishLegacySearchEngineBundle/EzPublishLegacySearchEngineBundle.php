@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishLegacySearchEngineBundle;
 
@@ -27,7 +25,6 @@ class EzPublishLegacySearchEngineBundle extends Bundle
         $container->addCompilerPass(new CriteriaConverterPass());
         $container->addCompilerPass(new CriterionFieldValueHandlerRegistryPass());
         $container->addCompilerPass(new SortClauseConverterPass());
-
         $container->addCompilerPass(new FieldRegistryPass());
         $container->addCompilerPass(new SearchEngineSignalSlotPass('legacy'));
     }
