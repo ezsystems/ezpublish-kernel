@@ -32,8 +32,9 @@ interface GatewayCachePurger
      * If given content has several locations, cache will be purged for all of them.
      *
      * @param mixed $contentId Content ID.
+     * @param array $locationIds
      */
-    public function purgeForContent($contentId);
+    public function purgeForContent($contentId, $locationIds = []);
 
     /**
      * Triggers the cache purge for all content in cache.
