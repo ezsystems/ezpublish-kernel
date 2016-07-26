@@ -13,11 +13,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache;
 interface PurgeClientInterface
 {
     /**
-     * Triggers the cache purge $cacheElements.
+     * Triggers the cache purge $locationIds.
      *
-     * @param mixed $cacheElements Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
+     * @param array $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
      */
-    public function purge($cacheElements);
+    public function purge($locationIds);
 
     /**
      * Purges all content elements currently in cache.

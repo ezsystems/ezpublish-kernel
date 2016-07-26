@@ -47,15 +47,15 @@ class InstantCachePurger implements GatewayCachePurger
     /**
      * @deprecated as of 6.0. Will be removed in 7.0. Use purgeForContent() instead.
      *
-     * @param mixed $cacheElements
+     * @param array $locationIds
      *
      * @return mixed
      */
-    public function purge($cacheElements)
+    public function purge($locationIds)
     {
-        $this->purgeClient->purge((array)$cacheElements);
+        $this->purgeClient->purge((array)$locationIds);
 
-        return $cacheElements;
+        return $locationIds;
     }
 
     public function purgeAll()
