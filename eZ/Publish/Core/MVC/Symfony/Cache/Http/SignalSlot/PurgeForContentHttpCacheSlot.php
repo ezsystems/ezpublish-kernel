@@ -30,16 +30,38 @@ abstract class PurgeForContentHttpCacheSlot extends HttpCacheSlot
      */
     protected function purgeHttpCache(Signal $signal)
     {
-        return $this->httpCacheClearer->purgeForContent($this->extractContentId($signal));
+        return $this->httpCacheClearer->purgeForContent($this->extractContentId($signal), $this->extractLocationIds($signal));
     }
 
     /**
      * Default implementation that returns the contentId property's value.
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal $signal
+     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
+     * @return mixed Content ID
      */
     protected function extractContentId(Signal $signal)
     {
         return $signal->contentId;
+    }
+
+    /**
+     * Default implementation that returns the signal location property values.
+     *
+     * This is extracted and provided to purgeForContent in case content is trashed where affected location is no longer returned by API.
+     *
+     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
+     * @return array Location ID's
+     */
+    protected function extractLocationIds(Signal $signal)
+    {
+        $locationIds = [];
+        if (isset($signal->locationId)) {
+            $locationIds[] = $signal->locationId;
+        } else if (isset($signal->parentLocationId)) {
+            $locationIds[] = $signal->parentLocationId;
+        }
+        return $locationIds;
     }
 }

@@ -63,13 +63,20 @@ class InstantCachePurger implements GatewayCachePurger
         $this->purgeClient->purgeAll();
     }
 
-    public function purgeForContent($contentId)
+    /**
+     * Purge Content cache using location id's returned from ContentCacheClearEvent.
+     *
+     * @deprecated in 6.5, design flaw on deleted/trashed content, use purge() on cases you are affected by this for now.
+     *
+     * @param mixed $contentId
+     * @param array $locationIds Initial location id's from signal to take into account.
+     */
+    public function purgeForContent($contentId, $locationIds = [])
     {
         $contentInfo = $this->contentService->loadContentInfo($contentId);
         $event = new ContentCacheClearEvent($contentInfo);
         $this->eventDispatcher->dispatch(MVCEvents::CACHE_CLEAR_CONTENT, $event);
 
-        $locationIds = [];
         foreach ($event->getLocationsToClear() as $location) {
             $locationIds[] = $location->id;
         }
