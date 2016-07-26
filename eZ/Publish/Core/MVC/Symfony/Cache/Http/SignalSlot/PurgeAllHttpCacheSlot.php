@@ -15,6 +15,8 @@ use eZ\Publish\Core\SignalSlot\Slot;
 
 /**
  * An abstract slot for clearing all http caches.
+ *
+ * @deprecated By design clears all cache, will be removed in favour of more precise cache clearing.
  */
 abstract class PurgeAllHttpCacheSlot extends HttpCacheSlot
 {
