@@ -116,6 +116,7 @@ class TrashService implements TrashServiceInterface
             new RecoverSignal(
                 array(
                     'trashItemId' => $trashItem->id,
+                    'contentId' => $trashItem->contentId,
                     'newParentLocationId' => $newParentLocation !== null ? $newParentLocation->id : null,
                     'newLocationId' => $newLocation->id,
                 )
