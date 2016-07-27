@@ -222,7 +222,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
             $this->markTestSkipped(
-                "'ezrichtext' field type is not searchable with Legacy Search Engine"
+                "'{$this->getTypeName()}' field type (any actually, fulltext search is missing) is not searchable with Legacy Search Engine"
             );
         }
     }
@@ -248,7 +248,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         if ($this->getSetupFactory() instanceof LegacyElasticsearch) {
             $this->markTestSkipped(
-                'Legacy Search Engine does not support custom fields'
+                'Elasticsearch Search Engine does not support custom fields'
             );
         }
     }

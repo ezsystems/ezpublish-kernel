@@ -10,6 +10,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -256,6 +258,76 @@ class TrashServiceTest extends BaseTrashServiceTest
         } catch (NotFoundException $e) {
             // All well
         }
+    }
+
+    /**
+     * Test for the trash() method.
+     *
+     * @see \eZ\Publish\API\Repository\TrashService::recover()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testNotFoundAliasAfterRemoveIt()
+    {
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
+
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        // Double ->lookup() call because there where issue that one call was not enough to spot bug
+        $urlAliasService->lookup('/Media');
+        $urlAliasService->lookup('/Media');
+
+        $mediaLocation = $locationService->loadLocationByRemoteId($mediaRemoteId);
+        $trashService->trash($mediaLocation);
+
+        $urlAliasService->lookup('/Media');
+    }
+
+    /**
+     * Test for the recover() method.
+     *
+     * @see \eZ\Publish\API\Repository\TrashService::recover()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     */
+    public function testAliasesForRemovedItems()
+    {
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
+
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        // Double ->lookup() call because there where issue that one call was not enough to spot bug
+        $urlAliasService->lookup('/Media');
+        $trashedLocationAlias = $urlAliasService->lookup('/Media');
+
+        $mediaLocation = $locationService->loadLocationByRemoteId($mediaRemoteId);
+        $trashItem = $trashService->trash($mediaLocation);
+        $this->assertAliasNotExists($urlAliasService, '/Media');
+
+        $this->createNewContentInPlaceTrashedOne($repository, $mediaLocation->parentLocationId);
+
+        $createdLocationAlias = $urlAliasService->lookup('/Media');
+
+        $this->assertNotEquals(
+            $trashedLocationAlias->destination,
+            $createdLocationAlias->destination,
+            'Destination for /media url should changed'
+        );
+
+        $recoveredLocation = $trashService->recover($trashItem);
+        $recoveredLocationAlias = $urlAliasService->lookup('/Media2');
+        $recoveredLocationAliasReverse = $urlAliasService->reverseLookup($recoveredLocation);
+
+        $this->assertEquals($recoveredLocationAlias->destination, $recoveredLocationAliasReverse->destination);
+
+        $this->assertNotEquals($recoveredLocationAliasReverse->destination, $trashedLocationAlias->destination);
+        $this->assertNotEquals($recoveredLocationAliasReverse->destination, $createdLocationAlias->destination);
     }
 
     /**
@@ -594,5 +666,57 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Inline */
 
         return $remoteIds;
+    }
+
+    /**
+     * @param Repository $repository
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createNewContentInPlaceTrashedOne(Repository $repository, $parentLocationId)
+    {
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $newContent = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $newContent->setField('name', 'Media');
+
+        $location = $locationService->newLocationCreateStruct($parentLocationId);
+
+        $draftContent = $contentService->createContent($newContent, [$location]);
+
+        return $contentService->publishVersion($draftContent->versionInfo);
+    }
+
+    /**
+     * @param URLAliasService $urlAliasService
+     * @param string $urlPath Url alias path
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    private function assertAliasExists(URLAliasService $urlAliasService, $urlPath)
+    {
+        $urlAlias = $urlAliasService->lookup($urlPath);
+
+        $this->assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\URLAlias', $urlAlias);
+
+        return $urlAlias;
+    }
+
+    /**
+     * @param URLAliasService $urlAliasService
+     * @param string $urlPath Url alias path
+     */
+    private function assertAliasNotExists(URLAliasService $urlAliasService, $urlPath)
+    {
+        try {
+            $this->getRepository()->getURLAliasService()->lookup($urlPath);
+            $this->fail(sprintf('Alias [%s] should not exists', $urlPath));
+        } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 }

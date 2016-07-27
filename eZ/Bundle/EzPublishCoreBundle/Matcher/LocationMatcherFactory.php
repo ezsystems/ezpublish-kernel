@@ -16,17 +16,14 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory as BaseMatcherFac
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @deprecated Deprecated since 6.0, will be removed in 6.1. Location view in general is deprecated. Use content view instead.
  */
 class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAware, ContainerAwareInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
+    use ContainerAwareTrait;
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -46,11 +43,6 @@ class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAwa
             $repository,
             $this->configResolver->getParameter('location_view')
         );
-    }
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     /**

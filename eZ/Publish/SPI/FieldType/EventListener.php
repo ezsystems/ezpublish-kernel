@@ -18,6 +18,8 @@ namespace eZ\Publish\SPI\FieldType;
  *
  * Note: This is a low level synchronous events, for more generic asynchronous events like sending out notifications,
  * please use the signal slot system instead (create and register a slot to listen to events).
+ *
+ * @deprecated (Not implemented)
  */
 interface EventListener
 {

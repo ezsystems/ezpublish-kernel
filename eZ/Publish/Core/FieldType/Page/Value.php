@@ -34,13 +34,15 @@ class Value extends BaseValue
 
     /**
      * Returns a string representation of the field value.
-     * This string representation must be compatible with format accepted via
-     * {@link \eZ\Publish\SPI\FieldType\FieldType::buildValue}.
      *
      * @return string
      */
     public function __toString()
     {
+        if ($this->page instanceof Page) {
+            return $this->page->layout;
+        }
+
         return '';
     }
 }

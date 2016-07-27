@@ -1006,7 +1006,7 @@ class User extends RestController
             $token = $authenticator->authenticate($request);
             // If CSRF token has not been generated yet (i.e. session not started), we generate it now.
             // This will seamlessly start the session.
-            if (!$csrfToken) {
+            if ($csrfTokenManager && !$csrfToken) {
                 $csrfToken = $csrfTokenManager->getToken(
                     $this->container->getParameter('ezpublish_rest.csrf_token_intention')
                 )->getValue();

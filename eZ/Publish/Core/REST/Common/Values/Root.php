@@ -17,4 +17,21 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
  */
 class Root extends RestValue
 {
+    /**
+     * @var Resource[]
+     */
+    protected $resources;
+
+    public function __construct(array $resources = array())
+    {
+        $this->resources = $resources;
+    }
+
+    /**
+     * @return Resource[]
+     */
+    public function getResources()
+    {
+        return $this->resources;
+    }
 }

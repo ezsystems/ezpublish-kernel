@@ -339,6 +339,16 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
+    public function testCurrentVersionNoCorrect(\DOMDocument $dom)
+    {
+        $this->assertXPath($dom, '/Content/currentVersionNo[text()="5"]');
+    }
+
+    /**
+     * @param \DOMDocument $dom
+     *
+     * @depends testVisitWithoutEmbeddedVersion
+     */
     public function testAlwaysAvailableCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/alwaysAvailable[text()="true"]');

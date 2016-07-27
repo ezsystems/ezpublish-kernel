@@ -980,6 +980,41 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testUpdateLocationWithSameRemoteId()
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $locationId and remote ID is the IDs of the same, existing location
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation($locationId);
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+
+        // Remote ID of an existing location with the same locationId
+        $updateStruct->remoteId = $originalLocation->remoteId;
+
+        // Sets one of the properties to be able to confirm location gets updated, here: priority
+        $updateStruct->priority = 2;
+
+        $location = $locationService->updateLocation($originalLocation, $updateStruct);
+
+        // Checks that the location was updated
+        $this->assertEquals(2, $location->priority);
+
+        // Checks that remoteId remains the same
+        $this->assertEquals($originalLocation->remoteId, $location->remoteId);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateLocationThrowsInvalidArgumentException()
@@ -988,13 +1023,14 @@ class LocationServiceTest extends BaseTest
 
         $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
-        // $locationId is the ID of an existing location
+        // $locationId and remoteId is the IDs of an existing, but not the same, location
         $locationService = $repository->getLocationService();
 
         $originalLocation = $locationService->loadLocation($locationId);
 
         $updateStruct = $locationService->newLocationUpdateStruct();
-        // Remote ID of an existing location
+
+        // Remote ID of an existing location with a different locationId
         $updateStruct->remoteId = 'f3e90596361e31d496d4026eb624c983';
 
         // Throws exception, since remote ID is already taken
@@ -1445,6 +1481,46 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertDefaultContentStates($copiedLocation->contentInfo);
+    }
+
+    /**
+     * Test for the copySubtree() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testCopySubtreeWithAliases()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // Publish demo installation
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+
+        $locationService = $repository->getLocationService();
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        $expectedSubItemAliases = [
+            '/Design/Plain-site/Media/Multimedia',
+            '/Design/Plain-site/Media/Images',
+            '/Design/Plain-site/Media/Files',
+        ];
+
+        $this->assertAliasesBeforeCopy($urlAliasService, $expectedSubItemAliases);
+
+        // Copy location "Media" to "Design"
+        $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
+
+        $this->assertGeneratedAliases($urlAliasService, $expectedSubItemAliases);
     }
 
     /**
@@ -2045,5 +2121,35 @@ class LocationServiceTest extends BaseTest
             ),
             $overwrite
         );
+    }
+
+    /**
+     * Assert generated aliases to expected alias return.
+     *
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param array $expectedAliases
+     */
+    protected function assertGeneratedAliases($urlAliasService, array $expectedAliases)
+    {
+        foreach ($expectedAliases as $expectedAlias) {
+            $urlAlias = $urlAliasService->lookup($expectedAlias);
+            $this->assertPropertiesCorrect(['type' => 0], $urlAlias);
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param array $expectedSubItemAliases
+     */
+    private function assertAliasesBeforeCopy($urlAliasService, array $expectedSubItemAliases)
+    {
+        foreach ($expectedSubItemAliases as $aliasUrl) {
+            try {
+                $urlAliasService->lookup($aliasUrl);
+                $this->fail('We didn\'t expect to find alias, but it was found');
+            } catch (\Exception $e) {
+                $this->assertTrue(true); // OK - alias was not found
+            }
+        }
     }
 }

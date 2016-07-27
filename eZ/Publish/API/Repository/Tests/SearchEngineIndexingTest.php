@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -165,6 +166,168 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertEquals(1, $result->totalCount);
         $this->assertEquals(
             $content->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    public function testUpdateLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $rootLocationId = 2;
+        $locationToUpdate = $locationService->loadLocation($rootLocationId);
+
+        $criterion = new Criterion\LogicalAnd([
+            new Criterion\LocationId($rootLocationId),
+            new Criterion\Location\Priority(Criterion\Operator::GT, 0),
+        ]);
+
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(0, $result->totalCount);
+
+        $locationUpdateStruct = $locationService->newLocationUpdateStruct();
+        $locationUpdateStruct->priority = 4;
+        $locationService->updateLocation($locationToUpdate, $locationUpdateStruct);
+
+        $this->refreshSearch($repository);
+
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $locationToUpdate->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Testing that content will be deleted with all of its subitems but subitems with additional location will stay as
+     * they are.
+     */
+    public function testDeleteLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $treeContainerContent = $this->createContentWithName('Tree Container', [2]);
+        $supposeBeDeletedSubItem = $this->createContentWithName(
+            'Suppose to be deleted sub-item',
+            [$treeContainerContent->contentInfo->mainLocationId]
+        );
+        $supposeSurviveSubItem = $this->createContentWithName(
+            'Suppose to Survive Item',
+            [2, $treeContainerContent->contentInfo->mainLocationId]
+        );
+
+        $treeContainerLocation = $locationService->loadLocation($treeContainerContent->contentInfo->mainLocationId);
+
+        $this->refreshSearch($repository);
+
+        $this->assertContentIdSearch($treeContainerContent->id, 1);
+        $this->assertContentIdSearch($supposeSurviveSubItem->id, 1);
+        $this->assertContentIdSearch($supposeBeDeletedSubItem->id, 1);
+
+        $locationService->deleteLocation($treeContainerLocation);
+
+        $this->refreshSearch($repository);
+
+        $this->assertContentIdSearch($supposeSurviveSubItem->id, 1);
+        $this->assertContentIdSearch($treeContainerContent->id, 0);
+        $this->assertContentIdSearch($supposeBeDeletedSubItem->id, 0);
+    }
+
+    /**
+     * Will create if not exists an simple content type for deletion test purpose with just and required field name.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected function createDeletionTestContentType()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        try {
+            return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+        } catch (NotFoundException $e) {
+            // continue creation process
+        }
+
+        $nameField = $contentTypeService->newFieldDefinitionCreateStruct('name', 'ezstring');
+        $nameField->fieldGroup = 'main';
+        $nameField->position = 1;
+        $nameField->isTranslatable = true;
+        $nameField->isSearchable = true;
+        $nameField->isRequired = true;
+
+        $contentTypeStruct = $contentTypeService->newContentTypeCreateStruct('deletion-test');
+        $contentTypeStruct->mainLanguageCode = 'eng-GB';
+        $contentTypeStruct->creatorId = 14;
+        $contentTypeStruct->creationDate = new DateTime();
+        $contentTypeStruct->names = ['eng-GB' => 'Deletion test'];
+        $contentTypeStruct->addFieldDefinition($nameField);
+
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+
+        $contentTypeDraft = $contentTypeService->createContentType($contentTypeStruct, [$contentTypeGroup]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+    }
+
+    /**
+     * Will create and publish an content with a filed with a given content name in location provided into
+     * $parentLocationIdList.
+     *
+     * @param string $contentName
+     * @param array $parentLocationIdList
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createContentWithName($contentName, array $parentLocationIdList = array())
+    {
+        $contentService = $this->getRepository()->getContentService();
+        $locationService = $this->getRepository()->getLocationService();
+
+        $testableContentType = $this->createDeletionTestContentType();
+
+        $rootContentStruct = $contentService->newContentCreateStruct($testableContentType, 'eng-GB');
+        $rootContentStruct->setField('name', $contentName);
+
+        $parentLocationList = [];
+        foreach ($parentLocationIdList as $locationID) {
+            $parentLocationList[] = $locationService->newLocationCreateStruct($locationID);
+        }
+
+        $contentDraft = $contentService->createContent($rootContentStruct, $parentLocationList);
+        $publishedContent = $contentService->publishVersion($contentDraft->getVersionInfo());
+
+        return $publishedContent;
+    }
+
+    /**
+     * Asserts an content id if it exists still in the solr core.
+     *
+     * @param int $contentId
+     * @param int $expectedCount
+     */
+    protected function assertContentIdSearch($contentId, $expectedCount)
+    {
+        $searchService = $this->getRepository()->getSearchService();
+
+        $criterion = new Criterion\ContentId($contentId);
+        $query = new Query(array('filter' => $criterion));
+        $result = $searchService->findContent($query);
+
+        $this->assertEquals($expectedCount, $result->totalCount);
+        if ($expectedCount == 0) {
+            return;
+        }
+
+        $this->assertEquals(
+            $contentId,
             $result->searchHits[0]->valueObject->id
         );
     }

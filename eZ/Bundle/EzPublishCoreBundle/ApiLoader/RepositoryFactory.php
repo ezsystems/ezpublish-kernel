@@ -17,11 +17,15 @@ use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class RepositoryFactory extends ContainerAware
+class RepositoryFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
@@ -33,6 +37,13 @@ class RepositoryFactory extends ContainerAware
      * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
      */
     protected $fieldTypeCollectionFactory;
+
+    /**
+     * Collection of fieldTypes, lazy loaded via a closure.
+     *
+     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
+     */
+    protected $fieldTypeNameableCollectionFactory;
 
     /**
      * @var string
@@ -54,11 +65,13 @@ class RepositoryFactory extends ContainerAware
     public function __construct(
         ConfigResolverInterface $configResolver,
         FieldTypeCollectionFactory $fieldTypeCollectionFactory,
+        FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory,
         $repositoryClass,
         array $policyMap
     ) {
         $this->configResolver = $configResolver;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
+        $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
         $this->repositoryClass = $repositoryClass;
         $this->policyMap = $policyMap;
     }
@@ -81,6 +94,7 @@ class RepositoryFactory extends ContainerAware
             $searchHandler,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
+                'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,

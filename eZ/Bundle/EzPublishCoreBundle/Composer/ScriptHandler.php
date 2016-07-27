@@ -16,6 +16,29 @@ use Composer\Script\Event;
 class ScriptHandler extends DistributionBundleScriptHandler
 {
     /**
+     * Clears the Symfony cache.
+     *
+     * Overloaded to clear project containers first before booting up Symfony container as part of clearCache() =>
+     * cache:clear call. Since this will crash with RuntimeException if bundles have been removed or added when for
+     * instance moving between git branches and running `composer install/update` afterwards.
+     *
+     * @param Event $event
+     */
+    public static function clearCache(Event $event)
+    {
+        $options = static::getOptions($event);
+        $cacheDir = $options['symfony-app-dir'] . '/cache';
+
+        // Take Symfony 3.0 directory structure into account if configured.
+        if (isset($options['symfony-var-dir']) && is_dir($options['symfony-var-dir'])) {
+            $cacheDir = $options['symfony-var-dir'] . '/cache';
+        }
+
+        array_map('unlink', glob($cacheDir . '/*/*ProjectContainer.php'));
+        parent::clearCache($event);
+    }
+
+    /**
      * Dump minified assets for prod environment under the web root directory.
      *
      * @param $event Event A instance
@@ -25,17 +48,18 @@ class ScriptHandler extends DistributionBundleScriptHandler
         $options = self::getOptions($event);
         $appDir = $options['symfony-app-dir'];
         $webDir = $options['symfony-web-dir'];
-        $env = isset($options['ezpublish-asset-dump-env']) ? $options['ezpublish-asset-dump-env'] : '';
+        $command = 'assetic:dump';
 
-        if (!$env) {
-            $env = $event->getIO()->ask(
-                "<question>Which environment would you like to dump production assets for?</question> (Default: 'prod', type 'none' to skip) ",
-                'prod'
-            );
-        }
+        // if not set falls back to default behaviour of console commands (using SYMFONY_ENV or fallback to 'dev')
+        if (!empty($options['ezpublish-asset-dump-env'])) {
+            $event->getIO()->write('<error>Use of `ezpublish-asset-dump-env` is deprecated, use SYMFONY_ENV to set anything other then dev for all commands</error>');
 
-        if ($env === 'none') {
-            return;
+            if ($options['ezpublish-asset-dump-env'] === 'none') {
+                // If asset dumping is skipped, output help text on how to generate it if needed
+                return self::dumpAssetsHelpText($event);
+            }
+
+            $command .= ' --env=' . escapeshellarg($options['ezpublish-asset-dump-env']);
         }
 
         if (!is_dir($appDir)) {
@@ -50,7 +74,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
             return;
         }
 
-        static::executeCommand($event, $appDir, 'assetic:dump --env=' . escapeshellarg($env) . ' ' . escapeshellarg($webDir));
+        static::executeCommand($event, $appDir, $command . ' ' . escapeshellarg($webDir));
     }
 
     /**
@@ -59,11 +83,12 @@ class ScriptHandler extends DistributionBundleScriptHandler
      * Typically to use this instead on composer update as dump command uses prod environment where cache is not cleared,
      * causing it to sometimes crash when cache needs to be cleared.
      *
+     * @deprecated Will be made private in the future for use by dumpAssets.
      * @param $event Event A instance
      */
     public static function dumpAssetsHelpText(Event $event)
     {
-        $event->getIO()->write('<info>To dump eZ Publish production assets, execute the following:</info>');
+        $event->getIO()->write('<info>To dump eZ Publish production assets, which is needed for production environment, execute the following:</info>');
         $event->getIO()->write('    php app/console assetic:dump --env=prod web');
         $event->getIO()->write('');
     }
@@ -77,23 +102,31 @@ class ScriptHandler extends DistributionBundleScriptHandler
     {
         $event->getIO()->write(<<<'EOT'
 
-________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\________________________________________/\\\\\_________________________________________________
- ________________\////////////\\\____________\/\\\/////////\\\_\////\\\______________________________________/\\\///__________________________________________________
-  __________________________/\\\/_____________\/\\\_______\/\\\____\/\\\_______________________/\\\__________/\\\______________________________________________________
-   _____/\\\\\\\\__________/\\\/_______________\/\\\\\\\\\\\\\/_____\/\\\_____/\\\\\\\\\_____/\\\\\\\\\\\__/\\\\\\\\\_______/\\\\\_____/\\/\\\\\\\_____/\\\\\__/\\\\\___
-    ___/\\\/////\\\_______/\\\/_________________\/\\\/////////_______\/\\\____\////////\\\___\////\\\////__\////\\\//______/\\\///\\\__\/\\\/////\\\__/\\\///\\\\\///\\\_
-     __/\\\\\\\\\\\______/\\\/___________________\/\\\________________\/\\\______/\\\\\\\\\\_____\/\\\_________\/\\\_______/\\\__\//\\\_\/\\\___\///__\/\\\_\//\\\__\/\\\_
-      _\//\\///////_____/\\\/_____________________\/\\\________________\/\\\_____/\\\/////\\\_____\/\\\_/\\_____\/\\\______\//\\\__/\\\__\/\\\_________\/\\\__\/\\\__\/\\\_
-       __\//\\\\\\\\\\__/\\\\\\\\\\\\\\\___________\/\\\______________/\\\\\\\\\_\//\\\\\\\\/\\____\//\\\\\______\/\\\_______\///\\\\\/___\/\\\_________\/\\\__\/\\\__\/\\\_
-        ___\//////////__\///////////////____________\///______________\/////////___\////////\//______\/////_______\///__________\/////_____\///__________\///___\///___\///__
+      ________      ____    ___             __       ___         
+     /\_____  \    /\  _`\ /\_ \           /\ \__  /'___\ 
+   __\/____//'/'   \ \ \_\ \//\ \      __  \ \ ,_\/\ \__/  ___   _ __    ___ ___
+ /'__`\   //'/'     \ \ ,__/ \ \ \   /'__`\ \ \ \/\ \ ,__\/ __`\/\`'__\/' __` __`\  
+/\  __/  //'/'___    \ \ \/   \_\ \_/\ \L\.\_\ \ \_\ \ \_/\ \L\ \ \ \/ /\ \/\ \/\ \ 
+\ \____\ /\_______\   \ \_\   /\____\ \__/.\_\\ \__\\ \_\\ \____/\ \_\ \ \_\ \_\ \_\
+ \/____/ \/_______/    \/_/   \/____/\/__/\/_/ \/__/ \/_/ \/___/  \/_/  \/_/\/_/\/_/
 
 
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
-<options=bold>Please read the INSTALL.md file to complete the installation.</options>
+<options=bold>Quick Install:</>
+(Assuming the CLI user you execute commands with below is same that extracted/installed the software)
+<comment>    $  export SYMFONY_ENV="prod"</comment>
+<comment>    $  php app/console ezplatform:install <type></comment>
+<comment>    $  php app/console assetic:dump</comment>
+<comment>    $  php app/console server:run</comment>
 
-<options=bold>Assuming that your database information were correctly entered, you may install a clean database by running the install command:</options>
-<comment>    $ php app/console --env=prod ezplatform:install clean</comment>
+Note:
+- "ezplatform:install" has different installer <type>s depending on your install, see <fg=green>INSTALL.md</> or <fg=green>README.md</> for which one to use.
+- For development use you can enable full debugging by setting SYMFONY_ENV to "dev".
+- Last command will give you url to frontend of installation, add "/ez" to reach backend.
+
+For full install instructions, including setting up directory permissions, see install instructions in <fg=green>INSTALL.md</>
+or <fg=green>README.md</>.
 
 EOT
         );

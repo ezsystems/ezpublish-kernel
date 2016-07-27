@@ -78,7 +78,7 @@ class FieldNameResolver
      *  )
      * </code>
      *
-     * @return array
+     * @return array[]
      */
     protected function getSearchableFieldMap()
     {
@@ -103,7 +103,7 @@ class FieldNameResolver
      * @param null|string $fieldTypeIdentifier
      * @param null|string $name
      *
-     * @return array
+     * @return string[]
      */
     public function getFieldNames(
         Criterion $criterion,
@@ -132,7 +132,7 @@ class FieldNameResolver
      * @param null|string $fieldTypeIdentifier
      * @param null|string $name
      *
-     * @return array
+     * @return array<string, \eZ\Publish\SPI\Search\FieldType>
      */
     public function getFieldTypes(
         Criterion $criterion,
@@ -157,7 +157,7 @@ class FieldNameResolver
                 continue;
             }
 
-            $fieldName = $this->getIndexFieldName(
+            $fieldNameWithSearchType = $this->getIndexFieldName(
                 $criterion,
                 $contentTypeIdentifier,
                 $fieldDefinitionIdentifier,
@@ -165,10 +165,11 @@ class FieldNameResolver
                 $name,
                 false
             );
-            $fieldType = $this->fieldRegistry->getType(
-                $fieldIdentifierMap[$fieldDefinitionIdentifier]['field_type_identifier']
-            );
-            $fieldTypeNameMap[$fieldName] = $fieldType;
+
+            $fieldNames = array_keys($fieldNameWithSearchType);
+            $fieldName = reset($fieldNames);
+
+            $fieldTypeNameMap[$fieldName] = $fieldNameWithSearchType[$fieldName];
         }
 
         return $fieldTypeNameMap;
@@ -207,14 +208,16 @@ class FieldNameResolver
             return null;
         }
 
-        return $this->getIndexFieldName(
+        $fieldName = array_keys($this->getIndexFieldName(
             $sortClause,
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,
             $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier]['field_type_identifier'],
             $name,
             true
-        );
+        ));
+
+        return reset($fieldName);
     }
 
     /**
@@ -246,7 +249,7 @@ class FieldNameResolver
                 $fieldDefinitionIdentifier
             )
         ) {
-            return $customFieldName;
+            return [$customFieldName => null];
         }
 
         // Else, generate field name from field type's index definition
@@ -271,7 +274,7 @@ class FieldNameResolver
             );
         }
 
-        return $this->nameGenerator->getTypedName(
+        $field = $this->nameGenerator->getTypedName(
             $this->nameGenerator->getName(
                 $name,
                 $fieldDefinitionIdentifier,
@@ -279,5 +282,7 @@ class FieldNameResolver
             ),
             $indexDefinition[$name]
         );
+
+        return [$field => $indexDefinition[$name]];
     }
 }

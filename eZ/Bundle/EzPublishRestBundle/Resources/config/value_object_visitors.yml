@@ -98,6 +98,7 @@ parameters:
     ezpublish_rest.output.value_object_visitor.Policy.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Policy
     ezpublish_rest.output.value_object_visitor.Role.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Role
     ezpublish_rest.output.value_object_visitor.CreatedRole.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CreatedRole
+    ezpublish_rest.output.value_object_visitor.PublishedRole.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\PublishedRole
     ezpublish_rest.output.value_object_visitor.RoleList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RoleList
     ezpublish_rest.output.value_object_visitor.RoleCreateStruct.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\RoleCreateStruct
     ezpublish_rest.output.value_object_visitor.RoleUpdateStruct.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\RoleUpdateStruct
@@ -556,6 +557,12 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.CreatedRole.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\CreatedRole }
+
+    ezpublish_rest.output.value_object_visitor.PublishedRole:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.PublishedRole.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\PublishedRole }
 
     ezpublish_rest.output.value_object_visitor.Role:
         parent: ezpublish_rest.output.value_object_visitor.base

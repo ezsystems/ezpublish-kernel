@@ -1353,18 +1353,24 @@ INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `ro
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('read',328,'content',0,1);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('login',331,'user',0,1);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',332,'*',0,2);
+INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('read',333,'content',0,4);
 
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (251,'Section',328);
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (252,'Section',329);
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (253,'SiteAccess',331);
+INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (254,'Class',333);
+INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (255,'Owner',333);
 
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (477,251,'1');
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (478,252,'1');
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (479,253,'1766001124');
+INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (480,254,'4');
+INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (481,255,'1');
 
 INSERT INTO `ezrole` (`id`, `is_new`, `name`, `value`, `version`) VALUES (1,0,'Anonymous','',0);
 INSERT INTO `ezrole` (`id`, `is_new`, `name`, `value`, `version`) VALUES (2,0,'Administrator','0',0);
 INSERT INTO `ezrole` (`id`, `is_new`, `name`, `value`, `version`) VALUES (3,0,'Editor','',0);
+INSERT INTO `ezrole` (`id`, `is_new`, `name`, `value`, `version`) VALUES (4,0,'Member','',0);
 
 INSERT INTO `ezsearch_object_word_link` (`contentclass_attribute_id`, `contentclass_id`, `contentobject_id`, `frequency`, `id`, `identifier`, `integer_value`, `next_word_id`, `placement`, `prev_word_id`, `published`, `section_id`, `word_id`) VALUES (4,1,1,0,4381,'name',0,801,0,0,1033917596,1,800);
 INSERT INTO `ezsearch_object_word_link` (`contentclass_attribute_id`, `contentclass_id`, `contentobject_id`, `frequency`, `id`, `identifier`, `integer_value`, `next_word_id`, `placement`, `prev_word_id`, `published`, `section_id`, `word_id`) VALUES (4,1,1,0,4382,'name',0,802,1,800,1033917596,1,801);
@@ -1862,7 +1868,7 @@ INSERT INTO `ezsection` (`id`, `identifier`, `locale`, `name`, `navigation_part_
 INSERT INTO `ezsection` (`id`, `identifier`, `locale`, `name`, `navigation_part_identifier`) VALUES (5,'design','','Design','ezvisualnavigationpart');
 
 INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-release','1');
-INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-version','6.1.0');
+INSERT INTO `ezsite_data` (`name`, `value`) VALUES ('ezpublish-version','6.4.0');
 
 INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832197,23,1,0,1448832197,'b728a39b2818dc1a558b07b9e8b7aef0','https://doc.ez.no/display/USERGUIDE/');
 INSERT INTO `ezurl` (`created`, `id`, `is_valid`, `last_checked`, `modified`, `original_url_md5`, `url`) VALUES (1448832277,24,1,0,1448832277,'d77b69a7ce26e6c87a7253f1fc50fc10','https://doc.ez.no/display/TECHDOC/');
@@ -1975,6 +1981,7 @@ INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_
 INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (13,32,'Subtree','/1/2/',3);
 INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (13,33,'Subtree','/1/43/',3);
 INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (12,34,'','',2);
+INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_value`, `role_id`) VALUES (13,35,'','',4);
 
 INSERT INTO `ezuser_setting` (`is_enabled`, `max_login`, `user_id`) VALUES (1,1000,10);
 INSERT INTO `ezuser_setting` (`is_enabled`, `max_login`, `user_id`) VALUES (1,10,14);

@@ -112,6 +112,23 @@ abstract class Base extends PHPUnit_Framework_TestCase
         return $this->fieldTypeRegistryMock;
     }
 
+    protected $nameableFieldTypeRegistryMock;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry
+     */
+    protected function getNameableFieldTypeRegistryMock()
+    {
+        if (!isset($this->nameableFieldTypeRegistryMock)) {
+            $this->nameableFieldTypeRegistryMock = $this
+                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\NameableFieldTypeRegistry')
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->nameableFieldTypeRegistryMock;
+    }
+
     /**
      * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
      */

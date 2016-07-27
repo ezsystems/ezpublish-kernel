@@ -746,6 +746,14 @@ ezpublish_rest_createRole:
     methods: [POST]
     requirements:
 
+ezpublish_rest_createRoleDraft:
+    path: /user/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:createRoleDraft
+    methods: [POST]
+    requirements:
+        roleId: \d+
+
 ezpublish_rest_loadRole:
     path: /user/roles/{roleId}
     defaults:
@@ -790,6 +798,14 @@ ezpublish_rest_deleteRole:
     path: /user/roles/{roleId}
     defaults:
         _controller: ezpublish_rest.controller.role:deleteRole
+    methods: [DELETE]
+    requirements:
+        roleId: \d+
+
+ezpublish_rest_deleteRoleDraft:
+    path: /user/roles/{roleId}/draft
+    defaults:
+        _controller: ezpublish_rest.controller.role:deleteRoleDraft
     methods: [DELETE]
     requirements:
         roleId: \d+

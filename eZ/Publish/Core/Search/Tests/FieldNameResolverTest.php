@@ -100,7 +100,7 @@ class FieldNameResolverTest extends TestCase
                 'field_type_identifier_1',
                 null
             )
-            ->will($this->returnValue('index_field_name_1'));
+            ->will($this->returnValue(['index_field_name_1' => null]));
 
         $mockedFieldNameResolver
             ->expects($this->at(2))
@@ -114,7 +114,7 @@ class FieldNameResolverTest extends TestCase
                 'field_type_identifier_2',
                 null
             )
-            ->will($this->returnValue('index_field_name_2'));
+            ->will($this->returnValue(['index_field_name_2' => null]));
 
         $fieldNames = $mockedFieldNameResolver->getFieldNames(
             $criterionMock,
@@ -174,7 +174,7 @@ class FieldNameResolverTest extends TestCase
                 'field_type_identifier_1',
                 'field_name'
             )
-            ->will($this->returnValue('index_field_name_1'));
+            ->will($this->returnValue(['index_field_name_1' => null]));
 
         $mockedFieldNameResolver
             ->expects($this->at(2))
@@ -188,7 +188,7 @@ class FieldNameResolverTest extends TestCase
                 'field_type_identifier_2',
                 'field_name'
             )
-            ->will($this->returnValue('index_field_name_2'));
+            ->will($this->returnValue(['index_field_name_2' => null]));
 
         $fieldNames = $mockedFieldNameResolver->getFieldNames(
             $criterionMock,
@@ -250,7 +250,7 @@ class FieldNameResolverTest extends TestCase
                 'field_type_identifier_2',
                 null
             )
-            ->will($this->returnValue('index_field_name_1'));
+            ->will($this->returnValue(['index_field_name_1' => null]));
 
         $fieldNames = $mockedFieldNameResolver->getFieldNames(
             $criterionMock,
@@ -311,7 +311,7 @@ class FieldNameResolverTest extends TestCase
                 'field_type_identifier_2',
                 'field_name'
             )
-            ->will($this->returnValue('index_field_name_1'));
+            ->will($this->returnValue(['index_field_name_1' => null]));
 
         $fieldNames = $mockedFieldNameResolver->getFieldNames(
             $criterionMock,
@@ -362,7 +362,7 @@ class FieldNameResolverTest extends TestCase
                 'field_type_identifier',
                 'field_name'
             )
-            ->will($this->returnValue('index_field_name'));
+            ->will($this->returnValue(['index_field_name' => null]));
 
         $fieldName = $mockedFieldNameResolver->getSortFieldName(
             $sortClauseMock,
@@ -432,7 +432,7 @@ class FieldNameResolverTest extends TestCase
             false
         );
 
-        $this->assertEquals('custom_field_name', $customFieldName);
+        $this->assertEquals('custom_field_name', key($customFieldName));
     }
 
     public function testGetIndexFieldNameNamedField()
@@ -494,7 +494,7 @@ class FieldNameResolverTest extends TestCase
             true
         );
 
-        $this->assertEquals('generated_typed_field_name', $fieldName);
+        $this->assertEquals('generated_typed_field_name', key($fieldName));
     }
 
     public function testGetIndexFieldNameDefaultMatchField()
@@ -561,7 +561,7 @@ class FieldNameResolverTest extends TestCase
             false
         );
 
-        $this->assertEquals('generated_typed_field_name', $fieldName);
+        $this->assertEquals('generated_typed_field_name', key($fieldName));
     }
 
     public function testGetIndexFieldNameDefaultSortField()
@@ -628,7 +628,7 @@ class FieldNameResolverTest extends TestCase
             true
         );
 
-        $this->assertEquals('generated_typed_field_name', $fieldName);
+        $this->assertEquals('generated_typed_field_name', key($fieldName));
     }
 
     /**

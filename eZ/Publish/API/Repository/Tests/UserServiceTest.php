@@ -1160,7 +1160,7 @@ class UserServiceTest extends BaseTest
 
         // This call will fail with a "NotFoundException", because the given
         // login/password combination does not exist.
-        $userService->loadUserByCredentials('USER', 'secret');
+        $userService->loadUserByCredentials('üser', 'secret');
         /* END: Use Case */
     }
 
@@ -1242,6 +1242,42 @@ class UserServiceTest extends BaseTest
         // login/password combination does not exist.
         $userService->loadUserByLogin('user42');
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadUserByLogin() method.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::loadUserByLogin()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByLogin
+     */
+    public function testLoadUserByLoginWorksForLoginWithWrongCase()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Lookup by user login should ignore casing
+        $userReloaded = $userService->loadUserByLogin('USER');
+        /* END: Use Case */
+
+        $this->assertPropertiesCorrect(
+            array(
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'hashAlgorithm' => $user->hashAlgorithm,
+                'enabled' => $user->enabled,
+                'maxLogin' => $user->maxLogin,
+                'id' => $user->id,
+                'contentInfo' => $user->contentInfo,
+                'versionInfo' => $user->versionInfo,
+                'fields' => $user->fields,
+            ),
+            $userReloaded
+        );
     }
 
     /**

@@ -15,8 +15,15 @@ parameters:
     # Default view templates
     ezplatform.default_view_templates.content.full: 'EzPublishCoreBundle:default:content/full.html.twig'
     ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
+    ezplatform.default_view_templates.content.text_linked: 'EzPublishCoreBundle:default:content/text_linked.html.twig'
     ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
+    ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
+
+    ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+
+    # List of content type identifiers to display as image when embedded
+    ezplatform.content_view.image_embed_content_types_identifiers: ['image']
 
     ezsettings.default.content_view_defaults:
         full:
@@ -27,7 +34,15 @@ parameters:
             default:
                 template: %ezplatform.default_view_templates.content.line%
                 match: []
+        text_linked:
+            default:
+                template: %ezplatform.default_view_templates.content.text_linked%
+                match: []
         embed:
+            image:
+                template: '%ezplatform.default_view_templates.content.embed_image%'
+                match:
+                    Identifier\ContentType: '%ezplatform.content_view.image_embed_content_types_identifiers%'
             default:
                 template: %ezplatform.default_view_templates.content.embed%
                 match: []
@@ -69,6 +84,8 @@ parameters:
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
     ezsettings.default.content.tree_root.location_id: 2 # Root locationId for routing and link generation. Useful for multisite apps with one repository.
     ezsettings.default.content.tree_root.excluded_uri_prefixes: [] # URI prefixes that are allowed to be outside the content tree
+    ezsettings.default.content.field_groups.list: ['content', 'metadata']
+    ezsettings.default.content.field_groups.default: 'content'
 
     # FieldType settings
     # Default XSL stylesheets for RichText rendering to HTML5.
@@ -134,7 +151,7 @@ parameters:
 
     # Security settings
     ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"
-    ezsettings.default.security.base_layout: %ezpublish.content_view.viewbase_layout%
+    ezsettings.default.security.base_layout: %ezsettings.default.pagelayout%
 
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp

@@ -66,8 +66,10 @@ class Configuration extends SiteAccessConfiguration
                     ->example(
                         array(
                             'main' => array(
-                                'engine' => 'legacy',
-                                'connection' => 'my_doctrine_connection_name',
+                                'storage' => array(
+                                    'engine' => 'legacy',
+                                    'connection' => 'my_doctrine_connection_name',
+                                ),
                             ),
                         )
                     )
@@ -116,6 +118,14 @@ class Configuration extends SiteAccessConfiguration
                                         $v['search'] = array();
                                     }
 
+                                    if (!isset($v['fields_groups']['list'])) {
+                                        $v['fields_groups']['list'] = ['content'];
+                                    }
+
+                                    if (!isset($v['fields_groups']['default'])) {
+                                        $v['fields_groups']['default'] = 'content';
+                                    }
+
                                     return $v;
                                 }
                             )
@@ -153,6 +163,13 @@ class Configuration extends SiteAccessConfiguration
                                         ->useAttributeAsKey('key')
                                         ->prototype('variable')->end()
                                     ->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('fields_groups')
+                                ->info('Definitions of fields groups.')
+                                ->children()
+                                    ->arrayNode('list')->prototype('scalar')->end()->end()
+                                    ->scalarNode('default')->defaultValue('content')->end()
                                 ->end()
                             ->end()
                         ->end()

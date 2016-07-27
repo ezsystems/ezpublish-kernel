@@ -136,10 +136,9 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
             }
 
             if ($target instanceof Location) {
-                $ownerId = $target->getContentInfo()->ownerId;
+                $targetContentInfo = $target->getContentInfo();
             } elseif ($target instanceof SPILocation) {
-                $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo($target->contentId);
-                $ownerId = $spiContentInfo->ownerId;
+                $targetContentInfo = $this->persistence->contentHandler()->loadContentInfo($target->contentId);
             } else {
                 throw new InvalidArgumentException(
                     '$targets',
@@ -147,7 +146,12 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
                 );
             }
 
-            if ($ownerId !== $currentUser->getUserId()) {
+            $userId = $currentUser->getUserId();
+
+            $isOwner = $targetContentInfo->ownerId === $userId;
+            $isSelf = $targetContentInfo->id === $userId;
+
+            if (!($isOwner || $isSelf)) {
                 return false;
             }
         }

@@ -100,6 +100,7 @@ interface FieldStorage
     /**
      * Get index data for external data for search backend.
      *
+     * @deprecated Use eZ\Publish\SPI\FieldType\Indexable
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context

@@ -224,6 +224,10 @@ class TimeTest extends FieldTypeTest
                 null,
             ),
             array(
+                new TimeValue(0),
+                0,
+            ),
+            array(
                 new TimeValue(200),
                 200,
             ),
@@ -271,6 +275,10 @@ class TimeTest extends FieldTypeTest
             array(
                 null,
                 new TimeValue(),
+            ),
+            array(
+                0,
+                new TimeValue(0),
             ),
             array(
                 200,
@@ -374,5 +382,67 @@ class TimeTest extends FieldTypeTest
             array($this->getEmptyValueExpectation(), ''),
             array(new TimeValue(200), '12:03:20 am'),
         );
+    }
+
+    /**
+     * @param mixed $inputValue
+     * @param array $expectedResult
+     *
+     * This overrides the FieldTypeTest method until it gets updated and all field types fixed in EZP-25424
+     *
+     * @dataProvider provideInputForToHash
+     */
+    public function testToHash($inputValue, $expectedResult)
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $actualResult = $fieldType->toHash($inputValue);
+
+        $this->assertIsValidHashValue($actualResult);
+
+        if (is_object($expectedResult) || is_array($expectedResult)) {
+            $this->assertEquals(
+                $expectedResult,
+                $actualResult,
+                'toHash() method did not create expected result.'
+            );
+        } else {
+            $this->assertSame(
+                $expectedResult,
+                $actualResult,
+                'toHash() method did not create expected result.'
+            );
+        }
+    }
+
+    /**
+     * @param mixed $inputValue
+     * @param array $expectedResult
+     *
+     * This overrides the FieldTypeTest method until it gets updated and all field types fixed in EZP-25424
+     *
+     * @dataProvider provideInputForFromHash
+     */
+    public function testFromHash($inputHash, $expectedResult)
+    {
+        $this->assertIsValidHashValue($inputHash);
+
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $actualResult = $fieldType->fromHash($inputHash);
+
+        if (is_object($expectedResult) || is_array($expectedResult)) {
+            $this->assertEquals(
+                $expectedResult,
+                $actualResult,
+                'fromHash() method did not create expected result.'
+            );
+        } else {
+            $this->assertSame(
+                $expectedResult,
+                $actualResult,
+                'fromHash() method did not create expected result.'
+            );
+        }
     }
 }

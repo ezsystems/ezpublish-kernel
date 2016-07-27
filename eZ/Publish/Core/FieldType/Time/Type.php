@@ -154,6 +154,23 @@ class Type extends FieldType
     }
 
     /**
+     * Returns if the given $value is considered empty by the field type.
+     *
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $value
+     *
+     * @return bool
+     */
+    public function isEmptyValue(SPIValue $value)
+    {
+        if ($value->time === null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Time\Value $value

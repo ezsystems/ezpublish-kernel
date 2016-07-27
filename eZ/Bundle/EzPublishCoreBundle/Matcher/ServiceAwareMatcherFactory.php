@@ -6,7 +6,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ClassNameMatcherFactory;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * A view matcher factory that also accepts services as matchers.
@@ -16,15 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ServiceAwareMatcherFactory extends ClassNameMatcherFactory implements ContainerAwareInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
+    use ContainerAwareTrait;
 
     /**
      * @param string $matcherIdentifier

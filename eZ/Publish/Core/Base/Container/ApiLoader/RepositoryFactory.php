@@ -15,11 +15,14 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-class RepositoryFactory extends ContainerAware
+class RepositoryFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var string
      */
@@ -33,16 +36,27 @@ class RepositoryFactory extends ContainerAware
     protected $fieldTypeCollectionFactory;
 
     /**
+     * Collection of fieldTypes, lazy loaded via a closure.
+     *
+     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
+     */
+    protected $fieldTypeNameableCollectionFactory;
+
+    /**
      * Collection of limitation types for the RoleService.
      *
      * @var \eZ\Publish\SPI\Limitation\Type[]
      */
     protected $roleLimitations = array();
 
-    public function __construct($repositoryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory)
-    {
+    public function __construct(
+        $repositoryClass,
+        FieldTypeCollectionFactory $fieldTypeCollectionFactory,
+        FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory
+    ) {
         $this->repositoryClass = $repositoryClass;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
+        $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
     }
 
     /**
@@ -63,6 +77,7 @@ class RepositoryFactory extends ContainerAware
             $searchHandler,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
+                'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
                 ),

@@ -1,45 +1,48 @@
+# Use trusty for better performance (and avoiding mysql/postgres/solr gone issues on precise and container infra)
+dist: trusty
+sudo: required
+
 language: php
 
-# execute unit tests, integration test stubs and integration tests using legacy storage engine
+services:
+  - mysql
+  - postgresql
+
+# Mysql isn't installed on trusty (only client is), so we need to specifically install it
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+
 env:
   global:
-    - DB_NAME="testdb"
+    # For functional tests
+    - COMPOSE_FILE="doc/docker-compose/base-dev.yml:doc/docker-compose/selenium.yml"
 
 matrix:
-  # mark as finished before allow_failures are run
   fast_finish: true
-  # misc nighlty tests we keep an eye on and aim to fix closer to stable versions
-#  allow_failures:
-#    - php: hhvm
-#      env: TEST_CONFIG="phpunit.xml"
   include:
 # 5.5
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # 5.6
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.7.0"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb" SYMFONY_VERSION="~2.7.0"
     - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.7.0"
-    - php: 5.6
-      env: BEHAT_OPTS="--profile=core --tags=~@broken"
+      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 PHP_IMAGE=ezsystems/php:5.6-v0 SYMFONY_ENV=behat SYMFONY_DEBUG=1
 # 7.0
     - php: 7.0
-      env: REST_TEST_CONFIG="phpunit-functional-rest.xml"
+      env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1
     - php: 7.0
       env: TEST_CONFIG="phpunit.xml"
     - php: 7.0
-      env: BEHAT_OPTS="--profile=rest --suite=fullJson"
+      env: BEHAT_OPTS="--profile=rest --suite=fullJson" RUN_INSTALL=1
     - php: 7.0
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
-#    - php: 7.0
-#      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="dedicated" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
-#    - php: 7.0
-#      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="shared" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
     - php: 7.0
       env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="single" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
 # hhvm - disabled, no need to enable before travis has newer versions avaiable
@@ -52,13 +55,16 @@ branches:
   only:
     - master
     - "6.1"
+    - "6.2"
+    - "6.3"
+    - "6.4"
 
 # setup requirements for running unit/integration/behat tests
 before_script:
   # Prepare system
   - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
   - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
-  - if [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; echo pwd; cd "$HOME/build/ezplatform/vendor/ezsystems/ezpublish-kernel"; ./bin/.travis/prepare_rest_functional_tests.sh; fi
+  - if [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
   # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
@@ -66,8 +72,8 @@ before_script:
 # execute phpunit or behat as the script command
 script:
   - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
-  - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform" && php bin/behat -vv $BEHAT_OPTS ; fi
-  - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional ; fi
+  - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/behat $BEHAT_OPTS" ; fi
+  - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"  ; fi
 
 # disable mail notifications
 notifications:

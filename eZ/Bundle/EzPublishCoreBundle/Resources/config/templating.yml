@@ -276,6 +276,8 @@ services:
     ezpublish.view.view_parameters.injector.viewbase_layout:
         class: %ezpublish.view.view_parameters.injector.viewbase_layout.class%
         arguments: [%ezpublish.content_view.viewbase_layout%]
+        calls:
+            - [setPageLayout, [$pagelayout$]]
         tags:
             - { name: kernel.event_subscriber }
 

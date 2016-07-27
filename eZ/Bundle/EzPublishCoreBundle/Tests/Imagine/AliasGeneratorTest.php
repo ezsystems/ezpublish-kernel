@@ -172,21 +172,6 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('debug');
 
-        $binary = $this->getMock('\Liip\ImagineBundle\Binary\BinaryInterface');
-        $this->dataLoader
-            ->expects($this->once())
-            ->method('find')
-            ->with($originalPath)
-            ->will($this->returnValue($binary));
-        $this->filterManager
-            ->expects($this->never())
-            ->method('applyFilter')
-            ->with($binary, $variationName)
-            ->will($this->returnValue($binary));
-        $this->ioResolver
-            ->expects($this->never())
-            ->method('store')
-            ->with($binary, $originalPath, $variationName);
         $this->ioResolver
             ->expects($this->once())
             ->method('resolve')
@@ -298,7 +283,7 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->method('debug');
 
         $this->dataLoader
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('find');
         $this->filterManager
             ->expects($this->never())
@@ -361,7 +346,7 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->method('debug');
 
         $this->dataLoader
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('find');
         $this->filterManager
             ->expects($this->never())

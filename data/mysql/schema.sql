@@ -2242,7 +2242,7 @@ CREATE TABLE `ezuser` (
   `password_hash` varchar(50) DEFAULT NULL,
   `password_hash_type` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`contentobject_id`),
-  KEY `ezuser_login` (`login`)
+  UNIQUE KEY `ezuser_login` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

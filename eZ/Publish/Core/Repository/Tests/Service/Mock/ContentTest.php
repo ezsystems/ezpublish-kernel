@@ -5611,13 +5611,14 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
+        $currentTime = time();
         if ($publicationDate === null && $versionInfoMock->versionNo === 1) {
-            $publicationDate = time();
+            $publicationDate = $currentTime;
         }
 
         // Account for 1 second of test execution time
         $metadataUpdateStruct->publicationDate = $publicationDate;
-        $metadataUpdateStruct->modificationDate = time();
+        $metadataUpdateStruct->modificationDate = $currentTime;
         $metadataUpdateStruct2 = clone $metadataUpdateStruct;
         ++$metadataUpdateStruct2->publicationDate;
         ++$metadataUpdateStruct2->modificationDate;

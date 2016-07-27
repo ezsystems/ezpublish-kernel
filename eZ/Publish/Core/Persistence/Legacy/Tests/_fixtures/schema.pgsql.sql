@@ -729,7 +729,7 @@ CREATE INDEX ezurlalias_ml_text ON ezurlalias_ml USING btree (text, id, link);
 
 CREATE INDEX ezurlalias_ml_text_lang ON ezurlalias_ml USING btree (text, lang_mask, parent);
 
-CREATE INDEX ezuser_login ON ezuser USING btree (login);
+CREATE UNIQUE INDEX ezuser_login ON ezuser USING btree ((lower(login)));
 
 CREATE INDEX hash_key ON ezuser_accountkey USING btree (hash_key);
 

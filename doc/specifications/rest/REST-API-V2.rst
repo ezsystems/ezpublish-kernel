@@ -1,6 +1,8 @@
-==========================
-eZ Publish REST API V2 RFC
-==========================
+=======================
+eZ Platform REST API V2
+=======================
+
+*This document was previously called "eZ Publish REST API V2" given this version of the REST API first was introduced with eZ Publish Platform 5.0.*
 
 .. contents:: Table of Contents
 
@@ -615,6 +617,7 @@ XML Example
       <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
 
@@ -781,6 +784,7 @@ JSON Example
         },
         "lastModificationDate": "2012-02-12T12:30:00",
         "mainLanguageCode": "eng-US",
+        "currentVersionNo": "1",
         "alwaysAvailable": true
       }
     }
@@ -874,6 +878,7 @@ XML Example
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
 
@@ -969,6 +974,7 @@ In this example
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>ger-DE</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>false</alwaysAvailable>
     </Content>
 
@@ -2149,7 +2155,7 @@ Create View
 XML Example
 '''''''''''
 
-Perform a query on images withing the media section, sorted by name, limiting results to 10.
+Perform a query on images within the media section, sorted by name, limiting results to 10.
 
 .. code:: http
 
@@ -2171,9 +2177,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
-          <SortClause>
-            <SortField>NAME</SortField>
-          </SortClause>
+          <ContentName>ascending</ContentName>
         </SortClauses>
         <FacetBuilders>
           <contentTypeFacetBuilder/>
@@ -2202,9 +2206,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
-          <SortClause>
-            <SortField>NAME</SortField>
-          </SortClause>
+          <ContentName>ascending</ContentName>
         </SortClauses>
         <FacetBuilders>
           <contentTypeFacetBuilder/>
@@ -4261,7 +4263,7 @@ Overview
 --------
 
 ============================================= ===================== ======================= ===================== ============================= ============= =====================
-Resource                                      POST                  GET                     PUT                   DELETE                        HEAD          PUBLISH
+Resource                                      POST                  GET                     PATCH/PUT             DELETE                        HEAD          PUBLISH
 --------------------------------------------- --------------------- ----------------------- --------------------- ----------------------------- ------------- ---------------------
 /user/groups                                  .                     load all topl. groups   .                     .                             .             .
 /user/groups/root                             .                     redirect to root        .                     .                             .             .
@@ -4277,9 +4279,9 @@ Resource                                      POST                  GET         
                                                                     by the user
 /user/users/<ID>/roles                        assign role to user   load roles of group     .                     .                             .             .
 /user/users/<ID>/roles/<ID>                   .                     load roleassignment     .                     unassign role from user       .             .
-/user/roles                                   create new role       load all roles          .                     .                             .             .
-/user/roles/<ID>                              .                     load role               update role           delete role                   .             .
-/user/roles/<ID>/draft                        .                     load draft for role     update role draft     .                             .             publish a role draft
+/user/roles                                   create role/draft     load all roles          .                     .                             .             .
+/user/roles/<ID>                              create role draft     load role               update role           delete role                   .             .
+/user/roles/<ID>/draft                        .                     load draft for role     update role draft     delete role draft             .             publish a role draft
 /user/roles/<ID>/policies                     create policy         load policies           .                     delete all policies from role .             .
 /user/roles/<ID>/policies/<ID>                .                     load policy             update policy         delete policy                 .             .
 /user/sessions                                create session        .                       .                     .                             .             .
@@ -5252,11 +5254,12 @@ XML Example
 Managing Roles and Policies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create Role
-```````````
+Create Role / Role Draft
+````````````````````````
 :Resource: /user/roles
 :Method: POST
-:Description: Creates a new role
+:Description: Creates a new role or role draft
+:Parameters: :publish: (default true) If true the role is published after creation
 :Headers:
     :Accept:
          :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
@@ -5274,15 +5277,28 @@ Create Role
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+
+          or:
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>/draft
+          Accept-Patch:  application/vnd.ez.api.RoleUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
 .. parsed-literal::
           Role_
 
+          or:
+
+          RoleDraft_
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this role
+    :401: If the user is not authorized to create this role / role draft
 
-XML Example
-'''''''''''
+XML Example for returning a role
+''''''''''''''''''''''''''''''''
 
 .. code:: http
 
@@ -5312,6 +5328,105 @@ XML Example
     <?xml version="1.0" encoding="UTF-8"?>
     <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml">
       <identifier>NewRole</identifier>
+      <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
+    </Role>
+
+XML Example for returning a role draft
+''''''''''''''''''''''''''''''''''''''
+
+.. code:: http
+
+    POST /user/roles?publish=false HTTP/1.1
+    Accept: application/vnd.ez.api.RoleDraft+xml
+    Content-Type: application/vnd.ez.api.RoleInput+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleInput>
+      <identifier>NewRole</identifier>
+    </RoleInput>
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/roles/11
+    Accept-Patch: application/vnd.ez.api.RoleUpdate+xml
+    ETag: "465897639450694836"
+    Content-Type: application/vnd.ez.api.RoleDraft+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Role href="/user/roles/11" media-type="application/vnd.ez.api.RoleDraft+xml">
+      <identifier>NewRole</identifier>
+      <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
+    </Role>
+
+
+
+Create Role Draft
+`````````````````
+:Resource: /user/roles/<ID>
+:Method: POST
+:Description: Creates a new role draft from an existing role.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
+         :application/vnd.ez.api.Role+json:  if set the new user is returned in json format (see Role_)
+    :Content-Type:
+         :application/vnd.ez.api.RoleInput+json: the RoleInput_  schema encoded in json
+         :application/vnd.ez.api.RoleInput+xml: the RoleInput_  schema encoded in xml
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>/draft
+          Accept-Patch:  application/vnd.ez.api.RoleUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+
+          RoleDraft_
+
+:Error Codes:
+    :401: If the user is not authorized to create this role / role draft
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    POST /user/roles/5 HTTP/1.1
+    Accept: application/vnd.ez.api.RoleDraft+xml
+    Content-Type: application/vnd.ez.api.RoleInput+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleInput>
+      <identifier>MyRole</identifier>
+    </RoleInput>
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/roles/11
+    Accept-Patch: application/vnd.ez.api.RoleUpdate+xml
+    ETag: "465897639450694836"
+    Content-Type: application/vnd.ez.api.RoleDraft+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Role href="/user/roles/11" media-type="application/vnd.ez.api.RoleDraft+xml">
+      <identifier>MyRole</identifier>
       <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
     </Role>
 
@@ -5461,18 +5576,17 @@ Update Role draft
 
 Publish Role draft
 ``````````````````
-:Resource: /user/roles/<ID/draft
+:Resource: /user/roles/<ID>/draft
 :Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
 :Description: Publishes a role draft
 :Response:
 
 .. code:: http
 
-          HTTP/1.1 200 OK
+          HTTP/1.1 204 No Content
+          Location: /api/ezp/v2/user/roles/<ID>
           Content-Type: <depending on accept header>
-          Content-Length: <length>
-.. parsed-literal::
-          Role_
+          Content-Length: 0
 
 :Error Codes:
     :401: If the user is not authorized to publish this content type draft
@@ -5492,6 +5606,20 @@ Delete Role
 
 :Error Codes:
     :401: If the user is not authorized to delete this role
+
+Delete Role Draft
+`````````````````
+:Resource: /user/roles/<ID>/draft
+:Method: DELETE
+:Description: The given role draft is deleted.
+:Response:
+
+.. code:: http
+
+        HTTP/1.1 204 No Content
+
+:Error Codes:
+        :401: If the user is not authorized to delete this role
 
 Load Roles for User or User Group
 `````````````````````````````````
@@ -6620,6 +6748,7 @@ Content XML Schema
                 minOccurs="0" />
               <xsd:element name="lastModificationDate" type="xsd:dateTime" />
               <xsd:element name="mainLanguageCode" type="xsd:string" />
+              <xsd:element name="currentVersionNo" type="xsd:int" />
               <xsd:element name="alwaysAvailable" type="xsd:boolean" />
             </xsd:all>
             <xsd:attribute name="id" type="xsd:int" />
@@ -7046,6 +7175,13 @@ View XML Schema
         </xsd:restriction>
       </xsd:simpleType>
 
+      <xsd:simpleType name="sortClauseDirectionEnumType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="ascending" />
+          <xsd:enumeration value="descending" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
       <xsd:complexType name="fieldCriterionType">
         <xsd:all>
           <xsd:element name="target" type="xsd:string">
@@ -7116,17 +7252,17 @@ View XML Schema
       </xsd:complexType>
 
       <xsd:complexType name="sortClauseType">
-        <xsd:sequence>
-          <xsd:element name="SortClause">
-            <xsd:complexType>
-              <xsd:all>
-                <xsd:element name="SortField" type="sortClauseEnumType" />
-                <xsd:element name="TargetData" type="xsd:anyType"
-                  minOccurs="0" />
-              </xsd:all>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:sequence>
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
+          <xsd:element name="ContentId" type="sortClauseDirectionEnumType" />
+          <xsd:element name="ContentName" type="sortClauseDirectionEnumType" />
+          <xsd:element name="DateModified" type="sortClauseDirectionEnumType" />
+          <xsd:element name="DatePublished" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationDepth" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationPath" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationPriority" type="sortClauseDirectionEnumType" />
+          <xsd:element name="SectionIdentifier" type="sortClauseDirectionEnumType" />
+          <xsd:element name="SectionName" type="sortClauseDirectionEnumType" />
+        </xsd:choice>
       </xsd:complexType>
 
       <xsd:complexType name="facetBuilderType">

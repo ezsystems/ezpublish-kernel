@@ -93,6 +93,10 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                     ->booleanNode('cookie_httponly')->end()
                 ->end()
             ->end()
+            ->scalarNode('pagelayout')
+                ->info('The default layout to use')
+                ->example('AppBundle::pagelayout.html.twig')
+            ->end()
             ->scalarNode('index_page')
                 ->info('The page that the index page will show. Default value is null.')
                 ->example('/Getting-Started')
@@ -188,6 +192,9 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         }
         if (isset($scopeSettings['default_page'])) {
             $contextualizer->setContextualParameter('default_page', $currentScope, '/' . ltrim($scopeSettings['default_page'], '/'));
+        }
+        if (isset($scopeSettings['pagelayout'])) {
+            $contextualizer->setContextualParameter('pagelayout', $currentScope, $scopeSettings['pagelayout']);
         }
     }
 

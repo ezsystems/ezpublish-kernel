@@ -32,7 +32,7 @@ class UrlAliasHandlerTest extends HandlerTest
             //array( 'lookup', array( '/url' ) ),
             //array( 'loadUrlAlias', array( 88 ) ),
             //array( 'locationMoved', array( 44, 2, 45 ) ),
-            array('locationCopied', array(44, 2, 45)),
+            //array( 'locationCopied', array( 44, 2, 45 ) ),
             //array( 'locationDeleted', array( 44 ) ),
         );
     }
@@ -79,11 +79,13 @@ class UrlAliasHandlerTest extends HandlerTest
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::publishUrlAliasForLocation
      */
-    public function testPublishUrlAliasForLocation()
+    public function testPublishUrlAliasForLocationWithoutCachedLocation()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
         $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
+        $cacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('urlAliasHandler')
@@ -95,10 +97,76 @@ class UrlAliasHandlerTest extends HandlerTest
             ->with(44, 2, 'name', 'eng-GB', true)
             ->will($this->returnValue(new UrlAlias(array('id' => 55))));
 
+        $cacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->willReturn(true);
+        $cacheItem
+            ->expects($this->never())
+            ->method('clear');
+
         $this->cacheMock
             ->expects($this->once())
             ->method('clear')
+            ->with('urlAlias')
+            ->will($this->returnValue(null));
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('getItem')
             ->with('urlAlias', 'location', 44)
+            ->willReturn($cacheItem);
+
+        $handler = $this->persistenceCacheHandler->urlAliasHandler();
+        $handler->publishUrlAliasForLocation(44, 2, 'name', 'eng-GB', true);
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::publishUrlAliasForLocation
+     */
+    public function testPublishUrlAliasForLocationWithCachedLocation()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
+        $cacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('urlAliasHandler')
+            ->will($this->returnValue($innerHandler));
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('publishUrlAliasForLocation')
+            ->with(44, 2, 'name', 'eng-GB', true)
+            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+
+        $cacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->willReturn(false);
+        $cacheItem
+            ->expects($this->once())
+            ->method('clear');
+        $cacheItem
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn([44]);
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('getItem')
+            ->with('urlAlias', 'location', 44)
+            ->willReturn($cacheItem);
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('clear')
+            ->with('urlAlias', 44)
+            ->will($this->returnValue(null));
+        $this->cacheMock
+            ->expects($this->at(2))
+            ->method('clear')
+            ->with('urlAlias', 'url')
             ->will($this->returnValue(null));
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
@@ -580,27 +648,46 @@ class UrlAliasHandlerTest extends HandlerTest
 
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::lookup
+     * @group justme
      */
     public function testLookupIsMiss()
     {
+        $urlAlias = new UrlAlias(array('id' => 55));
+
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('urlAlias', 'url', '/url')
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
+        $missedUrlAliasIdCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $missedUrlAliasIdCacheItem
             ->expects($this->once())
             ->method('get')
             ->will($this->returnValue(null));
 
-        $cacheItemMock
+        $missedUrlAliasIdCacheItem
             ->expects($this->once())
             ->method('isMiss')
             ->will($this->returnValue(true));
+
+        $missedUrlAliasIdCacheItem
+            ->expects($this->once())
+            ->method('set')
+            ->with(55);
+
+        $newUrlAliasCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $newUrlAliasCacheItem
+            ->expects($this->once())
+             ->method('set')
+            ->with($urlAlias);
+
+        $this->cacheMock
+                ->expects($this->at(0))
+                ->method('getItem')
+                ->with('urlAlias', 'url', '/url')
+                ->will($this->returnValue($missedUrlAliasIdCacheItem));
+        $this->cacheMock
+             ->expects($this->at(1))
+                ->method('getItem')
+                ->with('urlAlias', 55)
+                ->will($this->returnValue($newUrlAliasCacheItem));
 
         $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
         $this->persistenceHandlerMock
@@ -612,12 +699,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('lookup')
             ->with('/url')
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('set')
-            ->with(55);
+            ->will($this->returnValue($urlAlias));
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->lookup('/url');
@@ -792,7 +874,67 @@ class UrlAliasHandlerTest extends HandlerTest
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::locationDeleted
      */
-    public function testLocationDeleted()
+    public function testLocationDeletedWithoutCachedLocation()
+    {
+        $locationNotCached = $this->getMock('Stash\Interfaces\ItemInterface');
+        $locationNotCached
+            ->expects($this->once())
+            ->method('isMiss')
+            ->willReturn(true);
+        $locationNotCached
+            ->expects($this->never())
+            ->method('clear');
+
+        $this->prepareDeleteMocks($locationNotCached);
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('clear')
+            ->with('urlAlias');
+
+        $handler = $this->persistenceCacheHandler->urlAliasHandler();
+        $handler->locationDeleted(44);
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::locationDeleted
+     */
+    public function testLocationDeletedWithCachedLocation()
+    {
+        $locationCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $locationCacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->willReturn(false);
+        $locationCacheItem
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn(['44'])
+        ;
+        $locationCacheItem
+            ->expects($this->once())
+            ->method('clear')
+            ->will($this->returnValue(null));
+
+        $this->prepareDeleteMocks($locationCacheItem);
+
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('clear')
+            ->with('urlAlias', 44);
+        $this->cacheMock
+            ->expects($this->at(2))
+            ->method('clear')
+            ->with('urlAlias', 'url');
+
+        $handler = $this->persistenceCacheHandler->urlAliasHandler();
+        $handler->locationDeleted(44);
+    }
+
+    /**
+     * @param $locationCacheMissed
+     */
+    protected function prepareDeleteMocks($locationCacheMissed)
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
@@ -802,18 +944,11 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method('urlAliasHandler')
             ->will($this->returnValue($innerHandler));
 
-        $innerHandler
-            ->expects($this->once())
-            ->method('locationDeleted')
-            ->with(44);
+        $innerHandler->expects($this->once())->method('locationDeleted')->with(44);
 
         $this->cacheMock
             ->expects($this->once())
-            ->method('clear')
-            ->with('urlAlias', 'location', 44)
-            ->will($this->returnValue(null));
-
-        $handler = $this->persistenceCacheHandler->urlAliasHandler();
-        $handler->locationDeleted(44);
+            ->method('getItem')
+            ->willReturn($locationCacheMissed);
     }
 }

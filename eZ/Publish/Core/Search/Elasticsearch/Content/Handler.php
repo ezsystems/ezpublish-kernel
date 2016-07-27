@@ -293,22 +293,24 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        // 1. Delete the Location
-        $this->gateway->delete($locationId, $this->locationDocumentTypeIdentifier);
-
-        // 2. Update (reindex) all Content in the subtree with additional Location(s) outside of it
+        // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
         $ast = array(
             'filter' => array(
-                'nested' => array(
-                    'path' => 'locations_doc',
-                    'filter' => array(
-                        'and' => array(
-                            0 => array(
+                'and' => array(
+                    0 => array(
+                        'nested' => array(
+                            'path' => 'locations_doc',
+                            'filter' => array(
                                 'regexp' => array(
                                     'locations_doc.path_string_id' => ".*/{$locationId}/.*",
                                 ),
                             ),
-                            1 => array(
+                        ),
+                    ),
+                    1 => array(
+                        'nested' => array(
+                            'path' => 'locations_doc',
+                            'filter' => array(
                                 'regexp' => array(
                                     'locations_doc.path_string_id' => array(
                                         // Matches anything (@) and (&) not (~) <expression>
@@ -333,9 +335,9 @@ class Handler implements SearchHandlerInterface
 
         $this->gateway->bulkIndex($documents);
 
-        // 3. Delete all Content in the subtree with no other Location(s) outside of it
-        $ast['filter']['nested']['filter']['and'][1] = array(
-            'not' => $ast['filter']['nested']['filter']['and'][1],
+        // 2. Delete all Content in the subtree with no other Location(s) outside of it
+        $ast['filter']['and'][1] = array(
+            'not' => $ast['filter']['and'][1],
         );
         $ast = array(
             'query' => array(
@@ -343,7 +345,13 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $this->gateway->deleteByQuery(json_encode($ast), $this->contentDocumentTypeIdentifier);
+        $response = $this->gateway->findRaw(json_encode($ast), $this->contentDocumentTypeIdentifier);
+        $documentsToDelete = json_decode($response->body);
+
+        foreach ($documentsToDelete->hits->hits as $documentToDelete) {
+            $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['_id' => $documentToDelete->_id]]]), $this->contentDocumentTypeIdentifier);
+            $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['content_id_id' => $documentToDelete->_id]]]), $this->locationDocumentTypeIdentifier);
+        }
     }
 
     /**

@@ -71,23 +71,26 @@ class FieldRenderingExtension extends Twig_Extension
         return 'ezpublish.field_rendering';
     }
 
-    public function initRuntime(Twig_Environment $environment)
-    {
-        $this->fieldBlockRenderer->setTwig($environment);
-    }
-
     public function getFunctions()
     {
         return array(
             new Twig_SimpleFunction(
                 'ez_render_field',
-                [$this, 'renderField'],
-                ['is_safe' => ['html']]
+                function (Twig_Environment $environment, Content $content, $fieldIdentifier, array $params = []) {
+                    $this->fieldBlockRenderer->setTwig($environment);
+
+                    return $this->renderField($content, $fieldIdentifier, $params);
+                },
+                ['is_safe' => ['html'], 'needs_environment' => true]
             ),
             new Twig_SimpleFunction(
                 'ez_render_fielddefinition_settings',
-                [$this, 'renderFieldDefinitionSettings'],
-                ['is_safe' => ['html']]
+                function (Twig_Environment $environment, FieldDefinition $fieldDefinition, array $params = []) {
+                    $this->fieldBlockRenderer->setTwig($environment);
+
+                    return $this->renderFieldDefinitionSettings($fieldDefinition, $params);
+                },
+                ['is_safe' => ['html'], 'needs_environment' => true]
             ),
         );
     }
