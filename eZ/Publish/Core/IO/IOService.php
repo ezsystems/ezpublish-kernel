@@ -320,4 +320,15 @@ class IOService implements IOServiceInterface
         $this->metadataHandler->deleteDirectory($prefixedUri);
         $this->binarydataHandler->deleteDirectory($prefixedUri);
     }
+
+    /**
+     * Check if path is absolute, in terms of http or disk (incl if it contains driver letter on Win).
+     *
+     * @param string $path
+     * @return bool
+     */
+    protected function isAbsolutePath($path)
+    {
+        return $path[0] === '/' || (PHP_OS === 'WINNT' && $path[1] === ':');
+    }
 }
