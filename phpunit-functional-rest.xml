@@ -7,6 +7,9 @@
   convertWarningsToExceptions="true"
   colors="false"
   >
+  <php>
+    <ini name="error_reporting" value="-1" />
+  </php>
   <testsuites>
     <testsuite name="REST API Functional tests">
       <directory>eZ/Bundle/EzPublishRestBundle/Tests/Functional</directory>

@@ -14,6 +14,7 @@
         <env name="fixtureDir" value="Solr" />
         <env name="solrServer" value="http://localhost:8983/" />
         <env name="CORES_SETUP" value="dedicated" />
+        <ini name="error_reporting" value="-1" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">

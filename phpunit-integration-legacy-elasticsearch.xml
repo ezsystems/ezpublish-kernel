@@ -13,6 +13,7 @@
         <env name="backendVersion" value="5" />
         <env name="fixtureDir" value="Elasticsearch" />
         <env name="elasticsearchServer" value="http://localhost:9200/" />
+        <ini name="error_reporting" value="-1" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
