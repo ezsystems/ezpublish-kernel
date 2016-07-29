@@ -46,7 +46,7 @@ services:
     ezpublish.search.elasticsearch.content.criterion_visitor.content_type_identifier_in:
         class: %ezpublish.search.elasticsearch.content.criterion_visitor.content_type_identifier_in.class%
         arguments:
-            - @ezpublish.spi.persistence.content_type_handler
+            - "@ezpublish.spi.persistence.content_type_handler"
         tags:
             - {name: ezpublish.search.elasticsearch.content.criterion_visitor}
 
@@ -68,7 +68,7 @@ services:
     ezpublish.search.elasticsearch.content.criterion_visitor.field_base:
         abstract: true
         arguments:
-            - @ezpublish.search.common.field_name_resolver
+            - "@ezpublish.search.common.field_name_resolver"
 
     ezpublish.search.elasticsearch.content.criterion_visitor.field_in:
         parent: ezpublish.search.elasticsearch.content.criterion_visitor.field_base

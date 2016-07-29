@@ -52,4 +52,4 @@ parameters:
 services:
     ezpublish.locale.converter:
         class: %ezpublish.locale.converter.class%
-        arguments: [%ezpublish.locale.conversion_map%, @logger]
+        arguments: [%ezpublish.locale.conversion_map%, "@logger"]

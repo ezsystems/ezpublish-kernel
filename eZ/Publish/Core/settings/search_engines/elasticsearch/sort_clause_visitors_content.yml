@@ -38,7 +38,7 @@ services:
     ezpublish.search.elasticsearch.content.sort_clause_visitor.field_base:
         abstract: true
         arguments:
-            - @ezpublish.search.common.field_name_resolver
+            - "@ezpublish.search.common.field_name_resolver"
 
     ezpublish.search.elasticsearch.content.sort_clause_visitor.field:
         parent: ezpublish.search.elasticsearch.content.sort_clause_visitor.field_base

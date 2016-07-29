@@ -11,12 +11,12 @@ services:
     ezpublish.persistence.legacy.language.gateway.inner:
         class: %ezpublish.persistence.legacy.language.gateway.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
 
     ezpublish.persistence.legacy.language.gateway.exception_conversion:
         class: %ezpublish.persistence.legacy.language.gateway.exception_conversion.class%
         arguments:
-            - @ezpublish.persistence.legacy.language.gateway.inner
+            - "@ezpublish.persistence.legacy.language.gateway.inner"
 
     # To disable exception conversion layer override this alias so that it points to inner gateway
     ezpublish.persistence.legacy.language.gateway:
@@ -28,8 +28,8 @@ services:
     ezpublish.spi.persistence.legacy.language.handler.inner:
         class: %ezpublish.spi.persistence.legacy.language.handler.class%
         arguments:
-            - @ezpublish.persistence.legacy.language.gateway
-            - @ezpublish.persistence.legacy.language.mapper
+            - "@ezpublish.persistence.legacy.language.gateway"
+            - "@ezpublish.persistence.legacy.language.mapper"
 
     ezpublish.persistence.legacy.language.cache:
         class: %ezpublish.persistence.legacy.language.cache.class%
@@ -37,8 +37,8 @@ services:
     ezpublish.spi.persistence.legacy.language.handler.caching:
         class: %ezpublish.spi.persistence.legacy.language.handler.caching.class%
         arguments:
-            - @ezpublish.spi.persistence.legacy.language.handler.inner
-            - @ezpublish.persistence.legacy.language.cache
+            - "@ezpublish.spi.persistence.legacy.language.handler.inner"
+            - "@ezpublish.persistence.legacy.language.cache"
 
     ezpublish.spi.persistence.legacy.language.handler:
         alias: ezpublish.spi.persistence.legacy.language.handler.caching
@@ -46,4 +46,4 @@ services:
 
     ezpublish.persistence.legacy.language.mask_generator:
         class: %ezpublish.persistence.legacy.language.mask_generator.class%
-        arguments: [@ezpublish.spi.persistence.legacy.language.handler]
+        arguments: ["@ezpublish.spi.persistence.legacy.language.handler"]

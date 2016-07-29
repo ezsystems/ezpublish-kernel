@@ -18,16 +18,16 @@ services:
     ezpublish.cache_pool:
         class: %ezpublish.cache_pool.class%
         factory: ["@ezpublish.cache_pool.factory", getCachePool]
-        arguments: [@ezpublish.config.resolver]
+        arguments: ["@ezpublish.config.resolver"]
 
     ezpublish.cache_pool.factory:
         class: %ezpublish.cache_pool.factory.class%
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
 
     ezpublish.http_cache.purger.instant:
         class: %ezpublish.http_cache.purger.instant.class%
-        arguments: [@ezpublish.http_cache.purge_client, @ezpublish.api.service.content, @ezpublish.http_cache.event_dispatcher]
+        arguments: ["@ezpublish.http_cache.purge_client", "@ezpublish.api.service.content", "@ezpublish.http_cache.event_dispatcher"]
         tags:
             - { name: kernel.cache_clearer }
 
@@ -36,7 +36,7 @@ services:
 
     ezpublish.http_cache.purge_client.local:
         class: %ezpublish.http_cache.purge_client.local.class%
-        arguments: [@ezpublish.http_cache.store]
+        arguments: ["@ezpublish.http_cache.store"]
 
     ezpublish.http_cache.store:
         class: %ezpublish.http_cache.store.class%
@@ -50,34 +50,34 @@ services:
 
     ezpublish.http_cache.proxy_client.varnish.factory:
         class: %ezpublish.http_cache.proxy_client.varnish.factory.class%
-        arguments: [@ezpublish.config.resolver, @ezpublish.config.dynamic_setting.parser, %fos_http_cache.proxy_client.varnish.class%]
+        arguments: ["@ezpublish.config.resolver", "@ezpublish.config.dynamic_setting.parser", %fos_http_cache.proxy_client.varnish.class%]
 
     ezpublish.http_cache.purge_client.fos:
         class: %ezpublish.http_cache.purge_client.fos.class%
-        arguments: [@ezpublish.http_cache.cache_manager]
+        arguments: ["@ezpublish.http_cache.cache_manager"]
 
     ezpublish.http_cache.purge_client:
         alias: ezpublish.http_cache.purge_client.local
 
     ezpublish.http_cache.event_dispatcher:
         class: %ezpublish.http_cache.event_dispatcher.class%
-        arguments: [@service_container]
+        arguments: ["@service_container"]
 
     ezpublish.cache_clear.content.base_locations_listener:
         class: %ezpublish.http_cache.content.base_locations_listener.class%
-        arguments: [@ezpublish.api.service.location]
+        arguments: ["@ezpublish.api.service.location"]
         tags:
             - { name: ezpublish.http_cache.event_subscriber }
 
     ezpublish.cache_clear.content.parent_locations_listener:
         class: %ezpublish.http_cache.content.parent_locations_listener.class%
-        arguments: [@ezpublish.api.service.location]
+        arguments: ["@ezpublish.api.service.location"]
         tags:
             - { name: ezpublish.http_cache.event_subscriber }
 
     ezpublish.cache_clear.content.related_locations_listener:
         class: %ezpublish.cache_clear.content.related_locations_listener.class%
-        arguments: [@ezpublish.api.repository]
+        arguments: ["@ezpublish.api.repository"]
         tags:
             - { name: ezpublish.http_cache.event_subscriber }
 

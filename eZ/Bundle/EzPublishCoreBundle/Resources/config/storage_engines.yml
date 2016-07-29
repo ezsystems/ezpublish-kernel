@@ -7,15 +7,15 @@ services:
     ezpublish.api.repository_configuration_provider:
         class: %ezpublish.api.repository_configuration_provider.class%
         arguments:
-            - @ezpublish.config.resolver
+            - "@ezpublish.config.resolver"
             - %ezpublish.repositories%
 
     ezpublish.persistence.connection.factory:
         class: %ezpublish.persistence.connection.factory.class%
         arguments:
-            - @ezpublish.api.repository_configuration_provider
+            - "@ezpublish.api.repository_configuration_provider"
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
 
     ezpublish.persistence.connection:
         class: %ezpublish.persistence.connection.class%

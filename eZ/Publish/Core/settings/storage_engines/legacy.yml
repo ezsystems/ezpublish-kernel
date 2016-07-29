@@ -23,17 +23,17 @@ services:
     ezpublish.spi.persistence.legacy:
         class: %ezpublish.spi.persistence.legacy.class%
         arguments:
-            - @ezpublish.spi.persistence.legacy.content.handler
-            - @ezpublish.spi.persistence.legacy.content_type.handler
-            - @ezpublish.spi.persistence.legacy.language.handler
-            - @ezpublish.spi.persistence.legacy.location.handler
-            - @ezpublish.spi.persistence.legacy.object_state.handler
-            - @ezpublish.spi.persistence.legacy.section.handler
-            - @ezpublish.spi.persistence.legacy.transactionhandler
-            - @ezpublish.spi.persistence.legacy.trash.handler
-            - @ezpublish.spi.persistence.legacy.url_alias.handler
-            - @ezpublish.spi.persistence.legacy.url_wildcard.handler
-            - @ezpublish.spi.persistence.legacy.user.handler
+            - "@ezpublish.spi.persistence.legacy.content.handler"
+            - "@ezpublish.spi.persistence.legacy.content_type.handler"
+            - "@ezpublish.spi.persistence.legacy.language.handler"
+            - "@ezpublish.spi.persistence.legacy.location.handler"
+            - "@ezpublish.spi.persistence.legacy.object_state.handler"
+            - "@ezpublish.spi.persistence.legacy.section.handler"
+            - "@ezpublish.spi.persistence.legacy.transactionhandler"
+            - "@ezpublish.spi.persistence.legacy.trash.handler"
+            - "@ezpublish.spi.persistence.legacy.url_alias.handler"
+            - "@ezpublish.spi.persistence.legacy.url_wildcard.handler"
+            - "@ezpublish.spi.persistence.legacy.user.handler"
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
         lazy: true
@@ -43,7 +43,7 @@ services:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
         factory: %ezpublish.api.storage_engine.legacy.dbhandler.class%::createFromConnection
         arguments:
-            - @ezpublish.api.storage_engine.legacy.connection
+            - "@ezpublish.api.storage_engine.legacy.connection"
         lazy: true
 
     ezpublish.api.storage_engine.legacy.connection:
@@ -55,6 +55,6 @@ services:
     ezpublish.spi.persistence.legacy.transactionhandler:
         class: %ezpublish.spi.persistence.legacy.transactionhandler.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.spi.persistence.legacy.content_type.handler.caching
-            - @ezpublish.spi.persistence.legacy.language.handler.caching
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.persistence.legacy.content_type.handler.caching"
+            - "@ezpublish.spi.persistence.legacy.language.handler.caching"

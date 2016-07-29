@@ -26,9 +26,9 @@ services:
     ezpublish.fieldType.ezimage.io_service:
         class: %ezpublish.fieldType.ezimage.io_legacy.class%
         arguments:
-            - @ezpublish.fieldType.ezimage.io_service.published
-            - @ezpublish.fieldType.ezimage.io_service.draft
-            - @ezpublish.fieldType.ezimage.io_service.options_provider
+            - "@ezpublish.fieldType.ezimage.io_service.published"
+            - "@ezpublish.fieldType.ezimage.io_service.draft"
+            - "@ezpublish.fieldType.ezimage.io_service.options_provider"
 
     ezpublish.fieldType.ezimage.io_service.options_provider:
         class: %ezpublish.fieldType.ezimage.io_service.options_provider.class%
@@ -84,7 +84,7 @@ services:
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
         arguments:
-            - @ezpublish.api.service.content
+            - "@ezpublish.api.service.content"
 
     ezpublish.fieldType.ezpage.hashConverter:
         class: %ezpublish.fieldType.ezpage.hashConverter.class%
@@ -93,14 +93,14 @@ services:
     ezpublish.fieldType.ezobjectrelation.nameable_field:
         class: %ezpublish.fieldType.ezobjectrelation.nameable_field.class%
         arguments:
-          - @ezpublish.spi.persistence.cache.contentHandler
+          - "@ezpublish.spi.persistence.cache.contentHandler"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.nameable_field:
         class: %ezpublish.fieldType.ezobjectrelationlist.nameable_field.class%
         arguments:
-          - @ezpublish.spi.persistence.cache.contentHandler
+          - "@ezpublish.spi.persistence.cache.contentHandler"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelationlist}
 

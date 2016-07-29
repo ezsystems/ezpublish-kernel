@@ -14,7 +14,7 @@ core:
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext:
-                    repository: @ezpublish.api.repository
+                    repository: "@ezpublish.api.repository"
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ExceptionContext
         query_controller:
             paths:

@@ -14,11 +14,11 @@ services:
         class: %ezpublish.core.io.tolerant_service.class%
         lazy: true
         arguments:
-            - @ezpublish.core.io.metadata_handler
-            - @ezpublish.core.io.binarydata_handler
-            - @ezpublish.core.io.mimeTypeDetector
+            - "@ezpublish.core.io.metadata_handler"
+            - "@ezpublish.core.io.binarydata_handler"
+            - "@ezpublish.core.io.mimeTypeDetector"
         calls:
-            - [ setLogger, [@?logger ] ]
+            - [ setLogger, ["@?logger" ] ]
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
@@ -33,7 +33,7 @@ services:
     ezpublish.core.io.metadata_handler.flysystem:
         class: %ezpublish.core.io.metadata_handler.flysystem.class%
         arguments:
-            - @ezpublish.core.io.flysystem.default_filesystem
+            - "@ezpublish.core.io.flysystem.default_filesystem"
 
     # binarydata handlers
     ezpublish.core.io.binarydata_handler:
@@ -42,8 +42,8 @@ services:
     ezpublish.core.io.binarydata_handler.flysystem:
         class: %ezpublish.core.io.binarydata_handler.flysystem.class%
         arguments:
-            - @ezpublish.core.io.flysystem.default_filesystem
-            - @ezpublish.core.io.default_url_decorator
+            - "@ezpublish.core.io.flysystem.default_filesystem"
+            - "@ezpublish.core.io.default_url_decorator"
 
     ezpublish.core.io.flysystem.base_filesystem:
         class: League\Flysystem\Filesystem
@@ -52,7 +52,7 @@ services:
     ezpublish.core.io.flysystem.default_filesystem:
         parent: ezpublish.core.io.flysystem.base_filesystem
         arguments:
-            - @ezpublish.core.io.flysystem.default_adapter
+            - "@ezpublish.core.io.flysystem.default_adapter"
 
     ezpublish.core.io.flysystem.default_adapter:
         class: League\Flysystem\Adapter\Local
@@ -76,12 +76,12 @@ services:
     ezpublish.core.io.image_fieldtype.legacy_url_redecorator:
         class: %ezpublish.core.io.image_fieldtype.legacy_url_redecorator.class%
         arguments:
-            - @ezpublish.core.io.default_url_decorator
-            - @ezpublish.core.io.image_fieldtype.legacy_url_decorator
+            - "@ezpublish.core.io.default_url_decorator"
+            - "@ezpublish.core.io.image_fieldtype.legacy_url_decorator"
 
     ezpublish.core.io.metadata_handler.legacy_dfs_cluster:
         abstract: true
         class: eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster
         arguments:
             - ~
-            - @ezpublish.core.io.image_fieldtype.legacy_url_decorator
+            - "@ezpublish.core.io.image_fieldtype.legacy_url_decorator"

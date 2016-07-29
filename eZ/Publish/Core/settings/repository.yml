@@ -38,117 +38,117 @@ services:
     ezpublish.field_type_collection.factory:
         class: %ezpublish.field_type_collection.factory.class%
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
 
     ezpublish.field_type_nameable_collection.factory:
         class: %ezpublish.field_type_nameable_collection.factory.class%
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
 
     ezpublish.api.repository.factory:
         class: %ezpublish.api.repository.factory.class%
         arguments:
             - %ezpublish.api.inner_repository.class%
-            - @ezpublish.field_type_collection.factory
-            - @ezpublish.field_type_nameable_collection.factory
+            - "@ezpublish.field_type_collection.factory"
+            - "@ezpublish.field_type_nameable_collection.factory"
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
 
     ezpublish.api.inner_repository:
         class: %ezpublish.api.inner_repository.class%
         factory: ["@ezpublish.api.repository.factory", buildRepository]
         arguments:
-            - @ezpublish.api.persistence_handler
-            - @ezpublish.spi.search
+            - "@ezpublish.api.persistence_handler"
+            - "@ezpublish.spi.search"
         lazy: true
 
     ezpublish.api.service.content:
         class: %ezpublish.api.service.content.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Content]
+        arguments: ["@ezpublish.api.repository", Content]
         lazy: true
 
     ezpublish.api.service.content_type:
         class: %ezpublish.api.service.content_type.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ContentType]
+        arguments: ["@ezpublish.api.repository", ContentType]
         lazy: true
 
     ezpublish.api.service.field_type:
         class: %ezpublish.api.service.field_type.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, FieldType]
+        arguments: ["@ezpublish.api.repository", FieldType]
         lazy: true
 
     ezpublish.api.service.role:
         class: %ezpublish.api.service.role.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Role]
+        arguments: ["@ezpublish.api.repository", Role]
         lazy: true
 
     ezpublish.api.service.object_state:
         class: %ezpublish.api.service.object_state.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ObjectState]
+        arguments: ["@ezpublish.api.repository", ObjectState]
         lazy: true
 
     ezpublish.api.service.url_wildcard:
         class: %ezpublish.api.service.url_wildcard.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, URLWildcard]
+        arguments: ["@ezpublish.api.repository", URLWildcard]
         lazy: true
 
     ezpublish.api.service.url_alias:
         class: %ezpublish.api.service.url_alias.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, URLAlias]
+        arguments: ["@ezpublish.api.repository", URLAlias]
         lazy: true
 
     ezpublish.api.service.user:
         class: %ezpublish.api.service.user.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, User]
+        arguments: ["@ezpublish.api.repository", User]
         lazy: true
 
     ezpublish.api.service.search:
         class: %ezpublish.api.service.search.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Search]
+        arguments: ["@ezpublish.api.repository", Search]
         lazy: true
 
     ezpublish.api.service.section:
         class: %ezpublish.api.service.section.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Section]
+        arguments: ["@ezpublish.api.repository", Section]
         lazy: true
 
     ezpublish.api.service.trash:
         class: %ezpublish.api.service.trash.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Trash]
+        arguments: ["@ezpublish.api.repository", Trash]
         lazy: true
 
     ezpublish.api.service.location:
         class: %ezpublish.api.service.location.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, Location]
+        arguments: ["@ezpublish.api.repository", Location]
         lazy: true
 
     ezpublish.api.service.language:
         class: %ezpublish.api.service.language.class%
         factory: ["@ezpublish.api.repository.factory", buildService]
-        arguments: [@ezpublish.api.repository, ContentLanguage]
+        arguments: ["@ezpublish.api.repository", ContentLanguage]
         lazy: true
 
     # Signal Slot API wrapper
     ezpublish.signalslot.repository:
         class: %ezpublish.signalslot.repository.class%
-        arguments: [@ezpublish.api.inner_repository, @ezpublish.signalslot.signal_dispatcher_transaction_wrapper]
+        arguments: ["@ezpublish.api.inner_repository", "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"]
         lazy: true
 
     ezpublish.signalslot.signal_dispatcher_transaction_wrapper:
         class: %ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class%
-        arguments: [@ezpublish.signalslot.signal_dispatcher]
+        arguments: ["@ezpublish.signalslot.signal_dispatcher"]
 
     ezpublish.signalslot.signal_dispatcher:
         class: %ezpublish.signalslot.signal_dispatcher.class%

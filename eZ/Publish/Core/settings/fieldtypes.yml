@@ -278,7 +278,7 @@ services:
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
         calls:
-            - [setTransformationProcessor, [@ezpublish.api.storage_engine.transformation_processor]]
+            - [setTransformationProcessor, ["@ezpublish.api.storage_engine.transformation_processor"]]
         abstract: true
 
     ezpublish.fieldType.ezauthor:
@@ -394,17 +394,17 @@ services:
         class: %ezpublish.fieldType.ezrichtext.class%
         parent: ezpublish.fieldType
         arguments:
-            - @ezpublish.fieldType.ezrichtext.validator.docbook
-            - @ezpublish.fieldType.ezrichtext.converter.input.dispatcher
-            - @ezpublish.fieldType.ezrichtext.normalizer.input
-            - @ezpublish.fieldType.ezrichtext.validator.input.dispatcher
+            - "@ezpublish.fieldType.ezrichtext.validator.docbook"
+            - "@ezpublish.fieldType.ezrichtext.converter.input.dispatcher"
+            - "@ezpublish.fieldType.ezrichtext.normalizer.input"
+            - "@ezpublish.fieldType.ezrichtext.validator.input.dispatcher"
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezpage.pageService, @ezpublish.fieldType.ezpage.hashConverter]
+        arguments: ["@ezpublish.fieldType.ezpage.pageService", "@ezpublish.fieldType.ezpage.hashConverter"]
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
 

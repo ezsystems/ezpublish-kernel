@@ -10,15 +10,15 @@ services:
     ezpublish.search.legacy.gateway.content.inner:
         class: %ezpublish.search.legacy.gateway.content.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.search.legacy.gateway.criteria_converter.content
-            - @ezpublish.search.legacy.gateway.sort_clause_converter.content
-            - @ezpublish.persistence.legacy.content_type.gateway
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.search.legacy.gateway.criteria_converter.content"
+            - "@ezpublish.search.legacy.gateway.sort_clause_converter.content"
+            - "@ezpublish.persistence.legacy.content_type.gateway"
 
     ezpublish.search.legacy.gateway.content.exception_conversion:
         class: %ezpublish.search.legacy.gateway.content.exception_conversion.class%
         arguments:
-            - @ezpublish.search.legacy.gateway.content.inner
+            - "@ezpublish.search.legacy.gateway.content.inner"
 
     # To disable exception conversion layer override this alias so that it points to inner gateway
     ezpublish.search.legacy.gateway.content:
@@ -28,23 +28,23 @@ services:
     ezpublish.search.legacy.gateway.wordIndexer:
         class: %ezpublish.search.legacy.gateway.wordIndexer.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.api.storage_engine.transformation_processor
-            - @ezpublish.search.legacy.repository.searchIndex
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.api.storage_engine.transformation_processor"
+            - "@ezpublish.search.legacy.repository.searchIndex"
 
     ezpublish.search.legacy.gateway.location.inner:
         class: %ezpublish.search.legacy.gateway.location.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.search.legacy.gateway.criteria_converter.location
-            - @ezpublish.search.legacy.gateway.sort_clause_converter.location
-            - @ezpublish.persistence.legacy.content_type.gateway
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.search.legacy.gateway.criteria_converter.location"
+            - "@ezpublish.search.legacy.gateway.sort_clause_converter.location"
+            - "@ezpublish.persistence.legacy.content_type.gateway"
 
     ezpublish.search.legacy.gateway.location.exception_conversion:
         class: %ezpublish.search.legacy.gateway.location.exception_conversion.class%
         arguments:
-            - @ezpublish.search.legacy.gateway.location.inner
+            - "@ezpublish.search.legacy.gateway.location.inner"
 
     # To disable exception conversion layer override this alias so that it points to inner gateway
     ezpublish.search.legacy.gateway.location:
@@ -53,4 +53,4 @@ services:
     ezpublish.search.legacy.repository.searchIndex:
         class: %ezpublish.search.legacy.repository.searchIndex.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"

@@ -7,13 +7,13 @@ services:
     ezpublish_rest.security.authentication.listener.session:
         class: %ezpublish_rest.security.authentication.listener.session.class%
         arguments:
-            - @security.token_storage
-            - @security.authentication.manager
+            - "@security.token_storage"
+            - "@security.authentication.manager"
             - ~ # Will be replaced at compile time by security provider key
-            - @event_dispatcher
-            - @ezpublish.config.resolver
-            - @session.storage
-            - @?logger
+            - "@event_dispatcher"
+            - "@ezpublish.config.resolver"
+            - "@session.storage"
+            - "@?logger"
         abstract: true
 
     ezpublish_rest.security.authentication.logout_handler:

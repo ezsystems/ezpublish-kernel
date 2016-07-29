@@ -31,20 +31,20 @@ parameters:
 services:
     ezpublish.search.legacy.gateway.criterion_handler.base:
         abstract: true
-        arguments: [@ezpublish.api.storage_engine.legacy.dbhandler]
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.search.legacy.gateway.criterion_handler.field_base:
         abstract: true
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.spi.persistence.language_handler
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.spi.persistence.language_handler"
 
     ezpublish.search.legacy.gateway.criterion_field_value_handler.base:
         abstract: true
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.api.storage_engine.transformation_processor
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.api.storage_engine.transformation_processor"
 
     # Criterion handlers
 
@@ -72,8 +72,8 @@ services:
     ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier:
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.spi.persistence.content_type_handler
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.persistence.content_type_handler"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
@@ -88,12 +88,12 @@ services:
     ezpublish.search.legacy.gateway.criterion_handler.common.field:
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.field.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.spi.persistence.language_handler
-            - @ezpublish.persistence.legacy.field_value_converter.registry
-            - @ezpublish.search.legacy.gateway.criterion_field_value_converter
-            - @ezpublish.api.storage_engine.transformation_processor
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.spi.persistence.language_handler"
+            - "@ezpublish.persistence.legacy.field_value_converter.registry"
+            - "@ezpublish.search.legacy.gateway.criterion_field_value_converter"
+            - "@ezpublish.api.storage_engine.transformation_processor"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
@@ -101,8 +101,8 @@ services:
     ezpublish.search.legacy.gateway.criterion_handler.common.full_text:
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.full_text.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.api.storage_engine.transformation_processor
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.api.storage_engine.transformation_processor"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
@@ -110,8 +110,8 @@ services:
     ezpublish.search.legacy.gateway.criterion_handler.common.language_code:
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.language_code.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.persistence.legacy.language.mask_generator
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.persistence.legacy.language.mask_generator"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
@@ -203,8 +203,8 @@ services:
     ezpublish.search.legacy.gateway.criterion_field_value_converter:
         class: %ezpublish.search.legacy.gateway.criterion_field_value_converter.class%
         arguments:
-            - @ezpublish.search.legacy.gateway.criterion_field_value_handler.registry
-            - @ezpublish.search.legacy.gateway.criterion_field_value_handler.default
+            - "@ezpublish.search.legacy.gateway.criterion_field_value_handler.registry"
+            - "@ezpublish.search.legacy.gateway.criterion_field_value_handler.default"
 
     ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.comma_separated:
         parent: ezpublish.search.legacy.gateway.criterion_field_value_handler.base

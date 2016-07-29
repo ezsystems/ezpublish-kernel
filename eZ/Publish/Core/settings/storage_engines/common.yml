@@ -44,12 +44,12 @@ services:
         factory: ["@ezpublish.persistence.field_type_registry.factory", buildFieldTypeRegistry]
         arguments:
             - %ezpublish.persistence.field_type_registry.class%
-            - @ezpublish.field_type_collection.factory
+            - "@ezpublish.field_type_collection.factory"
 
     ezpublish.persistence.external_storage_registry.factory:
         class: %ezpublish.persistence.external_storage_registry.factory.class%
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
 
     ezpublish.persistence.external_storage_registry:
         class: %ezpublish.persistence.external_storage_registry.class%
@@ -59,14 +59,14 @@ services:
 
     ezpublish.persistence.slug_converter:
         class: %ezpublish.persistence.slug_converter.class%
-        arguments: [@ezpublish.api.storage_engine.transformation_processor]
+        arguments: ["@ezpublish.api.storage_engine.transformation_processor"]
 
     ezpublish.api.storage_engine.transformation_parser:
         class: %ezpublish.api.storage_engine.transformation_parser.class%
 
     ezpublish.api.storage_engine.pcre_compiler:
         class: %ezpublish.api.storage_engine.pcre_compiler.class%
-        arguments: [@ezpublish.api.storage_engine.transformation_converter]
+        arguments: ["@ezpublish.api.storage_engine.transformation_converter"]
 
     ezpublish.api.storage_engine.transformation_converter:
         class: %ezpublish.api.storage_engine.transformation_converter.class%
@@ -76,10 +76,10 @@ services:
         arguments:
             # Using definition files:
             #
-            # - @ezpublish.api.storage_engine.transformation_parser
-            # - @ezpublish.api.storage_engine.pcre_compiler
+            # - "@ezpublish.api.storage_engine.transformation_parser"
+            # - "@ezpublish.api.storage_engine.pcre_compiler"
             # - %ezpublish.api.storage_engine.transformation_rules.resources%
 
             # Using preprocessed files:
-            - @ezpublish.api.storage_engine.pcre_compiler
+            - "@ezpublish.api.storage_engine.pcre_compiler"
             - %ezpublish.api.storage_engine.preprocessed_transformation_rules.resources%

@@ -42,9 +42,9 @@ services:
     ezpublish.search.common.field_name_resolver:
         class: %ezpublish.search.common.field_name_resolver.class%
         arguments:
-            - @ezpublish.search.common.field_registry
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.search.common.field_name_generator
+            - "@ezpublish.search.common.field_registry"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.search.common.field_name_generator"
 
     # Note: services tagged with 'ezpublish.search.common.field_value_mapper'
     # are registered to this one using compilation pass

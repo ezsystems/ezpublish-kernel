@@ -14,7 +14,7 @@ services:
 
     ezpublish_debug.persistence_collector:
         class: %ezpublish_debug.persistence_collector.class%
-        arguments: [@ezpublish.spi.persistence.cache.persistenceLogger]
+        arguments: ["@ezpublish.spi.persistence.cache.persistenceLogger"]
         tags:
             -
                 name: ezpublish_data_collector

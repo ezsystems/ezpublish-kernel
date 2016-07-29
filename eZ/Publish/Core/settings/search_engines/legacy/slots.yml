@@ -13,9 +13,9 @@ services:
         class: %ezpublish.search.legacy.slot.class%
         abstract: true
         arguments:
-            - @ezpublish.api.inner_repository
-            - @ezpublish.api.persistence_handler
-            - @ezpublish.spi.search
+            - "@ezpublish.api.inner_repository"
+            - "@ezpublish.api.persistence_handler"
+            - "@ezpublish.spi.search"
 
     ezpublish.search.legacy.slot.publish_version:
         parent: ezpublish.search.legacy.slot

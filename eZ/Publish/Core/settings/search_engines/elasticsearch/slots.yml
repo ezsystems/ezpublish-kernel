@@ -23,9 +23,9 @@ services:
         class: %ezpublish.search.elasticsearch.slot.class%
         abstract: true
         arguments:
-            - @ezpublish.api.inner_repository
-            - @ezpublish.api.persistence_handler
-            - @ezpublish.spi.search
+            - "@ezpublish.api.inner_repository"
+            - "@ezpublish.api.persistence_handler"
+            - "@ezpublish.spi.search"
 
     ezpublish.search.elasticsearch.slot.publish_version:
         parent: ezpublish.search.elasticsearch.slot

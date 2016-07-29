@@ -7,7 +7,7 @@ services:
     ezplatform.installer.db_based_installer:
         abstract: true
         class:  %ezplatform.installer.db_based_installer.class%
-        arguments: [@database_connection]
+        arguments: ["@database_connection"]
 
     ezplatform.installer.clean_installer:
         class: %ezplatform.installer.clean_installer.class%
@@ -18,10 +18,10 @@ services:
     ezplatform.installer.install_command:
         class: %ezplatform.installer.install_command.class%
         arguments:
-            - @database_connection
+            - "@database_connection"
             - []
-            - @cache_clearer
-            - @filesystem
+            - "@cache_clearer"
+            - "@filesystem"
             - %kernel.cache_dir%
             - %kernel.environment%
             - %search_engine%

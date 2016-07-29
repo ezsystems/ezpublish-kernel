@@ -62,9 +62,9 @@ services:
 
     ezpublish.fieldType.ezdatetime.parameterProvider:
         class: %ezpublish.fieldType.locale.parameterProvider.class%
-        arguments: [@ezpublish.locale.converter]
+        arguments: ["@ezpublish.locale.converter"]
         calls:
-            - [setRequestStack, [@request_stack]]
+            - [setRequestStack, ["@request_stack"]]
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}
@@ -72,7 +72,7 @@ services:
 
     ezpublish.fieldType.ezpage.parameterProvider:
         class: %ezpublish.fieldType.ezpage.parameterProvider.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        arguments: ["@ezpublish.fieldType.ezpage.pageService"]
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezpage}
 
@@ -85,9 +85,9 @@ services:
         factory: ["@ezpublish.fieldType.ezpage.pageService.factory", buildService]
         arguments:
             - %ezpublish.fieldType.ezpage.pageService.class%
-            - @ezpublish.config.resolver
-            - @ezpublish.fieldType.ezpage.storage_gateway
-            - @ezpublish.api.service.content
+            - "@ezpublish.config.resolver"
+            - "@ezpublish.fieldType.ezpage.storage_gateway"
+            - "@ezpublish.api.service.content"
         lazy: true
 
     ezpublish.fieldType.ezpage.hashConverter:
@@ -105,44 +105,44 @@ services:
         class: %ezpublish.fieldType.ezrichtext.converter.input.html5.class%
         arguments:
             - %ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources%
-            - @ezpublish.config.resolver
+            - "@ezpublish.config.resolver"
 
     ezpublish.fieldType.ezrichtext.converter.input.dispatcher:
         class: %ezpublish.fieldType.ezrichtext.converter.dispatcher.class%
         arguments:
             -
                 http://docbook.org/ns/docbook: null
-                http://ez.no/namespaces/ezpublish5/xhtml5/edit: @ezpublish.fieldType.ezrichtext.converter.input.xhtml5
+                http://ez.no/namespaces/ezpublish5/xhtml5/edit: "@ezpublish.fieldType.ezrichtext.converter.input.xhtml5"
 
     ezpublish.fieldType.ezrichtext.converter.link:
         class: %ezpublish.fieldType.ezrichtext.converter.link.class%
-        arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
+        arguments: ["@ezpublish.api.service.location", "@ezpublish.api.service.content", "@ezpublish.urlalias_router", "@?logger"]
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
 
     ezpublish.fieldType.ezrichtext.renderer:
         class: %ezpublish.fieldType.ezrichtext.renderer.class%
         arguments:
-            - @ezpublish.api.repository
-            - @security.authorization_checker
-            - @ezpublish.config.resolver
-            - @templating
+            - "@ezpublish.api.repository"
+            - "@security.authorization_checker"
+            - "@ezpublish.config.resolver"
+            - "@templating"
             - %ezpublish.fieldType.ezrichtext.tag.namespace%
             - %ezpublish.fieldType.ezrichtext.embed.namespace%
-            - @?logger
+            - "@?logger"
 
     ezpublish.fieldType.ezrichtext.converter.template:
         class: %ezpublish.fieldType.ezrichtext.converter.template.class%
         arguments:
-            - @ezpublish.fieldType.ezrichtext.renderer
+            - "@ezpublish.fieldType.ezrichtext.renderer"
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
 
     ezpublish.fieldType.ezrichtext.converter.embed:
         class: %ezpublish.fieldType.ezrichtext.converter.embed.class%
         arguments:
-            - @ezpublish.fieldType.ezrichtext.renderer
-            - @?logger
+            - "@ezpublish.fieldType.ezrichtext.renderer"
+            - "@?logger"
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
 
@@ -150,7 +150,7 @@ services:
         class: %ezpublish.fieldType.ezrichtext.converter.output.html5.class%
         arguments:
             - %ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources%
-            - @ezpublish.config.resolver
+            - "@ezpublish.config.resolver"
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 50}
 
@@ -171,7 +171,7 @@ services:
         class: %ezpublish.fieldType.ezrichtext.converter.edit.html5.class%
         arguments:
             - %ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources%
-            - @ezpublish.config.resolver
+            - "@ezpublish.config.resolver"
         lazy: true
 
     ezpublish.fieldType.ezrichtext.validator.docbook:
@@ -188,15 +188,15 @@ services:
             -
                 http://docbook.org/ns/docbook: null
                 http://ez.no/namespaces/ezpublish5/xhtml5/edit: null
-                http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5
+                http://ez.no/namespaces/ezpublish5/xhtml5: "@ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5"
 
     # Image
     ezpublish.fieldType.ezimage.io_service:
         class: %ezpublish.fieldType.ezimage.io_legacy.class%
         arguments:
-            - @ezpublish.fieldType.ezimage.io_service.published
-            - @ezpublish.fieldType.ezimage.io_service.draft
-            - @ezpublish.fieldType.ezimage.io_service.options_provider
+            - "@ezpublish.fieldType.ezimage.io_service.published"
+            - "@ezpublish.fieldType.ezimage.io_service.draft"
+            - "@ezpublish.fieldType.ezimage.io_service.options_provider"
         # Required by ezpublish.core.io.stream_file_listener. Request listeners are initialized very early.
         lazy: true
 
@@ -237,20 +237,20 @@ services:
     # Will be added to binaryfile & mediafile external storage handlers by a compiler pass
     ezpublish.fieldType.ezbinarybase.download_url_generator:
         class: %ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class%
-        arguments: [@router]
+        arguments: ["@router"]
 
     # Nameable services (for fieldtypes that need advance name handling)
     ezpublish.fieldType.ezobjectrelation.nameable_field:
         class: %ezpublish.fieldType.ezobjectrelation.nameable_field.class%
         arguments:
-          - @ezpublish.spi.persistence.cache.contentHandler
+          - "@ezpublish.spi.persistence.cache.contentHandler"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.nameable_field:
         class: %ezpublish.fieldType.ezobjectrelationlist.nameable_field.class%
         arguments:
-          - @ezpublish.spi.persistence.cache.contentHandler
+          - "@ezpublish.spi.persistence.cache.contentHandler"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelationlist}
 

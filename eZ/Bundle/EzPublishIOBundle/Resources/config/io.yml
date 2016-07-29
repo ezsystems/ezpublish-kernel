@@ -19,12 +19,12 @@ services:
     ezpublish.core.io.metadata_handler.factory:
         class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ "@service_container" ] ]
 
     ezpublish.core.io.binarydata_handler.factory:
         class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ "@service_container" ] ]
 
     # Inject the siteaccess config into a few io services
     ezpublish.core.io.flysystem.default_adapter:
@@ -54,7 +54,7 @@ services:
     ezpublish.core.io.metadata_handler.flysystem.default:
         class: %ezpublish.core.io.metadata_handler.flysystem.class%
         arguments:
-            - @ezpublish.core.io.flysystem.default_filesystem
+            - "@ezpublish.core.io.flysystem.default_filesystem"
 
     # Base service for flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem:
@@ -62,14 +62,14 @@ services:
         class: %ezpublish.core.io.binarydata_handler.flysystem.class%
         arguments:
             - ~
-            - @ezpublish.core.io.default_url_decorator
+            - "@ezpublish.core.io.default_url_decorator"
 
     # Default flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem.default:
         class: %ezpublish.core.io.binarydata_handler.flysystem.class%
         arguments:
-            - @ezpublish.core.io.flysystem.default_filesystem
-            - @ezpublish.core.io.default_url_decorator
+            - "@ezpublish.core.io.flysystem.default_filesystem"
+            - "@ezpublish.core.io.default_url_decorator"
 
     ezpublish.core.io.image_fieldtype.legacy_url_decorator:
         class: %ezpublish.core.io.url_decorator.prefix.class%
@@ -79,7 +79,7 @@ services:
     ezpublish.core.io.stream_file_listener:
         class: %ezpublish.core.io.stream_file_listener.class%
         arguments:
-            - @ezpublish.fieldtype.ezimage.io_service
-            - @ezpublish.config.resolver
+            - "@ezpublish.fieldtype.ezimage.io_service"
+            - "@ezpublish.config.resolver"
         tags:
             - { name: kernel.event_subscriber }

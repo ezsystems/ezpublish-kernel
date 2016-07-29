@@ -28,7 +28,7 @@ services:
         class: %ezpublish.search.legacy.dbhandler.class%
         factory: [%ezpublish.search.legacy.dbhandler.class%, createFromConnection]
         arguments:
-            - @ezpublish.api.search_engine.legacy.connection
+            - "@ezpublish.api.search_engine.legacy.connection"
         lazy: true
 
     # Aliasing storage connection in order to support sqlite://:memory:
@@ -39,15 +39,15 @@ services:
     ezpublish.search.legacy.gateway.content.inner:
         class: %ezpublish.search.legacy.gateway.content.class%
         arguments:
-            - @ezpublish.api.search_engine.legacy.dbhandler
-            - @ezpublish.search.legacy.gateway.criteria_converter.content
-            - @ezpublish.search.legacy.gateway.sort_clause_converter.content
-            - @ezpublish.spi.persistence.language_handler
+            - "@ezpublish.api.search_engine.legacy.dbhandler"
+            - "@ezpublish.search.legacy.gateway.criteria_converter.content"
+            - "@ezpublish.search.legacy.gateway.sort_clause_converter.content"
+            - "@ezpublish.spi.persistence.language_handler"
 
     ezpublish.search.legacy.gateway.content.exception_conversion:
         class: %ezpublish.search.legacy.gateway.content.exception_conversion.class%
         arguments:
-            - @ezpublish.search.legacy.gateway.content.inner
+            - "@ezpublish.search.legacy.gateway.content.inner"
 
     # To disable exception conversion layer override this alias so that it points to inner gateway
     ezpublish.search.legacy.gateway.content:
@@ -56,15 +56,15 @@ services:
     ezpublish.search.legacy.gateway.location.inner:
         class: %ezpublish.search.legacy.gateway.location.class%
         arguments:
-            - @ezpublish.api.search_engine.legacy.dbhandler
-            - @ezpublish.search.legacy.gateway.criteria_converter.location
-            - @ezpublish.search.legacy.gateway.sort_clause_converter.location
-            - @ezpublish.spi.persistence.language_handler
+            - "@ezpublish.api.search_engine.legacy.dbhandler"
+            - "@ezpublish.search.legacy.gateway.criteria_converter.location"
+            - "@ezpublish.search.legacy.gateway.sort_clause_converter.location"
+            - "@ezpublish.spi.persistence.language_handler"
 
     ezpublish.search.legacy.gateway.location.exception_conversion:
         class: %ezpublish.search.legacy.gateway.location.exception_conversion.class%
         arguments:
-            - @ezpublish.search.legacy.gateway.location.inner
+            - "@ezpublish.search.legacy.gateway.location.inner"
 
     # To disable exception conversion layer override this alias so that it points to inner gateway
     ezpublish.search.legacy.gateway.location:
@@ -73,8 +73,8 @@ services:
     ezpublish.search.legacy.mapper.fulltext:
         class: %ezpublish.search.legacy.mapper.fulltext.class%
         arguments:
-            - @ezpublish.search.common.field_registry
-            - @ezpublish.spi.persistence.content_type_handler
+            - "@ezpublish.search.common.field_registry"
+            - "@ezpublish.spi.persistence.content_type_handler"
 
     ezpublish.search.legacy.fulltext_mapper:
         alias: ezpublish.search.legacy.mapper.fulltext
@@ -82,13 +82,13 @@ services:
     ezpublish.spi.search.legacy:
         class: %ezpublish.spi.search.legacy.class%
         arguments:
-            - @ezpublish.search.legacy.gateway.content
-            - @ezpublish.search.legacy.gateway.location
-            - @ezpublish.search.legacy.gateway.wordIndexer
-            - @ezpublish.persistence.legacy.content.mapper
-            - @ezpublish.persistence.legacy.location.mapper
-            - @ezpublish.spi.persistence.language_handler
-            - @ezpublish.search.legacy.fulltext_mapper
+            - "@ezpublish.search.legacy.gateway.content"
+            - "@ezpublish.search.legacy.gateway.location"
+            - "@ezpublish.search.legacy.gateway.wordIndexer"
+            - "@ezpublish.persistence.legacy.content.mapper"
+            - "@ezpublish.persistence.legacy.location.mapper"
+            - "@ezpublish.spi.persistence.language_handler"
+            - "@ezpublish.search.legacy.fulltext_mapper"
         tags:
             - {name: ezpublish.searchEngine, alias: legacy}
         lazy: true
