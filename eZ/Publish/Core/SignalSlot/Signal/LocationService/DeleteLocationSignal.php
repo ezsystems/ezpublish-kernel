@@ -30,4 +30,11 @@ class DeleteLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
+
+    /**
+     * Location ID of parent location of the deleted location.
+     *
+     * @var mixed
+     */
+    public $parentLocationId;
 }

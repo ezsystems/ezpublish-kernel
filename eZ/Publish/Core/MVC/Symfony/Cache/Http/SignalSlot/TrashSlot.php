@@ -13,14 +13,12 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * A slot handling DeleteContentSignal.
- *
- * @todo Change to clear precise cache items on content deletion (implies changes to how this signal is used and emitted).
+ * A slot handling TrashSignal.
  */
-class DeleteContentSlot extends PurgeAllHttpCacheSlot
+class TrashSlot extends PurgeForContentHttpCacheSlot
 {
     protected function supports(Signal $signal)
     {
-        return $signal instanceof Signal\ContentService\DeleteContentSignal;
+        return $signal instanceof Signal\TrashService\TrashSignal;
     }
 }

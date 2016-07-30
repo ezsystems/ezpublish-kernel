@@ -8,22 +8,24 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
+use eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal;
 
-class DeleteContentSlotTest extends AbstractPurgeAllSlotTest implements SlotTest, PurgeAllExpectation
+class RecoverSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
+    protected static $locationIds = [43];
+
     public static function createSignal()
     {
-        return new DeleteContentSignal();
+        return new RecoverSignal(['contentId' => self::getContentId(), 'newParentLocationId' => 43]);
     }
 
     public function getSlotClass()
     {
-        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteContentSlot';
+        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RecoverSlot';
     }
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal'];
+        return ['eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal'];
     }
 }
