@@ -20,9 +20,6 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Search\IndexerDataProvider;
 use eZ\Publish\SPI\Search\Indexing;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Handler implements SearchHandlerInterface, Indexing
 {
@@ -391,14 +388,20 @@ class Handler implements SearchHandlerInterface, Indexing
      *
      * @param $bulkCount
      * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param callable $onOutput
+     * @param callable $onBatchStarted
+     * @param callable $onBatchFinished
+     * @param callable $onBulkProcessed
+     * @param callable $onError
      */
     public function createSearchIndex(
         $bulkCount,
         IndexerDataProvider $dataProvider,
-        OutputInterface $output,
-        LoggerInterface $logger
+        callable $onOutput,
+        callable $onBatchStarted,
+        callable $onBatchFinished,
+        callable $onBulkProcessed,
+        callable $onError
     ) {
         $this->setCommit(true);
         $this->purgeIndex();
@@ -409,11 +412,9 @@ class Handler implements SearchHandlerInterface, Indexing
         $contentCurrentVersionIds = $dataProvider->getContentObjects();
 
         //Indexing Content
-        $output->writeln('Indexing Content...');
+        $onOutput('Indexing Content...');
 
-        /* @var \Symfony\Component\Console\Helper\ProgressBar $progress */
-        $progress = new ProgressBar($output);
-        $progress->start($totalCount);
+        $onBatchStarted($totalCount);
         $i = 0;
         do {
             $contentObjects = array();
@@ -425,29 +426,29 @@ class Handler implements SearchHandlerInterface, Indexing
                     break;
                 }
 
-                $contentObjects[] = $dataProvider->loadContentObjectVersion($row['id'], $row['current_version']);
+                try {
+                    $contentObjects[] = $dataProvider->loadContentObjectVersion($row['id'], $row['current_version']);
+                } catch (NotFoundException $e) {
+                    $onError("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
+                }
             }
 
             if (!empty($contentObjects)) {
                 $this->bulkIndexContent($contentObjects);
             }
-
-            $progress->advance($k);
+            $onBulkProcessed($k);
         } while (($i += $bulkCount) < $totalCount);
 
-        $progress->finish();
-        $output->writeln('');
+        $onBatchFinished();
 
         // Indexing Locations
-        $output->writeln('Indexing Locations...');
-
-        $progress = new ProgressBar($output);
+        $onOutput('Indexing Locations...');
         $totalLocations = $dataProvider->getLocationsCount();
+        $onBatchStarted($totalLocations);
 
         // get location nodes ids generator
         $locationsNodesIds = $dataProvider->getLocations();
 
-        $progress->start($totalLocations);
         $i = 0;
         do {
             $locations = array();
@@ -459,16 +460,20 @@ class Handler implements SearchHandlerInterface, Indexing
                     break;
                 }
 
-                $locations[] = $dataProvider->loadLocation($locationId);
+                try {
+                    $locations[] = $dataProvider->loadLocation($locationId);
+                } catch (NotFoundException $e) {
+                    $onError("Could not load Location with id $locationId, so skipped for indexing. Full exception: " . $e->getMessage());
+                }
             }
 
             if (!empty($locations)) {
                 $this->bulkIndexLocations($locations);
             }
 
-            $progress->advance($k);
+            $onBulkProcessed($k);
         } while (($i += $bulkCount) < $totalCount);
 
-        $progress->finish();
+        $onBatchFinished();
     }
 }

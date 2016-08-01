@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -76,13 +77,31 @@ EOT
 
         $output->writeln('Creating search index for the engine: ' . get_parent_class($this->searchHandler));
 
+        $logger = $this->logger;
+        $progress = new ProgressBar($output);
         $this->searchHandler->createSearchIndex(
             $bulkCount,
             $this->dataProvider,
-            $output,
-            $this->logger
+            function ($message) use ($output) {
+                $output->writeln($message);
+            },
+            function ($totalCount) use ($output, $progress) {
+                $progress->start($totalCount);
+            },
+            function () use ($progress, $output) {
+                $progress->finish();
+                $output->writeln('');
+            },
+            function ($step) use ($progress) {
+                $progress->advance($step);
+            },
+            function ($msg) use ($progress, $logger) {
+                $progress->clear();
+                $logger->warning($msg);
+                $progress->display();
+            }
         );
 
-        $output->writeln(PHP_EOL . 'Finished creating search index for the engine: ' . get_parent_class($this->searchHandler));
+        $output->writeln('Finished creating search index for the engine: ' . get_parent_class($this->searchHandler));
     }
 }

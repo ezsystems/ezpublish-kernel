@@ -8,9 +8,6 @@
  */
 namespace eZ\Publish\SPI\Search;
 
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
 /**
  * Interface for creating a search index in search handler.
  */
@@ -21,13 +18,19 @@ interface Indexing
      *
      * @param $bulkCount
      * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param callable $onOutput
+     * @param callable $onBatchStarted
+     * @param callable $onBatchFinished
+     * @param callable $onBulkProcessed
+     * @param callable $onError
      */
     public function createSearchIndex(
         $bulkCount,
         IndexerDataProvider $dataProvider,
-        OutputInterface $output,
-        LoggerInterface $logger
+        callable $onOutput,
+        callable $onBatchStarted,
+        callable $onBatchFinished,
+        callable $onBulkProcessed,
+        callable $onError
     );
 }
