@@ -4,9 +4,9 @@ parameters:
 
 services:
     ezpublish.search.elasticsearch.content.gateway.client.http.stream:
-        class: %ezpublish.search.elasticsearch.content.gateway.client.http.stream.class%
+        class: "%ezpublish.search.elasticsearch.content.gateway.client.http.stream.class%"
         arguments:
-            - %ezpublish.search.elasticsearch.connection.server%
+            - "%ezpublish.search.elasticsearch.connection.server%"
 
     ezpublish.search.elasticsearch.content.field_name_generator:
-        class: %ezpublish.search.elasticsearch.content.field_name_generator.class%
+        class: "%ezpublish.search.elasticsearch.content.field_name_generator.class%"

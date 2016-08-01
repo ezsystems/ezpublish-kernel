@@ -20,7 +20,7 @@ parameters:
 
 services:
     ezpublish.search.elasticsearch.slot:
-        class: %ezpublish.search.elasticsearch.slot.class%
+        class: "%ezpublish.search.elasticsearch.slot.class%"
         abstract: true
         arguments:
             - "@ezpublish.api.inner_repository"
@@ -29,102 +29,102 @@ services:
 
     ezpublish.search.elasticsearch.slot.publish_version:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.publish_version.class%
+        class: "%ezpublish.search.elasticsearch.slot.publish_version.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\PublishVersionSignal}
 
     ezpublish.search.elasticsearch.slot.copy_content:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.copy_content.class%
+        class: "%ezpublish.search.elasticsearch.slot.copy_content.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\CopyContentSignal}
 
     ezpublish.search.elasticsearch.slot.delete_content:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.delete_content.class%
+        class: "%ezpublish.search.elasticsearch.slot.delete_content.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\DeleteContentSignal}
 
     ezpublish.search.elasticsearch.slot.delete_version:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.delete_version.class%
+        class: "%ezpublish.search.elasticsearch.slot.delete_version.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\DeleteVersionSignal}
 
     ezpublish.search.elasticsearch.slot.create_location:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.create_location.class%
+        class: "%ezpublish.search.elasticsearch.slot.create_location.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\CreateLocationSignal}
 
     ezpublish.search.elasticsearch.slot.update_location:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.update_location.class%
+        class: "%ezpublish.search.elasticsearch.slot.update_location.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\UpdateLocationSignal}
 
     ezpublish.search.elasticsearch.slot.delete_location:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.delete_location.class%
+        class: "%ezpublish.search.elasticsearch.slot.delete_location.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\DeleteLocationSignal}
 
     ezpublish.search.elasticsearch.slot.create_user:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.create_user.class%
+        class: "%ezpublish.search.elasticsearch.slot.create_user.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: UserService\CreateUserSignal}
 
     ezpublish.search.elasticsearch.slot.create_user_group:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.create_user_group.class%
+        class: "%ezpublish.search.elasticsearch.slot.create_user_group.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: UserService\CreateUserGroupSignal}
 
     ezpublish.search.elasticsearch.slot.move_user_group:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.move_user_group.class%
+        class: "%ezpublish.search.elasticsearch.slot.move_user_group.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: UserService\MoveUserGroupSignal}
 
     ezpublish.search.elasticsearch.slot.copy_subtree:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.copy_subtree.class%
+        class: "%ezpublish.search.elasticsearch.slot.copy_subtree.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\CopySubtreeSignal}
 
     ezpublish.search.elasticsearch.slot.move_subtree:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.move_subtree.class%
+        class: "%ezpublish.search.elasticsearch.slot.move_subtree.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\MoveSubtreeSignal}
 
     ezpublish.search.elasticsearch.slot.trash:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.trash.class%
+        class: "%ezpublish.search.elasticsearch.slot.trash.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: TrashService\TrashSignal}
 
     ezpublish.search.elasticsearch.slot.recover:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.recover.class%
+        class: "%ezpublish.search.elasticsearch.slot.recover.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: TrashService\RecoverSignal}
 
     ezpublish.search.elasticsearch.slot.hide_location:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.hide_location.class%
+        class: "%ezpublish.search.elasticsearch.slot.hide_location.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\HideLocationSignal}
 
     ezpublish.search.elasticsearch.slot.unhide_location:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.unhide_location.class%
+        class: "%ezpublish.search.elasticsearch.slot.unhide_location.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\UnhideLocationSignal}
 
     ezpublish.search.elasticsearch.slot.set_content_state:
         parent: ezpublish.search.elasticsearch.slot
-        class: %ezpublish.search.elasticsearch.slot.set_content_state.class%
+        class: "%ezpublish.search.elasticsearch.slot.set_content_state.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ObjectStateService\SetContentStateSignal}

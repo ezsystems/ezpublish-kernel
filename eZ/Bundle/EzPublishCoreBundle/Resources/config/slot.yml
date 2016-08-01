@@ -20,101 +20,101 @@ parameters:
 services:
     ezpublish.http_cache.signalslot.http_cache:
         abstract: true
-        class: %ezpublish.http_cache.signalslot.http_cache.class%
+        class: "%ezpublish.http_cache.signalslot.http_cache.class%"
         arguments: ["@ezpublish.http_cache.purger"]
 
     ezpublish.http_cache.signalslot.assign_section:
-        class: %ezpublish.http_cache.signalslot.assign_section.class%
+        class: "%ezpublish.http_cache.signalslot.assign_section.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: SectionService\AssignSectionSignal }
 
     ezpublish.http_cache.signalslot.copy_content:
-        class: %ezpublish.http_cache.signalslot.copy_content.class%
+        class: "%ezpublish.http_cache.signalslot.copy_content.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: ContentService\CopyContentSignal }
 
     ezpublish.http_cache.signalslot.create_location:
-        class: %ezpublish.http_cache.signalslot.create_location.class%
+        class: "%ezpublish.http_cache.signalslot.create_location.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\CreateLocationSignal }
 
     ezpublish.http_cache.signalslot.delete_content:
-        class: %ezpublish.http_cache.signalslot.delete_content.class%
+        class: "%ezpublish.http_cache.signalslot.delete_content.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: ContentService\DeleteContentSignal }
 
     ezpublish.http_cache.signalslot.delete_location:
-        class: %ezpublish.http_cache.signalslot.delete_location.class%
+        class: "%ezpublish.http_cache.signalslot.delete_location.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\DeleteLocationSignal }
 
     ezpublish.http_cache.signalslot.delete_version:
-        class: %ezpublish.http_cache.signalslot.delete_version.class%
+        class: "%ezpublish.http_cache.signalslot.delete_version.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: ContentService\DeleteVersionSignal }
 
     ezpublish.http_cache.signalslot.hide_location:
-        class: %ezpublish.http_cache.signalslot.hide_location.class%
+        class: "%ezpublish.http_cache.signalslot.hide_location.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\HideLocationSignal }
 
     ezpublish.http_cache.signalslot.move_subtree:
-        class: %ezpublish.http_cache.signalslot.move_subtree.class%
+        class: "%ezpublish.http_cache.signalslot.move_subtree.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\MoveSubtreeSignal }
 
     ezpublish.http_cache.signalslot.publish_version:
-        class: %ezpublish.http_cache.signalslot.publish_version.class%
+        class: "%ezpublish.http_cache.signalslot.publish_version.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
 
     ezpublish.http_cache.signalslot.set_content_state:
-        class: %ezpublish.http_cache.signalslot.set_content_state.class%
+        class: "%ezpublish.http_cache.signalslot.set_content_state.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: ObjectStateService\SetContentStateSignal }
 
     ezpublish.http_cache.signalslot.swap_location:
-        class: %ezpublish.http_cache.signalslot.swap_location.class%
+        class: "%ezpublish.http_cache.signalslot.swap_location.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\SwapLocationSignal }
 
     ezpublish.http_cache.signalslot.unhide_location:
-        class: %ezpublish.http_cache.signalslot.unhide_location.class%
+        class: "%ezpublish.http_cache.signalslot.unhide_location.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\UnhideLocationSignal }
 
     ezpublish.http_cache.signalslot.update_location:
-        class: %ezpublish.http_cache.signalslot.update_location.class%
+        class: "%ezpublish.http_cache.signalslot.update_location.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\UpdateLocationSignal }
 
     ezpublish.http_cache.signalslot.update_user:
-        class: %ezpublish.http_cache.signalslot.update_user.class%
+        class: "%ezpublish.http_cache.signalslot.update_user.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: UserService\UpdateUserSignal }
 
     ezpublish.http_cache.signalslot.assign_user_to_user_group:
-        class: %ezpublish.http_cache.signalslot.assign_user_to_user_group.class%
+        class: "%ezpublish.http_cache.signalslot.assign_user_to_user_group.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: UserService\AssignUserToUserGroupSignal }
 
     ezpublish.http_cache.signalslot.unassign_user_from_user_group:
-        class: %ezpublish.http_cache.signalslot.unassign_user_from_user_group.class%
+        class: "%ezpublish.http_cache.signalslot.unassign_user_from_user_group.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: UserService\UnAssignUserFromUserGroupSignal }

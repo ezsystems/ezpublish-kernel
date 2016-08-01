@@ -10,18 +10,18 @@ parameters:
 
 services:
     ezpublish.persistence.legacy.content.query_builder:
-        class: %ezpublish.persistence.legacy.content.query_builder.class%
+        class: "%ezpublish.persistence.legacy.content.query_builder.class%"
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
 
     ezpublish.persistence.legacy.content.mapper:
-        class: %ezpublish.persistence.legacy.content.mapper.class%
+        class: "%ezpublish.persistence.legacy.content.mapper.class%"
         arguments:
             - "@ezpublish.persistence.legacy.field_value_converter.registry"
             - "@ezpublish.spi.persistence.legacy.language.handler"
 
     ezpublish.persistence.legacy.content.gateway.inner:
-        class: %ezpublish.persistence.legacy.content.gateway.class%
+        class: "%ezpublish.persistence.legacy.content.gateway.class%"
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.api.storage_engine.legacy.connection"
@@ -30,7 +30,7 @@ services:
             - "@ezpublish.persistence.legacy.language.mask_generator"
 
     ezpublish.persistence.legacy.content.gateway.exception_conversion:
-        class: %ezpublish.persistence.legacy.content.gateway.exception_conversion.class%
+        class: "%ezpublish.persistence.legacy.content.gateway.exception_conversion.class%"
         arguments:
             - "@ezpublish.persistence.legacy.content.gateway.inner"
 
@@ -39,7 +39,7 @@ services:
         alias: ezpublish.persistence.legacy.content.gateway.exception_conversion
 
     ezpublish.persistence.legacy.field_handler:
-        class: %ezpublish.persistence.legacy.field_handler.class%
+        class: "%ezpublish.persistence.legacy.field_handler.class%"
         arguments:
             - "@ezpublish.persistence.legacy.content.gateway"
             - "@ezpublish.persistence.legacy.content.mapper"
@@ -49,7 +49,7 @@ services:
         lazy: true
 
     ezpublish.persistence.legacy.tree_handler:
-        class: %ezpublish.persistence.legacy.tree_handler.class%
+        class: "%ezpublish.persistence.legacy.tree_handler.class%"
         arguments:
             - "@ezpublish.persistence.legacy.location.gateway"
             - "@ezpublish.persistence.legacy.location.mapper"
@@ -58,7 +58,7 @@ services:
             - "@ezpublish.persistence.legacy.field_handler"
 
     ezpublish.spi.persistence.legacy.content.handler:
-        class: %ezpublish.spi.persistence.legacy.content.handler.class%
+        class: "%ezpublish.spi.persistence.legacy.content.handler.class%"
         arguments:
             - "@ezpublish.persistence.legacy.content.gateway"
             - "@ezpublish.persistence.legacy.location.gateway"

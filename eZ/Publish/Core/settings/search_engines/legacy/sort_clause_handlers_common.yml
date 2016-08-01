@@ -16,34 +16,34 @@ services:
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.content_id:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.content_id.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.content_id.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.content_name:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.content_name.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.content_name.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.date_modified:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.date_modified.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.date_modified.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.date_published:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.date_published.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.date_published.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.field:
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.field.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.field.class%"
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.language_handler"
@@ -53,7 +53,7 @@ services:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance:
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance.class%"
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.language_handler"
@@ -64,14 +64,14 @@ services:
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.section_identifier:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.section_identifier.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.section_identifier.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.section_name:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.section_name.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.section_name.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}

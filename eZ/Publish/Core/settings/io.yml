@@ -11,7 +11,7 @@ parameters:
 
 services:
     ezpublish.core.io.service:
-        class: %ezpublish.core.io.tolerant_service.class%
+        class: "%ezpublish.core.io.tolerant_service.class%"
         lazy: true
         arguments:
             - "@ezpublish.core.io.metadata_handler"
@@ -21,7 +21,7 @@ services:
             - [ setLogger, ["@?logger" ] ]
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
-        class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
+        class: "%ezpublish.core.io.mimeTypeDetector.fileinfo.class%"
 
     ezpublish.core.io.mimeTypeDetector:
         alias: ezpublish.core.io.mimeTypeDetector.fileinfo
@@ -31,7 +31,7 @@ services:
         alias: ezpublish.core.io.metadata_handler.flysystem
 
     ezpublish.core.io.metadata_handler.flysystem:
-        class: %ezpublish.core.io.metadata_handler.flysystem.class%
+        class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
 
@@ -40,7 +40,7 @@ services:
         alias: ezpublish.core.io.binarydata_handler.flysystem
 
     ezpublish.core.io.binarydata_handler.flysystem:
-        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
             - "@ezpublish.core.io.default_url_decorator"
@@ -57,24 +57,24 @@ services:
     ezpublish.core.io.flysystem.default_adapter:
         class: League\Flysystem\Adapter\Local
         arguments:
-            - %io_root_dir%
+            - "%io_root_dir%"
 
     ezpublish.core.io.default_url_decorator:
         alias: ezpublish.core.io.prefix_url_decorator
 
     ezpublish.core.io.prefix_url_decorator:
-        class: %ezpublish.core.io.url_decorator.absolute_prefix.class%
+        class: "%ezpublish.core.io.url_decorator.absolute_prefix.class%"
         arguments:
-            - %storage_dir%
+            - "%storage_dir%"
 
     # used by legacy in Image Converter to decorate its own url
     ezpublish.core.io.image_fieldtype.legacy_url_decorator:
-        class: %ezpublish.core.io.url_decorator.prefix.class%
+        class: "%ezpublish.core.io.url_decorator.prefix.class%"
         arguments:
-            - %storage_dir%
+            - "%storage_dir%"
 
     ezpublish.core.io.image_fieldtype.legacy_url_redecorator:
-        class: %ezpublish.core.io.image_fieldtype.legacy_url_redecorator.class%
+        class: "%ezpublish.core.io.image_fieldtype.legacy_url_redecorator.class%"
         arguments:
             - "@ezpublish.core.io.default_url_decorator"
             - "@ezpublish.core.io.image_fieldtype.legacy_url_decorator"

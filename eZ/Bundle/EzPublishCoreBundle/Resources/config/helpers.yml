@@ -12,25 +12,25 @@ parameters:
 services:
     # Helpers
     ezpublish.translation_helper:
-        class: %ezpublish.translation_helper.class%
+        class: "%ezpublish.translation_helper.class%"
         arguments:
             - "@ezpublish.config.resolver"
             - "@ezpublish.api.service.content"
-            - %ezpublish.siteaccesses_by_language%
+            - "%ezpublish.siteaccesses_by_language%"
             - "@?logger"
 
     ezpublish.field_helper:
-        class: %ezpublish.field_helper.class%
+        class: "%ezpublish.field_helper.class%"
         arguments: ["@ezpublish.translation_helper", "@ezpublish.api.service.content_type", "@ezpublish.api.service.field_type"]
 
     ezpublish.content_preview_helper:
-        class: %ezpublish.content_preview_helper.class%
+        class: "%ezpublish.content_preview_helper.class%"
         arguments: ["@event_dispatcher", "@ezpublish.siteaccess_router"]
         calls:
             - [setSiteAccess, ["@ezpublish.siteaccess"]]
 
     ezpublish.config_scope_listener:
-        class: %ezpublish.config_scope_listener.class%
+        class: "%ezpublish.config_scope_listener.class%"
         arguments:
             - "@ezpublish.config.resolver.core"
             - "@ezpublish.view_manager"
@@ -38,17 +38,17 @@ services:
             - { name: kernel.event_subscriber }
 
     ezpublish.dynamic_settings_listener:
-        class: %ezpublish.dynamic_settings_listener.class%
+        class: "%ezpublish.dynamic_settings_listener.class%"
         arguments:
-            - %ezpublish.config_resolver.resettable_services%
-            - %ezpublish.config_resolver.updateable_services%
+            - "%ezpublish.config_resolver.resettable_services%"
+            - "%ezpublish.config_resolver.updateable_services%"
         calls:
             - [setContainer, ["@service_container"]]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.content_preview.location_provider:
-        class: %ezpublish.content_preview.location_provider.class%
+        class: "%ezpublish.content_preview.location_provider.class%"
         arguments:
             - "@ezpublish.api.service.location"
             - "@ezpublish.api.service.content"

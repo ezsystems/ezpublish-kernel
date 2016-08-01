@@ -18,24 +18,24 @@ parameters:
     ezpublish.spi.persistence.cache.objectStateHandler.class: eZ\Publish\Core\Persistence\Cache\ObjectStateHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
-    ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: %kernel.debug%
+    ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"
 
 services:
     ezpublish.cache_pool:
-        class: %ezpublish.cache_pool.class%
+        class: "%ezpublish.cache_pool.class%"
         arguments: ["@?ezpublish.cache_pool.driver"]
 
     ezpublish.cache_pool.spi.cache.decorator:
-        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
         arguments: ["@ezpublish.cache_pool"]
 
     ezpublish.spi.persistence.cache.persistenceLogger:
-        class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
+        class: "%ezpublish.spi.persistence.cache.persistenceLogger.class%"
         arguments:
-            - %ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%
+            - "%ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%"
 
     ezpublish.spi.persistence.cache.abstractHandler:
-        class: %ezpublish.spi.persistence.cache.abstractHandler.class%
+        class: "%ezpublish.spi.persistence.cache.abstractHandler.class%"
         abstract:  true
         arguments:
             - "@ezpublish.cache_pool.spi.cache.decorator"
@@ -43,47 +43,47 @@ services:
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
 
     ezpublish.spi.persistence.cache.sectionHandler:
-        class: %ezpublish.spi.persistence.cache.sectionHandler.class%
+        class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.locationHandler:
-        class: %ezpublish.spi.persistence.cache.locationHandler.class%
+        class: "%ezpublish.spi.persistence.cache.locationHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.contentHandler:
-        class: %ezpublish.spi.persistence.cache.contentHandler.class%
+        class: "%ezpublish.spi.persistence.cache.contentHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.contentLanguageHandler:
-        class: %ezpublish.spi.persistence.cache.contentLanguageHandler.class%
+        class: "%ezpublish.spi.persistence.cache.contentLanguageHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.contentTypeHandler:
-        class: %ezpublish.spi.persistence.cache.contentTypeHandler.class%
+        class: "%ezpublish.spi.persistence.cache.contentTypeHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.userHandler:
-        class: %ezpublish.spi.persistence.cache.userHandler.class%
+        class: "%ezpublish.spi.persistence.cache.userHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.transactionhandler:
-        class: %ezpublish.spi.persistence.cache.transactionhandler.class%
+        class: "%ezpublish.spi.persistence.cache.transactionhandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.trashHandler:
-        class: %ezpublish.spi.persistence.cache.trashHandler.class%
+        class: "%ezpublish.spi.persistence.cache.trashHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.urlAliasHandler:
-        class: %ezpublish.spi.persistence.cache.urlAliasHandler.class%
+        class: "%ezpublish.spi.persistence.cache.urlAliasHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.objectStateHandler:
-        class: %ezpublish.spi.persistence.cache.objectStateHandler.class%
+        class: "%ezpublish.spi.persistence.cache.objectStateHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache:
-        class: %ezpublish.spi.persistence.cache.class%
+        class: "%ezpublish.spi.persistence.cache.class%"
         arguments:
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.sectionHandler"

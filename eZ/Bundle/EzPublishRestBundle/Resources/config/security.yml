@@ -5,7 +5,7 @@ parameters:
 services:
     # Following service will be aliased at compile time to "ezpublish_rest.session_authenticator" by the Security factory.
     ezpublish_rest.security.authentication.listener.session:
-        class: %ezpublish_rest.security.authentication.listener.session.class%
+        class: "%ezpublish_rest.security.authentication.listener.session.class%"
         arguments:
             - "@security.token_storage"
             - "@security.authentication.manager"
@@ -17,4 +17,4 @@ services:
         abstract: true
 
     ezpublish_rest.security.authentication.logout_handler:
-        class: %ezpublish_rest.security.authentication.logout_handler.class%
+        class: "%ezpublish_rest.security.authentication.logout_handler.class%"

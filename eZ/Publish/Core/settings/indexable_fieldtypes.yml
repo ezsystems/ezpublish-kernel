@@ -25,119 +25,119 @@ parameters:
 
 services:
     ezpublish.fieldType.indexable.ezauthor:
-        class: %ezpublish.fieldType.indexable.ezauthor.class%
+        class: "%ezpublish.fieldType.indexable.ezauthor.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezauthor}
 
     ezpublish.fieldType.indexable.ezstring:
-        class: %ezpublish.fieldType.indexable.ezstring.class%
+        class: "%ezpublish.fieldType.indexable.ezstring.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezstring}
 
     ezpublish.fieldType.indexable.ezprice:
-        class: %ezpublish.fieldType.indexable.ezprice.class%
+        class: "%ezpublish.fieldType.indexable.ezprice.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezprice}
 
     ezpublish.fieldType.indexable.ezgmaplocation:
-        class: %ezpublish.fieldType.indexable.ezgmaplocation.class%
+        class: "%ezpublish.fieldType.indexable.ezgmaplocation.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezgmaplocation}
 
     ezpublish.fieldType.indexable.ezcountry:
-        class: %ezpublish.fieldType.indexable.ezcountry.class%
+        class: "%ezpublish.fieldType.indexable.ezcountry.class%"
         arguments:
-            - %ezpublish.fieldType.ezcountry.data%
+            - "%ezpublish.fieldType.ezcountry.data%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezcountry}
 
     ezpublish.fieldType.indexable.ezdate:
-        class: %ezpublish.fieldType.indexable.ezdate.class%
+        class: "%ezpublish.fieldType.indexable.ezdate.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezdate}
 
     ezpublish.fieldType.indexable.ezinteger:
-        class: %ezpublish.fieldType.indexable.ezinteger.class%
+        class: "%ezpublish.fieldType.indexable.ezinteger.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezinteger}
 
     ezpublish.fieldType.indexable.ezfloat:
-        class: %ezpublish.fieldType.indexable.ezfloat.class%
+        class: "%ezpublish.fieldType.indexable.ezfloat.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezfloat}
 
     ezpublish.fieldType.indexable.ezemail:
-        class: %ezpublish.fieldType.indexable.ezemail.class%
+        class: "%ezpublish.fieldType.indexable.ezemail.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezemail}
 
     ezpublish.fieldType.indexable.ezimage:
-        class: %ezpublish.fieldType.indexable.ezimage.class%
+        class: "%ezpublish.fieldType.indexable.ezimage.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezimage}
 
     ezpublish.fieldType.indexable.ezmedia:
-        class: %ezpublish.fieldType.indexable.ezmedia.class%
+        class: "%ezpublish.fieldType.indexable.ezmedia.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezmedia}
 
     ezpublish.fieldType.indexable.ezbinaryfile:
-        class: %ezpublish.fieldType.indexable.ezbinaryfile.class%
+        class: "%ezpublish.fieldType.indexable.ezbinaryfile.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezbinaryfile}
 
     ezpublish.fieldType.indexable.eztime:
-        class: %ezpublish.fieldType.indexable.eztime.class%
+        class: "%ezpublish.fieldType.indexable.eztime.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: eztime}
 
     ezpublish.fieldType.indexable.eztext:
-        class: %ezpublish.fieldType.indexable.eztext.class%
+        class: "%ezpublish.fieldType.indexable.eztext.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: eztext}
 
     ezpublish.fieldType.indexable.ezboolean:
-        class: %ezpublish.fieldType.indexable.ezboolean.class%
+        class: "%ezpublish.fieldType.indexable.ezboolean.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezboolean}
 
     ezpublish.fieldType.indexable.ezdatetime:
-        class: %ezpublish.fieldType.indexable.ezdatetime.class%
+        class: "%ezpublish.fieldType.indexable.ezdatetime.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezdatetime}
 
     ezpublish.fieldType.indexable.ezrichtext:
-        class: %ezpublish.fieldType.indexable.ezrichtext.class%
+        class: "%ezpublish.fieldType.indexable.ezrichtext.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezrichtext}
 
     ezpublish.fieldType.indexable.ezisbn:
-        class: %ezpublish.fieldType.indexable.ezisbn.class%
+        class: "%ezpublish.fieldType.indexable.ezisbn.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezisbn}
 
     ezpublish.fieldType.indexable.ezobjectrelation:
-        class: %ezpublish.fieldType.indexable.ezobjectrelation.class%
+        class: "%ezpublish.fieldType.indexable.ezobjectrelation.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezobjectrelation}
 
     ezpublish.fieldType.indexable.ezselection:
-        class: %ezpublish.fieldType.indexable.ezselection.class%
+        class: "%ezpublish.fieldType.indexable.ezselection.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezselection}
 
     ezpublish.fieldType.indexable.ezobjectrelationlist:
-        class: %ezpublish.fieldType.indexable.ezobjectrelationlist.class%
+        class: "%ezpublish.fieldType.indexable.ezobjectrelationlist.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.indexable.ezurl:
-        class: %ezpublish.fieldType.indexable.ezurl.class%
+        class: "%ezpublish.fieldType.indexable.ezurl.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezurl}
 
     ezpublish.fieldType.indexable.unindexed:
-        class: %ezpublish.fieldType.indexable.unindexed.class%
+        class: "%ezpublish.fieldType.indexable.unindexed.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezuser}
             - {name: ezpublish.fieldType.indexable, alias: ezkeyword}

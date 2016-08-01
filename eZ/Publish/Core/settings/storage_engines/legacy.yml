@@ -21,7 +21,7 @@ parameters:
 
 services:
     ezpublish.spi.persistence.legacy:
-        class: %ezpublish.spi.persistence.legacy.class%
+        class: "%ezpublish.spi.persistence.legacy.class%"
         arguments:
             - "@ezpublish.spi.persistence.legacy.content.handler"
             - "@ezpublish.spi.persistence.legacy.content_type.handler"
@@ -40,20 +40,20 @@ services:
 
     # Compiler pass will alias 'ezpublish.api.storage_engine.legacy.connection' service to the StorageConnectionFactory
     ezpublish.api.storage_engine.legacy.dbhandler:
-        class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
-        factory: %ezpublish.api.storage_engine.legacy.dbhandler.class%::createFromConnection
+        class: "%ezpublish.api.storage_engine.legacy.dbhandler.class%"
+        factory: "%ezpublish.api.storage_engine.legacy.dbhandler.class%::createFromConnection"
         arguments:
             - "@ezpublish.api.storage_engine.legacy.connection"
         lazy: true
 
     ezpublish.api.storage_engine.legacy.connection:
-        class: %ezpublish.persistence.connection.class%
-        factory: %ezpublish.api.storage_engine.legacy.dbhandler.class%::createConnectionFromDSN
+        class: "%ezpublish.persistence.connection.class%"
+        factory: "%ezpublish.api.storage_engine.legacy.dbhandler.class%::createConnectionFromDSN"
         arguments:
-            - %legacy_dsn%
+            - "%legacy_dsn%"
 
     ezpublish.spi.persistence.legacy.transactionhandler:
-        class: %ezpublish.spi.persistence.legacy.transactionhandler.class%
+        class: "%ezpublish.spi.persistence.legacy.transactionhandler.class%"
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.legacy.content_type.handler.caching"

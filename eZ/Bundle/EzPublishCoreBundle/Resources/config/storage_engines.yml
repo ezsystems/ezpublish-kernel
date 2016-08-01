@@ -5,20 +5,20 @@ parameters:
 
 services:
     ezpublish.api.repository_configuration_provider:
-        class: %ezpublish.api.repository_configuration_provider.class%
+        class: "%ezpublish.api.repository_configuration_provider.class%"
         arguments:
             - "@ezpublish.config.resolver"
-            - %ezpublish.repositories%
+            - "%ezpublish.repositories%"
 
     ezpublish.persistence.connection.factory:
-        class: %ezpublish.persistence.connection.factory.class%
+        class: "%ezpublish.persistence.connection.factory.class%"
         arguments:
             - "@ezpublish.api.repository_configuration_provider"
         calls:
             - [setContainer, ["@service_container"]]
 
     ezpublish.persistence.connection:
-        class: %ezpublish.persistence.connection.class%
+        class: "%ezpublish.persistence.connection.class%"
         factory: ["@ezpublish.persistence.connection.factory", getConnection]
         lazy: true
 

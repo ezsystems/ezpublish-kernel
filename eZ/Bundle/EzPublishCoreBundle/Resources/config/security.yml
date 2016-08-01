@@ -14,51 +14,51 @@ parameters:
 
 services:
     ezpublish.security.user_provider:
-        class: %ezpublish.security.user_provider.class%
+        class: "%ezpublish.security.user_provider.class%"
         arguments: ["@ezpublish.api.repository"]
 
     ezpublish.security.voter.core:
-        class: %ezpublish.security.voter.core.class%
+        class: "%ezpublish.security.voter.core.class%"
         arguments: ["@ezpublish.api.repository"]
         public: false
         tags:
             - { name: security.voter }
 
     ezpublish.security.voter.value_object:
-        class: %ezpublish.security.voter.value_object.class%
+        class: "%ezpublish.security.voter.value_object.class%"
         arguments: ["@ezpublish.api.repository"]
         public: false
         tags:
             - { name: security.voter }
 
     ezpublish.security.controller:
-        class: %ezpublish.security.controller.class%
+        class: "%ezpublish.security.controller.class%"
         arguments: ["@templating", "@ezpublish.config.resolver", "@security.authentication_utils"]
 
     ezpublish.security.login_listener:
-        class: %ezpublish.security.login_listener.class%
+        class: "%ezpublish.security.login_listener.class%"
         arguments:
             - "@ezpublish.api.repository"
             - "@ezpublish.config.resolver"
             - "@event_dispatcher"
             - "@security.token_storage"
             - "@security.authorization_checker"
-            - %fragment.path%
+            - "%fragment.path%"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.user.identity:
-        class: %ezpublish.user.identity.class%
+        class: "%ezpublish.user.identity.class%"
 
     ezpublish.user.hash_generator:
-        class: %ezpublish.user.hash_generator.class%
+        class: "%ezpublish.user.hash_generator.class%"
         calls:
             - [setIdentity, ["@ezpublish.user.identity"]]
         tags:
             - { name: fos_http_cache.user_context_provider }
 
     ezpublish.user.identity_definer.role_id:
-        class: %ezpublish.user.identity_definer.role_id.class%
+        class: "%ezpublish.user.identity_definer.role_id.class%"
         arguments: ["@ezpublish.api.repository"]
         tags:
             - { name: fos_http_cache.user_context_provider }

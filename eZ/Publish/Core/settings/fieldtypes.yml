@@ -276,122 +276,122 @@ parameters:
 
 services:
     ezpublish.fieldType:
-        class: %ezpublish.fieldType.class%
+        class: "%ezpublish.fieldType.class%"
         calls:
             - [setTransformationProcessor, ["@ezpublish.api.storage_engine.transformation_processor"]]
         abstract: true
 
     ezpublish.fieldType.ezauthor:
-        class: %ezpublish.fieldType.ezauthor.class%
+        class: "%ezpublish.fieldType.ezauthor.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezauthor}
 
     ezpublish.fieldType.ezbinaryfile:
-        class: %ezpublish.fieldType.ezbinaryfile.class%
+        class: "%ezpublish.fieldType.ezbinaryfile.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezboolean:
-        class: %ezpublish.fieldType.ezboolean.class%
+        class: "%ezpublish.fieldType.ezboolean.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezboolean}
 
     ezpublish.fieldType.ezcountry:
-        class: %ezpublish.fieldType.ezcountry.class%
-        arguments: [%ezpublish.fieldType.ezcountry.data%]
+        class: "%ezpublish.fieldType.ezcountry.class%"
+        arguments: ["%ezpublish.fieldType.ezcountry.data%"]
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezcountry}
 
     ezpublish.fieldType.ezdatetime:
-        class: %ezpublish.fieldType.ezdatetime.class%
+        class: "%ezpublish.fieldType.ezdatetime.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezdatetime}
 
     ezpublish.fieldType.ezemail:
-        class: %ezpublish.fieldType.ezemail.class%
+        class: "%ezpublish.fieldType.ezemail.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezemail}
 
     ezpublish.fieldType.ezfloat:
-        class: %ezpublish.fieldType.ezfloat.class%
+        class: "%ezpublish.fieldType.ezfloat.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezfloat}
 
     ezpublish.fieldType.ezinteger:
-        class: %ezpublish.fieldType.ezinteger.class%
+        class: "%ezpublish.fieldType.ezinteger.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezinteger}
 
     ezpublish.fieldType.ezimage:
-        class: %ezpublish.fieldType.ezimage.class%
+        class: "%ezpublish.fieldType.ezimage.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
 
     ezpublish.fieldType.ezisbn:
-        class: %ezpublish.fieldType.ezisbn.class%
+        class: "%ezpublish.fieldType.ezisbn.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezisbn}
 
     ezpublish.fieldType.ezkeyword:
-        class: %ezpublish.fieldType.ezkeyword.class%
+        class: "%ezpublish.fieldType.ezkeyword.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezkeyword}
 
     ezpublish.fieldType.ezmedia:
-        class: %ezpublish.fieldType.ezmedia.class%
+        class: "%ezpublish.fieldType.ezmedia.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
     ezpublish.fieldType.ezobjectrelation:
-        class: %ezpublish.fieldType.ezobjectrelation.class%
+        class: "%ezpublish.fieldType.ezobjectrelation.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezsrrating:
-        class: %ezpublish.fieldType.ezsrrating.class%
+        class: "%ezpublish.fieldType.ezsrrating.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezsrrating}
 
     ezpublish.fieldType.ezselection:
-        class: %ezpublish.fieldType.ezselection.class%
+        class: "%ezpublish.fieldType.ezselection.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezselection}
 
     ezpublish.fieldType.eztext:
-        class: %ezpublish.fieldType.eztext.class%
+        class: "%ezpublish.fieldType.eztext.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: eztext}
 
     ezpublish.fieldType.ezstring:
-        class: %ezpublish.fieldType.ezstring.class%
+        class: "%ezpublish.fieldType.ezstring.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezstring}
 
     ezpublish.fieldType.ezurl:
-        class: %ezpublish.fieldType.ezurl.class%
+        class: "%ezpublish.fieldType.ezurl.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezurl}
 
     ezpublish.fieldType.ezrichtext:
-        class: %ezpublish.fieldType.ezrichtext.class%
+        class: "%ezpublish.fieldType.ezrichtext.class%"
         parent: ezpublish.fieldType
         arguments:
             - "@ezpublish.fieldType.ezrichtext.validator.docbook"
@@ -402,26 +402,26 @@ services:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 
     ezpublish.fieldType.ezpage:
-        class: %ezpublish.fieldType.ezpage.class%
+        class: "%ezpublish.fieldType.ezpage.class%"
         parent: ezpublish.fieldType
         arguments: ["@ezpublish.fieldType.ezpage.pageService", "@ezpublish.fieldType.ezpage.hashConverter"]
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
 
     ezpublish.fieldType.ezgmaplocation:
-        class: %ezpublish.fieldType.ezgmaplocation.class%
+        class: "%ezpublish.fieldType.ezgmaplocation.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezgmaplocation}
 
     ezpublish.fieldType.ezobjectrelationlist:
-        class: %ezpublish.fieldType.ezobjectrelationlist.class%
+        class: "%ezpublish.fieldType.ezobjectrelationlist.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezuser:
-        class: %ezpublish.fieldType.ezuser.class%
+        class: "%ezpublish.fieldType.ezuser.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezuser}
@@ -429,105 +429,105 @@ services:
     # Not implemented fieldtypes
     # Configured to use the Null type to not throw exception
     ezpublish.fieldType.ezdate:
-        class: %ezpublish.fieldType.ezdate.class%
+        class: "%ezpublish.fieldType.ezdate.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezdate" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezdate}
 
     ezpublish.fieldType.ezenum:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezenum" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezenum}
 
     ezpublish.fieldType.ezidentifier:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezidentifier" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezidentifier}
 
     ezpublish.fieldType.ezinisetting:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezinisetting" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezinisetting}
 
     ezpublish.fieldType.ezmatrix:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezmatrix" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmatrix}
 
     ezpublish.fieldType.ezmultioption:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezmultioption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultioption}
 
     ezpublish.fieldType.ezmultioption2:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezmultioption2" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultioption2}
 
     ezpublish.fieldType.ezmultiprice:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezmultiprice" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultiprice}
 
     ezpublish.fieldType.ezoption:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezoption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezoption}
 
     ezpublish.fieldType.ezpackage:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezpackage" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezpackage}
 
     ezpublish.fieldType.ezprice:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezprice" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezprice}
 
     ezpublish.fieldType.ezproductcategory:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezproductcategory" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezproductcategory}
 
     ezpublish.fieldType.ezrangeoption:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezrangeoption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezrangeoption}
 
     ezpublish.fieldType.ezsubtreesubscription:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezsubtreesubscription" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezsubtreesubscription}
 
     ezpublish.fieldType.eztime:
-        class: %ezpublish.fieldType.eztime.class%
+        class: "%ezpublish.fieldType.eztime.class%"
         parent: ezpublish.fieldType
         arguments: [ "eztime" ]
         tags:
@@ -535,35 +535,35 @@ services:
 
     # not implemented fieldtypes from extensions
     ezpublish.fieldType.ezcomcomments:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezcomcomments" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezcomcomments}
 
     ezpublish.fieldType.ezpaex:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezpaex" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezpaex}
 
     ezpublish.fieldType.ezsurvey:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezsurvey" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezsurvey}
 
     ezpublish.fieldType.eztags:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "eztags" ]
         tags:
             - {name: ezpublish.fieldType, alias: eztags}
 
     ezpublish.fieldType.ezrecommendation:
-        class: %ezpublish.fieldType.eznull.class%
+        class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
         arguments: [ "ezrecommendation" ]
         tags:

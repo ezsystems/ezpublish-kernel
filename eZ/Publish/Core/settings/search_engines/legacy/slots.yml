@@ -10,7 +10,7 @@ parameters:
 
 services:
     ezpublish.search.legacy.slot:
-        class: %ezpublish.search.legacy.slot.class%
+        class: "%ezpublish.search.legacy.slot.class%"
         abstract: true
         arguments:
             - "@ezpublish.api.inner_repository"
@@ -19,42 +19,42 @@ services:
 
     ezpublish.search.legacy.slot.publish_version:
         parent: ezpublish.search.legacy.slot
-        class: %ezpublish.search.legacy.slot.publish_version.class%
+        class: "%ezpublish.search.legacy.slot.publish_version.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: ContentService\PublishVersionSignal}
 
     ezpublish.search.legacy.slot.copy_content:
         parent: ezpublish.search.legacy.slot
-        class: %ezpublish.search.legacy.slot.copy_content.class%
+        class: "%ezpublish.search.legacy.slot.copy_content.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: ContentService\CopyContentSignal}
 
     ezpublish.search.legacy.slot.delete_content:
         parent: ezpublish.search.legacy.slot
-        class: %ezpublish.search.legacy.slot.delete_content.class%
+        class: "%ezpublish.search.legacy.slot.delete_content.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: ContentService\DeleteContentSignal}
 
     ezpublish.search.legacy.slot.delete_version:
         parent: ezpublish.search.legacy.slot
-        class: %ezpublish.search.legacy.slot.delete_version.class%
+        class: "%ezpublish.search.legacy.slot.delete_version.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: ContentService\DeleteVersionSignal}
 
     ezpublish.search.legacy.slot.copy_subtree:
         parent: ezpublish.search.legacy.slot
-        class: %ezpublish.search.legacy.slot.copy_subtree.class%
+        class: "%ezpublish.search.legacy.slot.copy_subtree.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: LocationService\CopySubtreeSignal}
 
     ezpublish.search.legacy.slot.trash:
         parent: ezpublish.search.legacy.slot
-        class: %ezpublish.search.legacy.slot.trash.class%
+        class: "%ezpublish.search.legacy.slot.trash.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: TrashService\TrashSignal}
 
     ezpublish.search.legacy.slot.recover:
         parent: ezpublish.search.legacy.slot
-        class: %ezpublish.search.legacy.slot.recover.class%
+        class: "%ezpublish.search.legacy.slot.recover.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: TrashService\RecoverSignal}
