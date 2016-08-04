@@ -6,8 +6,9 @@ parameters:
 services:
     ezplatform.installer.db_based_installer:
         abstract: true
-        class:  %ezplatform.installer.db_based_installer.class%
-        arguments: [@database_connection]
+        class:  "%ezplatform.installer.db_based_installer.class%"
+        arguments: ["@ezpublish.persistence.connection"]
+        lazy: true
 
     ezplatform.installer.clean_installer:
         class: %ezplatform.installer.clean_installer.class%
