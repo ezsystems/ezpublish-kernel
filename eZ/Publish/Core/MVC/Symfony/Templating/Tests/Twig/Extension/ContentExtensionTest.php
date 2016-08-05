@@ -48,7 +48,8 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
                     array(),
                     $this->getMock('Psr\Log\LoggerInterface')
                 ),
-                $this->fieldHelperMock
+                $this->fieldHelperMock,
+                $this->getConfigResolverMock()
             ),
         );
     }
