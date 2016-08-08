@@ -31,6 +31,6 @@ class ServerException extends Exception
         // These are only set if server is running in debug mode, but even if not set we want to overwrite the values.
         $this->file = (string)$error->file;
         $this->line = (int)$error->line;
-        $this->trace = explode("\n", (array)$error->trace);
+        $this->trace = explode("\n", (string)$error->trace);
     }
 }
