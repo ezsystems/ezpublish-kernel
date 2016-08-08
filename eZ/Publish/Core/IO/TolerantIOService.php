@@ -73,7 +73,7 @@ class TolerantIOService extends IOService
     {
         $this->checkBinaryFileId($binaryFileId);
 
-        if ($binaryFileId[0] === '/') {
+        if ($this->isAbsolutePath($binaryFileId)) {
             throw new InvalidBinaryFileIdException($binaryFileId, 'Binary file ids can not begin with a /');
         }
 

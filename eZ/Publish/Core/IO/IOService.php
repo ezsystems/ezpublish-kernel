@@ -156,7 +156,7 @@ class IOService implements IOServiceInterface
         $this->checkBinaryFileId($binaryFileId);
 
         // @todo An absolute path can in no case be loaded, but throwing an exception is too much (why ?)
-        if ($binaryFileId[0] === '/') {
+        if ($this->isAbsolutePath($binaryFileId)) {
             return false;
         }
 
@@ -319,5 +319,16 @@ class IOService implements IOServiceInterface
         $prefixedUri = $this->getPrefixedUri($path);
         $this->metadataHandler->deleteDirectory($prefixedUri);
         $this->binarydataHandler->deleteDirectory($prefixedUri);
+    }
+
+    /**
+     * Check if path is absolute, in terms of http or disk (incl if it contains driver letter on Win).
+     *
+     * @param string $path
+     * @return bool
+     */
+    protected function isAbsolutePath($path)
+    {
+        return $path[0] === '/' || (PHP_OS === 'WINNT' && $path[1] === ':');
     }
 }
