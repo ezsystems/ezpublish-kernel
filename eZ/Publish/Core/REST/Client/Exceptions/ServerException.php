@@ -26,7 +26,8 @@ class ServerException extends Exception
      */
     public function __construct(ErrorMessage $error)
     {
-        parent::__construct($error->message, $error->code);
+        // Use description, this is the exception message from sever, message is only the HTTP status message.
+        parent::__construct($error->description, $error->code);
 
         // These are only set if server is running in debug mode, but even if not set we want to overwrite the values.
         $this->file = (string)$error->file;
