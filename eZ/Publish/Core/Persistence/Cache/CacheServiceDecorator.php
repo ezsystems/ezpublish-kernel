@@ -99,7 +99,6 @@ class CacheServiceDecorator
         return str_replace('/', '_', trim($key, '/'));
     }
 
-
     /**
      * Clears the cache for the key, or if none is specified clears the entire cache. The key can be either
      * a series of string arguments, or an array.
