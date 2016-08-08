@@ -55,12 +55,11 @@ class CacheServiceDecorator
 
         //  Upstream seems to no longer support array, so we flatten it
         if (!isset($args[1]) && is_array($args[0])) {
-            $key = implode('/', $args[0]);
+            $key = implode('/', array_map([$this, 'washKey'], $args[0]));
         } else {
-            $key = '' . implode('/', $args);
+            $key = '' . implode('/', array_map([$this, 'washKey'], $args));
         }
 
-        $key = trim($key, '/');
         $key = $key === '' ? self::SPI_CACHE_KEY_PREFIX : self::SPI_CACHE_KEY_PREFIX . '/' . $key;
 
         return $this->cachePool->getItem($key);
@@ -79,7 +78,7 @@ class CacheServiceDecorator
         $prefix = self::SPI_CACHE_KEY_PREFIX;
         $keys = array_map(
             function ($key) use ($prefix) {
-                $key = trim($key, '/');
+                $key = $this->washKey($key);
 
                 return $key === '' ? $prefix : $prefix . '/' . $key;
             },
@@ -88,6 +87,18 @@ class CacheServiceDecorator
 
         return $this->cachePool->getItems($keys);
     }
+
+    /**
+     * Remove slashes from start and end of keys, and for content replace it with _ to avoid issues for Stash.
+     *
+     * @param string $key
+     * @return string
+     */
+    private function washKey($key)
+    {
+        return str_replace('/', '_', trim($key, '/'));
+    }
+
 
     /**
      * Clears the cache for the key, or if none is specified clears the entire cache. The key can be either
