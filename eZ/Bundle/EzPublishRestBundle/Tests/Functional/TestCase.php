@@ -78,15 +78,33 @@ class TestCase extends PHPUnit_Framework_TestCase
             $errorMessageString = '';
             if (strpos($response->getHeader('Content-Type'), 'application/vnd.ez.api.ErrorMessage+xml') !== false) {
                 $body = \simplexml_load_string($response->getContent());
-                $errorMessageString = $body->errorDescription;
+                $errorMessageString = $this->getHttpResponseCodeErrorMessage($body);
             } elseif (strpos($response->getHeader('Content-Type'), 'application/vnd.ez.api.ErrorMessage+json') !== false) {
                 $body = json_decode($response->getContent());
-                $errorMessageString = "Error message: {$body->ErrorMessage->errorDescription}\n" .
-                    "In {$body->ErrorMessage->file}:{$body->ErrorMessage->line}";
+                $errorMessageString = $this->getHttpResponseCodeErrorMessage($body->ErrorMessage);
             }
 
             self::assertEquals($expected, $responseCode, $errorMessageString);
         }
+    }
+
+    private function getHttpResponseCodeErrorMessage($errorMessage)
+    {
+        $errorMessageString = <<< EOF
+Server error message ({$errorMessage->errorCode}): {$errorMessage->errorMessage}
+
+{$errorMessage->errorDescription}
+
+EOF;
+
+        // If server is in debug mode it will return file, line and trace.
+        if (!empty($errorMessage->file)) {
+            $errorMessageString .= "\nIn {$errorMessage->file}:{$errorMessage->line}\n\n{$errorMessage->trace}";
+        } else {
+            $errorMessageString .= "\nIn \<no trace, debug disabled\>";
+        }
+
+        return $errorMessageString;
     }
 
     protected function assertHttpResponseHasHeader(HttpResponse $response, $header, $expectedValue = null)
