@@ -6,24 +6,24 @@ parameters:
 services:
     ezplatform.installer.db_based_installer:
         abstract: true
-        class:  %ezplatform.installer.db_based_installer.class%
-        arguments: [@database_connection]
+        class:  "%ezplatform.installer.db_based_installer.class%"
+        arguments: ["@database_connection"]
 
     ezplatform.installer.clean_installer:
-        class: %ezplatform.installer.clean_installer.class%
+        class: "%ezplatform.installer.clean_installer.class%"
         parent: ezplatform.installer.db_based_installer
         tags:
             - {name: ezplatform.installer, type: clean}
 
     ezplatform.installer.install_command:
-        class: %ezplatform.installer.install_command.class%
+        class: "%ezplatform.installer.install_command.class%"
         arguments:
-            - @database_connection
+            - "@database_connection"
             - []
-            - @cache_clearer
-            - @filesystem
-            - %kernel.cache_dir%
-            - %kernel.environment%
-            - %search_engine%
+            - "@cache_clearer"
+            - "@filesystem"
+            - "%kernel.cache_dir%"
+            - "%kernel.environment%"
+            - "%search_engine%"
         tags:
             - { name: console.command }

@@ -58,150 +58,150 @@ parameters:
 services:
     # Parameter providers
     ezpublish.fieldType.parameterProviderRegistry:
-        class: %ezpublish.fieldType.parameterProviderRegistry.class%
+        class: "%ezpublish.fieldType.parameterProviderRegistry.class%"
 
     ezpublish.fieldType.ezdatetime.parameterProvider:
-        class: %ezpublish.fieldType.locale.parameterProvider.class%
-        arguments: [@ezpublish.locale.converter]
+        class: "%ezpublish.fieldType.locale.parameterProvider.class%"
+        arguments: ["@ezpublish.locale.converter"]
         calls:
-            - [setRequestStack, [@request_stack]]
+            - [setRequestStack, ["@request_stack"]]
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}
             - {name: ezpublish.fieldType.parameterProvider, alias: eztime}
 
     ezpublish.fieldType.ezpage.parameterProvider:
-        class: %ezpublish.fieldType.ezpage.parameterProvider.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        class: "%ezpublish.fieldType.ezpage.parameterProvider.class%"
+        arguments: ["@ezpublish.fieldType.ezpage.pageService"]
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezpage}
 
     # Page
     ezpublish.fieldType.ezpage.pageService.factory:
-        class: %ezpublish.fieldType.ezpage.pageService.factory.class%
+        class: "%ezpublish.fieldType.ezpage.pageService.factory.class%"
 
     ezpublish.fieldType.ezpage.pageService:
-        class: %ezpublish.fieldType.ezpage.pageService.class%
+        class: "%ezpublish.fieldType.ezpage.pageService.class%"
         factory: ["@ezpublish.fieldType.ezpage.pageService.factory", buildService]
         arguments:
-            - %ezpublish.fieldType.ezpage.pageService.class%
-            - @ezpublish.config.resolver
-            - @ezpublish.fieldType.ezpage.storage_gateway
-            - @ezpublish.api.service.content
+            - "%ezpublish.fieldType.ezpage.pageService.class%"
+            - "@ezpublish.config.resolver"
+            - "@ezpublish.fieldType.ezpage.storage_gateway"
+            - "@ezpublish.api.service.content"
         lazy: true
 
     ezpublish.fieldType.ezpage.hashConverter:
-        class: %ezpublish.fieldType.ezpage.hashConverter.class%
+        class: "%ezpublish.fieldType.ezpage.hashConverter.class%"
 
     # RichText
     ezpublish.fieldType.ezrichtext.normalizer.input:
-        class: %ezpublish.fieldType.ezrichtext.normalizer.document_type_definition.class%
+        class: "%ezpublish.fieldType.ezrichtext.normalizer.document_type_definition.class%"
         arguments:
             - "section"
             - "http://ez.no/namespaces/ezpublish5/xhtml5/edit"
             - %ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/RichText/Resources/dtd/ezxhtml5_edit_html_character_entities.dtd
 
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5:
-        class: %ezpublish.fieldType.ezrichtext.converter.input.html5.class%
+        class: "%ezpublish.fieldType.ezrichtext.converter.input.html5.class%"
         arguments:
-            - %ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources%
-            - @ezpublish.config.resolver
+            - "%ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources%"
+            - "@ezpublish.config.resolver"
 
     ezpublish.fieldType.ezrichtext.converter.input.dispatcher:
-        class: %ezpublish.fieldType.ezrichtext.converter.dispatcher.class%
+        class: "%ezpublish.fieldType.ezrichtext.converter.dispatcher.class%"
         arguments:
             -
                 http://docbook.org/ns/docbook: null
-                http://ez.no/namespaces/ezpublish5/xhtml5/edit: @ezpublish.fieldType.ezrichtext.converter.input.xhtml5
+                http://ez.no/namespaces/ezpublish5/xhtml5/edit: "@ezpublish.fieldType.ezrichtext.converter.input.xhtml5"
 
     ezpublish.fieldType.ezrichtext.converter.link:
-        class: %ezpublish.fieldType.ezrichtext.converter.link.class%
-        arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
+        class: "%ezpublish.fieldType.ezrichtext.converter.link.class%"
+        arguments: ["@ezpublish.api.service.location", "@ezpublish.api.service.content", "@ezpublish.urlalias_router", "@?logger"]
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
 
     ezpublish.fieldType.ezrichtext.renderer:
-        class: %ezpublish.fieldType.ezrichtext.renderer.class%
+        class: "%ezpublish.fieldType.ezrichtext.renderer.class%"
         arguments:
-            - @ezpublish.api.repository
-            - @security.authorization_checker
-            - @ezpublish.config.resolver
-            - @templating
-            - %ezpublish.fieldType.ezrichtext.tag.namespace%
-            - %ezpublish.fieldType.ezrichtext.embed.namespace%
-            - @?logger
+            - "@ezpublish.api.repository"
+            - "@security.authorization_checker"
+            - "@ezpublish.config.resolver"
+            - "@templating"
+            - "%ezpublish.fieldType.ezrichtext.tag.namespace%"
+            - "%ezpublish.fieldType.ezrichtext.embed.namespace%"
+            - "@?logger"
 
     ezpublish.fieldType.ezrichtext.converter.template:
-        class: %ezpublish.fieldType.ezrichtext.converter.template.class%
+        class: "%ezpublish.fieldType.ezrichtext.converter.template.class%"
         arguments:
-            - @ezpublish.fieldType.ezrichtext.renderer
+            - "@ezpublish.fieldType.ezrichtext.renderer"
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
 
     ezpublish.fieldType.ezrichtext.converter.embed:
-        class: %ezpublish.fieldType.ezrichtext.converter.embed.class%
+        class: "%ezpublish.fieldType.ezrichtext.converter.embed.class%"
         arguments:
-            - @ezpublish.fieldType.ezrichtext.renderer
-            - @?logger
+            - "@ezpublish.fieldType.ezrichtext.renderer"
+            - "@?logger"
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
 
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5.core:
-        class: %ezpublish.fieldType.ezrichtext.converter.output.html5.class%
+        class: "%ezpublish.fieldType.ezrichtext.converter.output.html5.class%"
         arguments:
-            - %ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources%
-            - @ezpublish.config.resolver
+            - "%ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources%"
+            - "@ezpublish.config.resolver"
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 50}
 
     # Note: should typically be the last one as it produces embeddable fragment
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5.fragment:
-        class: %ezpublish.fieldType.ezrichtext.converter.xslt.class%
-        arguments: [%ezpublish.fieldType.ezrichtext.converter.output.xhtml5.fragment.resources%]
+        class: "%ezpublish.fieldType.ezrichtext.converter.xslt.class%"
+        arguments: ["%ezpublish.fieldType.ezrichtext.converter.output.xhtml5.fragment.resources%"]
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 100}
 
     # Aggregate converter for XHTML5 output that other converters register to
     # through service tags.
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5:
-        class: %ezpublish.fieldType.ezrichtext.converter.aggregate.class%
+        class: "%ezpublish.fieldType.ezrichtext.converter.aggregate.class%"
         lazy: true
 
     ezpublish.fieldType.ezrichtext.converter.edit.xhtml5:
-        class: %ezpublish.fieldType.ezrichtext.converter.edit.html5.class%
+        class: "%ezpublish.fieldType.ezrichtext.converter.edit.html5.class%"
         arguments:
-            - %ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources%
-            - @ezpublish.config.resolver
+            - "%ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources%"
+            - "@ezpublish.config.resolver"
         lazy: true
 
     ezpublish.fieldType.ezrichtext.validator.docbook:
-        class: %ezpublish.fieldType.ezrichtext.validator.xml.class%
-        arguments: [%ezpublish.fieldType.ezrichtext.validator.docbook.resources%]
+        class: "%ezpublish.fieldType.ezrichtext.validator.xml.class%"
+        arguments: ["%ezpublish.fieldType.ezrichtext.validator.docbook.resources%"]
 
     ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5:
-        class: %ezpublish.fieldType.ezrichtext.validator.xml.class%
-        arguments: [%ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5.resources%]
+        class: "%ezpublish.fieldType.ezrichtext.validator.xml.class%"
+        arguments: ["%ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5.resources%"]
 
     ezpublish.fieldType.ezrichtext.validator.input.dispatcher:
-        class: %ezpublish.fieldType.ezrichtext.validator.dispatcher.class%
+        class: "%ezpublish.fieldType.ezrichtext.validator.dispatcher.class%"
         arguments:
             -
                 http://docbook.org/ns/docbook: null
                 http://ez.no/namespaces/ezpublish5/xhtml5/edit: null
-                http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5
+                http://ez.no/namespaces/ezpublish5/xhtml5: "@ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5"
 
     # Image
     ezpublish.fieldType.ezimage.io_service:
-        class: %ezpublish.fieldType.ezimage.io_legacy.class%
+        class: "%ezpublish.fieldType.ezimage.io_legacy.class%"
         arguments:
-            - @ezpublish.fieldType.ezimage.io_service.published
-            - @ezpublish.fieldType.ezimage.io_service.draft
-            - @ezpublish.fieldType.ezimage.io_service.options_provider
+            - "@ezpublish.fieldType.ezimage.io_service.published"
+            - "@ezpublish.fieldType.ezimage.io_service.draft"
+            - "@ezpublish.fieldType.ezimage.io_service.options_provider"
         # Required by ezpublish.core.io.stream_file_listener. Request listeners are initialized very early.
         lazy: true
 
     ezpublish.fieldType.ezimage.io_service.options_provider:
-        class: %ezpublish.fieldType.ezimage.io_service.options_provider.class%
+        class: "%ezpublish.fieldType.ezimage.io_service.options_provider.class%"
         calls:
             - [ setVarDir, [ "$var_dir$" ] ]
             - [ setStorageDir, [ "$storage_dir$" ] ]
@@ -223,7 +223,7 @@ services:
             - [ setPrefix, [ "$image.versioned_images_dir$" ] ]
 
     ezpublish.fieldType.ezimage.pathGenerator:
-        class: %ezpublish.fieldType.ezimage.pathGenerator.class%
+        class: "%ezpublish.fieldType.ezimage.pathGenerator.class%"
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
@@ -232,29 +232,29 @@ services:
             - [ setPrefix, [ "$binary_dir$" ] ]
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
-        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
+        class: "%ezpublish.fieldType.ezbinaryfile.pathGenerator.class%"
 
     # Will be added to binaryfile & mediafile external storage handlers by a compiler pass
     ezpublish.fieldType.ezbinarybase.download_url_generator:
-        class: %ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class%
-        arguments: [@router]
+        class: "%ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class%"
+        arguments: ["@router"]
 
     # Nameable services (for fieldtypes that need advance name handling)
     ezpublish.fieldType.ezobjectrelation.nameable_field:
-        class: %ezpublish.fieldType.ezobjectrelation.nameable_field.class%
+        class: "%ezpublish.fieldType.ezobjectrelation.nameable_field.class%"
         arguments:
-          - @ezpublish.spi.persistence.cache.contentHandler
+          - "@ezpublish.spi.persistence.cache.contentHandler"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.nameable_field:
-        class: %ezpublish.fieldType.ezobjectrelationlist.nameable_field.class%
+        class: "%ezpublish.fieldType.ezobjectrelationlist.nameable_field.class%"
         arguments:
-          - @ezpublish.spi.persistence.cache.contentHandler
+          - "@ezpublish.spi.persistence.cache.contentHandler"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezselection.nameable_field:
-        class: %ezpublish.fieldType.ezselection.nameable_field.class%
+        class: "%ezpublish.fieldType.ezselection.nameable_field.class%"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezselection}

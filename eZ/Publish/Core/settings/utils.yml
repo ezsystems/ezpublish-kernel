@@ -3,5 +3,5 @@ parameters:
 
 services:
     ezpublish.utils.deprecation_warner:
-        class: %ezpublish.utils.deprecation_warner.class%
+        class: "%ezpublish.utils.deprecation_warner.class%"
 

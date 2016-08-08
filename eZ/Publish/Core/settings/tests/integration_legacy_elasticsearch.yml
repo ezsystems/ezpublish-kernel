@@ -19,13 +19,13 @@ parameters:
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
-        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
 
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.elasticsearch
 
     ezpublish.signalslot.signal_dispatcher.factory:
-        class: %ezpublish.signalslot.signal_dispatcher.factory.class%
+        class: "%ezpublish.signalslot.signal_dispatcher.factory.class%"
         arguments:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "elasticsearch"

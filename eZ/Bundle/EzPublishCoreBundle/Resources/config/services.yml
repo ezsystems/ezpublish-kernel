@@ -33,88 +33,87 @@ parameters:
 services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
-        class: %ezpublish.siteaccess.class%
-        arguments: [%ezpublish.siteaccess.default.name%, 'uninitialized']
+        class: "%ezpublish.siteaccess.class%"
+        arguments: ["%ezpublish.siteaccess.default.name%", 'uninitialized']
 
     ezpublish.config.resolver.core:
-        class: %ezpublish.config.resolver.dynamic.class%
-        arguments: [%ezpublish.siteaccess.groups_by_siteaccess%, %ezpublish.config.default_scope%]
+        class: "%ezpublish.config.resolver.dynamic.class%"
+        arguments: ["%ezpublish.siteaccess.groups_by_siteaccess%", "%ezpublish.config.default_scope%"]
         calls:
-            - [setSiteAccess, [@ezpublish.siteaccess]]
-            - [setContainer, [@service_container]]
+            - [setSiteAccess, ["@ezpublish.siteaccess"]]
+            - [setContainer, ["@service_container"]]
         lazy: true
         tags:
             - { name: ezpublish.config.resolver, priority: 200 }
 
     ezpublish.config.resolver.chain:
-        class: %ezpublish.config.resolver.chain.class%
+        class: "%ezpublish.config.resolver.chain.class%"
 
     ezpublish.config.resolver:
         alias: ezpublish.config.resolver.chain
 
     ezpublish.config.dynamic_setting.parser:
-        class: %ezpublish.config.dynamic_setting.parser.class%
+        class: "%ezpublish.config.dynamic_setting.parser.class%"
 
     ezpublish.config.complex_setting_value.resolver:
-        class: %ezpublish.config.complex_setting_value.resolver.class%
+        class: "%ezpublish.config.complex_setting_value.resolver.class%"
 
     ezpublish.console_event_listener:
-        class: %ezpublish.console_event_listener.class%
-        arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.list%, @event_dispatcher]
+        class: "%ezpublish.console_event_listener.class%"
+        arguments: ["%ezpublish.siteaccess.default%", "%ezpublish.siteaccess.list%", "@event_dispatcher"]
         calls:
-            - [setSiteAccess, [@ezpublish.siteaccess]]
+            - [setSiteAccess, ["@ezpublish.siteaccess"]]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.controller.base:
-        class: %ezpublish.controller.base.class%
+        class: "%ezpublish.controller.base.class%"
         abstract: true
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setContainer, ["@service_container"] ]
 
     ezpublish.controller.content.view:
-        class: %ezpublish.controller.content.view.class%
+        class: "%ezpublish.controller.content.view.class%"
         arguments:
-            - @ezpublish.view_manager
-            - @security.authorization_checker
+            - "@ezpublish.view_manager"
+            - "@security.authorization_checker"
         parent: ezpublish.controller.base
 
     ezpublish.controller.content.preview.core:
-        class: %ezpublish.controller.content.preview.class%
+        class: "%ezpublish.controller.content.preview.class%"
         arguments:
-            - @ezpublish.api.service.content
-            - @http_kernel
-            - @ezpublish.content_preview_helper
-            - @security.authorization_checker
-            - @ezpublish.content_preview.location_provider
-            - @ezpublish.view.custom_location_controller_checker
+            - "@ezpublish.api.service.content"
+            - "@http_kernel"
+            - "@ezpublish.content_preview_helper"
+            - "@security.authorization_checker"
+            - "@ezpublish.content_preview.location_provider"
+            - "@ezpublish.view.custom_location_controller_checker"
 
     ezpublish.controller.content.preview:
         alias: ezpublish.controller.content.preview.core
 
     ezpublish.controller.content.download:
-        class: %ezpublish.controller.content.download.class%
+        class: "%ezpublish.controller.content.download.class%"
         arguments:
-            - @ezpublish.api.service.content
-            - @ezpublish.fieldType.ezbinaryfile.io_service
-            - @ezpublish.translation_helper
-            - @router
-            - @ezpublish.route_reference.generator
+            - "@ezpublish.api.service.content"
+            - "@ezpublish.fieldType.ezbinaryfile.io_service"
+            - "@ezpublish.translation_helper"
+            - "@router"
+            - "@ezpublish.route_reference.generator"
         parent: ezpublish.controller.base
 
     ezpublish.controller.content.download_redirection:
-        class: %ezpublish.controller.content.download_redirection.class%
+        class: "%ezpublish.controller.content.download_redirection.class%"
         arguments:
-            - @ezpublish.api.service.content
-            - @router
-            - @ezpublish.route_reference.generator
+            - "@ezpublish.api.service.content"
+            - "@router"
+            - "@ezpublish.route_reference.generator"
         parent: ezpublish.controller.base
 
     ezpublish.controller.page.view:
-        class: %ezpublish.controller.page.view.class%
-        arguments: [@ezpublish.view_manager, @ezpublish.fieldType.ezpage.pageService]
+        class: "%ezpublish.controller.page.view.class%"
+        arguments: ["@ezpublish.view_manager", "@ezpublish.fieldType.ezpage.pageService"]
         parent: ezpublish.controller.base
-        scope: request
 
     # This alias allows easier management for subrequests
     # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewType": "line"} ) ) }
@@ -127,47 +126,47 @@ services:
         alias: ezpublish.controller.page.view
 
     ezpublish.view_controller_listener:
-        class: %ezpublish.view_controller_listener.class%
+        class: "%ezpublish.view_controller_listener.class%"
         arguments:
-            - @controller_resolver
-            - @ezpublish.view_builder.registry
-            - @event_dispatcher
-            - @logger
+            - "@controller_resolver"
+            - "@ezpublish.view_builder.registry"
+            - "@event_dispatcher"
+            - "@logger"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.fragment_listener.factory:
-        class: %ezpublish.fragment_listener.factory.class%
-        arguments: [%fragment.path%]
+        class: "%ezpublish.fragment_listener.factory.class%"
+        arguments: ["%fragment.path%"]
         calls:
-            - [setRequestStack, [@request_stack]]
+            - [setRequestStack, ["@request_stack"]]
 
     ezpublish.decorated_fragment_renderer:
-        class: %ezpublish.decorated_fragment_renderer.class%
+        class: "%ezpublish.decorated_fragment_renderer.class%"
         # Arguments replaced at compile time
         arguments: []
         calls:
-            - [setFragmentPath, [%fragment.path%]]
-            - [setSiteAccess, [@ezpublish.siteaccess]]
+            - [setFragmentPath, ["%fragment.path%"]]
+            - [setSiteAccess, ["@ezpublish.siteaccess"]]
         abstract: true
 
     ezpublish.param_converter.content:
-        class: %ezpublish.param_converter.content.class%
+        class: "%ezpublish.param_converter.content.class%"
         arguments:
-            - @ezpublish.api.service.content
+            - "@ezpublish.api.service.content"
         tags:
-            - { name: request.param_converter, priority: %ezpublish.param_converter.content.priority%, converter: ez_content_converter }
+            - { name: request.param_converter, priority: "%ezpublish.param_converter.content.priority%", converter: ez_content_converter }
 
     ezpublish.param_converter.location:
-        class: %ezpublish.param_converter.location.class%
+        class: "%ezpublish.param_converter.location.class%"
         arguments:
-            - @ezpublish.api.service.location
+            - "@ezpublish.api.service.location"
         tags:
-            - { name: request.param_converter, priority: %ezpublish.param_converter.location.priority%, converter: ez_location_converter }
+            - { name: request.param_converter, priority: "%ezpublish.param_converter.location.priority%", converter: ez_location_converter }
 
     ezpublish.exception_listener:
-        class: %ezpublish.exception_listener.class%
-        arguments: [@translator]
+        class: "%ezpublish.exception_listener.class%"
+        arguments: ["@translator"]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -175,15 +174,15 @@ services:
         class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
 
     ezpublish.fields_groups.list:
-        class: %ezpublish.fields_groups.list.class%
-        factory: [@ezpublish.fields_groups.list.repository_settings_factory, "build"]
+        class: "%ezpublish.fields_groups.list.class%"
+        factory: ["@ezpublish.fields_groups.list.repository_settings_factory", "build"]
         arguments:
-            - @translator
+            - "@translator"
 
     ezpublish.fields_groups.list.repository_settings_factory:
         class: eZ\Publish\Core\Helper\FieldsGroups\RepositoryConfigFieldsGroupsListFactory
         arguments:
-            - @ezpublish.api.repository_configuration_provider
+            - "@ezpublish.api.repository_configuration_provider"
 
     ezpublish.query_type_content_view_mapper:
         class: eZ\Publish\Core\QueryType\QueryParameterContentViewQueryTypeMapper

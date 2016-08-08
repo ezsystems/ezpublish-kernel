@@ -48,128 +48,128 @@ parameters:
 
 services:
     twig.extension.intl:
-        class: %twig.extension.intl.class%
+        class: "%twig.extension.intl.class%"
         tags:
             - {name: twig.extension}
 
     ezpublish.twig.extension.content:
-        class: %ezpublish.twig.extension.content.class%
+        class: "%ezpublish.twig.extension.content.class%"
         arguments:
-            - @ezpublish.api.repository
-            - @ezpublish.translation_helper
-            - @ezpublish.field_helper
-            - @?logger
+            - "@ezpublish.api.repository"
+            - "@ezpublish.translation_helper"
+            - "@ezpublish.field_helper"
+            - "@?logger"
         tags:
             - {name: twig.extension}
 
     ezpublish.view_manager:
-        class: %ezpublish.view_manager.class%
+        class: "%ezpublish.view_manager.class%"
         arguments:
-          - @templating
-          - @event_dispatcher
-          - @ezpublish.api.repository
-          - @ezpublish.config.resolver
-          - %ezpublish.content_view.viewbase_layout%
-          - @ezpublish.view.configurator
-          - @?logger
+          - "@templating"
+          - "@event_dispatcher"
+          - "@ezpublish.api.repository"
+          - "@ezpublish.config.resolver"
+          - "%ezpublish.content_view.viewbase_layout%"
+          - "@ezpublish.view.configurator"
+          - "@?logger"
 
     ezpublish.content_view_provider.configured:
-        class: %ezpublish.view_provider.configured.class%
-        arguments: [@ezpublish.content_view.matcher_factory]
+        class: "%ezpublish.view_provider.configured.class%"
+        arguments: ["@ezpublish.content_view.matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.content_view.matcher_factory:
-        class: %ezpublish.view.matcher_factory.class%
-        arguments: [@ezpublish.api.repository, 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
+        class: "%ezpublish.view.matcher_factory.class%"
+        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
             - [setMatchConfig, [$content_view$]]
 
     ezpublish.content_view_provider.default_configured:
-        class: %ezpublish.view_provider.configured.class%
-        arguments: [@ezpublish.content_view.default_matcher_factory]
+        class: "%ezpublish.view_provider.configured.class%"
+        arguments: ["@ezpublish.content_view.default_matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: -1}
 
     ezpublish.content_view.default_matcher_factory:
-        class: %ezpublish.view.matcher_factory.class%
-        arguments: [@ezpublish.api.repository, 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
+        class: "%ezpublish.view.matcher_factory.class%"
+        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
             - [setMatchConfig, [$content_view_defaults$]]
 
     ezpublish.location_view_provider.configured:
-        class: %ezpublish.view_provider.configured.class%
-        arguments: [@ezpublish.location_view.matcher_factory]
+        class: "%ezpublish.view_provider.configured.class%"
+        arguments: ["@ezpublish.location_view.matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.location_view.matcher_factory:
-        class: %ezpublish.view.matcher_factory.class%
-        arguments: [@ezpublish.api.repository, 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
+        class: "%ezpublish.view.matcher_factory.class%"
+        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
             - [setMatchConfig, [$location_view$]]
 
     ezpublish.block_view_provider.configured:
-        class: %ezpublish.view_provider.configured.class%
-        arguments: [@ezpublish.block_view.matcher_factory]
+        class: "%ezpublish.view_provider.configured.class%"
+        arguments: ["@ezpublish.block_view.matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\BlockView', priority: 10}
 
     ezpublish.block_view.matcher_factory:
-        class: %ezpublish.view.matcher_factory.class%
-        arguments: [@ezpublish.api.repository, 'eZ\Publish\Core\MVC\Symfony\Matcher\Block']
+        class: "%ezpublish.view.matcher_factory.class%"
+        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\Block']
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
             - [setMatchConfig, [$block_view$]]
 
     ezpublish.block_view_provider.default_configured:
-        class: %ezpublish.view_provider.configured.class%
-        arguments: [@ezpublish.block_view.default_matcher_factory]
+        class: "%ezpublish.view_provider.configured.class%"
+        arguments: ["@ezpublish.block_view.default_matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\BlockView', priority: -1}
 
     ezpublish.block_view.default_matcher_factory:
-        class: %ezpublish.view.matcher_factory.class%
-        arguments: [@ezpublish.api.repository]
+        class: "%ezpublish.view.matcher_factory.class%"
+        arguments: ["@ezpublish.api.repository"]
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
             - [setMatchConfig, [$block_view_defaults$]]
 
     ezpublish.templating.global_helper.core:
-        class: %ezpublish.templating.global_helper.core.class%
-        arguments: [@ezpublish.config.resolver, @ezpublish.api.service.location, @router, @ezpublish.translation_helper]
+        class: "%ezpublish.templating.global_helper.core.class%"
+        arguments: ["@ezpublish.config.resolver", "@ezpublish.api.service.location", "@router", "@ezpublish.translation_helper"]
         calls:
-            - [setRequestStack, [@request_stack]]
+            - [setRequestStack, ["@request_stack"]]
 
     ezpublish.templating.global_helper:
         alias: ezpublish.templating.global_helper.core
 
     ezpublish.twig.extension.core:
-        class: %ezpublish.twig.extension.core.class%
-        arguments: [@ezpublish.templating.global_helper]
+        class: "%ezpublish.twig.extension.core.class%"
+        arguments: ["@ezpublish.templating.global_helper"]
         tags:
             - {name: twig.extension}
 
     ezpublish.twig.extension.filesize:
-        class: %ezpublish.twig.extension.filesize.class%
-        arguments: [@translator, %ezpublish.twig.extension.filesize.suffixes%, @ezpublish.config.resolver, @ezpublish.locale.converter ]
+        class: "%ezpublish.twig.extension.filesize.class%"
+        arguments: ["@translator", "%ezpublish.twig.extension.filesize.suffixes%", "@ezpublish.config.resolver", "@ezpublish.locale.converter" ]
         tags:
             - {name: twig.extension}
 
     ezpublish.templating.extension.routing:
-        class: %ezpublish.templating.extension.routing.class%
-        arguments: [@ezpublish.route_reference.generator]
+        class: "%ezpublish.templating.extension.routing.class%"
+        arguments: ["@ezpublish.route_reference.generator"]
         tags:
             - {name: twig.extension}
 
     ezpublish.templating.field_block_renderer.twig:
-        class: %ezpublish.templating.field_block_renderer.twig.class%
+        class: "%ezpublish.templating.field_block_renderer.twig.class%"
         calls:
-            - [setTwig, [@twig]]
-            - [setBaseTemplate, [%ezpublish.content_view.viewbase_layout%]]
+            - [setTwig, ["@twig"]]
+            - [setBaseTemplate, ["%ezpublish.content_view.viewbase_layout%"]]
             - [setFieldViewResources, ["$field_templates$"]]
             - [setFieldEditResources, ["$field_edit_templates$"]]
             - [setFieldDefinitionViewResources, ["$fielddefinition_settings_templates$"]]
@@ -180,121 +180,121 @@ services:
         alias: ezpublish.templating.field_block_renderer.twig
 
     ezpublish.twig.extension.field_rendering:
-        class: %ezpublish.twig.extension.field_rendering.class%
+        class: "%ezpublish.twig.extension.field_rendering.class%"
         arguments:
-            - @ezpublish.templating.field_block_renderer
-            - @ezpublish.api.service.content_type
-            - @ezpublish.fieldType.parameterProviderRegistry
-            - @ezpublish.translation_helper
+            - "@ezpublish.templating.field_block_renderer"
+            - "@ezpublish.api.service.content_type"
+            - "@ezpublish.fieldType.parameterProviderRegistry"
+            - "@ezpublish.translation_helper"
         tags:
             - { name: twig.extension }
 
     ezpublish.twig.extension.image:
-        class: %ezpublish.twig.extension.image.class%
-        arguments: [@ezpublish.fieldtype.ezimage.variation_service]
+        class: "%ezpublish.twig.extension.image.class%"
+        arguments: ["@ezpublish.fieldtype.ezimage.variation_service"]
         tags:
             - { name: twig.extension }
 
     ezpublish.twig.extension.rich_text:
-        class: %ezpublish.twig.extension.rich_text.class%
+        class: "%ezpublish.twig.extension.rich_text.class%"
         arguments:
-            - @ezpublish.fieldType.ezrichtext.converter.output.xhtml5
-            - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
+            - "@ezpublish.fieldType.ezrichtext.converter.output.xhtml5"
+            - "@ezpublish.fieldType.ezrichtext.converter.edit.xhtml5"
         tags:
             - { name: twig.extension }
 
 
     ezpublish.view.custom_location_controller_checker:
-        class: %ezpublish.view.custom_location_controller_checker.class%
+        class: "%ezpublish.view.custom_location_controller_checker.class%"
 
     ezpublish.view_provider.registry:
-        class: %ezpublish.view_provider.registry.class%
+        class: "%ezpublish.view_provider.registry.class%"
 
     ezpublish.view.configurator:
-        class: %ezpublish.view.configurator.class%
-        arguments: [@ezpublish.view_provider.registry]
+        class: "%ezpublish.view.configurator.class%"
+        arguments: ["@ezpublish.view_provider.registry"]
 
     ezpublish.view_builder.registry:
-        class: %ezpublish.view_builder.registry.class%
+        class: "%ezpublish.view_builder.registry.class%"
         calls:
-            - [addToRegistry, [[@ezpublish.view_builder.content, @ezpublish.view_builder.block]]]
+            - [addToRegistry, [["@ezpublish.view_builder.content", "@ezpublish.view_builder.block"]]]
 
     ezpublish.view_builder.content:
-        class: %ezpublish.view_builder.content.class%
+        class: "%ezpublish.view_builder.content.class%"
         arguments:
-            - @ezpublish.api.repository
-            - @security.authorization_checker
-            - @ezpublish.view.configurator
-            - @ezpublish.view.view_parameters.injector.dispatcher
+            - "@ezpublish.api.repository"
+            - "@security.authorization_checker"
+            - "@ezpublish.view.configurator"
+            - "@ezpublish.view.view_parameters.injector.dispatcher"
 
     ezpublish.view_builder.block:
-        class: %ezpublish.view_builder.block.class%
+        class: "%ezpublish.view_builder.block.class%"
         arguments:
-            - @ezpublish.fieldType.ezpage.pageService
-            - @ezpublish.view.configurator
-            - @ezpublish.view.view_parameters.injector.dispatcher
+            - "@ezpublish.fieldType.ezpage.pageService"
+            - "@ezpublish.view.configurator"
+            - "@ezpublish.view.view_parameters.injector.dispatcher"
 
     ezpublish.view.builder_parameter_collector.request_attributes:
-        class: %ezpublish.view.builder_parameter_collector.request_attributes.class%
+        class: "%ezpublish.view.builder_parameter_collector.request_attributes.class%"
         tags:
             - {name: kernel.event_subscriber}
 
     ezpublish.view.template_renderer:
-        class: %ezpublish.view.template_renderer.class%
-        arguments: [@templating, @event_dispatcher]
+        class: "%ezpublish.view.template_renderer.class%"
+        arguments: ["@templating", "@event_dispatcher"]
 
     ezpublish.view.renderer_listener:
-        class: %ezpublish.view.renderer_listener.class%
-        arguments: [@ezpublish.view.template_renderer]
+        class: "%ezpublish.view.renderer_listener.class%"
+        arguments: ["@ezpublish.view.template_renderer"]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.dispatcher:
-        class: %ezpublish.view.view_parameters.injector.dispatcher.class%
-        arguments: [@event_dispatcher]
+        class: "%ezpublish.view.view_parameters.injector.dispatcher.class%"
+        arguments: ["@event_dispatcher"]
 
     ezpublish.view.view_parameters.injector.custom_parameters:
-        class: %ezpublish.view.view_parameters.injector.custom_parameters.class%
+        class: "%ezpublish.view.view_parameters.injector.custom_parameters.class%"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.embed_object_parameters:
-        class: %ezpublish.view.view_parameters.injector.embed_object_parameters.class%
+        class: "%ezpublish.view.view_parameters.injector.embed_object_parameters.class%"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.no_layout:
-        class: %ezpublish.view.view_parameters.injector.no_layout.class%
+        class: "%ezpublish.view.view_parameters.injector.no_layout.class%"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.value_objects_ids:
-        class: %ezpublish.view.view_parameters.injector.value_objects_ids.class%
+        class: "%ezpublish.view.view_parameters.injector.value_objects_ids.class%"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.viewbase_layout:
-        class: %ezpublish.view.view_parameters.injector.viewbase_layout.class%
-        arguments: [%ezpublish.content_view.viewbase_layout%]
+        class: "%ezpublish.view.view_parameters.injector.viewbase_layout.class%"
+        arguments: ["%ezpublish.content_view.viewbase_layout%"]
         calls:
             - [setPageLayout, [$pagelayout$]]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.block.valid_items:
-        class: %ezpublish.view.view_parameters.injector.block.valid_items.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        class: "%ezpublish.view.view_parameters.injector.block.valid_items.class%"
+        arguments: ["@ezpublish.fieldType.ezpage.pageService"]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.block.valid_content_info_items:
-        class: %ezpublish.view.view_parameters.injector.block.valid_content_info_items.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        class: "%ezpublish.view.view_parameters.injector.block.valid_content_info_items.class%"
+        arguments: ["@ezpublish.fieldType.ezpage.pageService"]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.cache_response_listener:
-        class: %ezpublish.view.cache_response_listener.class%
+        class: "%ezpublish.view.cache_response_listener.class%"
         arguments:
             - $content.view_cache$
             - $content.ttl_cache$
@@ -303,7 +303,7 @@ services:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.block_cache_response_listener:
-        class: %ezpublish.view.block_cache_response_listener.class%
+        class: "%ezpublish.view.block_cache_response_listener.class%"
         calls:
             - [setEnableViewCache, [$content.view_cache$]]
         tags:

@@ -4,13 +4,13 @@ parameters:
 
 services:
     ezpublish.search.legacy.connection.factory:
-        class: %ezpublish.search.legacy.connection.factory.class%
+        class: "%ezpublish.search.legacy.connection.factory.class%"
         arguments:
-            - @ezpublish.api.repository_configuration_provider
+            - "@ezpublish.api.repository_configuration_provider"
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]
 
     ezpublish.api.search_engine.legacy.connection:
-        class: %ezpublish.search.legacy.connection.class%
+        class: "%ezpublish.search.legacy.connection.class%"
         factory: ["@ezpublish.search.legacy.connection.factory", getConnection]
         lazy: true

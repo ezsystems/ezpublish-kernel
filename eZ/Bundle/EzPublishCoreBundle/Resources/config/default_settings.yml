@@ -28,15 +28,15 @@ parameters:
     ezsettings.default.content_view_defaults:
         full:
             default:
-                template: %ezplatform.default_view_templates.content.full%
+                template: "%ezplatform.default_view_templates.content.full%"
                 match: []
         line:
             default:
-                template: %ezplatform.default_view_templates.content.line%
+                template: "%ezplatform.default_view_templates.content.line%"
                 match: []
         text_linked:
             default:
-                template: %ezplatform.default_view_templates.content.text_linked%
+                template: "%ezplatform.default_view_templates.content.text_linked%"
                 match: []
         embed:
             image:
@@ -44,21 +44,21 @@ parameters:
                 match:
                     Identifier\ContentType: '%ezplatform.content_view.image_embed_content_types_identifiers%'
             default:
-                template: %ezplatform.default_view_templates.content.embed%
+                template: "%ezplatform.default_view_templates.content.embed%"
                 match: []
 
     ezsettings.default.block_view_defaults:
         block:
             default:
-                template: %ezplatform.default_view_templates.block%
+                template: "%ezplatform.default_view_templates.block%"
                 match: []
 
     # Common settings
     ezpublish.repositories: {}
     ezsettings.default.repository: ~
     ezpublish.session_name.default: "eZSESSID{siteaccess_hash}"
-    ezsettings.default.session_name: %ezpublish.session_name.default%    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
-    ezsettings.default.session: { name: %ezpublish.session_name.default% } # Session options that will override options from framework
+    ezsettings.default.session_name: "%ezpublish.session_name.default%"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
+    ezsettings.default.session: { name: "%ezpublish.session_name.default%" } # Session options that will override options from framework
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.index_page: ~                    # The page to show when accessing IndexPage (/)
     ezsettings.default.default_page: ~                  # The default page to show, e.g. after user login this will be used for default redirection
@@ -153,7 +153,7 @@ parameters:
 
     # Security settings
     ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"
-    ezsettings.default.security.base_layout: %ezsettings.default.pagelayout%
+    ezsettings.default.security.base_layout: "%ezsettings.default.pagelayout%"
 
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp

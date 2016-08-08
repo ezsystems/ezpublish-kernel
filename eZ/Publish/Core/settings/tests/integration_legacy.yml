@@ -9,4 +9,4 @@ parameters:
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
-        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"

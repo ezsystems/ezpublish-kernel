@@ -70,255 +70,255 @@ parameters:
     ezpublish_rest.input.handler.json.class: eZ\Publish\Core\REST\Common\Input\Handler\Json
     ezpublish_rest.input.handler.xml.class: eZ\Publish\Core\REST\Common\Input\Handler\Xml
 
-    ezpublish_rest.templated_router.class: %router.class%
+    ezpublish_rest.templated_router.class: "%router.class%"
 
 services:
     ezpublish_rest.routing.options_loader:
-        class: %ezpublish_rest.routing.options_loader.class%
+        class: "%ezpublish_rest.routing.options_loader.class%"
         arguments:
-            - @ezpublish_rest.routing.options_loader.route_collection_mapper
-            - @ezpublish_rest.templated_router
+            - "@ezpublish_rest.routing.options_loader.route_collection_mapper"
+            - "@ezpublish_rest.templated_router"
         tags:
             - { name: routing.loader }
 
     ezpublish_rest.routing.options_loader.route_collection_mapper:
-        class: %ezpublish_rest.routing.options_loader.route_collection_mapper.class%
+        class: "%ezpublish_rest.routing.options_loader.route_collection_mapper.class%"
         arguments:
-            - @ezpublish_rest.routing.options_loader.mapper
+            - "@ezpublish_rest.routing.options_loader.mapper"
 
     ezpublish_rest.routing.options_loader.mapper:
-        class: %ezpublish_rest.routing.options_loader.mapper.class%
+        class: "%ezpublish_rest.routing.options_loader.mapper.class%"
 
     ezpublish_rest.cors_option_provider:
-        class: %ezpublish_rest.cors_options_provider.class%
-        arguments: [@router.default]
+        class: "%ezpublish_rest.cors_options_provider.class%"
+        arguments: ["@router.default"]
         tags:
             - { name: nelmio_cors.options_provider }
 
     ezpublish_rest.field_type_serializer:
-        class: %ezpublish_rest.field_type_serializer.class%
+        class: "%ezpublish_rest.field_type_serializer.class%"
         arguments:
-            - @ezpublish.api.service.field_type
-            - @ezpublish_rest.field_type_processor_registry
+            - "@ezpublish.api.service.field_type"
+            - "@ezpublish_rest.field_type_processor_registry"
 
     ezpublish_rest.request_parser:
-        class: %ezpublish_rest.request_parser.class%
+        class: "%ezpublish_rest.request_parser.class%"
         arguments:
-            - @router
+            - "@router"
 
     ezpublish_rest.parser_tools:
-        class: %ezpublish_rest.parser_tools.class%
+        class: "%ezpublish_rest.parser_tools.class%"
 
     ezpublish_rest.field_type_parser:
-        class: %ezpublish_rest.field_type_parser.class%
+        class: "%ezpublish_rest.field_type_parser.class%"
         arguments:
-            - @ezpublish.api.service.content
-            - @ezpublish.api.service.content_type
-            - @ezpublish.api.service.field_type
-            - @ezpublish_rest.field_type_processor_registry
+            - "@ezpublish.api.service.content"
+            - "@ezpublish.api.service.content_type"
+            - "@ezpublish.api.service.field_type"
+            - "@ezpublish_rest.field_type_processor_registry"
 
     ezpublish_rest.factory:
-        class: %ezpublish_rest.factory.class%
-        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        class: "%ezpublish_rest.factory.class%"
+        arguments: ["@ezpublish.config.resolver", "@ezpublish.api.repository"]
         calls:
-            - [setRequestStack, [@request_stack]]
+            - [setRequestStack, ["@request_stack"]]
 
     ezpublish_rest.root_resource_builder:
-         class: %ezpublish_rest.root_resource_builder.class%
-         arguments: [@router, @ezpublish_rest.templated_router, "$rest_root_resources$"]
+         class: "%ezpublish_rest.root_resource_builder.class%"
+         arguments: ["@router", "@ezpublish_rest.templated_router", "$rest_root_resources$"]
 
     ezpublish_rest.controller.base:
-        class: %ezpublish_rest.controller.base.class%
+        class: "%ezpublish_rest.controller.base.class%"
         calls:
-            - [ setContainer, [@service_container] ]
-            - [ setInputDispatcher, [@ezpublish_rest.input.dispatcher] ]
-            - [ setRouter, [@router] ]
-            - [ setRequestParser, [@ezpublish_rest.request_parser] ]
-            - [ setRepository, [@ezpublish.api.repository] ]
+            - [ setContainer, ["@service_container"] ]
+            - [ setInputDispatcher, ["@ezpublish_rest.input.dispatcher"] ]
+            - [ setRouter, ["@router"] ]
+            - [ setRequestParser, ["@ezpublish_rest.request_parser"] ]
+            - [ setRepository, ["@ezpublish.api.repository"] ]
 
     ezpublish_rest.controller.root:
-        class: %ezpublish_rest.controller.root.class%
+        class: "%ezpublish_rest.controller.root.class%"
         parent: ezpublish_rest.controller.base
-        arguments: [@ezpublish_rest.root_resource_builder]
+        arguments: ["@ezpublish_rest.root_resource_builder"]
 
     ezpublish_rest.controller.section:
-        class: %ezpublish_rest.controller.section.class%
+        class: "%ezpublish_rest.controller.section.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.section
+            - "@ezpublish.api.service.section"
 
     ezpublish_rest.controller.binary_content:
-        class: %ezpublish_rest.controller.binary_content.class%
+        class: "%ezpublish_rest.controller.binary_content.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.fieldType.ezimage.variation_service
+            - "@ezpublish.fieldType.ezimage.variation_service"
 
     ezpublish_rest.controller.content:
-        class: %ezpublish_rest.controller.content.class%
+        class: "%ezpublish_rest.controller.content.class%"
         parent: ezpublish_rest.controller.base
 
     ezpublish_rest.controller.content_type:
-        class: %ezpublish_rest.controller.content_type.class%
+        class: "%ezpublish_rest.controller.content_type.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.content_type
+            - "@ezpublish.api.service.content_type"
 
     ezpublish_rest.controller.role:
-        class: %ezpublish_rest.controller.role.class%
+        class: "%ezpublish_rest.controller.role.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.role
-            - @ezpublish.api.service.user
-            - @ezpublish.api.service.location
+            - "@ezpublish.api.service.role"
+            - "@ezpublish.api.service.user"
+            - "@ezpublish.api.service.location"
 
     ezpublish_rest.controller.location:
-        class: %ezpublish_rest.controller.location.class%
+        class: "%ezpublish_rest.controller.location.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.location
-            - @ezpublish.api.service.content
-            - @ezpublish.api.service.trash
+            - "@ezpublish.api.service.location"
+            - "@ezpublish.api.service.content"
+            - "@ezpublish.api.service.trash"
 
     ezpublish_rest.controller.object_state:
-        class: %ezpublish_rest.controller.object_state.class%
+        class: "%ezpublish_rest.controller.object_state.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.object_state
-            - @ezpublish.api.service.content
+            - "@ezpublish.api.service.object_state"
+            - "@ezpublish.api.service.content"
 
     ezpublish_rest.controller.trash:
-        class: %ezpublish_rest.controller.trash.class%
+        class: "%ezpublish_rest.controller.trash.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.trash
-            - @ezpublish.api.service.location
+            - "@ezpublish.api.service.trash"
+            - "@ezpublish.api.service.location"
 
     ezpublish_rest.controller.user:
-        class: %ezpublish_rest.controller.user.class%
+        class: "%ezpublish_rest.controller.user.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.user
-            - @ezpublish.api.service.role
-            - @ezpublish.api.service.content
-            - @ezpublish.api.service.content_type
-            - @ezpublish.api.service.location
-            - @ezpublish.api.service.section
-            - @ezpublish.api.repository
+            - "@ezpublish.api.service.user"
+            - "@ezpublish.api.service.role"
+            - "@ezpublish.api.service.content"
+            - "@ezpublish.api.service.content_type"
+            - "@ezpublish.api.service.location"
+            - "@ezpublish.api.service.section"
+            - "@ezpublish.api.repository"
 
     ezpublish_rest.controller.url_wildcard:
-        class: %ezpublish_rest.controller.url_wildcard.class%
+        class: "%ezpublish_rest.controller.url_wildcard.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.url_wildcard
+            - "@ezpublish.api.service.url_wildcard"
 
     ezpublish_rest.controller.url_alias:
-        class: %ezpublish_rest.controller.url_alias.class%
+        class: "%ezpublish_rest.controller.url_alias.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.url_alias
-            - @ezpublish.api.service.location
+            - "@ezpublish.api.service.url_alias"
+            - "@ezpublish.api.service.location"
 
     ezpublish_rest.controller.views:
-        class: %ezpublish_rest.controller.views.class%
+        class: "%ezpublish_rest.controller.views.class%"
         parent: ezpublish_rest.controller.base
         arguments:
-            - @ezpublish.api.service.search
+            - "@ezpublish.api.service.search"
 
     ezpublish_rest.request_listener:
-        class: %ezpublish_rest.request_listener.class%
+        class: "%ezpublish_rest.request_listener.class%"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish_rest.response_listener:
-        class: %ezpublish_rest.response_listener.class%
+        class: "%ezpublish_rest.response_listener.class%"
         arguments:
-            - @ezpublish_rest.output.visitor.dispatcher
+            - "@ezpublish_rest.output.visitor.dispatcher"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish_rest.csrf_listener:
-        class: %ezpublish_rest.csrf_listener.class%
+        class: "%ezpublish_rest.csrf_listener.class%"
         arguments:
-            - @event_dispatcher
-            - %form.type_extension.csrf.enabled%
-            - %ezpublish_rest.csrf_token_intention%
-            - @?security.csrf.token_manager
+            - "@event_dispatcher"
+            - "%form.type_extension.csrf.enabled%"
+            - "%ezpublish_rest.csrf_token_intention%"
+            - "@?security.csrf.token_manager"
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish_rest.controller.options:
-        class: %ezpublish_rest.controller.options.class%
+        class: "%ezpublish_rest.controller.options.class%"
         parent: ezpublish_rest.controller.base
 
     ezpublish_rest.controller.services:
-        class: %ezpublish_rest.controller.services.class%
-        arguments: [%ezpublish.fieldType.ezcountry.data%]
+        class: "%ezpublish_rest.controller.services.class%"
+        arguments: ["%ezpublish.fieldType.ezcountry.data%"]
 
     ezpublish_rest.field_type_processor_registry:
-        class: %ezpublish_rest.field_type_processor_registry.class%
+        class: "%ezpublish_rest.field_type_processor_registry.class%"
         lazy: true
 
     ezpublish_rest.field_type_processor.ezimage:
-        class: %ezpublish_rest.field_type_processor.ezimage.class%
+        class: "%ezpublish_rest.field_type_processor.ezimage.class%"
         factory: ["@ezpublish_rest.factory", getImageFieldTypeProcessor]
         arguments:
-            - @router
+            - "@router"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezimage }
 
     ezpublish_rest.field_type_processor.ezdatetime:
-        class: %ezpublish_rest.field_type_processor.ezdatetime.class%
+        class: "%ezpublish_rest.field_type_processor.ezdatetime.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezdatetime }
 
     ezpublish_rest.field_type_processor.ezdate:
-        class: %ezpublish_rest.field_type_processor.ezdate.class%
+        class: "%ezpublish_rest.field_type_processor.ezdate.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezdate }
 
     ezpublish_rest.field_type_processor.ezmedia:
-        class: %ezpublish_rest.field_type_processor.ezmedia.class%
+        class: "%ezpublish_rest.field_type_processor.ezmedia.class%"
         factory: ["@ezpublish_rest.factory", getMediaFieldTypeProcessor]
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezmedia }
 
     ezpublish_rest.field_type_processor.ezobjectrelationlist:
-        class: %ezpublish_rest.field_type_processor.ezobjectrelationlist.class%
+        class: "%ezpublish_rest.field_type_processor.ezobjectrelationlist.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelationlist }
 
     ezpublish_rest.field_type_processor.ezobjectrelation:
-        class: %ezpublish_rest.field_type_processor.ezobjectrelation.class%
+        class: "%ezpublish_rest.field_type_processor.ezobjectrelation.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelation }
 
     ezpublish_rest.field_type_processor.eztime:
-        class: %ezpublish_rest.field_type_processor.eztime.class%
+        class: "%ezpublish_rest.field_type_processor.eztime.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: eztime }
 
     ezpublish_rest.field_type_processor.ezrichtext:
-        class: %ezpublish_rest.field_type_processor.ezrichtext.class%
+        class: "%ezpublish_rest.field_type_processor.ezrichtext.class%"
         arguments:
-            - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
+            - "@ezpublish.fieldType.ezrichtext.converter.edit.xhtml5"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezrichtext }
 
     ezpublish_rest.field_type_processor.ezbinaryfile:
-        class: %ezpublish_rest.field_type_processor.ezbinaryfile.class%
+        class: "%ezpublish_rest.field_type_processor.ezbinaryfile.class%"
         factory: ["@ezpublish_rest.factory", getBinaryFileFieldTypeProcessor]
         arguments:
-            - @ezpublish.core.io.default_url_decorator
+            - "@ezpublish.core.io.default_url_decorator"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezbinaryfile }
 
     ezpublish_rest.field_type_processor.ezpage:
-        class: %ezpublish_rest.field_type_processor.ezpage.class%
+        class: "%ezpublish_rest.field_type_processor.ezpage.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezpage }
 
     ezpublish_rest.field_type_processor.ezfloat:
-        class: %ezpublish_rest.field_type_processor.ezfloat.class%
+        class: "%ezpublish_rest.field_type_processor.ezfloat.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezfloat }
 
@@ -327,79 +327,79 @@ services:
     # Main REST output dispatcher
     # Gets a <requestMatch> => output.visitor mapping with the ezpublish_rest.output.visitor tag.
     ezpublish_rest.output.visitor.dispatcher:
-        class: %ezpublish_rest.output.visitor.dispatcher.class%
+        class: "%ezpublish_rest.output.visitor.dispatcher.class%"
 
     # format output visitors
     ezpublish_rest.output.visitor.json:
-        class: %ezpublish_rest.output.visitor.class%
+        class: "%ezpublish_rest.output.visitor.class%"
         arguments:
-            - @ezpublish_rest.output.generator.json
-            - @ezpublish_rest.output.value_object_visitor.dispatcher
+            - "@ezpublish_rest.output.generator.json"
+            - "@ezpublish_rest.output.value_object_visitor.dispatcher"
         tags:
             - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.json.regexps }
 
     ezpublish_rest.output.visitor.xml:
-        class: %ezpublish_rest.output.visitor.class%
+        class: "%ezpublish_rest.output.visitor.class%"
         arguments:
-            - @ezpublish_rest.output.generator.xml
-            - @ezpublish_rest.output.value_object_visitor.dispatcher
+            - "@ezpublish_rest.output.generator.xml"
+            - "@ezpublish_rest.output.value_object_visitor.dispatcher"
         tags:
             - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.xml.regexps }
 
     # format output generators
     ezpublish_rest.output.generator.xml:
-        class: %ezpublish_rest.output.generator.xml.class%
+        class: "%ezpublish_rest.output.generator.xml.class%"
         arguments:
-            - @ezpublish_rest.output.generator.xml.field_type_hash_generator
+            - "@ezpublish_rest.output.generator.xml.field_type_hash_generator"
         calls:
-            - [ setFormatOutput, [ %kernel.debug% ] ]
+            - [ setFormatOutput, [ "%kernel.debug%" ] ]
 
     ezpublish_rest.output.generator.xml.field_type_hash_generator:
-        class: %ezpublish_rest.output.generator.xml.field_type_hash_generator.class%
+        class: "%ezpublish_rest.output.generator.xml.field_type_hash_generator.class%"
 
     ezpublish_rest.output.generator.json:
-        class: %ezpublish_rest.output.generator.json.class%
+        class: "%ezpublish_rest.output.generator.json.class%"
         arguments:
-            - @ezpublish_rest.output.generator.json.field_type_hash_generator
+            - "@ezpublish_rest.output.generator.json.field_type_hash_generator"
         calls:
-            - [ setFormatOutput, [ %kernel.debug% ] ]
+            - [ setFormatOutput, [ "%kernel.debug%" ] ]
 
     ezpublish_rest.output.generator.json.field_type_hash_generator:
-        class: %ezpublish_rest.output.generator.json.field_type_hash_generator.class%
+        class: "%ezpublish_rest.output.generator.json.field_type_hash_generator.class%"
 
     # value objects visitors
     ezpublish_rest.output.value_object_visitor.dispatcher:
-        class: %ezpublish_rest.output.value_object_visitor.dispatcher.class%
+        class: "%ezpublish_rest.output.value_object_visitor.dispatcher.class%"
 
     ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException:
-        class: %ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException.class%
+        class: "%ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException.class%"
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException }
 
     ezpublish_rest.input.dispatcher:
-        class: %ezpublish_rest.input.dispatcher.class%
+        class: "%ezpublish_rest.input.dispatcher.class%"
         arguments:
-            - @ezpublish_rest.input.parsing_dispatcher
+            - "@ezpublish_rest.input.parsing_dispatcher"
             - []
-            - @ezpublish_rest.request_parser
-            - @ezpublish_rest.parser_tools
-            - @ezpublish_rest.field_type_parser
+            - "@ezpublish_rest.request_parser"
+            - "@ezpublish_rest.parser_tools"
+            - "@ezpublish_rest.field_type_parser"
 
     ezpublish_rest.input.parsing_dispatcher:
-        class: %ezpublish_rest.input.parsing_dispatcher.class%
+        class: "%ezpublish_rest.input.parsing_dispatcher.class%"
 
     ezpublish_rest.input.handler.json:
-        class: %ezpublish_rest.input.handler.json.class%
+        class: "%ezpublish_rest.input.handler.json.class%"
         tags:
             - { name: ezpublish_rest.input.handler, format: json }
 
     ezpublish_rest.input.handler.xml:
-        class: %ezpublish_rest.input.handler.xml.class%
+        class: "%ezpublish_rest.input.handler.xml.class%"
         tags:
             - { name: ezpublish_rest.input.handler, format: xml }
 
     ezpublish_rest.templated_router:
-        class: %ezpublish_rest.templated_router.class%
+        class: "%ezpublish_rest.templated_router.class%"
         parent: hautelook.router.template
         calls:
             - [ setOption, [ strict_requirements, ~ ] ]

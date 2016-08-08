@@ -8,14 +8,14 @@ parameters:
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
-        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
 
     # disable cache - TODO fix bug with trash recover
     ezpublish.api.persistence_handler:
         alias: ezpublish.spi.persistence.legacy
 
     ezpublish.signalslot.signal_dispatcher.factory:
-        class: %ezpublish.signalslot.signal_dispatcher.factory.class%
+        class: "%ezpublish.signalslot.signal_dispatcher.factory.class%"
         arguments:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "legacy"

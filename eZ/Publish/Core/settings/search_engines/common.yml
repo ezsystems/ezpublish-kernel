@@ -31,22 +31,22 @@ services:
     # Note: services tagged with 'ezpublish.fieldType.indexable'
     # are registered to this one using compilation pass
     ezpublish.search.common.field_registry:
-        class: %ezpublish.search.common.field_registry.class%
+        class: "%ezpublish.search.common.field_registry.class%"
 
     # Mapping for our internal search field types
     ezpublish.search.common.field_name_generator:
-        class: %ezpublish.search.common.field_name_generator.class%
+        class: "%ezpublish.search.common.field_name_generator.class%"
         arguments:
-            - %ezpublish.search.common.field_name_generator.map%
+            - "%ezpublish.search.common.field_name_generator.map%"
 
     ezpublish.search.common.field_name_resolver:
-        class: %ezpublish.search.common.field_name_resolver.class%
+        class: "%ezpublish.search.common.field_name_resolver.class%"
         arguments:
-            - @ezpublish.search.common.field_registry
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.search.common.field_name_generator
+            - "@ezpublish.search.common.field_registry"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.search.common.field_name_generator"
 
     # Note: services tagged with 'ezpublish.search.common.field_value_mapper'
     # are registered to this one using compilation pass
     ezpublish.search.common.field_value_mapper.aggregate:
-        class: %ezpublish.search.common.field_value_mapper.aggregate.class%
+        class: "%ezpublish.search.common.field_value_mapper.aggregate.class%"

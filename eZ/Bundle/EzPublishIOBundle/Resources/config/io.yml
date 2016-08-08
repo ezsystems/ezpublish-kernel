@@ -19,16 +19,16 @@ services:
     ezpublish.core.io.metadata_handler.factory:
         class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ "@service_container" ] ]
 
     ezpublish.core.io.binarydata_handler.factory:
         class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ "@service_container" ] ]
 
     # Inject the siteaccess config into a few io services
     ezpublish.core.io.flysystem.default_adapter:
-        class: %ezpublish.core.io.flysystem.default_adapter.class%
+        class: "%ezpublish.core.io.flysystem.default_adapter.class%"
         factory: ["@ezpublish.core.io.flysystem.local_adapter_factory", build]
         arguments:
             - "$io.root_dir$"
@@ -39,47 +39,47 @@ services:
         class: eZ\Bundle\EzPublishIOBundle\DependencyInjection\Factory\LocalAdapterFactory
 
     ezpublish.core.io.prefix_url_decorator:
-        class: %ezpublish.core.io.url_decorator.absolute_prefix.class%
+        class: "%ezpublish.core.io.url_decorator.absolute_prefix.class%"
         calls:
             - [ setPrefix, [ "$io.url_prefix$" ] ]
 
     # Base service for flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem:
         abstract: true
-        class: %ezpublish.core.io.metadata_handler.flysystem.class%
+        class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - ~
 
     # Default flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem.default:
-        class: %ezpublish.core.io.metadata_handler.flysystem.class%
+        class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
-            - @ezpublish.core.io.flysystem.default_filesystem
+            - "@ezpublish.core.io.flysystem.default_filesystem"
 
     # Base service for flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem:
         abstract: true
-        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
             - ~
-            - @ezpublish.core.io.default_url_decorator
+            - "@ezpublish.core.io.default_url_decorator"
 
     # Default flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem.default:
-        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
-            - @ezpublish.core.io.flysystem.default_filesystem
-            - @ezpublish.core.io.default_url_decorator
+            - "@ezpublish.core.io.flysystem.default_filesystem"
+            - "@ezpublish.core.io.default_url_decorator"
 
     ezpublish.core.io.image_fieldtype.legacy_url_decorator:
-        class: %ezpublish.core.io.url_decorator.prefix.class%
+        class: "%ezpublish.core.io.url_decorator.prefix.class%"
         calls:
             - [setPrefix, ["$io.legacy_url_prefix$"]]
 
     ezpublish.core.io.stream_file_listener:
-        class: %ezpublish.core.io.stream_file_listener.class%
+        class: "%ezpublish.core.io.stream_file_listener.class%"
         arguments:
-            - @ezpublish.fieldtype.ezimage.io_service
-            - @ezpublish.config.resolver
+            - "@ezpublish.fieldtype.ezimage.io_service"
+            - "@ezpublish.config.resolver"
         tags:
             - { name: kernel.event_subscriber }
