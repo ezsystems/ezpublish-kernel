@@ -10,14 +10,23 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 abstract class AbstractPurgeForContentSlotTest extends AbstractSlotTest implements PurgeForContentExpectation
 {
-    private static $contentId = 42;
+    protected static $contentId = 42;
+    protected static $locationIds = [];
 
     /**
      * @return mixed
      */
     public static function getContentId()
     {
-        return self::$contentId;
+        return static::$contentId;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public static function getLocationIds()
+    {
+        return static::$locationIds;
     }
 
     /**
@@ -25,7 +34,7 @@ abstract class AbstractPurgeForContentSlotTest extends AbstractSlotTest implemen
      */
     public function testReceivePurgesCacheForContent($signal)
     {
-        $this->cachePurgerMock->expects($this->once())->method('purgeForContent')->with(self::getContentId());
+        $this->cachePurgerMock->expects($this->once())->method('purgeForContent')->with(self::getContentId(), self::getLocationIds());
         $this->cachePurgerMock->expects($this->never())->method('purgeAll');
         parent::receive($signal);
     }

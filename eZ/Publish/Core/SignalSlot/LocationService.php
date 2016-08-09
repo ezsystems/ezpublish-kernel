@@ -335,6 +335,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'contentId' => $location->contentId,
                     'locationId' => $location->id,
+                    'parentLocationId' => $location->parentLocationId,
                 )
             )
         );
