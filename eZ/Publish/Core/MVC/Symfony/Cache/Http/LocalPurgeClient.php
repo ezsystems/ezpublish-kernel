@@ -30,7 +30,7 @@ class LocalPurgeClient implements PurgeClientInterface
     }
 
     /**
-     * Triggers the cache purge $cacheElements.
+     * Triggers the cache purge $locationIds.
      *
      * @param mixed $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
      */

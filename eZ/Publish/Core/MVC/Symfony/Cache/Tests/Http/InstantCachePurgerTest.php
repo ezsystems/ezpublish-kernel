@@ -69,7 +69,7 @@ class InstantCachePurgerTest extends PHPUnit_Framework_TestCase
     public function testPurgeForContent()
     {
         $contentId = 123;
-        $contentInfo = new ContentInfo(['id' => $contentId]);
+        $contentInfo = new ContentInfo(['id' => $contentId, 'published' => true]);
         // Assume listeners have added locations.
         // Adding duplicates on purpose.
         $locationIds = [123, 456, 789, 234, 567];

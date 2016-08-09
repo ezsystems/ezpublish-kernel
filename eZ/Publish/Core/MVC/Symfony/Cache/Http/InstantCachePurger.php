@@ -45,33 +45,38 @@ class InstantCachePurger implements GatewayCachePurger
     }
 
     /**
-     * @deprecated as of 6.0. Will be removed in 7.0. Use purgeForContent() instead.
-     *
-     * @param mixed $cacheElements
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function purge($cacheElements)
+    public function purge($locationIds)
     {
-        $this->purgeClient->purge((array)$cacheElements);
+        $this->purgeClient->purge((array)$locationIds);
 
-        return $cacheElements;
+        return $locationIds;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function purgeAll()
     {
         $this->purgeClient->purgeAll();
     }
 
-    public function purgeForContent($contentId)
+    /**
+     * {@inheritdoc}
+     */
+    public function purgeForContent($contentId, $locationIds = [])
     {
         $contentInfo = $this->contentService->loadContentInfo($contentId);
-        $event = new ContentCacheClearEvent($contentInfo);
-        $this->eventDispatcher->dispatch(MVCEvents::CACHE_CLEAR_CONTENT, $event);
 
-        $locationIds = [];
-        foreach ($event->getLocationsToClear() as $location) {
-            $locationIds[] = $location->id;
+        // Can only gather relevant locations using ContentCacheClearEvent on published content
+        if ($contentInfo->published) {
+            $event = new ContentCacheClearEvent($contentInfo);
+            $this->eventDispatcher->dispatch(MVCEvents::CACHE_CLEAR_CONTENT, $event);
+
+            foreach ($event->getLocationsToClear() as $location) {
+                $locationIds[] = $location->id;
+            }
         }
 
         $this->purgeClient->purge(array_unique($locationIds));
