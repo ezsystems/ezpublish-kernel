@@ -33,6 +33,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
@@ -466,11 +467,14 @@ class ContentService implements ContentServiceInterface
      * In 4.x at least one location has to be provided in the location creation array.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
-     *                                                                        or there is no location provided (4.x) or multiple locations
-     *                                                                        are under the same parent or if the a field value is not accepted by the field type
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an empty value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the provided remoteId exists in the system, required properties on
+     *                                                                        struct are missing or invalid, or if multiple locations are under the
+     *                                                                        same parent.
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid,
+     *                                                                               or if a required field is missing / set to an empty value.
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType,
+     *                                                                          or value is set for non-translatable field in language
+     *                                                                          other than main.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs For each location parent under which a location should be created for the content
@@ -572,9 +576,11 @@ class ContentService implements ContentServiceInterface
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmptyValue = true;
                     if ($fieldDefinition->isRequired) {
-                        throw new ContentValidationException(
+                        $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
                             "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
-                            ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode]
+                            null,
+                            ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode],
+                            'empty'
                         );
                     }
                 } else {
@@ -1119,8 +1125,10 @@ class ContentService implements ContentServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to update this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid, or if a required field is missing or is set to an empty value.
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType
+     *                                                                          or value is set for non-translatable field in language
+     *                                                                          other than main.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
      * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
@@ -1140,8 +1148,12 @@ class ContentService implements ContentServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentUpdateStruct is not valid
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a property on the struct is invalid.
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid,
+     *                                                                               or if a required field is missing / set to an empty value.
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType,
+     *                                                                          or value is set for non-translatable field in language
+     *                                                                          other than main.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
@@ -1216,9 +1228,11 @@ class ContentService implements ContentServiceInterface
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmpty = true;
                     if ($fieldDefinition->isRequired) {
-                        throw new ContentValidationException(
+                        $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
                             "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
-                            ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode]
+                            null,
+                            ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode],
+                            'empty'
                         );
                     }
                 } else {

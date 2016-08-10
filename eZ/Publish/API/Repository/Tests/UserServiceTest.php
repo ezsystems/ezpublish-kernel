@@ -327,10 +327,10 @@ class UserServiceTest extends BaseTest
      * Test for the createUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
-    public function testCreateUserGroupThrowsContentValidationException()
+    public function testCreateUserGroupWhenMissingField()
     {
         $repository = $this->getRepository();
 
@@ -346,7 +346,7 @@ class UserServiceTest extends BaseTest
         // Instantiate a new create struct
         $userGroupCreate = $userService->newUserGroupCreateStruct('eng-US');
 
-        // This call will fail with a "ContentValidationException", because the
+        // This call will fail with a "ContentFieldValidationException", because the
         // only mandatory field "name" is not set.
         $userService->createUserGroup($userGroupCreate, $parentUserGroup);
         /* END: Use Case */
@@ -854,10 +854,10 @@ class UserServiceTest extends BaseTest
      * Test for the createUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::createUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testCreateUserThrowsContentValidationExceptionForMissingField()
+    public function testCreateUserWhenMissingField()
     {
         $repository = $this->getRepository();
 
@@ -883,7 +883,7 @@ class UserServiceTest extends BaseTest
         // Load parent group for the user
         $group = $userService->loadUserGroup($editorsGroupId);
 
-        // This call will fail with a "ContentValidationException", because the
+        // This call will fail with a "ContentFieldValidationException", because the
         // mandatory fields "first_name" and "last_name" are not set.
         $userService->createUser($userCreate, array($group));
         /* END: Use Case */
@@ -1544,10 +1544,10 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
-    public function testUpdateUserThrowsContentValidationException()
+    public function testUpdateUserWhenMissingField()
     {
         $repository = $this->getRepository();
 
@@ -1569,7 +1569,7 @@ class UserServiceTest extends BaseTest
         // Set the content update struct.
         $userUpdate->contentUpdateStruct = $contentUpdate;
 
-        // This call will fail with a "ContentValidationException" because the
+        // This call will fail with a "ContentFieldValidationException" because the
         // mandatory field "first_name" is set to an empty value.
         $userService->updateUser($user, $userUpdate);
 

@@ -341,7 +341,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Violates string length constraint
         $contentCreate1->setField('short_name', str_repeat('a', 200));
 
-        // Throws ContentValidationException, since short_name does not pass
+        // Throws ContentFieldValidationException, since short_name does not pass
         // validation of the string length validator
         $draft = $contentService->createContent($contentCreate1);
         /* END: Use Case */
@@ -351,10 +351,10 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the createContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentThrowsContentValidationException()
+    public function testCreateContentRequiredFieldMissing()
     {
         $repository = $this->getRepository();
 
@@ -367,7 +367,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate1 = $contentService->newContentCreateStruct($contentType, 'eng-US');
         // Required field "name" is not set
 
-        // Throws a ContentValidationException, since a required field is
+        // Throws a ContentFieldValidationException, since a required field is
         // missing
         $draft = $contentService->createContent($contentCreate1);
         /* END: Use Case */
@@ -1418,10 +1418,10 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the updateContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
-    public function testUpdateContentThrowsContentValidationExceptionWhenMandatoryFieldIsEmpty()
+    public function testUpdateContentWhenMandatoryFieldIsEmpty()
     {
         $repository = $this->getRepository();
 
@@ -1437,7 +1437,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Don't set this, then the above call without languageCode will fail
         $contentUpdateStruct->initialLanguageCode = 'eng-US';
 
-        // This call will fail with a "ContentValidationException", because the
+        // This call will fail with a "ContentFieldValidationException", because the
         // mandatory "name" field is empty.
         $contentService->updateContent(
             $draft->getVersionInfo(),

@@ -1108,11 +1108,11 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      *
      * @return array
      */
-    public function testCreateContentThrowsContentValidationRequiredFieldDefaultValueEmpty()
+    public function testCreateContentRequiredFieldDefaultValueEmpty()
     {
         $testContentType = $this->createTestContentType();
 
@@ -1434,9 +1434,9 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the updateContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      */
-    public function testUpdateContentThrowsContentValidationExceptionRequiredFieldEmpty()
+    public function testUpdateContentRequiredFieldEmpty()
     {
         list($content, $contentType) = $this->createTestContent();
 

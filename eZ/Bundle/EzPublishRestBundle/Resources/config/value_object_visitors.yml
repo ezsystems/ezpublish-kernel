@@ -8,6 +8,7 @@ parameters:
     ezpublish_rest.output.value_object_visitor.UnauthorizedException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UnauthorizedException
     ezpublish_rest.output.value_object_visitor.BadStateException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\BadStateException
     ezpublish_rest.output.value_object_visitor.BadRequestException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\BadRequestException
+    ezpublish_rest.output.value_object_visitor.ContentFieldValidationException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentFieldValidationException
     ezpublish_rest.output.value_object_visitor.ForbiddenException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ForbiddenException
     ezpublish_rest.output.value_object_visitor.Exception.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
     ezpublish_rest.output.value_object_visitor.NotImplementedException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\NotImplementedException
@@ -194,6 +195,14 @@ services:
         arguments: [ "%kernel.debug%", "@translator" ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Exceptions\BadRequestException }
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Common\Exceptions\Parser }
+
+    ezpublish_rest.output.value_object_visitor.ContentFieldValidationException:
+        parent: ezpublish_rest.output.value_object_visitor.BadRequestException
+        class: "%ezpublish_rest.output.value_object_visitor.ContentFieldValidationException.class%"
+        arguments: [ "%kernel.debug%", "@translator" ]
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Exceptions\ContentFieldValidationException }
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Common\Exceptions\Parser }
 
     ezpublish_rest.output.value_object_visitor.ForbiddenException:

@@ -47,6 +47,7 @@ class ErrorMessage extends BaseParser
             'code' => $data['errorCode'],
             'message' => isset($data['errorMessage']) ? $data['errorMessage'] : null,
             'description' => isset($data['errorDescription']) ? $data['errorDescription'] : null,
+            'details' => isset($data['errorDetails']) ? $data['errorDetails'] : null,
             'trace' => isset($data['trace']) ? $data['trace'] : null,
             'file' => isset($data['file']) ? $data['file'] : null,
             'line' => isset($data['line']) ? $data['line'] : null,

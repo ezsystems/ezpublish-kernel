@@ -2001,7 +2001,7 @@ class ContentTest extends BaseServiceMockTest
     }
 
     /**
-     * Asserts behaviour necessary for testing ContentValidationException because of required
+     * Asserts behaviour necessary for testing ContentFieldValidationException because of required
      * field being empty.
      *
      * @param string $mainLanguageCode
@@ -2010,7 +2010,7 @@ class ContentTest extends BaseServiceMockTest
      *
      * @return mixed
      */
-    protected function assertForTestCreateContentThrowsContentValidationExceptionRequiredField(
+    protected function assertForTestCreateContentRequiredField(
         $mainLanguageCode,
         array $structFields,
         array $fieldDefinitions
@@ -2150,9 +2150,9 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionRequiredField
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      */
-    public function testCreateContentThrowsContentValidationExceptionRequiredField(
+    public function testCreateContentRequiredField(
         $mainLanguageCode,
         $structFields,
         $identifier,
@@ -2170,7 +2170,7 @@ class ContentTest extends BaseServiceMockTest
                 )
             ),
         );
-        $contentCreateStruct = $this->assertForTestCreateContentThrowsContentValidationExceptionRequiredField(
+        $contentCreateStruct = $this->assertForTestCreateContentRequiredField(
             $mainLanguageCode,
             $structFields,
             $fieldDefinitions
@@ -4795,7 +4795,7 @@ class ContentTest extends BaseServiceMockTest
         );
     }
 
-    public function assertForTestUpdateContentThrowsContentValidationExceptionRequiredField(
+    public function assertForTestUpdateContentRequiredField(
         $initialLanguageCode,
         $structFields,
         $existingFields,
@@ -4916,7 +4916,7 @@ class ContentTest extends BaseServiceMockTest
         return array($content->versionInfo, $contentUpdateStruct);
     }
 
-    public function providerForTestUpdateContentThrowsContentValidationExceptionRequiredField()
+    public function providerForTestUpdateContentRequiredField()
     {
         return array(
             array(
@@ -4942,10 +4942,10 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @dataProvider providerForTestUpdateContentThrowsContentValidationExceptionRequiredField
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @dataProvider providerForTestUpdateContentRequiredField
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      */
-    public function testUpdateContentThrowsContentValidationExceptionRequiredField(
+    public function testUpdateContentRequiredField(
         $initialLanguageCode,
         $structFields,
         $identifier,
@@ -4974,7 +4974,7 @@ class ContentTest extends BaseServiceMockTest
             ),
         );
         list($versionInfo, $contentUpdateStruct) =
-            $this->assertForTestUpdateContentThrowsContentValidationExceptionRequiredField(
+            $this->assertForTestUpdateContentRequiredField(
                 $initialLanguageCode,
                 $structFields,
                 $existingFields,
