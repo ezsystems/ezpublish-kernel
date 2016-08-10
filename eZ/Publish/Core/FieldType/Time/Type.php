@@ -213,7 +213,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );
@@ -227,7 +227,7 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of boolean type",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );
@@ -243,7 +243,7 @@ class Type extends FieldType
                             "Setting '%setting%' is of unknown type",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );

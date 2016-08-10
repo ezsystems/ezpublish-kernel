@@ -527,7 +527,7 @@ class FloatTest extends FieldTypeTest
      *                  "The value can not be lower than %size%.",
      *                  null,
      *                  array(
-     *                      "size" => 5
+     *                      "%size%" => 5
      *                  ),
      *              ),
      *          ),
@@ -582,7 +582,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be lower than %size%.',
                         null,
                         array(
-                            'size' => 5.1,
+                            '%size%' => 5.1,
                         ),
                         'value'
                     ),
@@ -603,7 +603,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be higher than %size%.',
                         null,
                         array(
-                            'size' => 10.5,
+                            '%size%' => 10.5,
                         ),
                         'value'
                     ),
@@ -624,7 +624,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be higher than %size%.',
                         null,
                         array(
-                            'size' => 5.1,
+                            '%size%' => 5.1,
                         ),
                         'value'
                     ),
@@ -632,7 +632,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be lower than %size%.',
                         null,
                         array(
-                            'size' => 10.5,
+                            '%size%' => 10.5,
                         ),
                         'value'
                     ),

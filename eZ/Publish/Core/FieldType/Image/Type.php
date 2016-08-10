@@ -179,7 +179,7 @@ class Type extends FieldType
                             'The file size cannot exceed %size% byte.',
                             'The file size cannot exceed %size% bytes.',
                             array(
-                                'size' => $parameters['maxFileSize'],
+                                '%size%' => $parameters['maxFileSize'],
                             ),
                             'fileSize'
                         );
@@ -210,8 +210,8 @@ class Type extends FieldType
                             'Validator %validator% expects parameter %parameter% to be set.',
                             null,
                             array(
-                                'validator' => $validatorIdentifier,
-                                'parameter' => 'maxFileSize',
+                                '%validator%' => $validatorIdentifier,
+                                '%parameter%' => 'maxFileSize',
                             ),
                             "[$validatorIdentifier]"
                         );
@@ -222,9 +222,9 @@ class Type extends FieldType
                             'Validator %validator% expects parameter %parameter% to be of %type%.',
                             null,
                             array(
-                                'validator' => $validatorIdentifier,
-                                'parameter' => 'maxFileSize',
-                                'type' => 'integer',
+                                '%validator%' => $validatorIdentifier,
+                                '%parameter%' => 'maxFileSize',
+                                '%type%' => 'integer',
                             ),
                             "[$validatorIdentifier][maxFileSize]"
                         );
@@ -235,7 +235,7 @@ class Type extends FieldType
                         "Validator '%validator%' is unknown",
                         null,
                         array(
-                            'validator' => $validatorIdentifier,
+                            '%validator%' => $validatorIdentifier,
                         ),
                         "[$validatorIdentifier]"
                     );
