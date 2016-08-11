@@ -56,7 +56,7 @@ class Type extends FieldType
                     "Validator '%validator%' is unknown",
                     null,
                     array(
-                        'validator' => $validatorIdentifier,
+                        '%validator%' => $validatorIdentifier,
                     )
                 );
                 continue;
@@ -98,7 +98,7 @@ class Type extends FieldType
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
                 array(
-                    'size' => $constraints['maxStringLength'],
+                    '%size%' => $constraints['maxStringLength'],
                 ),
                 'text'
             );
@@ -112,7 +112,7 @@ class Type extends FieldType
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
                 array(
-                    'size' => $constraints['minStringLength'],
+                    '%size%' => $constraints['minStringLength'],
                 ),
                 'text'
             );
