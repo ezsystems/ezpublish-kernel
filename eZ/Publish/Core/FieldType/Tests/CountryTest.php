@@ -638,7 +638,7 @@ class CountryTest extends FieldTypeTest
                         "Country with Alpha2 code '%alpha2%' is not defined in FieldType settings.",
                         null,
                         array(
-                            'alpha2' => 'LE',
+                            '%alpha2%' => 'LE',
                         ),
                         'countries'
                     ),

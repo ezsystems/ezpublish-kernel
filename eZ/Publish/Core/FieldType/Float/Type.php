@@ -54,7 +54,7 @@ class Type extends FieldType
                     "Validator '%validator%' is unknown",
                     null,
                     array(
-                        'validator' => $validatorIdentifier,
+                        '%validator%' => $validatorIdentifier,
                     ),
                     "[$validatorIdentifier]"
                 );
@@ -71,7 +71,7 @@ class Type extends FieldType
                                 "Validator parameter '%parameter%' value must be of numeric type",
                                 null,
                                 array(
-                                    'parameter' => $name,
+                                    '%parameter%' => $name,
                                 ),
                                 "[$validatorIdentifier][$name]"
                             );
@@ -82,7 +82,7 @@ class Type extends FieldType
                             "Validator parameter '%parameter%' is unknown",
                             null,
                             array(
-                                'parameter' => $name,
+                                '%parameter%' => $name,
                             ),
                             "[$validatorIdentifier][$name]"
                         );
@@ -124,7 +124,7 @@ class Type extends FieldType
                 'The value can not be higher than %size%.',
                 null,
                 array(
-                    'size' => $constraints['maxFloatValue'],
+                    '%size%' => $constraints['maxFloatValue'],
                 ),
                 'value'
             );
@@ -136,7 +136,7 @@ class Type extends FieldType
                 'The value can not be lower than %size%.',
                 null,
                 array(
-                    'size' => $constraints['minFloatValue'],
+                    '%size%' => $constraints['minFloatValue'],
                 ),
                 'value'
             );

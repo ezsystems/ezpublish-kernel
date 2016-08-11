@@ -464,7 +464,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      *                  "The value can not be lower than %size%.",
      *                  null,
      *                  array(
-     *                      "size" => 5
+     *                      "%size%" => 5
      *                  ),
      *              ),
      *          ),
