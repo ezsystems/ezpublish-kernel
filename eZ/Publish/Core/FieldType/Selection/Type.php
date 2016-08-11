@@ -62,9 +62,9 @@ class Type extends FieldType
                             "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
                             array(
-                                'fieldType' => $this->getFieldTypeIdentifier(),
-                                'setting' => $settingKey,
-                                'type' => 'bool',
+                                '%fieldType%' => $this->getFieldTypeIdentifier(),
+                                '%setting%' => $settingKey,
+                                '%type%' => 'bool',
                             ),
                             "[$settingKey]"
                         );
@@ -76,9 +76,9 @@ class Type extends FieldType
                             "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
                             array(
-                                'fieldType' => $this->getFieldTypeIdentifier(),
-                                'setting' => $settingKey,
-                                'type' => 'hash',
+                                '%fieldType%' => $this->getFieldTypeIdentifier(),
+                                '%setting%' => $settingKey,
+                                '%type%' => 'hash',
                             ),
                             "[$settingKey]"
                         );
@@ -89,7 +89,7 @@ class Type extends FieldType
                         "Setting '%setting%' is unknown",
                         null,
                         array(
-                            'setting' => $settingKey,
+                            '%setting%' => $settingKey,
                         ),
                         "[$settingKey]"
                     );
@@ -207,7 +207,7 @@ class Type extends FieldType
                     'Option with index %index% does not exist in the field definition.',
                     null,
                     array(
-                        'index' => $optionIndex,
+                        '%index%' => $optionIndex,
                     ),
                     'selection'
                 );

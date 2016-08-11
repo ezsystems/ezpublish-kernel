@@ -153,7 +153,7 @@ class Type extends FieldType
                     "Country with Alpha2 code '%alpha2%' is not defined in FieldType settings.",
                     null,
                     array(
-                        'alpha2' => $alpha2,
+                        '%alpha2%' => $alpha2,
                     ),
                     'countries'
                 );
@@ -256,7 +256,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );
@@ -270,7 +270,7 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of boolean type",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );

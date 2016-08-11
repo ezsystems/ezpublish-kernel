@@ -50,7 +50,7 @@ class IntegerValueValidator extends Validator
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
                             array(
-                                'parameter' => $name,
+                                '%parameter%' => $name,
                             )
                         );
                     }
@@ -60,7 +60,7 @@ class IntegerValueValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            'parameter' => $name,
+                            '%parameter%' => $name,
                         )
                     );
             }
@@ -91,7 +91,7 @@ class IntegerValueValidator extends Validator
                 'The value can not be higher than %size%.',
                 null,
                 array(
-                    'size' => $this->constraints['maxIntegerValue'],
+                    '%size%' => $this->constraints['maxIntegerValue'],
                 )
             );
             $isValid = false;
@@ -102,7 +102,7 @@ class IntegerValueValidator extends Validator
                 'The value can not be lower than %size%.',
                 null,
                 array(
-                    'size' => $this->constraints['minIntegerValue'],
+                    '%size%' => $this->constraints['minIntegerValue'],
                 )
             );
             $isValid = false;

@@ -374,7 +374,7 @@ class Type extends FieldType
                                 "Setting '%setting%' value must be of integer type",
                                 null,
                                 array(
-                                    'setting' => $name,
+                                    '%setting%' => $name,
                                 ),
                                 "[$name]"
                             );
@@ -386,7 +386,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );

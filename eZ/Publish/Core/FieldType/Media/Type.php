@@ -99,7 +99,7 @@ class Type extends BaseType
                                 "Setting '%setting%' is of unknown type",
                                 null,
                                 array(
-                                    'setting' => $name,
+                                    '%setting%' => $name,
                                 ),
                                 "[$name]"
                             );
@@ -111,7 +111,7 @@ class Type extends BaseType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );

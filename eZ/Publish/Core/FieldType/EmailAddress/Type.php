@@ -47,7 +47,7 @@ class Type extends FieldType
                     "Validator '%validator%' is unknown",
                     null,
                     array(
-                        'validator' => $validatorIdentifier,
+                        '%validator%' => $validatorIdentifier,
                     ),
                     "[$validatorIdentifier]"
                 );

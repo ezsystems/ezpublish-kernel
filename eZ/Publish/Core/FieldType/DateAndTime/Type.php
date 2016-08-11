@@ -271,7 +271,7 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    ['setting' => $name],
+                    ['%setting%' => $name],
                     "[$name]"
                 );
             }
