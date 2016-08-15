@@ -1041,7 +1041,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertEquals(
             new Message(
                 "Validator parameter '%parameter%' value must be of integer type",
-                array('%parameter%' => 'minIntegerValue')
+                array('parameter' => 'minIntegerValue')
             ),
             $validationErrors['temperature'][0]->getTranslatableMessage()
         );
@@ -1423,7 +1423,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertEquals(
             new Message(
                 "Validator parameter '%parameter%' value must be of integer type",
-                array('%parameter%' => 'maxIntegerValue')
+                array('parameter' => 'maxIntegerValue')
             ),
             $validationErrors['temperature'][0]->getTranslatableMessage()
         );

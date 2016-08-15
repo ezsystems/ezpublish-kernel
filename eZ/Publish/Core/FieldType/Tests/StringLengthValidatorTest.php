@@ -216,19 +216,19 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 '',
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
-                array('%size%' => $this->getMinStringLength()),
+                array('size' => $this->getMinStringLength()),
             ),
             array(
                 'Hi!',
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
-                array('%size%' => $this->getMinStringLength()),
+                array('size' => $this->getMinStringLength()),
             ),
             array(
                 '0123456789!',
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
-                array('%size%' => $this->getMaxStringLength()),
+                array('size' => $this->getMaxStringLength()),
             ),
         );
     }
@@ -315,7 +315,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('%parameter%' => 'minStringLength'),
+                    array('parameter' => 'minStringLength'),
                 ),
             ),
             array(
@@ -324,7 +324,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('%parameter%' => 'minStringLength'),
+                    array('parameter' => 'minStringLength'),
                 ),
             ),
             array(
@@ -334,7 +334,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('%parameter%' => 'minStringLength'),
+                    array('parameter' => 'minStringLength'),
                 ),
             ),
             array(
@@ -344,7 +344,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('%parameter%' => 'maxStringLength'),
+                    array('parameter' => 'maxStringLength'),
                 ),
             ),
             array(
@@ -354,7 +354,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('%parameter%' => 'minStringLength'),
+                    array('parameter' => 'minStringLength'),
                 ),
             ),
             array(
@@ -367,8 +367,8 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                     "Validator parameter '%parameter%' value must be of integer type",
                 ),
                 array(
-                    array('%parameter%' => 'minStringLength'),
-                    array('%parameter%' => 'maxStringLength'),
+                    array('parameter' => 'minStringLength'),
+                    array('parameter' => 'maxStringLength'),
                 ),
             ),
             array(
@@ -377,7 +377,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('%parameter%' => 'brljix'),
+                    array('parameter' => 'brljix'),
                 ),
             ),
             array(
@@ -387,7 +387,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('%parameter%' => 'brljix'),
+                    array('parameter' => 'brljix'),
                 ),
             ),
         );

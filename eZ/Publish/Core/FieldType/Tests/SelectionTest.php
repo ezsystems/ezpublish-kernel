@@ -545,7 +545,7 @@ class SelectionTest extends FieldTypeTest
                         'Option with index %index% does not exist in the field definition.',
                         null,
                         array(
-                            '%index%' => 3,
+                            'index' => 3,
                         ),
                         'selection'
                     ),

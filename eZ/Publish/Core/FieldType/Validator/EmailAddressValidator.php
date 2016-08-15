@@ -52,7 +52,7 @@ class EmailAddressValidator extends Validator
                             "Validator parameter '%parameter%' value must be regex for now",
                             null,
                             array(
-                                '%parameter%' => $name,
+                                'parameter' => $name,
                             ),
                             "[EmailAddressValidator][$name]"
                         );
@@ -63,7 +63,7 @@ class EmailAddressValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            '%parameter%' => $name,
+                            'parameter' => $name,
                         ),
                         "[EmailAddressValidator][$name]"
                     );

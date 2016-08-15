@@ -218,7 +218,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
                     'The file size cannot exceed %size% byte.',
                     'The file size cannot exceed %size% bytes.',
                 ),
-                array('%size%' => $this->getMaxFileSize()),
+                array('size' => $this->getMaxFileSize()),
             ),
         );
     }
@@ -282,22 +282,22 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
             array(
                 array('maxFileSize' => true),
                 array("Validator parameter '%parameter%' value must be of integer type"),
-                array('%parameter%' => 'maxFileSize'),
+                array('parameter' => 'maxFileSize'),
             ),
             array(
                 array('maxFileSize' => 'five thousand bytes'),
                 array("Validator parameter '%parameter%' value must be of integer type"),
-                array('%parameter%' => 'maxFileSize'),
+                array('parameter' => 'maxFileSize'),
             ),
             array(
                 array('maxFileSize' => new \DateTime()),
                 array("Validator parameter '%parameter%' value must be of integer type"),
-                array('%parameter%' => 'maxFileSize'),
+                array('parameter' => 'maxFileSize'),
             ),
             array(
                 array('brljix' => 12345),
                 array("Validator parameter '%parameter%' is unknown"),
-                array('%parameter%' => 'brljix'),
+                array('parameter' => 'brljix'),
             ),
         );
     }

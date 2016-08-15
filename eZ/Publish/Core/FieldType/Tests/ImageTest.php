@@ -633,7 +633,7 @@ class ImageTest extends FieldTypeTest
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
                         array(
-                            '%size%' => 0.01,
+                            'size' => 0.01,
                         ),
                         'fileSize'
                     ),
@@ -687,7 +687,7 @@ class ImageTest extends FieldTypeTest
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
                         array(
-                            '%size%' => 0.01,
+                            'size' => 0.01,
                         ),
                         'fileSize'
                     ),

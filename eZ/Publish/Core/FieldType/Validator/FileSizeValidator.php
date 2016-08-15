@@ -44,7 +44,7 @@ class FileSizeValidator extends Validator
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
                             array(
-                                '%parameter%' => $name,
+                                'parameter' => $name,
                             )
                         );
                     }
@@ -54,7 +54,7 @@ class FileSizeValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            '%parameter%' => $name,
+                            'parameter' => $name,
                         )
                     );
             }
@@ -79,7 +79,7 @@ class FileSizeValidator extends Validator
                 'The file size cannot exceed %size% byte.',
                 'The file size cannot exceed %size% bytes.',
                 array(
-                    '%size%' => $this->constraints['maxFileSize'],
+                    'size' => $this->constraints['maxFileSize'],
                 )
             );
             $isValid = false;

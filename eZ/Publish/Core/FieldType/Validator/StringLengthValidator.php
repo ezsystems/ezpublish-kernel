@@ -50,7 +50,7 @@ class StringLengthValidator extends Validator
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
                             array(
-                                '%parameter%' => $name,
+                                'parameter' => $name,
                             )
                         );
                     } elseif ($value < 0) {
@@ -58,7 +58,7 @@ class StringLengthValidator extends Validator
                             "Validator parameter '%parameter%' value can't be negative",
                             null,
                             array(
-                                '%parameter%' => $name,
+                                'parameter' => $name,
                             )
                         );
                     }
@@ -68,7 +68,7 @@ class StringLengthValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            '%parameter%' => $name,
+                            'parameter' => $name,
                         )
                     );
             }
@@ -77,7 +77,11 @@ class StringLengthValidator extends Validator
         // if no errors above, check if minStringLength is shorter or equal than maxStringLength
         if (empty($validationErrors) && !$this->validateConstraintsOrder($constraints)) {
             $validationErrors[] = new ValidationError(
-                "Validator parameter 'maxStringLength' can't be shorter than validator parameter 'minStringLength' value"
+                "Validator parameter 'maxStringLength' can't be shorter than validator parameter 'minStringLength' value",
+                null,
+                array(
+                    'parameter' => 'minStringLength',
+                )
             );
         }
 
@@ -119,7 +123,7 @@ class StringLengthValidator extends Validator
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
                 array(
-                    '%size%' => $this->constraints['maxStringLength'],
+                    'size' => $this->constraints['maxStringLength'],
                 )
             );
             $isValid = false;
@@ -131,7 +135,7 @@ class StringLengthValidator extends Validator
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
                 array(
-                    '%size%' => $this->constraints['minStringLength'],
+                    'size' => $this->constraints['minStringLength'],
                 )
             );
             $isValid = false;
