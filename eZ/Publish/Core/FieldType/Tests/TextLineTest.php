@@ -631,7 +631,7 @@ class TextLineTest extends FieldTypeTest
                         'The string can not be shorter than %size% character.',
                         'The string can not be shorter than %size% characters.',
                         array(
-                            '%size%' => 5,
+                            'size' => 5,
                         ),
                         'text'
                     ),
@@ -652,7 +652,7 @@ class TextLineTest extends FieldTypeTest
                         'The string can not exceed %size% character.',
                         'The string can not exceed %size% characters.',
                         array(
-                            '%size%' => 10,
+                            'size' => 10,
                         ),
                         'text'
                     ),
@@ -673,7 +673,7 @@ class TextLineTest extends FieldTypeTest
                         'The string can not exceed %size% character.',
                         'The string can not exceed %size% characters.',
                         array(
-                            '%size%' => 5,
+                            'size' => 5,
                         ),
                         'text'
                     ),
@@ -681,7 +681,7 @@ class TextLineTest extends FieldTypeTest
                         'The string can not be shorter than %size% character.',
                         'The string can not be shorter than %size% characters.',
                         array(
-                            '%size%' => 10,
+                            'size' => 10,
                         ),
                         'text'
                     ),

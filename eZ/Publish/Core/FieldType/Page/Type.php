@@ -80,7 +80,7 @@ class Type extends FieldType
                                 "Layout '{$value}' for setting '%setting%' is not available",
                                 null,
                                 array(
-                                    '%setting%' => $name,
+                                    'setting' => $name,
                                 ),
                                 "[$name]"
                             );
@@ -92,7 +92,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        '%setting%' => $name,
+                        'setting' => $name,
                     ),
                     "[$name]"
                 );

@@ -66,7 +66,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        '%setting%' => $name,
+                        'setting' => $name,
                     ),
                     "[$name]"
                 );
@@ -80,9 +80,9 @@ class Type extends FieldType
                             "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
                             null,
                             array(
-                                '%setting%' => $name,
-                                '%selection_browse%' => self::SELECTION_BROWSE,
-                                '%selection_dropdown%' => self::SELECTION_DROPDOWN,
+                                'setting' => $name,
+                                'selection_browse' => self::SELECTION_BROWSE,
+                                'selection_dropdown' => self::SELECTION_DROPDOWN,
                             ),
                             "[$name]"
                         );
@@ -94,7 +94,7 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of either null, string or integer",
                             null,
                             array(
-                                '%setting%' => $name,
+                                'setting' => $name,
                             ),
                             "[$name]"
                         );
@@ -106,7 +106,7 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of array type",
                             null,
                             array(
-                                '%setting%' => $name,
+                                'setting' => $name,
                             ),
                             "[$name]"
                         );

@@ -572,7 +572,7 @@ class IntegerTest extends FieldTypeTest
                         'The value can not be lower than %size%.',
                         null,
                         array(
-                            '%size%' => 5,
+                            'size' => 5,
                         ),
                         'value'
                     ),
@@ -593,7 +593,7 @@ class IntegerTest extends FieldTypeTest
                         'The value can not be higher than %size%.',
                         null,
                         array(
-                            '%size%' => 10,
+                            'size' => 10,
                         ),
                         'value'
                     ),
@@ -614,7 +614,7 @@ class IntegerTest extends FieldTypeTest
                         'The value can not be higher than %size%.',
                         null,
                         array(
-                            '%size%' => 5,
+                            'size' => 5,
                         ),
                         'value'
                     ),
@@ -622,7 +622,7 @@ class IntegerTest extends FieldTypeTest
                         'The value can not be lower than %size%.',
                         null,
                         array(
-                            '%size%' => 10,
+                            'size' => 10,
                         ),
                         'value'
                     ),

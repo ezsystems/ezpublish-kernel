@@ -210,10 +210,10 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function providerForValidateKO()
     {
         return array(
-            array(-10 / 7, 'The value can not be lower than %size%.', array('%size%' => $this->getMinFloatValue())),
-            array(0, 'The value can not be lower than %size%.', array('%size%' => $this->getMinFloatValue())),
-            array(99 / 70, 'The value can not be lower than %size%.', array('%size%' => $this->getMinFloatValue())),
-            array(111 / 70, 'The value can not be higher than %size%.', array('%size%' => $this->getMaxFloatValue())),
+            array(-10 / 7, 'The value can not be lower than %size%.', array('size' => $this->getMinFloatValue())),
+            array(0, 'The value can not be lower than %size%.', array('size' => $this->getMinFloatValue())),
+            array(99 / 70, 'The value can not be lower than %size%.', array('size' => $this->getMinFloatValue())),
+            array(111 / 70, 'The value can not be higher than %size%.', array('size' => $this->getMaxFloatValue())),
         );
     }
 
@@ -299,7 +299,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('%parameter%' => 'minFloatValue'),
+                    array('parameter' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -308,7 +308,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('%parameter%' => 'minFloatValue'),
+                    array('parameter' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -318,7 +318,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('%parameter%' => 'minFloatValue'),
+                    array('parameter' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -328,7 +328,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('%parameter%' => 'maxFloatValue'),
+                    array('parameter' => 'maxFloatValue'),
                 ),
             ),
             array(
@@ -338,7 +338,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('%parameter%' => 'minFloatValue'),
+                    array('parameter' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -351,8 +351,8 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                     "Validator parameter '%parameter%' value must be of numeric type",
                 ),
                 array(
-                    array('%parameter%' => 'minFloatValue'),
-                    array('%parameter%' => 'maxFloatValue'),
+                    array('parameter' => 'minFloatValue'),
+                    array('parameter' => 'maxFloatValue'),
                 ),
             ),
             array(
@@ -361,7 +361,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('%parameter%' => 'brljix'),
+                    array('parameter' => 'brljix'),
                 ),
             ),
             array(
@@ -371,7 +371,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('%parameter%' => 'brljix'),
+                    array('parameter' => 'brljix'),
                 ),
             ),
         );
