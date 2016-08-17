@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use PHPUnit_Framework_TestCase;
@@ -142,6 +141,11 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->event
             ->expects($this->once())
             ->method('setController');
+
+        $this->controllerResolver
+            ->expects($this->once())
+            ->method('getController')
+            ->will($this->returnValue(function () {}));
 
         $this->controllerListener->getController($this->event);
         $this->assertEquals($customController, $this->request->attributes->get('_controller'));
