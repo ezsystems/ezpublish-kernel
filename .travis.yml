@@ -17,6 +17,10 @@ addons:
     - mysql-client-5.6
     - redis-server
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 env:
   global:
     # For functional tests
