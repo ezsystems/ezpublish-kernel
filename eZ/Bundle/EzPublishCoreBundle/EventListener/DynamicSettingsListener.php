@@ -14,7 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\DependencyInjection\ExpressionLanguage;
-use Symfony\Component\DependencyInjection\IntrospectableContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -38,7 +38,7 @@ class DynamicSettingsListener implements EventSubscriberInterface
     private $expressionLanguage;
 
     /**
-     * @var IntrospectableContainerInterface
+     * @var ContainerInterface
      */
     private $container;
 
@@ -49,7 +49,7 @@ class DynamicSettingsListener implements EventSubscriberInterface
         $this->expressionLanguage = $expressionLanguage ?: new ExpressionLanguage();
     }
 
-    public function setContainer(IntrospectableContainerInterface $container)
+    public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
     }
