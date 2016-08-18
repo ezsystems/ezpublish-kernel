@@ -82,6 +82,6 @@ abstract class CriterionHandler
      */
     protected function getUniqueTableName()
     {
-        return uniqid("CriterionHandler", true);
+        return uniqid('CriterionHandler', true);
     }
 }
