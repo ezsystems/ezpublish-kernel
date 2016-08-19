@@ -19,6 +19,9 @@ parameters:
     ezpublish.http_cache.signalslot.trash.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\TrashSlot
     ezpublish.http_cache.signalslot.recover.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RecoverSlot
 
+    ezpublish.http_cache.signalslot.publish_content_type.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\PublishContentTypeSlot
+    ezpublish.http_cache.signalslot.delete_content_type.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteContentTypeSlot
+
 services:
     # Content
     ezpublish.http_cache.signalslot.abstract_content:
@@ -133,3 +136,14 @@ services:
         parent: ezpublish.http_cache.signalslot.abstract_content
         tags:
             - { name: ezpublish.api.slot, signal: TrashService\RecoverSignal }
+
+    # Content Type
+    ezpublish.http_cache.signalslot.publish_content_type:
+        class: "%ezpublish.http_cache.signalslot.publish_content_type.class%"
+        arguments: ["@ezpublish.http_cache.purge_client"]
+        tags: [{ name: ezpublish.api.slot, signal: ContentTypeService\PublishContentTypeDraftSignal }]
+
+    ezpublish.http_cache.signalslot.delete_content_type:
+        class: "%ezpublish.http_cache.signalslot.delete_content_type.class%"
+        arguments: ["@ezpublish.http_cache.purge_client"]
+        tags: [{ name: ezpublish.api.slot, signal: ContentTypeService\DeleteContentTypeSignal }]
