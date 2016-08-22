@@ -206,7 +206,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($urlAlias);
+            ->with($urlAlias)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock2 = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
@@ -228,7 +234,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('set')
-            ->with(array(42, 55));
+            ->with(array(42, 55))
+            ->will($this->returnValue($cacheItemMock2));
+
+        $cacheItemMock2
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->createCustomUrlAlias(44, '/path', true, 'eng-GB', true);
@@ -267,7 +279,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($urlAlias);
+            ->with($urlAlias)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock2 = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
@@ -289,7 +307,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('set')
-            ->with(array(55));
+            ->with(array(55))
+            ->will($this->returnValue($cacheItemMock2));
+
+        $cacheItemMock2
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->createCustomUrlAlias(44, '/path', true, 'eng-GB', true);
@@ -324,7 +348,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock
             ->expects($this->never())
@@ -381,7 +411,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(55, 58, 91));
+            ->with(array(55, 58, 91))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->listURLAliasesForLocation(44, false);
@@ -434,7 +470,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(55, 58, 91));
+            ->with(array(55, 58, 91))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->listURLAliasesForLocation(44, true);
@@ -670,13 +712,25 @@ class UrlAliasHandlerTest extends HandlerTest
         $missedUrlAliasIdCacheItem
             ->expects($this->once())
             ->method('set')
-            ->with(55);
+            ->with(55)
+            ->will($this->returnValue($missedUrlAliasIdCacheItem));
+
+        $missedUrlAliasIdCacheItem
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $newUrlAliasCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
         $newUrlAliasCacheItem
             ->expects($this->once())
              ->method('set')
-            ->with($urlAlias);
+            ->with($urlAlias)
+            ->will($this->returnValue($newUrlAliasCacheItem));
+
+        $newUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $this->cacheMock
                 ->expects($this->at(0))
@@ -801,7 +855,13 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->loadUrlAlias(55);

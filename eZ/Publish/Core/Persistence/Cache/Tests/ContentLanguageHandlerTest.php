@@ -52,7 +52,13 @@ class ContentLanguageHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Language'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Language'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock
             ->expects($this->never())
@@ -136,7 +142,13 @@ class ContentLanguageHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Language'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Language'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->load(2);

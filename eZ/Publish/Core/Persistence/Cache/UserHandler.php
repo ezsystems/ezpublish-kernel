@@ -128,7 +128,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
             if ($cache->isMiss()) {
                 $this->logger->logCall(__METHOD__, array('role' => $roleId));
                 $role = $this->persistenceHandler->userHandler()->loadRole($roleId, $status);
-                $cache->set($role);
+                $cache->set($role)->save();
             }
         } else {
             $role = $this->persistenceHandler->userHandler()->loadRole($roleId, $status);
@@ -204,7 +204,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
                 $groupId,
                 $inherit
             );
-            $cache->set($assignments);
+            $cache->set($assignments)->save();
         }
 
         return $assignments;
@@ -258,7 +258,8 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         }
         $this->cache
             ->getItem('user', 'role', $publishedRole->id)
-            ->set($publishedRole);
+            ->set($publishedRole)
+            ->save();
 
         return $return;
     }

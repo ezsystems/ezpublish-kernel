@@ -57,7 +57,13 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->load(33);
@@ -136,7 +142,13 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(33));
+            ->with(array(33))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadLocationsByContent(44);
@@ -238,7 +250,13 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(33));
+            ->with(array(33))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadParentLocationsForDraftContent(44);
@@ -340,7 +358,13 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(33));
+            ->with(array(33))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadLocationsByContent(44, 2);
@@ -688,7 +712,13 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock
             ->expects($this->never())

@@ -66,7 +66,13 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $group = $handler->createGroup($inputStruct);
@@ -100,6 +106,15 @@ class ObjectStateHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('isMiss')
             ->will($this->returnValue(true));
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group'))
+            ->will($this->returnValue($cacheItemMock));
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
@@ -252,7 +267,13 @@ class ObjectStateHandlerTest extends HandlerTest
                             $cacheItemMock
                                 ->expects($this->once())
                                 ->method('set')
-                                ->with($group);
+                                ->with($group)
+                                ->will($this->returnValue($cacheItemMock));
+
+                            $cacheItemMock
+                                ->expects($this->once())
+                                ->method('save')
+                                ->with();
 
                             return $cacheItemMock;
                         }
@@ -263,7 +284,13 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($testGroupIds);
+            ->with($testGroupIds)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $groups = $handler->loadAllGroups($offset, $limit);
@@ -411,7 +438,13 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($testStateIds);
+            ->with($testStateIds)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $states = $handler->loadObjectStates(1);
@@ -641,6 +674,15 @@ class ObjectStateHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('isMiss')
             ->will($this->returnValue(true));
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState'))
+            ->will($this->returnValue($cacheItemMock));
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
@@ -897,6 +939,15 @@ class ObjectStateHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('isMiss')
             ->will($this->returnValue(true));
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('set')
+            ->with(1)
+            ->will($this->returnValue($cacheItemMock));
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
