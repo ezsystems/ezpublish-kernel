@@ -9,6 +9,7 @@
   >
   <php>
     <ini name="error_reporting" value="-1" />
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="62" /> <!-- there are 62 known issues that can't cause CI to fail -->
   </php>
   <testsuites>
     <testsuite name="eZ\Publish\Core\Base">
