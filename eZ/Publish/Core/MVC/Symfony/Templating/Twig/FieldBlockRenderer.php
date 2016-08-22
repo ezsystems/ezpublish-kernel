@@ -176,7 +176,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
 
         return $this->baseTemplate->renderBlock(
             $this->getRenderFieldBlockName($fieldTypeIdentifier, $type),
-            $params,
+            $this->twig->mergeGlobals($params),
             $this->getBlocksByField($fieldTypeIdentifier, $type, $localTemplate)
         );
     }
@@ -211,7 +211,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
 
         return $this->baseTemplate->renderBlock(
             $this->getRenderFieldDefinitionBlockName($fieldDefinition->fieldTypeIdentifier, $type),
-            $params,
+            $this->twig->mergeGlobals($params),
             $this->getBlocksByFieldDefinition($fieldDefinition, $type)
         );
     }
