@@ -34,7 +34,6 @@ class CacheServiceDecorator
     public function __construct(PoolInterface $cachePool)
     {
         $this->cachePool = $cachePool;
-        $this->cachePool->setItemClass('\eZ\Publish\Core\Persistence\Cache\CacheItem');
     }
 
     /**

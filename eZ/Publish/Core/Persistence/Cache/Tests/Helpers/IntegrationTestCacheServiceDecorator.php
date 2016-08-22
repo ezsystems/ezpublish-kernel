@@ -26,7 +26,7 @@ class IntegrationTestCacheServiceDecorator extends CacheServiceDecorator
      */
     public function __construct()
     {
-        parent::__construct(new Pool(new Ephemeral()));
+        $this->cachePool = new Pool(new Ephemeral());
     }
 
     /**
