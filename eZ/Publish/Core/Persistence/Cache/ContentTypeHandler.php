@@ -35,7 +35,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
         $group = $this->persistenceHandler->contentTypeHandler()->createGroup($struct);
 
-        $this->cache->getItem('contentTypeGroup', $group->id)->set($group);
+        $this->cache->getItem('contentTypeGroup', $group->id)->set($group)->save();
 
         return $group;
     }
@@ -49,7 +49,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
 
         $this->cache
             ->getItem('contentTypeGroup', $struct->id)
-            ->set($group = $this->persistenceHandler->contentTypeHandler()->updateGroup($struct));
+            ->set($group = $this->persistenceHandler->contentTypeHandler()->updateGroup($struct))
+            ->save();
 
         return $group;
     }
@@ -76,7 +77,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $group = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('group' => $groupId));
-            $cache->set($group = $this->persistenceHandler->contentTypeHandler()->loadGroup($groupId));
+            $cache->set($group = $this->persistenceHandler->contentTypeHandler()->loadGroup($groupId))->save();
         }
 
         return $group;
@@ -128,7 +129,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $type = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status));
-            $cache->set($type = $this->persistenceHandler->contentTypeHandler()->load($typeId, $status));
+            $cache->set($type = $this->persistenceHandler->contentTypeHandler()->load($typeId, $status))->save();
         }
 
         return $type;
@@ -145,9 +146,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('type' => $identifier));
             $type = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier($identifier);
-            $cache->set($type->id);
+            $cache->set($type->id)->save();
             // Warm contentType cache in case it's not set
-            $this->cache->getItem('contentType', $type->id)->set($type);
+            $this->cache->getItem('contentType', $type->id)->set($type)->save();
         } else {
             // Reuse load() if we have id (it should be cached anyway)
             $type = $this->load($typeId);
@@ -176,8 +177,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
 
         if ($type->status === Type::STATUS_DEFINED) {
             // Warm cache
-            $this->cache->getItem('contentType', $type->id)->set($type);
-            $this->cache->getItem('contentType', 'identifier', $type->identifier)->set($type->id);
+            $this->cache->getItem('contentType', $type->id)->set($type)->save();
+            $this->cache->getItem('contentType', 'identifier', $type->identifier)->set($type->id)->save();
             $this->cache->clear('searchableFieldMap');
         }
 
@@ -197,12 +198,13 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         // Warm cache
         $this->cache
             ->getItem('contentType', $typeId)
-            ->set($type = $this->persistenceHandler->contentTypeHandler()->update($typeId, $status, $struct));
+            ->set($type = $this->persistenceHandler->contentTypeHandler()->update($typeId, $status, $struct))
+            ->save();
 
         // Clear identifier cache in case it was changed before warming the new one
         $this->cache->clear('contentType', 'identifier');
         $this->cache->clear('searchableFieldMap');
-        $this->cache->getItem('contentType', 'identifier', $type->identifier)->set($typeId);
+        $this->cache->getItem('contentType', 'identifier', $type->identifier)->set($typeId)->save();
 
         return $type;
     }
@@ -380,7 +382,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__);
             $fieldMap = $this->persistenceHandler->contentTypeHandler()->getSearchableFieldMap();
-            $cache->set($fieldMap);
+            $cache->set($fieldMap)->save();
         }
 
         return $fieldMap;

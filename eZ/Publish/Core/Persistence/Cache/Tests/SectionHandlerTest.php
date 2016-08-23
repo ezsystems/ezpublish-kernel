@@ -165,7 +165,13 @@ class SectionHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock
             ->expects($this->never())
@@ -245,7 +251,13 @@ class SectionHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock
             ->expects($this->once())
@@ -389,7 +401,13 @@ class SectionHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock
             ->expects($this->never())

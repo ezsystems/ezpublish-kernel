@@ -29,7 +29,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $location = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('location' => $locationId));
-            $cache->set($location = $this->persistenceHandler->locationHandler()->load($locationId));
+            $cache->set($location = $this->persistenceHandler->locationHandler()->load($locationId))->save();
         }
 
         return $location;
@@ -47,7 +47,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
             $this->logger->logCall(__METHOD__, array('location' => $locationId));
             $cache->set(
                 $locationIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId)
-            );
+            )->save();
         }
 
         return $locationIds;
@@ -73,7 +73,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
                 $locationIds[] = $location->id;
             }
 
-            $cache->set($locationIds);
+            $cache->set($locationIds)->save();
         } else {
             $locations = array();
             foreach ($locationIds as $locationId) {
@@ -100,7 +100,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
                 $locationIds[] = $location->id;
             }
 
-            $cache->set($locationIds);
+            $cache->set($locationIds)->save();
         } else {
             $locations = array();
             foreach ($locationIds as $locationId) {
@@ -216,7 +216,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall(__METHOD__, array('struct' => $locationStruct));
         $location = $this->persistenceHandler->locationHandler()->create($locationStruct);
 
-        $this->cache->getItem('location', $location->id)->set($location);
+        $this->cache->getItem('location', $location->id)->set($location)->save();
         $this->cache->clear('location', 'subtree');
         $this->cache->clear('content', 'locations', $location->contentId);
         $this->cache->clear('content', $location->contentId);

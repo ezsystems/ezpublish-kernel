@@ -82,7 +82,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             $alwaysAvailable
         );
 
-        $this->cache->getItem('urlAlias', $urlAlias->id)->set($urlAlias);
+        $this->cache->getItem('urlAlias', $urlAlias->id)->set($urlAlias)->save();
         $cache = $this->cache->getItem('urlAlias', 'location', $urlAlias->destination, 'custom');
         $urlAliasIds = $cache->get();
         if ($cache->isMiss()) {
@@ -90,7 +90,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         }
 
         $urlAliasIds[] = $urlAlias->id;
-        $cache->set($urlAliasIds);
+        $cache->set($urlAliasIds)->save();
 
         return $urlAlias;
     }
@@ -119,7 +119,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             $alwaysAvailable
         );
 
-        $this->cache->getItem('urlAlias', $urlAlias->id)->set($urlAlias);
+        $this->cache->getItem('urlAlias', $urlAlias->id)->set($urlAlias)->save();
 
         return $urlAlias;
     }
@@ -155,7 +155,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
                 $urlAliasIds[] = $urlAlias->id;
             }
 
-            $cache->set($urlAliasIds);
+            $cache->set($urlAliasIds)->save();
         } else {
             // Reuse loadUrlAlias for the url alias object cache
             $urlAliases = array();
@@ -204,12 +204,12 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             try {
                 $this->logger->logCall(__METHOD__, array('url' => $url));
                 $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
-                $cache->set($urlAlias->id);
+                $cache->set($urlAlias->id)->save();
 
                 $urlAliasCache = $this->cache->getItem('urlAlias', $urlAlias->id);
-                $urlAliasCache->set($urlAlias);
+                $urlAliasCache->set($urlAlias)->save();
             } catch (APINotFoundException $e) {
-                $cache->set(self::NOT_FOUND);
+                $cache->set(self::NOT_FOUND)->save();
                 throw $e;
             }
         } elseif ($urlAliasId === self::NOT_FOUND) {
@@ -232,7 +232,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('alias' => $id));
             $urlAlias = $this->persistenceHandler->urlAliasHandler()->loadUrlAlias($id);
-            $cache->set($urlAlias);
+            $cache->set($urlAlias)->save();
         }
 
         return $urlAlias;

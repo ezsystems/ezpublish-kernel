@@ -27,7 +27,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('name' => $name, 'identifier' => $identifier));
         $section = $this->persistenceHandler->sectionHandler()->create($name, $identifier);
-        $this->cache->getItem('section', $section->id)->set($section);
+        $this->cache->getItem('section', $section->id)->set($section)->save();
 
         return $section;
     }
@@ -40,7 +40,8 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $this->logger->logCall(__METHOD__, array('section' => $id, 'name' => $name, 'identifier' => $identifier));
         $this->cache
             ->getItem('section', $id)
-            ->set($section = $this->persistenceHandler->sectionHandler()->update($id, $name, $identifier));
+            ->set($section = $this->persistenceHandler->sectionHandler()->update($id, $name, $identifier))
+            ->save();
 
         return $section;
     }
@@ -54,7 +55,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $section = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('section' => $id));
-            $cache->set($section = $this->persistenceHandler->sectionHandler()->load($id));
+            $cache->set($section = $this->persistenceHandler->sectionHandler()->load($id))->save();
         }
 
         return $section;

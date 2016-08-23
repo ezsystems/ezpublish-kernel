@@ -27,7 +27,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $group = $this->persistenceHandler->objectStateHandler()->createGroup($input);
 
         $this->cache->clear('objectstategroup', 'all');
-        $this->cache->getItem('objectstategroup', $group->id)->set($group);
+        $this->cache->getItem('objectstategroup', $group->id)->set($group)->save();
 
         return $group;
     }
@@ -41,7 +41,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $group = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
-            $cache->set($group = $this->persistenceHandler->objectStateHandler()->loadGroup($groupId));
+            $cache->set($group = $this->persistenceHandler->objectStateHandler()->loadGroup($groupId))->save();
         }
 
         return $group;
@@ -71,11 +71,11 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
             $groupIds = array();
             foreach ($stateGroups as $objectStateGroup) {
                 $groupCache = $this->cache->getItem('objectstategroup', $objectStateGroup->id);
-                $groupCache->set($objectStateGroup);
+                $groupCache->set($objectStateGroup)->save();
                 $groupIds[] = $objectStateGroup->id;
             }
 
-            $cache->set($groupIds);
+            $cache->set($groupIds)->save();
             $stateGroups = array_slice($stateGroups, $offset, $limit > -1 ?: null);
         } else {
             $groupIds = array_slice($groupIds, $offset, $limit > -1 ?: null);
@@ -105,7 +105,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
                 $objectStateIds[] = $objectState->id;
             }
 
-            $cache->set($objectStateIds);
+            $cache->set($objectStateIds)->save();
         } else {
             $objectStates = array();
             foreach ($objectStateIds as $stateId) {
@@ -166,7 +166,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $objectState = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('stateId' => $stateId));
-            $cache->set($objectState = $this->persistenceHandler->objectStateHandler()->load($stateId));
+            $cache->set($objectState = $this->persistenceHandler->objectStateHandler()->load($stateId))->save();
         }
 
         return $objectState;
@@ -246,7 +246,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
             $this->logger->logCall(__METHOD__, array('contentId' => $contentId, 'stateGroupId' => $stateGroupId));
 
             $contentState = $this->persistenceHandler->objectStateHandler()->getContentState($contentId, $stateGroupId);
-            $cache->set($contentState->id);
+            $cache->set($contentState->id)->save();
 
             return $contentState;
         }

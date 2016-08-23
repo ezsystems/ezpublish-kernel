@@ -234,7 +234,13 @@ class UserHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->loadRole(33);
@@ -321,7 +327,13 @@ class UserHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isType('array'));
+            ->with($this->isType('array'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $roleAssignments = $handler->loadRoleAssignmentsByGroupId(42);
@@ -414,7 +426,13 @@ class UserHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isType('array'));
+            ->with($this->isType('array'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $roleAssignments = $handler->loadRoleAssignmentsByGroupId(42, true);
@@ -727,7 +745,13 @@ class UserHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->publishRoleDraft($roleDraftId);
@@ -781,7 +805,13 @@ class UserHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->publishRoleDraft($roleDraftId);

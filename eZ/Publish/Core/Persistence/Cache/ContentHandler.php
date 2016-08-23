@@ -68,7 +68,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $version, 'translations' => $translations));
             $content = $this->persistenceHandler->contentHandler()->load($contentId, $version, $translations);
-            $cache->set($content);
+            $cache->set($content)->save();
         }
 
         return $content;
@@ -83,7 +83,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $contentInfo = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('content' => $contentId));
-            $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($contentId));
+            $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($contentId))->save();
         }
 
         return $contentInfo;
@@ -98,7 +98,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $contentInfo = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('content' => $remoteId));
-            $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId));
+            $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId))->save();
         }
 
         return $contentInfo;
@@ -150,7 +150,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
         $this->cache
             ->getItem('content', 'info', $contentId)
-            ->set($contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct));
+            ->set($contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct))->save();
 
         $this->cache->clear('content', $contentId, $contentInfo->currentVersionNo);
 
@@ -167,7 +167,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->cache->clear('content', $contentId, $versionNo);
         $this->cache
             ->getItem('content', $contentId, $versionNo, self::ALL_TRANSLATIONS_KEY)
-            ->set($content);
+            ->set($content)
+            ->save();
 
         return $content;
     }
@@ -288,8 +289,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $contentInfo = $content->versionInfo->contentInfo;
         $this->cache
             ->getItem('content', $contentInfo->id, $content->versionInfo->versionNo, self::ALL_TRANSLATIONS_KEY)
-            ->set($content);
-        $this->cache->getItem('content', 'info', $contentInfo->id)->set($contentInfo);
+            ->set($content)
+            ->save();
+        $this->cache->getItem('content', 'info', $contentInfo->id)->set($contentInfo)->save();
 
         return $content;
     }

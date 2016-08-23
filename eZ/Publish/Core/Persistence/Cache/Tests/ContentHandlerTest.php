@@ -141,7 +141,13 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->load(2, 1, array('eng-GB', 'eng-US'));
@@ -238,7 +244,13 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->loadContentInfo(2, 1);
@@ -376,7 +388,13 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->updateMetadata(2, new MetadataUpdateStruct());
@@ -431,7 +449,13 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->updateContent(2, 1, new UpdateStruct());
@@ -610,7 +634,13 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock
             ->expects($this->never())
@@ -626,7 +656,13 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'));
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'))
+            ->will($this->returnValue($cacheItemMock2));
+
+        $cacheItemMock2
+            ->expects($this->once())
+            ->method('save')
+            ->with();
 
         $cacheItemMock2
             ->expects($this->never())

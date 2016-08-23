@@ -26,7 +26,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
         $language = $this->persistenceHandler->contentLanguageHandler()->create($struct);
-        $this->cache->getItem('language', $language->id)->set($language);
+        $this->cache->getItem('language', $language->id)->set($language)->save();
 
         return $language;
     }
@@ -53,7 +53,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
         $language = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('language' => $id));
-            $cache->set($language = $this->persistenceHandler->contentLanguageHandler()->load($id));
+            $cache->set($language = $this->persistenceHandler->contentLanguageHandler()->load($id))->save();
         }
 
         return $language;
