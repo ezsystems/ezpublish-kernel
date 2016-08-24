@@ -139,6 +139,7 @@ class UserService implements UserServiceInterface
             new DeleteUserGroupSignal(
                 array(
                     'userGroupId' => $userGroup->id,
+                    'affectedLocationIds' => $returnValue,
                 )
             )
         );
@@ -317,6 +318,7 @@ class UserService implements UserServiceInterface
             new DeleteUserSignal(
                 array(
                     'userId' => $user->id,
+                    'affectedLocationIds' => $returnValue,
                 )
             )
         );

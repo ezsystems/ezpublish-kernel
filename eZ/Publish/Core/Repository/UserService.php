@@ -253,12 +253,14 @@ class UserService implements UserServiceInterface
         $this->repository->beginTransaction();
         try {
             //@todo: what happens to sub user groups and users below sub user groups
-            $this->repository->getContentService()->deleteContent($loadedUserGroup->getVersionInfo()->getContentInfo());
+            $affectedLocationIds = $this->repository->getContentService()->deleteContent($loadedUserGroup->getVersionInfo()->getContentInfo());
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
+
+        return $affectedLocationIds;
     }
 
     /**
@@ -650,13 +652,15 @@ class UserService implements UserServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->repository->getContentService()->deleteContent($loadedUser->getVersionInfo()->getContentInfo());
+            $affectedLocationIds = $this->repository->getContentService()->deleteContent($loadedUser->getVersionInfo()->getContentInfo());
             $this->userHandler->delete($loadedUser->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
+
+        return $affectedLocationIds;
     }
 
     /**

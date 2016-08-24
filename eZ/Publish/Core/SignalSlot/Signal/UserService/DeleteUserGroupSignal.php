@@ -23,4 +23,13 @@ class DeleteUserGroupSignal extends Signal
      * @var mixed
      */
     public $userGroupId;
+
+    /**
+     * Affected location id's.
+     *
+     * List of locations of the content that was deleted, as returned by deleteContent().
+     *
+     * @var array
+     */
+    public $affectedLocationIds = [];
 }
