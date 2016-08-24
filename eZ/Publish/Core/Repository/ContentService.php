@@ -972,6 +972,8 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return mixed[] Affected Location Id's
      */
     public function deleteContent(ContentInfo $contentInfo)
     {
@@ -981,6 +983,7 @@ class ContentService implements ContentServiceInterface
             throw new UnauthorizedException('content', 'remove', array('contentId' => $contentInfo->id));
         }
 
+        $affectedLocations = [];
         $this->repository->beginTransaction();
         try {
             // Load Locations first as deleting Content also deletes belonging Locations
@@ -988,12 +991,15 @@ class ContentService implements ContentServiceInterface
             $this->persistenceHandler->contentHandler()->deleteContent($contentInfo->id);
             foreach ($spiLocations as $spiLocation) {
                 $this->persistenceHandler->urlAliasHandler()->locationDeleted($spiLocation->id);
+                $affectedLocations[] = $spiLocation->id;
             }
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
+
+        return $affectedLocations;
     }
 
     /**

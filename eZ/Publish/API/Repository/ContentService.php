@@ -195,6 +195,8 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
     public function deleteContent(ContentInfo $contentInfo);
 

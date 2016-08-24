@@ -284,6 +284,8 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return mixed[] Affected Location Id's
      */
     public function deleteContent(ContentInfo $contentInfo)
     {
@@ -292,6 +294,7 @@ class ContentService implements ContentServiceInterface
             new DeleteContentSignal(
                 array(
                     'contentId' => $contentInfo->id,
+                    'affectedLocationIds' => $returnValue,
                 )
             )
         );
