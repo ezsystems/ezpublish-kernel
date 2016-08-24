@@ -2062,6 +2062,10 @@ or if destination is /content/trash
         HTTP/1.1 201 Created
         Location: /content/trash/<ID>
 
+.. code:: http
+
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :404: If the  location with the given id does not exist
     :401: If the user is not authorized to move this location
