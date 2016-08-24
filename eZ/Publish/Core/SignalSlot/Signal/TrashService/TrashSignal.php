@@ -37,4 +37,11 @@ class TrashSignal extends Signal
      * @var mixed
      */
     public $contentId;
+
+    /**
+     * If content was trashed or if just location was deleted.
+     *
+     * @var bool
+     */
+    public $contentTrashed;
 }
