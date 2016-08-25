@@ -206,7 +206,7 @@ class Location extends RestController
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated | \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function moveSubtree($locationPath, Request $request)
     {
@@ -247,12 +247,17 @@ class Location extends RestController
                 // Trash the subtree
                 $trashItem = $this->trashService->trash($locationToMove);
 
-                return new Values\ResourceCreated(
-                    $this->router->generate(
-                        'ezpublish_rest_loadTrashItem',
-                        array('trashItemId' => $trashItem->id)
-                    )
-                );
+                if (isset($trashItem)) {
+                    return new Values\ResourceCreated(
+                        $this->router->generate(
+                            'ezpublish_rest_loadTrashItem',
+                            array('trashItemId' => $trashItem->id)
+                        )
+                    );
+                } else {
+                    // Only a location has been trashed and not the object
+                    return new Values\NoContent();
+                }
             } catch (Exceptions\InvalidArgumentException $e) {
                 // If that fails, the Destination header is not formatted right
                 // so just throw the BadRequestException

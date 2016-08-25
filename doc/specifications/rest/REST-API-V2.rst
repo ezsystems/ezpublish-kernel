@@ -2055,12 +2055,18 @@ Move Subtree
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
 
-or if destination is /content/trash
+or if destination is /content/trash and content only has one location
 
 .. code:: http
 
         HTTP/1.1 201 Created
         Location: /content/trash/<ID>
+
+or if destination is /content/trash and content still has other locations (no trash item is created)
+
+.. code:: http
+
+        HTTP/1.1 204 No Content
 
 :Error Codes:
     :404: If the  location with the given id does not exist
