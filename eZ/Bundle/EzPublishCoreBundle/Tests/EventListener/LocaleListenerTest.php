@@ -15,6 +15,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -30,12 +31,31 @@ class LocaleListenerTest extends PHPUnit_Framework_TestCase
      */
     private $configResolver;
 
+    /**
+     * @var ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $requestStack;
+
     protected function setUp()
     {
         parent::setUp();
         $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->localeConverter = $this->getMock('eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface');
         $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+
+        $this->requestStack = new RequestStack();
+        $parameterBagMock = $this->getMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
+        $parameterBagMock->expects($this->never())->method($this->anything());
+
+        $requestMock = $this->getMock('Symfony\\Component\\HttpFoundation\\Request');
+        $requestMock->attributes = $parameterBagMock;
+
+        $requestMock->expects($this->any())
+            ->method('__get')
+            ->with($this->equalTo('attributes'))
+            ->will($this->returnValue($parameterBagMock));
+
+        $this->requestStack->push($requestMock);
     }
 
     /**
@@ -48,6 +68,7 @@ class LocaleListenerTest extends PHPUnit_Framework_TestCase
             ->method('getParameter')
             ->with('languages')
             ->will($this->returnValue($configuredLanguages));
+
         $this->localeConverter
             ->expects($this->atLeastOnce())
             ->method('convertToPOSIX')
@@ -56,7 +77,7 @@ class LocaleListenerTest extends PHPUnit_Framework_TestCase
             );
 
         $defaultLocale = 'en';
-        $localeListener = new LocaleListener($defaultLocale);
+        $localeListener = new LocaleListener($this->requestStack, $defaultLocale);
         $localeListener->setConfigResolver($this->configResolver);
         $localeListener->setLocaleConverter($this->localeConverter);
 

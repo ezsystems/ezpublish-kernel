@@ -44,12 +44,16 @@ parameters:
         tur-TR: tr_TR
         ukr-UA: uk_UA
 
-    # Overriding the original locale listener to trigger the internal locale conversion correctly.
-    locale_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\LocaleListener
-
     ezpublish.locale.converter.class: eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter
 
 services:
     ezpublish.locale.converter:
         class: "%ezpublish.locale.converter.class%"
         arguments: ["%ezpublish.locale.conversion_map%", "@logger"]
+
+    # Overriding the original locale listener to trigger the internal locale conversion correctly.
+    locale_listener:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\LocaleListener
+        arguments: ["@request_stack", "%kernel.default_locale%", "@?router"]
+        tags:
+            - { name: kernel.event_subscriber }
