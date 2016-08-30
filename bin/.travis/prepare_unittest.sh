@@ -39,8 +39,8 @@ COMPOSER_UPDATE=""
 
 # solr package search API integration tests
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
-    echo "> Require ezsystems/ezplatform-solr-search-engine:^1.0.0@dev"
-    composer require --no-update ezsystems/ezplatform-solr-search-engine:^1.0.0@dev
+    echo "> Require ezsystems/ezplatform-solr-search-engine:^1.1.0@dev"
+    composer require --no-update ezsystems/ezplatform-solr-search-engine:"dev-EZP-26186 as 1.1.x-dev"
     COMPOSER_UPDATE="true"
 fi
 
