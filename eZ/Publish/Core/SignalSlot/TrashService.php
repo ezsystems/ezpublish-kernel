@@ -79,7 +79,7 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     * @return null|\eZ\Publish\API\Repository\Values\Content\TrashItem null if location was deleted, otherwise TrashItem
      */
     public function trash(Location $location)
     {
@@ -90,6 +90,7 @@ class TrashService implements TrashServiceInterface
                     'locationId' => $location->id,
                     'parentLocationId' => $location->parentLocationId,
                     'contentId' => $location->contentId,
+                    'contentTrashed' => $returnValue instanceof TrashItem,
                 )
             )
         );

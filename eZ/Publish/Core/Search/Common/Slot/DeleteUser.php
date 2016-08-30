@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Common\Slot;
 
@@ -14,9 +12,9 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Search Engine slot handling DeleteContentSignal.
+ * A Search Engine slot handling DeleteUserSignal.
  */
-class DeleteContent extends Slot
+class DeleteUser extends Slot
 {
     /**
      * Receive the given $signal and react on it.
@@ -25,16 +23,16 @@ class DeleteContent extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\ContentService\DeleteContentSignal) {
+        if (!$signal instanceof Signal\UserService\DeleteUserSignal) {
             return;
         }
 
         // Delete Content
-        $this->searchHandler->deleteContent($signal->contentId);
+        $this->searchHandler->deleteContent($signal->userId);
 
         // Delete locations if there is any
         foreach ($signal->affectedLocationIds as $locationId) {
-            $this->searchHandler->deleteLocation($locationId, $signal->contentId);
+            $this->searchHandler->deleteLocation($locationId, $signal->userId);
         }
     }
 }

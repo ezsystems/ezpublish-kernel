@@ -76,6 +76,8 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
+     *
+     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
     public function deleteUserGroup(UserGroup $userGroup);
 
@@ -195,6 +197,8 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete the user
+     *
+     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
     public function deleteUser(User $user);
 

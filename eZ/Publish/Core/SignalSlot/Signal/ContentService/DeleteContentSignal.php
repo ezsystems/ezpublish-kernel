@@ -23,4 +23,13 @@ class DeleteContentSignal extends Signal
      * @var mixed
      */
     public $contentId;
+
+    /**
+     * Affected location id's.
+     *
+     * List of locations of the content that was deleted, as returned by deleteContent().
+     *
+     * @var array
+     */
+    public $affectedLocationIds = [];
 }
