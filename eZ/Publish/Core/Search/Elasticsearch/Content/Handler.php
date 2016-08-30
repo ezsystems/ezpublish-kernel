@@ -241,44 +241,13 @@ class Handler implements SearchHandlerInterface
     {
         // 1. Delete the Content
         if ($versionId === null) {
-            $ast = array(
-                'query' => array(
-                    'filtered' => array(
-                        'filter' => array(
-                            'and' => array(
-                                array(
-                                    'ids' => array(
-                                        'type' => $this->contentDocumentTypeIdentifier,
-                                        'values' => array(
-                                            $contentId,
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            );
-
-            $this->gateway->deleteByQuery(json_encode($ast), 'content');
+            $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['_id' => $contentId]]]), $this->contentDocumentTypeIdentifier);
         } else {
-            $this->gateway->delete($contentId, 'content');
+            $this->gateway->delete($contentId, $this->contentDocumentTypeIdentifier);
         }
 
         // 2. Delete all Content's Locations
-        $ast = array(
-            'query' => array(
-                'filtered' => array(
-                    'filter' => array(
-                        'term' => array(
-                            'content_id' => $contentId,
-                        ),
-                    ),
-                ),
-            ),
-        );
-
-        $this->gateway->deleteByQuery(json_encode($ast), $this->locationDocumentTypeIdentifier);
+        $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['content_id_id' => $contentId]]]), $this->locationDocumentTypeIdentifier);
     }
 
     /**
