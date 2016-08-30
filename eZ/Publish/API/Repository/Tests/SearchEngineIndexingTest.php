@@ -76,6 +76,52 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertEquals(0, $result->totalCount);
     }
 
+    /**
+     * EZP-26186: Make sure index is deleted on removal of Users  (affected Solr & Elastic).
+     */
+    public function testDeleteUser()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $searchService = $repository->getSearchService();
+
+        $anonymousContentId = $this->generateId('user', 10);
+        $user = $userService->loadUser($anonymousContentId);
+
+        $userService->deleteUser($user);
+
+        $this->refreshSearch($repository);
+
+        // Should not be found
+        $criterion = new Criterion\ContentId($user->id);
+        $query = new Query(array('filter' => $criterion));
+        $result = $searchService->findContentInfo($query);
+        $this->assertEquals(0, $result->totalCount);
+    }
+
+    /**
+     * EZP-26186: Make sure index is deleted on removal of UserGroups  (affected Solr & Elastic).
+     */
+    public function testDeleteUserGroup()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $searchService = $repository->getSearchService();
+
+        $membersContentId = $this->generateId('user_group', 11);
+        $userGroup = $userService->loadUserGroup($membersContentId);
+
+        $userService->deleteUserGroup($userGroup);
+
+        $this->refreshSearch($repository);
+
+        // Should not be found
+        $criterion = new Criterion\ContentId($userGroup->id);
+        $query = new Query(array('filter' => $criterion));
+        $result = $searchService->findContentInfo($query);
+        $this->assertEquals(0, $result->totalCount);
+    }
+
     public function testCreateLocation()
     {
         $repository = $this->getRepository();
