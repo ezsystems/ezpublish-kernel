@@ -25,6 +25,57 @@ use DateTime;
  */
 class SearchEngineIndexingTest extends BaseTest
 {
+    /**
+     * EZP-26186: Make sure index is NOT deleted on removal of version draft (affected Solr & content index on Elastic).
+     */
+    public function testDeleteVersion()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $searchService = $repository->getSearchService();
+
+        $membersContentId = $this->generateId('content', 11);
+        $contentInfo = $contentService->loadContentInfo($membersContentId);
+
+        $draft = $contentService->createContentDraft($contentInfo);
+        $contentService->deleteVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
+
+        // Found
+        $criterion = new Criterion\LocationId($contentInfo->mainLocationId);
+        $query = new Query(array('filter' => $criterion));
+        $result = $searchService->findContentInfo($query);
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $contentInfo->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * EZP-26186: Make sure affected child locations are deleted on content deletion (affected Solr & Elastic).
+     */
+    public function testDeleteContent()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $searchService = $repository->getSearchService();
+
+        $anonymousUsersContentId = $this->generateId('content', 42);
+        $contentInfo = $contentService->loadContentInfo($anonymousUsersContentId);
+
+        $contentService->deleteContent($contentInfo);
+
+        $this->refreshSearch($repository);
+
+        // Should not be found
+        $criterion = new Criterion\ParentLocationId($contentInfo->mainLocationId);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        $this->assertEquals(0, $result->totalCount);
+    }
+
     public function testCreateLocation()
     {
         $repository = $this->getRepository();
