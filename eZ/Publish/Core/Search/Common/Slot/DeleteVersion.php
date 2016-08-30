@@ -15,6 +15,8 @@ use eZ\Publish\Core\Search\Common\Slot;
 
 /**
  * A Search Engine slot handling DeleteVersionSignal.
+ *
+ * @deprecated Slot is deprecated and will be removed as versions are not indexed atm. As of EZP-26186 it does nothing
  */
 class DeleteVersion extends Slot
 {
@@ -29,9 +31,6 @@ class DeleteVersion extends Slot
             return;
         }
 
-        $this->searchHandler->deleteContent(
-            $signal->contentId,
-            $signal->versionNo
-        );
+        // Do nothing, published version & content is not allowed to be deleted via deleteVersion so we can ignore this.
     }
 }
