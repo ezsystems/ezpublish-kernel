@@ -33,20 +33,33 @@ class ResourceLink extends ValueObjectVisitor
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
+        $generator->startAttribute('href', $data->link);
+        $generator->endAttribute('href');
+
+        if ($this->needsResourceExpansion($generator->getStackPath())) {
+            try {
+                $visitor->visitValueObject($this->valueLoader->load($data->link));
+            } catch (ApiUnauthorizedException $e) {
+            }
+        }
+    }
+
+    /**
+     * Tests if the current $nodePath requires the resource to be expanded,
+     * based on the custom X-eZ-Embed-Value Request header.
+     *
+     * @param string $nodePath
+     *
+     * @return bool
+     */
+    public function needsResourceExpansion($nodePath)
+    {
         $request = $this->getRequestStack()->getMasterRequest();
         $expandedPathList = [];
         if ($request->headers->has('x-ez-embed-value')) {
             $expandedPathList = explode(',', $request->headers->get('x-ez-embed-value'));
         }
 
-        $generator->startAttribute('href', $data->link);
-        $generator->endAttribute('href');
-
-        if (in_array($generator->getStackPath(), $expandedPathList)) {
-            try {
-                $visitor->visitValueObject($this->valueLoader->load($data->link));
-            } catch (ApiUnauthorizedException $e) {
-            }
-        }
+        return in_array($nodePath, $expandedPathList);
     }
 }
