@@ -8,8 +8,10 @@ parameters:
     ezpublish.search.elasticsearch.slot.update_location.class: eZ\Publish\Core\Search\Common\Slot\UpdateLocation
     ezpublish.search.elasticsearch.slot.delete_location.class: eZ\Publish\Core\Search\Common\Slot\DeleteLocation
     ezpublish.search.elasticsearch.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
+    ezpublish.search.elasticsearch.slot.delete_user.class: eZ\Publish\Core\Search\Common\Slot\DeleteUser
     ezpublish.search.elasticsearch.slot.create_user_group.class: eZ\Publish\Core\Search\Common\Slot\CreateUserGroup
     ezpublish.search.elasticsearch.slot.move_user_group.class: eZ\Publish\Core\Search\Common\Slot\MoveUserGroup
+    ezpublish.search.elasticsearch.slot.delete_user_group.class: eZ\Publish\Core\Search\Common\Slot\DeleteUserGroup
     ezpublish.search.elasticsearch.slot.copy_subtree.class: eZ\Publish\Core\Search\Common\Slot\CopySubtree
     ezpublish.search.elasticsearch.slot.move_subtree.class: eZ\Publish\Core\Search\Common\Slot\MoveSubtree
     ezpublish.search.elasticsearch.slot.trash.class: eZ\Publish\Core\Search\Common\Slot\Trash
@@ -75,6 +77,12 @@ services:
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: UserService\CreateUserSignal}
 
+    ezpublish.search.elasticsearch.slot.delete_user:
+        parent: ezpublish.search.elasticsearch.slot
+        class: "%ezpublish.search.elasticsearch.slot.delete_user.class%"
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: UserService\DeleteUserSignal}
+
     ezpublish.search.elasticsearch.slot.create_user_group:
         parent: ezpublish.search.elasticsearch.slot
         class: "%ezpublish.search.elasticsearch.slot.create_user_group.class%"
@@ -86,6 +94,12 @@ services:
         class: "%ezpublish.search.elasticsearch.slot.move_user_group.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: UserService\MoveUserGroupSignal}
+
+    ezpublish.search.elasticsearch.slot.delete_user_group:
+        parent: ezpublish.search.elasticsearch.slot
+        class: "%ezpublish.search.elasticsearch.slot.delete_user_group.class%"
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: UserService\DeleteUserGroupSignal}
 
     ezpublish.search.elasticsearch.slot.copy_subtree:
         parent: ezpublish.search.elasticsearch.slot
