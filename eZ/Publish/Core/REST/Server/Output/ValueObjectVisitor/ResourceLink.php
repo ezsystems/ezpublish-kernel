@@ -10,6 +10,7 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Output\PathExpansion\ExpansionGenerator;
 use eZ\Publish\Core\REST\Server\Output\PathExpansion\PathExpansionChecker;
 use eZ\Publish\Core\REST\Server\ValueLoaders\UriValueLoader;
 
@@ -54,7 +55,7 @@ class ResourceLink extends ValueObjectVisitor
             try {
                 $this->visitorDispatcher->visit(
                     $this->valueLoader->load($data->link),
-                    $generator = new ExpansionGenerator($generator),
+                    new ExpansionGenerator($generator),
                     $visitor
                 );
             } catch (ApiUnauthorizedException $e) {

@@ -146,15 +146,19 @@ class ExpansionGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->getInnerGeneratorMock()
             ->expects($this->once())
-            ->method('startAttribute');
+            ->method('startAttribute')
+            ->with('jacket');
 
         $this->getInnerGeneratorMock()
-            ->expects($this->never())
-            ->method('endAttribute');
+            ->expects($this->once())
+            ->method('endAttribute')
+            ->with('jacket');
 
         $this->buildGenerator()->startObjectElement('eccleston');
-        $this->buildGenerator()->startAttribute('href', 'htt://google.cm');
+        $this->buildGenerator()->startAttribute('href', 'http://ez.no');
         $this->buildGenerator()->endAttribute('href');
+        $this->buildGenerator()->startAttribute('media-type', 'application/planet.gallifrey.doctor');
+        $this->buildGenerator()->endAttribute('media-type');
         $this->buildGenerator()->startAttribute('jacket', 'leather');
         $this->buildGenerator()->endAttribute('jacket');
     }
