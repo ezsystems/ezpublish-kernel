@@ -38,7 +38,7 @@ class CachedValue extends ValueObjectVisitor
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $visitor->visitValueObject($data->value);
+        $visitor->visitValueObject($data->value, $generator, $visitor);
 
         if ($this->getParameter('content.view_cache') !== true) {
             return;

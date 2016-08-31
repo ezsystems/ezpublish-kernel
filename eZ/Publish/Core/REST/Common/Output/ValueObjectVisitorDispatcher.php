@@ -59,18 +59,26 @@ class ValueObjectVisitorDispatcher
      *
      * @return mixed
      */
-    public function visit($data)
+    public function visit($data, Generator $generator = null, Visitor $visitor = null)
     {
         if (!is_object($data)) {
             throw new Exceptions\InvalidTypeException($data);
         }
         $checkedClassNames = array();
 
+        if ($visitor === null) {
+            $visitor = $this->outputVisitor;
+        }
+
+        if ($generator === null) {
+            $generator = $this->outputGenerator;
+        }
+
         $className = get_class($data);
         do {
             $checkedClassNames[] = $className;
             if (isset($this->visitors[$className])) {
-                return $this->visitors[$className]->visit($this->outputVisitor, $this->outputGenerator, $data);
+                return $this->visitors[$className]->visit($visitor, $generator, $data);
             }
         } while ($className = get_parent_class($className));
 

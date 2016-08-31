@@ -134,12 +134,15 @@ class Visitor
      *
      * @return mixed
      */
-    public function visitValueObject($data)
+    public function visitValueObject($data, Generator $generator = null, Visitor $visitor = null)
     {
         $this->valueObjectVisitorDispatcher->setOutputGenerator($this->generator);
-        $this->valueObjectVisitorDispatcher->setOutputVisitor($this);
 
-        return $this->valueObjectVisitorDispatcher->visit($data);
+        return $this->valueObjectVisitorDispatcher->visit(
+            $data,
+            $generator ?: $this->generator,
+            $visitor ?: $this
+        );
     }
 
     /**
