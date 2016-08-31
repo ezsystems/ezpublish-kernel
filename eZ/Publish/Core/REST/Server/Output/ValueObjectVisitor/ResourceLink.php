@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as ApiUnauthorizedException;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Output\PathExpansion\PathExpansionChecker;
 use eZ\Publish\Core\REST\Server\ValueLoaders\UriValueLoader;
@@ -24,10 +25,19 @@ class ResourceLink extends ValueObjectVisitor
      */
     private $valueLoader;
 
-    public function __construct(UriValueLoader $valueLoader, PathExpansionChecker $pathExpansionChecker)
+    /**
+     * @var ValueObjectVisitorDispatcher
+     */
+    private $visitorDispatcher;
+
+    public function __construct(
+        UriValueLoader $valueLoader,
+        PathExpansionChecker $pathExpansionChecker,
+        ValueObjectVisitorDispatcher $visitorDispatcher)
     {
         $this->valueLoader = $valueLoader;
         $this->pathExpansionChecker = $pathExpansionChecker;
+        $this->visitorDispatcher = $visitorDispatcher;
     }
 
     /**
@@ -42,7 +52,11 @@ class ResourceLink extends ValueObjectVisitor
 
         if ($this->pathExpansionChecker->needsExpansion($generator->getStackPath())) {
             try {
-                $visitor->visitValueObject($this->valueLoader->load($data->link));
+                $this->visitorDispatcher->visit(
+                    $this->valueLoader->load($data->link),
+                    $generator = new ExpansionGenerator($generator),
+                    $visitor
+                );
             } catch (ApiUnauthorizedException $e) {
             }
         }

@@ -868,6 +868,7 @@ services:
         arguments:
             - '@ezpublish_rest.controller_uri_value_loader'
             - '@ezpublish_rest.output.path_expansion_checker.request_header'
+            - '@ezpublish_rest.output.value_object_visitor.dispatcher'
 
     ezpublish_rest.output.path_expansion_checker.request_header:
         class: 'eZ\Publish\Core\REST\Server\Output\PathExpansion\RequestHeaderPathExpansionChecker'
@@ -882,3 +883,4 @@ services:
         arguments:
             - '@ezpublish_rest.controller_uri_value_loader'
             - '@ezpublish_rest.output.path_expansion_checker.request_header'
+            - '@ezpublish_rest.output.value_object_visitor.dispatcher'
