@@ -9,11 +9,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use eZ\Publish\API\Repository\Values\Content\Query;
 
 class RemoveOrphanRecordsFromEzUserTablesCommand extends ContainerAwareCommand
 {
@@ -45,7 +43,7 @@ class RemoveOrphanRecordsFromEzUserTablesCommand extends ContainerAwareCommand
 
         $tablesAndColumns = [
             'ezuser' => 'contentobject_id',
-            'ezuser_setting' => 'user_id'
+            'ezuser_setting' => 'user_id',
         ];
 
         foreach ($tablesAndColumns as $table => $column) {
@@ -64,6 +62,5 @@ class RemoveOrphanRecordsFromEzUserTablesCommand extends ContainerAwareCommand
             $ezUserDeleteOrphansQuery->prepare()->execute();
             $output->writeln('Deleting orphan records from ' . $table . '.');
         }
-
-    }   
+    }
 }

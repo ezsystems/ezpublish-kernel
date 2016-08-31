@@ -33,7 +33,7 @@ class DeleteUsersFromTrashCommand extends ContainerAwareCommand
         $contentTypeService = $repository->getContentTypeService();
 
         $repository->sudo(
-            function() use($contentTypeService, $trashService, $output) {
+            function() use ($contentTypeService, $trashService, $output) {
                 $contentTypes = $this->getContentTypesEzWithUserField($contentTypeService);
 
                 $query = new Query();
@@ -51,7 +51,7 @@ class DeleteUsersFromTrashCommand extends ContainerAwareCommand
     }
 
     /**
-     * Returns all contentTypes having an ezuser field
+     * Returns all contentTypes having an ezuser field.
      *
      * @return array
      */
