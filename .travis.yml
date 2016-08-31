@@ -63,6 +63,7 @@ branches:
     - "6.2"
     - "6.3"
     - "6.4"
+    - "6.5"
 
 # setup requirements for running unit/integration/behat tests
 before_script:
