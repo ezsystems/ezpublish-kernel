@@ -9,6 +9,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,23 +32,46 @@ class DeleteUsersFromTrashCommand extends ContainerAwareCommand
         $trashService = $repository->getTrashService();
         $contentTypeService = $repository->getContentTypeService();
 
-        $repository->setCurrentUser($repository->getUserService()->loadUser(14));
+        $repository->sudo(
+            function() use($contentTypeService, $trashService, $output) {
+                $contentTypes = $this->getContentTypesEzWithUserField($contentTypeService);
 
-        $query = new Query();
-        $query->filter = null;
+                $query = new Query();
+                $query->filter = !empty($contentTypes) ? new Query\Criterion\ContentTypeIdentifier($contentTypes) : null;
+                $query->limit = PHP_INT_MAX;
 
-        $trashItems = $trashService->findTrashItems($query);
+                $trashItems = $trashService->findTrashItems($query);
 
-        foreach ($trashItems->items as $trashItem) {
-            $contentType = $contentTypeService->loadContentType(
-                $trashItem->contentInfo->contentTypeId
-            );
+                foreach ($trashItems->items as $trashItem) {
+                    $output->writeln('Deleting ' . $trashItem->contentInfo->name . ' from trash');
+                    $trashService->deleteTrashItem($trashItem);
+                }
+            }
+        );
+    }
 
-            if ($this->hasUserField($contentType)) {
-                $output->writeln('Deleting ' . $trashItem->contentInfo->name .  ' from trash');
-                $trashService->deleteTrashItem($trashItem);
+    /**
+     * Returns all contentTypes having an ezuser field
+     *
+     * @return array
+     */
+    protected function getContentTypesEzWithUserField(ContentTypeService $contentTypeService)
+    {
+        $contentTypeIdentifiers = [];
+
+        $contentTypeGroups = $contentTypeService->loadContentTypeGroups();
+        foreach ($contentTypeGroups as $contentTypeGroup) {
+            $contentTypeList = $contentTypeService->loadContentTypes($contentTypeGroup);
+
+            foreach ($contentTypeList as $contentType) {
+                if ($this->hasEzUserField($contentType)) {
+                    $contentTypeIdentifiers[] = $contentType->identifier;
+                    continue;
+                }
             }
         }
+
+        return $contentTypeIdentifiers;
     }
 
     /**
@@ -56,7 +80,7 @@ class DeleteUsersFromTrashCommand extends ContainerAwareCommand
      * @param ContentType $contentType
      * @return bool
      */
-    private function hasUserField(ContentType $contentType)
+    protected function hasEzUserField(ContentType $contentType)
     {
         /** @var \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions */
         $fieldDefinitions = $contentType->getFieldDefinitions();
