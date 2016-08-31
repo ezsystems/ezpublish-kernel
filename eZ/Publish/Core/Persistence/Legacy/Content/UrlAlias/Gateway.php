@@ -95,6 +95,16 @@ abstract class Gateway
     abstract public function cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5);
 
     /**
+     * Swaps the content being referred to by two aliases.
+     *
+     * @param mixed $locationId1
+     * @param mixed $locationId2
+     *
+     * @return bool
+     */
+    abstract public function swap($locationId1, $locationId2);
+
+    /**
      * Marks all entries with given $id as history entries.
      *
      * This method is used by Handler::locationMoved(). For this reason rows are not updated with next id value as
