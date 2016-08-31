@@ -27,7 +27,7 @@ class RemoveOrphanRecordsFromEzUserTablesCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler; */
-        $connection = $this->getContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
+        $connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.dbhandler');
         
         $selectQuery = $connection->createSelectQuery();
         $selectQuery->select(
