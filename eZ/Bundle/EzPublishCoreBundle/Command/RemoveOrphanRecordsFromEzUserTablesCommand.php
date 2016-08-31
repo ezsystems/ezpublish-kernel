@@ -20,7 +20,7 @@ class RemoveOrphanRecordsFromEzUserTablesCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('ezpublish:removeorphanrecordsfromezusertables')
+            ->setName('ezplatform:upgrade:remove-orphan-user-records')
             ->setDescription('Removes all records from ezuser and ezuser_setting
              tables having no corresponding record in ezcontentobject table. 
              See https://jira.ez.no/browse/EZP-25644');

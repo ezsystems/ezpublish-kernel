@@ -20,7 +20,7 @@ class DeleteUsersFromTrashCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('ezpublish:deleteusersfromtrash')
+            ->setName('ezplatform:upgrade:delete-users-from-trash')
             ->setDescription('Deletes all users from trash, See https://jira.ez.no/browse/EZP-25643');
     }
 
