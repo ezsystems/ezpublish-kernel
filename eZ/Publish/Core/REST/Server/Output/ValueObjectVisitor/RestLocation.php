@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
+use eZ\Publish\Core\REST\Server\Values\LoadableValueObjectReference;
 
 /**
  * RestLocation value object visitor.
@@ -129,15 +129,15 @@ class RestLocation extends ValueObjectVisitor
         $generator->endObjectElement('UrlAliases');
 
         $generator->startObjectElement('ContentInfo', 'ContentInfo');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
-                'ezpublish_rest_loadContent',
-                array('contentId' => $contentInfo->id)
+        $visitor->visitValueObject(
+            new LoadableValueObjectReference(
+                [
+                    'type' => 'Content',
+                    'loadParameters' => ['contentId' => $contentInfo->id],
+                ]
             )
         );
-        $generator->endAttribute('href');
-        $visitor->visitValueObject(new RestContentValue($contentInfo));
+
         $generator->endObjectElement('ContentInfo');
 
         $generator->endObjectElement('Location');

@@ -34,6 +34,7 @@ class EzPublishRestExtension extends Extension implements PrependExtensionInterf
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('value_object_visitors.yml');
+        $loader->load('value_loaders.yml');
         $loader->load('input_parsers.yml');
         $loader->load('security.yml');
         $loader->load('default_settings.yml');

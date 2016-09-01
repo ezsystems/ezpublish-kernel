@@ -1,0 +1,24 @@
+services:
+    ezpublish_rest.value_loader_dispatcher.type_map:
+        class: eZ\Publish\Core\REST\Server\ValueLoaders\TypeMapValueLoaderDispatcher
+        arguments:
+            -
+                Content: '@ezpublish_rest.value_loader.content'
+                User: '@ezpublish_rest.value_loader.user'
+
+    ezpublish_rest.value_loader.repository_based:
+        abstract: true
+        calls:
+            - [setRepository, ['@ezpublish.api.repository']]
+
+    ezpublish_rest.value_loader.content:
+        class: eZ\Publish\Core\REST\Server\ValueLoaders\Content
+        parent: ezpublish_rest.value_loader.repository_based
+        tags:
+            - { name: ezplatform.rest.value_loader, type: 'Content' }
+
+    ezpublish_rest.value_loader.user:
+        class: eZ\Publish\Core\REST\Server\ValueLoaders\User
+        parent: ezpublish_rest.value_loader.repository_based
+        tags:
+            - { name: ezplatform.rest.value_loader, type: 'User' }
