@@ -25,7 +25,8 @@ class ResourceRouteReference extends ResourceLink
                 $this->router->generate(
                     $data->route,
                     $data->loadParameters
-                )
+                ),
+                isset($data->mediaTypeName) ? $generator->getMediaType($data->mediaTypeName) : null
             )
         );
     }

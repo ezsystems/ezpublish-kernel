@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  *
  * @property string $route
  * @property array $loadParameters
+ * @property string $mediaTypeName
  */
 class ResourceRouteReference extends ValueObject
 {
@@ -25,9 +26,22 @@ class ResourceRouteReference extends ValueObject
      */
     protected $loadParameters;
 
-    public function __construct($route, $loadParameters)
+    /**
+     * The media-type name (ContentInfo, Location) of the resource. If null, the default will be used.
+     * @var null
+     */
+    protected $mediaTypeName;
+
+    /**
+     * ResourceRouteReference constructor.
+     * @param array $route
+     * @param $loadParameters
+     * @param string $mediaType The media-type name (ContentInfo, Location) of the resource. If null, the default will be used.
+     */
+    public function __construct($route, $loadParameters, $mediaType = null)
     {
         $this->route = $route;
         $this->loadParameters = $loadParameters;
+        $this->mediaTypeName = $mediaType;
     }
 }

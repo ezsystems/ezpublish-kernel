@@ -37,10 +37,14 @@ class ControllerUriValueLoader implements UriValueLoader
         $this->controllerResolver = $controllerResolver;
     }
 
-    public function load($restResourceLink)
+    public function load($restResourceLink, $mediaType = null)
     {
         $request = Request::create($restResourceLink);
         $request->attributes->add($this->router->match($restResourceLink));
+
+        if ($mediaType !== null) {
+            $request->headers->set('Accept', $mediaType);
+        }
 
         $controller = $this->controllerResolver->getController($request);
         $arguments = $this->controllerResolver->getArguments($request, $controller);

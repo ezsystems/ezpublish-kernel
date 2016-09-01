@@ -104,8 +104,11 @@ class RestLocation extends ValueObjectVisitor
         $visitor->visitValueObject(
             new ResourceRouteReference(
                 'ezpublish_rest_loadContent',
-                ['contentId' => $contentInfo->id]
-            )
+                ['contentId' => $contentInfo->id],
+                'Content'
+            ),
+            $generator,
+            $visitor
         );
         $generator->endObjectElement('Content');
 

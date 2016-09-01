@@ -11,6 +11,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * A link to a REST resource.
  *
  * @property string $link
+ * @property string $mediaType
  */
 class ResourceLink extends ValueObject
 {
@@ -22,8 +23,15 @@ class ResourceLink extends ValueObject
      */
     protected $link;
 
-    public function __construct($link)
+    /**
+     * Resource media-type. If not specified, the default one is used.
+     * @var string|null
+     */
+    protected $mediaType;
+
+    public function __construct($link, $mediaType = null)
     {
         $this->link = $link;
+        $this->mediaType = $mediaType;
     }
 }

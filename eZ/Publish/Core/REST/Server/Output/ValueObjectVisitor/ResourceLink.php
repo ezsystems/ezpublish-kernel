@@ -54,7 +54,7 @@ class ResourceLink extends ValueObjectVisitor
         if ($this->pathExpansionChecker->needsExpansion($generator->getStackPath())) {
             try {
                 $this->visitorDispatcher->visit(
-                    $this->valueLoader->load($data->link),
+                    $this->valueLoader->load($data->link, $data->mediaType ?: null),
                     new ExpansionGenerator($generator),
                     $visitor
                 );
