@@ -201,4 +201,48 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($generator->isEmpty());
     }
+
+    public function testGetDocumentStackPath()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument('test');
+
+        self::assertEquals('', $generator->getStackPath());
+    }
+
+    public function testGetRootStackPath()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
+
+        self::assertEquals('element', $generator->getStackPath());
+    }
+
+    public function testGetElementStackPath()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
+        $generator->startObjectElement('subElement');
+
+        self::assertEquals('element.subElement', $generator->getStackPath());
+    }
+
+    public function testGetListChildrenStackPath()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument('test');
+        $generator->startObjectElement('listOfElements');
+        $generator->startList('listOfElements');
+        $generator->startObjectElement('child');
+        $generator->startAttribute('href', 'http://google.com');
+        $generator->endAttribute('href');
+
+        self::assertEquals('listOfElements.child', $generator->getStackPath());
+    }
 }

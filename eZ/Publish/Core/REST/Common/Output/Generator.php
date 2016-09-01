@@ -396,4 +396,31 @@ abstract class Generator
      * @return mixed
      */
     abstract public function serializeBool($boolValue);
+
+    /**
+     * Returns a string representation of the current stack of the document.
+     *
+     * Example: "Location.ContentInfo'.
+     * Elements of type 'attribute', 'document' and 'list' are ignored.
+     *
+     * @return string
+     */
+    public function getStackPath()
+    {
+        $relevantNodes = array_filter(
+            $this->stack,
+            function ($value) {
+                return !in_array($value[0], ['attribute', 'document', 'list']);
+            }
+        );
+
+        $names = array_map(
+            function ($value) {
+                return $value[1];
+            },
+            $relevantNodes
+        );
+
+        return implode('.', $names);
+    }
 }
