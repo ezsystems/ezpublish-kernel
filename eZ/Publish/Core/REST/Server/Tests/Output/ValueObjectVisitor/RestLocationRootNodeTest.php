@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestLocation;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -60,31 +61,14 @@ class RestLocationRootNodeTest extends RestLocationTest
             array('locationPath' => '1'),
             '/content/locations/1'
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocationChildren',
-            array('locationPath' => '1'),
-            '/content/locations/1/children'
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
-            "/content/objects/{$location->location->contentId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_listLocationURLAliases',
-            array('locationPath' => '1'),
-            '/content/objects/1/urlaliases'
-        );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
-            "/content/objects/{$location->location->contentId}"
-        );
-
-        $this->getVisitorMock()->expects($this->once())
-            ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'));
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadLocationChildren', array('locationPath' => '1')),
+            new ResourceRouteReference('ezpublish_rest_loadContent', array('contentId' => $location->location->contentId)),
+            new ResourceRouteReference('ezpublish_rest_listLocationURLAliases', array('locationPath' => '1')),
+            new ResourceRouteReference('ezpublish_rest_loadContent', array('contentId' => $location->location->contentId), 'ContentInfo'),
+            $this->isInstanceOf('eZ\Publish\Core\REST\Server\Values\RestContent'),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -195,7 +179,6 @@ class RestLocationRootNodeTest extends RestLocationTest
                 'tag' => 'Children',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.LocationList+xml',
-                    'href' => '/content/locations/1/children',
                 ),
             ),
             $result,
@@ -238,7 +221,6 @@ class RestLocationRootNodeTest extends RestLocationTest
                 'tag' => 'UrlAliases',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UrlAliasRefList+xml',
-                    'href' => '/content/objects/1/urlaliases',
                 ),
             ),
             $result,

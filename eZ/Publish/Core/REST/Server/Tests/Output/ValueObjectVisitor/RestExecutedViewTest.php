@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestExecutedView;
 use eZ\Publish\Core\Repository\Values\Content as ApiValues;
 
@@ -50,11 +51,9 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
             array('viewId' => $view->identifier),
             "/content/views/{$view->identifier}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_views_load_results',
-            array('viewId' => $view->identifier),
-            "/content/views/{$view->identifier}/results"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_views_load_results', ['viewId' => $view->identifier]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -84,7 +83,6 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
             array('/View/Query[@media-type="application/vnd.ez.api.Query+xml"]'),
             array('/View/Result'),
             array('/View/Result[@media-type="application/vnd.ez.api.ViewResult+xml"]'),
-            array('/View/Result[@href="/content/views/test_view/results"]'),
         );
     }
 

@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * Location value object visitor.
@@ -73,16 +73,12 @@ class Location extends ValueObjectVisitor
 
         $generator->startObjectElement('ParentLocation', 'Location');
         if (trim($location->pathString, '/') !== '1') {
-            $generator->startAttribute(
-                'href',
-                $this->router->generate(
-                    'ezpublish_rest_loadLocation',
-                    array(
-                        'locationPath' => implode('/', array_slice($location->path, 0, count($location->path) - 1)),
-                    )
-                )
+            new ResourceRouteReference(
+                'ezpublish_rest_loadLocation',
+                [
+                    'locationPath' => implode('/', array_slice($location->path, 0, count($location->path) - 1)),
+                ]
             );
-            $generator->endAttribute('href');
         }
         $generator->endObjectElement('ParentLocation');
 
@@ -99,24 +95,17 @@ class Location extends ValueObjectVisitor
         $generator->endValueElement('remoteId');
 
         $generator->startObjectElement('Children', 'LocationList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
-                'ezpublish_rest_loadLocationChildren',
-                array(
-                    'locationPath' => trim($location->pathString, '/'),
-                )
-            )
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadLocationChildren', ['locationPath' => trim($location->pathString, '/')]),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Children');
 
         $generator->startObjectElement('Content');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $location->contentId))
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $location->contentId])
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Content');
 
         $generator->startValueElement('sortField', $this->serializeSortField($location->sortField));
@@ -126,26 +115,19 @@ class Location extends ValueObjectVisitor
         $generator->endValueElement('sortOrder');
 
         $generator->startObjectElement('UrlAliases', 'UrlAliasRefList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
-                'ezpublish_rest_listLocationURLAliases',
-                array('locationPath' => trim($location->pathString, '/'))
-            )
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_listLocationURLAliases', ['locationPath' => trim($location->pathString, '/')])
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('UrlAliases');
 
         $generator->startObjectElement('ContentInfo', 'ContentInfo');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
-                'ezpublish_rest_loadContent',
-                array('contentId' => $location->contentId)
-            )
+
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $location->contentId]),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
-        $visitor->visitValueObject(new RestContentValue($location->contentInfo));
+
         $generator->endObjectElement('ContentInfo');
 
         $generator->endObjectElement('Location');

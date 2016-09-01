@@ -51,11 +51,9 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
             ),
             "/user/groups/1/5/14/roles/{$userGroupRoleAssignment->roleAssignment->role->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadRole',
-            array('roleId' => $userGroupRoleAssignment->roleAssignment->role->id),
-            "/user/roles/{$userGroupRoleAssignment->roleAssignment->role->id}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new Values\ResourceRouteReference('ezpublish_rest_loadRole', ['roleId' => $userGroupRoleAssignment->roleAssignment->role->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -106,7 +104,6 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
                 'tag' => 'RoleAssignment',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.RoleAssignment+xml',
-                    'href' => '/user/groups/1/5/14/roles/42',
                 ),
             ),
             $result,
@@ -148,7 +145,6 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Role',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Role+xml',
-                    'href' => '/user/roles/42',
                 ),
             ),
             $result,

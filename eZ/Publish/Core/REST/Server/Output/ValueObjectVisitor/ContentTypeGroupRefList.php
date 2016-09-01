@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * ContentTypeGroupRefList value object visitor.
@@ -48,16 +49,9 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
         foreach ($data->contentTypeGroups as $contentTypeGroup) {
             $generator->startObjectElement('ContentTypeGroupRef', 'ContentTypeGroup');
 
-            $generator->startAttribute(
-                'href',
-                $this->router->generate(
-                    'ezpublish_rest_loadContentTypeGroup',
-                    array(
-                        'contentTypeGroupId' => $contentTypeGroup->id,
-                    )
-                )
+            $visitor->visitValueObject(
+                new ResourceRouteReference('ezpublish_rest_loadContentTypeGroup', ['contentTypeGroupId' => $contentTypeGroup->id])
             );
-            $generator->endAttribute('href');
 
             // Unlinking last group is not allowed
             if ($groupCount > 1) {

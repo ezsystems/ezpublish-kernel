@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * RestUserGroupRoleAssignment value object visitor.
@@ -53,11 +54,12 @@ class RestUserGroupRoleAssignment extends ValueObjectVisitor
         }
 
         $generator->startObjectElement('Role');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadRole', array('roleId' => $role->id))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_loadRole',
+                ['roleId' => $role->id]
+            )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Role');
 
         $generator->endObjectElement('RoleAssignment');

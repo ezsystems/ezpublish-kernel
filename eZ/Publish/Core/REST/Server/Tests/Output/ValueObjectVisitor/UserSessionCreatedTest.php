@@ -50,11 +50,9 @@ class UserSessionCreatedTest extends UserSessionTest
             "/user/sessions/{$session->sessionId}"
         );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $session->user->id),
-            "/user/users/{$session->user->id}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new Values\ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $session->user->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),

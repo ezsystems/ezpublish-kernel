@@ -18,6 +18,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
@@ -89,11 +90,12 @@ class RestExecutedView extends ValueObjectVisitor
 
         // BEGIN Result
         $generator->startObjectElement('Result', 'ViewResult');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_views_load_results', array('viewId' => $data->identifier))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_views_load_results',
+                ['viewId' => $data->identifier]
+            )
         );
-        $generator->endAttribute('href');
 
         // BEGIN Result metadata
         $generator->startValueElement('count', $data->searchResults->totalCount);

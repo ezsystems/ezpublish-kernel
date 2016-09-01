@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\UserGroupRefList;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -63,29 +64,12 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
             14
         );
 
-        $groupPath = trim($UserGroupRefList->userGroups[0]->mainLocation->pathString, '/');
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUserGroup',
-            array('groupPath' => $groupPath),
-            "/user/groups/{$groupPath}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_unassignUserFromUserGroup',
-            array('userId' => $UserGroupRefList->userId, 'groupPath' => 14),
-            '/user/users/14/groups/14'
-        );
-
-        $groupPath = trim($UserGroupRefList->userGroups[1]->mainLocation->pathString, '/');
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUserGroup',
-            array('groupPath' => '1/5/13'),
-            "/user/groups/{$groupPath}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_unassignUserFromUserGroup',
-            array('userId' => $UserGroupRefList->userId, 'groupPath' => 13),
-            '/user/users/14/groups/13'
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadUserGroup', ['groupPath' => '1/5/14']),
+            new ResourceRouteReference('ezpublish_rest_unassignUserFromUserGroup', ['userId' => $UserGroupRefList->userId, 'groupPath' => 14]),
+            new ResourceRouteReference('ezpublish_rest_loadUserGroup', ['groupPath' => '1/5/13']),
+            new ResourceRouteReference('ezpublish_rest_unassignUserFromUserGroup', ['userId' => $UserGroupRefList->userId, 'groupPath' => 13]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -108,29 +92,9 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testUserGroupRefListHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/UserGroupRefList[@href="/some/path"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisit
-     */
     public function testUserGroupRefListMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/UserGroupRefList[@media-type="application/vnd.ez.api.UserGroupRefList+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisit
-     */
-    public function testFirstUserGroupHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/UserGroupRefList/UserGroup[1][@href="/user/groups/1/5/14"]');
     }
 
     /**
@@ -148,16 +112,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testFirstUserGroupUnassignHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/UserGroupRefList/UserGroup[1]/unassign[@href="/user/users/14/groups/14"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisit
-     */
     public function testFirstUserGroupUnassignMethodCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/UserGroupRefList/UserGroup[1]/unassign[@method="DELETE"]');
@@ -168,29 +122,9 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testSecondUserGroupHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/UserGroupRefList/UserGroup[2][@href="/user/groups/1/5/13"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisit
-     */
     public function testSecondUserGroupMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/UserGroupRefList/UserGroup[2][@media-type="application/vnd.ez.api.UserGroup+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisit
-     */
-    public function testSecondUserGroupUnassignHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/UserGroupRefList/UserGroup[2]/unassign[@href="/user/users/14/groups/13"]');
     }
 
     /**

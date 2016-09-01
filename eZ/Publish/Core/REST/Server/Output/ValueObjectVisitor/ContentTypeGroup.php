@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * ContentTypeGroup value object visitor.
@@ -34,10 +35,7 @@ class ContentTypeGroup extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->router->generate(
-                'ezpublish_rest_loadContentTypeGroup',
-                array('contentTypeGroupId' => $data->id)
-            )
+            $this->router->generate('ezpublish_rest_loadContentTypeGroup', ['contentTypeGroupId' => $data->id])
         );
         $generator->endAttribute('href');
 
@@ -54,30 +52,31 @@ class ContentTypeGroup extends ValueObjectVisitor
         $generator->endValueElement('modified');
 
         $generator->startObjectElement('Creator', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->creatorId))
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $data->creatorId]),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Creator');
 
         $generator->startObjectElement('Modifier', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->modifierId))
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $data->modifierId]),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Modifier');
 
         $generator->startObjectElement('ContentTypes', 'ContentTypeInfoList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_listContentTypesForGroup',
-                array('contentTypeGroupId' => $data->id)
-            )
+                ['contentTypeGroupId' => $data->id],
+                'ContentTypeInfoList'
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('ContentTypes');
 
         $generator->endObjectElement('ContentTypeGroup');

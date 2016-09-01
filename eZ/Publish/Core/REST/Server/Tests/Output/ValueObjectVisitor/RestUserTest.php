@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestUser;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
@@ -30,60 +31,25 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
         $restUser = $this->getBasicRestUser();
 
-        $this->getVisitorMock()->expects($this->once())
-            ->method('visitValueObject');
-
         $locationPath = implode('/', $restUser->mainLocation->path);
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
             array('userId' => $restUser->contentInfo->id),
             "/user/users/{$restUser->contentInfo->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContentType',
-            array('contentTypeId' => $restUser->contentInfo->contentTypeId),
-            "/content/types/{$restUser->contentInfo->contentTypeId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContentVersions',
-            array('contentId' => $restUser->contentInfo->id),
-            "/content/objects/{$restUser->contentInfo->id}/versions"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadSection',
-            array('sectionId' => $restUser->contentInfo->sectionId),
-            "/content/sections/{$restUser->contentInfo->sectionId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocation',
-            array('locationPath' => $locationPath),
-            "/content/locations/{$locationPath}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocationsForContent',
-            array('contentId' => $restUser->contentInfo->id),
-            "/content/objects/{$restUser->contentInfo->id}/locations"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUserGroupsOfUser',
-            array('userId' => $restUser->contentInfo->id),
-            "/user/users/{$restUser->contentInfo->id}/groups"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $restUser->contentInfo->ownerId),
-            "/user/users/{$restUser->contentInfo->ownerId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUserGroupsOfUser',
-            array('userId' => $restUser->contentInfo->id),
-            "/user/users/{$restUser->contentInfo->id}/groups"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadRoleAssignmentsForUser',
-            array('userId' => $restUser->contentInfo->id),
-            "/user/users/{$restUser->contentInfo->id}/roles"
-        );
+
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadContentType', ['contentTypeId' => $restUser->contentInfo->contentTypeId]),
+            new ResourceRouteReference('ezpublish_rest_loadContentVersions', ['contentId' => $restUser->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadSection', ['sectionId' => $restUser->contentInfo->sectionId]),
+            new ResourceRouteReference('ezpublish_rest_loadLocation', ['locationPath' => $locationPath]),
+            new ResourceRouteReference('ezpublish_rest_loadLocationsForContent', ['contentId' => $restUser->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadUserGroupsOfUser', ['userId' => $restUser->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $restUser->contentInfo->ownerId]),
+            $this->isInstanceOf('eZ\Publish\Core\REST\Server\Values\Version'),
+            new ResourceRouteReference('ezpublish_rest_loadUserGroupsOfUser', ['userId' => $restUser->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadRoleAssignmentsForUser', ['userId' => $restUser->contentInfo->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -178,16 +144,6 @@ class RestUserTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testUserTypeHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/ContentType[@href="/content/types/contentType23"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testUserTypeMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/User/ContentType[@media-type="application/vnd.ez.api.ContentType+xml"]');
@@ -208,29 +164,9 @@ class RestUserTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testVersionsHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/Versions[@href="/content/objects/content23/versions"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testVersionsMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/User/Versions[@media-type="application/vnd.ez.api.VersionList+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
-    public function testSectionHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/Section[@href="/content/sections/section23"]');
     }
 
     /**
@@ -248,16 +184,6 @@ class RestUserTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testMainLocationHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/MainLocation[@href="/content/locations/1/2/23"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testMainLocationMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/User/MainLocation[@media-type="application/vnd.ez.api.Location+xml"]');
@@ -268,29 +194,9 @@ class RestUserTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testLocationsHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/Locations[@href="/content/objects/content23/locations"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testLocationsMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/User/Locations[@media-type="application/vnd.ez.api.LocationList+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
-    public function testOwnerHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/Owner[@href="/user/users/user23"]');
     }
 
     /**
@@ -338,29 +244,9 @@ class RestUserTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testUserGroupsHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/UserGroups[@href="/user/users/content23/groups"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testUserGroupsMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/User/UserGroups[@media-type="application/vnd.ez.api.UserGroupList+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
-    public function testRolesHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/User/Roles[@href="/user/users/content23/roles"]');
     }
 
     /**

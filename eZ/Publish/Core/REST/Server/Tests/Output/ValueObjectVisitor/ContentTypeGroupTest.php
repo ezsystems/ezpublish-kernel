@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\ContentType;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
 {
@@ -50,31 +51,17 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
             )
         );
 
-        $routerMock = $this->getRouterMock();
-
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentTypeGroup',
-            array('contentTypeGroupId' => $contentTypeGroup->id),
+            ['contentTypeGroupId' => $contentTypeGroup->id],
             "/content/typegroups/{$contentTypeGroup->id}"
         );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $contentTypeGroup->creatorId),
-            "/user/users/{$contentTypeGroup->creatorId}"
-        );
-
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $contentTypeGroup->modifierId),
-            "/user/users/{$contentTypeGroup->modifierId}"
-        );
-
-        $this->addRouteExpectation(
-            'ezpublish_rest_listContentTypesForGroup',
-            array('contentTypeGroupId' => $contentTypeGroup->id),
-            "/content/typegroups/{$contentTypeGroup->id}/types"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $contentTypeGroup->creatorId]),
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $contentTypeGroup->modifierId]),
+            new ResourceRouteReference('ezpublish_rest_listContentTypesForGroup', ['contentTypeGroupId' => $contentTypeGroup->id], 'ContentTypeInfoList'),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -234,29 +221,6 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Creator element attributes.
-     *
-     * @param string $result
-     *
-     * @depends testVisit
-     */
-    public function testResultContainsCreatorAttributes($result)
-    {
-        $this->assertXMLTag(
-            array(
-                'tag' => 'Creator',
-                'attributes' => array(
-                    'href' => '/user/users/14',
-                    'media-type' => 'application/vnd.ez.api.User+xml',
-                ),
-            ),
-            $result,
-            'Invalid <Creator> element attributes.',
-            false
-        );
-    }
-
-    /**
      * Test if result contains Modifier element.
      *
      * @param string $result
@@ -276,29 +240,6 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Modifier element attributes.
-     *
-     * @param string $result
-     *
-     * @depends testVisit
-     */
-    public function testResultContainsModifierAttributes($result)
-    {
-        $this->assertXMLTag(
-            array(
-                'tag' => 'Modifier',
-                'attributes' => array(
-                    'href' => '/user/users/13',
-                    'media-type' => 'application/vnd.ez.api.User+xml',
-                ),
-            ),
-            $result,
-            'Invalid <Modifier> element attributes.',
-            false
-        );
-    }
-
-    /**
      * Test if result contains ContentTypes element.
      *
      * @param string $result
@@ -313,29 +254,6 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid <ContentTypes> element.',
-            false
-        );
-    }
-
-    /**
-     * Test if result contains ContentTypes element attributes.
-     *
-     * @param string $result
-     *
-     * @depends testVisit
-     */
-    public function testResultContainsContentTypesAttributes($result)
-    {
-        $this->assertXMLTag(
-            array(
-                'tag' => 'ContentTypes',
-                'attributes' => array(
-                    'href' => '/content/typegroups/42/types',
-                    'media-type' => 'application/vnd.ez.api.ContentTypeInfoList+xml',
-                ),
-            ),
-            $result,
-            'Invalid <ContentTypes> attributes.',
             false
         );
     }

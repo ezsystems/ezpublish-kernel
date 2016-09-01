@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestTrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -61,28 +62,12 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             array('trashItemId' => $trashItem->trashItem->id),
             "/content/trash/{$trashItem->trashItem->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocation',
-            array('locationPath' => '1/2/21'),
-            '/content/locations/1/2/21'
-        );
-
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $trashItem->trashItem->contentInfo->id),
-            "/content/objects/{$trashItem->trashItem->contentInfo->id}"
-        );
-
-        // Expected twice, second one here for ContentInfo
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $trashItem->trashItem->contentInfo->id),
-            "/content/objects/{$trashItem->trashItem->contentInfo->id}"
-        );
-
-        $this->getVisitorMock()->expects($this->once())
-            ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'));
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadLocation', ['locationPath' => '1/2/21']),
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $trashItem->trashItem->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $trashItem->trashItem->contentInfo->id]),
+            $this->isInstanceOf('eZ\Publish\Core\REST\Server\Values\RestContent'),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -133,7 +118,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                 'tag' => 'TrashItem',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.TrashItem+xml',
-                    'href' => '/content/trash/42',
                 ),
             ),
             $result,
@@ -175,7 +159,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                 'tag' => 'ContentInfo',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
-                    'href' => '/content/objects/84',
                 ),
             ),
             $result,
@@ -317,7 +300,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                 'tag' => 'ParentLocation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Location+xml',
-                    'href' => '/content/locations/1/2/21',
                 ),
             ),
             $result,
@@ -419,7 +401,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Content',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Content+xml',
-                    'href' => '/content/objects/84',
                 ),
             ),
             $result,

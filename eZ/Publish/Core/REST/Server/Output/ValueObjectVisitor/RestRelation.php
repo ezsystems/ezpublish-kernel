@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * RestRelation value object visitor.
@@ -46,29 +47,21 @@ class RestRelation extends ValueObjectVisitor
         $generator->endAttribute('href');
 
         $generator->startObjectElement('SourceContent', 'ContentInfo');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadContent',
-                array(
-                    'contentId' => $data->contentId,
-                )
+                ['contentId' => $data->contentId]
             )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('SourceContent');
 
         $generator->startObjectElement('DestinationContent', 'ContentInfo');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadContent',
-                array(
-                    'contentId' => $data->relation->getDestinationContentInfo()->id,
-                )
+                ['contentId' => $data->relation->getDestinationContentInfo()->id]
             )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('DestinationContent');
 
         if ($data->relation->sourceFieldDefinitionIdentifier !== null) {

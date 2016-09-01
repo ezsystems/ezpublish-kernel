@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * UserSession value object visitor.
@@ -53,11 +54,9 @@ class UserSession extends ValueObjectVisitor
         $generator->endValueElement('csrfToken');
 
         $generator->startObjectElement('User', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->user->id))
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $data->user->id])
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('User');
 
         $generator->endObjectElement('Session');

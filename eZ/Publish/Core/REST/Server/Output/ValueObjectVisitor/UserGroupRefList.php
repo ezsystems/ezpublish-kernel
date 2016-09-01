@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * UserGroupRefList value object visitor.
@@ -42,31 +43,25 @@ class UserGroupRefList extends ValueObjectVisitor
         foreach ($data->userGroups as $userGroup) {
             $generator->startObjectElement('UserGroup');
 
-            $generator->startAttribute(
-                'href',
-                $this->router->generate(
+            $visitor->visitValueObject(
+                new ResourceRouteReference(
                     'ezpublish_rest_loadUserGroup',
-                    array(
-                        'groupPath' => trim($userGroup->mainLocation->pathString, '/'),
-                    )
+                    ['groupPath' => trim($userGroup->mainLocation->pathString, '/')]
                 )
             );
-            $generator->endAttribute('href');
 
             if ($data->userId !== null && $groupCount > 1) {
                 $generator->startHashElement('unassign');
 
-                $generator->startAttribute(
-                    'href',
-                    $this->router->generate(
+                $visitor->visitValueObject(
+                    new ResourceRouteReference(
                         'ezpublish_rest_unassignUserFromUserGroup',
-                        array(
+                        [
                             'userId' => $data->userId,
                             'groupPath' => $userGroup->mainLocation->path[count($userGroup->mainLocation->path) - 1],
-                        )
+                        ]
                     )
                 );
-                $generator->endAttribute('href');
 
                 $generator->startAttribute('method', 'DELETE');
                 $generator->endAttribute('method');

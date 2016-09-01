@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * Role value object visitor.
@@ -43,11 +44,9 @@ class Role extends ValueObjectVisitor
         $generator->endValueElement('identifier');
 
         $generator->startObjectElement('Policies', 'PolicyList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadPolicies', array('roleId' => $data->id))
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadPolicies', ['roleId' => $data->id])
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Policies');
 
         $generator->endObjectElement('Role');

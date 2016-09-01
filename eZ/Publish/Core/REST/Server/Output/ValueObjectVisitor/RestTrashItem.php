@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
@@ -63,16 +64,12 @@ class RestTrashItem extends ValueObjectVisitor
         $pathStringParts = array_slice($pathStringParts, 0, count($pathStringParts) - 1);
 
         $generator->startObjectElement('ParentLocation', 'Location');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadLocation',
-                array(
-                    'locationPath' => implode('/', $pathStringParts),
-                )
+                ['locationPath' => implode('/', $pathStringParts)]
             )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('ParentLocation');
 
         $generator->startValueElement('pathString', $trashItem->pathString);
@@ -88,11 +85,12 @@ class RestTrashItem extends ValueObjectVisitor
         $generator->endValueElement('remoteId');
 
         $generator->startObjectElement('Content');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $contentInfo->id))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_loadContent',
+                ['contentId' => $contentInfo->id]
+            )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Content');
 
         $generator->startValueElement('sortField', $this->serializeSortField($trashItem->sortField));
@@ -102,14 +100,12 @@ class RestTrashItem extends ValueObjectVisitor
         $generator->endValueElement('sortOrder');
 
         $generator->startObjectElement('ContentInfo', 'ContentInfo');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadContent',
-                array('contentId' => $contentInfo->id)
+                ['contentId' => $contentInfo->id]
             )
         );
-        $generator->endAttribute('href');
         $visitor->visitValueObject(new RestContentValue($contentInfo));
         $generator->endObjectElement('ContentInfo');
 

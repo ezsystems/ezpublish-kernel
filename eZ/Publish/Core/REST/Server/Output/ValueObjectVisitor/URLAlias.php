@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * URLAlias value object visitor.
@@ -46,11 +47,9 @@ class URLAlias extends ValueObjectVisitor
 
         if ($data->type === Values\Content\URLAlias::LOCATION) {
             $generator->startObjectElement('location', 'Location');
-            $generator->startAttribute(
-                'href',
-                $this->router->generate('ezpublish_rest_loadLocation', array('locationPath' => $data->destination))
+            $visitor->visitValueObject(
+                new ResourceRouteReference('ezpublish_rest_loadLocation', ['locationPath' => $data->destination])
             );
-            $generator->endAttribute('href');
             $generator->endObjectElement('location');
         } else {
             $generator->startValueElement('resource', $data->destination);

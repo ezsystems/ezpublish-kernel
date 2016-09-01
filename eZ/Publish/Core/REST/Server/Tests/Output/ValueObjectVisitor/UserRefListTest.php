@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\UserRefList;
 use eZ\Publish\Core\REST\Server\Values\RestUser;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -49,11 +50,9 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
             '/some/path'
         );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $UserRefList->users[0]->contentInfo->id),
-            "/user/users/{$UserRefList->users[0]->contentInfo->id}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $UserRefList->users[0]->contentInfo->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -89,16 +88,6 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
     public function testUserRefListMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/UserRefList[@media-type="application/vnd.ez.api.UserRefList+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisit
-     */
-    public function testUserHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/UserRefList/User[@href="/user/users/14"]');
     }
 
     /**

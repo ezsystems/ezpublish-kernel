@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * RestObjectState value object visitor.
@@ -52,11 +53,12 @@ class RestObjectState extends ValueObjectVisitor
 
         $generator->startObjectElement('ObjectStateGroup');
 
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadObjectStateGroup', array('objectStateGroupId' => $data->groupId))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_loadObjectStateGroup',
+                ['objectStateGroupId' => $data->groupId]
+            )
         );
-        $generator->endAttribute('href');
 
         $generator->endObjectElement('ObjectStateGroup');
 

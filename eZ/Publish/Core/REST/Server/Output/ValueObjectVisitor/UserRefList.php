@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * UserRefList value object visitor.
@@ -39,10 +40,9 @@ class UserRefList extends ValueObjectVisitor
         $generator->startList('User');
         foreach ($data->users as $user) {
             $generator->startObjectElement('User');
-
-            $generator->startAttribute('href', $this->router->generate('ezpublish_rest_loadUser', array('userId' => $user->contentInfo->id)));
-            $generator->endAttribute('href');
-
+            $visitor->visitValueObject(
+                new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $user->contentInfo->id])
+            );
             $generator->endObjectElement('User');
         }
         $generator->endList('User');

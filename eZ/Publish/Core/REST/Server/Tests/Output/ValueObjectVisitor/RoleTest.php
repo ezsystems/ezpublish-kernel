@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\User;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 class RoleTest extends ValueObjectVisitorBaseTest
 {
@@ -47,7 +48,9 @@ class RoleTest extends ValueObjectVisitorBaseTest
         );
 
         $this->addRouteExpectation('ezpublish_rest_loadRole', array('roleId' => $role->id), "/user/roles/{$role->id}");
-        $this->addRouteExpectation('ezpublish_rest_loadPolicies', array('roleId' => $role->id), "/user/roles/{$role->id}/policies");
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadPolicies', ['roleId' => $role->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -98,7 +101,6 @@ class RoleTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Role',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Role+xml',
-                    'href' => '/user/roles/42',
                 ),
             ),
             $result,
@@ -227,7 +229,6 @@ class RoleTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Policies',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.PolicyList+xml',
-                    'href' => '/user/roles/42/policies',
                 ),
             ),
             $result,

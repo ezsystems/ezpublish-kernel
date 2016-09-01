@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\ObjectState;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
 {
@@ -51,11 +52,9 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
             "/content/objectstategroups/$objectStateGroup->id"
         );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadObjectStates',
-            array('objectStateGroupId' => $objectStateGroup->id),
-            "/content/objectstategroups/$objectStateGroup->id/objectstates"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadObjectStates', ['objectStateGroupId' => $objectStateGroup->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),

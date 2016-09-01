@@ -76,47 +76,40 @@ class RestContentType extends RestContentTypeBase
         $generator->endValueElement('modificationDate');
 
         $generator->startObjectElement('Creator', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        // @todo EZP-26033: this sould use rest resource embedding
+        $visitor->visitValueObject(
+            new Values\ResourceRouteReference(
                 'ezpublish_rest_loadUser',
-                array('userId' => $contentType->creatorId)
+                ['userId' => $contentType->creatorId]
             )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Creator');
 
         $generator->startObjectElement('Modifier', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new Values\ResourceRouteReference(
                 'ezpublish_rest_loadUser',
-                array('userId' => $contentType->modifierId)
+                ['userId' => $contentType->modifierId]
             )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Modifier');
 
         $generator->startObjectElement('Groups', 'ContentTypeGroupRefList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new Values\ResourceRouteReference(
                 'ezpublish_rest_loadGroupsOfContentType',
-                array('contentTypeId' => $contentType->id)
+                ['contentTypeId' => $contentType->id]
             )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Groups');
 
         $generator->startObjectElement('Draft', 'ContentType');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new Values\ResourceRouteReference(
                 'ezpublish_rest_loadContentTypeDraft',
-                array('contentTypeId' => $contentType->id)
+                ['contentTypeId' => $contentType->id]
             )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Draft');
 
         $generator->startValueElement('remoteId', $contentType->remoteId);

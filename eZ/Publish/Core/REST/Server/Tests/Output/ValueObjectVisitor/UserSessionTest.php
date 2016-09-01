@@ -52,11 +52,9 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
             "/user/sessions/{$session->sessionId}"
         );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $session->user->id),
-            "/user/users/{$session->user->id}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new Values\ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $session->user->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -219,7 +217,6 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
             array(
                 'tag' => 'User',
                 'attributes' => array(
-                    'href' => '/user/users/user123',
                     'media-type' => 'application/vnd.ez.api.User+xml',
                 ),
             ),

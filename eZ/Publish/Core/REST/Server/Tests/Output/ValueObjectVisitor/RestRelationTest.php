@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestRelation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -61,16 +62,10 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
             ),
             "/content/objects/{$relation->contentId}/versions/{$relation->versionNo}/relations/{$relation->relation->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $relation->contentId),
-            "/content/objects/{$relation->contentId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $relation->relation->getDestinationContentInfo()->id),
-            "/content/objects/{$relation->relation->getDestinationContentInfo()->id}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $relation->contentId]),
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $relation->relation->getDestinationContentInfo()->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -122,7 +117,6 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Relation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Relation+xml',
-                    'href' => '/content/objects/1/versions/1/relations/42',
                 ),
             ),
             $result,
@@ -143,7 +137,6 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'SourceContent',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
-                    'href' => '/content/objects/1',
                 ),
             ),
             $result,
@@ -164,7 +157,6 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'DestinationContent',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
-                    'href' => '/content/objects/2',
                 ),
             ),
             $result,

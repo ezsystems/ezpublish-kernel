@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\Core\REST\Common\Values;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 class RestObjectStateTest extends ValueObjectVisitorBaseTest
 {
@@ -55,11 +56,9 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
             array('objectStateGroupId' => $objectState->groupId, 'objectStateId' => $objectState->objectState->id),
             "/content/objectstategroups/{$objectState->groupId}/objectstates/{$objectState->objectState->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadObjectStateGroup',
-            array('objectStateGroupId' => $objectState->groupId),
-            "/content/objectstategroups/{$objectState->groupId}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadObjectStateGroup', ['objectStateGroupId' => $objectState->groupId]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -110,7 +109,6 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
                 'tag' => 'ObjectState',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectState+xml',
-                    'href' => '/content/objectstategroups/21/objectstates/42',
                 ),
             ),
             $result,
@@ -152,7 +150,6 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
                 'tag' => 'ObjectStateGroup',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml',
-                    'href' => '/content/objectstategroups/21',
                 ),
             ),
             $result,

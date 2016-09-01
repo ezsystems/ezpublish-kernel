@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * VersionInfo value object visitor.
@@ -52,12 +53,9 @@ class VersionInfo extends ValueObjectVisitor
         $generator->endValueElement('modificationDate');
 
         $generator->startObjectElement('Creator', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadUser',
-                array('userId' => $versionInfo->creatorId))
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $versionInfo->creatorId])
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Creator');
 
         $generator->startValueElement(
@@ -81,11 +79,9 @@ class VersionInfo extends ValueObjectVisitor
         $this->visitNamesList($generator, $versionInfo->names);
 
         $generator->startObjectElement('Content', 'ContentInfo');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $versionInfo->getContentInfo()->id))
+        $visitor->visitValueObject(
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $versionInfo->getContentInfo()->id])
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Content');
 
         $generator->endHashElement('VersionInfo');

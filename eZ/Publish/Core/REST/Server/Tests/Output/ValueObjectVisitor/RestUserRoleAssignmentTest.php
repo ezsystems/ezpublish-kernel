@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
 {
@@ -52,11 +53,9 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
             "/user/users/{$userRoleAssignment->id}/roles/{$userRoleAssignment->roleAssignment->role->id}"
         );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadRole',
-            array('roleId' => $userRoleAssignment->roleAssignment->role->id),
-            "/user/roles/{$userRoleAssignment->roleAssignment->role->id}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadRole', ['roleId' => $userRoleAssignment->roleAssignment->role->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -107,7 +106,6 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
                 'tag' => 'RoleAssignment',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.RoleAssignment+xml',
-                    'href' => '/user/users/14/roles/42',
                 ),
             ),
             $result,
@@ -149,7 +147,6 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Role',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Role+xml',
-                    'href' => '/user/roles/42',
                 ),
             ),
             $result,

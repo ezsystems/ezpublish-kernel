@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 
 /**
  * LocationList value object visitor.
@@ -38,14 +39,12 @@ class LocationList extends ValueObjectVisitor
 
         foreach ($data->locations as $restLocation) {
             $generator->startObjectElement('Location');
-            $generator->startAttribute(
-                'href',
-                $this->router->generate(
+            $visitor->visitValueObject(
+                new ResourceRouteReference(
                     'ezpublish_rest_loadLocation',
-                    array('locationPath' => trim($restLocation->location->pathString, '/'))
+                    ['locationPath' => trim($restLocation->location->pathString, '/')]
                 )
             );
-            $generator->endAttribute('href');
             $generator->endObjectElement('Location');
         }
 

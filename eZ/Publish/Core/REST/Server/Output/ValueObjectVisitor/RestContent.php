@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 
 /**
@@ -45,7 +46,7 @@ class RestContent extends ValueObjectVisitor
         $generator->startAttribute(
             'href',
             $data->path === null ?
-                $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $contentInfo->id)) :
+                $this->router->generate('ezpublish_rest_loadContent', ['contentId' => $contentInfo->id]) :
                 $data->path
         );
         $generator->endAttribute('href');
@@ -56,89 +57,99 @@ class RestContent extends ValueObjectVisitor
         $generator->endAttribute('id');
 
         $generator->startObjectElement('ContentType');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadContentType',
-                array('contentTypeId' => $contentInfo->contentTypeId)
-            )
+                ['contentTypeId' => $contentInfo->contentTypeId]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('ContentType');
 
         $generator->startValueElement('Name', $contentInfo->name);
         $generator->endValueElement('Name');
 
         $generator->startObjectElement('Versions', 'VersionList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadContentVersions', array('contentId' => $contentInfo->id))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_loadContentVersions',
+                ['contentId' => $contentInfo->id]
+            )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Versions');
 
         $generator->startObjectElement('CurrentVersion', 'Version');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_redirectCurrentVersion',
-                array('contentId' => $contentInfo->id)
-            )
+                ['contentId' => $contentInfo->id]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
 
         // Embed current version, if available
         if ($currentVersion !== null) {
+            // @todo EZP-26033: this should use rest resource embedding
             $visitor->visitValueObject(
                 new VersionValue(
                     $currentVersion,
                     $contentType,
                     $restContent->relations
-                )
+                ),
+                $generator,
+                $visitor
             );
         }
 
         $generator->endObjectElement('CurrentVersion');
 
         $generator->startObjectElement('Section');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadSection', array('sectionId' => $contentInfo->sectionId))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_loadSection',
+                ['sectionId' => $contentInfo->sectionId]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Section');
 
         // Main location will not exist if we're visiting the content draft
         if ($data->mainLocation !== null) {
             $generator->startObjectElement('MainLocation', 'Location');
-            $generator->startAttribute(
-                'href',
-                $this->router->generate(
+            $visitor->visitValueObject(
+                new ResourceRouteReference(
                     'ezpublish_rest_loadLocation',
-                    array('locationPath' => trim($mainLocation->pathString, '/'))
-                )
+                    ['locationPath' => trim($mainLocation->pathString, '/')]
+                ),
+                $generator,
+                $visitor
             );
-            $generator->endAttribute('href');
             $generator->endObjectElement('MainLocation');
         }
 
         $generator->startObjectElement('Locations', 'LocationList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadLocationsForContent',
-                array('contentId' => $contentInfo->id)
-            )
+                ['contentId' => $contentInfo->id]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Locations');
 
         $generator->startObjectElement('Owner', 'User');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $contentInfo->ownerId))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_loadUser',
+                ['userId' => $contentInfo->ownerId]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Owner');
 
         // Modification date will not exist if we're visiting the content draft
@@ -180,14 +191,14 @@ class RestContent extends ValueObjectVisitor
         $generator->endValueElement('alwaysAvailable');
 
         $generator->startObjectElement('ObjectStates', 'ContentObjectStates');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_getObjectStatesForContent',
-                array('contentId' => $contentInfo->id)
-            )
+                ['contentId' => $contentInfo->id]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('ObjectStates');
 
         $generator->endObjectElement('Content');

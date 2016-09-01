@@ -195,6 +195,26 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
+     * Adds the expectated value object visit calls sequence.
+     *
+     * @param array $valueObjects Array of visited value object, or of phpunit matcher ($this->instanceOf(), etc...) .
+     */
+    protected function setVisitValueObjectExpectations(array $valueObjects)
+    {
+        $consecutiveCalls = [];
+        foreach ($valueObjects as $valueObject) {
+            $consecutiveCalls = [
+                $valueObject,
+                $this->getGenerator(),
+                $this->getVisitorMock(),
+            ];
+        }
+
+        $mocker = $this->getVisitorMock()->expects($this->any())->method('visitValueObject');
+        call_user_func_array([$mocker, 'withConsecutive'], $consecutiveCalls);
+    }
+
+    /**
      * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getTemplatedRouterMock()

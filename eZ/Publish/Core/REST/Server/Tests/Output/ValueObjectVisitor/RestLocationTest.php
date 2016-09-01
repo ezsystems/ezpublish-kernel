@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestLocation;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -56,42 +57,15 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             0
         );
 
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocation',
-            array('locationPath' => '1/2/21/42'),
-            '/content/locations/1/2/21/42'
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocation',
-            array('locationPath' => '1/2/21'),
-            '/content/locations/1/2/21'
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocationChildren',
-            array('locationPath' => '1/2/21/42'),
-            '/content/locations/1/2/21/42/children'
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
-            "/content/objects/{$location->location->contentId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_listLocationURLAliases',
-            array('locationPath' => '1/2/21/42'),
-            '/content/objects/1/2/21/42/urlaliases'
-        );
-
-        // Expected twice, second one here for ContentInfo
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
-            "/content/objects/{$location->location->contentId}"
-        );
-
-        $this->getVisitorMock()->expects($this->once())
-            ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'));
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadLocation', ['locationPath' => '1/2/21/42']),
+            new ResourceRouteReference('ezpublish_rest_loadLocation', ['locationPath' => '1/2/21']),
+            new ResourceRouteReference('ezpublish_rest_loadLocationChildren', ['locationPath' => '1/2/21/42']),
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $location->location->contentId]),
+            new ResourceRouteReference('ezpublish_rest_listLocationURLAliases', ['locationPath' => '1/2/21/42']),
+            new ResourceRouteReference('ezpublish_rest_loadContent', ['contentId' => $location->location->contentId]),
+            $this->isInstanceOf('eZ\Publish\Core\REST\Server\Values\RestContent'),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -139,7 +113,6 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Location',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Location+xml',
-                    'href' => '/content/locations/1/2/21/42',
                 ),
             ),
             $result,
@@ -181,7 +154,6 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'ContentInfo',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
-                    'href' => '/content/objects/42',
                 ),
             ),
             $result,
@@ -323,7 +295,6 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Children',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.LocationList+xml',
-                    'href' => '/content/locations/1/2/21/42/children',
                 ),
             ),
             $result,
@@ -365,7 +336,6 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'ParentLocation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Location+xml',
-                    'href' => '/content/locations/1/2/21',
                 ),
             ),
             $result,
@@ -407,7 +377,6 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'Content',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Content+xml',
-                    'href' => '/content/objects/42',
                 ),
             ),
             $result,
@@ -549,7 +518,6 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                 'tag' => 'UrlAliases',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UrlAliasRefList+xml',
-                    'href' => '/content/objects/1/2/21/42/urlaliases',
                 ),
             ),
             $result,

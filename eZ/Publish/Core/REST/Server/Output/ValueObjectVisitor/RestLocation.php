@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
@@ -40,7 +41,7 @@ class RestLocation extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadLocation',
-                array('locationPath' => trim($location->pathString, '/'))
+                ['locationPath' => trim($location->pathString, '/')]
             )
         );
         $generator->endAttribute('href');
@@ -65,16 +66,14 @@ class RestLocation extends ValueObjectVisitor
 
         $generator->startObjectElement('ParentLocation', 'Location');
         if (trim($location->pathString, '/') !== '1') {
-            $generator->startAttribute(
-                'href',
-                $this->router->generate(
+            $visitor->visitValueObject(
+                new ResourceRouteReference(
                     'ezpublish_rest_loadLocation',
-                    array(
-                        'locationPath' => implode('/', array_slice($location->path, 0, count($location->path) - 1)),
-                    )
-                )
+                    ['locationPath' => implode('/', array_slice($location->path, 0, count($location->path) - 1))]
+                ),
+                $generator,
+                $visitor
             );
-            $generator->endAttribute('href');
         }
         $generator->endObjectElement('ParentLocation');
 
@@ -91,24 +90,23 @@ class RestLocation extends ValueObjectVisitor
         $generator->endValueElement('remoteId');
 
         $generator->startObjectElement('Children', 'LocationList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadLocationChildren',
-                array(
-                    'locationPath' => trim($location->pathString, '/'),
-                )
-            )
+                ['locationPath' => trim($location->pathString, '/')]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Children');
 
         $generator->startObjectElement('Content');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $contentInfo->id))
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
+                'ezpublish_rest_loadContent',
+                ['contentId' => $contentInfo->id]
+            )
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('Content');
 
         $generator->startValueElement('sortField', $this->serializeSortField($location->sortField));
@@ -118,25 +116,27 @@ class RestLocation extends ValueObjectVisitor
         $generator->endValueElement('sortOrder');
 
         $generator->startObjectElement('UrlAliases', 'UrlAliasRefList');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_listLocationURLAliases',
-                array('locationPath' => trim($location->pathString, '/'))
-            )
+                ['locationPath' => trim($location->pathString, '/')]
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
         $generator->endObjectElement('UrlAliases');
 
         $generator->startObjectElement('ContentInfo', 'ContentInfo');
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
+        $visitor->visitValueObject(
+            new ResourceRouteReference(
                 'ezpublish_rest_loadContent',
-                array('contentId' => $contentInfo->id)
-            )
+                ['contentId' => $contentInfo->id],
+                'ContentInfo'
+            ),
+            $generator,
+            $visitor
         );
-        $generator->endAttribute('href');
+
         $visitor->visitValueObject(new RestContentValue($contentInfo));
         $generator->endObjectElement('ContentInfo');
 

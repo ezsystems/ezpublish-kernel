@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestContent;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
@@ -30,54 +31,21 @@ class RestContentTest extends ValueObjectVisitorBaseTest
 
         $restContent = $this->getBasicRestContent();
 
-        $this->getVisitorMock()->expects($this->never())
-            ->method('visitValueObject');
-
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
             array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContentType',
-            array('contentTypeId' => $restContent->contentInfo->contentTypeId),
-            "/content/types/{$restContent->contentInfo->contentTypeId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContentVersions',
-            array('contentId' => $restContent->contentInfo->id),
-            "/content/objects/{$restContent->contentInfo->id}/versions"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_redirectCurrentVersion',
-            array('contentId' => $restContent->contentInfo->id),
-            "/content/objects/{$restContent->contentInfo->id}/currentversion"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadSection',
-            array('sectionId' => $restContent->contentInfo->sectionId),
-            "/content/sections/{$restContent->contentInfo->sectionId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocation',
-            array('locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')),
-            "/content/locations/{$locationPath}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocationsForContent',
-            array('contentId' => $restContent->contentInfo->id),
-            "/content/objects/{$restContent->contentInfo->id}/locations"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $restContent->contentInfo->ownerId),
-            "/user/users/{$restContent->contentInfo->ownerId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_getObjectStatesForContent',
-            array('contentId' => $restContent->contentInfo->id),
-            "/content/objects/{$restContent->contentInfo->id}/objectstates"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadContentType', ['contentTypeId' => $restContent->contentInfo->contentTypeId]),
+            new ResourceRouteReference('ezpublish_rest_loadContentVersions', ['contentId' => $restContent->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_redirectCurrentVersion', ['contentId' => $restContent->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadSection', ['sectionId' => $restContent->contentInfo->sectionId]),
+            new ResourceRouteReference('ezpublish_rest_loadLocation', ['locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')]),
+            new ResourceRouteReference('ezpublish_rest_loadLocationsForContent', ['contentId' => $restContent->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $restContent->contentInfo->ownerId]),
+            new ResourceRouteReference('ezpublish_rest_getObjectStatesForContent', ['contentId' => $restContent->contentInfo->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -169,16 +137,6 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testContentTypeHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/ContentType[@href="/content/types/contentType23"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testContentTypeMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/ContentType[@media-type="application/vnd.ez.api.ContentType+xml"]');
@@ -199,29 +157,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testVersionsHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/Versions[@href="/content/objects/content23/versions"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testVersionsMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/Versions[@media-type="application/vnd.ez.api.VersionList+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
-    public function testCurrentVersionHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/CurrentVersion[@href="/content/objects/content23/currentversion"]');
     }
 
     /**
@@ -239,29 +177,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testSectionHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/Section[@href="/content/sections/section23"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testSectionMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/Section[@media-type="application/vnd.ez.api.Section+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
-    public function testMainLocationHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/MainLocation[@href="/content/locations/1/2/23"]');
     }
 
     /**
@@ -279,29 +197,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testLocationsHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/Locations[@href="/content/objects/content23/locations"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
     public function testLocationsMediaTypeCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/Locations[@media-type="application/vnd.ez.api.LocationList+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithoutEmbeddedVersion
-     */
-    public function testOwnerHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/Owner[@href="/user/users/user23"]');
     }
 
     /**
@@ -376,51 +274,21 @@ class RestContentTest extends ValueObjectVisitorBaseTest
             'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'
         );
 
-        $this->getVisitorMock()->expects($this->once())
-            ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\Version'));
-
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
             array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContentType',
-            array('contentTypeId' => $restContent->contentInfo->contentTypeId),
-            "/content/types/{$restContent->contentInfo->contentTypeId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContentVersions',
-            array('contentId' => $restContent->contentInfo->id),
-            "/content/objects/{$restContent->contentInfo->id}/versions"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_redirectCurrentVersion',
-            array('contentId' => $restContent->contentInfo->id),
-            "/content/objects/{$restContent->contentInfo->id}/currentversion"
-        );
-
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadSection',
-            array('sectionId' => $restContent->contentInfo->sectionId),
-            "/content/sections/{$restContent->contentInfo->sectionId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocation',
-            array('locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')),
-            "/content/locations/{$locationPath}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadLocationsForContent',
-            array('contentId' => $restContent->contentInfo->id),
-            "/content/objects/{$restContent->contentInfo->id}/locations"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $restContent->contentInfo->ownerId),
-            "/user/users/{$restContent->contentInfo->ownerId}"
-        );
+        $this->setVisitValueObjectExpectations([
+            new ResourceRouteReference('ezpublish_rest_loadContentType', ['contentTypeId' => $restContent->contentInfo->contentTypeId]),
+            new ResourceRouteReference('ezpublish_rest_loadContentVersions', ['contentId' => $restContent->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_redirectCurrentVersion', ['contentId' => $restContent->contentInfo->id]),
+            $this->isInstanceOf('eZ\Publish\Core\REST\Server\Values\Version'),
+            new ResourceRouteReference('ezpublish_rest_loadSection', ['sectionId' => $restContent->contentInfo->sectionId]),
+            new ResourceRouteReference('ezpublish_rest_loadLocation', ['locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')]),
+            new ResourceRouteReference('ezpublish_rest_loadLocationsForContent', ['contentId' => $restContent->contentInfo->id]),
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $restContent->contentInfo->ownerId]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -446,16 +314,6 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     public function testContentMediaTypeWithVersionCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content[@media-type="application/vnd.ez.api.Content+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitWithEmbeddedVersion
-     */
-    public function testEmbeddedCurrentVersionHrefCorrect(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/Content/CurrentVersion[@href="/content/objects/content23/currentversion"]');
     }
 
     /**

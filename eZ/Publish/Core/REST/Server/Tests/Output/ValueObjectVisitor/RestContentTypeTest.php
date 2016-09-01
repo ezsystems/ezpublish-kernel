@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
+use eZ\Publish\Core\REST\Server\Values\ResourceRouteReference;
 use eZ\Publish\Core\REST\Server\Values\RestContentType;
 
 /**
@@ -33,35 +34,19 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
         $restContentType = $this->getBasicContentType();
 
-        $this->getVisitorMock()->expects($this->once())
-            ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'));
-
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
             array('contentTypeId' => $restContentType->contentType->id),
             "/content/types/{$restContentType->contentType->id}"
         );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $restContentType->contentType->creatorId),
-            "/user/users/{$restContentType->contentType->creatorId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadUser',
-            array('userId' => $restContentType->contentType->modifierId),
-            "/user/users/{$restContentType->contentType->modifierId}"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadGroupsOfContentType',
-            array('contentTypeId' => $restContentType->contentType->id),
-            "/content/types/{$restContentType->contentType->id}/groups"
-        );
-        $this->addRouteExpectation(
-            'ezpublish_rest_loadContentTypeDraft',
-            array('contentTypeId' => $restContentType->contentType->id),
-            "/content/types/{$restContentType->contentType->id}/draft"
-        );
+
+        $this->setVisitValueObjectExpectations([
+            $this->isInstanceOf('eZ\Publish\Core\REST\Server\Values\FieldDefinitionList'),
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $restContentType->contentType->creatorId]),
+            new ResourceRouteReference('ezpublish_rest_loadUser', ['userId' => $restContentType->contentType->modifierId]),
+            new ResourceRouteReference('ezpublish_rest_loadGroupsOfContentType', ['contentTypeId' => $restContentType->contentType->id]),
+            new ResourceRouteReference('ezpublish_rest_loadContentTypeDraft', ['contentTypeId' => $restContentType->contentType->id]),
+        ]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -109,16 +94,6 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
             ),
             array()
         );
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitDefinedType
-     */
-    public function testContentTypeHref(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/ContentType[@href="/content/types/contentTypeId"]');
     }
 
     /**
@@ -226,29 +201,9 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitDefinedType
      */
-    public function testCreatorHref(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/ContentType/Creator[@href="/user/users/creatorId"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitDefinedType
-     */
     public function testCreatorMediaType(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/ContentType/Creator[@media-type="application/vnd.ez.api.User+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitDefinedType
-     */
-    public function testModifierHref(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/ContentType/Modifier[@href="/user/users/modifierId"]');
     }
 
     /**
@@ -266,29 +221,9 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitDefinedType
      */
-    public function testDraftHref(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/ContentType/Draft[@href="/content/types/contentTypeId/draft"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitDefinedType
-     */
     public function testDraftType(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/ContentType/Draft[@media-type="application/vnd.ez.api.ContentType+xml"]');
-    }
-
-    /**
-     * @param \DOMDocument $dom
-     *
-     * @depends testVisitDefinedType
-     */
-    public function testGroupsHref(\DOMDocument $dom)
-    {
-        $this->assertXPath($dom, '/ContentType/Groups[@href="/content/types/contentTypeId/groups"]');
     }
 
     /**
