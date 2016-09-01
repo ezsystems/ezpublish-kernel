@@ -335,6 +335,7 @@ services:
         arguments:
             - "@ezpublish_rest.output.generator.json"
             - "@ezpublish_rest.output.value_object_visitor.dispatcher"
+            - "@router"
         tags:
             - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.json.regexps }
 

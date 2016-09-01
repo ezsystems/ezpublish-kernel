@@ -859,3 +859,23 @@ services:
         class: "%ezpublish_rest.output.value_object_visitor.ViewInput.class%"
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Client\Values\ViewInput }
+
+    ezpublish_rest.output.value_object_visitor.internal.resource_link:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: 'eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceLink'
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: 'eZ\Publish\Core\REST\Server\Values\ResourceLink' }
+        arguments:
+            - '@ezpublish_rest.controller_uri_value_loader'
+        calls:
+            - [setRequestStack, ['@request_stack']]
+
+    ezpublish_rest.output.value_object_visitor.internal.resource_route_reference:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: 'eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceRouteReference'
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: 'eZ\Publish\Core\REST\Server\Values\ResourceRouteReference' }
+        arguments:
+            - '@ezpublish_rest.controller_uri_value_loader'
+        calls:
+            - [setRequestStack, ['@request_stack']]
