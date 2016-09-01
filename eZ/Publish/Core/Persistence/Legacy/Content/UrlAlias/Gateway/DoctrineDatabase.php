@@ -355,16 +355,18 @@ class DoctrineDatabase extends Gateway
             return false;
         }
 
+        // Set alias 1 to temporary values to avoid primary key collision
+        $tempText = '_' . $aliases[$nodeAction2]['text'] . '_tmp';
         $query = $this->dbHandler->createUpdateQuery();
         $query
             ->update($this->dbHandler->quoteTable('ezurlalias_ml'))
             ->set(
                 $this->dbHandler->quoteColumn('text'),
-                $query->bindValue($aliases[$nodeAction2]['text'])
+                $query->bindValue($tempText)
             )
             ->set(
                 $this->dbHandler->quoteColumn('text_md5'),
-                $query->bindValue($aliases[$nodeAction2]['text_md5'])
+                $query->bindValue(md5($tempText))
             )
             ->set(
                 $this->dbHandler->quoteColumn('lang_mask'),
@@ -378,6 +380,7 @@ class DoctrineDatabase extends Gateway
             );
         $query->prepare()->execute();
 
+        // Set alias 2 to the new values
         $query = $this->dbHandler->createUpdateQuery();
         $query
             ->update($this->dbHandler->quoteTable('ezurlalias_ml'))
@@ -397,6 +400,26 @@ class DoctrineDatabase extends Gateway
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('action'),
                     $query->bindValue($nodeAction2)
+                )
+            );
+        $query->prepare()->execute();
+
+        // Set alias 1 to the final, new values.
+        $query = $this->dbHandler->createUpdateQuery();
+        $query
+            ->update($this->dbHandler->quoteTable('ezurlalias_ml'))
+            ->set(
+                $this->dbHandler->quoteColumn('text'),
+                $query->bindValue($aliases[$nodeAction2]['text'])
+            )
+            ->set(
+                $this->dbHandler->quoteColumn('text_md5'),
+                $query->bindValue($aliases[$nodeAction2]['text_md5'])
+            )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('action'),
+                    $query->bindValue($nodeAction1)
                 )
             );
         $query->prepare()->execute();
