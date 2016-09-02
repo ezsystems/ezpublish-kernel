@@ -220,7 +220,7 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
 
         $request = clone $this->request;
         // Be sure to have a clean pathinfo, without SiteAccess part in it.
-        if ($this->siteAccess->matcher instanceof URILexer) {
+        if ($this->siteAccess && $this->siteAccess->matcher instanceof URILexer) {
             $request->setPathinfo($this->siteAccess->matcher->analyseURI($request->pathinfo));
         }
 
