@@ -140,7 +140,7 @@ class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInte
 
         $vpSegments = explode('/', $vpString);
         for ($i = 0, $iMax = count($vpSegments); $i < $iMax; ++$i) {
-            if (!isset($vpSegments[$i])) {
+            if (empty($vpSegments[$i])) {
                 continue;
             }
 

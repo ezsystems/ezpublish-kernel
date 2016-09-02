@@ -75,6 +75,7 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
             array('/foo/bar/(some)/thing', '/foo/bar', '/(some)/thing', array('some' => 'thing')),
             array('/foo/bar/(some)/thing/(other)', '/foo/bar', '/(some)/thing/(other)', array('some' => 'thing', 'other' => '')),
             array('/foo/bar/(some)/thing/orphan', '/foo/bar', '/(some)/thing/orphan', array('some' => 'thing/orphan')),
+            array('/foo/bar/(some)/thing//orphan', '/foo/bar', '/(some)/thing//orphan', array('some' => 'thing/orphan')),
             array('/foo/bar/(some)/thing/orphan/(something)/else', '/foo/bar', '/(some)/thing/orphan/(something)/else', array('some' => 'thing/orphan', 'something' => 'else')),
             array('/foo/bar/(some)/thing/orphan/(something)/else/(other)', '/foo/bar', '/(some)/thing/orphan/(something)/else/(other)', array('some' => 'thing/orphan', 'something' => 'else', 'other' => '')),
             array('/foo/bar/(some)/thing/orphan/(other)', '/foo/bar', '/(some)/thing/orphan/(other)', array('some' => 'thing/orphan', 'other' => '')),
