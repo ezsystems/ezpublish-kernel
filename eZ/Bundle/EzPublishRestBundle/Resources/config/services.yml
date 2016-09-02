@@ -406,7 +406,7 @@ services:
             - [ setOption, [ strict_requirements, ~ ] ]
 
     ezpublish_rest.controller_uri_value_loader:
-        class: eZ\Publish\Core\REST\Server\ValueLoaders\ControllerUriValueLoader
+        class: eZ\Publish\Core\REST\Server\Output\PathExpansion\ValueLoaders\ControllerUriValueLoader
         arguments:
             - '@router'
             - '@controller_resolver'

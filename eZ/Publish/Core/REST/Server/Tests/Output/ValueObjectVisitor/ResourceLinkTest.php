@@ -225,13 +225,13 @@ class ResourceLinkTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Server\ValueLoaders\UriValueLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\REST\Server\Output\PathExpansion\ValueLoaders\UriValueLoader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getValueLoaderMock()
     {
         if ($this->valueLoaderMock === null) {
             $this->valueLoaderMock = $this
-                ->getMockBuilder('eZ\Publish\Core\REST\Server\ValueLoaders\UriValueLoader')
+                ->getMockBuilder('eZ\Publish\Core\REST\Server\Output\PathExpansion\ValueLoaders\UriValueLoader')
                 ->getMock();
         }
 
