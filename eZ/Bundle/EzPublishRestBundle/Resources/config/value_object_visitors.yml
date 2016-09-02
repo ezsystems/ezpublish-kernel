@@ -866,7 +866,7 @@ services:
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: 'eZ\Publish\Core\REST\Server\Values\ResourceLink' }
         arguments:
-            - '@ezpublish_rest.controller_uri_value_loader'
+            - '@ezpublish_rest.unique_controller_uri_value_loader'
             - '@ezpublish_rest.output.path_expansion_checker.request_header'
             - '@ezpublish_rest.output.value_object_visitor.dispatcher'
 
@@ -881,6 +881,6 @@ services:
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: 'eZ\Publish\Core\REST\Server\Values\ResourceRouteReference' }
         arguments:
-            - '@ezpublish_rest.controller_uri_value_loader'
+            - '@ezpublish_rest.unique_controller_uri_value_loader'
             - '@ezpublish_rest.output.path_expansion_checker.request_header'
             - '@ezpublish_rest.output.value_object_visitor.dispatcher'

@@ -12,7 +12,8 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Output\PathExpansion\ExpansionGenerator;
 use eZ\Publish\Core\REST\Server\Output\PathExpansion\PathExpansionChecker;
-use eZ\Publish\Core\REST\Server\ValueLoaders\UriValueLoader;
+use eZ\Publish\Core\REST\Server\Output\PathExpansion\Exceptions\MultipleValueLoadException;
+use eZ\Publish\Core\REST\Server\Output\PathExpansion\ValueLoaders\UriValueLoader;
 
 class ResourceLink extends ValueObjectVisitor
 {
@@ -59,6 +60,11 @@ class ResourceLink extends ValueObjectVisitor
                     $visitor
                 );
             } catch (ApiUnauthorizedException $e) {
+                $generator->startAttribute('embed-error', $e->getMessage());
+                $generator->endAttribute('embed-error');
+            } catch (MultipleValueLoadException $e) {
+                $generator->startAttribute('embed-error', $e->getMessage());
+                $generator->endAttribute('embed-error');
             }
         }
     }

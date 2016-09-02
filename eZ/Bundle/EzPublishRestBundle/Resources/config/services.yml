@@ -410,3 +410,8 @@ services:
         arguments:
             - '@router'
             - '@controller_resolver'
+
+    ezpublish_rest.unique_controller_uri_value_loader:
+        class: eZ\Publish\Core\REST\Server\Output\PathExpansion\ValueLoaders\UniqueUriValueLoader
+        arguments:
+            - '@ezpublish_rest.controller_uri_value_loader'
