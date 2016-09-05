@@ -217,79 +217,79 @@ services:
         class: '%ezpublish.signalslot.service.content.class%'
         arguments:
             - '@ezpublish.api.service.inner_content'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.content_type:
         class: '%ezpublish.signalslot.service.content_type.class%'
         arguments:
             - '@ezpublish.api.service.inner_content_type'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.field_type:
         class: '%ezpublish.signalslot.service.field_type.class%'
         arguments:
             - '@ezpublish.api.service.inner_field_type'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.role:
         class: '%ezpublish.signalslot.service.role.class%'
         arguments:
             - '@ezpublish.api.service.inner_role'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.object_state:
         class: '%ezpublish.signalslot.service.object_state.class%'
         arguments:
             - '@ezpublish.api.service.inner_object_state'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.url_wildcard:
         class: '%ezpublish.signalslot.service.url_wildcard.class%'
         arguments:
             - '@ezpublish.api.service.inner_url_wildcard'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.url_alias:
         class: '%ezpublish.signalslot.service.url_alias.class%'
         arguments:
             - '@ezpublish.api.service.inner_url_alias'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.user:
         class: '%ezpublish.signalslot.service.user.class%'
         arguments:
             - '@ezpublish.api.service.inner_user'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.search:
         class: '%ezpublish.signalslot.service.search.class%'
         arguments:
             - '@ezpublish.api.service.inner_search'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.section:
         class: '%ezpublish.signalslot.service.section.class%'
         arguments:
             - '@ezpublish.api.service.inner_section'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.trash:
         class: '%ezpublish.signalslot.service.trash.class%'
         arguments:
             - '@ezpublish.api.service.inner_trash'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.location:
         class: '%ezpublish.signalslot.service.location.class%'
         arguments:
             - '@ezpublish.api.service.inner_location'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.service.language:
         class: '%ezpublish.signalslot.service.language.class%'
         arguments:
             - '@ezpublish.api.service.inner_language'
-            - '@ezpublish.signalslot.signal_dispatcher'
+            - '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
 
     ezpublish.signalslot.signal_dispatcher_transaction_wrapper:
         class: "%ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class%"
