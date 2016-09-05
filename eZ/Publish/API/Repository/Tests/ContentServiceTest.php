@@ -4748,6 +4748,8 @@ class ContentServiceTest extends BaseContentServiceTest
         // Rollback all changes
         $repository->rollback();
 
+        $this->refreshSearch($repository);
+
         // This array will only contain a single admin user object
         $locations = $locationService->loadLocationChildren(
             $locationService->loadLocation($locationId)
