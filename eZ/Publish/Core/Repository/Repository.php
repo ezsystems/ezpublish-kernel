@@ -42,7 +42,7 @@ class Repository implements RepositoryInterface
     protected $searchHandler;
 
     /**
-     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionResolver.
+     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
      *
      * Currently logged in user object if already loaded.
      *
@@ -51,7 +51,7 @@ class Repository implements RepositoryInterface
     protected $currentUser;
 
     /**
-     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionResolver.
+     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
      *
      * Currently logged in user reference for permission purposes.
      *
@@ -297,7 +297,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user.
      *
@@ -317,7 +317,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user reference.
      *
@@ -330,7 +330,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.
      *
@@ -388,7 +388,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionResolver::hasAccess() instead.
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
      *
      * Check if user has access to a given module / function.
      *
@@ -406,7 +406,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionResolver::canUser() instead.
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
      *
      * Check if user has access to a given action on a given value object.
      *
