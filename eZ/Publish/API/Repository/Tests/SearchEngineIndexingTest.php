@@ -292,16 +292,104 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * Will create if not exists an simple content type for deletion test purpose with just and required field name.
+     * Test content is available for search after being published.
+     */
+    public function testPublishVersion()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $publishedContent = $this->createContentWithName('publishedContent', [2]);
+        $this->refreshSearch($repository);
+
+        $criterion = new Criterion\FullText('publishedContent');
+        $query = new Query(['filter' => $criterion]);
+        $result = $searchService->findContent($query);
+
+        $this->assertCount(1, $result->searchHits);
+        $this->assertEquals($publishedContent->contentInfo->id, $result->searchHits[0]->valueObject->contentInfo->id);
+
+        // Searching for children of locationId=2 should also hit this content
+        $criterion = new Criterion\ParentLocationId(2);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+
+        foreach ($result->searchHits as $searchHit) {
+            if ($searchHit->valueObject->contentInfo->id === $publishedContent->contentInfo->id) {
+                return;
+            }
+        }
+        $this->fail('Parent location sub-items do not contain published content');
+    }
+
+    /**
+     * Test recovered content is available for search.
+     */
+    public function testRecoverLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $trashService = $repository->getTrashService();
+        $searchService = $repository->getSearchService();
+
+        $publishedContent = $this->createContentWithName('recovery-test', [2]);
+        $location = $locationService->loadLocation($publishedContent->contentInfo->mainLocationId);
+
+        $trashService->trash($location);
+        $this->refreshSearch($repository);
+
+        $criterion = new Criterion\LocationId($location->id);
+        $query = new LocationQuery(['filter' => $criterion]);
+        $locations = $searchService->findLocations($query);
+        $this->assertEquals(0, $locations->totalCount);
+
+        $trashItem = $trashService->loadTrashItem($location->id);
+        $trashService->recover($trashItem);
+        $this->refreshSearch($repository);
+
+        $locations = $searchService->findLocations($query);
+        $this->assertEquals(0, $locations->totalCount);
+        $this->assertContentIdSearch($publishedContent->contentInfo->id, 1);
+    }
+
+    /**
+     * Test copied content is available for search.
+     */
+    public function testCopyContent()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $publishedContent = $this->createContentWithName('copy-test', [2]);
+        $this->refreshSearch($repository);
+        $criterion = new Criterion\FullText('copy-test');
+        $query = new Query(['filter' => $criterion]);
+        $result = $searchService->findContent($query);
+        $this->assertCount(1, $result->searchHits);
+
+        $copiedContent = $contentService->copyContent($publishedContent->contentInfo, $locationService->newLocationCreateStruct(2));
+        $this->refreshSearch($repository);
+        $result = $searchService->findContent($query);
+        $this->assertCount(2, $result->searchHits);
+
+        $this->assertContentIdSearch($publishedContent->contentInfo->id, 1);
+        $this->assertContentIdSearch($copiedContent->contentInfo->id, 1);
+    }
+
+    /**
+     * Will create if not exists an simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    protected function createDeletionTestContentType()
+    protected function createTestContentType()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
+        $contentTypeIdentifier = 'test-type';
         try {
-            return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+            return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
         } catch (NotFoundException $e) {
             // continue creation process
         }
@@ -313,11 +401,11 @@ class SearchEngineIndexingTest extends BaseTest
         $nameField->isSearchable = true;
         $nameField->isRequired = true;
 
-        $contentTypeStruct = $contentTypeService->newContentTypeCreateStruct('deletion-test');
+        $contentTypeStruct = $contentTypeService->newContentTypeCreateStruct($contentTypeIdentifier);
         $contentTypeStruct->mainLanguageCode = 'eng-GB';
         $contentTypeStruct->creatorId = 14;
         $contentTypeStruct->creationDate = new DateTime();
-        $contentTypeStruct->names = ['eng-GB' => 'Deletion test'];
+        $contentTypeStruct->names = ['eng-GB' => 'Test Content Type'];
         $contentTypeStruct->addFieldDefinition($nameField);
 
         $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
@@ -325,7 +413,7 @@ class SearchEngineIndexingTest extends BaseTest
         $contentTypeDraft = $contentTypeService->createContentType($contentTypeStruct, [$contentTypeGroup]);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+        return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
     }
 
     /**
@@ -342,7 +430,7 @@ class SearchEngineIndexingTest extends BaseTest
         $contentService = $this->getRepository()->getContentService();
         $locationService = $this->getRepository()->getLocationService();
 
-        $testableContentType = $this->createDeletionTestContentType();
+        $testableContentType = $this->createTestContentType();
 
         $rootContentStruct = $contentService->newContentCreateStruct($testableContentType, 'eng-GB');
         $rootContentStruct->setField('name', $contentName);
