@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\PermissionService as PermissionServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
@@ -19,9 +19,9 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use Exception;
 
 /**
- * Core implementation of PermissionsService interface.
+ * Core implementation of PermissionResolver interface.
  */
-class PermissionService implements PermissionServiceInterface
+class PermissionResolver implements PermissionResolverInterface
 {
     /**
      * Counter for the current sudo nesting level {@see sudo()}.

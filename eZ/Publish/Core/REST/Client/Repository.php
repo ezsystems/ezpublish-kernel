@@ -131,7 +131,7 @@ class Repository implements APIRepository
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user.
      *
@@ -143,7 +143,7 @@ class Repository implements APIRepository
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user.
      *
@@ -155,7 +155,7 @@ class Repository implements APIRepository
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::setCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.
      *
@@ -171,7 +171,7 @@ class Repository implements APIRepository
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::hasAccess() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::hasAccess() instead.
      *
      * @param string $module
      * @param string $function
@@ -185,7 +185,7 @@ class Repository implements APIRepository
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::canUser() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::canUser() instead.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
@@ -474,11 +474,11 @@ class Repository implements APIRepository
     }
 
     /**
-     * Get PermissionService.
+     * Get PermissionResolver.
      *
-     * @return \eZ\Publish\API\Repository\PermissionService
+     * @return \eZ\Publish\API\Repository\PermissionResolver
      */
-    public function getPermissionService()
+    public function getPermissionResolver()
     {
         throw new \RuntimeException('@todo: Implement');
     }

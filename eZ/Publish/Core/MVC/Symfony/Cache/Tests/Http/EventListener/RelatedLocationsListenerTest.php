@@ -47,7 +47,7 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
         $this->repository = $this
             ->getMockBuilder('\eZ\Publish\Core\Repository\Repository')
             ->disableOriginalConstructor()
-            ->setMethods(['getContentService', 'getLocationService', 'getPermissionService'])
+            ->setMethods(['getContentService', 'getLocationService', 'getPermissionResolver'])
             ->getMock();
         $this->contentService = $this->getMock('\eZ\Publish\API\Repository\ContentService');
         $this->locationService = $this->getMock('\eZ\Publish\API\Repository\LocationService');
@@ -61,16 +61,16 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->locationService));
         $this->repository
             ->expects($this->any())
-            ->method('getPermissionService')
-            ->will($this->returnValue($this->getPermissionServiceMock()));
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         $this->listener = new RelatedLocationsListener($this->repository);
     }
 
-    private function getPermissionServiceMock()
+    private function getPermissionResolverMock()
     {
         return $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionService')
+            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionResolver')
             ->setMethods(null)
             ->setConstructorArgs(
                 [

@@ -89,8 +89,8 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->locationService));
         $repository
             ->expects($this->any())
-            ->method('getPermissionService')
-            ->will($this->returnValue($this->getPermissionServiceMock()));
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         $urlAliasCharmap = array(
             '"' => '%22',
@@ -420,10 +420,10 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getPermissionServiceMock()
+    protected function getPermissionResolverMock()
     {
         return $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionService')
+            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionResolver')
             ->setMethods(null)
             ->setConstructorArgs(
                 [

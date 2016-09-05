@@ -10,9 +10,9 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This service provides methods for permission related operations.
+ * This service provides methods for resolving permissions.
  */
-interface PermissionService
+interface PermissionResolver
 {
     /**
      * Get current user reference.

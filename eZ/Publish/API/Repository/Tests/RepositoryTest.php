@@ -238,15 +238,15 @@ class RepositoryTest extends BaseTest
      *
      * @group permission
      *
-     * @see \eZ\Publish\API\Repository\Repository::getPermissionService()
+     * @see \eZ\Publish\API\Repository\Repository::getPermissionResolver()
      */
-    public function testGetPermissionService()
+    public function testGetPermissionResolver()
     {
         $repository = $this->getRepository();
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\PermissionService',
-            $repository->getPermissionService()
+            '\\eZ\\Publish\\API\\Repository\\PermissionResolver',
+            $repository->getPermissionResolver()
         );
     }
 

@@ -32,7 +32,7 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
         $this->repositoryMock = $this
             ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
             ->disableOriginalConstructor()
-            ->setMethods(array('getRoleService', 'getCurrentUser', 'getPermissionService'))
+            ->setMethods(array('getRoleService', 'getCurrentUser', 'getPermissionResolver'))
             ->getMock();
 
         $this->roleServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\RoleService');
@@ -43,8 +43,8 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->roleServiceMock));
         $this->repositoryMock
             ->expects($this->any())
-            ->method('getPermissionService')
-            ->will($this->returnValue($this->getPermissionServiceMock()));
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
     }
 
     public function testSetIdentity()
@@ -156,10 +156,10 @@ class RoleContextProviderTest extends PHPUnit_Framework_TestCase
         return $limitationMock;
     }
 
-    protected function getPermissionServiceMock()
+    protected function getPermissionResolverMock()
     {
         return $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionService')
+            ->getMockBuilder('\eZ\Publish\Core\Repository\PermissionResolver')
             ->setMethods(null)
             ->setConstructorArgs(
                 [

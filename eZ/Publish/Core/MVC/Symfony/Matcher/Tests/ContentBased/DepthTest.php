@@ -153,8 +153,8 @@ class DepthTest extends BaseTest
             ->will($this->returnValue($locationServiceMock));
         $repository
             ->expects($this->once())
-            ->method('getPermissionService')
-            ->will($this->returnValue($this->getPermissionServiceMock()));
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         return $repository;
     }

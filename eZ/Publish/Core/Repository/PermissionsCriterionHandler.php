@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\User\Limitation;
-use eZ\Publish\API\Repository\PermissionService as PermissionServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use RuntimeException;
 
@@ -24,9 +24,9 @@ use RuntimeException;
 class PermissionsCriterionHandler
 {
     /**
-     * @var \eZ\Publish\API\Repository\PermissionService
+     * @var \eZ\Publish\API\Repository\PermissionResolver
      */
-    private $permissionService;
+    private $permissionResolver;
 
     /**
      * @var \eZ\Publish\Core\Repository\Helper\LimitationService
@@ -36,14 +36,14 @@ class PermissionsCriterionHandler
     /**
      * Constructor.
      *
-     * @param \eZ\Publish\API\Repository\PermissionService $permissionService
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      */
     public function __construct(
-        PermissionServiceInterface $permissionService,
+        PermissionResolverInterface $permissionResolver,
         LimitationService $limitationService
     ) {
-        $this->permissionService = $permissionService;
+        $this->PermissionResolver = $permissionResolver;
         $this->limitationService = $limitationService;
     }
 
@@ -81,7 +81,7 @@ class PermissionsCriterionHandler
     /**
      * Get content-read Permission criteria if needed and return false if no access at all.
      *
-     * @uses \eZ\Publish\API\Repository\PermissionService::hasAccess()
+     * @uses \eZ\Publish\API\Repository\PermissionResolver::hasAccess()
      *
      * @throws \RuntimeException If empty array of limitations are provided from hasAccess()
      *
@@ -92,7 +92,7 @@ class PermissionsCriterionHandler
      */
     public function getPermissionsCriterion($module = 'content', $function = 'read')
     {
-        $permissionSets = $this->permissionService->hasAccess($module, $function);
+        $permissionSets = $this->PermissionResolver->hasAccess($module, $function);
         if ($permissionSets === false || $permissionSets === true) {
             return $permissionSets;
         }
@@ -107,7 +107,7 @@ class PermissionsCriterionHandler
          * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
          * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
          */
-        $currentUserRef = $this->permissionService->getCurrentUserReference();
+        $currentUserRef = $this->PermissionResolver->getCurrentUserReference();
         $roleAssignmentOrCriteria = array();
         foreach ($permissionSets as $permissionSet) {
             // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash

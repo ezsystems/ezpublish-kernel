@@ -148,7 +148,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user.
      *
@@ -160,7 +160,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user ref.
      *
@@ -172,7 +172,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::setCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.
      *
@@ -211,7 +211,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::hasAccess() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::hasAccess() instead.
      *
      * Check if user has access to a given module / function.
      *
@@ -229,7 +229,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::canUser() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::canUser() instead.
      *
      * Check if user has access to a given action on a given value object.
      *
@@ -476,13 +476,13 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get PermissionService.
+     * Get PermissionResolver.
      *
-     * @return \eZ\Publish\API\Repository\PermissionService
+     * @return \eZ\Publish\API\Repository\PermissionResolver
      */
-    public function getPermissionService()
+    public function getPermissionResolver()
     {
-        return $this->repository->getPermissionService();
+        return $this->repository->getPermissionResolver();
     }
 
     /**

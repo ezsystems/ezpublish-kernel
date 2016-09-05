@@ -42,7 +42,7 @@ class Repository implements RepositoryInterface
     protected $searchHandler;
 
     /**
-     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionService.
+     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionResolver.
      *
      * Currently logged in user object if already loaded.
      *
@@ -51,7 +51,7 @@ class Repository implements RepositoryInterface
     protected $currentUser;
 
     /**
-     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionService.
+     * @deprecated since 6.5, to be removed. Current user handling is moved to PermissionResolver.
      *
      * Currently logged in user reference for permission purposes.
      *
@@ -181,9 +181,9 @@ class Repository implements RepositoryInterface
     /**
      * Instance of permission service.
      *
-     * @var \eZ\Publish\Core\Repository\PermissionService
+     * @var \eZ\Publish\Core\Repository\PermissionResolver
      */
-    protected $permissionService;
+    protected $permissionResolver;
 
     /**
      * Service settings, first level key is service name.
@@ -297,7 +297,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user.
      *
@@ -309,7 +309,7 @@ class Repository implements RepositoryInterface
     {
         if ($this->currentUser === null) {
             $this->currentUser = $this->getUserService()->loadUser(
-                $this->getPermissionService()->getCurrentUserReference()->getUserId()
+                $this->getPermissionResolver()->getCurrentUserReference()->getUserId()
             );
         }
 
@@ -317,7 +317,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::getCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
      * Get current user reference.
      *
@@ -326,11 +326,11 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUserReference()
     {
-        return $this->getPermissionService()->getCurrentUserReference();
+        return $this->getPermissionResolver()->getCurrentUserReference();
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::setCurrentUserReference() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.
      *
@@ -353,7 +353,7 @@ class Repository implements RepositoryInterface
             $this->currentUserRef = $user;
         }
 
-        return $this->getPermissionService()->setCurrentUserReference($this->currentUserRef);
+        return $this->getPermissionResolver()->setCurrentUserReference($this->currentUserRef);
     }
 
     /**
@@ -381,14 +381,14 @@ class Repository implements RepositoryInterface
      */
     public function sudo(\Closure $callback, RepositoryInterface $outerRepository = null)
     {
-        return $this->getPermissionService()->sudo(
+        return $this->getPermissionResolver()->sudo(
             $callback,
             $outerRepository !== null ? $outerRepository : $this
         );
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::hasAccess() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::hasAccess() instead.
      *
      * Check if user has access to a given module / function.
      *
@@ -402,11 +402,11 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess($module, $function, APIUserReference $user = null)
     {
-        return $this->getPermissionService()->hasAccess($module, $function, $user);
+        return $this->getPermissionResolver()->hasAccess($module, $function, $user);
     }
 
     /**
-     * @deprecated since 6.5, to be removed. Use PermissionService::canUser() instead.
+     * @deprecated since 6.5, to be removed. Use PermissionResolver::canUser() instead.
      *
      * Check if user has access to a given action on a given value object.
      *
@@ -437,7 +437,7 @@ class Repository implements RepositoryInterface
             );
         }
 
-        return $this->getPermissionService()->canUser($module, $function, $object, $targets);
+        return $this->getPermissionResolver()->canUser($module, $function, $object, $targets);
     }
 
     /**
@@ -760,14 +760,14 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get PermissionService.
+     * Get PermissionResolver.
      *
-     * @return \eZ\Publish\API\Repository\PermissionService
+     * @return \eZ\Publish\API\Repository\PermissionResolver
      */
-    public function getPermissionService()
+    public function getPermissionResolver()
     {
-        if ($this->permissionService === null) {
-            $this->permissionService = new PermissionService(
+        if ($this->permissionResolver === null) {
+            $this->permissionResolver = new PermissionResolver(
                 $this->getRoleDomainMapper(),
                 $this->getLimitationService(),
                 $this->persistenceHandler->userHandler(),
@@ -775,7 +775,7 @@ class Repository implements RepositoryInterface
             );
         }
 
-        return $this->permissionService;
+        return $this->permissionResolver;
     }
 
     /**
@@ -909,7 +909,7 @@ class Repository implements RepositoryInterface
     {
         if ($this->permissionsCriterionHandler === null) {
             $this->permissionsCriterionHandler = new PermissionsCriterionHandler(
-                $this->getPermissionService(),
+                $this->getPermissionResolver(),
                 $this->getLimitationService()
             );
         }
