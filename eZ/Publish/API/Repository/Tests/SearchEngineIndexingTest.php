@@ -362,9 +362,9 @@ class SearchEngineIndexingTest extends BaseTest
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
-        $publishedContent = $this->createContentWithName('copy-test', [2]);
+        $publishedContent = $this->createContentWithName('copyTest', [2]);
         $this->refreshSearch($repository);
-        $criterion = new Criterion\FullText('copy-test');
+        $criterion = new Criterion\FullText('copyTest');
         $query = new Query(['filter' => $criterion]);
         $result = $searchService->findContent($query);
         $this->assertCount(1, $result->searchHits);
@@ -379,7 +379,7 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * Will create if not exists an simple content type for test purposes with just one required field name.
+     * Will create if not exists a simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
