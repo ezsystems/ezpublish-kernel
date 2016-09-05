@@ -43,7 +43,7 @@ class PermissionsCriterionHandler
         PermissionResolverInterface $permissionResolver,
         LimitationService $limitationService
     ) {
-        $this->PermissionResolver = $permissionResolver;
+        $this->permissionResolver = $permissionResolver;
         $this->limitationService = $limitationService;
     }
 
@@ -92,7 +92,7 @@ class PermissionsCriterionHandler
      */
     public function getPermissionsCriterion($module = 'content', $function = 'read')
     {
-        $permissionSets = $this->PermissionResolver->hasAccess($module, $function);
+        $permissionSets = $this->permissionResolver->hasAccess($module, $function);
         if ($permissionSets === false || $permissionSets === true) {
             return $permissionSets;
         }
@@ -107,7 +107,7 @@ class PermissionsCriterionHandler
          * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
          * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
          */
-        $currentUserRef = $this->PermissionResolver->getCurrentUserReference();
+        $currentUserRef = $this->permissionResolver->getCurrentUserReference();
         $roleAssignmentOrCriteria = array();
         foreach ($permissionSets as $permissionSet) {
             // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash
