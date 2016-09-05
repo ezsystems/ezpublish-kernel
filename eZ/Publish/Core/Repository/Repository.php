@@ -181,7 +181,7 @@ class Repository implements RepositoryInterface
     /**
      * Instance of permission service.
      *
-     * @var \eZ\Publish\Core\Repository\PermissionResolver
+     * @var \eZ\Publish\Core\Repository\Permission\PermissionResolver
      */
     protected $permissionResolver;
 
@@ -767,7 +767,7 @@ class Repository implements RepositoryInterface
     public function getPermissionResolver()
     {
         if ($this->permissionResolver === null) {
-            $this->permissionResolver = new PermissionResolver(
+            $this->permissionResolver = new Permission\PermissionResolver(
                 $this->getRoleDomainMapper(),
                 $this->getLimitationService(),
                 $this->persistenceHandler->userHandler(),

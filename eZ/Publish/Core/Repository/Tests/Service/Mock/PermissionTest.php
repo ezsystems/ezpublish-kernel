@@ -7,7 +7,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Repository\PermissionResolver;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
@@ -942,7 +942,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         if ($this->permissionResolverMock === null) {
             $this->permissionResolverMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\PermissionResolver')
+                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Permission\\PermissionResolver')
                 ->setMethods($methods)
                 ->setConstructorArgs(
                     [
