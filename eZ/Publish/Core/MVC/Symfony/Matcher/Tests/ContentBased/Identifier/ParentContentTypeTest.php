@@ -89,6 +89,10 @@ class ParentContentTypeTest extends BaseTest
             ->expects($this->once())
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
+        $repository
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         return $repository;
     }

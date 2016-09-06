@@ -148,6 +148,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -158,6 +160,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user ref.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
@@ -168,6 +172,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -205,6 +211,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
+     *
      * Check if user has access to a given module / function.
      *
      * Low level function, use canUser instead if you have objects to check against.
@@ -221,6 +229,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
+     *
      * Check if user has access to a given action on a given value object.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -463,6 +473,16 @@ class Repository implements RepositoryInterface
         $this->fieldTypeService = new FieldTypeService($this->repository->getFieldTypeService(), $this->signalDispatcher);
 
         return $this->fieldTypeService;
+    }
+
+    /**
+     * Get PermissionResolver.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionResolver
+     */
+    public function getPermissionResolver()
+    {
+        return $this->repository->getPermissionResolver();
     }
 
     /**

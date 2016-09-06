@@ -131,6 +131,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -141,6 +143,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
@@ -151,6 +155,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -165,6 +171,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
+     *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -177,6 +185,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
+     *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
      *
@@ -461,6 +471,16 @@ class Repository implements APIRepository
         }
 
         return $this->fieldTypeService;
+    }
+
+    /**
+     * Get PermissionResolver.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionResolver
+     */
+    public function getPermissionResolver()
+    {
+        throw new \RuntimeException('@todo: Implement');
     }
 
     /**
