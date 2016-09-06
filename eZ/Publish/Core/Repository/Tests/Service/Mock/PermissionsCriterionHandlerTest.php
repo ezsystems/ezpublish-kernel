@@ -30,7 +30,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
         $this->assertAttributeSame(
             $permissionResolverMock,
-            'PermissionResolver',
+            'permissionResolver',
             $handler
         );
         $this->assertAttributeSame(
