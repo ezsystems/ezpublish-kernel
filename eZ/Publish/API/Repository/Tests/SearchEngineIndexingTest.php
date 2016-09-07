@@ -379,6 +379,50 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Check if FullText indexing works for special cases of text.
+     *
+     * @param string $text Content Item field value text (to be indexed)
+     * @param string $searchForText text based on which Content Item should be found
+     * @dataProvider getSpecialFullTextCases
+     */
+    public function testIndexingSpecialFullTextCases($text, $searchForText)
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $content = $this->createContentWithName($text, [2]);
+        $this->refreshSearch($repository);
+
+        $criterion = new Criterion\FullText($searchForText);
+        $query = new Query(['filter' => $criterion]);
+        $result = $searchService->findContent($query);
+
+        // for some cases there might be more than one hit, so check if proper one was found
+        foreach ($result->searchHits as $searchHit) {
+            if ($content->contentInfo->id === $searchHit->valueObject->versionInfo->contentInfo->id) {
+                return;
+            }
+        }
+        $this->fail('Failed to find required Content in search results');
+    }
+
+    /**
+     * Data Provider for {@see testIndexingSpecialFullTextCases()} method.
+     *
+     * @return array
+     */
+    public function getSpecialFullTextCases()
+    {
+        return [
+            ['UPPERCASE TEXT', 'uppercase text'],
+            ['lowercase text', 'LOWERCASE TEXT'],
+            ['text-with-hyphens', 'text-with-hyphens'],
+            ['text containing spaces', 'text containing spaces'],
+            ['"quoted text"', '"quoted text"'],
+        ];
+    }
+
+    /**
      * Will create if not exists a simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
