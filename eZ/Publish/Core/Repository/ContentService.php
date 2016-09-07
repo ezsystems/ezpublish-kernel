@@ -348,6 +348,12 @@ class ContentService implements ContentServiceInterface
             throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentId, 'versionNo' => $versionNo));
         }
 
+        if (
+            $versionNo !== null
+            && !$this->repository->canUser( 'content', 'versionread', $content )
+        )
+            throw new UnauthorizedException( 'content', 'versionread' );
+
         return $content;
     }
 
@@ -452,6 +458,12 @@ class ContentService implements ContentServiceInterface
         ) {
             throw new UnauthorizedException('content', 'versionread', array('remoteId' => $remoteId, 'versionNo' => $versionNo));
         }
+
+        if (
+            $versionNo !== null
+            && !$this->repository->canUser( 'content', 'versionread', $content )
+        )
+            throw new UnauthorizedException( 'content', 'versionread' );
 
         return $content;
     }
