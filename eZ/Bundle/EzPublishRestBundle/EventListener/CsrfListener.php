@@ -104,7 +104,7 @@ class CsrfListener implements EventSubscriberInterface
             return;
         }
 
-        if ($this->isLoginRequest($event->getRequest()->get('_route'))) {
+        if ($this->isSessionRoute($event->getRequest()->get('_route'))) {
             return;
         }
 
@@ -133,6 +133,8 @@ class CsrfListener implements EventSubscriberInterface
      * @param string $route
      *
      * @return bool
+     *
+     * @deprecated Deprecated since 6.5. Use isSessionRoute() instead.
      */
     protected function isLoginRequest($route)
     {
@@ -140,9 +142,26 @@ class CsrfListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * Tests if a given $route is a session management one.
+     *
+     * @param string $route
      *
      * @return bool
+     */
+    protected function isSessionRoute($route)
+    {
+        return in_array(
+            $route,
+            ['ezpublish_rest_createSession', 'ezpublish_rest_refreshSession', 'ezpublish_rest_deleteSession']
+        );
+    }
+
+    /**
+     * Checks the validity of the request's csrf token header.
+     *
+     * @param Request $request
+     *
+     * @return bool true/false if the token is valid/invalid, false if none was found in the request's headers.
      */
     protected function checkCsrfToken(Request $request)
     {
