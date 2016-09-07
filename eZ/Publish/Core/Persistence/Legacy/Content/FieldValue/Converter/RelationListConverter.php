@@ -60,7 +60,7 @@ class RelationListConverter implements Converter
 
             $relationItem = $doc->createElement('relation-item');
             foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
-                if (!isset($row[$propertyKey])) {
+                if (!array_key_exists($propertyKey, $row)) {
                     throw new \RuntimeException("Missing relation-item external data property: $propertyKey");
                 }
 
