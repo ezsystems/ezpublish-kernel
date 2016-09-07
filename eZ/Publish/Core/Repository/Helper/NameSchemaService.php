@@ -204,7 +204,7 @@ class NameSchemaService
 
             // Make sure length is not longer then $limit unless it's 0
             if ($this->settings['limit'] && strlen($name) > $this->settings['limit']) {
-                $name = rtrim(substr($name, 0, $this->settings['limit'] - strlen($this->settings['sequence']))) . $this->settings['sequence'];
+                $name = rtrim(mb_substr($name, 0, $this->settings['limit'] - strlen($this->settings['sequence']), 'UTF-8')) . $this->settings['sequence'];
             }
 
             $names[$languageCode] = $name;
