@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
+use PDO;
 use RuntimeException;
 
 /**
@@ -80,17 +81,20 @@ abstract class Handler
 
         switch ($criterion->operator) {
             case Criterion\Operator::IN:
+                if (!is_string($criterion->value)) {
+                    throw new \Exception('Value must be sting for in operator');
+                }
                 $filter = $query->expr->in(
                     $column,
-                    array_map(array($this, 'lowercase'), $criterion->value)
+                    array_map(array($this, 'lowerCase'), $criterion->value)
                 );
                 break;
 
             case Criterion\Operator::BETWEEN:
                 $filter = $query->expr->between(
                     $column,
-                    $query->bindValue($this->lowercase($criterion->value[0])),
-                    $query->bindValue($this->lowercase($criterion->value[1]))
+                    $this->bindValue($query, $criterion->value[0]),
+                    $this->bindValue($query, $criterion->value[1])
                 );
                 break;
 
@@ -103,11 +107,14 @@ abstract class Handler
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
                 $filter = $query->expr->$operatorFunction(
                     $column,
-                    $query->bindValue($this->lowercase($criterion->value))
+                    $this->bindValue($query, $criterion->value)
                 );
                 break;
 
             case Criterion\Operator::CONTAINS:
+                if (!is_string($criterion->value)) {
+                    throw new \Exception('Value must be sting for contains operator');
+                }
                 $filter = $query->expr->like(
                     $column,
                     $query->bindValue('%' . $this->lowercase($criterion->value) . '%')
@@ -119,6 +126,21 @@ abstract class Handler
         }
 
         return $filter;
+    }
+
+    /**
+     * Binds vale a given value using the appropriate type.
+     *
+     * @param mixed $value
+     * @return string the placeholder name used.
+     */
+    protected function bindValue($query, $value)
+    {
+        if ($value instanceof \DateTime) {
+            return $query->bindValue($value->getTimestamp(), null, PDO::PARAM_INT);
+        }
+
+        return $query->bindValue($this->lowerCase(value));
     }
 
     /**
