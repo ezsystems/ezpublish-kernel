@@ -76,6 +76,74 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertEquals(0, $result->totalCount);
     }
 
+    /**
+     * Test that a newly created user is available for search.
+     */
+    public function testCreateUser()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $searchService = $repository->getSearchService();
+
+        // ID of the "Editors" user group
+        $editorsGroupId = 13;
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+        $userCreate->setField('first_name', 'Example');
+        $userCreate->setField('last_name', 'User');
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup($editorsGroupId);
+
+        // Create a new user instance.
+        $user = $userService->createUser($userCreate, array($group));
+
+        $this->refreshSearch($repository);
+
+        // Should be found
+        $criterion = new Criterion\ContentId($user->id);
+        $query = new Query(array('filter' => $criterion));
+        $result = $searchService->findContentInfo($query);
+        $this->assertEquals(1, $result->totalCount);
+    }
+
+    /**
+     * Test that a newly created user group is available for search.
+     */
+    public function testCreateUserGroup()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $searchService = $repository->getSearchService();
+        $mainGroupId = $this->generateId('group', 4);
+
+        $parentUserGroup = $userService->loadUserGroup($mainGroupId);
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct('eng-GB');
+        $userGroupCreateStruct->setField('name', 'Example Group');
+
+        // Create a new user group
+        $userGroup = $userService->createUserGroup(
+            $userGroupCreateStruct,
+            $parentUserGroup
+        );
+
+        $this->refreshSearch($repository);
+
+        // Should be found
+        $criterion = new Criterion\ContentId($userGroup->id);
+        $query = new Query(array('filter' => $criterion));
+        $result = $searchService->findContentInfo($query);
+        $this->assertEquals(1, $result->totalCount);
+    }
+
+    /**
+     * Test that a newly created Location is available for search.
+     */
     public function testCreateLocation()
     {
         $repository = $this->getRepository();
