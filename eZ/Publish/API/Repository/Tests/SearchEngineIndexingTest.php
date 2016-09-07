@@ -147,16 +147,8 @@ class SearchEngineIndexingTest extends BaseTest
     public function testCreateLocation()
     {
         $repository = $this->getRepository();
-        $locationService = $repository->getLocationService();
-        $contentService = $repository->getContentService();
         $searchService = $repository->getSearchService();
-
-        $rootLocationId = 2;
-        $membersContentId = 11;
-        $membersContentInfo = $contentService->loadContentInfo($membersContentId);
-
-        $locationCreateStruct = $locationService->newLocationCreateStruct($rootLocationId);
-        $membersLocation = $locationService->createLocation($membersContentInfo, $locationCreateStruct);
+        $membersLocation = $this->createNewTestLocation();
 
         $this->refreshSearch($repository);
 
@@ -171,6 +163,123 @@ class SearchEngineIndexingTest extends BaseTest
         );
     }
 
+    /**
+     * Test that hiding a Location makes it unavailable for search.
+     */
+    public function testHideSubtree()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        // 5 is the ID of an existing location
+        $locationId = $this->generateId('location', 5);
+        $locationService = $repository->getLocationService();
+        $location = $locationService->loadLocation($locationId);
+        $locationService->hideLocation($location);
+        $this->refreshSearch($repository);
+
+        // Check if parent location is hidden
+        $criterion = new Criterion\LocationId($locationId);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertTrue($result->searchHits[0]->valueObject->hidden);
+
+        // Check if children locations are invisible
+        $criterion = new Criterion\ParentLocationId($locationId);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        foreach ($result->searchHits as $searchHit) {
+            $this->assertTrue($searchHit->valueObject->invisible, sprintf('Location %s is not hidden', $searchHit->valueObject->id));
+        }
+    }
+
+    /**
+     * Test that hiding and revealing a Location makes it available for search.
+     */
+    public function testRevealSubtree()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        // 5 is the ID of an existing location
+        $locationId = $this->generateId('location', 5);
+        $locationService = $repository->getLocationService();
+        $location = $locationService->loadLocation($locationId);
+        $locationService->hideLocation($location);
+        $this->refreshSearch($repository);
+        $locationService->unhideLocation($location);
+        $this->refreshSearch($repository);
+
+        // Check if parent location is not hidden
+        $criterion = new Criterion\LocationId($locationId);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertFalse($result->searchHits[0]->valueObject->hidden);
+
+        // Check if children locations are not invisible
+        $criterion = new Criterion\ParentLocationId($locationId);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        foreach ($result->searchHits as $searchHit) {
+            $this->assertFalse($searchHit->valueObject->invisible, sprintf('Location %s is not hidden', $searchHit->valueObject->id));
+        }
+    }
+
+    /**
+     * Test that a copied subtree is available for search.
+     */
+    public function testCopySubtree()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $searchService = $repository->getSearchService();
+
+        $rootLocationId = 2;
+        $membersContentId = 11;
+        $adminsContentId = 12;
+        $editorsContentId = 13;
+        $membersContentInfo = $contentService->loadContentInfo($membersContentId);
+        $adminsContentInfo = $contentService->loadContentInfo($adminsContentId);
+        $editorsContentInfo = $contentService->loadContentInfo($editorsContentId);
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct($rootLocationId);
+        $membersLocation = $locationService->createLocation($membersContentInfo, $locationCreateStruct);
+        $editorsLocation = $locationService->createLocation($editorsContentInfo, $locationCreateStruct);
+        $adminsLocation = $locationService->createLocation(
+            $adminsContentInfo,
+            $locationService->newLocationCreateStruct($membersLocation->id)
+        );
+
+        $copiedLocation = $locationService->copySubtree($adminsLocation, $editorsLocation);
+        $this->refreshSearch($repository);
+
+        // Found under Members
+        $criterion = new Criterion\ParentLocationId($membersLocation->id);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $adminsLocation->id,
+            $result->searchHits[0]->valueObject->id
+        );
+
+        // Found under Editors
+        $criterion = new Criterion\ParentLocationId($editorsLocation->id);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $copiedLocation->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test that moved subtree is available for search and found only under a specific parent Location.
+     */
     public function testMoveSubtree()
     {
         $repository = $this->getRepository();
@@ -289,6 +398,9 @@ class SearchEngineIndexingTest extends BaseTest
         );
     }
 
+    /**
+     * Test that updated Location is available for search.
+     */
     public function testUpdateLocation()
     {
         $repository = $this->getRepository();
@@ -581,5 +693,25 @@ class SearchEngineIndexingTest extends BaseTest
             $contentId,
             $result->searchHits[0]->valueObject->id
         );
+    }
+
+    /**
+     * Create & get new Location for tests.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    protected function createNewTestLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        $rootLocationId = 2;
+        $membersContentId = 11;
+        $membersContentInfo = $contentService->loadContentInfo($membersContentId);
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct($rootLocationId);
+
+        return $locationService->createLocation($membersContentInfo, $locationCreateStruct);
     }
 }
