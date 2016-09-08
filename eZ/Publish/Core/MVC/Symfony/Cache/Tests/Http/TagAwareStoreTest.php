@@ -49,7 +49,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
     public function testGetPath()
     {
         $path = $this->store->getTagPath('location-123') . DIRECTORY_SEPARATOR . 'en' . sha1('someContent');
-        $this->assertStringStartsWith(__DIR__ . DIRECTORY_SEPARATOR . 'ez/32/1-/noitacol', $path);
+        $this->assertStringStartsWith(__DIR__ . DIRECTORY_SEPARATOR . 'ez' . DIRECTORY_SEPARATOR . '32' . DIRECTORY_SEPARATOR . '1-' . DIRECTORY_SEPARATOR . 'noitacol', $path);
     }
 
     public function testGetStalePath()
