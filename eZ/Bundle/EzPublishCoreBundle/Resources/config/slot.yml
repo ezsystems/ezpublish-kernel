@@ -79,7 +79,7 @@ services:
 
     ezpublish.http_cache.signalslot.publish_version:
         class: "%ezpublish.http_cache.signalslot.publish_version.class%"
-        parent: ezpublish.http_cache.signalslot.abstract_content
+        arguments: ["@ezpublish.http_cache.purge_client", "@ezpublish.spi.persistence.cache.locationHandler"]
         tags:
             - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
 

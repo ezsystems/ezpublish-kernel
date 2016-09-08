@@ -35,19 +35,12 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getPurgeClientMock()
-    {
-        return $this->purgeClientMock;
-    }
-
-    /**
      * @dataProvider getUnreceivedSignals
      */
     public function testDoesNotReceiveOtherSignals($signal)
     {
         $this->purgeClientMock->expects($this->never())->method('purge');
+        $this->purgeClientMock->expects($this->never())->method('purgeByTags');
         $this->purgeClientMock->expects($this->never())->method('purgeAll');
 
         $this->slot->receive($signal);
