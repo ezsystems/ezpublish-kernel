@@ -10,16 +10,16 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal;
 
-class UnassignUserFromUserGroupSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
+class UnassignUserFromUserGroupSlotTest extends AbstractContentSlotTest
 {
-    public static function createSignal()
+    public function createSignal()
     {
-        return new UnAssignUserFromUserGroupSignal(['userId' => static::$contentId, 'userGroupId' => 99]);
+        return new UnAssignUserFromUserGroupSignal(['userId' => $this->contentId, 'userGroupId' => 99]);
     }
 
-    public static function generateTags()
+    public function generateTags()
     {
-        return ['content-'.static::$contentId, 'content-99'];
+        return ['content-'.$this->contentId, 'content-99'];
     }
 
     public function getSlotClass()
@@ -27,7 +27,7 @@ class UnassignUserFromUserGroupSlotTest extends AbstractContentSlotTest implemen
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnassignUserFromUserGroupSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal'];
     }

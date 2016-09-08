@@ -8,46 +8,36 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-abstract class AbstractContentSlotTest extends AbstractSlotTest implements PurgeForContentExpectation
+abstract class AbstractContentSlotTest extends AbstractSlotTest
 {
-    protected static $contentId = 42;
-    protected static $locationId = null;
-    protected static $parentLocationId = null;
+    protected $contentId = 42;
+    protected $locationId = null;
+    protected $parentLocationId = null;
 
     /**
      * @return array
      */
-    public static function generateTags()
+    public function generateTags()
     {
         $tags = [];
-        if (static::$contentId){
-            $tags = ['content-'.static::$contentId, 'relation-'.static::$contentId];
+        if ($this->contentId){
+            $tags = ['content-'.$this->contentId, 'relation-'.$this->contentId];
         }
 
-        if (static::$locationId) {
+        if ($this->locationId) {
             // self(s)
-            $tags[] = 'location-'.static::$locationId;
+            $tags[] = 'location-'.$this->locationId;
             // children
-            $tags[] = 'parent-'.static::$locationId;
+            $tags[] = 'parent-'.$this->locationId;
         }
 
-        if (static::$parentLocationId) {
+        if ($this->parentLocationId) {
             // parent(s)
-            $tags[] = 'location-'.static::$parentLocationId;
+            $tags[] = 'location-'.$this->parentLocationId;
             // siblings
-            $tags[] = 'parent-'.static::$parentLocationId;
+            $tags[] = 'parent-'.$this->parentLocationId;
         }
 
         return $tags;
-    }
-
-    /**
-     * @dataProvider getReceivedSignals
-     */
-    public function testReceivePurgesCacheForContent($signal)
-    {
-        $this->purgeClientMock->expects($this->once())->method('purgeByTags')->with(static::generateTags());
-        $this->purgeClientMock->expects($this->never())->method('purgeAll');
-        parent::receive($signal);
     }
 }

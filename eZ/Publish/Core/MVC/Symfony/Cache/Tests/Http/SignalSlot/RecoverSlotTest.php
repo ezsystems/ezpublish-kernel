@@ -10,30 +10,30 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal;
 
-class RecoverSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
+class RecoverSlotTest extends AbstractContentSlotTest
 {
-    protected static $locationId = 43;
-    protected static $parentLocationId = 45;
+    protected $locationId = 43;
+    protected $parentLocationId = 45;
 
-    public static function createSignal()
+    public function createSignal()
     {
         return new RecoverSignal(
             [
-                'contentId' => static::$contentId,
-                'newLocationId' => static::$locationId,
-                'newParentLocationId' => static::$parentLocationId
+                'contentId' => $this->contentId,
+                'newLocationId' => $this->locationId,
+                'newParentLocationId' => $this->parentLocationId
             ]
         );
     }
 
 
-    public static function generateTags()
+    public function generateTags()
     {
         return [
-            'content-'.static::$contentId,
-            'relation-'.static::$contentId,
-            'location-'.static::$parentLocationId,
-            'parent-'.static::$parentLocationId,
+            'content-'.$this->contentId,
+            'relation-'.$this->contentId,
+            'location-'.$this->parentLocationId,
+            'parent-'.$this->parentLocationId,
         ];
     }
 
@@ -42,7 +42,7 @@ class RecoverSlotTest extends AbstractContentSlotTest implements SlotTest, Purge
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RecoverSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal'];
     }

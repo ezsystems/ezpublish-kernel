@@ -10,24 +10,24 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
 
-class HideLocationSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
+class HideLocationSlotTest extends AbstractContentSlotTest
 {
-    protected static $locationId = 99;
+    protected $locationId = 99;
 
-    public static function createSignal()
+    public function createSignal()
     {
         return new HideLocationSignal(
             [
-                'contentId' => static::$contentId,
-                'locationId' => static::$locationId,
+                'contentId' => $this->contentId,
+                'locationId' => $this->locationId,
             ]
         );
     }
 
-    public static function generateTags()
+    public function generateTags()
     {
         $tags = parent::generateTags();
-        $tags[] = 'path-'.static::$locationId;
+        $tags[] = 'path-'.$this->locationId;
 
         return $tags;
     }
@@ -37,7 +37,7 @@ class HideLocationSlotTest extends AbstractContentSlotTest implements SlotTest, 
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\HideLocationSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal'];
     }

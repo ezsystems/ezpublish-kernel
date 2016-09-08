@@ -10,26 +10,26 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal;
 
-class DeleteLocationSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
+class DeleteLocationSlotTest extends AbstractContentSlotTest
 {
-    protected static $locationId = 45;
-    protected static $parentLocationId = 43;
+    protected $locationId = 45;
+    protected $parentLocationId = 43;
 
-    public static function createSignal()
+    public function createSignal()
     {
         return new DeleteLocationSignal(
             [
-                'contentId' => static::$contentId,
-                'locationId' => static::$locationId,
-                'parentLocationId' => static::$parentLocationId
+                'contentId' => $this->contentId,
+                'locationId' => $this->locationId,
+                'parentLocationId' => $this->parentLocationId
             ]
         );
     }
 
-    public static function generateTags()
+    public function generateTags()
     {
         $tags = parent::generateTags();
-        $tags[] = 'path-'.static::$locationId;
+        $tags[] = 'path-'.$this->locationId;
 
         return $tags;
     }
@@ -39,7 +39,7 @@ class DeleteLocationSlotTest extends AbstractContentSlotTest implements SlotTest
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteLocationSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal'];
     }

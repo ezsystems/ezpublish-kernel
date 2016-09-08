@@ -10,24 +10,24 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
 
-class MoveSubtreeSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
+class MoveSubtreeSlotTest extends AbstractContentSlotTest
 {
-    protected static $locationId = 45;
-    protected static $parentLocationId = 43;
+    protected $locationId = 45;
+    protected $parentLocationId = 43;
 
-    public static function createSignal()
+    public function createSignal()
     {
         return new MoveSubtreeSignal(
             [
-                'locationId' => static::$locationId,
-                'newParentLocationId' => static::$parentLocationId
+                'locationId' => $this->locationId,
+                'newParentLocationId' => $this->parentLocationId
             ]
         );
     }
 
-    public static function generateTags()
+    public function generateTags()
     {
-        return ['path-'.static::$locationId, 'location-'.static::$parentLocationId, 'parent-'.static::$parentLocationId];
+        return ['path-'.$this->locationId, 'location-'.$this->parentLocationId, 'parent-'.$this->parentLocationId];
     }
 
     public function getSlotClass()
@@ -35,7 +35,7 @@ class MoveSubtreeSlotTest extends AbstractContentSlotTest implements SlotTest, P
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\MoveSubtreeSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal'];
     }

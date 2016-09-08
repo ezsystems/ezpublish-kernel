@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
 use eZ\Publish\SPI\Persistence\Content\Location;
 
-class PublishVersionSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
+class PublishVersionSlotTest extends AbstractContentSlotTest
 {
-    protected static $locationId = 45;
-    protected static $parentLocationId = 32;
+    protected $locationId = 45;
+    protected $parentLocationId = 32;
 
     /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject */
     protected $spiLocationHandlerMock;
@@ -24,12 +24,12 @@ class PublishVersionSlotTest extends AbstractContentSlotTest implements SlotTest
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\PublishVersionSlot';
     }
 
-    public static function createSignal()
+    public function createSignal()
     {
-        return new PublishVersionSignal(['contentId' => static::$contentId]);
+        return new PublishVersionSignal(['contentId' => $this->contentId]);
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal'];
     }
@@ -62,20 +62,20 @@ class PublishVersionSlotTest extends AbstractContentSlotTest implements SlotTest
     /**
      * @dataProvider getReceivedSignals
      */
-    public function testReceivePurgesCacheForContent($signal)
+    public function testReceivePurgesCacheForTags($signal)
     {
         $this->spiLocationHandlerMock
             ->expects($this->once())
             ->method('loadLocationsByContent')
-            ->with(self::$contentId)
+            ->with($this->contentId)
             ->willReturn(
                 [
-                    new Location(['id' => self::$locationId, 'parentId' => self::$parentLocationId])
+                    new Location(['id' => $this->locationId, 'parentId' => $this->parentLocationId])
                 ]
             );
 
 
-        $this->purgeClientMock->expects($this->once())->method('purgeByTags')->with(static::generateTags());
+        $this->purgeClientMock->expects($this->once())->method('purgeByTags')->with($this->generateTags());
         $this->purgeClientMock->expects($this->never())->method('purgeAll');
         parent::receive($signal);
     }

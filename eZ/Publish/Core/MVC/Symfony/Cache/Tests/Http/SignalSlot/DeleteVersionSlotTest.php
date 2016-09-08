@@ -10,11 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal;
 
-class DeleteVersionSlotTest extends AbstractContentSlotTest implements SlotTest, PurgeForContentExpectation
+class DeleteVersionSlotTest extends AbstractContentSlotTest
 {
-    public static function createSignal()
+    public function createSignal()
     {
-        return new DeleteVersionSignal(['contentId' => static::$contentId]);
+        return new DeleteVersionSignal(['contentId' => $this->contentId]);
     }
 
     public function getSlotClass()
@@ -22,7 +22,7 @@ class DeleteVersionSlotTest extends AbstractContentSlotTest implements SlotTest,
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteVersionSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal'];
     }
