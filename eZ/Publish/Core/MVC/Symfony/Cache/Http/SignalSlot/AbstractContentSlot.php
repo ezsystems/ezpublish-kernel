@@ -46,15 +46,23 @@ abstract class AbstractContentSlot extends AbstractSlot
         $tags = [];
 
         if (isset($signal->contentId)) {
-            $tags = ['content-'.$signal->contentId, 'relation-'.$signal->contentId];
+            // self in all forms (also withouth locations)
+            $tags[] = 'content-'.$signal->contentId;
+            // reverse relations
+            $tags[] = 'relation-'.$signal->contentId;
         }
 
         if (isset($signal->locationId)) {
+            // self
             $tags[] = 'location-'.$signal->locationId;
+            // direct children
+            $tags[] = 'parent-'.$signal->locationId;
         }
 
         if (isset($signal->parentLocationId)) {
+            // direct parent
             $tags[] = 'location-'.$signal->parentLocationId;
+            // direct siblings
             $tags[] = 'parent-'.$signal->parentLocationId;
         }
 

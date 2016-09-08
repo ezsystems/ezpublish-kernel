@@ -199,6 +199,7 @@ class TagAwareStore extends Store implements ContentPurger
         $files = (new Finder)->files()->in($cacheTagsCacheDir);
         try {
             foreach ($files as $file) {
+                // @todo Load the cache and either get all tags to delete them to, or expire the cache instead of deleting
                 if ($digest = file_get_contents($file->getRealPath())) {
                     $fs->remove($this->getPath($digest));
                 }

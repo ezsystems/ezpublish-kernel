@@ -14,6 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * A slot handling PublishVersionSignal.
+ *
+ * @todo This signal is missing location id's to clear cache on!
  */
 class PublishVersionSlot extends AbstractContentSlot
 {

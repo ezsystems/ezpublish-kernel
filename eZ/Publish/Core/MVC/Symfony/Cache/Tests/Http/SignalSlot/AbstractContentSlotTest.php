@@ -25,11 +25,16 @@ abstract class AbstractContentSlotTest extends AbstractSlotTest implements Purge
         }
 
         if (static::$locationId) {
+            // self(s)
             $tags[] = 'location-'.static::$locationId;
+            // children
+            $tags[] = 'parent-'.static::$locationId;
         }
 
         if (static::$parentLocationId) {
+            // parent(s)
             $tags[] = 'location-'.static::$parentLocationId;
+            // siblings
             $tags[] = 'parent-'.static::$parentLocationId;
         }
 
