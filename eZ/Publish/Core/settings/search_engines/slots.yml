@@ -8,8 +8,10 @@ parameters:
     ezpublish.search.slot.update_location.class: eZ\Publish\Core\Search\Common\Slot\UpdateLocation
     ezpublish.search.slot.delete_location.class: eZ\Publish\Core\Search\Common\Slot\DeleteLocation
     ezpublish.search.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
+    ezpublish.search.slot.delete_user.class: eZ\Publish\Core\Search\Common\Slot\DeleteUser
     ezpublish.search.slot.create_user_group.class: eZ\Publish\Core\Search\Common\Slot\CreateUserGroup
     ezpublish.search.slot.move_user_group.class: eZ\Publish\Core\Search\Common\Slot\MoveUserGroup
+    ezpublish.search.slot.delete_user_group.class: eZ\Publish\Core\Search\Common\Slot\DeleteUserGroup
     ezpublish.search.slot.copy_subtree.class: eZ\Publish\Core\Search\Common\Slot\CopySubtree
     ezpublish.search.slot.move_subtree.class: eZ\Publish\Core\Search\Common\Slot\MoveSubtree
     ezpublish.search.slot.trash.class: eZ\Publish\Core\Search\Common\Slot\Trash
@@ -75,6 +77,12 @@ services:
         tags:
             - {name: ezpublish.search.slot, signal: UserService\CreateUserSignal}
 
+    ezpublish.search.slot.delete_user:
+        parent: ezpublish.search.slot
+        class: "%ezpublish.search.slot.delete_user.class%"
+        tags:
+            - {name: ezpublish.search.slot, signal: UserService\DeleteUserSignal}
+
     ezpublish.search.slot.create_user_group:
         parent: ezpublish.search.slot
         class: %ezpublish.search.slot.create_user_group.class%
@@ -86,6 +94,12 @@ services:
         class: %ezpublish.search.slot.move_user_group.class%
         tags:
             - {name: ezpublish.search.slot, signal: UserService\MoveUserGroupSignal}
+
+    ezpublish.search.slot.delete_user_group:
+        parent: ezpublish.search.slot
+        class: "%ezpublish.search.slot.delete_user_group.class%"
+        tags:
+            - {name: ezpublish.search.slot, signal: UserService\DeleteUserGroupSignal}
 
     ezpublish.search.slot.copy_subtree:
         parent: ezpublish.search.slot
