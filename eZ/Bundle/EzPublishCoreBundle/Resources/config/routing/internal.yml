@@ -6,8 +6,20 @@ _ezpublishLocation:
         viewType: full
         layout: true
 
-_ez_content_view:
+# This route is deprecated and will be removed in future versions.
+# The purpose of the route is to preserve BC by redirecting from the old format
+# of "_ez_content_view" route with "language" parameter, to the new format without
+# the language parameter. See https://jira.ez.no/browse/EZP-26042 for details.
+_ez_content_view_redirect:
     path: /view/content/{contentId}/{language}/{viewType}/{layout}/{locationId}
+    defaults:
+        _controller: "FrameworkBundle:Redirect:redirect"
+        route: _ez_content_view
+        permanent: true
+        ignoreAttributes: [language]
+
+_ez_content_view:
+    path: /view/content/{contentId}/{viewType}/{layout}/{locationId}
     defaults:
         _controller: ez_content:viewAction
         viewType: full
