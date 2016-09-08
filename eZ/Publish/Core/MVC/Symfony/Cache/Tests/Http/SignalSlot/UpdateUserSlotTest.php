@@ -19,8 +19,7 @@ class UpdateUserSlotTest extends AbstractContentSlotTest
 
     public function generateTags()
     {
-        return ['content-'.$this->contentId];
-   ;
+        return ['content-' . $this->contentId];
     }
 
     public function getSlotClass()

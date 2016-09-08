@@ -17,7 +17,6 @@ class DeleteContentSlotTest extends AbstractContentSlotTest
         return new DeleteContentSignal(['contentId' => $this->contentId, 'affectedLocationIds' => [45, 55]]);
     }
 
-
     public function generateTags()
     {
         $tags = parent::generateTags();

@@ -21,7 +21,7 @@ class TrashSlotTest extends AbstractContentSlotTest
             [
                 'contentId' => $this->contentId,
                 'locationId' => $this->locationId,
-                'parentLocationId' => $this->parentLocationId
+                'parentLocationId' => $this->parentLocationId,
             ]
         );
     }

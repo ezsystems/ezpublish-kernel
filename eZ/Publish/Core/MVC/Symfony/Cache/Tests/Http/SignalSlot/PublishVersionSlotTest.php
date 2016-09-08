@@ -55,7 +55,6 @@ class PublishVersionSlotTest extends AbstractContentSlotTest
 
         $this->spiLocationHandlerMock->expects($this->never())->method('loadLocationsByContent');
 
-
         $this->slot->receive($signal);
     }
 
@@ -70,10 +69,9 @@ class PublishVersionSlotTest extends AbstractContentSlotTest
             ->with($this->contentId)
             ->willReturn(
                 [
-                    new Location(['id' => $this->locationId, 'parentId' => $this->parentLocationId])
+                    new Location(['id' => $this->locationId, 'parentId' => $this->parentLocationId]),
                 ]
             );
-
 
         $this->purgeClientMock->expects($this->once())->method('purgeByTags')->with($this->generateTags());
         $this->purgeClientMock->expects($this->never())->method('purgeAll');

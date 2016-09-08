@@ -23,10 +23,10 @@ class SwapLocationSlot extends AbstractContentSlot
     protected function generateTags(Signal $signal)
     {
         return [
-            'location-'.$signal->location1Id,
-            'parent-'.$signal->location1Id,
-            'location-'.$signal->location1Id,
-            'parent-'.$signal->location2Id,
+            'location-' . $signal->location1Id,
+            'parent-' . $signal->location1Id,
+            'location-' . $signal->location1Id,
+            'parent-' . $signal->location2Id,
         ];
     }
 

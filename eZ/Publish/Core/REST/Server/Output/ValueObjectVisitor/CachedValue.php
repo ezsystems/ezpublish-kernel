@@ -61,7 +61,7 @@ class CachedValue extends ValueObjectVisitor
             $tags = [];
             foreach ($data->cacheTags as $tag => $values) {
                 foreach ((array)$values as $value) {
-                    $tags[] = $tag . '-'. $value;
+                    $tags[] = $tag . '-' . $value;
                 }
             }
 

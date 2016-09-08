@@ -10,7 +10,6 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
@@ -24,7 +23,7 @@ class DeleteLocationSlot extends AbstractContentSlot
     protected function generateTags(Signal $signal)
     {
         $tags = parent::generateTags($signal);
-        $tags[] = 'path-'.$signal->locationId;
+        $tags[] = 'path-' . $signal->locationId;
 
         return $tags;
     }

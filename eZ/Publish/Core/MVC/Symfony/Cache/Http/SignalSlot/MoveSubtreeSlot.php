@@ -24,9 +24,9 @@ class MoveSubtreeSlot extends AbstractContentSlot
     {
         // @todo Missing info to clear sibling and parent cache of old parent!
         return [
-            'path-'.$signal->locationId,
-            'location-'.$signal->newParentLocationId,
-            'parent-'.$signal->newParentLocationId
+            'path-' . $signal->locationId,
+            'location-' . $signal->newParentLocationId,
+            'parent-' . $signal->newParentLocationId,
         ];
     }
 

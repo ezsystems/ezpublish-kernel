@@ -72,7 +72,7 @@ class CacheViewResponseListener implements EventSubscriberInterface
                     'parent-' . $location->parentLocationId,
                     'content-type-' . $location->getContentInfo()->contentTypeId,
                 ] + array_map(
-                    function($pathItem){
+                    function ($pathItem) {
                         return 'path-' . $pathItem;
                     },
                     $location->path

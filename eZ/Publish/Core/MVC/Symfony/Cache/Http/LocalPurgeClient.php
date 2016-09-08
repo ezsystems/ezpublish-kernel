@@ -28,7 +28,7 @@ class LocalPurgeClient implements PurgeClientInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function purge($locationIds)
     {
@@ -47,7 +47,7 @@ class LocalPurgeClient implements PurgeClientInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function purgeByTags(array $tags)
     {
@@ -61,7 +61,7 @@ class LocalPurgeClient implements PurgeClientInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function purgeAll()
     {

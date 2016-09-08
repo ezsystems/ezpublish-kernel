@@ -14,7 +14,6 @@ use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler;
 
-
 /**
  * A slot handling PublishVersionSignal.
  */
@@ -49,13 +48,13 @@ class PublishVersionSlot extends AbstractContentSlot
         $tags = parent::generateTags($signal);
         foreach ($this->locationHandler->loadLocationsByContent($signal->contentId) as $location) {
             // self
-            $tags[] = 'location-'.$location->id;
+            $tags[] = 'location-' . $location->id;
             // children
-            $tags[] = 'parent-'.$location->id;
+            $tags[] = 'parent-' . $location->id;
             // parent
-            $tags[] = 'location-'.$location->parentId;
+            $tags[] = 'location-' . $location->parentId;
             // siblings
-            $tags[] = 'parent-'.$location->parentId;
+            $tags[] = 'parent-' . $location->parentId;
         }
 
         return $tags;

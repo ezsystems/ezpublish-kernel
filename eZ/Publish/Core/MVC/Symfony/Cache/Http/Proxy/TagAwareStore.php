@@ -101,7 +101,7 @@ class TagAwareStore extends Store implements ContentPurger
      */
     private function saveTag($tag, $digest)
     {
-        $path = $this->getTagPath($tag).DIRECTORY_SEPARATOR.$digest;
+        $path = $this->getTagPath($tag) . DIRECTORY_SEPARATOR . $digest;
         if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true) && !is_dir(dirname($path))) {
             return false;
         }
@@ -147,10 +147,10 @@ class TagAwareStore extends Store implements ContentPurger
 
         if ($request->headers->has('xkey')) {
             $tags = explode(' ', $request->headers->get('xkey'));
-        } else if ($locationId[0] === '(' && substr($locationId, -1) === ')') {
+        } elseif ($locationId[0] === '(' && substr($locationId, -1) === ')') {
             // Deprecated: (123|456|789) => Purge for #123, #456 and #789 location IDs.
             $tags = array_map(
-                function($id){return 'location-' . $id;},
+                function ($id) {return 'location-' . $id;},
                 explode('|', substr($locationId, 1, -1))
             );
         } else {
@@ -196,7 +196,7 @@ class TagAwareStore extends Store implements ContentPurger
             return false;
         }
 
-        $files = (new Finder)->files()->in($cacheTagsCacheDir);
+        $files = (new Finder())->files()->in($cacheTagsCacheDir);
         try {
             foreach ($files as $file) {
                 // @todo Load the cache and either get all tags to delete them to, or expire the cache instead of deleting
@@ -228,12 +228,12 @@ class TagAwareStore extends Store implements ContentPurger
      */
     public function getTagPath($tag = null)
     {
-        $path = $this->root.DIRECTORY_SEPARATOR.static::TAG_CACHE_DIR;
+        $path = $this->root . DIRECTORY_SEPARATOR . static::TAG_CACHE_DIR;
         if ($tag) {
             // Flip the tag so we put id first so it gets sliced into folders.
             // (otherwise we would easily reach inode limits on file system)
             $tag = strrev($tag);
-            $path .= DIRECTORY_SEPARATOR.substr($tag, 0, 2).DIRECTORY_SEPARATOR.substr($tag, 2, 2).DIRECTORY_SEPARATOR.substr($tag, 4);
+            $path .= DIRECTORY_SEPARATOR . substr($tag, 0, 2) . DIRECTORY_SEPARATOR . substr($tag, 2, 2) . DIRECTORY_SEPARATOR . substr($tag, 4);
         }
 
         return $path;

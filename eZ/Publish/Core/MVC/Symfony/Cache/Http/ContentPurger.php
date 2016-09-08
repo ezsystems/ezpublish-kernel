@@ -14,8 +14,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
  * Interface allowing for HttpCache stores to purge specific content.
  * When purging content by tags, purgeByRequest() would receive a Request object with xkey headers
  * indicating which objects to purge.
- *
- * @package  eZ\Publish\Core\MVC\Symfony\Cache\Http\ProxyCacheStore
  */
 interface ContentPurger extends RequestAwarePurger
 {

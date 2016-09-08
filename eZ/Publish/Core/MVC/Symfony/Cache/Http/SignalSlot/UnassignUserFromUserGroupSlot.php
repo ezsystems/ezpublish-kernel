@@ -27,7 +27,7 @@ class UnassignUserFromUserGroupSlot extends AbstractContentSlot
      */
     protected function generateTags(Signal $signal)
     {
-        return ['content-'.$signal->userId, 'content-'.$signal->userGroupId];
+        return ['content-' . $signal->userId, 'content-' . $signal->userGroupId];
     }
 
     protected function supports(Signal $signal)

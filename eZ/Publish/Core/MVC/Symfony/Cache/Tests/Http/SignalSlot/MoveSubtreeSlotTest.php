@@ -20,14 +20,14 @@ class MoveSubtreeSlotTest extends AbstractContentSlotTest
         return new MoveSubtreeSignal(
             [
                 'locationId' => $this->locationId,
-                'newParentLocationId' => $this->parentLocationId
+                'newParentLocationId' => $this->parentLocationId,
             ]
         );
     }
 
     public function generateTags()
     {
-        return ['path-'.$this->locationId, 'location-'.$this->parentLocationId, 'parent-'.$this->parentLocationId];
+        return ['path-' . $this->locationId, 'location-' . $this->parentLocationId, 'parent-' . $this->parentLocationId];
     }
 
     public function getSlotClass()

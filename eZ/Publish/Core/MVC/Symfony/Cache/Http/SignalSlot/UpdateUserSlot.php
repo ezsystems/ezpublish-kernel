@@ -22,7 +22,7 @@ class UpdateUserSlot extends AbstractContentSlot
      */
     protected function generateTags(Signal $signal)
     {
-        return ['content-'.$signal->userId];
+        return ['content-' . $signal->userId];
     }
 
     protected function supports(Signal $signal)

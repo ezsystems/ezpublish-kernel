@@ -48,13 +48,13 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
 
     public function testGetPath()
     {
-        $path = $this->store->getTagPath('location-123'). DIRECTORY_SEPARATOR . 'en' . sha1('someContent');
+        $path = $this->store->getTagPath('location-123') . DIRECTORY_SEPARATOR . 'en' . sha1('someContent');
         $this->assertStringStartsWith(__DIR__ . DIRECTORY_SEPARATOR . 'ez/32/1-/noitacol', $path);
     }
 
     public function testGetStalePath()
     {
-        $this->markTestIncomplete("@todo Stale handling removed, needs adjustments once it is re added in new form");
+        $this->markTestIncomplete('@todo Stale handling removed, needs adjustments once it is re added in new form');
         // Generate the lock file to force using the stale cache dir
         $locationId = 123;
         $prefix = TagAwareStore::TAG_CACHE_DIR . DIRECTORY_SEPARATOR . $locationId;
@@ -69,7 +69,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
 
     public function testGetPathDeadProcess()
     {
-        $this->markTestIncomplete("@todo Stale handling removed, needs adjustments once it is re added in new form");
+        $this->markTestIncomplete('@todo Stale handling removed, needs adjustments once it is re added in new form');
         if (!function_exists('posix_kill')) {
             self::markTestSkipped('posix_kill() function is needed for this test');
         }
@@ -94,7 +94,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
 
     public function testPurgeByRequestSingleLocation()
     {
-        $this->markTestIncomplete("@todo needs adjustments for new impl on top of tags");
+        $this->markTestIncomplete('@todo needs adjustments for new impl on top of tags');
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
         $locationId = 123;
@@ -126,7 +126,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
 
     public function testPurgeByRequestMultipleLocations()
     {
-        $this->markTestIncomplete("@todo needs adjustments for new impl on top of tags");
+        $this->markTestIncomplete('@todo needs adjustments for new impl on top of tags');
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
         $locationIds = array(123, 456, 789);

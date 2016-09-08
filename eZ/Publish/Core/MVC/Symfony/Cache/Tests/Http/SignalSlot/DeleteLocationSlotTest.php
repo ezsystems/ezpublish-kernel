@@ -21,7 +21,7 @@ class DeleteLocationSlotTest extends AbstractContentSlotTest
             [
                 'contentId' => $this->contentId,
                 'locationId' => $this->locationId,
-                'parentLocationId' => $this->parentLocationId
+                'parentLocationId' => $this->parentLocationId,
             ]
         );
     }
@@ -29,7 +29,7 @@ class DeleteLocationSlotTest extends AbstractContentSlotTest
     public function generateTags()
     {
         $tags = parent::generateTags();
-        $tags[] = 'path-'.$this->locationId;
+        $tags[] = 'path-' . $this->locationId;
 
         return $tags;
     }

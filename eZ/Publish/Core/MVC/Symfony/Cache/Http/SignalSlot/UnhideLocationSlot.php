@@ -23,7 +23,7 @@ class UnhideLocationSlot extends AbstractContentSlot
     protected function generateTags(Signal $signal)
     {
         $tags = parent::generateTags($signal);
-        $tags[] = 'path-'.$signal->locationId;
+        $tags[] = 'path-' . $signal->locationId;
 
         return $tags;
     }

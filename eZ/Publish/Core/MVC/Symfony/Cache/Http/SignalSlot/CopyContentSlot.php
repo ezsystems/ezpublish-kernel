@@ -22,7 +22,7 @@ class CopyContentSlot extends AbstractContentSlot
      */
     protected function generateTags(Signal $signal)
     {
-        return ['content-'.$signal->dstContentId, 'location-'.$signal->dstParentLocationId, 'path-'.$signal->dstParentLocationId];
+        return ['content-' . $signal->dstContentId, 'location-' . $signal->dstParentLocationId, 'path-' . $signal->dstParentLocationId];
     }
 
     protected function supports(Signal $signal)

@@ -20,22 +20,22 @@ abstract class AbstractContentSlotTest extends AbstractSlotTest
     public function generateTags()
     {
         $tags = [];
-        if ($this->contentId){
-            $tags = ['content-'.$this->contentId, 'relation-'.$this->contentId];
+        if ($this->contentId) {
+            $tags = ['content-' . $this->contentId, 'relation-' . $this->contentId];
         }
 
         if ($this->locationId) {
             // self(s)
-            $tags[] = 'location-'.$this->locationId;
+            $tags[] = 'location-' . $this->locationId;
             // children
-            $tags[] = 'parent-'.$this->locationId;
+            $tags[] = 'parent-' . $this->locationId;
         }
 
         if ($this->parentLocationId) {
             // parent(s)
-            $tags[] = 'location-'.$this->parentLocationId;
+            $tags[] = 'location-' . $this->parentLocationId;
             // siblings
-            $tags[] = 'parent-'.$this->parentLocationId;
+            $tags[] = 'parent-' . $this->parentLocationId;
         }
 
         return $tags;
