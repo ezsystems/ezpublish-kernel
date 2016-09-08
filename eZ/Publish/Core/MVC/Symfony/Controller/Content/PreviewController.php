@@ -153,7 +153,6 @@ EOF;
             '_route_params' => array(
                 'contentId' => $content->id,
                 'locationId' => $location->id,
-                'language' => $language,
             ),
             'location' => $location,
             'content' => $content,
