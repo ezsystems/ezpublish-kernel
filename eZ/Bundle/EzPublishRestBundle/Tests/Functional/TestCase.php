@@ -34,6 +34,11 @@ class TestCase extends PHPUnit_Framework_TestCase
 
     protected static $testSuffix;
 
+    /**
+     * @var array
+     */
+    private $headers = [];
+
     protected function setUp()
     {
         parent::setUp();
@@ -45,6 +50,15 @@ class TestCase extends PHPUnit_Framework_TestCase
         $this->httpClient->setVerifyPeer(false);
         $this->httpClient->setTimeout(90);
         $this->httpClient->setOption(CURLOPT_FOLLOWLOCATION, false);
+        $this->httpClient->setOption(CURLOPT_COOKIEFILE, null);
+
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
+        $request->setContent('{"SessionInput": {"login": "admin", "password": "publish"}}');
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
+        $session = json_decode($response->getContent())->Session;
+        $this->headers[] = sprintf('Cookie: %s=%s', $session->name, $session->identifier);
+        $this->headers[] = sprintf('X-CSRF-Token: %s', $session->csrfToken);
     }
 
     /**
@@ -63,10 +77,23 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     public function createHttpRequest($method, $uri, $contentType = '', $acceptType = '')
     {
+        $headers = array_merge(
+            $method === 'POST' && $uri === '/api/ezp/v2/user/sessions' ? [] : $this->headers,
+            [
+                'Content-Type: ' . $this->generateMediaTypeString($contentType),
+                'Accept: ' . $this->generateMediaTypeString($acceptType),
+            ]
+        );
+
+        switch ($method) {
+            case 'PUBLISH': $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: PUBLISH'; break;
+            case 'MOVE':    $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: MOVE';    break;
+            case 'PATCH':   $method = 'PATCH'; $headers[] = 'X-HTTP-Method-Override: PATCH';   break;
+            case 'COPY':    $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: COPY';    break;
+        }
+
         $request = new HttpRequest($method, $uri, $this->httpHost);
-        $request->addHeader('Authorization: Basic ' . base64_encode($this->httpAuth));
-        $request->addHeader('Content-Type: ' . $this->generateMediaTypeString($contentType));
-        $request->addHeader('Accept: ' . $this->generateMediaTypeString($acceptType));
+        $request->addHeaders($headers);
 
         return $request;
     }
