@@ -559,6 +559,32 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test that setting object content state to locked and then unlocked does not affect search index.
+     */
+    public function testSetContentState()
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        // get Object States
+        $stateNotLocked = $objectStateService->loadObjectState(1);
+        $stateLocked = $objectStateService->loadObjectState(2);
+
+        $publishedContent = $this->createContentWithName('setContentStateTest', [2]);
+        $objectStateService->setContentState($publishedContent->contentInfo, $stateLocked->getObjectStateGroup(), $stateLocked);
+        $this->refreshSearch($repository);
+
+        // Setting Content State to "locked" should not affect search index
+        $this->assertContentIdSearch($publishedContent->contentInfo->id, 1);
+
+        $objectStateService->setContentState($publishedContent->contentInfo, $stateNotLocked->getObjectStateGroup(), $stateNotLocked);
+        $this->refreshSearch($repository);
+
+        // Setting Content State back to "not locked" should not affect search index
+        $this->assertContentIdSearch($publishedContent->contentInfo->id, 1);
+    }
+
+    /**
      * Check if FullText indexing works for special cases of text.
      *
      * @param string $text Content Item field value text (to be indexed)
