@@ -4349,7 +4349,6 @@ class SearchServiceTest extends BaseTest
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
         $this->assertEquals($content3->id, $searchResult->searchHits[1]->valueObject->id);
         $this->assertEquals($content2->id, $searchResult->searchHits[2]->valueObject->id);
-
     }
 
     /**
