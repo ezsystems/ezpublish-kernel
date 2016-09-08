@@ -23,7 +23,7 @@ use Symfony\Component\Finder\Finder;
  */
 class TagAwareStore extends Store implements ContentPurger
 {
-    const TAG_CACHE_DIR = 'eztg';
+    const TAG_CACHE_DIR = 'ez';
 
     /**
      * @var \Symfony\Component\Filesystem\Filesystem
@@ -101,7 +101,7 @@ class TagAwareStore extends Store implements ContentPurger
      */
     private function saveTag($tag, $digest)
     {
-        $path = $this->getPath($this->getCacheTagDir($tag)).DIRECTORY_SEPARATOR.$digest;
+        $path = $this->getTagPath($tag).DIRECTORY_SEPARATOR.$digest;
         if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true) && !is_dir(dirname($path))) {
             return false;
         }
@@ -177,7 +177,7 @@ class TagAwareStore extends Store implements ContentPurger
      */
     public function purgeAllContent()
     {
-        $cacheTagsCacheDir = $this->getCacheTagDir();
+        $cacheTagsCacheDir = $this->getTagPath();
         $this->getFilesystem()->remove($cacheTagsCacheDir);
     }
 
@@ -191,7 +191,7 @@ class TagAwareStore extends Store implements ContentPurger
     private function purgeByCacheTag($tag)
     {
         $fs = $this->getFilesystem();
-        $cacheTagsCacheDir = $this->getPath($this->getCacheTagDir($tag));
+        $cacheTagsCacheDir = $this->getTagPath($tag);
         if (!$fs->exists($cacheTagsCacheDir) || !is_dir($cacheTagsCacheDir)) {
             return false;
         }
@@ -226,13 +226,16 @@ class TagAwareStore extends Store implements ContentPurger
      *
      * @return string
      */
-    public function getCacheTagDir($tag = null)
+    public function getTagPath($tag = null)
     {
-        $cacheDir = static::TAG_CACHE_DIR;
+        $path = $this->root.DIRECTORY_SEPARATOR.static::TAG_CACHE_DIR;
         if ($tag) {
-            $cacheDir .= DIRECTORY_SEPARATOR . $tag;
+            // Flip the tag so we put id first so it gets sliced into folders.
+            // (otherwise we would easily reach inode limits on file system)
+            $tag = strrev($tag);
+            $path .= DIRECTORY_SEPARATOR.substr($tag, 0, 2).DIRECTORY_SEPARATOR.substr($tag, 2, 2).DIRECTORY_SEPARATOR.substr($tag, 4);
         }
 
-        return $cacheDir;
+        return $path;
     }
 }

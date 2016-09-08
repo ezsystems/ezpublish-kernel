@@ -48,8 +48,8 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
 
     public function testGetPath()
     {
-        $path = $this->store->getPath($this->store->getCacheTagDir('location-123') . DIRECTORY_SEPARATOR . 'en' . sha1('someContent'));
-        $this->assertStringStartsWith(__DIR__ . DIRECTORY_SEPARATOR . 'ez/ca/ch/etag/location-123', $path);
+        $path = $this->store->getTagPath('location-123'). DIRECTORY_SEPARATOR . 'en' . sha1('someContent');
+        $this->assertStringStartsWith(__DIR__ . DIRECTORY_SEPARATOR . 'ez/32/1-/noitacol', $path);
     }
 
     public function testGetStalePath()
@@ -98,7 +98,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
         $locationId = 123;
-        $locationCacheDir = $this->store->getCacheTagDir('location-' . $locationId);
+        $locationCacheDir = $this->store->getTagPath('location-' . $locationId);
         $staleCacheDir = str_replace(TagAwareStore::TAG_CACHE_DIR, TagAwareStore::TAG_CACHE_DIR, $locationCacheDir);
 
         $fs
@@ -132,7 +132,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
         $locationIds = array(123, 456, 789);
         $i = 0;
         foreach ($locationIds as $locationId) {
-            $locationCacheDir = $this->store->getCacheTagDir('location-' . $locationId);
+            $locationCacheDir = $this->store->getTagPath('location-' . $locationId);
             $staleCacheDir = str_replace(TagAwareStore::TAG_CACHE_DIR, TagAwareStore::TAG_CACHE_DIR, $locationCacheDir);
 
             $fs
@@ -163,7 +163,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
     {
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
-        $locationCacheDir = $this->store->getCacheTagDir();
+        $locationCacheDir = $this->store->getTagPath();
 
         $fs
             ->expects($this->once())
@@ -177,7 +177,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
     {
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
-        $locationCacheDir = $this->store->getCacheTagDir();
+        $locationCacheDir = $this->store->getTagPath();
 
         $fs
             ->expects($this->once())
@@ -193,7 +193,7 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
     {
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
-        $locationCacheDir = $this->store->getCacheTagDir();
+        $locationCacheDir = $this->store->getTagPath();
 
         $fs
             ->expects($this->once())
