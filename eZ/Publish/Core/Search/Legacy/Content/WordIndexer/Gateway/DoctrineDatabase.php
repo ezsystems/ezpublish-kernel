@@ -63,23 +63,33 @@ class DoctrineDatabase extends Gateway
     protected $searchIndex;
 
     /**
+     * Full text search configuration options.
+     *
+     * @var array
+     */
+    protected $fullTextSearchConfiguration;
+
+    /**
      * Construct from handler handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $typeHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      * @param \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex $searchIndex
+     * @param array $fullTextSearchConfiguration
      */
     public function __construct(
         DatabaseHandler $dbHandler,
         SPITypeHandler $typeHandler,
         TransformationProcessor $transformationProcessor,
-        SearchIndex $searchIndex
+        SearchIndex $searchIndex,
+        array $fullTextSearchConfiguration
     ) {
         $this->dbHandler = $dbHandler;
         $this->typeHandler = $typeHandler;
         $this->transformationProcessor = $transformationProcessor;
         $this->searchIndex = $searchIndex;
+        $this->fullTextSearchConfiguration = $fullTextSearchConfiguration;
     }
 
     /**
@@ -107,13 +117,12 @@ class DoctrineDatabase extends Gateway
             } else {
                 $integerValue = 0;
             }
-            // Split text on whitespace
-            $wordArray = explode(' ', $fullTextValue->value);
+            // Split transformed text on whitespace
+            $wordArray = explode(' ', $this->transformationProcessor->transform($fullTextValue->value, $this->fullTextSearchConfiguration['commands']));
             foreach ($wordArray as $word) {
                 if (trim($word) === '') {
                     continue;
                 }
-                $word = $this->transformationProcessor->transformByGroup($word, 'lowercase');
                 // words stored in search index are limited to 150 characters
                 if (mb_strlen($word) > 150) {
                     $word = mb_substr($word, 0, 150);
