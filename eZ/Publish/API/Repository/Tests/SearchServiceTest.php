@@ -4346,6 +4346,24 @@ class SearchServiceTest extends BaseTest
         $searchResult = $searchService->findContent($query, ['languages' => ['eng-GB']]);
 
         $this->assertEquals(3, $searchResult->totalCount);
+
+        // Legacy search engine does have scoring, sorting the results by ID in that case
+        $setupFactory = $this->getSetupFactory();
+        if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            usort(
+                $searchResult->searchHits,
+                function ($a, $b) {
+                    return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
+                }
+            );
+
+            $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+            $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
+            $this->assertEquals($content3->id, $searchResult->searchHits[2]->valueObject->id);
+
+            return;
+        }
+
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
         $this->assertEquals($content3->id, $searchResult->searchHits[1]->valueObject->id);
         $this->assertEquals($content2->id, $searchResult->searchHits[2]->valueObject->id);
