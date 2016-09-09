@@ -95,6 +95,16 @@ EOT;
                                 'ezcontentclass_identifier' => '27',
                             ),
                         ),
+                        '4' => array(
+                            array(
+                                'ezcontentobject_remote_id' => '22',
+                                'ezcontentobject_current_version' => '23',
+                                'ezcontentobject_contentclass_id' => '24',
+                                'ezcontentobject_tree_node_id' => null,
+                                'ezcontentobject_tree_parent_node_id' => null,
+                                'ezcontentclass_identifier' => '27',
+                            ),
+                        ),
                     )
                 )
             );
