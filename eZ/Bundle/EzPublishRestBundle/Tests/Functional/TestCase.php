@@ -39,26 +39,49 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     private $headers = [];
 
+    /**
+     * The username to use for login.
+     * @var string
+     */
+    private $loginUsername;
+
+    /**
+     * The password to use for login.
+     * @var string
+     */
+    private $loginPassword;
+
+    /**
+     * If true, a login request is automatically done during setUp().
+     * @var bool
+     */
+    protected $autoLogin = true;
+
+    /**
+     * List of REST contentId (/content/objects/12345) created by tests.
+     *
+     * @var array
+     */
+    private static $createdContent = array();
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->httpHost = getenv('EZP_TEST_REST_HOST') ?: 'localhost';
         $this->httpAuth = getenv('EZP_TEST_REST_AUTH') ?: 'admin:publish';
+        list($this->loginUsername, $this->loginPassword) = explode(':', $this->httpAuth);
 
         $this->httpClient = new \Buzz\Client\Curl();
         $this->httpClient->setVerifyPeer(false);
         $this->httpClient->setTimeout(90);
         $this->httpClient->setOption(CURLOPT_FOLLOWLOCATION, false);
-        $this->httpClient->setOption(CURLOPT_COOKIEFILE, null);
 
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
-        $request->setContent('{"SessionInput": {"login": "admin", "password": "publish"}}');
-        $response = $this->sendHttpRequest($request);
-        self::assertHttpResponseCodeEquals($response, 201);
-        $session = json_decode($response->getContent())->Session;
-        $this->headers[] = sprintf('Cookie: %s=%s', $session->name, $session->identifier);
-        $this->headers[] = sprintf('X-CSRF-Token: %s', $session->csrfToken);
+        if ($this->autoLogin) {
+            $session = $this->login();
+            $this->headers[] = sprintf('Cookie: %s=%s', $session->name, $session->identifier);
+            $this->headers[] = sprintf('X-CSRF-Token: %s', $session->csrfToken);
+        }
     }
 
     /**
@@ -265,9 +288,32 @@ XML;
     }
 
     /**
-     * List of REST contentId (/content/objects/12345) created by tests.
+     * Sends a login request to the REST server.
      *
-     * @var array
+     * @return \stdClass an object with the name, identifier, csrftoken properties.
      */
-    private static $createdContent = array();
+    protected function login()
+    {
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
+        $this->setSessionInput($request);
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
+
+        return json_decode($response->getContent())->Session;
+    }
+
+    /**
+     * Sets the request's content to a JSON session creation payload.
+     *
+     * @param HttpRequest $request
+     * @param string $password The password to use in the input. Will use the default one if not set.
+     *
+     * @return string
+     */
+    protected function setSessionInput(HttpRequest $request, $password = null)
+    {
+        $request->setContent(
+            sprintf('{"SessionInput": {"login": "admin", "password": "%s"}}', $password ?: $this->loginPassword)
+        );
+    }
 }
