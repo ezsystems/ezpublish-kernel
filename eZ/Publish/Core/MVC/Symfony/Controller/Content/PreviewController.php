@@ -162,6 +162,7 @@ EOF;
                 'content' => $content,
                 'location' => $location,
                 'isPreview' => true,
+                'language' => $language,
             ),
             'siteaccess' => $previewSiteAccess,
             'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
