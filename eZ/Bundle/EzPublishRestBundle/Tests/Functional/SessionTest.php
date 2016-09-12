@@ -5,6 +5,7 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Message\Form\FormRequest;
 use Buzz\Message\Response;
 use Buzz\Message\Request;
 use stdClass;
@@ -85,6 +86,36 @@ class SessionTest extends TestCase
         $this->removeCsrfHeader($request);
         $response = $this->sendHttpRequest($request);
         self::assertHttpResponseCodeEquals($response, 401);
+    }
+
+    public function testLoginWithExistingFrontendSession()
+    {
+        $loginFormResponse = $this->sendHttpRequest(new Request('GET', '/login', $this->getHttpHost()));
+        $domDocument = $loginFormResponse->toDomDocument();
+        $xpath = new \DOMXPath($domDocument);
+
+        $csrfDomElements = $xpath->query("//input[@name='_csrf_token']/@value");
+        self::assertGreaterThan(0, $csrfDomElements->length);
+        $csrfTokenValue = $csrfDomElements->item(0)->nodeValue;
+
+        $loginPostRequest = new FormRequest('POST', '/login', $this->getHttpHost());
+        $loginPostRequest->addFields([
+            '_username' => $this->getLoginUsername(),
+            '_password' => $this->getLoginPassword(),
+            '_csrf_token' => $csrfTokenValue,
+        ]);
+        $loginResponse = $this->sendHttpRequest($loginPostRequest);
+        if (!$sessionCookieHeader = $loginResponse->getHeader('set-cookie')) {
+            self::fail('No cookie in login response');
+        }
+
+        list($sessionCookie) = explode(';', $sessionCookieHeader);
+
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
+        $this->setSessionInput($request);
+        $request->addHeader("Cookie: $sessionCookie");
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
     }
 
     /**

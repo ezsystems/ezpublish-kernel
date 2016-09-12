@@ -95,6 +95,21 @@ class TestCase extends PHPUnit_Framework_TestCase
         return $response;
     }
 
+    protected function getHttpHost()
+    {
+        return $this->httpHost;
+    }
+
+    protected function getLoginUsername()
+    {
+        return $this->loginUsername;
+    }
+
+    protected function getLoginPassword()
+    {
+        return $this->loginPassword;
+    }
+
     /**
      * @return HttpRequest
      */

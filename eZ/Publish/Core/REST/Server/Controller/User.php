@@ -989,7 +989,7 @@ class User extends RestController
 
         try {
             $session = $request->getSession();
-            if ($session->isStarted()) {
+            if ($session->isStarted() && $this->hasStoredCsrfToken()) {
                 $this->checkCsrfToken($request);
             }
 
