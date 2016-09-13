@@ -194,6 +194,16 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 new URLAlias(array('path' => '/foo/bar')),
+               array( 'viewParameters' => array( 'keyOne' => 'valueOne')),
+                '/foo/bar/(keyOne)/valueOne',
+            ),
+            array(
+                new URLAlias(array('path' => '/')),
+               array( 'viewParameters' => array( 'keyTwo' => 'valueTwo')),
+                '/(keyTwo)/valueTwo',
+            ),
+            array(
+                new URLAlias(array('path' => '/foo/bar')),
                 array('some' => 'thing'),
                 '/foo/bar?some=thing',
             ),
@@ -202,6 +212,17 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
                 array('some' => 'thing', 'truc' => 'muche'),
                 '/foo/bar?some=thing&truc=muche',
             ),
+            array(
+                new URLAlias(array('path' => '/foo/bar')),
+                array('some' => 'thing', 'truc' => 'muche', 'viewParameters' => array( 'key' => 'value') ),
+                '/foo/bar/(key)/value?some=thing&truc=muche',
+            ),
+             array(
+                new URLAlias(array('path' => '/foo/bar')),
+                array('some' => 'thing', 'truc' => 'muche', 'viewParameters' => array( 'key' => 'value',  'moreKey' => 'moreValue') ),
+                '/foo/bar/(key)/value/(moreKey)/moreValue?some=thing&truc=muche',
+            ),
+            
         );
     }
 

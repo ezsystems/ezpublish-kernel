@@ -105,9 +105,27 @@ class UrlAliasGenerator extends Generator
         }
 
         $queryString = '';
+        //add variable to handle viewParameters un path
+        $viewParametersPath='';
         unset($parameters['language'], $parameters['contentId']);
         if (!empty($parameters)) {
-            $queryString = '?' . http_build_query($parameters, '', '&');
+            
+            // handle viewParameters generation with keyword 'viewParameters'
+            if(array_key_exists('viewParameters', $parameters))
+            {
+                $viewParameters = $parameters['viewParameters'];
+                foreach($viewParameters as $key => $value)
+                {
+                    $viewParametersPath .= $viewParametersPath ? '/' : '';
+                    $viewParametersPath .= '('.$key.')/'.$value;
+                }
+                // remove 'viewParameters' to exclude it from query string
+                unset( $parameters['viewParameters'] );
+            }
+            if (!empty($parameters))
+            {
+                $queryString = '?' . http_build_query($parameters, '', '&');
+            }
         }
 
         if (!empty($urlAliases)) {
@@ -131,8 +149,18 @@ class UrlAliasGenerator extends Generator
             );
         }
 
+        if( $viewParametersPath != '')
+        {
+            if(substr($path, -1) != '/')
+            {
+                $path .= '/';
+            }
+            $path .= $viewParametersPath;
+        }
+         
         $path = $path ?: '/';
-
+        
+        
         // replace potentially unsafe characters with url-encoded counterpart
         return strtr($path . $queryString, $this->unsafeCharMap);
     }
