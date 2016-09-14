@@ -292,6 +292,39 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test that swapping locations affects properly Search Engine Index.
+     */
+    public function testSwapLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $content01 = $this->createContentWithName('content01', [2]);
+        $location01 = $locationService->loadLocation($content01->contentInfo->mainLocationId);
+
+        $content02 = $this->createContentWithName('content02', [2]);
+        $location02 = $locationService->loadLocation($content02->contentInfo->mainLocationId);
+
+        $locationService->swapLocation($location01, $location02);
+        $this->refreshSearch($repository);
+
+        // content02 should be at location01
+        $criterion = new Criterion\LocationId($location01->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($content02->id, $results->searchHits[0]->valueObject->id);
+
+        // content01 should be at location02
+        $criterion = new Criterion\LocationId($location02->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($content01->id, $results->searchHits[0]->valueObject->id);
+    }
+
+    /**
      * Will create if not exists an simple content type for deletion test purpose with just and required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
