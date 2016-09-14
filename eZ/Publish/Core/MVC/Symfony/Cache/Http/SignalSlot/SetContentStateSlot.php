@@ -15,7 +15,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling SetContentStateSignal.
  */
-class SetContentStateSlot extends PurgeForContentHttpCacheSlot
+class SetContentStateSlot extends AbstractContentSlot
 {
     protected function supports(Signal $signal)
     {

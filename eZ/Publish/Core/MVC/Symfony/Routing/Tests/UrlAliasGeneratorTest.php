@@ -87,6 +87,10 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getLocationService')
             ->will($this->returnValue($this->locationService));
+        $repository
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         $urlAliasCharmap = array(
             '"' => '%22',
@@ -414,5 +418,30 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
                 '/my/root-folder',
             ),
         );
+    }
+
+    protected function getPermissionResolverMock()
+    {
+        return $this
+            ->getMockBuilder('\eZ\Publish\Core\Repository\Permission\PermissionResolver')
+            ->setMethods(null)
+            ->setConstructorArgs(
+                [
+                    $this
+                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
+                        ->disableOriginalConstructor()
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\SPI\Persistence\User\Handler')
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
+                        ->getMock(),
+                ]
+            )
+            ->getMock();
     }
 }

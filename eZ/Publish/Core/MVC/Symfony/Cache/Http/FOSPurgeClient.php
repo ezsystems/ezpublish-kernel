@@ -42,15 +42,28 @@ class FOSPurgeClient implements PurgeClientInterface
             return;
         }
 
-        if (!is_array($locationIds)) {
-            $locationIds = array($locationIds);
+        $this->purgeByTags(
+            array_map(
+                function ($locationId) {
+                    return 'location-' . $locationId;
+                },
+                (array)$locationIds
+            )
+        );
+    }
+
+    public function purgeByTags(array $tags)
+    {
+        if (empty($tags)) {
+            return;
         }
 
-        $this->cacheManager->invalidate(array('X-Location-Id' => '^(' . implode('|', $locationIds) . ')$'));
+        // @todo: Need to take advantage of xkey if enabled to avoid BAN unless VCL handles this for us.
+        $this->cacheManager->invalidate(array('xkey' => '^(' . implode('|', $tags) . ')$'));
     }
 
     public function purgeAll()
     {
-        $this->cacheManager->invalidate(array('X-Location-Id' => '.*'));
+        $this->cacheManager->invalidate(array('xkey' => '.*'));
     }
 }

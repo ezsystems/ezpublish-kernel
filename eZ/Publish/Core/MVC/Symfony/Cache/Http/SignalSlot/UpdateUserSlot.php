@@ -15,14 +15,14 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling UpdateUserSignal.
  */
-class UpdateUserSlot extends PurgeForContentHttpCacheSlot
+class UpdateUserSlot extends AbstractContentSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserSignal $signal
      */
-    protected function extractContentId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return $signal->userId;
+        return ['content-' . $signal->userId];
     }
 
     protected function supports(Signal $signal)

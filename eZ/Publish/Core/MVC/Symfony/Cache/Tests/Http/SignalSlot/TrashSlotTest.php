@@ -10,13 +10,20 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal;
 
-class TrashSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class TrashSlotTest extends AbstractContentSlotTest
 {
-    protected static $locationIds = [45, 43];
+    protected $locationId = 45;
+    protected $parentLocationId = 43;
 
-    public static function createSignal()
+    public function createSignal()
     {
-        return new TrashSignal(['contentId' => self::getContentId(), 'locationId' => 45, 'parentLocationId' => 43]);
+        return new TrashSignal(
+            [
+                'contentId' => $this->contentId,
+                'locationId' => $this->locationId,
+                'parentLocationId' => $this->parentLocationId,
+            ]
+        );
     }
 
     public function getSlotClass()
@@ -24,7 +31,7 @@ class TrashSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest,
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\TrashSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal'];
     }

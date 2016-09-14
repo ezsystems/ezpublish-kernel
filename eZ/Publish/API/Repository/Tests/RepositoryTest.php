@@ -234,6 +234,23 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getSearchService() method.
+     *
+     * @group permission
+     *
+     * @see \eZ\Publish\API\Repository\Repository::getPermissionResolver()
+     */
+    public function testGetPermissionResolver()
+    {
+        $repository = $this->getRepository();
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\PermissionResolver',
+            $repository->getPermissionResolver()
+        );
+    }
+
+    /**
      * Test for the commit() method.
      *
      * @see \eZ\Publish\API\Repository\Repository::commit()

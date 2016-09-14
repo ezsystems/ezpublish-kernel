@@ -61,7 +61,7 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
         $responseMock->expects($this->once())->method('setSharedMaxAge')->with($this->defaultOptions['content.default_ttl']);
         $responseMock->expects($this->at(3))->method('setVary')->with('X-User-Hash', false);
 
-        $result = $this->visit(new CachedValue(new stdClass(), array('locationId' => 'testLocationId')));
+        $result = $this->visit(new CachedValue(new stdClass(), array('location' => 'testLocationId')));
 
         self::assertNotNull($result);
     }

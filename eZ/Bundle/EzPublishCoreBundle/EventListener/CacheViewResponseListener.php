@@ -62,7 +62,23 @@ class CacheViewResponseListener implements EventSubscriberInterface
         $response = $event->getResponse();
 
         if ($view instanceof LocationValueView && ($location = $view->getLocation()) instanceof Location) {
-            $response->headers->set('X-Location-Id', $location->id, false);
+            // See doc/specifications/cache/multi_tagging.md
+            // @todo Add relation-<contentId> tags in a clean way, pherhaps extend ContentView to add such info?
+            $response->headers->set(
+                'xkey',
+                [
+                    'content-' . $location->contentId,
+                    'location-' . $location->id,
+                    'parent-' . $location->parentLocationId,
+                    'content-type-' . $location->getContentInfo()->contentTypeId,
+                ] + array_map(
+                    function ($pathItem) {
+                        return 'path-' . $pathItem;
+                    },
+                    $location->path
+                ),
+                false
+            );
         }
 
         $response->setPublic();

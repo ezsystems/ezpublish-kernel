@@ -15,7 +15,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling DeleteVersionSignal.
  */
-class DeleteVersionSlot extends PurgeForContentHttpCacheSlot
+class DeleteVersionSlot extends AbstractContentSlot
 {
     protected function supports(Signal $signal)
     {

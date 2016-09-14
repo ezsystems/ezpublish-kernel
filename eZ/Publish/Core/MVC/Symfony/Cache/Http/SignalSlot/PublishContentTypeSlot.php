@@ -5,30 +5,28 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
 
 /**
- * An abstract slot for clearing all http caches.
- *
- * @deprecated By design clears all cache, will be removed in favour of more precise cache clearing.
+ * A slot handling PublishContentTypeDraftSignal.
  */
-abstract class PurgeAllHttpCacheSlot extends HttpCacheSlot
+class PublishContentTypeSlot extends AbstractSlot
 {
+    protected function supports(Signal $signal)
+    {
+        return $signal instanceof Signal\ContentTypeService\PublishContentTypeDraftSignal;
+    }
+
     /**
-     * Purges all caches.
-     *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\PublishContentTypeDraftSignal $signal
      *
      * @return mixed
      */
     protected function purgeHttpCache(Signal $signal)
     {
-        return $this->httpCacheClearer->purgeAll();
+        return $this->purgeClient->purgeByTags(['content-type-' . $signal->contentTypeDraftId]);
     }
 }

@@ -91,6 +91,8 @@ public function viewContent( $contentId, $viewType, $layout = false, array $para
 ### Caching
 Using your own controller, it is **your responsibility to define cache rules**, like for every custom controller !
 
+
+__@todo__: Update to refer to multi tags spec.
 So don't forget to set cache rules and the appropriate `X-Location-Id` header in the returned `Response` object.
 
 [See built-in ViewController](https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/Core/MVC/Symfony/Controller/Content/ViewController.php#L68) for more details on this.

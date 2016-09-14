@@ -15,14 +15,14 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling CopyContentSignal.
  */
-class CopyContentSlot extends PurgeForContentHttpCacheSlot
+class CopyContentSlot extends AbstractContentSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal $signal
      */
-    protected function extractContentId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return $signal->dstContentId;
+        return ['content-' . $signal->dstContentId, 'location-' . $signal->dstParentLocationId, 'path-' . $signal->dstParentLocationId];
     }
 
     protected function supports(Signal $signal)

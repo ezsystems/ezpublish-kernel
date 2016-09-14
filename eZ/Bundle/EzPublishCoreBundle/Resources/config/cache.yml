@@ -2,7 +2,7 @@ parameters:
     ezpublish.cache_pool.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
     ezpublish.http_cache.purger.instant.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\InstantCachePurger
     ezpublish.http_cache.purge_client.local.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient
-    ezpublish.http_cache.store.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore
+    ezpublish.http_cache.store.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\Proxy\TagAwareStore
     ezpublish.http_cache.store.root: "%kernel.cache_dir%/http_cache"
     ezpublish.http_cache.cache_manager.class: FOS\HttpCacheBundle\CacheManager
     ezpublish.http_cache.proxy_client.varnish.factory.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\VarnishProxyClientFactory

@@ -17,6 +17,11 @@ use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class InstantCachePurger.
+ *
+ * @deprecated since 6.6 will be removed in 7.0, use PurgeClient directly.
+ */
 class InstantCachePurger implements GatewayCachePurger
 {
     /**

@@ -10,26 +10,26 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot;
 
 /**
  * A abstract legacy slot covering common functions needed for legacy slots.
  */
-abstract class HttpCacheSlot extends Slot
+abstract class AbstractSlot extends Slot
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger
+     * @var \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface
      */
-    protected $httpCacheClearer;
+    protected $purgeClient;
 
     /**
-     * @param \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger $httpCacheClearer
+     * @param \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface $purgeClient
      */
-    public function __construct(GatewayCachePurger $httpCacheClearer)
+    public function __construct(PurgeClientInterface $purgeClient)
     {
-        $this->httpCacheClearer = $httpCacheClearer;
+        $this->purgeClient = $purgeClient;
     }
 
     public function receive(Signal $signal)
@@ -51,7 +51,7 @@ abstract class HttpCacheSlot extends Slot
     abstract protected function supports(Signal $signal);
 
     /**
-     * Purges the HTTP cache for $signal.
+     * Purges relevant HTTP cache for $signal.
      *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
      *

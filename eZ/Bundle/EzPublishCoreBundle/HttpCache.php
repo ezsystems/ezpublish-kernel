@@ -10,7 +10,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\Proxy\TagAwareStore;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\SymfonyCache\UserContextSubscriber;
 use FOS\HttpCacheBundle\SymfonyCache\EventDispatchingHttpCache;
@@ -21,7 +21,7 @@ abstract class HttpCache extends EventDispatchingHttpCache
 {
     protected function createStore()
     {
-        return new LocationAwareStore($this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache');
+        return new TagAwareStore($this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache');
     }
 
     /**

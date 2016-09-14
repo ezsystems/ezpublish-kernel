@@ -163,7 +163,7 @@ class User extends RestController
                 $userGroupLocation,
                 $this->contentService->loadRelations($userGroup->getVersionInfo())
             ),
-            array('locationId' => $userGroupLocation->id)
+            array('location' => $userGroupLocation->id)
         );
     }
 
@@ -207,7 +207,7 @@ class User extends RestController
                 $userMainLocation,
                 $relations
             ),
-            array('locationId' => $userContentInfo->mainLocationId)
+            array('location' => $userContentInfo->mainLocationId)
         );
     }
 
@@ -744,13 +744,13 @@ class User extends RestController
         if ($this->getMediaType($request) === 'application/vnd.ez.api.usergrouplist') {
             return new Values\CachedValue(
                 new Values\UserGroupList($restUserGroups, $request->getPathInfo()),
-                array('locationId' => $userGroupLocation->id)
+                array('location' => $userGroupLocation->id)
             );
         }
 
         return new Values\CachedValue(
             new Values\UserGroupRefList($restUserGroups, $request->getPathInfo()),
-            array('locationId' => $userGroupLocation->id)
+            array('location' => $userGroupLocation->id)
         );
     }
 
@@ -792,7 +792,7 @@ class User extends RestController
 
         return new Values\CachedValue(
             new Values\UserGroupRefList($restUserGroups, $request->getPathInfo(), $userId),
-            array('locationId' => $user->contentInfo->mainLocationId)
+            array('location' => $user->contentInfo->mainLocationId)
         );
     }
 
@@ -840,13 +840,13 @@ class User extends RestController
         if ($this->getMediaType($request) === 'application/vnd.ez.api.userlist') {
             return new Values\CachedValue(
                 new Values\UserList($restUsers, $request->getPathInfo()),
-                array('locationId' => $userGroupLocation->id)
+                array('location' => $userGroupLocation->id)
             );
         }
 
         return new Values\CachedValue(
             new Values\UserRefList($restUsers, $request->getPathInfo()),
-            array('locationId' => $userGroupLocation->id)
+            array('location' => $userGroupLocation->id)
         );
     }
 
