@@ -325,16 +325,17 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * Will create if not exists an simple content type for deletion test purpose with just and required field name.
+     * Will create if not exists an simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    protected function createDeletionTestContentType()
+    protected function createTestContentType()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
+        $contentTypeIdentifier = 'test-type';
         try {
-            return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+            return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
         } catch (NotFoundException $e) {
             // continue creation process
         }
@@ -345,12 +346,11 @@ class SearchEngineIndexingTest extends BaseTest
         $nameField->isTranslatable = true;
         $nameField->isSearchable = true;
         $nameField->isRequired = true;
-
-        $contentTypeStruct = $contentTypeService->newContentTypeCreateStruct('deletion-test');
+        $contentTypeStruct = $contentTypeService->newContentTypeCreateStruct($contentTypeIdentifier);
         $contentTypeStruct->mainLanguageCode = 'eng-GB';
         $contentTypeStruct->creatorId = 14;
         $contentTypeStruct->creationDate = new DateTime();
-        $contentTypeStruct->names = ['eng-GB' => 'Deletion test'];
+        $contentTypeStruct->names = ['eng-GB' => 'Test Content Type'];
         $contentTypeStruct->addFieldDefinition($nameField);
 
         $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
@@ -358,7 +358,7 @@ class SearchEngineIndexingTest extends BaseTest
         $contentTypeDraft = $contentTypeService->createContentType($contentTypeStruct, [$contentTypeGroup]);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+        return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
     }
 
     /**
@@ -375,7 +375,7 @@ class SearchEngineIndexingTest extends BaseTest
         $contentService = $this->getRepository()->getContentService();
         $locationService = $this->getRepository()->getLocationService();
 
-        $testableContentType = $this->createDeletionTestContentType();
+        $testableContentType = $this->createTestContentType();
 
         $rootContentStruct = $contentService->newContentCreateStruct($testableContentType, 'eng-GB');
         $rootContentStruct->setField('name', $contentName);
