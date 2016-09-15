@@ -20,6 +20,7 @@ parameters:
     ezpublish.search.slot.unhide_location.class: eZ\Publish\Core\Search\Common\Slot\UnhideLocation
     ezpublish.search.slot.set_content_state.class: eZ\Publish\Core\Search\Common\Slot\SetContentState
     ezpublish.search.slot.swap_location.class: eZ\Publish\Core\Search\Common\Slot\SwapLocation
+    ezpublish.search.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
 
 services:
     ezpublish.search.slot:
@@ -149,3 +150,9 @@ services:
         class: "%ezpublish.search.slot.swap_location.class%"
         tags:
             - {name: ezpublish.search.slot, signal: LocationService\SwapLocationSignal}
+
+    ezpublish.search.slot.update_content_metadata:
+        parent: ezpublish.search.slot
+        class: "%ezpublish.search.slot.update_content_metadata.class%"
+        tags:
+            - {name: ezpublish.search.slot, signal: ContentService\UpdateContentMetadataSignal}

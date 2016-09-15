@@ -325,6 +325,49 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test that updating Content metadata affects properly Search Engine Index.
+     */
+    public function testUpdateContentMetadata()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $publishedContent = $this->createContentWithName('updateMetadataTest', [2]);
+        $newLocationCreateStruct = $locationService->newLocationCreateStruct(60);
+        $newLocation = $locationService->createLocation($publishedContent->contentInfo, $newLocationCreateStruct);
+
+        $newContentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $newContentMetadataUpdateStruct->remoteId = md5('Test');
+        $newContentMetadataUpdateStruct->publishedDate = new \DateTime();
+        $newContentMetadataUpdateStruct->publishedDate->add(new \DateInterval('P1D'));
+        $newContentMetadataUpdateStruct->mainLocationId = $newLocation->id;
+
+        $contentService->updateContentMetadata($publishedContent->contentInfo, $newContentMetadataUpdateStruct);
+        $this->refreshSearch($repository);
+
+        // find Content by Id, calling findContentInfo which is using the Search Index
+        $criterion = new Criterion\ContentId($publishedContent->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContentInfo($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($publishedContent->contentInfo->id, $results->searchHits[0]->valueObject->id);
+
+        // find Content using updated RemoteId
+        $criterion = new Criterion\RemoteId($newContentMetadataUpdateStruct->remoteId);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(1, $results->totalCount);
+        $foundContentInfo = $results->searchHits[0]->valueObject->contentInfo;
+        /** @var \eZ\Publish\Core\Repository\Values\Content\Content $foundContentInfo */
+        $this->assertEquals($publishedContent->id, $foundContentInfo->id);
+        $this->assertEquals($newContentMetadataUpdateStruct->publishedDate, $foundContentInfo->publishedDate);
+        $this->assertEquals($newLocation->id, $foundContentInfo->mainLocationId);
+        $this->assertEquals($newContentMetadataUpdateStruct->remoteId, $foundContentInfo->remoteId);
+    }
+
+    /**
      * Will create if not exists an simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
