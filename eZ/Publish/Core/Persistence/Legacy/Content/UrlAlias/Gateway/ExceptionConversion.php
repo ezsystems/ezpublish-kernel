@@ -101,6 +101,17 @@ class ExceptionConversion extends Gateway
         }
     }
 
+    public function cleanupAfterSwap($action, $languageId, $newId, $languageMask)
+    {
+        try {
+            $this->innerGateway->cleanupAfterSwap($action, $languageId, $newId, $languageMask);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
     /**
      * Marks all entries with given $id as history entries.
      *
