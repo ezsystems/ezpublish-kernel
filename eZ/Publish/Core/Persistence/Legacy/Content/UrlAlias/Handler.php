@@ -193,7 +193,7 @@ class Handler implements UrlAliasHandlerInterface
                         // If we are reusing existing location entry merge existing language mask
                         $languageMask |= ($row['lang_mask'] & ~1);
                     }
-                } else if ($newId === null) {
+                } elseif ($newId === null) {
                     // Use reused row ID only if publishing normally, else use given $newId
                     $newId = $row['id'];
                 }
