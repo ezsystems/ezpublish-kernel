@@ -119,14 +119,23 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * Tests that session creation request is properly accepted.
+     * @dataProvider provideSessionRoutes
      */
-    public function testCreateSessionRequest()
+    public function testSessionRequests($route)
     {
-        $this->route = 'ezpublish_rest_createSession';
+        $this->route = $route;
         $this->csrfTokenHeaderValue = null;
 
         $this->getEventListener()->onKernelRequest($this->getEventMock());
+    }
+
+    public static function provideSessionRoutes()
+    {
+        return [
+            ['ezpublish_rest_createSession'],
+            ['ezpublish_rest_refreshSession'],
+            ['ezpublish_rest_deleteSession'],
+        ];
     }
 
     /**
