@@ -34,17 +34,54 @@ class TestCase extends PHPUnit_Framework_TestCase
 
     protected static $testSuffix;
 
+    /**
+     * @var array
+     */
+    private $headers = [];
+
+    /**
+     * The username to use for login.
+     * @var string
+     */
+    private $loginUsername;
+
+    /**
+     * The password to use for login.
+     * @var string
+     */
+    private $loginPassword;
+
+    /**
+     * If true, a login request is automatically done during setUp().
+     * @var bool
+     */
+    protected $autoLogin = true;
+
+    /**
+     * List of REST contentId (/content/objects/12345) created by tests.
+     *
+     * @var array
+     */
+    private static $createdContent = array();
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->httpHost = getenv('EZP_TEST_REST_HOST') ?: 'localhost';
         $this->httpAuth = getenv('EZP_TEST_REST_AUTH') ?: 'admin:publish';
+        list($this->loginUsername, $this->loginPassword) = explode(':', $this->httpAuth);
 
         $this->httpClient = new \Buzz\Client\Curl();
         $this->httpClient->setVerifyPeer(false);
         $this->httpClient->setTimeout(90);
         $this->httpClient->setOption(CURLOPT_FOLLOWLOCATION, false);
+
+        if ($this->autoLogin) {
+            $session = $this->login();
+            $this->headers[] = sprintf('Cookie: %s=%s', $session->name, $session->identifier);
+            $this->headers[] = sprintf('X-CSRF-Token: %s', $session->csrfToken);
+        }
     }
 
     /**
@@ -58,15 +95,43 @@ class TestCase extends PHPUnit_Framework_TestCase
         return $response;
     }
 
+    protected function getHttpHost()
+    {
+        return $this->httpHost;
+    }
+
+    protected function getLoginUsername()
+    {
+        return $this->loginUsername;
+    }
+
+    protected function getLoginPassword()
+    {
+        return $this->loginPassword;
+    }
+
     /**
      * @return HttpRequest
      */
     public function createHttpRequest($method, $uri, $contentType = '', $acceptType = '')
     {
+        $headers = array_merge(
+            $method === 'POST' && $uri === '/api/ezp/v2/user/sessions' ? [] : $this->headers,
+            [
+                'Content-Type: ' . $this->generateMediaTypeString($contentType),
+                'Accept: ' . $this->generateMediaTypeString($acceptType),
+            ]
+        );
+
+        switch ($method) {
+            case 'PUBLISH': $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: PUBLISH'; break;
+            case 'MOVE':    $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: MOVE';    break;
+            case 'PATCH':   $method = 'PATCH'; $headers[] = 'X-HTTP-Method-Override: PATCH';   break;
+            case 'COPY':    $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: COPY';    break;
+        }
+
         $request = new HttpRequest($method, $uri, $this->httpHost);
-        $request->addHeader('Authorization: Basic ' . base64_encode($this->httpAuth));
-        $request->addHeader('Content-Type: ' . $this->generateMediaTypeString($contentType));
-        $request->addHeader('Accept: ' . $this->generateMediaTypeString($acceptType));
+        $request->addHeaders($headers);
 
         return $request;
     }
@@ -238,9 +303,32 @@ XML;
     }
 
     /**
-     * List of REST contentId (/content/objects/12345) created by tests.
+     * Sends a login request to the REST server.
      *
-     * @var array
+     * @return \stdClass an object with the name, identifier, csrftoken properties.
      */
-    private static $createdContent = array();
+    protected function login()
+    {
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
+        $this->setSessionInput($request);
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
+
+        return json_decode($response->getContent())->Session;
+    }
+
+    /**
+     * Sets the request's content to a JSON session creation payload.
+     *
+     * @param HttpRequest $request
+     * @param string $password The password to use in the input. Will use the default one if not set.
+     *
+     * @return string
+     */
+    protected function setSessionInput(HttpRequest $request, $password = null)
+    {
+        $request->setContent(
+            sprintf('{"SessionInput": {"login": "admin", "password": "%s"}}', $password ?: $this->loginPassword)
+        );
+    }
 }

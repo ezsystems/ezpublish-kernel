@@ -204,6 +204,8 @@ services:
             - @ezpublish.api.service.location
             - @ezpublish.api.service.section
             - @ezpublish.api.repository
+        calls:
+            - [setTokenStorage, ['@?security.csrf.token_storage']]
 
     ezpublish_rest.controller.url_wildcard:
         class: %ezpublish_rest.controller.url_wildcard.class%
