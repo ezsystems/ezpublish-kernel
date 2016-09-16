@@ -101,10 +101,10 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function cleanupAfterSwap($action, $languageId, $newId, $languageMask)
+    public function historizeBeforeSwap($action, $languageMask)
     {
         try {
-            $this->innerGateway->cleanupAfterSwap($action, $languageId, $newId, $languageMask);
+            $this->innerGateway->historizeBeforeSwap($action, $languageMask);
         } catch (DBALException $e) {
             throw new \RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

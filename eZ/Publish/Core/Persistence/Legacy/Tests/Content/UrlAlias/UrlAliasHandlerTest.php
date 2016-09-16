@@ -3466,7 +3466,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler->locationSwapped(314, 2, 315, 2);
 
         $this->assertEquals(
-            $countBeforeReusing + 1,
+            $countBeforeReusing,
             $this->countRows()
         );
 
@@ -3503,33 +3503,6 @@ class UrlAliasHandlerTest extends TestCase
                 array(
                     'id' => '0-' . md5('dva'),
                     'type' => UrlAlias::LOCATION,
-                    'destination' => 315,
-                    'languageCodes' => array(
-                        'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
-                            'always-available' => false,
-                            'translations' => array(
-                                'cro-HR' => 'dva',
-                            ),
-                        ),
-                    ),
-                    'alwaysAvailable' => false,
-                    'isHistory' => true,
-                    'isCustom' => false,
-                    'forward' => false,
-                )
-            ),
-            $urlAlias
-        );
-
-        $urlAlias = $handler->lookup('dva2');
-        $this->assertEquals(
-            new UrlAlias(
-                array(
-                    'id' => '0-' . md5('dva2'),
-                    'type' => UrlAlias::LOCATION,
                     'destination' => 314,
                     'languageCodes' => array(
                         'cro-HR',
@@ -3538,7 +3511,7 @@ class UrlAliasHandlerTest extends TestCase
                         array(
                             'always-available' => false,
                             'translations' => array(
-                                'cro-HR' => 'dva2',
+                                'cro-HR' => 'dva',
                             ),
                         ),
                     ),
@@ -3567,7 +3540,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler->locationSwapped(315, 2, 314, 2);
 
         $this->assertEquals(
-            $countBeforeReusing + 1,
+            $countBeforeReusing,
             $this->countRows()
         );
 
@@ -3577,7 +3550,7 @@ class UrlAliasHandlerTest extends TestCase
                 array(
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
-                    'destination' => 314,
+                    'destination' => 315,
                     'languageCodes' => array(
                         'cro-HR',
                     ),
@@ -3590,7 +3563,7 @@ class UrlAliasHandlerTest extends TestCase
                         ),
                     ),
                     'alwaysAvailable' => false,
-                    'isHistory' => true,
+                    'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
                 )
@@ -3613,33 +3586,6 @@ class UrlAliasHandlerTest extends TestCase
                             'always-available' => false,
                             'translations' => array(
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                    ),
-                    'alwaysAvailable' => false,
-                    'isHistory' => false,
-                    'isCustom' => false,
-                    'forward' => false,
-                )
-            ),
-            $urlAlias
-        );
-
-        $urlAlias = $handler->lookup('jedan2');
-        $this->assertEquals(
-            new UrlAlias(
-                array(
-                    'id' => '0-' . md5('jedan2'),
-                    'type' => UrlAlias::LOCATION,
-                    'destination' => 315,
-                    'languageCodes' => array(
-                        'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
-                            'always-available' => false,
-                            'translations' => array(
-                                'cro-HR' => 'jedan2',
                             ),
                         ),
                     ),
@@ -3668,7 +3614,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler->locationSwapped(314, 2, 315, 2);
 
         $this->assertEquals(
-            $countBeforeReusing + 1,
+            $countBeforeReusing,
             $this->countRows()
         );
 
@@ -3759,7 +3705,7 @@ class UrlAliasHandlerTest extends TestCase
                 array(
                     'id' => '0-' . md5('dva-new'),
                     'type' => UrlAlias::LOCATION,
-                    'destination' => 315,
+                    'destination' => 314,
                     'languageCodes' => array(
                         'cro-HR',
                     ),
@@ -3769,29 +3715,6 @@ class UrlAliasHandlerTest extends TestCase
                             'translations' => array(
                                 'cro-HR' => 'dva-new',
                             ),
-                        ),
-                    ),
-                    'alwaysAvailable' => false,
-                    'isHistory' => true,
-                    'isCustom' => false,
-                    'forward' => false,
-                )
-            ),
-            $urlAlias
-        );
-
-        $urlAlias = $handler->lookup('dva-new2');
-        $this->assertEquals(
-            new UrlAlias(
-                array(
-                    'id' => '0-' . md5('dva-new2'),
-                    'type' => UrlAlias::LOCATION,
-                    'destination' => 314,
-                    'languageCodes' => array('cro-HR'),
-                    'pathData' => array(
-                        array(
-                            'always-available' => false,
-                            'translations' => array('cro-HR' => 'dva-new2'),
                         ),
                     ),
                     'alwaysAvailable' => false,
@@ -3819,7 +3742,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler->locationSwapped(315, 2, 314, 2);
 
         $this->assertEquals(
-            $countBeforeReusing + 1,
+            $countBeforeReusing,
             $this->countRows()
         );
 
@@ -3883,7 +3806,7 @@ class UrlAliasHandlerTest extends TestCase
                 array(
                     'id' => '0-' . md5('jedan-new'),
                     'type' => UrlAlias::LOCATION,
-                    'destination' => 314,
+                    'destination' => 315,
                     'languageCodes' => array(
                         'cro-HR',
                     ),
@@ -3896,7 +3819,7 @@ class UrlAliasHandlerTest extends TestCase
                         ),
                     ),
                     'alwaysAvailable' => false,
-                    'isHistory' => true,
+                    'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
                 )
@@ -3919,33 +3842,6 @@ class UrlAliasHandlerTest extends TestCase
                             'always-available' => false,
                             'translations' => array(
                                 'cro-HR' => 'dva-new',
-                            ),
-                        ),
-                    ),
-                    'alwaysAvailable' => false,
-                    'isHistory' => false,
-                    'isCustom' => false,
-                    'forward' => false,
-                )
-            ),
-            $urlAlias
-        );
-
-        $urlAlias = $handler->lookup('jedan-new2');
-        $this->assertEquals(
-            new UrlAlias(
-                array(
-                    'id' => '0-' . md5('jedan-new2'),
-                    'type' => UrlAlias::LOCATION,
-                    'destination' => 315,
-                    'languageCodes' => array(
-                        'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
-                            'always-available' => false,
-                            'translations' => array(
-                                'cro-HR' => 'jedan-new2',
                             ),
                         ),
                     ),
