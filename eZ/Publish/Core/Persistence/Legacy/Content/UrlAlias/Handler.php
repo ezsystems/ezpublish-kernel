@@ -114,7 +114,7 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     * todo document
+     * todo document.
      *
      * @param int $locationId
      * @param int $parentLocationId
