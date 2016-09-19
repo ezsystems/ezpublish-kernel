@@ -4716,6 +4716,182 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the locationSwapped() method.
+     *
+     * @group swap
+     */
+    public function testLocationSwappedWithReusingNopEntry()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_reusing_nop.php');
+
+        $countBeforeReusing = $this->countRows();
+
+        $handler->locationSwapped(316, 314, 317, 315);
+
+        $this->assertEquals(
+            $countBeforeReusing + 1,
+            $this->countRows()
+        );
+
+        $urlAlias = $handler->lookup('jedan/swap-that');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '2-' . md5('swap-that'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 316,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'jedan',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-that',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('dva/swap-this');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '3-' . md5('swap-this'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 317,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'dva',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-this',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('dva/swap-that');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '3-' . md5('swap-that'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 317,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'dva',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-that',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => true,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('jedan/swap-this');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '2-' . md5('swap-this'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 316,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'jedan',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-this',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => true,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+    }
+
+    /**
+     * Test for the locationSwapped() method.
+     *
+     * @depends testLocationSwappedWithReusingNopEntry
+     * @group swap2
+     */
+    public function testLocationSwappedWithReusingNopEntryCustomAliasIsDestroyed()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_reusing_nop.php');
+
+        $handler->lookup('jedan/swap-that/search');
+        $handler->locationSwapped(316, 314, 317, 315);
+
+        try {
+            $handler->lookup('jedan/swap-that/search');
+            $this->fail('Custom alias is not destroyed');
+        } catch (NotFoundException $e) {
+            // Custom alias is destroyed by reusing NOP entry with existing autogenerated alias
+            // on the same level (that means link and ID are updated to the existing alias ID,
+            // so custom alias children entries are no longer properly linked (parent-link))
+        }
+    }
+
+    /**
      * @return int
      */
     protected function countRows()
