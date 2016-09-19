@@ -16,6 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase as DoctrineDatabaseLocation;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase as DoctrineDatabaseContent;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase as LanguageGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
@@ -4871,7 +4872,7 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the locationSwapped() method.
      *
      * @depends testLocationSwappedWithReusingNopEntry
-     * @group swap2
+     * @group swap
      */
     public function testLocationSwappedWithReusingNopEntryCustomAliasIsDestroyed()
     {
@@ -4892,16 +4893,74 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the locationSwapped() method.
+     *
+     * @group swap
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationSwapped
+     */
+    public function testLocationSwappedUpdatesLocationPathIdentificationString()
+    {
+        $handler = $this->getHandler();
+        $locationGateway = $this->getLocationGateway();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_path_identification_string.php');
+
+        $countBeforeReusing = $this->countRows();
+
+        $handler->locationSwapped(314, 2, 315, 2);
+
+        $this->assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+
+        $locationData = $locationGateway->getBasicNodeData(314);
+        self::assertEquals('dva', $locationData['path_identification_string']);
+
+        $locationData = $locationGateway->getBasicNodeData(315);
+        self::assertEquals('jedan', $locationData['path_identification_string']);
+    }
+
+    /**
+     * Test for the locationSwapped() method.
+     *
+     * @group swap
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationSwapped
+     */
+    public function testLocationSwappedMultipleLanguagesUpdatesLocationPathIdentificationString()
+    {
+        $handler = $this->getHandler();
+        $locationGateway = $this->getLocationGateway();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_multilang_path_identification_string.php');
+
+        $countBeforeReusing = $this->countRows();
+
+        $handler->locationSwapped(314, 2, 315, 2);
+
+        $this->assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+
+        $locationData = $locationGateway->getBasicNodeData(314);
+        self::assertEquals('zwei', $locationData['path_identification_string']);
+
+        $locationData = $locationGateway->getBasicNodeData(315);
+        self::assertEquals('jedan', $locationData['path_identification_string']);
+    }
+
+    /**
      * @return int
      */
     protected function countRows()
     {
         /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->getDatabaseHandler()->createSelectQuery();
         $query->select(
             $query->expr->count('*')
         )->from(
-            $this->dbHandler->quoteTable('ezurlalias_ml')
+            $this->getDatabaseHandler()->quoteTable('ezurlalias_ml')
         );
 
         $statement = $query->prepare();
@@ -4910,17 +4969,14 @@ class UrlAliasHandlerTest extends TestCase
         return (int)$statement->fetchColumn();
     }
 
-    /**
-     * @return int
-     */
     protected function dump()
     {
         /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->getDatabaseHandler()->createSelectQuery();
         $query->select(
             '*'
         )->from(
-            $this->dbHandler->quoteTable('ezurlalias_ml')
+            $this->getDatabaseHandler()->quoteTable('ezurlalias_ml')
         );
 
         $statement = $query->prepare();
@@ -4938,6 +4994,16 @@ class UrlAliasHandlerTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
 
     /**
      * @param array $methods
@@ -4984,16 +5050,10 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function getHandler()
     {
-        $this->dbHandler = $this->getDatabaseHandler();
-        $languageHandler = new LanguageHandler(
-            new LanguageGateway(
-                $this->getDatabaseHandler()
-            ),
-            new LanguageMapper()
-        );
-        $languageMaskGenerator = new LanguageMaskGenerator($languageHandler);
+        $languageHandler = $this->getLanguageHandler();
+        $languageMaskGenerator = $this->getLanguageMaskGenerator();
         $gateway = new DoctrineDatabase(
-            $this->dbHandler,
+            $this->getDatabaseHandler(),
             $languageMaskGenerator
         );
         $mapper = new Mapper($languageMaskGenerator);
@@ -5008,17 +5068,40 @@ class UrlAliasHandlerTest extends TestCase
         );
     }
 
+    protected function getLanguageHandler()
+    {
+        if (!isset($this->languageHandler)) {
+            $this->languageHandler = new LanguageHandler(
+                new LanguageGateway(
+                    $this->getDatabaseHandler()
+                ),
+                new LanguageMapper()
+            );
+        }
+
+        return $this->languageHandler;
+    }
+
+    protected function getLanguageMaskGenerator()
+    {
+        if (!isset($this->languageMaskGenerator)) {
+            $this->languageMaskGenerator = new LanguageMaskGenerator(
+                $this->getLanguageHandler()
+            );
+        }
+
+        return $this->languageMaskGenerator;
+    }
+
     /**
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected function getLocationGateway()
     {
-        if (!isset($this->dbHandler)) {
-            $this->dbHandler = $this->getDatabaseHandler();
-        }
-
         if (!isset($this->locationGateway)) {
-            $this->locationGateway = new DoctrineDatabaseLocation($this->dbHandler);
+            $this->locationGateway = new DoctrineDatabaseLocation(
+                $this->getDatabaseHandler()
+            );
         }
 
         return $this->locationGateway;

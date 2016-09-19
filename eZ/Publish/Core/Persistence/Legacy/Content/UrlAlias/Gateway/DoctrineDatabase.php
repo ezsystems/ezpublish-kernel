@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Database\Query;
+use RuntimeException;
 
 /**
  * UrlAlias Gateway.
@@ -1068,5 +1069,41 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getLocationContentMainLanguageId($locationId)
+    {
+        $dbHandler = $this->dbHandler;
+        $query = $dbHandler->createSelectQuery();
+        $query
+            ->select($dbHandler->quoteColumn('initial_language_id', 'ezcontentobject'))
+            ->from($dbHandler->quoteTable('ezcontentobject'))
+            ->innerJoin(
+                $dbHandler->quoteTable('ezcontentobject_tree'),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
+                        $dbHandler->quoteColumn('id', 'ezcontentobject')
+                    ),
+                    $query->expr->eq(
+                        $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
+                        $dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree')
+                    ),
+                    $query->expr->eq(
+                        $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
+                        $query->bindValue($locationId, null, \PDO::PARAM_INT)
+                    )
+                )
+            );
+
+        $statement = $query->prepare();
+        $statement->execute();
+        $languageId = $statement->fetchColumn();
+
+        if ($languageId === false) {
+            throw new RuntimeException("Could not find Content for Location #{$locationId}");
+        }
+
+        return $languageId;
     }
 }

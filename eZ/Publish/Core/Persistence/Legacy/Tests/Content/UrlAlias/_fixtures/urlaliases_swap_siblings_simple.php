@@ -61,4 +61,43 @@ return array(
             'id' => '3',
         ),
     ),
+    'ezcontentobject_tree' => array(
+        0 => array(
+            'node_id' => 2,
+            'main_node_id' => 2,
+            'parent_node_id' => 1,
+            'path_string' => '',
+            'path_identification_string' => '',
+            'remote_id' => '',
+            'contentobject_id' => 1,
+        ),
+        1 => array(
+            'node_id' => 314,
+            'main_node_id' => 314,
+            'parent_node_id' => 2,
+            'path_string' => '',
+            'path_identification_string' => '',
+            'remote_id' => '',
+            'contentobject_id' => 2,
+        ),
+        2 => array(
+            'node_id' => 315,
+            'main_node_id' => 315,
+            'parent_node_id' => 2,
+            'path_string' => '',
+            'path_identification_string' => '',
+            'remote_id' => '',
+            'contentobject_id' => 3,
+        ),
+    ),
+    'ezcontentobject' => array(
+        0 => array(
+            'id' => 2,
+            'initial_language_id' => 2,
+        ),
+        1 => array(
+            'id' => 3,
+            'initial_language_id' => 2,
+        ),
+    ),
 );

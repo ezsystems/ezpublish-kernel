@@ -204,4 +204,13 @@ abstract class Gateway
      * @return mixed
      */
     abstract public function getNextId();
+
+    /**
+     * Returns main language ID of the Content on the Location with given $locationId.
+     *
+     * @param int $locationId
+     *
+     * @return int
+     */
+    abstract public function getLocationContentMainLanguageId($locationId);
 }
