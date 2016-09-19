@@ -346,7 +346,7 @@ class DoctrineDatabase extends Gateway
                 $query->expr->gt(
                     $query->expr->bitAnd(
                         $this->dbHandler->quoteColumn('lang_mask'),
-                        $query->bindValue($languageMask, null, \PDO::PARAM_INT)
+                        $query->bindValue($languageMask & ~1, null, \PDO::PARAM_INT)
                     ),
                     0
                 )
