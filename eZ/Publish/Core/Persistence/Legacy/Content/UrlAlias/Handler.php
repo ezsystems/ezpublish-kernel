@@ -618,13 +618,14 @@ class Handler implements UrlAliasHandlerInterface
             $languageIds = $this->extractLanguageIdsFromMask($row['lang_mask']);
 
             foreach ($languageIds as $languageId) {
+                $isMainLanguage = $languageId == $location2MainLanguageId;
                 $this->internalPublishUrlAliasForLocation(
                     $location1Id,
                     $location1ParentId,
                     $row['text'],
                     $languageId,
-                    $alwaysAvailable,
-                    $languageId == $location2MainLanguageId,
+                    $isMainLanguage && $alwaysAvailable,
+                    $isMainLanguage,
                     $autoLocation1['id']
                 );
             }
@@ -635,13 +636,14 @@ class Handler implements UrlAliasHandlerInterface
             $languageIds = $this->extractLanguageIdsFromMask($row['lang_mask']);
 
             foreach ($languageIds as $languageId) {
+                $isMainLanguage = $languageId == $location1MainLanguageId;
                 $this->internalPublishUrlAliasForLocation(
                     $location2Id,
                     $location2ParentId,
                     $row['text'],
                     $languageId,
-                    $alwaysAvailable,
-                    $languageId == $location1MainLanguageId,
+                    $isMainLanguage && $alwaysAvailable,
+                    $isMainLanguage,
                     $autoLocation2['id']
                 );
             }
