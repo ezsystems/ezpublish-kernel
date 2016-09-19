@@ -58,7 +58,7 @@ return array(
             'action' => 'eznode:317',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
-            'id' => '6',
+            'id' => '7',
             'is_alias' => '0',
             'is_original' => '0',
             'lang_mask' => '2',
@@ -117,6 +117,12 @@ return array(
         ),
         4 => array(
             'id' => '5',
+        ),
+        5 => array(
+            'id' => '6',
+        ),
+        6 => array(
+            'id' => '7',
         ),
     ),
 );
