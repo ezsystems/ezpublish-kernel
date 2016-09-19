@@ -3073,6 +3073,40 @@ class UrlAliasHandlerTest extends TestCase
         $handler->loadUrlAlias('non-existent');
     }
 
+    public function providerForTestPublishUrlAliasForLocationSkipsReservedWord()
+    {
+        return [
+            [
+                'section',
+                'section2'
+            ],
+            [
+                'claß',
+                'class2'
+            ],
+        ];
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @dataProvider providerForTestPublishUrlAliasForLocationSkipsReservedWord
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @group publish
+     */
+    public function testPublishUrlAliasForLocationSkipsReservedWord($text, $alias)
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/publish_base.php');
+
+        $handler->publishUrlAliasForLocation(314, 2, $text, 'kli-KR');
+
+        $urlAlias = $handler->lookup($alias);
+
+        $this->assertEquals(314, $urlAlias->destination);
+        $this->assertEquals(['kli-KR'], $urlAlias->languageCodes);
+    }
+
     /**
      * @return int
      */
