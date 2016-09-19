@@ -3078,11 +3078,11 @@ class UrlAliasHandlerTest extends TestCase
         return [
             [
                 'section',
-                'section2'
+                'section2',
             ],
             [
                 'claß',
-                'class2'
+                'class2',
             ],
         ];
     }
