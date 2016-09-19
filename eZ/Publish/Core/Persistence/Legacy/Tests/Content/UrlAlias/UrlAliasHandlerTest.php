@@ -4564,6 +4564,158 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the locationSwapped() method.
+     *
+     * @group swap
+     */
+    public function testLocationSwappedWithReusingExternalHistory()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_reusing_external_history.php');
+
+        $countBeforeReusing = $this->countRows();
+
+        $handler->locationSwapped(318, 314, 319, 315);
+
+        $this->assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+
+        $urlAlias = $handler->lookup('jedan/swap-that');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '2-' . md5('swap-that'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 318,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'jedan',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-that',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('dva/swap-this');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '3-' . md5('swap-this'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 319,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'dva',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-this',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('dva/swap-that');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '3-' . md5('swap-that'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 319,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'dva',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-that',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => true,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('jedan/swap-this');
+        $this->assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '2-' . md5('swap-this'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 318,
+                    'languageCodes' => array(
+                        'cro-HR',
+                    ),
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'jedan',
+                            ),
+                        ),
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'cro-HR' => 'swap-this',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => false,
+                    'isHistory' => true,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias
+        );
+    }
+
+    /**
      * @return int
      */
     protected function countRows()
