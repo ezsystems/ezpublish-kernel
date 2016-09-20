@@ -368,8 +368,9 @@ class DoctrineDatabase extends Gateway
      * History entry "id" column is moved to next id value so that all active (non-history) entries are kept
      * under the same id.
      *
-     * @param mixed $parentId
+     * @param int $parentId
      * @param string $textMD5
+     * @param int $newId
      */
     protected function historize($parentId, $textMD5, $newId)
     {
@@ -444,30 +445,30 @@ class DoctrineDatabase extends Gateway
     /**
      * Marks all entries with given $id as history entries.
      *
-     * This method is used by Handler::locationMoved(). For this reason rows are not updated with next id value as
-     * all entries with given id are being marked as history and there is no need for id separation.
-     * Thus only "link" and "is_original" columns are updated.
+     * This method is used by Handler::locationMoved(). Each row is separately historized
+     * because future publishing needs to be able to take over history entries safely.
      *
      * @param mixed $id
      * @param mixed $link
      */
     public function historizeId($id, $link)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn('parent'),
+            $this->dbHandler->quoteColumn('text_md5')
+        )->from(
             $this->dbHandler->quoteTable('ezurlalias_ml')
-        )->set(
-            $this->dbHandler->quoteColumn('is_original'),
-            $query->bindValue(0, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('link'),
-            $query->bindValue($link, null, \PDO::PARAM_INT)
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('is_alias'),
                     $query->bindValue(0, null, \PDO::PARAM_INT)
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('is_original'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('action_type'),
@@ -479,7 +480,15 @@ class DoctrineDatabase extends Gateway
                 )
             )
         );
-        $query->prepare()->execute();
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($rows as $row) {
+            $this->historize($row['parent'], $row['text_md5'], $link);
+        }
     }
 
     /**
