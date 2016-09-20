@@ -21,6 +21,7 @@ parameters:
     ezpublish.search.slot.set_content_state.class: eZ\Publish\Core\Search\Common\Slot\SetContentState
     ezpublish.search.slot.swap_location.class: eZ\Publish\Core\Search\Common\Slot\SwapLocation
     ezpublish.search.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
+    ezpublish.search.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
 
 services:
     ezpublish.search.slot:
@@ -156,3 +157,9 @@ services:
         class: "%ezpublish.search.slot.update_content_metadata.class%"
         tags:
             - {name: ezpublish.search.slot, signal: ContentService\UpdateContentMetadataSignal}
+
+    ezpublish.search.slot.assign_section:
+        parent: ezpublish.search.slot
+        class: "%ezpublish.search.slot.assign_section.class%"
+        tags:
+            - {name: ezpublish.search.slot, signal: SectionService\AssignSectionSignal}

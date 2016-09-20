@@ -368,6 +368,27 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test that assigning section to content object properly affects Search Engine Index.
+     */
+    public function testAssignSection()
+    {
+        $repository = $this->getRepository();
+        $sectionService = $repository->getSectionService();
+        $searchService = $repository->getSearchService();
+
+        $section = $sectionService->loadSection(2);
+        $content = $this->createContentWithName('testAssignSection', [2]);
+
+        $sectionService->assignSection($content->contentInfo, $section);
+        $this->refreshSearch($repository);
+
+        $criterion = new Criterion\ContentId($content->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContentInfo($query);
+        $this->assertEquals($section->id, $results->searchHits[0]->valueObject->sectionId);
+    }
+
+    /**
      * Will create if not exists an simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
