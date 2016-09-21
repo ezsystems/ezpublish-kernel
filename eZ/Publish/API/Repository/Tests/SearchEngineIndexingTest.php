@@ -629,6 +629,37 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test updating Content field value with empty value removes it from search index.
+     */
+    public function testRemovedContentFieldValueIsNotFound()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $searchService = $repository->getSearchService();
+        $publishedContent = $this->createContentWithNameAndDescription('testRemovedContentFieldValueIsNotFound', 'descriptionToBeRemoved', [2]);
+        $this->refreshSearch($repository);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('description', null);
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+        $contentService->publishVersion($contentDraft->versionInfo);
+        $this->refreshSearch($repository);
+
+        // Removed field value should not be found
+        $criterion = new Criterion\FullText('descriptionToBeRemoved');
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(0, $results->totalCount);
+
+        // Should be found
+        $criterion = new Criterion\FullText('testRemovedContentFieldValueIsNotFound');
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(1, $results->totalCount);
+    }
+
+    /**
      * Will create if not exists a simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
@@ -694,6 +725,40 @@ class SearchEngineIndexingTest extends BaseTest
         $publishedContent = $contentService->publishVersion($contentDraft->getVersionInfo());
 
         return $publishedContent;
+    }
+
+    /**
+     * Create and publish a content with filled name and description fields in location provided into
+     * $parentLocationIdList.
+     *
+     * @param string $contentName
+     * @param $contentDescription
+     * @param array $parentLocationIdList
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createContentWithNameAndDescription($contentName, $contentDescription, array $parentLocationIdList = [])
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $publishedContent = $this->createContentWithName($contentName, $parentLocationIdList);
+        $descriptionField = $contentTypeService->newFieldDefinitionCreateStruct('description', 'ezstring');
+        $descriptionField->fieldGroup = 'main';
+        $descriptionField->position = 2;
+        $descriptionField->isTranslatable = true;
+        $descriptionField->isSearchable = true;
+        $descriptionField->isRequired = false;
+        $contentType = $contentTypeService->loadContentType($publishedContent->contentInfo->contentTypeId);
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+        $contentTypeService->addFieldDefinition($contentTypeDraft, $descriptionField);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('description', $contentDescription);
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+
+        return $contentService->publishVersion($contentDraft->versionInfo);
     }
 
     /**
