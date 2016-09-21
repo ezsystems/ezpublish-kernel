@@ -117,8 +117,8 @@ class Handler implements UrlAliasHandlerInterface
         $updatePathIdentificationString = false
     ) {
         $parentId = $this->getRealAliasId($parentLocationId);
-        $uniqueCounter = $this->slugConverter->getUniqueCounterValue($name, $parentId == 0);
         $name = $this->slugConverter->convert($name, 'location_' . $locationId);
+        $uniqueCounter = $this->slugConverter->getUniqueCounterValue($name, $parentId == 0);
         $languageId = $this->languageHandler->loadByLanguageCode($languageCode)->id;
         $languageMask = $languageId | (int)$alwaysAvailable;
         $action = 'eznode:' . $locationId;
