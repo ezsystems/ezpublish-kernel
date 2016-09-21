@@ -104,6 +104,10 @@ class CsrfListener implements EventSubscriberInterface
             return;
         }
 
+        if ($this->isCreateViewRequest($event->getRequest())) {
+            return;
+        }
+
         if ($this->isSessionRoute($event->getRequest()->get('_route'))) {
             return;
         }
@@ -175,5 +179,24 @@ class CsrfListener implements EventSubscriberInterface
                 $request->headers->get(self::CSRF_TOKEN_HEADER)
             )
         );
+    }
+
+    /**
+     * Used to skip csrf token check on POST /content/views. The request is supposed to be unsafe, as it is a post,
+     * but is in reality safe, as it doesn't store anything at the moment (6.5).
+     *
+     * @todo This check needs to be removed when query storage is implemented.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isCreateViewRequest(Request $request)
+    {
+        if ($request->get('_route') === 'ezpublish_rest_views_create' && $request->getMethod() === 'POST') {
+            return true;
+        }
+
+        return false;
     }
 }
