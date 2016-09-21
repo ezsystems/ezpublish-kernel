@@ -107,6 +107,8 @@ class DoctrineDatabase extends Gateway
         $wordCount = 0;
         $placement = 0;
 
+        // Remove previously indexed content if exists to avoid keeping in index removed field values
+        $this->remove($fullTextData->id);
         foreach ($fullTextData->values as $fullTextValue) {
             /** @var \eZ\Publish\Core\Search\Legacy\Content\FullTextValue $fullTextValue */
             if (is_numeric(trim($fullTextValue->value))) {
