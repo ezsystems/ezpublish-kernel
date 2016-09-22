@@ -11,6 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -186,12 +187,7 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertTrue($result->searchHits[0]->valueObject->hidden);
 
         // Check if children locations are invisible
-        $criterion = new Criterion\ParentLocationId($locationId);
-        $query = new LocationQuery(array('filter' => $criterion));
-        $result = $searchService->findLocations($query);
-        foreach ($result->searchHits as $searchHit) {
-            $this->assertTrue($searchHit->valueObject->invisible, sprintf('Location %s is not hidden', $searchHit->valueObject->id));
-        }
+        $this->assertSubtreeInvisibleProperty($searchService, $locationId, true);
     }
 
     /**
@@ -219,12 +215,7 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertFalse($result->searchHits[0]->valueObject->hidden);
 
         // Check if children locations are not invisible
-        $criterion = new Criterion\ParentLocationId($locationId);
-        $query = new LocationQuery(array('filter' => $criterion));
-        $result = $searchService->findLocations($query);
-        foreach ($result->searchHits as $searchHit) {
-            $this->assertFalse($searchHit->valueObject->invisible, sprintf('Location %s is not hidden', $searchHit->valueObject->id));
-        }
+        $this->assertSubtreeInvisibleProperty($searchService, $locationId, false);
     }
 
     /**
@@ -657,6 +648,25 @@ class SearchEngineIndexingTest extends BaseTest
         $query = new Query(['filter' => $criterion]);
         $results = $searchService->findContent($query);
         $this->assertEquals(1, $results->totalCount);
+    }
+
+    /**
+     * Check if children locations are/are not ivisible.
+     *
+     * @param \eZ\Publish\API\Repository\SearchService $searchService
+     * @param int $parentLocationId parent location Id
+     * @param bool $expected expected value of {invisible} property in subtree
+     */
+    private function assertSubtreeInvisibleProperty(SearchService $searchService, $parentLocationId, $expected)
+    {
+        $criterion = new Criterion\ParentLocationId($parentLocationId);
+        $query = new LocationQuery(array('filter' => $criterion));
+        $result = $searchService->findLocations($query);
+        foreach ($result->searchHits as $searchHit) {
+            $this->assertEquals($expected, $searchHit->valueObject->invisible, sprintf('Location %s is not hidden', $searchHit->valueObject->id));
+            // Perform recursive check for children locations
+            $this->assertSubtreeInvisibleProperty($searchService, $searchHit->valueObject->id, $expected);
+        }
     }
 
     /**
