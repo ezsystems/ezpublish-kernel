@@ -12,9 +12,49 @@ namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\FieldType\RelationList\Type;
+use Symfony\Component\Routing\RouterInterface;
 
 class RelationListProcessor extends FieldTypeProcessor
 {
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    private $router;
+
+    public function setRouter(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * In addition to the list of destinationContentIds, adds a destinationContentHrefs
+     * array, with matching content uris.
+     *
+     * @param array $outgoingValueHash
+     *
+     * @return array
+     */
+    public function postProcessValueHash($outgoingValueHash)
+    {
+        if (!isset($outgoingValueHash['destinationContentIds']) || !is_array($outgoingValueHash['destinationContentIds'])) {
+            return $outgoingValueHash;
+        }
+
+        if (isset($this->router)) {
+            $outgoingValueHash['destinationContentHrefs'] = array_map(
+                function ($contentId) {
+                    return $this->router->generate(
+                        'ezpublish_rest_loadContent',
+                        ['contentId' => $contentId]
+                    );
+                },
+                $outgoingValueHash['destinationContentIds']
+            );
+        }
+
+        return $outgoingValueHash;
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -61,6 +61,30 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testPostProcessValueHash()
+    {
+        $processor = $this->getProcessor();
+
+        $routerMock = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
+        $processor->setRouter($routerMock);
+
+        $routerMock
+            ->expects($this->exactly(2))
+            ->method('generate')
+            ->withConsecutive(
+                ['ezpublish_rest_loadContent', ['contentId' => 42]],
+                ['ezpublish_rest_loadContent', ['contentId' => 300]]
+            )->willReturnOnConsecutiveCalls(
+                '/api/ezp/v2/content/objects/42',
+                '/api/ezp/v2/content/objects/300'
+            );
+
+        $hash = $processor->postProcessValueHash(['destinationContentIds' => [42, 300]]);
+        $this->assertArrayHasKey('destinationContentHrefs', $hash);
+        $this->assertEquals('/api/ezp/v2/content/objects/42', $hash['destinationContentHrefs'][0]);
+        $this->assertEquals('/api/ezp/v2/content/objects/300', $hash['destinationContentHrefs'][1]);
+    }
+
     /**
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor
      */

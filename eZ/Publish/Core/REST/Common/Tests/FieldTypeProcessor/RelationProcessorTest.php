@@ -61,6 +61,39 @@ class RelationProcessorTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testPostProcessFieldValueHash()
+    {
+        $processor = $this->getProcessor();
+
+        $routerMock = $this->getMockBuilder('\Symfony\Component\Routing\RouterInterface')->getMock();
+        $processor->setRouter($routerMock);
+
+        $routerMock
+            ->expects($this->once())
+            ->method('generate')
+            ->with('ezpublish_rest_loadContent', ['contentId' => 42])
+            ->will($this->returnValue('/api/ezp/v2/content/objects/42'));
+
+        $hash = $processor->postProcessValueHash(['destinationContentId' => 42]);
+        $this->assertArrayHasKey('destinationContentHref', $hash);
+        $this->assertEquals('/api/ezp/v2/content/objects/42', $hash['destinationContentHref']);
+    }
+
+    public function testPostProcessFieldValueHashNullValue()
+    {
+        $processor = $this->getProcessor();
+
+        $routerMock = $this->getMockBuilder('\Symfony\Component\Routing\RouterInterface')->getMock();
+        $processor->setRouter($routerMock);
+
+        $routerMock
+            ->expects($this->never())
+            ->method('generate');
+
+        $hash = $processor->postProcessValueHash(['destinationContentId' => null]);
+        $this->assertArrayNotHasKey('destinationContentHref', $hash);
+    }
+
     /**
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationProcessor
      */
