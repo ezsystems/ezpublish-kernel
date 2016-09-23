@@ -14,18 +14,8 @@ use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\FieldType\Relation\Type;
 use Symfony\Component\Routing\RouterInterface;
 
-class RelationProcessor extends FieldTypeProcessor
+class RelationProcessor extends BaseRelationProcessor
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    private $router;
-
-    public function setRouter(RouterInterface $router)
-    {
-        $this->router = $router;
-    }
-
     /**
      * In addition to the destinationContentId, adds a destinationContentHref entry.
      *
@@ -35,16 +25,13 @@ class RelationProcessor extends FieldTypeProcessor
      */
     public function postProcessValueHash($outgoingValueHash)
     {
-        if (!isset($outgoingValueHash['destinationContentId'])) {
+        if (!isset($outgoingValueHash['destinationContentId']) || !$this->canMapContentHref()) {
             return $outgoingValueHash;
         }
 
-        if (isset($this->router)) {
-            $outgoingValueHash['destinationContentHref'] = $this->router->generate(
-                'ezpublish_rest_loadContent',
-                ['contentId' => $outgoingValueHash['destinationContentId']]
-            );
-        }
+        $outgoingValueHash['destinationContentHref'] = $this->mapToContentHref(
+            $outgoingValueHash['destinationContentId']
+        );
 
         return $outgoingValueHash;
     }
