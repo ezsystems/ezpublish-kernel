@@ -6,9 +6,10 @@
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\FieldType\Relation\Type;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use Symfony\Component\Routing\RouterInterface;
 
-abstract class BaseRelationProcessor
+abstract class BaseRelationProcessor extends FieldTypeProcessor
 {
     /**
      * @var \Symfony\Component\Routing\RouterInterface
