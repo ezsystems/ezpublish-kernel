@@ -251,6 +251,7 @@ EOT
         if ($totalCount === 0) {
             $this->output->writeln('Could not find any Locations, nothing to backup.');
             $this->output->writeln('');
+
             return;
         }
 
@@ -278,7 +279,6 @@ EOT
 
                 $customAliasCount += count($customAliases);
                 $customAliasPathCount += $this->storeCustomAliases($customAliases);
-
             }
 
             $progressBar->advance(count($rows));
@@ -336,6 +336,7 @@ EOT
                 'Could not find any backed up custom Location URL aliases, nothing to restore.'
             );
             $this->output->writeln('');
+
             return;
         }
 
@@ -577,6 +578,7 @@ EOT
         if ($totalLocationCount === 0) {
             $this->output->writeln('Could not find any Locations, nothing to generate.');
             $this->output->writeln('');
+
             return;
         }
 
@@ -652,6 +654,7 @@ EOT
         if ($totalCount === 0) {
             $this->output->writeln('Could not find any global URL aliases, nothing to backup.');
             $this->output->writeln('');
+
             return;
         }
 
@@ -780,6 +783,7 @@ EOT
                 'Could not find any backed up global URL aliases, nothing to restore.'
             );
             $this->output->writeln('');
+
             return;
         }
 
