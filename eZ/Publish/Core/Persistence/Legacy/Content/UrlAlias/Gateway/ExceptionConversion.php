@@ -36,6 +36,17 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
+    public function setTable($name)
+    {
+        try {
+            return $this->innerGateway->setTable($name);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
     /**
      * Loads list of aliases by given $locationId.
      *

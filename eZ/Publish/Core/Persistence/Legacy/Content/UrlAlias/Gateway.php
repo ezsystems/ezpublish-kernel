@@ -16,6 +16,20 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 abstract class Gateway
 {
     /**
+     * Default database table.
+     */
+    const TABLE = 'ezurlalias_ml';
+
+    /**
+     * Changes the gateway database table.
+     *
+     * @internal
+     *
+     * @param string $name
+     */
+    abstract public function setTable($name);
+
+    /**
      * Loads list of aliases by given $locationId.
      *
      * @param mixed $locationId
