@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\Core\Persistence\Legacy\Handler as LegacyStorageEngine;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -29,6 +30,7 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
 {
     const MIGRATION_TABLE = '__migration_ezurlalias_ml';
     const CUSTOM_ALIAS_BACKUP_TABLE = '__migration_backup_custom_alias';
+    const GLOBAL_ALIAS_BACKUP_TABLE = '__migration_backup_global_alias';
 
     /**
      * @var \eZ\Publish\API\Repository\ContentService
@@ -51,7 +53,7 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
     protected $urlAliasGateway;
 
     /**
-     * @var \Doctrine\DBAL\Connection $connection
+     * @var \Doctrine\DBAL\Connection
      */
     protected $connection;
 
@@ -65,11 +67,13 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
      */
     protected $output;
 
-    protected $actions = [
-        'full',
-        'autogenerate',
-        'backup-custom',
-        'restore-custom',
+    protected $actionSet = [
+        'full' => true,
+        'autogenerate' => true,
+        'backup-custom' => true,
+        'restore-custom' => true,
+        'backup-global' => true,
+        'restore-global' => true,
     ];
 
     protected function configure()
@@ -78,9 +82,9 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
             ->setName('ezpublish:regenerate:legacy_storage_url_aliases')
             ->setDescription('Updates sort keys in configured Legacy Storage database')
             ->addArgument(
-                'action',// regenerate
+                'action',
                 InputArgument::REQUIRED,
-                'Action to perform, one of: full, autogenerate, backup-custom, restore-custom'
+                'Action to perform, one of: full, autogenerate, backup-custom, restore-custom, backup-global, restore-global'
             )
             ->addArgument(
                 'bulk-count',
@@ -90,12 +94,26 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
             )
             ->setHelp(
                 <<<EOT
-The command <info>%command.name%</info>
+The command <info>%command.name%</info> regenerates URL aliases for Locations
+and migrates existing custom Location and global URL aliases to a separate database table. Separate
+table must be named '__migration_ezurlalias_ml' and should be created manually to be identical (but
+empty) as the existing table 'ezurlalias_ml' before the command is executed.
 
-<warning>During the script execution the database should not be modified.
+After the script finishes, to complete migration the table should be renamed to 'ezurlalias_ml'
+manually.
 
-Since this script can potentially run for a very long time, to avoid memory
-exhaustion run it in production environment using <info>--env=prod</info> switch.
+Using available options for 'action' argument, you can backup custom Location and global URL aliases
+separately and inspect them before restoring them to the migration table. They will be stored in
+backup tables named '__migration_backup_custom_alias' and '__migration_backup_global_alias' (created
+automatically).
+
+It is also possible to skip custom Location and global URL aliases altogether and regenerate only
+automatically created URL aliases for Locations (use 'autogenerate' action to achieve this).
+
+<error>During the script execution the database should not be modified.</error>
+
+Since this script can potentially run for a very long time, to avoid memory exhaustion run it in
+production environment using <info>--env=prod</info> switch.
 
 EOT
             );
@@ -109,23 +127,28 @@ EOT
         $action = $input->getArgument('action');
         $this->bulkCount = $input->getArgument('bulk-count');
 
-        if (!in_array($action, $this->actions)) {
+        if (!isset($this->actionSet[$action])) {
             throw new RuntimeException("Action '{$action}' is not supported");
         }
 
-        if ($action === 'full' || $action === 'backup-custom')
-        {
+        if ($action === 'full' || $action === 'backup-custom') {
             $this->backupCustomLocationAliases();
         }
 
-        if ($action === 'full' || $action === 'autogenerate')
-        {
+        if ($action === 'full' || $action === 'backup-global') {
+            $this->backupGlobalAliases();
+        }
+
+        if ($action === 'full' || $action === 'autogenerate') {
             $this->generateLocationAliases();
         }
 
-        if ($action === 'full' || $action === 'restore-custom')
-        {
+        if ($action === 'full' || $action === 'restore-custom') {
             $this->restoreCustomLocationAliases();
+        }
+
+        if ($action === 'full' || $action === 'restore-global') {
+            $this->restoreGlobalAliases();
         }
     }
 
@@ -193,17 +216,19 @@ EOT
     }
 
     /**
-     * Backups custom URL aliases the custom URL alias backup table.
+     * Backups custom Location URL aliases the custom URL alias backup table.
      */
     protected function backupCustomLocationAliases()
     {
-        if (!$this->tableExists(static::CUSTOM_ALIAS_BACKUP_TABLE)) {
-            $this->createCustomAliasBackupTable();
+        $table = static::CUSTOM_ALIAS_BACKUP_TABLE;
+
+        if (!$this->tableExists($table)) {
+            $this->createCustomLocationUrlAliasBackupTable();
         }
 
-        if (!$this->isTableEmpty(static::CUSTOM_ALIAS_BACKUP_TABLE)) {
+        if (!$this->isTableEmpty($table)) {
             throw new RuntimeException(
-                'Table ' . static::CUSTOM_ALIAS_BACKUP_TABLE . ' contains data. ' .
+                "Table '{$table}' contains data. " .
                 "Ensure it's empty or non-existent (it will be automatically created)."
             );
         }
@@ -212,7 +237,7 @@ EOT
     }
 
     /**
-     * Internal method for backing up custom URL aliases.
+     * Internal method for backing up custom Location URL aliases.
      *
      * @see \eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage\RegenerateUrlAliasesCommand::backupCustomLocationAliases()
      */
@@ -223,6 +248,12 @@ EOT
         $customAliasCount = 0;
         $customAliasPathCount = 0;
 
+        if ($totalCount === 0) {
+            $this->output->writeln('Could not find any Locations, nothing to backup.');
+            $this->output->writeln('');
+            return;
+        }
+
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
             ->select('node_id', 'parent_node_id', 'contentobject_id')
@@ -231,7 +262,7 @@ EOT
             ->orderBy('depth', 'ASC')
             ->orderBy('node_id', 'ASC');
 
-        $this->output->writeln("Backing up custom URL aliases for {$totalCount} Location(s).");
+        $this->output->writeln("Backing up custom URL alias(es) for {$totalCount} Location(s).");
 
         $progressBar = $this->getProgressBar($totalCount);
         $progressBar->start();
@@ -264,14 +295,24 @@ EOT
     }
 
     /**
-     * Restores custom URL aliases from the backup table.
+     * Restores custom Location URL aliases from the backup table.
      */
     protected function restoreCustomLocationAliases()
     {
-        if (!$this->tableExists(static::MIGRATION_TABLE)) {
+        $mainTable = static::MIGRATION_TABLE;
+        $backupTable = static::CUSTOM_ALIAS_BACKUP_TABLE;
+
+        if (!$this->tableExists($mainTable)) {
             throw new RuntimeException(
-                'Could not find custom URL alias backup table ' . static::MIGRATION_TABLE . '. ' .
-                'Ensure that table is created by backup process.'
+                "Could not find main URL alias migration table '{$mainTable}'. " .
+                'Ensure that table exists (you will have to create it manually).'
+            );
+        }
+
+        if (!$this->tableExists($backupTable)) {
+            throw new RuntimeException(
+                "Could not find custom Location URL alias backup table '{$backupTable}'. " .
+                "Ensure that table is created by 'backup-custom' action."
             );
         }
 
@@ -279,16 +320,24 @@ EOT
     }
 
     /**
-     * Restores custom URL aliases from the backup table.
+     * Restores custom Location URL aliases from the backup table.
      *
      * @see \eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage\RegenerateUrlAliasesCommand::restoreCustomLocationAliases()
      */
     protected function doRestoreCustomLocationAliases()
     {
-        $totalCount = $this->getTotalCustomUrlAliasBackupCount();
+        $totalCount = $this->getTotalBackupCount(static::CUSTOM_ALIAS_BACKUP_TABLE);
         $passCount = ceil($totalCount / $this->bulkCount);
         $createdAliasCount = 0;
         $conflictCount = 0;
+
+        if ($totalCount === 0) {
+            $this->output->writeln(
+                'Could not find any backed up custom Location URL aliases, nothing to restore.'
+            );
+            $this->output->writeln('');
+            return;
+        }
 
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
@@ -302,7 +351,7 @@ EOT
         $progressBar->start();
 
         for ($pass = 0; $pass <= $passCount; ++$pass) {
-            $rows = $this->loadCustomUrlAliasData($queryBuilder, $pass);
+            $rows = $this->loadPassData($queryBuilder, $pass);
 
             foreach ($rows as $row) {
                 try {
@@ -345,7 +394,7 @@ EOT
      *
      * @return array
      */
-    protected function loadCustomUrlAliasData(QueryBuilder $queryBuilder, $pass)
+    protected function loadPassData(QueryBuilder $queryBuilder, $pass)
     {
         $queryBuilder->setFirstResult($pass * $this->bulkCount);
         $queryBuilder->setMaxResults($this->bulkCount);
@@ -392,11 +441,16 @@ EOT
      * @param int $locationId
      * @param string $path
      * @param string $languageCode
-     * @param boolean $alwaysAvailable
-     * @param boolean $forwarding
+     * @param bool $alwaysAvailable
+     * @param bool $forwarding
      */
-    protected function storeCustomAliasPath($locationId, $path, $languageCode, $alwaysAvailable, $forwarding)
-    {
+    protected function storeCustomAliasPath(
+        $locationId,
+        $path,
+        $languageCode,
+        $alwaysAvailable,
+        $forwarding
+    ) {
         $queryBuilder = $this->connection->createQueryBuilder();
 
         $queryBuilder->insert(static::CUSTOM_ALIAS_BACKUP_TABLE);
@@ -425,18 +479,18 @@ EOT
      *
      * Explanation:
      *
-     * Custom URL aliases can generate NOP entries, which can be taken over by the autogenerated
-     * aliases. When multiple languages exists for the Location that took over, multiple entries
-     * with the same link will exist on the same level. In that case it will not be possible to
-     * reliably reconstruct what was the path for the original custom alias. For that reason we
-     * combine path data to get all possible path combinations.
+     * Custom Location and global URL aliases can generate NOP entries, which can be taken over by
+     * the autogenerated aliases. When multiple languages exists for the Location that took over,
+     * multiple entries with the same link will exist on the same level. In that case it will not be
+     * possible to reliably reconstruct what was the path for the original custom alias. For that
+     * reason we combine path data to get all possible path combinations.
      *
      * Note: it could happen that original NOP entry was historized after being taken over by the
      * autogenerated alias. So to be complete this would have to take into account history entries
      * as well, but at the moment we lack API to do that.
      *
-     * Proper solution of this problem would be introducing separate database table to store custom
-     * URL alias data.
+     * Proper solution of this problem would be introducing separate database table to store
+     * custom/global URL alias data.
      *
      * @see https://jira.ez.no/browse/EZP-20777
      *
@@ -495,7 +549,10 @@ EOT
         $tableName = static::MIGRATION_TABLE;
 
         if (!$this->tableExists($tableName)) {
-            throw new RuntimeException("Table '{$tableName}' does not exist.");
+            throw new RuntimeException(
+                "Could not find main URL alias migration table '{$tableName}'. " .
+                'Ensure that table exists (you will have to create it manually).'
+            );
         }
 
         if (!$this->isTableEmpty($tableName)) {
@@ -516,6 +573,12 @@ EOT
         $totalContentCount = $this->getTotalLocationContentCount();
         $passCount = ceil($totalLocationCount / $this->bulkCount);
         $publishedAliasCount = 0;
+
+        if ($totalLocationCount === 0) {
+            $this->output->writeln('Could not find any Locations, nothing to generate.');
+            $this->output->writeln('');
+            return;
+        }
 
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
@@ -551,6 +614,219 @@ EOT
 
         $this->output->writeln('');
         $this->output->writeln("Done. Published {$publishedAliasCount} URL alias(es).");
+        $this->output->writeln('');
+    }
+
+    /**
+     * Backups global URL aliases the custom URL alias backup table.
+     */
+    protected function backupGlobalAliases()
+    {
+        $table = static::GLOBAL_ALIAS_BACKUP_TABLE;
+
+        if (!$this->tableExists($table)) {
+            $this->createGlobalUrlAliasBackupTable();
+        }
+
+        if (!$this->isTableEmpty($table)) {
+            throw new RuntimeException(
+                "Table '{$table}' contains data. " .
+                "Ensure it's empty or non-existent (it will be automatically created)."
+            );
+        }
+
+        $this->doBackupGlobalAliases();
+    }
+
+    /**
+     * Internal method for backing up global URL aliases.
+     *
+     * @see \eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage\RegenerateUrlAliasesCommand::backupGlobalAliases()
+     */
+    protected function doBackupGlobalAliases()
+    {
+        $aliases = $this->urlAliasHandler->listGlobalURLAliases();
+        $totalCount = count($aliases);
+        $pathCount = 0;
+
+        if ($totalCount === 0) {
+            $this->output->writeln('Could not find any global URL aliases, nothing to backup.');
+            $this->output->writeln('');
+            return;
+        }
+
+        $this->output->writeln("Backing up {$totalCount} global URL aliases.");
+
+        $progressBar = $this->getProgressBar($totalCount);
+        $progressBar->start();
+
+        foreach ($aliases as $alias) {
+            $pathCount += $this->storeGlobalAlias($alias);
+            $progressBar->advance();
+        }
+
+        $progressBar->finish();
+
+        $this->output->writeln('');
+        $this->output->writeln(
+            "Done. Backed up {$totalCount} global URL alias(es) " .
+            "with {$pathCount} path(s)."
+        );
+        $this->output->writeln('');
+    }
+
+    /**
+     * Stores given global URL $alias to the global URL alias backup table.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias $alias
+     *
+     * @return int
+     */
+    protected function storeGlobalAlias(UrlAlias $alias)
+    {
+        $paths = $this->combinePaths($alias->pathData);
+
+        foreach ($paths as $path) {
+            $this->storeGlobalAliasPath(
+                $alias->destination,
+                $path,
+                reset($alias->languageCodes),
+                $alias->alwaysAvailable,
+                $alias->forward
+            );
+        }
+
+        return count($paths);
+    }
+
+    /**
+     * Stores global URL alias data for $path to the backup table.
+     *
+     * @param string $resource
+     * @param string $path
+     * @param string $languageCode
+     * @param bool $alwaysAvailable
+     * @param bool $forwarding
+     */
+    protected function storeGlobalAliasPath(
+        $resource,
+        $path,
+        $languageCode,
+        $alwaysAvailable,
+        $forwarding
+    ) {
+        $queryBuilder = $this->connection->createQueryBuilder();
+
+        $queryBuilder->insert(static::GLOBAL_ALIAS_BACKUP_TABLE);
+        $queryBuilder->values(
+            [
+                'id' => '?',
+                'resource' => '?',
+                'path' => '?',
+                'language_code' => '?',
+                'always_available' => '?',
+                'forwarding' => '?',
+            ]
+        );
+        $queryBuilder->setParameter(0, 0);
+        $queryBuilder->setParameter(1, 'module:' . $resource);
+        $queryBuilder->setParameter(2, $path);
+        $queryBuilder->setParameter(3, $languageCode);
+        $queryBuilder->setParameter(4, (int)$alwaysAvailable);
+        $queryBuilder->setParameter(5, (int)$forwarding);
+
+        $queryBuilder->execute();
+    }
+
+    /**
+     * Restores global URL aliases from the backup table.
+     */
+    protected function restoreGlobalAliases()
+    {
+        $table = static::MIGRATION_TABLE;
+        $backupTable = static::GLOBAL_ALIAS_BACKUP_TABLE;
+
+        if (!$this->tableExists($table)) {
+            throw new RuntimeException(
+                "Could not find main URL alias migration table '{$table}'. " .
+                'Ensure that table exists (you will have to create it manually).'
+            );
+        }
+
+        if (!$this->tableExists($backupTable)) {
+            throw new RuntimeException(
+                "Could not find global URL alias backup table '$backupTable'. " .
+                "Ensure that table is created by 'backup-global' action."
+            );
+        }
+
+        $this->doRestoreGlobalAliases();
+    }
+
+    /**
+     * Restores global URL aliases from the backup table.
+     *
+     * @see \eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage\RegenerateUrlAliasesCommand::restoreGlobalAliases()
+     */
+    protected function doRestoreGlobalAliases()
+    {
+        $totalCount = $this->getTotalBackupCount(static::GLOBAL_ALIAS_BACKUP_TABLE);
+        $passCount = ceil($totalCount / $this->bulkCount);
+        $createdAliasCount = 0;
+        $conflictCount = 0;
+
+        if ($totalCount === 0) {
+            $this->output->writeln(
+                'Could not find any backed up global URL aliases, nothing to restore.'
+            );
+            $this->output->writeln('');
+            return;
+        }
+
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(static::GLOBAL_ALIAS_BACKUP_TABLE)
+            ->orderBy('id', 'ASC');
+
+        $this->output->writeln("Restoring {$totalCount} custom URL alias(es).");
+
+        $progressBar = $this->getProgressBar($totalCount);
+        $progressBar->start();
+
+        for ($pass = 0; $pass <= $passCount; ++$pass) {
+            $rows = $this->loadPassData($queryBuilder, $pass);
+
+            foreach ($rows as $row) {
+                try {
+                    $this->setMigrationTable();
+                    $this->urlAliasHandler->createGlobalUrlAlias(
+                        $row['resource'],
+                        $row['path'],
+                        (bool)$row['forwarding'],
+                        $row['language_code'],
+                        (bool)$row['always_available']
+                    );
+                    $createdAliasCount += 1;
+                    $this->setDefaultTable();
+                } catch (ForbiddenException $e) {
+                    $conflictCount += 1;
+                } catch (Exception $e) {
+                    $this->setDefaultTable();
+                    throw $e;
+                }
+            }
+
+            $progressBar->advance(count($rows));
+        }
+
+        $progressBar->finish();
+
+        $this->output->writeln('');
+        $this->output->writeln(
+            "Done. Restored {$createdAliasCount} custom URL alias(es) " .
+            "with {$conflictCount} conflict(s)."
+        );
         $this->output->writeln('');
     }
 
@@ -658,26 +934,28 @@ EOT
     }
 
     /**
-     * Returns total number of Content objects having a Location in the database.
+     * Return the number of rows in the given $table (on ID column).
      *
-     * The number excludes absolute root Location, which does not have an URL alias.
+     * @param string $table
+     *
+     * @return int
      */
-    protected function getTotalCustomUrlAliasBackupCount()
+    protected function getTotalBackupCount($table)
     {
         $platform = $this->connection->getDatabasePlatform();
 
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
             ->select($platform->getCountExpression('id'))
-            ->from(static::CUSTOM_ALIAS_BACKUP_TABLE);
+            ->from($table);
 
-        return $queryBuilder->execute()->fetchColumn();
+        return (int)$queryBuilder->execute()->fetchColumn();
     }
 
     /**
-     * Creates database table for custom URL alias backup.
+     * Creates database table for custom Location URL alias backup.
      */
-    protected function createCustomAliasBackupTable()
+    protected function createCustomLocationUrlAliasBackupTable()
     {
         $schema = new Schema();
 
@@ -685,6 +963,30 @@ EOT
 
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('location_id', 'integer');
+        $table->addColumn('path', 'text');
+        $table->addColumn('language_code', 'string');
+        $table->addColumn('always_available', 'integer');
+        $table->addColumn('forwarding', 'integer');
+        $table->setPrimaryKey(['id']);
+
+        $queries = $schema->toSql($this->connection->getDatabasePlatform());
+
+        foreach ($queries as $query) {
+            $this->connection->exec($query);
+        }
+    }
+
+    /**
+     * Creates database table for custom URL alias backup.
+     */
+    protected function createGlobalUrlAliasBackupTable()
+    {
+        $schema = new Schema();
+
+        $table = $schema->createTable(static::GLOBAL_ALIAS_BACKUP_TABLE);
+
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('resource', 'text');
         $table->addColumn('path', 'text');
         $table->addColumn('language_code', 'string');
         $table->addColumn('always_available', 'integer');
