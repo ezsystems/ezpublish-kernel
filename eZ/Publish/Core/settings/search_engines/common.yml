@@ -26,6 +26,7 @@ parameters:
         ez_document: 'doc'
         ez_fulltext: 'fulltext'
     ezpublish.search.common.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Common\FieldValueMapper\Aggregate
+    ezpublish.search.common.indexer.class: eZ\Publish\Core\Search\Common\Indexer
 
 services:
     # Note: services tagged with 'ezpublish.fieldType.indexable'
