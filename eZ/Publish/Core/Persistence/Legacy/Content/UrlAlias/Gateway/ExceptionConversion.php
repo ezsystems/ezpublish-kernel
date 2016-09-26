@@ -126,9 +126,8 @@ class ExceptionConversion extends Gateway
     /**
      * Marks all entries with given $id as history entries.
      *
-     * This method is used by Handler::locationMoved(). For this reason rows are not updated with next id value as
-     * all entries with given id are being marked as history and there is no need for id separation.
-     * Thus only "link" and "is_original" columns are updated.
+     * This method is used by Handler::locationMoved(). Each row is separately historized
+     * because future publishing needs to be able to take over history entries safely.
      *
      * @param mixed $id
      * @param mixed $link
