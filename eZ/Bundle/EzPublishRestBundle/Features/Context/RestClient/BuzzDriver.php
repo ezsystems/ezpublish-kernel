@@ -115,6 +115,10 @@ class BuzzDriver implements DriverInterface
      */
     public function setMethod($method)
     {
+        if (in_array(strtolower($method), ['publish', 'patch', 'move', 'swap'])) {
+            $this->getRequest()->addHeader("X-HTTP-Method-Override: $method");
+            $method = 'POST';
+        }
         $this->getRequest()->setMethod($method);
     }
 

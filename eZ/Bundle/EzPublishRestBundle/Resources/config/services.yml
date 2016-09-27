@@ -204,8 +204,6 @@ services:
             - "@ezpublish.api.service.location"
             - "@ezpublish.api.service.section"
             - "@ezpublish.api.repository"
-        calls:
-            - [setTokenStorage, ['@?security.csrf.token_storage']]
 
     ezpublish_rest.controller.url_wildcard:
         class: "%ezpublish_rest.controller.url_wildcard.class%"
@@ -225,6 +223,15 @@ services:
         parent: ezpublish_rest.controller.base
         arguments:
             - "@ezpublish.api.service.search"
+
+    ezpublish_rest.controller.session:
+        class: eZ\Publish\Core\REST\Server\Controller\SessionController
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - "@ezpublish_rest.session_authenticator"
+            - "%ezpublish_rest.csrf_token_intention%"
+            - "@?security.csrf.token_manager"
+            - "@?security.csrf.token_storage"
 
     ezpublish_rest.request_listener:
         class: "%ezpublish_rest.request_listener.class%"
