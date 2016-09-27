@@ -137,33 +137,51 @@ services:
             - [ setRepository, ["@ezpublish.api.repository"] ]
 
     ezpublish_rest.controller.root:
+        alias: ezpublish_rest.controller.root.inner
+
+    ezpublish_rest.controller.root.inner:
         class: "%ezpublish_rest.controller.root.class%"
         parent: ezpublish_rest.controller.base
         arguments: ["@ezpublish_rest.root_resource_builder"]
 
     ezpublish_rest.controller.section:
+        alias: ezpublish_rest.controller.section.inner
+
+    ezpublish_rest.controller.section.inner:
         class: "%ezpublish_rest.controller.section.class%"
         parent: ezpublish_rest.controller.base
         arguments:
             - "@ezpublish.api.service.section"
 
     ezpublish_rest.controller.binary_content:
+        alias: ezpublish_rest.controller.binary_content.inner
+
+    ezpublish_rest.controller.binary_content.inner:
         class: "%ezpublish_rest.controller.binary_content.class%"
         parent: ezpublish_rest.controller.base
         arguments:
             - "@ezpublish.fieldType.ezimage.variation_service"
 
     ezpublish_rest.controller.content:
+        alias: ezpublish_rest.controller.content.inner
+
+    ezpublish_rest.controller.content.inner:
         class: "%ezpublish_rest.controller.content.class%"
         parent: ezpublish_rest.controller.base
 
     ezpublish_rest.controller.content_type:
+        alias: ezpublish_rest.controller.content_type.inner
+
+    ezpublish_rest.controller.content_type.inner:
         class: "%ezpublish_rest.controller.content_type.class%"
         parent: ezpublish_rest.controller.base
         arguments:
             - "@ezpublish.api.service.content_type"
 
     ezpublish_rest.controller.role:
+        alias: ezpublish_rest.controller.role.inner
+
+    ezpublish_rest.controller.role.inner:
         class: "%ezpublish_rest.controller.role.class%"
         parent: ezpublish_rest.controller.base
         arguments:
@@ -172,6 +190,9 @@ services:
             - "@ezpublish.api.service.location"
 
     ezpublish_rest.controller.location:
+        alias: ezpublish_rest.controller.location.inner
+
+    ezpublish_rest.controller.location.inner:
         class: "%ezpublish_rest.controller.location.class%"
         parent: ezpublish_rest.controller.base
         arguments:
@@ -180,6 +201,9 @@ services:
             - "@ezpublish.api.service.trash"
 
     ezpublish_rest.controller.object_state:
+        alias: ezpublish_rest.controller.object_state.inner
+
+    ezpublish_rest.controller.object_state.inner:
         class: "%ezpublish_rest.controller.object_state.class%"
         parent: ezpublish_rest.controller.base
         arguments:
@@ -187,6 +211,9 @@ services:
             - "@ezpublish.api.service.content"
 
     ezpublish_rest.controller.trash:
+        alias: ezpublish_rest.controller.trash.inner
+
+    ezpublish_rest.controller.trash.inner:
         class: "%ezpublish_rest.controller.trash.class%"
         parent: ezpublish_rest.controller.base
         arguments:
@@ -194,6 +221,9 @@ services:
             - "@ezpublish.api.service.location"
 
     ezpublish_rest.controller.user:
+        alias: ezpublish_rest.controller.user.inner
+
+    ezpublish_rest.controller.user.inner:
         class: "%ezpublish_rest.controller.user.class%"
         parent: ezpublish_rest.controller.base
         arguments:
@@ -206,12 +236,18 @@ services:
             - "@ezpublish.api.repository"
 
     ezpublish_rest.controller.url_wildcard:
+        alias: ezpublish_rest.controller.url_wildcard.inner
+
+    ezpublish_rest.controller.url_wildcard.inner:
         class: "%ezpublish_rest.controller.url_wildcard.class%"
         parent: ezpublish_rest.controller.base
         arguments:
             - "@ezpublish.api.service.url_wildcard"
 
     ezpublish_rest.controller.url_alias:
+        alias: ezpublish_rest.controller.url_alias.inner
+
+    ezpublish_rest.controller.url_alias.inner:
         class: "%ezpublish_rest.controller.url_alias.class%"
         parent: ezpublish_rest.controller.base
         arguments:
@@ -219,6 +255,9 @@ services:
             - "@ezpublish.api.service.location"
 
     ezpublish_rest.controller.views:
+        alias: ezpublish_rest.controller.views.inner
+
+    ezpublish_rest.controller.views.inner:
         class: "%ezpublish_rest.controller.views.class%"
         parent: ezpublish_rest.controller.base
         arguments:
