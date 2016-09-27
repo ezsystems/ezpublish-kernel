@@ -180,7 +180,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId));
 
-        // Load reverse field relations first
+        // Load locations and reverse field relations first
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId);
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
             $contentId,
             APIRelation::FIELD
@@ -197,6 +198,10 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->cache->clear('content', 'info', $contentId);
         $this->cache->clear('content', 'info', 'remoteId');
         $this->cache->clear('location', 'subtree');
+
+        foreach ($locations as $location) {
+            $this->cache->clear('location', $location->id);
+        }
 
         return $return;
     }

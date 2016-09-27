@@ -468,6 +468,18 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
+        $innerLocationHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->exactly(1))
+            ->method('locationHandler')
+            ->will($this->returnValue($innerLocationHandlerMock));
+
+        $innerLocationHandlerMock
+            ->expects($this->once())
+            ->method('loadLocationsByContent')
+            ->with(2)
+            ->willReturn([new Content\Location(array('id' => 58))]);
+
         $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
         $this->persistenceHandlerMock
             ->expects($this->exactly(2))
@@ -520,6 +532,12 @@ class ContentHandlerTest extends HandlerTest
             ->expects($this->at(4))
             ->method('clear')
             ->with('location', 'subtree')
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(5))
+            ->method('clear')
+            ->with('location', 58)
             ->will($this->returnValue(null));
 
         $handler = $this->persistenceCacheHandler->contentHandler();
