@@ -168,7 +168,7 @@ class RelationProcessorTest extends BaseServiceMockTest
             $locationIdToContentIdMapping,
             $fieldTypeMock,
             $fieldValueMock,
-            42
+            new FieldDefinition(array('id' => 42))
         );
 
         $this->assertEquals($expected, $relations);
@@ -247,7 +247,7 @@ class RelationProcessorTest extends BaseServiceMockTest
             $locationIdToContentIdMapping,
             $fieldTypeMock,
             $fieldValueMock,
-            42
+            new FieldDefinition(array('id' => 42))
         );
 
         $this->assertEquals(
