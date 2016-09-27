@@ -97,7 +97,7 @@ class FullText extends FieldFilterBase
                 // Might make sense to use percentage in addition
                 'minimum_should_match' => 1,
                 // Default is OR, changed per FullText criterion spec
-                'default_operator' => 'AND',
+                'default_operator' => 'OR',
             ),
         );
 

@@ -4326,6 +4326,91 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFulltextComplex()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+
+        $contentCreateStruct->setField('name', 'red');
+        $contentCreateStruct->setField('short_name', 'red apple');
+        $content1 = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $contentCreateStruct->setField('name', 'apple');
+        $contentCreateStruct->setField('short_name', 'two');
+        $content2 = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $contentCreateStruct->setField('name', 'red apple');
+        $contentCreateStruct->setField('short_name', 'three');
+        $content3 = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $this->refreshSearch($repository);
+
+        $query = new Query(
+            [
+                'query' => new Criterion\FullText(
+                    'red apple',
+                    [
+                        'boost' => [
+                            'short_name' => 2,
+                        ],
+                        'fuzziness' => .1,
+                    ]
+                ),
+            ]
+        );
+
+        $searchResult = $searchService->findContent($query, ['languages' => ['eng-GB']]);
+
+        $this->assertEquals(3, $searchResult->totalCount);
+
+        // Legacy search engine does have scoring, sorting the results by ID in that case
+        $setupFactory = $this->getSetupFactory();
+        if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            usort(
+                $searchResult->searchHits,
+                function ($a, $b) {
+                    return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
+                }
+            );
+
+            $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+            $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
+            $this->assertEquals($content3->id, $searchResult->searchHits[2]->valueObject->id);
+
+            return;
+        }
+
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content3->id, $searchResult->searchHits[1]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[2]->valueObject->id);
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param Query $query

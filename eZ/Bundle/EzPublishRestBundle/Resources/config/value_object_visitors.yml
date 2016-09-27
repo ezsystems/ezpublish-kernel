@@ -203,7 +203,6 @@ services:
         arguments: [ "%kernel.debug%", "@translator" ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Exceptions\ContentFieldValidationException }
-            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Common\Exceptions\Parser }
 
     ezpublish_rest.output.value_object_visitor.ForbiddenException:
         parent: ezpublish_rest.output.value_object_visitor.base
