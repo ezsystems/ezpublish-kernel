@@ -44,7 +44,7 @@ class RelationListTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageValue()
     {
-        $destinationContentIds = array(3, 2, 1);
+        $destinationContentIds = array(3, 2, 1, 44);
         $fieldValue = new FieldValue();
         $fieldValue->sortKey = false;
         $fieldValue->data = array('destinationContentIds' => $destinationContentIds);
@@ -52,7 +52,7 @@ class RelationListTest extends PHPUnit_Framework_TestCase
         $expectedStorageFieldValue = new StorageFieldValue();
         $expectedStorageFieldValue->dataText = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
-<related-objects><relation-list><relation-item priority="1" contentobject-id="3" contentobject-version="33" node-id="35" parent-node-id="36" contentclass-id="34" contentclass-identifier="37" contentobject-remote-id="32"/><relation-item priority="2" contentobject-id="2" contentobject-version="23" node-id="25" parent-node-id="26" contentclass-id="24" contentclass-identifier="27" contentobject-remote-id="22"/><relation-item priority="3" contentobject-id="1" contentobject-version="13" node-id="15" parent-node-id="16" contentclass-id="14" contentclass-identifier="17" contentobject-remote-id="12"/></relation-list></related-objects>
+<related-objects><relation-list><relation-item priority="1" in-trash="" contentobject-id="3" contentobject-version="33" node-id="35" parent-node-id="36" contentclass-id="34" contentclass-identifier="37" contentobject-remote-id="32"/><relation-item priority="2" in-trash="" contentobject-id="2" contentobject-version="23" node-id="25" parent-node-id="26" contentclass-id="24" contentclass-identifier="27" contentobject-remote-id="22"/><relation-item priority="3" in-trash="1" contentobject-id="1" contentobject-version="13" contentclass-id="14" contentclass-identifier="17" contentobject-remote-id="12"/><relation-item priority="4" contentobject-id="44"/></relation-list></related-objects>
 
 EOT;
 
@@ -68,16 +68,16 @@ EOT;
                         '1' => array(
                             array(
                                 'ezcontentobject_remote_id' => '12',
+                                'ezcontentobject_status' => '2',
                                 'ezcontentobject_current_version' => '13',
                                 'ezcontentobject_contentclass_id' => '14',
-                                'ezcontentobject_tree_node_id' => '15',
-                                'ezcontentobject_tree_parent_node_id' => '16',
                                 'ezcontentclass_identifier' => '17',
                             ),
                         ),
                         '3' => array(
                             array(
                                 'ezcontentobject_remote_id' => '32',
+                                'ezcontentobject_status' => '1',
                                 'ezcontentobject_current_version' => '33',
                                 'ezcontentobject_contentclass_id' => '34',
                                 'ezcontentobject_tree_node_id' => '35',
@@ -88,6 +88,7 @@ EOT;
                         '2' => array(
                             array(
                                 'ezcontentobject_remote_id' => '22',
+                                'ezcontentobject_status' => '1',
                                 'ezcontentobject_current_version' => '23',
                                 'ezcontentobject_contentclass_id' => '24',
                                 'ezcontentobject_tree_node_id' => '25',

@@ -12,12 +12,14 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use DOMDocument;
+use DOMElement;
 use PDO;
 
 class RelationListConverter implements Converter
@@ -54,23 +56,13 @@ class RelationListConverter implements Converter
         $priority = 0;
 
         foreach ($value->data['destinationContentIds'] as $id) {
-            if (!isset($data[$id][0])) {
-                // Ignore deleted content items (we can't throw as it would block ContentService->createContentDraft())
-                continue;
-            }
-            $row = $data[$id][0];
-            $row['ezcontentobject_id'] = $id;
-            $row['priority'] = ($priority += 1);
-
             $relationItem = $doc->createElement('relation-item');
-            foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
-                if (!isset($row[$propertyKey])) {
-                    // left join data missing, ignore the given attribute (content in trash missing location)
-                    continue;
-                }
-
-                $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);
+            if (isset($data[$id][0])) {
+                $this->setRelationItem($relationItem, $id, $data[$id][0], $priority += 1);
+            } else {
+                $this->setDeletedRelationItem($relationItem, $id, $priority += 1);
             }
+
             $relationList->appendChild($relationItem);
             unset($relationItem);
         }
@@ -79,6 +71,47 @@ class RelationListConverter implements Converter
         $doc->appendChild($root);
 
         $storageFieldValue->dataText = $doc->saveXML();
+    }
+
+    /**
+     * Set RelationItem for Content.
+     *
+     * Handles existing Content, with and without location data, for deleted Content {@see setDeletedRelationItem()}.
+     *
+     * @param \DOMElement $relationItem
+     * @param mixed $id
+     * @param array $row
+     * @param int $priority
+     */
+    private function setRelationItem(DOMElement $relationItem, $id, array $row, $priority)
+    {
+        $row['ezcontentobject_id'] = $id;
+        $row['priority'] = $priority;
+        $row['in_trash'] = ($row['ezcontentobject_status'] == ContentInfo::STATUS_ARCHIVED);
+        foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
+            if (!isset($row[$propertyKey])) {
+                // left join data missing, ignore the given attribute (content most likely in trash, or missing location)
+                continue;
+            }
+
+            $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);
+        }
+    }
+
+    /**
+     * Set RelationItem for deleted Content.
+     *
+     * This is most likely draft creation (version copy) so we just need enough data for toFieldValue() so user is made
+     * aware of this when saving/publishing draft via API.
+     *
+     * @param \DOMElement $relationItem
+     * @param mixed $id
+     * @param int $priority
+     */
+    private function setDeletedRelationItem(DOMElement $relationItem, $id, $priority)
+    {
+        $relationItem->setAttribute('priority', $priority);
+        $relationItem->setAttribute('contentobject-id', $id);
     }
 
     /**
@@ -264,6 +297,7 @@ class RelationListConverter implements Converter
                 $this->db->aliasedColumn($q, 'remote_id', 'ezcontentobject'),
                 $this->db->aliasedColumn($q, 'current_version', 'ezcontentobject'),
                 $this->db->aliasedColumn($q, 'contentclass_id', 'ezcontentobject'),
+                $this->db->aliasedColumn($q, 'status', 'ezcontentobject'),
                 $this->db->aliasedColumn($q, 'node_id', 'ezcontentobject_tree'),
                 $this->db->aliasedColumn($q, 'parent_node_id', 'ezcontentobject_tree'),
                 $this->db->aliasedColumn($q, 'identifier', 'ezcontentclass')
@@ -308,6 +342,10 @@ class RelationListConverter implements Converter
     }
 
     /**
+     * Legacy relevant properties.
+     *
+     * These properties are only relevant for legacy database, for improved database engine in 7.0+ they are not.
+     *
      * @return array
      */
     private static function dbAttributeMap()
@@ -315,7 +353,7 @@ class RelationListConverter implements Converter
         return array(
             // 'identifier' => 'identifier',// not used
             'priority' => 'priority',
-            // 'in-trash' => 'in_trash',// false by default and implies
+            'in-trash' => 'in_trash',// false by default and implies
             'contentobject-id' => 'ezcontentobject_id',
             'contentobject-version' => 'ezcontentobject_current_version',
             'node-id' => 'ezcontentobject_tree_node_id',
