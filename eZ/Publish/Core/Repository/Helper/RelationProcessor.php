@@ -10,11 +10,13 @@
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 
 /**
@@ -49,6 +51,8 @@ class RelationProcessor
      * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
      * @param \eZ\Publish\Core\FieldType\Value $fieldValue Accepted field value.
      * @param string $fieldDefinitionId
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function appendFieldRelations(
         array &$relations,
@@ -57,11 +61,30 @@ class RelationProcessor
         BaseValue $fieldValue,
         $fieldDefinitionId
     ) {
+        $validationErrors = [];
         foreach ($fieldType->getRelations($fieldValue) as $relationType => $destinationIds) {
             if ($relationType === Relation::FIELD) {
                 if (!isset($relations[$relationType][$fieldDefinitionId])) {
                     $relations[$relationType][$fieldDefinitionId] = array();
                 }
+
+                foreach ($destinationIds as $destinationId) {
+                    try {
+                        $this->persistenceHandler->contentHandler()->loadContentInfo($destinationId);
+                    } catch (NotFoundException $e) {
+                        $validationErrors[] = new ValidationError(
+                            "Relations to Content '%content%' could not be found as part of field '%identifier%'",
+                            null,
+                            array(
+                                '%content%' => $destinationId,
+                                '%identifier%' => $fieldDefinitionId,
+                            ),
+                            "[$fieldDefinitionId]"
+                        );
+                        continue;
+                    }
+                }
+
                 $relations[$relationType][$fieldDefinitionId] += array_flip($destinationIds);
             } elseif ($relationType & (Relation::LINK | Relation::EMBED)) {
                 // Using bitwise operators as Legacy Stack stores COMMON, LINK and EMBED relation types
@@ -73,7 +96,21 @@ class RelationProcessor
                 if (isset($destinationIds['locationIds'])) {
                     foreach ($destinationIds['locationIds'] as $locationId) {
                         if (!isset($locationIdToContentIdMapping[$locationId])) {
-                            $location = $this->persistenceHandler->locationHandler()->load($locationId);
+                            try {
+                                $location = $this->persistenceHandler->locationHandler()->load($locationId);
+                            } catch (NotFoundException $e) {
+                                $validationErrors[] = new ValidationError(
+                                    "Relations to Location '%location%' could not be found as part of field '%identifier%'",
+                                    null,
+                                    array(
+                                        '%location%' => $locationId,
+                                        '%identifier%' => $fieldDefinitionId,
+                                    ),
+                                    "[$fieldDefinitionId]"
+                                );
+                                continue;
+                            }
+
                             $locationIdToContentIdMapping[$locationId] = $location->contentId;
                         }
 
@@ -86,6 +123,8 @@ class RelationProcessor
                 }
             }
         }
+
+        return $validationErrors;
     }
 
     /**

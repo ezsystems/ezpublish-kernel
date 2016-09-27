@@ -1151,7 +1151,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $objectStateHandlerMock */
         $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
@@ -1276,7 +1275,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->isInstanceOf('eZ\\Publish\\SPI\\FieldType\\FieldType'),
                 $this->isInstanceOf('eZ\\Publish\\Core\\FieldType\\Value'),
                 $this->anything()
-            );
+            )->willReturn([]);
 
         $values = $this->determineValuesForCreate(
             $mainLanguageCode,
@@ -2019,7 +2018,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $fieldTypeMock = $this->getMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
         $contentType = new ContentType(
@@ -2116,6 +2114,16 @@ class ContentTest extends BaseServiceMockTest
             ->method('validate')
             ->will($this->returnValue(array()));
 
+        $this->getRelationProcessorMock()->expects($this->any())
+            ->method('appendFieldRelations')
+            ->with(
+                $this->isType('array'),
+                $this->isType('array'),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\FieldType\\FieldType'),
+                $this->isInstanceOf('eZ\\Publish\\Core\\FieldType\\Value'),
+                $this->anything()
+            )->willReturn([]);
+
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
             ->will($this->returnValue($fieldTypeMock));
@@ -2209,7 +2217,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
+        $relationProcessorMock = $this->getRelationProcessorMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $fieldTypeMock = $this->getMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
@@ -2296,7 +2304,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->isInstanceOf('eZ\\Publish\\SPI\\FieldType\\FieldType'),
                 $this->isInstanceOf('eZ\\Publish\\Core\\FieldType\\Value'),
                 $this->anything()
-            );
+            )->willReturn([]);
 
         $fieldValues = $this->determineValuesForCreate(
             $mainLanguageCode,
@@ -2338,9 +2346,9 @@ class ContentTest extends BaseServiceMockTest
                     ->with(
                         $this->equalTo($fieldDefinition),
                         $this->equalTo($value)
-                    )->will($this->returnArgument(1));
+                    )->willReturn([$value]);
 
-                $allFieldErrors[$fieldDefinition->id][$languageCode] = $value;
+                $allFieldErrors[$fieldDefinition->id][$languageCode] = [$value];
             }
         }
 
@@ -3056,7 +3064,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
@@ -3186,7 +3193,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->isInstanceOf('eZ\\Publish\\SPI\\FieldType\\FieldType'),
                 $this->isInstanceOf('eZ\\Publish\\Core\\FieldType\\Value'),
                 $this->anything()
-            );
+            )->willReturn([]);
 
         $values = $this->determineValuesForUpdate(
             $initialLanguageCode,
@@ -4806,7 +4813,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $fieldTypeMock = $this->getMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
         $existingLanguageCodes = array_map(
             function (Field $field) {
@@ -4901,6 +4907,16 @@ class ContentTest extends BaseServiceMockTest
                 $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition'),
                 $this->isInstanceOf('eZ\\Publish\\Core\\FieldType\\Value')
             );
+
+        $this->getRelationProcessorMock()->expects($this->any())
+            ->method('appendFieldRelations')
+            ->with(
+                $this->isType('array'),
+                $this->isType('array'),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\FieldType\\FieldType'),
+                $this->isInstanceOf('eZ\\Publish\\Core\\FieldType\\Value'),
+                $this->anything()
+            )->willReturn([]);
 
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
@@ -5004,7 +5020,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
+        $relationProcessorMock = $this->getRelationProcessorMock();
         $fieldTypeMock = $this->getMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
         $existingLanguageCodes = array_map(
             function (Field $field) {
@@ -5118,11 +5134,21 @@ class ContentTest extends BaseServiceMockTest
                     ->with(
                         $this->equalTo($fieldDefinition),
                         $this->equalTo($value)
-                    )->will($this->returnArgument(1));
+                    )->willReturn([$value]);
 
-                $allFieldErrors[$fieldDefinition->id][$languageCode] = $value;
+                $allFieldErrors[$fieldDefinition->id][$languageCode] = [$value];
             }
         }
+
+        $relationProcessorMock->expects($this->any())
+            ->method('appendFieldRelations')
+            ->with(
+                $this->isType('array'),
+                $this->isType('array'),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\FieldType\\FieldType'),
+                $this->isInstanceOf('eZ\\Publish\\Core\\FieldType\\Value'),
+                $this->anything()
+            )->willReturn([]);
 
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
