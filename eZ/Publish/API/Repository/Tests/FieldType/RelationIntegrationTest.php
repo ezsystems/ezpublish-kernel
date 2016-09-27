@@ -50,7 +50,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
                     'sourceFieldDefinitionIdentifier' => 'data',
                     'type' => Relation::FIELD,
                     'sourceContentInfo' => $content->contentInfo,
-                    'destinationContentInfo' => $contentService->loadContentInfo(4),
+                    'destinationContentInfo' => $contentService->loadContentInfo(49),
                 )
             ),
         );
@@ -71,14 +71,14 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
                     'sourceFieldDefinitionIdentifier' => 'data',
                     'type' => Relation::FIELD,
                     'sourceContentInfo' => $content->contentInfo,
-                    'destinationContentInfo' => $contentService->loadContentInfo(49),
+                    'destinationContentInfo' => $contentService->loadContentInfo(4),
                 )
             ),
         );
     }
 
     /**
-     * @see eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getSettingsSchema()
+     * @see \eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getSettingsSchema()
      */
     public function getSettingsSchema()
     {
@@ -95,7 +95,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * @see eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getValidatorSchema()
+     * @see \eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getValidatorSchema()
      */
     public function getValidatorSchema()
     {
@@ -157,7 +157,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new RelationValue(4);
+        return new RelationValue(49);
     }
 
     /**
@@ -167,7 +167,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getFieldName()
     {
-        return 'Users';
+        return 'Images';
     }
 
     /**
@@ -186,7 +186,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentId' => 4,
+            'destinationContentId' => 49,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -232,7 +232,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new RelationValue(49);
+        return new RelationValue(4);
     }
 
     /**
@@ -250,7 +250,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentId' => 49,
+            'destinationContentId' => 4,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -300,7 +300,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentId' => 4,
+            'destinationContentId' => 49,
         );
 
         $this->assertPropertiesCorrect(

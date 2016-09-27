@@ -10,7 +10,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
@@ -53,6 +55,67 @@ trait RelationSearchBaseIntegrationTestTrait
                 $this->getRepository()->getContentService()->loadRelations($content->versionInfo)
             )
         );
+    }
+
+    /**
+     * Tests relation processing on field  when relation is trashed.
+     *
+     * We expect that we should be allowed to create new draft, but not allowed to publish.
+     */
+    public function testTrashedContentRelationsProcessedCorrect()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $trashService = $repository->getTrashService();
+
+        // create and publish
+        $content = $this->createContent($this->getValidCreationFieldData());
+        $contentService->publishVersion($content->getVersionInfo());
+
+        // trash second or first relation (first on RichText is location relation which won't pass here as location is trashed)
+        $relations = $this->getCreateExpectedRelations($content);
+        $i = isset($relations[1]) ? 1 : 0;
+        $trashService->trash($locationService->loadLocation($relations[$i]->getDestinationContentInfo()->mainLocationId));
+
+        // create draft
+        $draft = $contentService->createContentDraft($content->getVersionInfo()->getContentInfo());
+
+        // try to update draft and keep same data, should still work, it's up to UI to warn about this
+        $struct = new ContentUpdateStruct();
+        $struct->setField('data', $this->getValidCreationFieldData());
+        $contentService->updateContent($draft->getVersionInfo(), $struct);
+    }
+
+    /**
+     * Tests relation processing on field  when relation is deleted.
+     *
+     * We expect that we should be allowed to create new draft, but not allowed to publish.
+     */
+    public function testDeletedContentRelationsProcessedCorrect()
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        // create and publish
+        $content = $this->createContent($this->getValidCreationFieldData());
+        $contentService->publishVersion($content->getVersionInfo());
+
+        // delete first relation
+        $relations = $this->getCreateExpectedRelations($content);
+        $contentService->deleteContent($relations[0]->getDestinationContentInfo());
+
+        // create draft
+        $draft = $contentService->createContentDraft($content->getVersionInfo()->getContentInfo());
+
+        try {
+            // try to update draft and keep same data
+            $struct = new ContentUpdateStruct();
+            $struct->setField('data', $this->getValidCreationFieldData());
+            $contentService->updateContent($draft->getVersionInfo(), $struct);
+            $this->fail('Expected deleted relation to throw validation exception on publish, nothing happened.');
+        } catch (ContentFieldValidationException $e) {
+            // do nothing, expected
+        }
     }
 
     /**
