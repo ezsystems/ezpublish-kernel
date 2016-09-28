@@ -5067,6 +5067,9 @@ class UrlAliasHandlerTest extends TestCase
         );
     }
 
+    /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+     */
     protected function getLanguageHandler()
     {
         if (!isset($this->languageHandler)) {
@@ -5081,6 +5084,9 @@ class UrlAliasHandlerTest extends TestCase
         return $this->languageHandler;
     }
 
+    /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
     protected function getLanguageMaskGenerator()
     {
         if (!isset($this->languageMaskGenerator)) {
