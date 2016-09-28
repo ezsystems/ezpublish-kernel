@@ -114,7 +114,10 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     * todo document.
+     * Internal publish method, accepting language ID instead of language code and optionally
+     * new alias ID (used when swapping Locations).
+     *
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationSwapped()
      *
      * @param int $locationId
      * @param int $parentLocationId
