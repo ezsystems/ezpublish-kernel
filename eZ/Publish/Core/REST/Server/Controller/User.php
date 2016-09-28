@@ -133,6 +133,7 @@ class User extends RestController
     public function loadRootUserGroup()
     {
         //@todo Replace hardcoded value with one loaded from settings
+        // @todo move generate call to visitor
         return new Values\PermanentRedirect(
             $this->router->generate('ezpublish_rest_loadUserGroup', array('groupPath' => '/1/5'))
         );
