@@ -162,12 +162,20 @@ services:
         arguments:
             - "@ezpublish.fieldType.ezimage.variation_service"
 
+    ezpublish_rest.controller.unwrapped_binary_content:
+        class: eZ\Publish\Core\REST\Server\HttpCache\Controller\CachedValueUnwrapperController
+        arguments: ['@ezpublish_rest.controller.binary_content.inner']
+
     ezpublish_rest.controller.content:
         alias: ezpublish_rest.controller.content.inner
 
     ezpublish_rest.controller.content.inner:
         class: "%ezpublish_rest.controller.content.class%"
         parent: ezpublish_rest.controller.base
+
+    ezpublish_rest.controller.unwrapped_content:
+        class: eZ\Publish\Core\REST\Server\HttpCache\Controller\CachedValueUnwrapperController
+        arguments: ['@ezpublish_rest.controller.content.inner']
 
     ezpublish_rest.controller.content_type:
         alias: ezpublish_rest.controller.content_type.inner
@@ -177,6 +185,10 @@ services:
         parent: ezpublish_rest.controller.base
         arguments:
             - "@ezpublish.api.service.content_type"
+
+    ezpublish_rest.controller.unwrapped_content_type:
+        class: eZ\Publish\Core\REST\Server\HttpCache\Controller\CachedValueUnwrapperController
+        arguments: ['@ezpublish_rest.controller.content_type.inner']
 
     ezpublish_rest.controller.role:
         alias: ezpublish_rest.controller.role.inner
@@ -191,6 +203,10 @@ services:
 
     ezpublish_rest.controller.location:
         alias: ezpublish_rest.controller.location.inner
+
+    ezpublish_rest.controller.unwrapped_location:
+        class: eZ\Publish\Core\REST\Server\HttpCache\Controller\CachedValueUnwrapperController
+        arguments: ['@ezpublish_rest.controller.location.inner']
 
     ezpublish_rest.controller.location.inner:
         class: "%ezpublish_rest.controller.location.class%"
@@ -235,6 +251,10 @@ services:
             - "@ezpublish.api.service.section"
             - "@ezpublish.api.repository"
 
+    ezpublish_rest.controller.unwrapped_user:
+        class: eZ\Publish\Core\REST\Server\HttpCache\Controller\CachedValueUnwrapperController
+        arguments: ["@ezpublish_rest.controller.user.inner"]
+
     ezpublish_rest.controller.url_wildcard:
         alias: ezpublish_rest.controller.url_wildcard.inner
 
@@ -253,6 +273,10 @@ services:
         arguments:
             - "@ezpublish.api.service.url_alias"
             - "@ezpublish.api.service.location"
+
+    ezpublish_rest.controller.unwrapped_url_alias:
+        class: eZ\Publish\Core\REST\Server\HttpCache\Controller\CachedValueUnwrapperController
+        arguments: ['@ezpublish_rest.controller.url_alias.inner']
 
     ezpublish_rest.controller.views:
         alias: ezpublish_rest.controller.views.inner
