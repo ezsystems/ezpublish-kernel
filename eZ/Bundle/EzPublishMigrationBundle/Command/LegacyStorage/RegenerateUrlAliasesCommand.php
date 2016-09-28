@@ -123,7 +123,6 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->checkStorage();
-        $this->prepareDependencies($output);
 
         $action = $input->getArgument('action');
         $this->bulkCount = $input->getArgument('bulk-count');
@@ -156,26 +155,7 @@ EOT
         }
     }
 
-    /**
-     * Checks that configured storage engine is Legacy Storage Engine.
-     */
-    protected function checkStorage()
-    {
-        $storageEngine = $this->getContainer()->get('ezpublish.api.storage_engine');
-
-        if (!$storageEngine instanceof LegacyStorageEngine) {
-            throw new RuntimeException(
-                'Expected to find Legacy Storage Engine but found something else.'
-            );
-        }
-    }
-
-    /**
-     * Prepares dependencies used by the command.
-     *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function prepareDependencies(OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output)
     {
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getContainer()->get('ezpublish.connection');
@@ -197,6 +177,20 @@ EOT
         $this->urlAliasGateway = $gateway;
         $this->connection = $databaseHandler->getConnection();
         $this->output = $output;
+    }
+
+    /**
+     * Checks that configured storage engine is Legacy Storage Engine.
+     */
+    protected function checkStorage()
+    {
+        $storageEngine = $this->getContainer()->get('ezpublish.api.storage_engine');
+
+        if (!$storageEngine instanceof LegacyStorageEngine) {
+            throw new RuntimeException(
+                'Expected to find Legacy Storage Engine but found something else.'
+            );
+        }
     }
 
     /**
