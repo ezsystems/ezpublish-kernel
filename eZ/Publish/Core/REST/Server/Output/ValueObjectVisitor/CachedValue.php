@@ -46,7 +46,7 @@ class CachedValue extends ValueObjectVisitor
 
         $response = $visitor->getResponse();
         $response->setPublic();
-        $response->setVary('Accept');
+        $response->setVary('Accept', false);
 
         if ($this->getParameter('content.ttl_cache') === true) {
             $response->setSharedMaxAge($this->getParameter('content.default_ttl'));
