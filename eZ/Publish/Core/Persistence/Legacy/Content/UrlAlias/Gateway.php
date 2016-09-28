@@ -111,7 +111,8 @@ abstract class Gateway
     /**
      * Historizes entry with $action by $languageMask.
      *
-     * Used when swapping Location aliases.
+     * Used when swapping Location aliases, this ensures that given $languageMask matches a
+     * single entry (database row).
      *
      * @param string $action
      * @param int $languageMask
