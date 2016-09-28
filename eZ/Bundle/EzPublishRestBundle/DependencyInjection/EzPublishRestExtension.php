@@ -40,6 +40,8 @@ class EzPublishRestExtension extends Extension implements PrependExtensionInterf
 
         $processor = new ConfigurationProcessor($container, 'ezsettings');
         $processor->mapConfigArray('rest_root_resources', $config);
+
+        $this->enableControllerCache($container);
     }
 
     public function prepend(ContainerBuilder $container)
@@ -49,6 +51,22 @@ class EzPublishRestExtension extends Extension implements PrependExtensionInterf
             $config = Yaml::parse(file_get_contents($file));
             $container->prependExtensionConfig('nelmio_cors', $config);
             $container->addResource(new FileResource($file));
+        }
+    }
+
+    private function enableControllerCache(ContainerBuilder $container)
+    {
+        foreach (['content', 'location', 'content_type', 'url_alias', 'binary_content', 'user'] as $controllerId) {
+            if (!$container->hasDefinition("ezpublish_rest.controller.cached_$controllerId")) {
+                continue;
+            }
+            if (!$container->hasAlias("ezpublish_rest.controller.$controllerId")) {
+                return;
+            }
+            $container->setAlias(
+                "ezpublish_rest.controller.$controllerId",
+                "ezpublish_rest.controller.cached_$controllerId"
+            );
         }
     }
 }
