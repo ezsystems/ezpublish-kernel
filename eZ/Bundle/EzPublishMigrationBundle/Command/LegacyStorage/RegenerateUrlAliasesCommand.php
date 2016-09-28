@@ -129,7 +129,10 @@ EOT
         $this->bulkCount = $input->getArgument('bulk-count');
 
         if (!isset($this->actionSet[$action])) {
-            throw new RuntimeException("Action '{$action}' is not supported");
+            throw new RuntimeException(
+                "Action '{$action}' is not supported, use one of: " .
+                implode(', ', array_keys($this->actionSet))
+            );
         }
 
         if ($action === 'full' || $action === 'backup-custom') {
