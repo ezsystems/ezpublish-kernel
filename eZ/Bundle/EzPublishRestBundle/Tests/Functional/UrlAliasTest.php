@@ -10,7 +10,11 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Message\Response;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\REST\Server\Values\URLAliasRefList;
 
 class UrlAliasTest extends RESTFunctionalTestCase
 {
@@ -21,7 +25,7 @@ class UrlAliasTest extends RESTFunctionalTestCase
      */
     public function testCreateFolder()
     {
-        $folderArray = $this->createFolder(__METHOD__, '/api/ezp/v2/content/locations/1/2');
+        $folderArray = $this->createFolder(__FUNCTION__, '/api/ezp/v2/content/locations/1/2');
         $folderLocations = $this->getContentLocations($folderArray['_href']);
 
         return $folderLocations['LocationList']['Location'][0]['_href'];
@@ -120,35 +124,19 @@ XML;
      */
     public function testLoadURLAlias($urlAliasHref)
     {
-        self::markTestSkipped('@todo fixme');
-
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', $urlAliasHref)
+            $this->createHttpRequest('GET', $urlAliasHref, '', 'UrlAlias+json')
         );
 
-        // @todo Will fail because of EZP-21082
-        // self::assertHttpResponseCodeEquals( $response, 200 );
-        self::assertHttpResponseCodeEquals($response, 500);
-        self::markTestSkipped('@todo Fix when EZP-21082 is fixed');
-    }
+        self::assertHttpResponseCodeEquals($response, 200);
 
-    /**
-     * @depends testCreateUrlAlias
-     * @covers DELETE /content/urlaliases/{urlAliasId}
-     */
-    public function testDeleteURLAlias($urlAliasHref)
-    {
-        self::markTestSkipped('@todo fixme');
-
-        $response = $this->sendHttpRequest(
-            $request = $this->createHttpRequest('DELETE', $urlAliasHref)
+        $urlAlias = $this->parseUrlAliasFromResponse($response);
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'location-' . $urlAlias->destination->id,
+            ]
         );
-
-        // @todo will fail because of EZP-21082
-        // self::assertHttpResponseCodeEquals( $response, 204 );
-        self::assertHttpResponseCodeEquals($response, 500);
-
-        self::markTestSkipped('@todo Fix when EZP-21082 is fixed');
     }
 
     /**
@@ -158,9 +146,89 @@ XML;
     public function testListLocationURLAliases($contentLocationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', "$contentLocationHref/urlaliases")
+            $this->createHttpRequest('GET', "$contentLocationHref/urlaliases", '', 'UrlAliasRefList+json')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $urlAliasList = $this->parseUrlAliasRefListFromResponse($response);
+        $this->assertEquals(1, count($urlAliasList));
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'location-' . $this->extractLocationIdFromHref($contentLocationHref),
+            ]
+        );
+    }
+
+    /**
+     * @depends testCreateUrlAlias
+     * @covers DELETE /content/urlaliases/{urlAliasId}
+     */
+    public function testDeleteURLAlias($urlAliasHref)
+    {
+        $response = $this->sendHttpRequest(
+            $request = $this->createHttpRequest('DELETE', $urlAliasHref)
+        );
+
+        self::assertHttpResponseCodeEquals( $response, 204 );
+    }
+
+    /**
+     * @param Response $response
+     * @return URLAliasRefList
+     */
+    private function parseUrlAliasRefListFromResponse(Response $response)
+    {
+        $responseStruct = json_decode($response->getContent(), true);
+
+        return new URLAliasRefList(
+            [
+                'urlaliases' => array_map(
+                    function (array $urlAliasRefRow) {
+                        return new URLAlias(
+                            [
+                                'id' => $this->extractLastIdFromHref($urlAliasRefRow['_href']),
+                            ]
+                        );
+                    },
+                    $responseStruct['UrlAliasRefList']['UrlAlias']
+                )
+            ],
+            ''
+        );
+    }
+
+    /**
+     * Extracts a location id from any location path href.
+     * @param string $href Ex: /api/ezp/v2/content/locations/1/2/3
+     * @return int
+     */
+    private function extractLocationIdFromHref($href)
+    {
+        // iterates over href parts, and returns the last numeric part before a non numeric part
+        foreach (explode('/', $href) as $part) {
+            if (is_numeric($part)) {
+                $id = $part;
+            } else if (isset($id)) {
+                return $id;
+            }
+        }
+    }
+
+    /**
+     * @param Response $response
+     * @return URLAlias
+     */
+    private function parseUrlAliasFromResponse(Response $response)
+    {
+        $responseStruct = json_decode($response->getContent(), true);
+
+        return new URLAlias(
+            [
+                'id' => $responseStruct['UrlAlias']['_id'],
+                'destination' => new Location(['id' => $this->extractLastIdFromHref($responseStruct['UrlAlias']['location']['_href'])]),
+            ]
+        );
     }
 }

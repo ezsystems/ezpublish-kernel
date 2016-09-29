@@ -10,7 +10,12 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Message\Response;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList;
+use eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList;
 
 class ContentTypeTest extends RESTFunctionalTestCase
 {
@@ -147,10 +152,25 @@ XML;
     public function testListContentTypesForGroup($contentTypeGroupHref)
     {
         $response = $this->sendHttpRequest(
-            $request = $this->createHttpRequest('GET', "$contentTypeGroupHref/types")
+            $request = $this->createHttpRequest('GET', "$contentTypeGroupHref/types", '', 'ContentTypeInfoList+json')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentTypeInfoList = $this->parseContentTypeInfoListFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            array_merge(
+                ['content-type-group-' . $this->extractLastIdFromHref($contentTypeGroupHref)],
+                array_map(
+                    function (ContentType $contentType) {
+                        return 'content-type-' . $contentType->id;
+                    },
+                    $contentTypeInfoList->contentTypes
+                )
+            )
+        );
     }
 
     /**
@@ -159,11 +179,22 @@ XML;
     public function testLoadContentTypeGroupList()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups', '', 'ContentTypeGroupList+json')
         );
         self::assertHttpResponseCodeEquals($response, 200);
 
-        // @todo test data
+        $contentTypeGroupList = $this->parseContentTypeGroupListFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            array_map(
+                function (ContentTypeGroup $contentTypeGroup) {
+                    return 'content-type-group-' . $contentTypeGroup->id;
+                },
+                $contentTypeGroupList->contentTypeGroups
+            )
+        );
+
     }
 
     /**
@@ -192,6 +223,8 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentTypeGroup = $this->parseContentTypeGroupFromResponse($response);
     }
 
     /**
@@ -220,6 +253,8 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentType = $this->parseContentTypeFromResponse($response);
     }
 
     /**
@@ -260,6 +295,8 @@ XML;
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentType = $this->parseContentTypeFromResponse($response);
     }
 
     /**
@@ -274,6 +311,8 @@ XML;
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentType = $this->parseContentTypeFromResponse($response);
     }
 
     /**
@@ -423,6 +462,10 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-type-' . $this->extractLastIdFromHref($contentTypeHref)]
+        );
 
         $data = json_decode($response->getContent(), true);
 
@@ -440,6 +483,8 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        // @todo Cache test. Needs the contentTypeId
     }
 
     /**
@@ -526,6 +571,13 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'content-type-' . $this->extractLastIdFromHref($contentTypeHref),
+            ]
+        );
     }
 
     /**
@@ -580,5 +632,86 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 403);
+    }
+
+    /**
+     * @param $response
+     * @return ContentTypeGroupList
+     */
+    private function parseContentTypeGroupListFromResponse($response): ContentTypeGroupList
+    {
+        $struct = json_decode($response->getContent(), true);
+        $contentTypeGroupList = new ContentTypeGroupList(
+            array_map(
+                function (array $row) {
+                    return new ContentTypeGroup(
+                        [
+                            'id' => $row['id'],
+                        ]
+                    );
+                },
+                $struct['ContentTypeGroupList']['ContentTypeGroup']
+            ),
+            ''
+        );
+        return $contentTypeGroupList;
+    }
+
+    /**
+     * @param $response
+     * @return ContentTypeInfoList
+     */
+    private function parseContentTypeInfoListFromResponse($response): ContentTypeInfoList
+    {
+        $struct = json_decode($response->getContent(), true);
+        $contentTypeInfoList = new ContentTypeInfoList(
+            array_map(
+                function (array $row) {
+                    return new ContentType(
+                        [
+                            'id' => $row['id'],
+                            'identifier' => $row['identifier'],
+                            'fieldDefinitions' => []
+                        ]
+                    );
+                },
+                $struct['ContentTypeInfoList']['ContentType']
+            ),
+            ''
+        );
+        return $contentTypeInfoList;
+    }
+
+    /**
+     * @param Response $response
+     * @return ContentTypeGroup
+     */
+    private function parseContentTypeGroupFromResponse(Response $response)
+    {
+        $struct = json_decode($response->getContent(), true);
+
+        return new ContentTypeGroup(
+            [
+                'id' => $struct['ContentTypeGroup']['id'],
+                'identifier' => $struct['ContentTypeGroup']['identifier']
+            ]
+        );
+    }
+
+    /**
+     * @param Response $response
+     * @return ContentType
+     */
+    private function parseContentTypeFromResponse(Response $response)
+    {
+        $struct = json_decode($response->getContent(), true);
+
+        return new ContentType(
+            [
+                'id' => $struct['ContentType']['id'],
+                'identifier' => $struct['ContentType']['identifier'],
+                'fieldDefinitions' => []
+            ]
+        );
     }
 }

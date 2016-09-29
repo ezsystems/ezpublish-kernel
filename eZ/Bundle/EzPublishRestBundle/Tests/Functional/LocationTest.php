@@ -10,7 +10,11 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Message\Response;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationList;
 
 class LocationTest extends RESTFunctionalTestCase
 {
@@ -85,10 +89,29 @@ XML;
     public function testLoadLocation($locationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', $locationHref)
+            $this->createHttpRequest('GET', $locationHref, '', 'Location+json')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $responseLocation = $this->parseLocationFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            array_merge(
+                [
+                    'location-' . $responseLocation->id,
+                    'content-' . $responseLocation->getContentInfo()->id,
+                    'content-type-' . $responseLocation->getContentInfo()->contentTypeId,
+                ],
+                array_map(
+                    function ($id) {
+                        return 'path-' . $id;
+                    },
+                    $responseLocation->path
+                )
+            )
+        );
     }
 
     /**
@@ -129,6 +152,7 @@ XML;
      */
     public function testLoadLocationsForContent($contentHref)
     {
+        self::markTestSkipped('@todo implement');
     }
 
     /**
@@ -154,12 +178,30 @@ XML;
      */
     public function testLoadLocationChildren($locationHref)
     {
+        for ($i = 0; $i < 2; ++$i) {
+            $this->createFolder('Child ' . $i, $locationHref);
+        }
+
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', "$locationHref/children", '', 'LocationList+json')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
         self::assertHttpResponseHasHeader($response, 'Content-Type', $this->generateMediaTypeString('LocationList+json'));
+
+        $locationList = $this->parseLocationListFromResponse($response);
+
+        self::assertEquals(2, $locationList->totalCount);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            array_map(
+                function (Location  $location) {
+                    return 'location-' . $location->id;
+                },
+                $locationList->locations
+            )
+        );
     }
 
     /**
@@ -195,5 +237,58 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 204);
+    }
+
+/**
+ * @param \Buzz\Message\Response
+ * @return \eZ\Publish\API\Repository\Values\Content\Location
+ */private function parseLocationFromResponse(Response $response)
+{
+    $jsonStruct = $this->parseJsonResponse($response);
+
+    return new Location(
+            [
+                'id' => $this->extractLastIdFromHref($jsonStruct['Location']['_href']),
+                'path' => explode('/', trim($jsonStruct['Location']['pathString'], '/')),
+                'contentInfo' => new ContentInfo(
+                    [
+                        'id' => $this->extractLastIdFromHref($jsonStruct['Location']['ContentInfo']['_href']),
+                    ]
+                ),
+            ]
+        );
+}
+
+/**
+ * @return \eZ\Publish\API\Repository\Values\Content\LocationList
+ */private function parseLocationListFromResponse($response)
+{
+    $jsonStruct = $this->parseJsonResponse($response);
+
+    return new LocationList(
+            [
+                'locations' => array_map(
+                    function ($location) {
+                        return new Location(
+                            [
+                                'id' => $this->extractLastIdFromHref($location['_href']),
+                            ]
+                        );
+                    },
+                    $jsonStruct['LocationList']['Location']
+                ),
+                'totalCount' => count($jsonStruct['LocationList']['Location']),
+            ],
+            ''
+        );
+}
+
+    /**
+     * @param Response $response
+     * @return array
+     */
+    private function parseJsonResponse(Response $response)
+    {
+        return json_decode($response->getContent(), true);
     }
 }
