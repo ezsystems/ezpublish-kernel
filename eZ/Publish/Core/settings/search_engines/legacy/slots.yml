@@ -7,6 +7,8 @@ parameters:
     ezpublish.search.legacy.slot.copy_subtree.class: eZ\Publish\Core\Search\Common\Slot\CopySubtree
     ezpublish.search.legacy.slot.trash.class: eZ\Publish\Core\Search\Common\Slot\Trash
     ezpublish.search.legacy.slot.recover.class: eZ\Publish\Core\Search\Common\Slot\Recover
+    ezpublish.search.legacy.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
+    ezpublish.search.legacy.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
 
 services:
     ezpublish.search.legacy.slot:
@@ -58,3 +60,15 @@ services:
         class: "%ezpublish.search.legacy.slot.recover.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: TrashService\RecoverSignal}
+
+    ezpublish.search.legacy.slot.update_content_metadata:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.update_content_metadata.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\UpdateContentMetadataSignal}
+
+    ezpublish.search.legacy.slot.assign_section:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.assign_section.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: SectionService\AssignSectionSignal}
