@@ -109,4 +109,49 @@ abstract class LanguageAwareTestCase extends TestCase
             $contentTypeHandler
         );
     }
+
+    /**
+     * Get FullText search configuration.
+     */
+    protected function getFullTextSearchConfiguration()
+    {
+        return [
+            'stopWordThresholdFactor' => 0.66,
+            'enableWildcards' => true,
+            'commands' => [
+                'apostrophe_normalize',
+                'apostrophe_to_doublequote',
+                'ascii_lowercase',
+                'ascii_search_cleanup',
+                'cyrillic_diacritical',
+                'cyrillic_lowercase',
+                'cyrillic_search_cleanup',
+                'cyrillic_transliterate_ascii',
+                'doublequote_normalize',
+                'endline_search_normalize',
+                'greek_diacritical',
+                'greek_lowercase',
+                'greek_normalize',
+                'greek_transliterate_ascii',
+                'hebrew_transliterate_ascii',
+                'hyphen_normalize',
+                'inverted_to_normal',
+                'latin1_diacritical',
+                'latin1_lowercase',
+                'latin1_transliterate_ascii',
+                'latin-exta_diacritical',
+                'latin-exta_lowercase',
+                'latin-exta_transliterate_ascii',
+                'latin_lowercase',
+                'latin_search_cleanup',
+                'latin_search_decompose',
+                'math_to_ascii',
+                'punctuation_normalize',
+                'space_normalize',
+                'special_decompose',
+                'specialwords_search_normalize',
+                'tab_search_normalize',
+            ],
+        ];
+    }
 }

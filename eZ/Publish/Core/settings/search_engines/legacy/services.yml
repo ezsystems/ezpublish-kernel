@@ -32,6 +32,7 @@ services:
             - "@ezpublish.spi.persistence.content_type_handler"
             - "@ezpublish.api.storage_engine.transformation_processor"
             - "@ezpublish.search.legacy.repository.searchIndex"
+            - "%ezpublish.search.legacy.criterion_handler.full_text.configuration%"
 
     ezpublish.search.legacy.gateway.location.inner:
         class: "%ezpublish.search.legacy.gateway.location.class%"
