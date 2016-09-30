@@ -103,7 +103,8 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                 $this->getDatabaseHandler(),
                 $this->getContentTypeHandler(),
                 $this->getDefinitionBasedTransformationProcessor(),
-                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler())
+                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
+                $this->getFullTextSearchConfiguration()
             ),
             $this->getContentMapperMock(),
             $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper'),
