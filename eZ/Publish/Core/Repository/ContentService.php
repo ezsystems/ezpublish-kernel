@@ -571,12 +571,13 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldDefinition->defaultValue;
                 }
 
+                $fieldErrors = [];
                 $fieldValue = $fieldType->acceptValue($fieldValue);
 
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmptyValue = true;
                     if ($fieldDefinition->isRequired) {
-                        $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
+                        $fieldErrors[] = new ValidationError(
                             "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
                             null,
                             ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode],
@@ -588,22 +589,24 @@ class ContentService implements ContentServiceInterface
                         $fieldDefinition,
                         $fieldValue
                     );
-                    if (!empty($fieldErrors)) {
-                        $allFieldErrors[$fieldDefinition->id][$languageCode] = $fieldErrors;
-                    }
+                }
+
+                $relationErrors = $this->relationProcessor->appendFieldRelations(
+                    $inputRelations,
+                    $locationIdToContentIdMapping,
+                    $fieldType,
+                    $fieldValue,
+                    $fieldDefinition
+                );
+
+                if (!empty($fieldErrors) || !empty($relationErrors)) {
+                    $allFieldErrors[$fieldDefinition->id][$languageCode] = array_merge($fieldErrors, $relationErrors);
                 }
 
                 if (!empty($allFieldErrors)) {
                     continue;
                 }
 
-                $this->relationProcessor->appendFieldRelations(
-                    $inputRelations,
-                    $locationIdToContentIdMapping,
-                    $fieldType,
-                    $fieldValue,
-                    $fieldDefinition->id
-                );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
                 // Only non-empty value for: translatable field or in main language
@@ -1229,12 +1232,13 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldDefinition->defaultValue;
                 }
 
+                $fieldErrors = [];
                 $fieldValue = $fieldType->acceptValue($fieldValue);
 
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmpty = true;
                     if ($fieldDefinition->isRequired) {
-                        $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
+                        $fieldErrors[] = new ValidationError(
                             "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
                             null,
                             ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode],
@@ -1246,22 +1250,24 @@ class ContentService implements ContentServiceInterface
                         $fieldDefinition,
                         $fieldValue
                     );
-                    if (!empty($fieldErrors)) {
-                        $allFieldErrors[$fieldDefinition->id][$languageCode] = $fieldErrors;
-                    }
+                }
+
+                $relationErrors = $this->relationProcessor->appendFieldRelations(
+                    $inputRelations,
+                    $locationIdToContentIdMapping,
+                    $fieldType,
+                    $fieldValue,
+                    $fieldDefinition
+                );
+
+                if (!empty($fieldErrors) || !empty($relationErrors)) {
+                    $allFieldErrors[$fieldDefinition->id][$languageCode] = array_merge($fieldErrors, $relationErrors);
                 }
 
                 if (!empty($allFieldErrors)) {
                     continue;
                 }
 
-                $this->relationProcessor->appendFieldRelations(
-                    $inputRelations,
-                    $locationIdToContentIdMapping,
-                    $fieldType,
-                    $fieldValue,
-                    $fieldDefinition->id
-                );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
                 if ($isRetained || $isCopied || ($isLanguageNew && $isEmpty) || $isProcessed) {

@@ -105,7 +105,7 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * @see eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getSettingsSchema()
+     * @see \eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getSettingsSchema()
      */
     public function getSettingsSchema()
     {
@@ -126,7 +126,7 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * @see eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getValidatorSchema()
+     * @see \eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest::getValidatorSchema()
      */
     public function getValidatorSchema()
     {

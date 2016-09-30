@@ -10,11 +10,14 @@
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 
 /**
@@ -48,21 +51,42 @@ class RelationProcessor
      * @param array $locationIdToContentIdMapping An array with Location Ids as keys and corresponding Content Id as values
      * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
      * @param \eZ\Publish\Core\FieldType\Value $fieldValue Accepted field value.
-     * @param string $fieldDefinitionId
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function appendFieldRelations(
         array &$relations,
         array &$locationIdToContentIdMapping,
         SPIFieldType $fieldType,
         BaseValue $fieldValue,
-        $fieldDefinitionId
+        FieldDefinition $fieldDefinition
     ) {
+        $validationErrors = [];
         foreach ($fieldType->getRelations($fieldValue) as $relationType => $destinationIds) {
             if ($relationType === Relation::FIELD) {
-                if (!isset($relations[$relationType][$fieldDefinitionId])) {
-                    $relations[$relationType][$fieldDefinitionId] = array();
+                if (!isset($relations[$relationType][$fieldDefinition->id])) {
+                    $relations[$relationType][$fieldDefinition->id] = array();
                 }
-                $relations[$relationType][$fieldDefinitionId] += array_flip($destinationIds);
+
+                foreach ($destinationIds as $destinationId) {
+                    try {
+                        $this->persistenceHandler->contentHandler()->loadContentInfo($destinationId);
+                    } catch (NotFoundException $e) {
+                        $validationErrors[] = new ValidationError(
+                            "Relations to Content '%content%' could not be found as part of field '%identifier%'",
+                            null,
+                            array(
+                                '%content%' => $destinationId,
+                                '%identifier%' => $fieldDefinition->identifier,
+                            ),
+                            "[$fieldDefinition->identifier]"
+                        );
+                        continue;
+                    }
+                }
+
+                $relations[$relationType][$fieldDefinition->id] += array_flip($destinationIds);
             } elseif ($relationType & (Relation::LINK | Relation::EMBED)) {
                 // Using bitwise operators as Legacy Stack stores COMMON, LINK and EMBED relation types
                 // in the same entry using bitmask
@@ -73,7 +97,21 @@ class RelationProcessor
                 if (isset($destinationIds['locationIds'])) {
                     foreach ($destinationIds['locationIds'] as $locationId) {
                         if (!isset($locationIdToContentIdMapping[$locationId])) {
-                            $location = $this->persistenceHandler->locationHandler()->load($locationId);
+                            try {
+                                $location = $this->persistenceHandler->locationHandler()->load($locationId);
+                            } catch (NotFoundException $e) {
+                                $validationErrors[] = new ValidationError(
+                                    "Relations to Location '%location%' could not be found as part of field '%identifier%'",
+                                    null,
+                                    array(
+                                        '%location%' => $locationId,
+                                        '%identifier%' => $fieldDefinition->identifier,
+                                    ),
+                                    "[$fieldDefinition->identifier]"
+                                );
+                                continue;
+                            }
+
                             $locationIdToContentIdMapping[$locationId] = $location->contentId;
                         }
 
@@ -86,6 +124,8 @@ class RelationProcessor
                 }
             }
         }
+
+        return $validationErrors;
     }
 
     /**
