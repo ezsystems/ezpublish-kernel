@@ -292,16 +292,114 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * Will create if not exists an simple content type for deletion test purpose with just and required field name.
+     * Test that swapping locations affects properly Search Engine Index.
+     */
+    public function testSwapLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $content01 = $this->createContentWithName('content01', [2]);
+        $location01 = $locationService->loadLocation($content01->contentInfo->mainLocationId);
+
+        $content02 = $this->createContentWithName('content02', [2]);
+        $location02 = $locationService->loadLocation($content02->contentInfo->mainLocationId);
+
+        $locationService->swapLocation($location01, $location02);
+        $this->refreshSearch($repository);
+
+        // content02 should be at location01
+        $criterion = new Criterion\LocationId($location01->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($content02->id, $results->searchHits[0]->valueObject->id);
+
+        // content01 should be at location02
+        $criterion = new Criterion\LocationId($location02->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($content01->id, $results->searchHits[0]->valueObject->id);
+    }
+
+    /**
+     * Test that updating Content metadata affects properly Search Engine Index.
+     */
+    public function testUpdateContentMetadata()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $publishedContent = $this->createContentWithName('updateMetadataTest', [2]);
+        $newLocationCreateStruct = $locationService->newLocationCreateStruct(60);
+        $newLocation = $locationService->createLocation($publishedContent->contentInfo, $newLocationCreateStruct);
+
+        $newContentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $newContentMetadataUpdateStruct->remoteId = md5('Test');
+        $newContentMetadataUpdateStruct->publishedDate = new \DateTime();
+        $newContentMetadataUpdateStruct->publishedDate->add(new \DateInterval('P1D'));
+        $newContentMetadataUpdateStruct->mainLocationId = $newLocation->id;
+
+        $contentService->updateContentMetadata($publishedContent->contentInfo, $newContentMetadataUpdateStruct);
+        $this->refreshSearch($repository);
+
+        // find Content by Id, calling findContentInfo which is using the Search Index
+        $criterion = new Criterion\ContentId($publishedContent->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContentInfo($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($publishedContent->contentInfo->id, $results->searchHits[0]->valueObject->id);
+
+        // find Content using updated RemoteId
+        $criterion = new Criterion\RemoteId($newContentMetadataUpdateStruct->remoteId);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContent($query);
+        $this->assertEquals(1, $results->totalCount);
+        $foundContentInfo = $results->searchHits[0]->valueObject->contentInfo;
+        /** @var \eZ\Publish\Core\Repository\Values\Content\Content $foundContentInfo */
+        $this->assertEquals($publishedContent->id, $foundContentInfo->id);
+        $this->assertEquals($newContentMetadataUpdateStruct->publishedDate, $foundContentInfo->publishedDate);
+        $this->assertEquals($newLocation->id, $foundContentInfo->mainLocationId);
+        $this->assertEquals($newContentMetadataUpdateStruct->remoteId, $foundContentInfo->remoteId);
+    }
+
+    /**
+     * Test that assigning section to content object properly affects Search Engine Index.
+     */
+    public function testAssignSection()
+    {
+        $repository = $this->getRepository();
+        $sectionService = $repository->getSectionService();
+        $searchService = $repository->getSearchService();
+
+        $section = $sectionService->loadSection(2);
+        $content = $this->createContentWithName('testAssignSection', [2]);
+
+        $sectionService->assignSection($content->contentInfo, $section);
+        $this->refreshSearch($repository);
+
+        $criterion = new Criterion\ContentId($content->id);
+        $query = new Query(['filter' => $criterion]);
+        $results = $searchService->findContentInfo($query);
+        $this->assertEquals($section->id, $results->searchHits[0]->valueObject->sectionId);
+    }
+
+    /**
+     * Will create if not exists an simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    protected function createDeletionTestContentType()
+    protected function createTestContentType()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
+        $contentTypeIdentifier = 'test-type';
         try {
-            return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+            return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
         } catch (NotFoundException $e) {
             // continue creation process
         }
@@ -312,12 +410,11 @@ class SearchEngineIndexingTest extends BaseTest
         $nameField->isTranslatable = true;
         $nameField->isSearchable = true;
         $nameField->isRequired = true;
-
-        $contentTypeStruct = $contentTypeService->newContentTypeCreateStruct('deletion-test');
+        $contentTypeStruct = $contentTypeService->newContentTypeCreateStruct($contentTypeIdentifier);
         $contentTypeStruct->mainLanguageCode = 'eng-GB';
         $contentTypeStruct->creatorId = 14;
         $contentTypeStruct->creationDate = new DateTime();
-        $contentTypeStruct->names = ['eng-GB' => 'Deletion test'];
+        $contentTypeStruct->names = ['eng-GB' => 'Test Content Type'];
         $contentTypeStruct->addFieldDefinition($nameField);
 
         $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
@@ -325,7 +422,7 @@ class SearchEngineIndexingTest extends BaseTest
         $contentTypeDraft = $contentTypeService->createContentType($contentTypeStruct, [$contentTypeGroup]);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        return $contentTypeService->loadContentTypeByIdentifier('deletion-test');
+        return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
     }
 
     /**
@@ -342,7 +439,7 @@ class SearchEngineIndexingTest extends BaseTest
         $contentService = $this->getRepository()->getContentService();
         $locationService = $this->getRepository()->getLocationService();
 
-        $testableContentType = $this->createDeletionTestContentType();
+        $testableContentType = $this->createTestContentType();
 
         $rootContentStruct = $contentService->newContentCreateStruct($testableContentType, 'eng-GB');
         $rootContentStruct->setField('name', $contentName);
