@@ -14,15 +14,20 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 
 class ContentTypeTest extends RESTFunctionalTestCase
 {
+    private static $createdContentTypeRemoteId;
+    private static $createdContentTypeIdentifier;
+    private static $updatedContentTypeGroupIdentifier;
+
     /**
      * @covers POST /content/typegroups
      */
     public function testCreateContentTypeGroup()
     {
+        $identifier = uniqid('test');
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeGroupInput>
-  <identifier>testCreateContentTypeGroup</identifier>
+  <identifier>$identifier</identifier>
 </ContentTypeGroupInput>
 XML;
         $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/typegroups', 'ContentTypeGroupInput+xml', 'ContentTypeGroup+json');
@@ -46,10 +51,11 @@ XML;
      */
     public function testUpdateContentTypeGroup($contentTypeGroupHref)
     {
+        $identifier = uniqid('test');
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeGroupInput>
-  <identifier>testUpdateContentTypeGroup</identifier>
+  <identifier>$identifier</identifier>
 </ContentTypeGroupInput>
 XML;
 
@@ -58,6 +64,8 @@ XML;
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        self::$updatedContentTypeGroupIdentifier = $identifier;
 
         return $contentTypeGroupHref;
     }
@@ -71,14 +79,16 @@ XML;
      */
     public function testCreateContentType($contentTypeGroupHref)
     {
+        $identifier = uniqid('test');
+        $remoteId = md5($identifier);
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeCreate>
-  <identifier>tCreate</identifier>
+  <identifier>$identifier</identifier>
   <names>
-    <value languageCode="eng-GB">testCreateContentType</value>
+    <value languageCode="eng-GB">$identifier</value>
   </names>
-  <remoteId>testCreateContentType</remoteId>
+  <remoteId>$remoteId</remoteId>
   <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
   <nameSchema>&lt;title&gt;</nameSchema>
   <isContainer>true</isContainer>
@@ -122,6 +132,9 @@ XML;
 
         $this->addCreatedElement($response->getHeader('Location'));
 
+        self::$createdContentTypeIdentifier = $identifier;
+        self::$createdContentTypeRemoteId = $remoteId;
+
         return $response->getHeader('Location');
     }
 
@@ -160,7 +173,7 @@ XML;
     public function testLoadContentTypeGroupListWithIdentifier()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups?identifier=testUpdateContentTypeGroup')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups?identifier=' . self::$updatedContentTypeGroupIdentifier)
         );
         // @todo Check if list filtered by identifier is supposed to send a 307
         self::assertHttpResponseCodeEquals($response, 307);
@@ -242,7 +255,7 @@ XML;
     public function testListContentTypesByIdentifier()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=tCreate')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=' . self::$createdContentTypeIdentifier)
         );
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
@@ -256,7 +269,7 @@ XML;
     public function testListContentTypesByRemoteId()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?remoteId=testCreateContentType')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?remoteId=' . self::$createdContentTypeRemoteId)
         );
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
@@ -294,11 +307,12 @@ XML;
      */
     public function testCreateContentTypeDraft($contentTypeHref)
     {
+        $identifier = uniqid('test');
         $content = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeUpdate>
   <names>
-    <value languageCode="eng-GB">testCreateContentTypeDraft</value>
+    <value languageCode="eng-GB">$identifier</value>
   </names>
 </ContentTypeUpdate>
 XML;
