@@ -161,6 +161,7 @@ class ContentType extends RestController
             );
 
             return new Values\TemporaryRedirect(
+                // @todo Use a value object + visitor
                 $this->router->generate(
                     'ezpublish_rest_loadContentTypeGroup',
                     array(
