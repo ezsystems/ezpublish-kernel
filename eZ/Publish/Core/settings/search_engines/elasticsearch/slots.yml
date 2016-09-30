@@ -17,6 +17,10 @@ parameters:
     ezpublish.search.elasticsearch.slot.hide_location.class: eZ\Publish\Core\Search\Common\Slot\HideLocation
     ezpublish.search.elasticsearch.slot.unhide_location.class: eZ\Publish\Core\Search\Common\Slot\UnhideLocation
     ezpublish.search.elasticsearch.slot.set_content_state.class: eZ\Publish\Core\Search\Common\Slot\SetContentState
+    ezpublish.search.elasticsearch.slot.swap_location.class: eZ\Publish\Core\Search\Common\Slot\SwapLocation
+    ezpublish.search.elasticsearch.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
+    ezpublish.search.elasticsearch.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
+
 
 services:
     ezpublish.search.elasticsearch.slot:
@@ -128,3 +132,21 @@ services:
         class: "%ezpublish.search.elasticsearch.slot.set_content_state.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ObjectStateService\SetContentStateSignal}
+
+    ezpublish.search.elasticsearch.slot.swap_location:
+        parent: ezpublish.search.elasticsearch.slot
+        class: "%ezpublish.search.elasticsearch.slot.swap_location.class%"
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: LocationService\SwapLocationSignal}
+
+    ezpublish.search.elasticsearch.slot.update_content_metadata:
+        parent: ezpublish.search.elasticsearch.slot
+        class: "%ezpublish.search.elasticsearch.slot.update_content_metadata.class%"
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\UpdateContentMetadataSignal}
+
+    ezpublish.search.elasticsearch.slot.assign_section:
+        parent: ezpublish.search.elasticsearch.slot
+        class: "%ezpublish.search.elasticsearch.slot.assign_section.class%"
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: SectionService\AssignSectionSignal}
