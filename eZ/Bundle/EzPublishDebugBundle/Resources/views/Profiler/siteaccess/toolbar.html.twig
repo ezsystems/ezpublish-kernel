@@ -1,3 +1,4 @@
+{% if collector.siteAccess is not null %}
 <div class="sf-toolbar-info-piece">
     <b>Site Access</b>
 </div>
@@ -7,3 +8,4 @@
 <div class="sf-toolbar-info-piece">
     <b>matching type</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.siteAccess.matchingType }}</span>
 </div>
+{% endif %}

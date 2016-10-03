@@ -1,3 +1,4 @@
+{% if collector.siteAccess is not null %}
 <h3>Site Access</h3>
 <table>
     <tr>
@@ -7,3 +8,4 @@
         <th>Matching Type</th><td>{{ collector.siteAccess.matchingType }}</td>
     </tr>
 </table>
+{% endif %}

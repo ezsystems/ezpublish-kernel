@@ -24,7 +24,6 @@ services:
 
     ezpublish_debug.siteaccess_collector:
         class: "%ezpublish_debug.siteaccess_collector.class%"
-        arguments: ["@ezpublish.siteaccess"]
         tags:
             -
                 name: ezpublish_data_collector
