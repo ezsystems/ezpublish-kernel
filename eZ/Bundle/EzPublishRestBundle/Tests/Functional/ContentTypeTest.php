@@ -225,6 +225,11 @@ XML;
         self::assertHttpResponseCodeEquals($response, 200);
 
         $contentTypeGroup = $this->parseContentTypeGroupFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-type-group' => $contentTypeGroup->id]
+        );
     }
 
     /**
@@ -255,6 +260,13 @@ XML;
         self::assertHttpResponseCodeEquals($response, 200);
 
         $contentType = $this->parseContentTypeFromResponse($response);
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'content-type' => $contentType->id,
+                'content-type-group' => $contentType->contentTypeGroups[0]->id,
+            ]
+        );
     }
 
     /**
@@ -281,6 +293,8 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $this->parseContentTypeListFromRespose($response);
     }
 
     /**
@@ -296,7 +310,7 @@ XML;
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
         self::assertHttpResponseCodeEquals($response, 200);
 
-        $contentType = $this->parseContentTypeFromResponse($response);
+        $contentTypeList = $this->parseContentTypeListFromRespose($response);
     }
 
     /**
@@ -312,7 +326,7 @@ XML;
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
         self::assertHttpResponseCodeEquals($response, 200);
 
-        $contentType = $this->parseContentTypeFromResponse($response);
+        $contentTypeList = $this->parseContentTypeListFromResponse($response);
     }
 
     /**
@@ -483,6 +497,10 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-type-' . $this->extractLastIdFromHref($contentTypeHref)]
+        );
 
         // @todo Cache test. Needs the contentTypeId
     }
@@ -713,5 +731,9 @@ XML;
                 'fieldDefinitions' => []
             ]
         );
+    }
+
+    private function parseContentTypeListFromRespose($response)
+    {
     }
 }
