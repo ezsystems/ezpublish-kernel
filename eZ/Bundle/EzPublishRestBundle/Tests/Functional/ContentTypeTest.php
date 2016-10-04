@@ -10,19 +10,29 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Message\Response;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList;
+use eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList;
 
 class ContentTypeTest extends RESTFunctionalTestCase
 {
+    private static $createdContentTypeRemoteId;
+    private static $createdContentTypeIdentifier;
+    private static $updatedContentTypeGroupIdentifier;
+
     /**
      * @covers POST /content/typegroups
      */
     public function testCreateContentTypeGroup()
     {
+        $identifier = uniqid('test');
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeGroupInput>
-  <identifier>testCreateContentTypeGroup</identifier>
+  <identifier>$identifier</identifier>
 </ContentTypeGroupInput>
 XML;
         $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/typegroups', 'ContentTypeGroupInput+xml', 'ContentTypeGroup+json');
@@ -46,10 +56,11 @@ XML;
      */
     public function testUpdateContentTypeGroup($contentTypeGroupHref)
     {
+        $identifier = uniqid('test');
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeGroupInput>
-  <identifier>testUpdateContentTypeGroup</identifier>
+  <identifier>$identifier</identifier>
 </ContentTypeGroupInput>
 XML;
 
@@ -58,6 +69,8 @@ XML;
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        self::$updatedContentTypeGroupIdentifier = $identifier;
 
         return $contentTypeGroupHref;
     }
@@ -71,14 +84,16 @@ XML;
      */
     public function testCreateContentType($contentTypeGroupHref)
     {
+        $identifier = uniqid('test');
+        $remoteId = md5($identifier);
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeCreate>
-  <identifier>tCreate</identifier>
+  <identifier>$identifier</identifier>
   <names>
-    <value languageCode="eng-GB">testCreateContentType</value>
+    <value languageCode="eng-GB">$identifier</value>
   </names>
-  <remoteId>testCreateContentType</remoteId>
+  <remoteId>$remoteId</remoteId>
   <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
   <nameSchema>&lt;title&gt;</nameSchema>
   <isContainer>true</isContainer>
@@ -122,6 +137,9 @@ XML;
 
         $this->addCreatedElement($response->getHeader('Location'));
 
+        self::$createdContentTypeIdentifier = $identifier;
+        self::$createdContentTypeRemoteId = $remoteId;
+
         return $response->getHeader('Location');
     }
 
@@ -134,10 +152,25 @@ XML;
     public function testListContentTypesForGroup($contentTypeGroupHref)
     {
         $response = $this->sendHttpRequest(
-            $request = $this->createHttpRequest('GET', "$contentTypeGroupHref/types")
+            $request = $this->createHttpRequest('GET', "$contentTypeGroupHref/types", '', 'ContentTypeInfoList+json')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentTypeInfoList = $this->parseContentTypeInfoListFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            array_merge(
+                ['content-type-group-' . $this->extractLastIdFromHref($contentTypeGroupHref)],
+                array_map(
+                    function (ContentType $contentType) {
+                        return 'content-type-' . $contentType->id;
+                    },
+                    $contentTypeInfoList->contentTypes
+                )
+            )
+        );
     }
 
     /**
@@ -146,11 +179,22 @@ XML;
     public function testLoadContentTypeGroupList()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups', '', 'ContentTypeGroupList+json')
         );
         self::assertHttpResponseCodeEquals($response, 200);
 
-        // @todo test data
+        $contentTypeGroupList = $this->parseContentTypeGroupListFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            array_map(
+                function (ContentTypeGroup $contentTypeGroup) {
+                    return 'content-type-group-' . $contentTypeGroup->id;
+                },
+                $contentTypeGroupList->contentTypeGroups
+            )
+        );
+
     }
 
     /**
@@ -160,7 +204,7 @@ XML;
     public function testLoadContentTypeGroupListWithIdentifier()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups?identifier=testUpdateContentTypeGroup')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups?identifier=' . self::$updatedContentTypeGroupIdentifier)
         );
         // @todo Check if list filtered by identifier is supposed to send a 307
         self::assertHttpResponseCodeEquals($response, 307);
@@ -179,6 +223,13 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentTypeGroup = $this->parseContentTypeGroupFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-type-group' => $contentTypeGroup->id]
+        );
     }
 
     /**
@@ -207,6 +258,15 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentType = $this->parseContentTypeFromResponse($response);
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'content-type' => $contentType->id,
+                'content-type-group' => $contentType->contentTypeGroups[0]->id,
+            ]
+        );
     }
 
     /**
@@ -233,6 +293,8 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $this->parseContentTypeListFromRespose($response);
     }
 
     /**
@@ -242,11 +304,13 @@ XML;
     public function testListContentTypesByIdentifier()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=tCreate')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=' . self::$createdContentTypeIdentifier)
         );
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentTypeList = $this->parseContentTypeListFromRespose($response);
     }
 
     /**
@@ -256,11 +320,13 @@ XML;
     public function testListContentTypesByRemoteId()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?remoteId=testCreateContentType')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?remoteId=' . self::$createdContentTypeRemoteId)
         );
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $contentTypeList = $this->parseContentTypeListFromResponse($response);
     }
 
     /**
@@ -294,11 +360,12 @@ XML;
      */
     public function testCreateContentTypeDraft($contentTypeHref)
     {
+        $identifier = uniqid('test');
         $content = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeUpdate>
   <names>
-    <value languageCode="eng-GB">testCreateContentTypeDraft</value>
+    <value languageCode="eng-GB">$identifier</value>
   </names>
 </ContentTypeUpdate>
 XML;
@@ -409,6 +476,10 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-type-' . $this->extractLastIdFromHref($contentTypeHref)]
+        );
 
         $data = json_decode($response->getContent(), true);
 
@@ -426,6 +497,12 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-type-' . $this->extractLastIdFromHref($contentTypeHref)]
+        );
+
+        // @todo Cache test. Needs the contentTypeId
     }
 
     /**
@@ -512,6 +589,13 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'content-type-' . $this->extractLastIdFromHref($contentTypeHref),
+            ]
+        );
     }
 
     /**
@@ -566,5 +650,90 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 403);
+    }
+
+    /**
+     * @param $response
+     * @return ContentTypeGroupList
+     */
+    private function parseContentTypeGroupListFromResponse($response): ContentTypeGroupList
+    {
+        $struct = json_decode($response->getContent(), true);
+        $contentTypeGroupList = new ContentTypeGroupList(
+            array_map(
+                function (array $row) {
+                    return new ContentTypeGroup(
+                        [
+                            'id' => $row['id'],
+                        ]
+                    );
+                },
+                $struct['ContentTypeGroupList']['ContentTypeGroup']
+            ),
+            ''
+        );
+        return $contentTypeGroupList;
+    }
+
+    /**
+     * @param $response
+     * @return ContentTypeInfoList
+     */
+    private function parseContentTypeInfoListFromResponse($response): ContentTypeInfoList
+    {
+        $struct = json_decode($response->getContent(), true);
+        $contentTypeInfoList = new ContentTypeInfoList(
+            array_map(
+                function (array $row) {
+                    return new ContentType(
+                        [
+                            'id' => $row['id'],
+                            'identifier' => $row['identifier'],
+                            'fieldDefinitions' => []
+                        ]
+                    );
+                },
+                $struct['ContentTypeInfoList']['ContentType']
+            ),
+            ''
+        );
+        return $contentTypeInfoList;
+    }
+
+    /**
+     * @param Response $response
+     * @return ContentTypeGroup
+     */
+    private function parseContentTypeGroupFromResponse(Response $response)
+    {
+        $struct = json_decode($response->getContent(), true);
+
+        return new ContentTypeGroup(
+            [
+                'id' => $struct['ContentTypeGroup']['id'],
+                'identifier' => $struct['ContentTypeGroup']['identifier']
+            ]
+        );
+    }
+
+    /**
+     * @param Response $response
+     * @return ContentType
+     */
+    private function parseContentTypeFromResponse(Response $response)
+    {
+        $struct = json_decode($response->getContent(), true);
+
+        return new ContentType(
+            [
+                'id' => $struct['ContentType']['id'],
+                'identifier' => $struct['ContentType']['identifier'],
+                'fieldDefinitions' => []
+            ]
+        );
+    }
+
+    private function parseContentTypeListFromRespose($response)
+    {
     }
 }

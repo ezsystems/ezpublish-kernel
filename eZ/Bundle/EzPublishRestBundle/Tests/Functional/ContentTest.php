@@ -10,10 +10,18 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Message\Response;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\REST\Server\Values\Version;
 
 class ContentTest extends RESTFunctionalTestCase
 {
+    private $createdContentTypeId = 1;
+
     /**
      * @covers POST /content/objects
      *
@@ -26,7 +34,7 @@ class ContentTest extends RESTFunctionalTestCase
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
-  <ContentType href="/api/ezp/v2/content/types/1" />
+  <ContentType href="/api/ezp/v2/content/types/{$this->createdContentTypeId}" />
   <mainLanguageCode>eng-GB</mainLanguageCode>
   <LocationCreate>
     <ParentLocation href="/api/ezp/v2/content/locations/1/2" />
@@ -98,11 +106,29 @@ XML;
     public function testLoadContent($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', $restContentHref)
+            $this->createHttpRequest('GET', $restContentHref, '', 'ContentInfo+json')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
-        // @todo test data a bit ?
+
+        return $response;
+    }
+
+    /**
+     * @depends testLoadContent
+     */
+    public function testLoadContentCacheTags(Response $response)
+    {
+        $contentInfo = $this->parseContentInfoFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'location-' . $contentInfo->mainLocationId,
+                'content-' . $contentInfo->id,
+                'content-type-' . $contentInfo->contentTypeId,
+            ]
+        );
     }
 
     /**
@@ -155,8 +181,14 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 307);
-
         self::assertHttpResponseHasHeader($response, 'Location', "$restContentHref/versions/1");
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'content-' . $this->extractLastIdFromHref($restContentHref),
+            ]
+        );
     }
 
     /**
@@ -168,12 +200,30 @@ XML;
     public function testLoadContentVersion($restContentVersionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', $restContentVersionHref)
+            $this->createHttpRequest('GET', $restContentVersionHref, '', 'Version+json')
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
         // @todo test data
         // @todo test filtering (language, fields, etc)
+
+        return $response;
+    }
+
+    /**
+     * @depends testLoadContentVersion
+     */
+    public function testLoadContentVersionCacheTags(Response $response)
+    {
+        $version = $this->parseVersionFromResponse($response);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'content-' . $version->content->contentInfo->id,
+                'content-type-' . $version->contentType->id,
+            ]
+        );
     }
 
     /**
@@ -224,6 +274,11 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-' . $this->extractContentIdFromHref($restContentHref)]
+        );
     }
 
     /**
@@ -319,6 +374,13 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
+
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            [
+                'content-' . $this->extractContentIdFromHref($restContentVersionHref),
+            ]
+        );
     }
 
     /**
@@ -360,7 +422,10 @@ XML;
 
         self::assertHttpResponseCodeEquals($response, 200);
 
-        // @todo test data
+        $this->assertHttpResponseHasCacheTags(
+            $response,
+            ['content-' . $this->extractContentIdFromHref($restContentRelationHref)]
+        );
     }
 
     /**
@@ -415,5 +480,51 @@ XML;
         // Returns 301 since 6.0 (deprecated in favour of /views)
         self::assertHttpResponseCodeEquals($response, 301);
         self::assertHttpResponseHasHeader($response, 'Location');
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    private function parseContentInfoFromResponse(Response $response)
+    {
+        $struct = json_decode($response->getContent(), true);
+
+        return new ContentInfo(
+            [
+                'mainLocationId' => $this->extractLastIdFromHref($struct['Content']['MainLocation']['_href']),
+                'id' => $struct['Content']['_id'],
+                'contentTypeId' => $this->extractLastIdFromHref($struct['Content']['ContentType']['_href']),
+            ]
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\REST\Server\Values\Version
+     */
+    private function parseVersionFromResponse(Response $response)
+    {
+        $responseStruct = json_decode($response->getContent(), true);
+
+        return new Version(
+            new Content(
+                [
+                    'versionInfo' => new VersionInfo(
+                        [
+                            'contentInfo' => new ContentInfo(
+                                [
+                                    'id' => $this->extractLastIdFromHref(
+                                        $responseStruct['Version']['VersionInfo']['Content']['_href']
+                                    ),
+                                ]
+                            ),
+                        ]
+                    ),
+                ]
+            ),
+            new ContentType(['id' => $this->createdContentTypeId, 'fieldDefinitions' => []]),
+            []
+        );
     }
 }

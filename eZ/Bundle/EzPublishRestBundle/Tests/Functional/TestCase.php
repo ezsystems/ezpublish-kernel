@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\Response as HttpResponse;
+use Buzz\Message\Response;
 use PHPUnit_Framework_TestCase;
 
 class TestCase extends PHPUnit_Framework_TestCase
@@ -203,9 +204,9 @@ EOF;
 
     private static function clearCreatedElement(array $contentArray)
     {
-        foreach (array_reverse($contentArray) as $href => $callback) {
+        /*foreach (array_reverse($contentArray) as $href => $callback) {
             $callback();
-        }
+        }*/
     }
 
     /**
@@ -330,5 +331,67 @@ XML;
         $request->setContent(
             sprintf('{"SessionInput": {"login": "admin", "password": "%s"}}', $password ?: $this->loginPassword)
         );
+    }
+
+    /**
+     * Asserts that $response has the given set of $cacheTags.
+     *
+     * @param Response $response
+     * @param array $expectedTags Example: ['content-42', 'location-300']
+     */
+    protected function assertHttpResponseHasCacheTags(Response $response, $expectedTags)
+    {
+        $this->assertHttpResponseHasHeader($response, 'xkey');
+
+        $responseCacheTag = $response->getHeader('xkey');
+        foreach ($expectedTags as $expectedTag) {
+            $this->assertContains($expectedTag, $responseCacheTag);
+        }
+    }
+
+    /**
+     * Extracts and returns the last id from $href.
+     *
+     * @param string $href Ex: '/api/ezp/v2/content/objects/1'
+     * @return int Ex: 1
+     */
+    protected function extractLastIdFromHref($href)
+    {
+        $contentTypeHrefParts = explode('/', $href);
+
+        return (int)array_pop($contentTypeHrefParts);
+    }
+
+    protected function extractPathFromHref($href)
+    {
+        $parts = array_filter(
+            explode('/', str_replace('/api/ezp/v2/', '', $href)),
+            function ($value) {
+                return is_numeric($value);
+            }
+        );
+
+        return $parts;
+    }
+
+    /**
+     * Extracts a content id from any href containing one.
+     *
+     * @param string $href Ex: /api/ezp/v2/content/objects/1/anything
+     * @return int
+     */
+    protected function extractContentIdFromHref($href)
+    {
+        $contentId = null;
+        $leftOvers = null;
+
+        sscanf(
+            $href,
+            '/api/ezp/v2/content/objects/%d/%s',
+            $contentId,
+            $leftOvers
+        );
+
+        return $contentId;
     }
 }

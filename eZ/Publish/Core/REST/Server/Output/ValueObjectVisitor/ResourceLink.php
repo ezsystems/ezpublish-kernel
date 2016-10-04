@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Server\Output\PathExpansion\ExpansionGenerator;
 use eZ\Publish\Core\REST\Server\Output\PathExpansion\PathExpansionChecker;
 use eZ\Publish\Core\REST\Server\Output\PathExpansion\Exceptions\MultipleValueLoadException;
 use eZ\Publish\Core\REST\Server\Output\PathExpansion\ValueLoaders\UriValueLoader;
+use eZ\Publish\Core\REST\Server\Values;
 
 class ResourceLink extends ValueObjectVisitor
 {
@@ -53,9 +54,20 @@ class ResourceLink extends ValueObjectVisitor
         $generator->endAttribute('href');
 
         if ($this->pathExpansionChecker->needsExpansion($generator->getStackPath())) {
+            $response = $visitor->getResponse();
+
+            if (!$response->headers->contains('Vary', 'X-eZ-Embed-Value')) {
+                $response->setVary('X-eZ-Embed-Value', false);
+            }
+
             try {
+                $valueObject = $this->valueLoader->load($data->link, $data->mediaType ?: null);
+                if ($valueObject instanceof Values\CachedValue) {
+                    $valueObject = $this->processCachedValue($valueObject, $visitor);
+                }
+
                 $this->visitorDispatcher->visit(
-                    $this->valueLoader->load($data->link, $data->mediaType ?: null),
+                    $valueObject,
                     new ExpansionGenerator($generator),
                     $visitor
                 );
@@ -67,5 +79,33 @@ class ResourceLink extends ValueObjectVisitor
                 $generator->endAttribute('embed-error');
             }
         }
+    }
+
+    /**
+     * Adds cache tags from the given $cachedValue, and returns the wrapped value object.
+     *
+     * @param \eZ\Publish\Core\REST\Server\Values\CachedValue $cachedValue
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+     *
+     * @return object The value object wrapped by the $cachedValue
+     */
+    private function processCachedValue(Values\CachedValue $cachedValue, Visitor $visitor)
+    {
+        if (!empty($cachedValue->cacheTags)) {
+            $response = $visitor->getResponse();
+            $tags = [];
+            foreach ($cachedValue->cacheTags as $tag => $values) {
+                foreach ((array)$values as $value) {
+                    $tagValue = $tag . '-' . $value;
+
+                    if (!$response->headers->contains('xkey', $tagValue)) {
+                        $tags[] = $tagValue;
+                    }
+                }
+            }
+            $response->headers->set('xkey', $tags, false);
+        }
+
+        return $cachedValue->value;
     }
 }

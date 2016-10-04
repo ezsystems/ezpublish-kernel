@@ -46,7 +46,7 @@ class CachedValue extends ValueObjectVisitor
 
         $response = $visitor->getResponse();
         $response->setPublic();
-        $response->setVary('Accept');
+        $response->setVary('Accept', false);
 
         if ($this->getParameter('content.ttl_cache') === true) {
             $response->setSharedMaxAge($this->getParameter('content.default_ttl'));
@@ -61,7 +61,10 @@ class CachedValue extends ValueObjectVisitor
             $tags = [];
             foreach ($data->cacheTags as $tag => $values) {
                 foreach ((array)$values as $value) {
-                    $tags[] = $tag . '-' . $value;
+                    $tagValue = $tag . '-' . $value;
+                    if (!$response->headers->contains('xkey', $tagValue)) {
+                        $tags[] = $tag . '-' . $value;
+                    }
                 }
             }
 
