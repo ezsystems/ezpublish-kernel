@@ -21,9 +21,6 @@ INSERT INTO `ezcobj_state_link` (`contentobject_id`, `contentobject_state_id`) V
 INSERT INTO `ezcobj_state_link` (`contentobject_id`, `contentobject_state_id`) VALUES (49,1);
 INSERT INTO `ezcobj_state_link` (`contentobject_id`, `contentobject_state_id`) VALUES (50,1);
 INSERT INTO `ezcobj_state_link` (`contentobject_id`, `contentobject_state_id`) VALUES (51,1);
-INSERT INTO `ezcobj_state_link` (`contentobject_id`, `contentobject_state_id`) VALUES (52,1);
-INSERT INTO `ezcobj_state_link` (`contentobject_id`, `contentobject_state_id`) VALUES (54,1);
-INSERT INTO `ezcobj_state_link` (`contentobject_id`, `contentobject_state_id`) VALUES (56,1);
 
 INSERT INTO `ezcontent_language` (`disabled`, `id`, `locale`, `name`) VALUES (0,2,'eng-GB','English (United Kingdom)');
 
