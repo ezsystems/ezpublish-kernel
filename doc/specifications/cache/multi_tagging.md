@@ -1,126 +1,103 @@
 # Multi Tagging
 
 
-_WIP @todo_
+Cache tagging, aka cache labeling is a concepts being introduced in both:
+- HttpCache using both the builtin enhanced PHP based Symfony Proxy, and Varnish *(with plain BAN and with xkey vmod)*
+- Repository Cache *(coming, to replace current persistence cache)*
 
-
-
-
-## Description
-Being built on Symfony, one of the cornerstones of eZ Platform is that it has always extended Symfony HttpCache
-to better integrate with the CMS. Starting in version v2014.11 *(eZ Publish Platform 5.4)* this was further improved
-by building on top of FOSHttpCache.
-
-But even if we moved to FOSHttpCache, we still had our own Symfony Proxy Store, and still abstract cache clearing
-internally. Starting with kernel v6.5 *(eZ Platform v1.5)*, this allowed us to give HttpCache layer several changes to:
-1. Be able to support multiple tagging, across Varnish and Symfony Proxy, as opposed to just single location tagging.
-2. Allow usage of Varnish xkey VMOD for better performance with Varnish.
-
-In both cases this is needed to more reliably be able to clear cache, and to improve performance. At later point these
-features might appear in FOSHttpCache v2.0 in a more generic form for us to build upon.
-
+This document concentrates on defining out of the box tags, and attempts to give guidelines for how to
+use them both in responses and how to best handle invalidation.
 
 ## Tags
 
 As the systems is extensible, important part of this is to document the used tags to avoid wrong use, or conflicts.
 If you add own tag types, please prefix with 1-3 letters abbreviating your *(company/full)* name.
 
-The tags are needs to be made in a way so that cache can be cleared using nothing but what info is available on signal,
+The tags needs to be made in a way so that cache can be cleared using nothing but what info is available on signal,
 and the signals will need to be expanded to contain the relevant info depending on operation they correspond to.
 
+#### Content Tags
 
-### Predefined System Tags
 
+Tags applied to Content View and Content REST Object:
 
 - `content-<content-id>`
 
-*Tagging*: Used for tagging content responses with id.
-*Clearing*: When a operation is specifically affecting just given content.
-
+    *Tagging*: Used for tagging content responses with id.
+    
+    *Clearing*: When a operation is specifically affecting just given content.
 
 - `content-type-<content-type-id>`
 
-*Tagging*: Used for tagging content responses with type id.
-*Clearing*: When a operation is specifically affecting content type, typically soft purge all affected content.
+    *Tagging*: Used for tagging content responses with type id.
+    
+    *Clearing*: When a operation is specifically affecting content type, typically soft purge all affected content.
 
+#### Location and Content Location Tags
 
-##### Locations
-
-If content has locations we need additional tags on the content response to be able to clear on operations affecting a
-given location or a tree.
 
 - `location-<location-id>`
 
-*Tagging*: Used for tagging content responses with all it's locations.
-*Clearing*: When a operation is specifically affecting one or several locations, on tree operations `path` is more relevant.
+    If content has locations we need additional tags on the content response to be able to clear on operations affecting a
+    given location or a tree.
+    
+    *Tagging*: Used for tagging content responses with all it's locations.
+    
+    *Clearing*: When a operation is specifically affecting one or several locations, on tree operations `path` is more relevant.
 
 
 - `parent-<parent-location-id>`
 
-*Tagging*: Used for tagging content responses with all it's direct parents.
-*Clearing*: When a operation is specifically affecting parent location(s), on tree operations `path` is more relevant.
+    *Tagging*: Used for tagging content responses with all it's direct parents.
+    
+    *Clearing*: When a operation is specifically affecting parent location(s), on tree operations `path` is more relevant.
 
 - `path-<path-location-id>`
 
-
 ##### Relations
 
-If content has relations we need additional tags on the content response to be able to clear on operations affecting the
-other side of the relation.
+
 
 - `relation-<relation-content-id>`
 
 *Tagging*: Used for tagging content responses with all it's relations, where content id is the id of the other side of relation.
-*Clearing*: When operations also affect reverse relations we can clear then using content id of self.
+*Clearing*: When operations also affect reverse relations we can clear them using content id of self.
 
-
-## Changes to existing systems
-
-_@todo: This is just notes for PR_
-
-
-**Signals**:
-
-- deleteLocation need to be changed to send different signals depending on if content is deleted or not.
-- deleteContent signal need to contain info on directly affected locations (locations of deleted content)
-    - using this all locations in all trees affected can be cleared using `path-<location-id>`
+_Note: These tags are mainly relevant for field (field, embed, link) relations as change like deletion of realtion has an
+effect on the output of the given content (it should not render links to the given relation anymore)._
 
 
 
-**Cache clearing system**:
-
-- Change smart cache system into the two parts:
-    - Event for tag generation for responses based on Content.
-    - Event for tag generation on operations only using signal info *(as content might be deleted)*.
-- Change purging to take tags only and soft purge based on them if possible.
+## Recommendations
 
 
-**VCL**
-Change to use xkey header, and extra flavour for actually using xcache VMOD, or inline doc on how to use it.
+
+### Avoiding Cache Stamping effect
+
+_Cache stamped (dog-piling): That several requests are requesting a cache item at the same time, worst case being a high
+traffic page like front page being expired and all traffic is in parallel trying to regenerate the cache overloading the
+system._
+
+Two ways to avoid:
 
 
-## Architectural choice: Http Soft purge vs instant UI update
+### Staleness / Soft purge vs instant UI updates
 
-_@todo: Move soft purge concept to own doc?_
+For HttpCache, to be able to archive stable performance of your setup our recommendation involves using Varnish with
+xkey vmod, and soft purge of http cache. This means the given cache item will be re-generated on next request, and until
+cache has been refreshed all other parallel requests are served stale cache item *(the old version)*.
 
-xkey gives us ability to do soft purge. Which is utterly important for setups with high traffic, and/or if content is
-updated frequently causing hard purges either by means of explicitly PURGE or BAN, flooding the backend with traffic
-while cache is being regenerated.
+This is great for avoiding cache stamped effect, however for things like the Platform UI you'll need to take this into
+account. There are two ways of solving this:
+- Make UI code aware that operations won't update the response immediately, like in distributed systems with eventually consistency.
+- Setup UI on separate admin/backend domain where cache is shared with main domain, but where grace time is always 0.
 
-However on UI side users expects interface to always reflect latest updates, unless interface itself indicates that a
-given operation is sent for processing, or sent to que for processing.
+### Cache stamped protection
 
-### Recommendations
+Normally archived by having a percentage of randomness in expiry before the actual expiry time, so not several requests
+end up trying to re generate a given cache, or several caches in parallel typically at the same time.
 
-Given the CMS is aiming to be able to work in distributed setups in the future, and already have search engine which is
-asynchronous, and now also HTTP cache which has some staleness in it. It is best if UI makes user aware most changes
-are not instant.
+### Avoiding to eager tag invalidation
 
-UI can for instance inform user in notifications on screen that operation is being executed and will be visible soon, as
-opposed to that it is done.
 
-But to avoid stale cache issues caused by cache being refreshed before search index is or similar, it is now important
-that HTTP Cache ttl *(default_ttl)* is not set to high, especially for REST endpoints used by UI.
 
-Additionally if editorial UI is setup on own domain or url, you can update VCL rules to never serve grace cache content
-to editors, to avoid some "random UI staleness".
