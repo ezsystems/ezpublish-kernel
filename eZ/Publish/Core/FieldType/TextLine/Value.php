@@ -31,7 +31,7 @@ class Value extends BaseValue
      */
     public function __construct($text = '')
     {
-        $this->text = $text;
+        $this->text = (string)$text;
     }
 
     /**
