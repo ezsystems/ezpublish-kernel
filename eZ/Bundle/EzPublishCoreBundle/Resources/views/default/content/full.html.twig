@@ -1,7 +1,7 @@
 {% extends noLayout == true ? viewbaseLayout : pagelayout %}
 {% block content %}
     <h2>{{ ez_content_name(content) }}</h2>
-    {% for field in content.fieldsByLanguage %}
+    {% for field in content.fieldsByLanguage(language|default(null)) %}
         <h3>{{ field.fieldDefIdentifier }}</h3>
         {{ ez_render_field(content, field.fieldDefIdentifier) }}
     {% endfor %}

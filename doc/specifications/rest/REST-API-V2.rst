@@ -3784,7 +3784,7 @@ Copy Content Type
 :Resource: /content/types/<ID>
 :Method:      COPY or POST with header: X-HTTP-Method-Override COPY
 :Description: copies a content type. A new remoteId is generated, and the identifier of the copy is set to
-              copy_of_<identifier>_<remoteId> (or another random string).
+              cpy_<identifier>_<remoteId> (or another random string).
 :Response:
 
 .. code:: http

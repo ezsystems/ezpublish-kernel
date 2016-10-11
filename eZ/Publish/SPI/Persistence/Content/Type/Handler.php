@@ -154,7 +154,7 @@ interface Handler
      * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}.
      *
      * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId created
-     * and identifier should be 'copy_of_<identifier>_' + the new remoteId or another unique number.
+     * and identifier should be 'cpy_<identifier>_' + the new remoteId or another unique number.
      *
      * @param mixed $userId
      * @param mixed $contentTypeId
