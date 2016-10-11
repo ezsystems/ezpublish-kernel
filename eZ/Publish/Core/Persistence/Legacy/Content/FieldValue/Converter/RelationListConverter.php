@@ -54,6 +54,10 @@ class RelationListConverter implements Converter
         $priority = 0;
 
         foreach ($value->data['destinationContentIds'] as $id) {
+            if (!isset($data[$id][0])) {
+                // Ignore deleted content items (we can't throw as it would block ContentService->createContentDraft())
+                continue;
+            }
             $row = $data[$id][0];
             $row['ezcontentobject_id'] = $id;
             $row['priority'] = ($priority += 1);
@@ -61,7 +65,8 @@ class RelationListConverter implements Converter
             $relationItem = $doc->createElement('relation-item');
             foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
                 if (!isset($row[$propertyKey])) {
-                    throw new \RuntimeException("Missing relation-item external data property: $propertyKey");
+                    // left join data missing, ignore the given attribute (content in trash missing location)
+                    continue;
                 }
 
                 $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);
@@ -298,15 +303,8 @@ class RelationListConverter implements Converter
             );
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
 
-        if (empty($rows)) {
-            throw new \Exception("Could find Content with id's" . var_export($destinationContentIds, true));
-        } elseif (count($rows) !== count($destinationContentIds)) {
-            throw new \Exception('Miss match of rows & id count:' . var_export($destinationContentIds, true));
-        }
-
-        return $rows;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
     }
 
     /**
