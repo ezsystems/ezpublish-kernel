@@ -791,7 +791,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                         'created'
                     ),
                     $this->attribute(
-                        $this->matchesRegularExpression('/^copy_of_testCopy_([a-z0-9]+)$/'),
+                        $this->matchesRegularExpression('/^cpy_testCopy_([a-z0-9]+)$/'),
                         'identifier'
                     )
                 )
