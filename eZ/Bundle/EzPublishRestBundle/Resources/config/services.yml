@@ -295,11 +295,15 @@ services:
         class: "%ezpublish_rest.field_type_processor.ezobjectrelationlist.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelationlist }
+        calls:
+            - [setRouter, ["@router"]]
 
     ezpublish_rest.field_type_processor.ezobjectrelation:
         class: "%ezpublish_rest.field_type_processor.ezobjectrelation.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelation }
+        calls:
+            - [setRouter, ["@router"]]
 
     ezpublish_rest.field_type_processor.eztime:
         class: "%ezpublish_rest.field_type_processor.eztime.class%"
