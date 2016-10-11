@@ -1,0 +1,13 @@
+ALTER TABLE `ezcontentobject_trash` ADD KEY `ezcobj_trash_path_ident` (`path_identification_string`(50));
+ALTER TABLE `ezcontentobject_tree` ADD KEY `ezcontentobject_tree_path_ident` (`path_identification_string`(50));
+ALTER TABLE `ezimagefile` ADD KEY `ezimagefile_file` (`filepath`(200));
+ALTER TABLE `ezurl` ADD KEY `ezurl_url` (`url`(255));
+ALTER TABLE `eztrigger` ADD UNIQUE KEY `eztrigger_def_id` (`module_name`(50),`function_name`(50),`connect_type`);
+ALTER TABLE `eztrigger` ADD KEY `eztrigger_fetch` (`name`(25),`module_name`(50),`function_name`(50));
+ALTER TABLE `ezurlalias` ADD KEY `ezurlalias_desturl` (`destination_url`(200));
+ALTER TABLE `ezurlalias` ADD KEY `ezurlalias_source_url` (`source_url`(255));
+ALTER TABLE `ezurlalias_ml` ADD KEY `ezurlalias_ml_par_lnk_txt` (`parent`,`text`(32),`link`);
+ALTER TABLE `ezurlalias_ml` ADD KEY `ezurlalias_ml_text` (`text`(32),`id`,`link`);
+ALTER TABLE `ezurlalias_ml` ADD KEY `ezurlalias_ml_text_lang` (`text`(32),`lang_mask`,`parent`);
+ALTER TABLE `ezurlalias_ml` ADD KEY `ezurlalias_ml_act_org` (`action`(32),`is_original`);
+ALTER TABLE `ezurlalias_ml` ADD KEY `ezurlalias_ml_par_act_id_lnk` (`action`(32),`id`,`link`,`parent`);

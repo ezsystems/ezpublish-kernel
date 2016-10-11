@@ -1634,9 +1634,6 @@ tables:
             ezcobj_trash_path:
                 columns:
                     - path_string
-            ezcobj_trash_path_ident:
-                columns:
-                    - path_identification_string
     ezcontentobject_tree:
         fields:
             node_id:
@@ -1734,9 +1731,6 @@ tables:
             ezcontentobject_tree_path:
                 columns:
                     - path_string
-            ezcontentobject_tree_path_ident:
-                columns:
-                    - path_identification_string
             modified_subnode:
                 columns:
                     - modified_subnode
@@ -2136,9 +2130,6 @@ tables:
             ezimagefile_coid:
                 columns:
                     - contentobject_attribute_id
-            ezimagefile_file:
-                columns:
-                    - filepath
     ezinfocollection:
         fields:
             id:
@@ -4466,18 +4457,6 @@ tables:
                     notnull: false
         pk:
             - id
-        indices:
-            eztrigger_def_id:
-                columns:
-                    - module_name
-                    - function_name
-                    - connect_type
-                unique: true
-            eztrigger_fetch:
-                columns:
-                    - name
-                    - module_name
-                    - function_name
     ezurl:
         fields:
             id:
@@ -4517,10 +4496,6 @@ tables:
                     notnull: false
         pk:
             - id
-        indices:
-            ezurl_url:
-                columns:
-                    - url
     ezurl_object_link:
         fields:
             contentobject_attribute_id:
@@ -4591,9 +4566,6 @@ tables:
         pk:
             - id
         indices:
-            ezurlalias_desturl:
-                columns:
-                    - destination_url
             ezurlalias_forward_to_id:
                 columns:
                     - forward_to_id
@@ -4605,9 +4577,6 @@ tables:
             ezurlalias_source_md5:
                 columns:
                     - source_md5
-            ezurlalias_source_url:
-                columns:
-                    - source_url
             ezurlalias_wcard_fwd:
                 columns:
                     - is_wildcard
@@ -4673,10 +4642,6 @@ tables:
             - parent
             - text_md5
         indices:
-            ezurlalias_ml_act_org:
-                columns:
-                    - action
-                    - is_original
             ezurlalias_ml_actt_org_al:
                 columns:
                     - action_type
@@ -4685,27 +4650,6 @@ tables:
             ezurlalias_ml_id:
                 columns:
                     - id
-            ezurlalias_ml_par_act_id_lnk:
-                columns:
-                    - action
-                    - id
-                    - link
-                    - parent
-            ezurlalias_ml_par_lnk_txt:
-                columns:
-                    - parent
-                    - text
-                    - link
-            ezurlalias_ml_text:
-                columns:
-                    - text
-                    - id
-                    - link
-            ezurlalias_ml_text_lang:
-                columns:
-                    - text
-                    - lang_mask
-                    - parent
     ezurlalias_ml_incr:
         fields:
             id:

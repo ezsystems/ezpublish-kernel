@@ -74,6 +74,7 @@ class CleanInstaller extends DbBasedInstaller implements Installer
         }
         $progressBar->finish();
         $this->output->writeln('');
+        $this->runCustomSchemaScript();
         $this->output->writeln('Created database schema');
     }
 

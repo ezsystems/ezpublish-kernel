@@ -1,0 +1,13 @@
+CREATE INDEX "ezcobj_trash_path_ident" ON "ezcontentobject_trash" USING btree ("path_identification_string");
+CREATE INDEX "ezcontentobject_tree_path_ident" ON "ezcontentobject_tree" USING btree ("path_identification_string");
+CREATE INDEX "ezimagefile_file" ON "ezimagefile" USING btree ("filepath");
+CREATE INDEX "ezurl_url" ON "ezurl" USING btree ("url");
+CREATE INDEX "ezurlalias_desturl" ON "ezurlalias" USING btree ("destination_url");
+CREATE INDEX "ezurlalias_source_url" ON "ezurlalias" USING btree ("source_url");
+CREATE INDEX "ezurlalias_ml_par_lnk_txt" ON "ezurlalias_ml" USING btree ("parent", "text", "link");
+CREATE INDEX "ezurlalias_ml_text" ON "ezurlalias_ml" USING btree ("text", "id", "link");
+CREATE INDEX "ezurlalias_ml_text_lang" ON "ezurlalias_ml" USING btree ("text", "lang_mask", "parent");
+CREATE INDEX "ezurlalias_ml_act_org" ON "ezurlalias_ml" USING btree ("action", "is_original");
+CREATE INDEX "ezurlalias_ml_par_act_id_lnk" ON "ezurlalias_ml" USING btree ("action", "id", "link", "parent");
+CREATE UNIQUE INDEX "eztrigger_def_id" ON "eztrigger" USING btree ("module_name", "function_name", "connect_type");
+CREATE INDEX "eztrigger_fetch" ON "eztrigger" USING btree ("name", "module_name", "function_name");
