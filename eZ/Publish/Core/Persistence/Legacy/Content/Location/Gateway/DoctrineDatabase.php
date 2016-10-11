@@ -585,7 +585,9 @@ class DoctrineDatabase extends Gateway
             ->select(
                 $this->handler->quoteColumn('node_id'),
                 $this->handler->quoteColumn('contentobject_id'),
-                $this->handler->quoteColumn('contentobject_version')
+                $this->handler->quoteColumn('contentobject_version'),
+                $this->handler->quoteColumn('contentobject_is_published'),
+                $this->handler->quoteColumn('path_identification_string')
             )
             ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
@@ -600,6 +602,28 @@ class DoctrineDatabase extends Gateway
             $contentObjects[$row['node_id']] = $row;
         }
 
+        if (!isset($contentObjects[$locationId1]) || !isset($contentObjects[$locationId2])) {
+            return false;
+        }
+
+        $pathIdentificationParts1 = explode('/', $contentObjects[$locationId1]['path_identification_string']);
+        $pathIdentificationParts2 = explode('/', $contentObjects[$locationId2]['path_identification_string']);
+
+        $contentObjects[$locationId2]['path_identification_string'] =
+            implode('/',
+                array_merge(
+                    count($pathIdentificationParts1) > 1 ? array_slice($pathIdentificationParts1, 0, -1) : [],
+                    array_slice($pathIdentificationParts2, -1)
+                )
+            );
+        $contentObjects[$locationId1]['path_identification_string'] =
+            implode('/',
+                array_merge(
+                    count($pathIdentificationParts2) > 1 ? array_slice($pathIdentificationParts2, 0, -1) : [],
+                    array_slice($pathIdentificationParts1, -1)
+                )
+            );
+
         $query = $this->handler->createUpdateQuery();
         $query
             ->update($this->handler->quoteTable('ezcontentobject_tree'))
@@ -610,6 +634,14 @@ class DoctrineDatabase extends Gateway
             ->set(
                 $this->handler->quoteColumn('contentobject_version'),
                 $query->bindValue($contentObjects[$locationId2]['contentobject_version'])
+            )
+            ->set(
+                $this->handler->quoteColumn('contentobject_is_published'),
+                $query->bindValue($contentObjects[$locationId2]['contentobject_is_published'])
+            )
+            ->set(
+                $this->handler->quoteColumn('path_identification_string'),
+                $query->bindValue($contentObjects[$locationId2]['path_identification_string'])
             )
             ->where(
                 $query->expr->eq(
@@ -629,6 +661,14 @@ class DoctrineDatabase extends Gateway
             ->set(
                 $this->handler->quoteColumn('contentobject_version'),
                 $query->bindValue($contentObjects[$locationId1]['contentobject_version'])
+            )
+            ->set(
+                $this->handler->quoteColumn('contentobject_is_published'),
+                $query->bindValue($contentObjects[$locationId1]['contentobject_is_published'])
+            )
+            ->set(
+                $this->handler->quoteColumn('path_identification_string'),
+                $query->bindValue($contentObjects[$locationId1]['path_identification_string'])
             )
             ->where(
                 $query->expr->eq(

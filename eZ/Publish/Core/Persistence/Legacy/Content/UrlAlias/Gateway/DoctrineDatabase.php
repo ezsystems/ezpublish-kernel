@@ -317,6 +317,115 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Swaps the content being referred to by two aliases.
+     *
+     * @param mixed $locationId1
+     * @param mixed $locationId2
+     *
+     * @return bool
+     */
+    public function swap($locationId1, $locationId2)
+    {
+        $nodeAction1 = "eznode:$locationId1";
+        $nodeAction2 = "eznode:$locationId2";
+
+        $query = $this->dbHandler->createSelectQuery();
+        $query
+            ->select(
+                $this->dbHandler->quoteColumn('action'),
+                $this->dbHandler->quoteColumn('text'),
+                $this->dbHandler->quoteColumn('text_md5'),
+                $this->dbHandler->quoteColumn('lang_mask')
+            )
+            ->from($this->dbHandler->quoteTable('ezurlalias_ml'))
+            ->where(
+                $query->expr->in(
+                    $this->dbHandler->quoteColumn('action'),
+                    array($nodeAction1, $nodeAction2)
+                )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+        $aliases = [];
+        foreach ($statement->fetchAll() as $row) {
+            $aliases[$row['action']] = $row;
+        }
+
+        if (!isset($aliases[$nodeAction1]) || !isset($aliases[$nodeAction2])) {
+            return false;
+        }
+
+        // Set alias 1 to temporary values to avoid primary key collision
+        $tempText = '_' . $aliases[$nodeAction2]['text'] . '_tmp';
+        $query = $this->dbHandler->createUpdateQuery();
+        $query
+            ->update($this->dbHandler->quoteTable('ezurlalias_ml'))
+            ->set(
+                $this->dbHandler->quoteColumn('text'),
+                $query->bindValue($tempText)
+            )
+            ->set(
+                $this->dbHandler->quoteColumn('text_md5'),
+                $query->bindValue(md5($tempText))
+            )
+            ->set(
+                $this->dbHandler->quoteColumn('lang_mask'),
+                $query->bindValue($aliases[$nodeAction2]['lang_mask'])
+            )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('action'),
+                    $query->bindValue($nodeAction1)
+                )
+            );
+        $query->prepare()->execute();
+
+        // Set alias 2 to the new values
+        $query = $this->dbHandler->createUpdateQuery();
+        $query
+            ->update($this->dbHandler->quoteTable('ezurlalias_ml'))
+            ->set(
+                $this->dbHandler->quoteColumn('text'),
+                $query->bindValue($aliases[$nodeAction1]['text'])
+            )
+            ->set(
+                $this->dbHandler->quoteColumn('text_md5'),
+                $query->bindValue($aliases[$nodeAction1]['text_md5'])
+            )
+            ->set(
+                $this->dbHandler->quoteColumn('lang_mask'),
+                $query->bindValue($aliases[$nodeAction1]['lang_mask'])
+            )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('action'),
+                    $query->bindValue($nodeAction2)
+                )
+            );
+        $query->prepare()->execute();
+
+        // Set alias 1 to the final, new values.
+        $query = $this->dbHandler->createUpdateQuery();
+        $query
+            ->update($this->dbHandler->quoteTable('ezurlalias_ml'))
+            ->set(
+                $this->dbHandler->quoteColumn('text'),
+                $query->bindValue($aliases[$nodeAction2]['text'])
+            )
+            ->set(
+                $this->dbHandler->quoteColumn('text_md5'),
+                $query->bindValue($aliases[$nodeAction2]['text_md5'])
+            )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('action'),
+                    $query->bindValue($nodeAction1)
+                )
+            );
+        $query->prepare()->execute();
+    }
+
+    /**
      * Updates single row matched by composite primary key.
      *
      * Sets "is_original" to 0 thus marking entry as history.

@@ -102,6 +102,25 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Swaps the content being referred to by two aliases.
+     *
+     * @param mixed $locationId1
+     * @param mixed $locationId2
+     *
+     * @return bool
+     */
+    public function swap($locationId1, $locationId2)
+    {
+        try {
+            return $this->innerGateway->swap($locationId1, $locationId2);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Marks all entries with given $id as history entries.
      *
      * This method is used by Handler::locationMoved(). For this reason rows are not updated with next id value as

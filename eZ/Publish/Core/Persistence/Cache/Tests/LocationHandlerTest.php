@@ -628,6 +628,30 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(4))
             ->method('clear')
+            ->with('content', $this->isType('integer'))
+            ->will($this->returnValue(true));
+
+        $this->cacheMock
+            ->expects($this->at(5))
+            ->method('clear')
+            ->with('content', $this->isType('integer'))
+            ->will($this->returnValue(true));
+
+        $this->cacheMock
+            ->expects($this->at(6))
+            ->method('clear')
+            ->with('content', 'info', $this->isType('integer'))
+            ->will($this->returnValue(true));
+
+        $this->cacheMock
+            ->expects($this->at(7))
+            ->method('clear')
+            ->with('content', 'info', $this->isType('integer'))
+            ->will($this->returnValue(true));
+
+        $this->cacheMock
+            ->expects($this->at(8))
+            ->method('clear')
             ->with('user', 'role', 'assignments', 'byGroup')
             ->will($this->returnValue(true));
 
@@ -642,6 +666,18 @@ class LocationHandlerTest extends HandlerTest
             ->method('swap')
             ->with(33, 66)
             ->will($this->returnValue(true));
+
+        $locationMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $locationMock
+            ->expects($this->any())
+            ->method('__get')
+            ->with('contentId')
+            ->will($this->returnValue(42));
+
+        $innerHandlerMock
+            ->expects($this->any())
+            ->method('load')
+            ->will($this->returnValue($locationMock));
 
         $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->swap(33, 66);

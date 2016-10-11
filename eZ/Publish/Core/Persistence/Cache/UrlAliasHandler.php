@@ -239,6 +239,20 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::swap
+     */
+    public function swap($locationId1, $locationId2)
+    {
+        $this->logger->logCall(__METHOD__, array('location1' => $locationId1, 'location2' => $locationId2));
+        $return = $this->persistenceHandler->urlAliasHandler()->swap($locationId1, $locationId2);
+
+        $this->clearLocation($locationId1);
+        $this->clearLocation($locationId2);
+
+        return $return;
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationMoved
      */
     public function locationMoved($locationId, $oldParentId, $newParentId)
