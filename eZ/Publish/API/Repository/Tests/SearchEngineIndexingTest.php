@@ -368,6 +368,31 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test that updating Content Draft metadata does not affect Search Engine Index.
+     */
+    public function testUpdateContentDraftMetadataIsNotIndexed()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $testableContentType = $this->createTestContentType();
+        $rootContentStruct = $contentService->newContentCreateStruct($testableContentType, 'eng-GB');
+        $rootContentStruct->setField('name', 'TestUpdatingContentDraftMetadata');
+
+        $contentDraft = $contentService->createContent($rootContentStruct, [$locationService->newLocationCreateStruct(2)]);
+
+        $newContentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $newContentMetadataUpdateStruct->ownerId = 10;
+        $newContentMetadataUpdateStruct->remoteId = md5('Test');
+
+        $contentService->updateContentMetadata($contentDraft->contentInfo, $newContentMetadataUpdateStruct);
+
+        $this->refreshSearch($repository);
+        $this->assertContentIdSearch($contentDraft->contentInfo->id, 0);
+    }
+
+    /**
      * Test that assigning section to content object properly affects Search Engine Index.
      */
     public function testAssignSection()
