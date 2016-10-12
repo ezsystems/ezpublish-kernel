@@ -25,6 +25,9 @@ class UpdateContentMetadata extends Slot
         }
 
         $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->contentId);
+        if (!$contentInfo->isPublished) {
+            return;
+        }
         $this->searchHandler->indexContent(
             $this->persistenceHandler->contentHandler()->load($contentInfo->id, $contentInfo->currentVersionNo)
         );
