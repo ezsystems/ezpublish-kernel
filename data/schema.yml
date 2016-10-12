@@ -1,0 +1,5318 @@
+tables:
+    ezapprove_items:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            collaboration_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_process_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezbasket:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            order_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            productcollection_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            session_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+        indices:
+            ezbasket_session_id:
+                columns:
+                    - session_id
+    ezbinaryfile:
+        fields:
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            download_count:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            filename:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            mime_type:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            original_filename:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - contentobject_attribute_id
+            - version
+    ezcobj_state:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            default_language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            group_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 45
+                    default: ''
+            language_mask:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            priority:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezcobj_state_identifier:
+                columns:
+                    - group_id
+                    - identifier
+                unique: true
+            ezcobj_state_lmask:
+                columns:
+                    - language_mask
+            ezcobj_state_priority:
+                columns:
+                    - priority
+    ezcobj_state_group:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            default_language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 45
+                    default: ''
+            language_mask:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezcobj_state_group_identifier:
+                columns:
+                    - identifier
+                unique: true
+            ezcobj_state_group_lmask:
+                columns:
+                    - language_mask
+    ezcobj_state_group_language:
+        fields:
+            contentobject_state_group_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            real_language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            description:
+                type: text
+                options:
+                    notnull: true
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 45
+                    default: ''
+        pk:
+            - contentobject_state_group_id
+            - real_language_id
+    ezcobj_state_language:
+        fields:
+            contentobject_state_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            description:
+                type: text
+                options:
+                    notnull: true
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 45
+                    default: ''
+        pk:
+            - contentobject_state_id
+            - language_id
+    ezcobj_state_link:
+        fields:
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_state_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - contentobject_id
+            - contentobject_state_id
+    ezcollab_group:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            depth:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_open:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            parent_group_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            path_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            priority:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            title:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezcollab_group_depth:
+                columns:
+                    - depth
+            ezcollab_group_path:
+                columns:
+                    - path_string
+    ezcollab_item:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_float1:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            data_float2:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            data_float3:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            data_int1:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int2:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int3:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_text1:
+                type: text
+                options:
+                    notnull: true
+            data_text2:
+                type: text
+                options:
+                    notnull: true
+            data_text3:
+                type: text
+                options:
+                    notnull: true
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            type_identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 40
+                    default: ''
+        pk:
+            - id
+    ezcollab_item_group_link:
+        fields:
+            collaboration_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            group_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_active:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            is_read:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            last_read:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - collaboration_id
+            - group_id
+            - user_id
+    ezcollab_item_message_link:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            collaboration_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            message_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            message_type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            participant_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezcollab_item_participant_link:
+        fields:
+            collaboration_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            participant_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_active:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            is_read:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            last_read:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            participant_role:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            participant_type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+        pk:
+            - collaboration_id
+            - participant_id
+    ezcollab_item_status:
+        fields:
+            collaboration_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_active:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            is_read:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            last_read:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - collaboration_id
+            - user_id
+    ezcollab_notification_rule:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            collab_identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            user_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    ezcollab_profile:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_text1:
+                type: text
+                options:
+                    notnull: true
+            main_group:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezcollab_simple_message:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_float1:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            data_float2:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            data_float3:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            data_int1:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int2:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int3:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_text1:
+                type: text
+                options:
+                    notnull: true
+            data_text2:
+                type: text
+                options:
+                    notnull: true
+            data_text3:
+                type: text
+                options:
+                    notnull: true
+            message_type:
+                type: string
+                options:
+                    notnull: true
+                    length: 40
+                    default: ''
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezcomment:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+            modified:
+                type: integer
+                options:
+                    notnull: true
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+            session_key:
+                type: string
+                options:
+                    notnull: false
+                    length: 32
+            ip:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+            parent_comment_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+            email:
+                type: string
+                options:
+                    notnull: true
+                    length: 75
+            url:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            text:
+                type: text
+                options:
+                    notnull: true
+            status:
+                type: integer
+                options:
+                    notnull: true
+            title:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+        indices:
+            user_id_session_key_ip:
+                columns:
+                    - user_id
+                    - session_key
+                    - ip
+            content_parentcomment:
+                columns:
+                    - contentobject_id
+                    - language_id
+                    - parent_comment_id
+    ezcomment_notification:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+            send_time:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            comment_id:
+                type: integer
+                options:
+                    notnull: true
+        pk:
+            - id
+    ezcomment_subscriber:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+            email:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+            enabled:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            hash_string:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+        pk:
+            - id
+    ezcomment_subscription:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+            subscriber_id:
+                type: integer
+                options:
+                    notnull: true
+            subscription_type:
+                type: string
+                options:
+                    notnull: true
+                    length: 30
+            content_id:
+                type: integer
+                options:
+                    notnull: true
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            subscription_time:
+                type: integer
+                options:
+                    notnull: true
+            enabled:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            hash_string:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+        pk:
+            - id
+    ezcontent_language:
+        fields:
+            id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            disabled:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            locale:
+                type: string
+                options:
+                    notnull: true
+                    length: 20
+                    default: ''
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+        indices:
+            ezcontent_language_name:
+                columns:
+                    - name
+    ezcontentbrowsebookmark:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezcontentbrowsebookmark_user:
+                columns:
+                    - user_id
+    ezcontentbrowserecent:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezcontentbrowserecent_user:
+                columns:
+                    - user_id
+    ezcontentclass:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            always_available:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            initial_language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            is_container:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            language_mask:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modifier_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            remote_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: ''
+            serialized_description_list:
+                type: text
+                options:
+                    notnull: false
+            serialized_name_list:
+                type: text
+                options:
+                    notnull: false
+            sort_field:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            sort_order:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            url_alias_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+            - version
+        indices:
+            ezcontentclass_version:
+                columns:
+                    - version
+            ezcontentclass_identifier:
+                columns:
+                    - identifier
+                    - version
+    ezcontentclass_attribute:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            can_translate:
+                type: integer
+                options:
+                    notnull: false
+                    default: '1'
+            category:
+                type: string
+                options:
+                    notnull: true
+                    length: 25
+                    default: ''
+            contentclass_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_float1:
+                type: float
+                options:
+                    notnull: false
+            data_float2:
+                type: float
+                options:
+                    notnull: false
+            data_float3:
+                type: float
+                options:
+                    notnull: false
+            data_float4:
+                type: float
+                options:
+                    notnull: false
+            data_int1:
+                type: integer
+                options:
+                    notnull: false
+            data_int2:
+                type: integer
+                options:
+                    notnull: false
+            data_int3:
+                type: integer
+                options:
+                    notnull: false
+            data_int4:
+                type: integer
+                options:
+                    notnull: false
+            data_text1:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+            data_text2:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+            data_text3:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+            data_text4:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            data_text5:
+                type: text
+                options:
+                    notnull: false
+            data_type_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            is_information_collector:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_required:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_searchable:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            placement:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            serialized_data_text:
+                type: text
+                options:
+                    notnull: false
+            serialized_description_list:
+                type: text
+                options:
+                    notnull: false
+            serialized_name_list:
+                type: text
+                options:
+                    notnull: true
+        pk:
+            - id
+            - version
+        indices:
+            ezcontentclass_attr_ccid:
+                columns:
+                    - contentclass_id
+    ezcontentclass_classgroup:
+        fields:
+            contentclass_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentclass_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            group_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            group_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - contentclass_id
+            - contentclass_version
+            - group_id
+    ezcontentclass_name:
+        fields:
+            contentclass_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentclass_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            language_locale:
+                type: string
+                options:
+                    notnull: true
+                    length: 20
+                    default: ''
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - contentclass_id
+            - contentclass_version
+            - language_id
+    ezcontentclassgroup:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modifier_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+    ezcontentobject:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentclass_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            current_version:
+                type: integer
+                options:
+                    notnull: false
+            initial_language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            language_mask:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            owner_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            published:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            remote_id:
+                type: string
+                options:
+                    notnull: false
+                    length: 100
+            section_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            status:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezcontentobject_remote_id:
+                columns:
+                    - remote_id
+                unique: true
+            ezcontentobject_classid:
+                columns:
+                    - contentclass_id
+            ezcontentobject_currentversion:
+                columns:
+                    - current_version
+            ezcontentobject_lmask:
+                columns:
+                    - language_mask
+            ezcontentobject_owner:
+                columns:
+                    - owner_id
+            ezcontentobject_pub:
+                columns:
+                    - published
+            ezcontentobject_status:
+                columns:
+                    - status
+    ezcontentobject_attribute:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            attribute_original_id:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            contentclassattribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_float:
+                type: float
+                options:
+                    notnull: false
+            data_int:
+                type: integer
+                options:
+                    notnull: false
+            data_text:
+                type: text
+                options:
+                    notnull: false
+            data_type_string:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+                    default: ''
+            language_code:
+                type: string
+                options:
+                    notnull: true
+                    length: 20
+                    default: ''
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            sort_key_int:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            sort_key_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+            - version
+        indices:
+            ezcontentobject_attribute_co_id_ver_lang_code:
+                columns:
+                    - contentobject_id
+                    - version
+                    - language_code
+            ezcontentobject_attribute_language_code:
+                columns:
+                    - language_code
+            ezcontentobject_classattr_id:
+                columns:
+                    - contentclassattribute_id
+            sort_key_int:
+                columns:
+                    - sort_key_int
+            sort_key_string:
+                columns:
+                    - sort_key_string
+    ezcontentobject_link:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentclassattribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            from_contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            from_contentobject_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            relation_type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            to_contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezco_link_from:
+                columns:
+                    - from_contentobject_id
+                    - from_contentobject_version
+                    - contentclassattribute_id
+            ezco_link_to_co_id:
+                columns:
+                    - to_contentobject_id
+    ezcontentobject_name:
+        fields:
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            content_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            content_translation:
+                type: string
+                options:
+                    notnull: true
+                    length: 20
+                    default: ''
+            language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            real_translation:
+                type: string
+                options:
+                    notnull: false
+                    length: 20
+        pk:
+            - contentobject_id
+            - content_version
+            - content_translation
+        indices:
+            ezcontentobject_name_cov_id:
+                columns:
+                    - content_version
+            ezcontentobject_name_lang_id:
+                columns:
+                    - language_id
+            ezcontentobject_name_name:
+                columns:
+                    - name
+    ezcontentobject_trash:
+        fields:
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: false
+            contentobject_version:
+                type: integer
+                options:
+                    notnull: false
+            depth:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_hidden:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_invisible:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            main_node_id:
+                type: integer
+                options:
+                    notnull: false
+            modified_subnode:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            parent_node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            path_identification_string:
+                type: text
+                options:
+                    notnull: false
+            path_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            priority:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            remote_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: ''
+            sort_field:
+                type: integer
+                options:
+                    notnull: false
+                    default: '1'
+            sort_order:
+                type: integer
+                options:
+                    notnull: false
+                    default: '1'
+        pk:
+            - node_id
+        indices:
+            ezcobj_trash_co_id:
+                columns:
+                    - contentobject_id
+            ezcobj_trash_depth:
+                columns:
+                    - depth
+            ezcobj_trash_modified_subnode:
+                columns:
+                    - modified_subnode
+            ezcobj_trash_p_node_id:
+                columns:
+                    - parent_node_id
+            ezcobj_trash_path:
+                columns:
+                    - path_string
+    ezcontentobject_tree:
+        fields:
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: false
+            contentobject_is_published:
+                type: integer
+                options:
+                    notnull: false
+            contentobject_version:
+                type: integer
+                options:
+                    notnull: false
+            depth:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_hidden:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_invisible:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            main_node_id:
+                type: integer
+                options:
+                    notnull: false
+            modified_subnode:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            parent_node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            path_identification_string:
+                type: text
+                options:
+                    notnull: false
+            path_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            priority:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            remote_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: ''
+            sort_field:
+                type: integer
+                options:
+                    notnull: false
+                    default: '1'
+            sort_order:
+                type: integer
+                options:
+                    notnull: false
+                    default: '1'
+        pk:
+            - node_id
+        indices:
+            ezcontentobject_tree_remote_id:
+                columns:
+                    - remote_id
+            ezcontentobject_tree_co_id:
+                columns:
+                    - contentobject_id
+            ezcontentobject_tree_depth:
+                columns:
+                    - depth
+            ezcontentobject_tree_p_node_id:
+                columns:
+                    - parent_node_id
+            ezcontentobject_tree_path:
+                columns:
+                    - path_string
+            modified_subnode:
+                columns:
+                    - modified_subnode
+    ezcontentobject_version:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: false
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            initial_language_id:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            language_mask:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_event_pos:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezcobj_version_creator_id:
+                columns:
+                    - creator_id
+            ezcobj_version_status:
+                columns:
+                    - status
+            idx_object_version_objver:
+                columns:
+                    - contentobject_id
+                    - version
+            ezcontobj_version_obj_status:
+                columns:
+                    - contentobject_id
+                    - status
+    ezcurrencydata:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            auto_rate_value:
+                type: decimal
+                options:
+                    notnull: true
+                    default: '0.00000'
+                    scale: 5
+            code:
+                type: string
+                options:
+                    notnull: true
+                    length: 4
+                    default: ''
+            custom_rate_value:
+                type: decimal
+                options:
+                    notnull: true
+                    default: '0.00000'
+                    scale: 5
+            locale:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            rate_factor:
+                type: decimal
+                options:
+                    notnull: true
+                    default: '1.00000'
+                    scale: 5
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            symbol:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+        indices:
+            ezcurrencydata_code:
+                columns:
+                    - code
+    ezdiscountrule:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    ezdiscountsubrule:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            discount_percent:
+                type: float
+                options:
+                    notnull: false
+            discountrule_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            limitation:
+                type: string
+                options:
+                    notnull: false
+                    length: 1
+                    fixed: true
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    ezdiscountsubrule_value:
+        fields:
+            discountsubrule_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            value:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            issection:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - discountsubrule_id
+            - value
+            - issection
+    ezenumobjectvalue:
+        fields:
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_attribute_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            enumid:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            enumelement:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            enumvalue:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - contentobject_attribute_id
+            - contentobject_attribute_version
+            - enumid
+    ezenumvalue:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentclass_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentclass_attribute_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            enumelement:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            enumvalue:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            placement:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+            - contentclass_attribute_id
+            - contentclass_attribute_version
+        indices:
+            ezenumvalue_co_cl_attr_id_co_class_att_ver:
+                columns:
+                    - contentclass_attribute_id
+                    - contentclass_attribute_version
+    ezforgot_password:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            hash_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            time:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezforgot_password_user:
+                columns:
+                    - user_id
+    ezgeneral_digest_user_settings:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            day:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            digest_type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            receive_digest:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            time:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezgeneral_digest_user_id:
+                columns:
+                    - user_id
+                unique: true
+    ezgmaplocation:
+        fields:
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            latitude:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            longitude:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            address:
+                type: string
+                options:
+                    notnull: false
+                    length: 150
+        pk:
+            - contentobject_attribute_id
+            - contentobject_version
+        indices:
+            latitude_longitude_key:
+                columns:
+                    - latitude
+                    - longitude
+    ezimagefile:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            filepath:
+                type: text
+                options:
+                    notnull: true
+        pk:
+            - id
+        indices:
+            ezimagefile_coid:
+                columns:
+                    - contentobject_attribute_id
+    ezinfocollection:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            user_identifier:
+                type: string
+                options:
+                    notnull: false
+                    length: 34
+        pk:
+            - id
+        indices:
+            ezinfocollection_co_id_created:
+                columns:
+                    - contentobject_id
+                    - created
+    ezinfocollection_attribute:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentclass_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: false
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: false
+            data_float:
+                type: float
+                options:
+                    notnull: false
+            data_int:
+                type: integer
+                options:
+                    notnull: false
+            data_text:
+                type: text
+                options:
+                    notnull: false
+            informationcollection_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezinfocollection_attr_cca_id:
+                columns:
+                    - contentclass_attribute_id
+            ezinfocollection_attr_co_id:
+                columns:
+                    - contentobject_id
+            ezinfocollection_attr_coa_id:
+                columns:
+                    - contentobject_attribute_id
+            ezinfocollection_attr_ic_id:
+                columns:
+                    - informationcollection_id
+    ezisbn_group:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            description:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            group_number:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezisbn_group_range:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            from_number:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            group_from:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            group_length:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            group_to:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            to_number:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezisbn_registrant_range:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            from_number:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            isbn_group_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            registrant_from:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            registrant_length:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            registrant_to:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            to_number:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezkeyword:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            class_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            keyword:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+        indices:
+            ezkeyword_keyword:
+                columns:
+                    - keyword
+    ezkeyword_attribute_link:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            keyword_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            objectattribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezkeyword_attr_link_kid_oaid:
+                columns:
+                    - keyword_id
+                    - objectattribute_id
+            ezkeyword_attr_link_oaid:
+                columns:
+                    - objectattribute_id
+    ezm_block:
+        fields:
+            id:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    fixed: true
+            zone_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    fixed: true
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+            overflow_id:
+                type: string
+                options:
+                    notnull: false
+                    length: 32
+                    fixed: true
+            last_update:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            block_type:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            fetch_params:
+                type: text
+                options:
+                    notnull: false
+            rotation_type:
+                type: integer
+                options:
+                    notnull: false
+            rotation_interval:
+                type: integer
+                options:
+                    notnull: false
+            is_removed:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezm_block__is_removed:
+                columns:
+                    - is_removed
+            ezm_block__node_id:
+                columns:
+                    - node_id
+    ezm_pool:
+        fields:
+            block_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    fixed: true
+            object_id:
+                type: integer
+                options:
+                    notnull: true
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+            priority:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            ts_publication:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            ts_visible:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            ts_hidden:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            rotation_until:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            moved_to:
+                type: string
+                options:
+                    notnull: false
+                    length: 32
+                    fixed: true
+        pk:
+            - block_id
+            - object_id
+        indices:
+            ezm_pool__block_id__ts_publication__priority:
+                columns:
+                    - block_id
+                    - ts_publication
+                    - priority
+            ezm_pool__block_id__ts_visible:
+                columns:
+                    - block_id
+                    - ts_visible
+            ezm_pool__block_id__ts_hidden:
+                columns:
+                    - block_id
+                    - ts_hidden
+    ezmedia:
+        fields:
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            controls:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+            filename:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            has_controller:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            height:
+                type: integer
+                options:
+                    notnull: false
+            is_autoplay:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            is_loop:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            mime_type:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            original_filename:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            pluginspage:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            quality:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+            width:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - contentobject_attribute_id
+            - version
+    ezmessage:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            body:
+                type: text
+                options:
+                    notnull: false
+            destination_address:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            is_sent:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            send_method:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            send_time:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            send_weekday:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            title:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    ezmodule_run:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            function_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            module_data:
+                type: text
+                options:
+                    notnull: false
+            module_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            workflow_process_id:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            ezmodule_run_workflow_process_id_s:
+                columns:
+                    - workflow_process_id
+                unique: true
+    ezmultipricedata:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_attr_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_attr_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            currency_code:
+                type: string
+                options:
+                    notnull: true
+                    length: 4
+                    default: ''
+            type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            value:
+                type: decimal
+                options:
+                    notnull: true
+                    default: '0.00'
+                    precision: 15
+                    scale: 2
+        pk:
+            - id
+        indices:
+            ezmultipricedata_coa_id:
+                columns:
+                    - contentobject_attr_id
+            ezmultipricedata_coa_version:
+                columns:
+                    - contentobject_attr_version
+            ezmultipricedata_currency_code:
+                columns:
+                    - currency_code
+    eznode_assignment:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: false
+            contentobject_version:
+                type: integer
+                options:
+                    notnull: false
+            from_node_id:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            is_main:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            op_code:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            parent_node:
+                type: integer
+                options:
+                    notnull: false
+            parent_remote_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: ''
+            remote_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: '0'
+            sort_field:
+                type: integer
+                options:
+                    notnull: false
+                    default: '1'
+            sort_order:
+                type: integer
+                options:
+                    notnull: false
+                    default: '1'
+            priority:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_hidden:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            eznode_assignment_co_version:
+                columns:
+                    - contentobject_version
+            eznode_assignment_coid_cov:
+                columns:
+                    - contentobject_id
+                    - contentobject_version
+            eznode_assignment_is_main:
+                columns:
+                    - is_main
+            eznode_assignment_parent_node:
+                columns:
+                    - parent_node
+    eznotificationcollection:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            data_subject:
+                type: text
+                options:
+                    notnull: true
+            data_text:
+                type: text
+                options:
+                    notnull: true
+            event_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            handler:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            transport:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    eznotificationcollection_item:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            address:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            collection_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            event_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            send_date:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    eznotificationevent:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            data_int1:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int2:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int3:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int4:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_text1:
+                type: text
+                options:
+                    notnull: true
+            data_text2:
+                type: text
+                options:
+                    notnull: true
+            data_text3:
+                type: text
+                options:
+                    notnull: true
+            data_text4:
+                type: text
+                options:
+                    notnull: true
+            event_type_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezoperation_memento:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            memento_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            main:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            main_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            memento_data:
+                type: text
+                options:
+                    notnull: true
+        pk:
+            - id
+            - memento_key
+        indices:
+            ezoperation_memento_memento_key_main:
+                columns:
+                    - memento_key
+                    - main
+    ezorder:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            account_identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: default
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_text_1:
+                type: text
+                options:
+                    notnull: false
+            data_text_2:
+                type: text
+                options:
+                    notnull: false
+            email:
+                type: string
+                options:
+                    notnull: false
+                    length: 150
+                    default: ''
+            ignore_vat:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_archived:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_temporary:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            order_nr:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            productcollection_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            status_id:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            status_modified:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            status_modifier_id:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezorder_is_archived:
+                columns:
+                    - is_archived
+            ezorder_is_tmp:
+                columns:
+                    - is_temporary
+    ezorder_item:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            description:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            is_vat_inc:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            order_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            price:
+                type: float
+                options:
+                    notnull: false
+            type:
+                type: string
+                options:
+                    notnull: false
+                    length: 30
+            vat_value:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezorder_item_order_id:
+                columns:
+                    - order_id
+            ezorder_item_type:
+                columns:
+                    - type
+    ezorder_nr_incr:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+        pk:
+            - id
+    ezorder_status:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            is_active:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            status_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezorder_status_active:
+                columns:
+                    - is_active
+            ezorder_status_name:
+                columns:
+                    - name
+            ezorder_status_sid:
+                columns:
+                    - status_id
+    ezorder_status_history:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modifier_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            order_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            status_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezorder_status_history_mod:
+                columns:
+                    - modified
+            ezorder_status_history_oid:
+                columns:
+                    - order_id
+            ezorder_status_history_sid:
+                columns:
+                    - status_id
+    ezpackage:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            install_date:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: ''
+            version:
+                type: string
+                options:
+                    notnull: true
+                    length: 30
+                    default: '0'
+        pk:
+            - id
+    ezpaymentobject:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            order_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            payment_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflowprocess_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezpdf_export:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: false
+            creator_id:
+                type: integer
+                options:
+                    notnull: false
+            export_classes:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            export_structure:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            intro_text:
+                type: text
+                options:
+                    notnull: false
+            modified:
+                type: integer
+                options:
+                    notnull: false
+            modifier_id:
+                type: integer
+                options:
+                    notnull: false
+            pdf_filename:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            show_frontpage:
+                type: integer
+                options:
+                    notnull: false
+            site_access:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            source_node_id:
+                type: integer
+                options:
+                    notnull: false
+            status:
+                type: integer
+                options:
+                    notnull: false
+            sub_text:
+                type: text
+                options:
+                    notnull: false
+            title:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+            - version
+    ezpending_actions:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            action:
+                type: string
+                options:
+                    notnull: true
+                    length: 64
+                    default: ''
+            created:
+                type: integer
+                options:
+                    notnull: false
+            param:
+                type: text
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            ezpending_actions_action:
+                columns:
+                    - action
+            ezpending_actions_created:
+                columns:
+                    - created
+    ezpolicy:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            function_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            module_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            original_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            role_id:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            ezpolicy_original_id:
+                columns:
+                    - original_id
+            ezpolicy_role_id:
+                columns:
+                    - role_id
+    ezpolicy_limitation:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            policy_id:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            policy_id:
+                columns:
+                    - policy_id
+    ezpolicy_limitation_value:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            limitation_id:
+                type: integer
+                options:
+                    notnull: false
+            value:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+        indices:
+            ezpolicy_limitation_value_val:
+                columns:
+                    - value
+            ezpolicy_limit_value_limit_id:
+                columns:
+                    - limitation_id
+    ezpreferences:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 100
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            value:
+                type: text
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            ezpreferences_name:
+                columns:
+                    - name
+            ezpreferences_user_id_idx:
+                columns:
+                    - user_id
+                    - name
+    ezprest_authcode:
+        fields:
+            id:
+                type: string
+                options:
+                    notnull: true
+                    length: 200
+                    default: ''
+            client_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 200
+                    default: ''
+            expirytime:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            scope:
+                type: string
+                options:
+                    notnull: false
+                    length: 200
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            authcode_client_id:
+                columns:
+                    - client_id
+    ezprest_authorized_clients:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: false
+            rest_client_id:
+                type: integer
+                options:
+                    notnull: false
+            user_id:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            client_user:
+                columns:
+                    - rest_client_id
+                    - user_id
+    ezprest_clients:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            client_id:
+                type: string
+                options:
+                    notnull: false
+                    length: 200
+            client_secret:
+                type: string
+                options:
+                    notnull: false
+                    length: 200
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            description:
+                type: text
+                options:
+                    notnull: false
+            endpoint_uri:
+                type: string
+                options:
+                    notnull: false
+                    length: 200
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 100
+            owner_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            updated:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            client_id_unique:
+                columns:
+                    - client_id
+                    - version
+                unique: true
+    ezprest_token:
+        fields:
+            id:
+                type: string
+                options:
+                    notnull: true
+                    length: 200
+                    default: ''
+            client_id:
+                type: string
+                options:
+                    notnull: true
+                    length: 200
+                    default: ''
+            expirytime:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            refresh_token:
+                type: string
+                options:
+                    notnull: true
+                    length: 200
+                    default: ''
+            scope:
+                type: string
+                options:
+                    notnull: false
+                    length: 200
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            token_client_id:
+                columns:
+                    - client_id
+    ezproductcategory:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    ezproductcollection:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: false
+            currency_code:
+                type: string
+                options:
+                    notnull: true
+                    length: 4
+                    default: ''
+        pk:
+            - id
+    ezproductcollection_item:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            discount:
+                type: float
+                options:
+                    notnull: false
+            is_vat_inc:
+                type: integer
+                options:
+                    notnull: false
+            item_count:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            price:
+                type: float
+                options:
+                    notnull: false
+                    default: '0'
+            productcollection_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            vat_value:
+                type: float
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            ezproductcollection_item_contentobject_id:
+                columns:
+                    - contentobject_id
+            ezproductcollection_item_productcollection_id:
+                columns:
+                    - productcollection_id
+    ezproductcollection_item_opt:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            item_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            object_attribute_id:
+                type: integer
+                options:
+                    notnull: false
+            option_item_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            price:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            value:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+        indices:
+            ezproductcollection_item_opt_item_id:
+                columns:
+                    - item_id
+    ezpublishingqueueprocesses:
+        fields:
+            ezcontentobject_version_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: false
+            finished:
+                type: integer
+                options:
+                    notnull: false
+            pid:
+                type: integer
+                options:
+                    notnull: false
+            started:
+                type: integer
+                options:
+                    notnull: false
+            status:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - ezcontentobject_version_id
+    ezrole:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            is_new:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            value:
+                type: string
+                options:
+                    notnull: false
+                    length: 1
+                    fixed: true
+            version:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+        pk:
+            - id
+    ezrss_export:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            access_url:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            active:
+                type: integer
+                options:
+                    notnull: false
+            created:
+                type: integer
+                options:
+                    notnull: false
+            creator_id:
+                type: integer
+                options:
+                    notnull: false
+            description:
+                type: text
+                options:
+                    notnull: false
+            image_id:
+                type: integer
+                options:
+                    notnull: false
+            main_node_only:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            modified:
+                type: integer
+                options:
+                    notnull: false
+            modifier_id:
+                type: integer
+                options:
+                    notnull: false
+            node_id:
+                type: integer
+                options:
+                    notnull: false
+            number_of_objects:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            rss_version:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            site_access:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            title:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            url:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+            - status
+    ezrss_export_item:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            category:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            class_id:
+                type: integer
+                options:
+                    notnull: false
+            description:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            enclosure:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            rssexport_id:
+                type: integer
+                options:
+                    notnull: false
+            source_node_id:
+                type: integer
+                options:
+                    notnull: false
+            subnodes:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            title:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - id
+            - status
+        indices:
+            ezrss_export_rsseid:
+                columns:
+                    - rssexport_id
+    ezrss_import:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            active:
+                type: integer
+                options:
+                    notnull: false
+            class_description:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            class_id:
+                type: integer
+                options:
+                    notnull: false
+            class_title:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            class_url:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            created:
+                type: integer
+                options:
+                    notnull: false
+            creator_id:
+                type: integer
+                options:
+                    notnull: false
+            destination_node_id:
+                type: integer
+                options:
+                    notnull: false
+            import_description:
+                type: text
+                options:
+                    notnull: true
+            modified:
+                type: integer
+                options:
+                    notnull: false
+            modifier_id:
+                type: integer
+                options:
+                    notnull: false
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            object_owner_id:
+                type: integer
+                options:
+                    notnull: false
+            url:
+                type: text
+                options:
+                    notnull: false
+        pk:
+            - id
+            - status
+    ezscheduled_script:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            command:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            last_report_timestamp:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            process_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            progress:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezscheduled_script_timestamp:
+                columns:
+                    - last_report_timestamp
+    ezsearch_object_word_link:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentclass_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentclass_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            frequency:
+                type: float
+                options:
+                    notnull: true
+                    default: '0'
+            identifier:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            integer_value:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            next_word_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            placement:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            prev_word_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            published:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            section_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            word_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezsearch_object_word_link_frequency:
+                columns:
+                    - frequency
+            ezsearch_object_word_link_identifier:
+                columns:
+                    - identifier
+            ezsearch_object_word_link_integer_value:
+                columns:
+                    - integer_value
+            ezsearch_object_word_link_object:
+                columns:
+                    - contentobject_id
+            ezsearch_object_word_link_word:
+                columns:
+                    - word_id
+    ezsearch_return_count:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            count:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            phrase_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            time:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezsearch_return_cnt_ph_id_cnt:
+                columns:
+                    - phrase_id
+                    - count
+    ezsearch_search_phrase:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            phrase:
+                type: string
+                options:
+                    notnull: false
+                    length: 250
+            phrase_count:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            result_count:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezsearch_search_phrase_phrase:
+                columns:
+                    - phrase
+                unique: true
+            ezsearch_search_phrase_count:
+                columns:
+                    - phrase_count
+    ezsearch_word:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            object_count:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            word:
+                type: string
+                options:
+                    notnull: false
+                    length: 150
+        pk:
+            - id
+        indices:
+            ezsearch_word_obj_count:
+                columns:
+                    - object_count
+            ezsearch_word_word_i:
+                columns:
+                    - word
+    ezsection:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            identifier:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            locale:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            navigation_part_identifier:
+                type: string
+                options:
+                    notnull: false
+                    length: 100
+                    default: ezcontentnavigationpart
+        pk:
+            - id
+    ezsession:
+        fields:
+            session_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            data:
+                type: text
+                options:
+                    notnull: true
+            expiration_time:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_hash:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - session_key
+        indices:
+            expiration_time:
+                columns:
+                    - expiration_time
+            ezsession_user_id:
+                columns:
+                    - user_id
+    ezsite_data:
+        fields:
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 60
+                    default: ''
+            value:
+                type: text
+                options:
+                    notnull: true
+        pk:
+            - name
+    ezstarrating:
+        fields:
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+            rating_average:
+                type: float
+                options:
+                    notnull: true
+            rating_count:
+                type: integer
+                options:
+                    notnull: true
+        pk:
+            - contentobject_id
+            - contentobject_attribute_id
+    ezstarrating_data:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created_at:
+                type: integer
+                options:
+                    notnull: true
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+            session_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+            rating:
+                type: float
+                options:
+                    notnull: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+        pk:
+            - id
+        indices:
+            user_id_session_key:
+                columns:
+                    - user_id
+                    - session_key
+            contentobject_id_contentobject_attribute_id:
+                columns:
+                    - contentobject_id
+                    - contentobject_attribute_id
+    ezsubtree_notification_rule:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            use_digest:
+                type: integer
+                options:
+                    notnull: false
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezsubtree_notification_rule_user_id:
+                columns:
+                    - user_id
+    eztipafriend_counter:
+        fields:
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            requested:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            count:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - node_id
+            - requested
+    eztipafriend_request:
+        fields:
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            email_receiver:
+                type: string
+                options:
+                    notnull: true
+                    length: 100
+                    default: ''
+        indices:
+            eztipafriend_request_created:
+                columns:
+                    - created
+            eztipafriend_request_email_rec:
+                columns:
+                    - email_receiver
+    eztrigger:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            connect_type:
+                type: string
+                options:
+                    notnull: true
+                    length: 1
+                    default: ''
+                    fixed: true
+            function_name:
+                type: string
+                options:
+                    notnull: true
+                    length: 200
+                    default: ''
+            module_name:
+                type: string
+                options:
+                    notnull: true
+                    length: 200
+                    default: ''
+            name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            workflow_id:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - id
+    ezurl:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_valid:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            last_checked:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            original_url_md5:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            url:
+                type: text
+                options:
+                    notnull: false
+        pk:
+            - id
+    ezurl_object_link:
+        fields:
+            contentobject_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentobject_attribute_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            url_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        indices:
+            ezurl_ol_coa_id:
+                columns:
+                    - contentobject_attribute_id
+            ezurl_ol_coa_version:
+                columns:
+                    - contentobject_attribute_version
+            ezurl_ol_url_id:
+                columns:
+                    - url_id
+    ezurlalias:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            destination_url:
+                type: text
+                options:
+                    notnull: true
+            forward_to_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_imported:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_internal:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            is_wildcard:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            source_md5:
+                type: string
+                options:
+                    notnull: false
+                    length: 32
+            source_url:
+                type: text
+                options:
+                    notnull: true
+        pk:
+            - id
+        indices:
+            ezurlalias_forward_to_id:
+                columns:
+                    - forward_to_id
+            ezurlalias_imp_wcard_fwd:
+                columns:
+                    - is_imported
+                    - is_wildcard
+                    - forward_to_id
+            ezurlalias_source_md5:
+                columns:
+                    - source_md5
+            ezurlalias_wcard_fwd:
+                columns:
+                    - is_wildcard
+                    - forward_to_id
+    ezurlalias_ml:
+        fields:
+            parent:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            text_md5:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            action:
+                type: text
+                options:
+                    notnull: true
+            action_type:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            alias_redirects:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_alias:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_original:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            lang_mask:
+                type: bigint
+                options:
+                    notnull: true
+                    default: '0'
+            link:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            text:
+                type: text
+                options:
+                    notnull: true
+        pk:
+            - parent
+            - text_md5
+        indices:
+            ezurlalias_ml_actt_org_al:
+                columns:
+                    - action_type
+                    - is_original
+                    - is_alias
+            ezurlalias_ml_id:
+                columns:
+                    - id
+    ezurlalias_ml_incr:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+        pk:
+            - id
+    ezurlwildcard:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            destination_url:
+                type: text
+                options:
+                    notnull: true
+            source_url:
+                type: text
+                options:
+                    notnull: true
+            type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezuser:
+        fields:
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            email:
+                type: string
+                options:
+                    notnull: true
+                    length: 150
+                    default: ''
+            login:
+                type: string
+                options:
+                    notnull: true
+                    length: 150
+                    default: ''
+            password_hash:
+                type: string
+                options:
+                    notnull: false
+                    length: 50
+            password_hash_type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '1'
+        pk:
+            - contentobject_id
+        indices:
+            ezuser_login:
+                columns:
+                    - login
+                unique: true
+    ezuser_accountkey:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            hash_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            time:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            hash_key:
+                columns:
+                    - hash_key
+    ezuser_discountrule:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: false
+            discountrule_id:
+                type: integer
+                options:
+                    notnull: false
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    ezuser_role:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            contentobject_id:
+                type: integer
+                options:
+                    notnull: false
+            limit_identifier:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+                    default: ''
+            limit_value:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+                    default: ''
+            role_id:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - id
+        indices:
+            ezuser_role_contentobject_id:
+                columns:
+                    - contentobject_id
+            ezuser_role_role_id:
+                columns:
+                    - role_id
+    ezuser_setting:
+        fields:
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_enabled:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            max_login:
+                type: integer
+                options:
+                    notnull: false
+        pk:
+            - user_id
+    ezuservisit:
+        fields:
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            current_visit_timestamp:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            failed_login_attempts:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            last_visit_timestamp:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            login_count:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - user_id
+        indices:
+            ezuservisit_co_visit_count:
+                columns:
+                    - current_visit_timestamp
+                    - login_count
+    ezvatrule:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            country_code:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            vat_type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezvatrule_product_category:
+        fields:
+            vatrule_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            product_category_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - vatrule_id
+            - product_category_id
+    ezvattype:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            percentage:
+                type: float
+                options:
+                    notnull: false
+        pk:
+            - id
+    ezview_counter:
+        fields:
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            count:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - node_id
+    ezwaituntildatevalue:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            workflow_event_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_event_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentclass_attribute_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            contentclass_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+            - workflow_event_id
+            - workflow_event_version
+        indices:
+            ezwaituntildateevalue_wf_ev_id_wf_ver:
+                columns:
+                    - workflow_event_id
+                    - workflow_event_version
+    ezwishlist:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            productcollection_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezworkflow:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            is_enabled:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modifier_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+            workflow_type_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+        pk:
+            - id
+            - version
+    ezworkflow_assign:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            access_type:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            as_tree:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+    ezworkflow_event:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            data_int1:
+                type: integer
+                options:
+                    notnull: false
+            data_int2:
+                type: integer
+                options:
+                    notnull: false
+            data_int3:
+                type: integer
+                options:
+                    notnull: false
+            data_int4:
+                type: integer
+                options:
+                    notnull: false
+            data_text1:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            data_text2:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            data_text3:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            data_text4:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+            data_text5:
+                type: text
+                options:
+                    notnull: false
+            description:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+            placement:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_type_string:
+                type: string
+                options:
+                    notnull: true
+                    length: 50
+                    default: ''
+        pk:
+            - id
+            - version
+        indices:
+            wid_version_placement:
+                columns:
+                    - workflow_id
+                    - version
+                    - placement
+    ezworkflow_group:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            creator_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            modifier_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            name:
+                type: string
+                options:
+                    notnull: true
+                    length: 255
+                    default: ''
+        pk:
+            - id
+    ezworkflow_group_link:
+        fields:
+            workflow_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            group_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            group_name:
+                type: string
+                options:
+                    notnull: false
+                    length: 255
+        pk:
+            - workflow_id
+            - group_id
+            - workflow_version
+    ezworkflow_process:
+        fields:
+            id:
+                type: integer
+                options:
+                    notnull: true
+                    autoincrement: true
+            activation_date:
+                type: integer
+                options:
+                    notnull: false
+            content_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            content_version:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            created:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            event_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            event_position:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            event_state:
+                type: integer
+                options:
+                    notnull: false
+            event_status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            last_event_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            last_event_position:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            last_event_status:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            memento_key:
+                type: string
+                options:
+                    notnull: false
+                    length: 32
+            modified:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            node_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            parameters:
+                type: text
+                options:
+                    notnull: false
+            process_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: ''
+            session_key:
+                type: string
+                options:
+                    notnull: true
+                    length: 32
+                    default: '0'
+            status:
+                type: integer
+                options:
+                    notnull: false
+            user_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+            workflow_id:
+                type: integer
+                options:
+                    notnull: true
+                    default: '0'
+        pk:
+            - id
+        indices:
+            ezworkflow_process_process_key:
+                columns:
+                    - process_key
