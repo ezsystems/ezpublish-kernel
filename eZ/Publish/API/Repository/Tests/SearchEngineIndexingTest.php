@@ -335,6 +335,7 @@ class SearchEngineIndexingTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $publishedContent = $this->createContentWithName('updateMetadataTest', [2]);
+        $originalMainLocationId = $publishedContent->contentInfo->mainLocationId;
         $newLocationCreateStruct = $locationService->newLocationCreateStruct(60);
         $newLocation = $locationService->createLocation($publishedContent->contentInfo, $newLocationCreateStruct);
 
@@ -365,6 +366,13 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertEquals($newContentMetadataUpdateStruct->publishedDate, $foundContentInfo->publishedDate);
         $this->assertEquals($newLocation->id, $foundContentInfo->mainLocationId);
         $this->assertEquals($newContentMetadataUpdateStruct->remoteId, $foundContentInfo->remoteId);
+
+        // find Content using old main location
+        $criterion = new Criterion\LocationId($originalMainLocationId);
+        $query = new LocationQuery(['filter' => $criterion]);
+        $results = $searchService->findLocations($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($newContentMetadataUpdateStruct->remoteId, $results->searchHits[0]->valueObject->contentInfo->remoteId);
     }
 
     /**
