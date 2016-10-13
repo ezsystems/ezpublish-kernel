@@ -236,7 +236,7 @@ class ContentTypeDomainMapper
                 'isRequired' => $spiFieldDefinition->isRequired,
                 'isInfoCollector' => $spiFieldDefinition->isInfoCollector,
                 'defaultValue' => $fieldType->fromPersistenceValue($spiFieldDefinition->defaultValue),
-                'isSearchable' => $spiFieldDefinition->isSearchable,
+                'isSearchable' => !$fieldType->isSearchable() ? false : $spiFieldDefinition->isSearchable,
                 'fieldSettings' => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
                 'validatorConfiguration' => (array)$spiFieldDefinition->fieldTypeConstraints->validators,
             )
