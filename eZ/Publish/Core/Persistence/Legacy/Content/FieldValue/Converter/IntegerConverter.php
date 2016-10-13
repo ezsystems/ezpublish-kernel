@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class IntegerConverter implements Converter
 {
-    const FLOAT_VALIDATOR_IDENTIFIER = 'IntegerValueValidator';
+    const VALIDATOR_IDENTIFIER = 'IntegerValueValidator';
 
     const HAS_MIN_VALUE = 1;
     const HAS_MAX_VALUE = 2;
@@ -67,16 +67,16 @@ class IntegerConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        if (isset($fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'])) {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'];
-        }
+        $minIntegerValue = isset($fieldDef->fieldTypeConstraints->validators[self::VALIDATOR_IDENTIFIER]['minIntegerValue']) ?
+            $fieldDef->fieldTypeConstraints->validators[self::VALIDATOR_IDENTIFIER]['minIntegerValue'] : null;
+        $maxIntegerValue = isset($fieldDef->fieldTypeConstraints->validators[self::VALIDATOR_IDENTIFIER]['maxIntegerValue']) ?
+            $fieldDef->fieldTypeConstraints->validators[self::VALIDATOR_IDENTIFIER]['maxIntegerValue'] : null;
 
-        if (isset($fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'])) {
-            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'];
-        }
+        $storageDef->dataInt1 = (int)$minIntegerValue;
+        $storageDef->dataInt2 = (int)$maxIntegerValue;
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
-        $storageDef->dataInt4 = $this->getStorageDefValidatorState($storageDef->dataInt1, $storageDef->dataInt2);
+        $storageDef->dataInt4 = $this->getStorageDefValidatorState($minIntegerValue, $maxIntegerValue);
         $storageDef->dataInt3 = $fieldDef->defaultValue->data;
     }
 
@@ -96,7 +96,7 @@ class IntegerConverter implements Converter
         if ($storageDef->dataInt4 & self::HAS_MAX_VALUE) {
             $validatorParameters['maxIntegerValue'] = $storageDef->dataInt2;
         }
-        $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER] = $validatorParameters;
+        $fieldDef->fieldTypeConstraints->validators[self::VALIDATOR_IDENTIFIER] = $validatorParameters;
         $fieldDef->defaultValue->data = $storageDef->dataInt3;
         $fieldDef->defaultValue->sortKey = ($storageDef->dataInt3 === null ? 0 : $storageDef->dataInt3);
     }
@@ -121,8 +121,8 @@ class IntegerConverter implements Converter
      *   - {@link self::HAS_MAX_VALUE}
      *   - {@link self::HAS_MIN_VALUE}.
      *
-     * @param int|null $minValue Minimum int value, or null if not set
-     * @param int|null $maxValue Maximum int value, or null if not set
+     * @param int|false|null $minValue Minimum int value, false if none, or null if not set
+     * @param int|false|null $maxValue Maximum int value, false if none, or null if not set
      *
      * @return int
      */
@@ -130,11 +130,11 @@ class IntegerConverter implements Converter
     {
         $state = 0;
 
-        if ($minValue !== null) {
+        if (is_numeric($minValue)) {
             $state |= self::HAS_MIN_VALUE;
         }
 
-        if ($maxValue !== null) {
+        if (is_numeric($maxValue)) {
             $state |= self::HAS_MAX_VALUE;
         }
 
