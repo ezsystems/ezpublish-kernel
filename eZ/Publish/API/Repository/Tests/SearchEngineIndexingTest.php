@@ -760,6 +760,7 @@ class SearchEngineIndexingTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $publishedContent = $this->createContentWithName('updateMetadataTest', [2]);
+        $originalMainLocationId = $publishedContent->contentInfo->mainLocationId;
         $newLocationCreateStruct = $locationService->newLocationCreateStruct(60);
         $newLocation = $locationService->createLocation($publishedContent->contentInfo, $newLocationCreateStruct);
 
@@ -790,6 +791,38 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertEquals($newContentMetadataUpdateStruct->publishedDate, $foundContentInfo->publishedDate);
         $this->assertEquals($newLocation->id, $foundContentInfo->mainLocationId);
         $this->assertEquals($newContentMetadataUpdateStruct->remoteId, $foundContentInfo->remoteId);
+
+        // find Content using old main location
+        $criterion = new Criterion\LocationId($originalMainLocationId);
+        $query = new LocationQuery(['filter' => $criterion]);
+        $results = $searchService->findLocations($query);
+        $this->assertEquals(1, $results->totalCount);
+        $this->assertEquals($newContentMetadataUpdateStruct->remoteId, $results->searchHits[0]->valueObject->contentInfo->remoteId);
+    }
+
+    /**
+     * Test that updating Content Draft metadata does not affect Search Engine Index.
+     */
+    public function testUpdateContentDraftMetadataIsNotIndexed()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $testableContentType = $this->createTestContentType();
+        $rootContentStruct = $contentService->newContentCreateStruct($testableContentType, 'eng-GB');
+        $rootContentStruct->setField('name', 'TestUpdatingContentDraftMetadata');
+
+        $contentDraft = $contentService->createContent($rootContentStruct, [$locationService->newLocationCreateStruct(2)]);
+
+        $newContentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $newContentMetadataUpdateStruct->ownerId = 10;
+        $newContentMetadataUpdateStruct->remoteId = md5('Test');
+
+        $contentService->updateContentMetadata($contentDraft->contentInfo, $newContentMetadataUpdateStruct);
+
+        $this->refreshSearch($repository);
+        $this->assertContentIdSearch($contentDraft->contentInfo->id, 0);
     }
 
     /**
