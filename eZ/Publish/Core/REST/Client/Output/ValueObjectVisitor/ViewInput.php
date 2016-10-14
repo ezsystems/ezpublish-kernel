@@ -14,13 +14,19 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception;
+use eZ\Publish\Core\REST\Server\Values\RestViewInput;
 
 /**
  * ViewInput value object visitor.
  */
 class ViewInput extends ValueObjectVisitor
 {
+    /**
+     * @param Visitor $visitor
+     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Client\Values\ViewInput $data
+     * @throws Exceptions\InvalidArgumentException
+     */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
         $generator->startObjectElement('ViewInput');
@@ -29,15 +35,14 @@ class ViewInput extends ValueObjectVisitor
         $generator->endValueElement('identifier');
 
         if ($data->locationQuery !== null ) {
-            $queryElementName = 'LocationQuery';
+            $queryElementName = 'locationQuery';
         } elseif ($data->contentQuery !== null ) {
-            $queryElementName = 'ContentQuery';
+            $queryElementName = 'contentQuery';
         } else {
             throw new Exceptions\InvalidArgumentException("ViewInput Query", "No content nor location query found in ViewInput");
         }
 
-        $generator->startObjectElement($queryElementName);
-        $generator->endObjectElement($queryElementName);
+        $visitor->visitValueObject($data->$queryElementName);
 
         $generator->endObjectElement('ViewInput');
     }

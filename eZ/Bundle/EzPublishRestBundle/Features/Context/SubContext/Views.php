@@ -4,6 +4,8 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\REST\Client\Values\View;
 use PHPUnit_Framework_Assert as Assertion;
@@ -33,5 +35,22 @@ trait Views
         foreach ($searchHits as $searchHit) {
             Assertion::assertInstanceOf('eZ\Publish\API\Repository\Values\Content\Content', $searchHit->valueObject);
         }
+    }
+
+    /**
+     * @Given /^I set field "([^"]*)" to a Query object$/
+     */
+    public function iSetFieldToAQueryObject($field)
+    {
+        $this->requestObject->$field = new Query();
+    }
+
+    /**
+     * @Given /^I set the "([^"]*)" property of the Query to a valid Criterion$/
+     */
+    public function iSetTheFilterPropertyOfTheQuery($field)
+    {
+        // @todo this could be improved if setFieldToValue used PropertyAccessor.
+        $this->requestObject->contentQuery->$field = new ContentTypeIdentifier('folder');
     }
 }

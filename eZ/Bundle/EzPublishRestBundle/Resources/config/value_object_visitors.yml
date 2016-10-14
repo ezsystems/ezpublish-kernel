@@ -858,3 +858,15 @@ services:
         class: "%ezpublish_rest.output.value_object_visitor.ViewInput.class%"
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Client\Values\ViewInput }
+
+    ezpublish_rest.output.value_object_visitor.Query:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: 'eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Query'
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\Content\Query }
+
+    ezpublish_rest.output.value_object_visitor.criterion.content_type_identifier:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: 'eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Criterion\ContentTypeIdentifier'
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier }

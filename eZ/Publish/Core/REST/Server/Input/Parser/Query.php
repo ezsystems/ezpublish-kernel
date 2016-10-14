@@ -88,15 +88,15 @@ abstract class Query extends CriterionParser
     abstract protected function buildQuery();
 
     /**
-     * @param array $criteria
+     * @param array $criteriaArray
      * @param ParsingDispatcher $parsingDispatcher
      *
      * @return CriterionValue
      */
-    private function processCriteriaArray(array $criteria, ParsingDispatcher $parsingDispatcher)
+    private function processCriteriaArray(array $criteriaArray, ParsingDispatcher $parsingDispatcher)
     {
         $criteria = array();
-        foreach ($criteria as $criterionName => $criterionData) {
+        foreach ($criteriaArray as $criterionName => $criterionData) {
             $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
         }
 
