@@ -5,12 +5,14 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\Builder;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Helper\ContentInfoLocationLoader;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
@@ -43,16 +45,23 @@ class ContentViewBuilder implements ViewBuilder
      */
     private $defaultTemplates;
 
+    /**
+     * @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader
+     */
+    private $locationLoader;
+
     public function __construct(
         Repository $repository,
         AuthorizationCheckerInterface $authorizationChecker,
         Configurator $viewConfigurator,
-        ParametersInjector $viewParametersInjector
+        ParametersInjector $viewParametersInjector,
+        ContentInfoLocationLoader $locationLoader = null
     ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
         $this->viewConfigurator = $viewConfigurator;
         $this->viewParametersInjector = $viewParametersInjector;
+        $this->locationLoader = $locationLoader;
     }
 
     public function matches($argument)
@@ -101,11 +110,20 @@ class ContentViewBuilder implements ViewBuilder
         }
 
         $view->setContent($content);
+
         if (isset($location)) {
             if ($location->contentId !== $content->id) {
                 throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');
             }
+        } elseif (isset($this->locationLoader)) {
+            try {
+                $location = $this->locationLoader->loadLocation($content->contentInfo);
+            } catch (NotFoundException $e) {
+                // nothing else to do
+            }
+        }
 
+        if (isset($location)) {
             $view->setLocation($location);
         }
 
