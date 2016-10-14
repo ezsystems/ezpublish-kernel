@@ -401,8 +401,17 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
-        $createStruct->remoteId = substr(sha1(uniqid(get_class($createStruct), true)), 0, 7);
-        $createStruct->identifier = 'cpy_' . $createStruct->identifier . '_' . $createStruct->remoteId;
+        $originalRemoteId = $createStruct->remoteId;
+        // truncate remoteId to 32 chars to keep BC length of that field
+        $createStruct->remoteId = substr(sha1(uniqid(get_class($createStruct), true)), 0, 32);
+        $abbrLen = 7;
+        // prepare identifier of a copy as
+        // cp_<sourceIdentifier>_<abbreviatedSourceRemoteId>_<newAbbreviatedRemoteId>
+        // to avoid making it too long
+        $createStruct->identifier = 'cp_' .
+            preg_replace("/^cp_(.+)(_[0-9a-f]{{$abbrLen}}){2}$/", '\1', $createStruct->identifier) .
+            '_' . substr($originalRemoteId, 0, $abbrLen) .
+            '_' . substr($createStruct->remoteId, 0, $abbrLen);
 
         // Set FieldDefinition ids to null to trigger creating new id
         foreach ($createStruct->fieldDefinitions as $fieldDefinition) {
