@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as LogicalAndCriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion as CriterionValue;
 
 /**
  * Content/Location Query Parser.
@@ -25,7 +25,7 @@ abstract class Query extends CriterionParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\RestViewInput
+     * @return \eZ\Publish\API\Repository\Values\Content\Query
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
@@ -34,16 +34,23 @@ abstract class Query extends CriterionParser
         // Criteria
         // -- FullTextCriterion
         if (array_key_exists('Criteria', $data) && is_array($data['Criteria'])) {
-            $criteria = array();
-            foreach ($data['Criteria'] as $criterionName => $criterionData) {
-                $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
+            $message = 'The Criteria element is deprecated since ezpublish-kernel 6.6.0, and will be removed in 7.0. Use Filter instead.';
+            if (array_key_exists('Filter', $data) && is_array($data['Filter'])) {
+                $message .= ' The Criteria element will be merged into Filter.';
+                $data['Filter'] = array_merge($data['Filter'], $data['Criteria']);
+            } else {
+                $data['Filter'] = $data['Criteria'];
             }
 
-            if (count($criteria) === 1) {
-                $query->filter = $criteria[0];
-            } else {
-                $query->filter = new LogicalAndCriterion($criteria);
-            }
+            @trigger_error($message, E_USER_DEPRECATED);
+        }
+
+        if (array_key_exists('Filter', $data) && is_array($data['Filter'])) {
+            $query->filter = $this->processCriteriaArray($data['Filter'], $parsingDispatcher);
+        }
+
+        if (array_key_exists('Query', $data) && is_array($data['Query'])) {
+            $query->query = $this->processCriteriaArray($data['Query'], $parsingDispatcher);
         }
 
         // limit
@@ -79,4 +86,20 @@ abstract class Query extends CriterionParser
      * @return \eZ\Publish\API\Repository\Values\Content\Query
      */
     abstract protected function buildQuery();
+
+    /**
+     * @param array $criteria
+     * @param ParsingDispatcher $parsingDispatcher
+     *
+     * @return CriterionValue
+     */
+    private function processCriteriaArray(array $criteria, ParsingDispatcher $parsingDispatcher)
+    {
+        $criteria = array();
+        foreach ($criteria as $criterionName => $criterionData) {
+            $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
+        }
+
+        return (count($criteria) === 1) ? $criteria[0] : new CriterionValue\LogicalAnd($criteria);
+    }
 }
