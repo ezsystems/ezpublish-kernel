@@ -427,10 +427,12 @@ class Handler implements BaseContentTypeHandler
     {
         $abbrLen = 7;
 
-        return 'cp_' .
-        preg_replace("/^cp_(.+)(_[0-9a-f]{{$abbrLen}}){2}$/", '\1', $createStruct->identifier) .
-        '_' . substr($originalRemoteId, 0, $abbrLen) .
-        '_' . substr($createStruct->remoteId, 0, $abbrLen);
+        return sprintf(
+            'cp_%s_%s_%s',
+            preg_replace("/^cp_(.+)(_[0-9a-f]{{$abbrLen}}){2}$/", '\1', $createStruct->identifier),
+            substr($originalRemoteId, 0, $abbrLen),
+            substr($createStruct->remoteId, 0, $abbrLen)
+        );
     }
 
     /**
