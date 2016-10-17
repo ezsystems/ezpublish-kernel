@@ -404,14 +404,7 @@ class Handler implements BaseContentTypeHandler
         $originalRemoteId = $createStruct->remoteId;
         // truncate remoteId to 32 chars to keep BC length of that field
         $createStruct->remoteId = substr(sha1(uniqid(get_class($createStruct), true)), 0, 32);
-        $abbrLen = 7;
-        // prepare identifier of a copy as
-        // cp_<sourceIdentifier>_<abbreviatedSourceRemoteId>_<newAbbreviatedRemoteId>
-        // to avoid making it too long
-        $createStruct->identifier = 'cp_' .
-            preg_replace("/^cp_(.+)(_[0-9a-f]{{$abbrLen}}){2}$/", '\1', $createStruct->identifier) .
-            '_' . substr($originalRemoteId, 0, $abbrLen) .
-            '_' . substr($createStruct->remoteId, 0, $abbrLen);
+        $createStruct->identifier = $this->getContentTypeCopyIdentifier($createStruct, $originalRemoteId);
 
         // Set FieldDefinition ids to null to trigger creating new id
         foreach ($createStruct->fieldDefinitions as $fieldDefinition) {
@@ -419,6 +412,25 @@ class Handler implements BaseContentTypeHandler
         }
 
         return $this->internalCreate($createStruct);
+    }
+
+    /**
+     * Prepare identifier of a copy as
+     * cp_<sourceIdentifier>_<abbreviatedSourceRemoteId>_<newAbbreviatedRemoteId>
+     * to avoid making it too long.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     * @param $originalRemoteId
+     * @return string
+     */
+    private function getContentTypeCopyIdentifier(CreateStruct $createStruct, $originalRemoteId)
+    {
+        $abbrLen = 7;
+
+        return 'cp_' .
+        preg_replace("/^cp_(.+)(_[0-9a-f]{{$abbrLen}}){2}$/", '\1', $createStruct->identifier) .
+        '_' . substr($originalRemoteId, 0, $abbrLen) .
+        '_' . substr($createStruct->remoteId, 0, $abbrLen);
     }
 
     /**
