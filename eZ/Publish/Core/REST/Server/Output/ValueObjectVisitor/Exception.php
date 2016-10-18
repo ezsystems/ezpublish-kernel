@@ -138,6 +138,12 @@ class Exception extends ValueObjectVisitor
             $generator->endValueElement('line');
         }
 
+        if ($previous = $data->getPrevious()) {
+            $generator->startObjectElement('Previous', 'ErrorMessage');
+            $visitor->visitValueObject($previous);
+            $generator->endObjectElement('Previous');
+        }
+
         $generator->endObjectElement('ErrorMessage');
     }
 }
