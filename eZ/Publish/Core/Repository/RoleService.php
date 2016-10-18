@@ -95,6 +95,8 @@ class RoleService implements RoleServiceInterface
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'policyMap' => array(
+                // @todo the list here must be completed with functions that don't have limitations so PermissionResolver can use this to generate PermissionInfo
+                // however this will cause issues from for instance section where assign take ContentInfo as value object and not section, so cleanup needed here perhaps one way or another.
                 'content' => array(
                     'read' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
                     'diff' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),

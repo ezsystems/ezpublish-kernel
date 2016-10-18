@@ -57,12 +57,34 @@ interface PermissionResolver
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
+     * @param string $module The module, e.g. 'content', to check permissions on
+     * @param string $function The function, e.g. 'read', to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return bool
      */
     public function canUser($module, $function, ValueObject $object, array $targets = []);
+
+
+    /**
+     * Returns a list of PermissionInfo for current user on a given module.
+     *
+     * Example: getUserPermissionInfo( 'content', $content, $location );
+     *          Will return PermissionInfo for all content module functions defined in policyMap config, and on things
+     *          like create that often can not evaluate to true/false permission, contains limitations values combines
+     *
+     * Example2: getUserPermissionInfo( 'section', $section, $content );
+     *           Will return PermissionInfo for edit, view and assign.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *
+     * @param string $module The module, e.g. 'content', to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target Optional specific target, e.g. Location to get precise permission info
+     *
+     *  @return \eZ\Publish\API\Repository\Values\User\PermissionInfo[]
+     */
+    public function getUserPermissionInfo($module, ValueObject $object, ValueObject $target = null);
 }
