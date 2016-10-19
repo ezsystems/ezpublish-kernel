@@ -278,4 +278,13 @@ abstract class Gateway
      * @return array
      */
     abstract public function getSearchableFieldMapData();
+
+    /**
+     * Update content type identifier to include copy number.
+     *
+     * @param int $typeId
+     * @param string $baseIdentifier prefix which precedes content type copy
+     * @return string updated identifier
+     */
+    abstract public function updateContentTypeCopyIdentifier($typeId, $baseIdentifier);
 }

@@ -748,7 +748,6 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
-        $remoteId = substr(sha1(uniqid(get_class($mapperMock), true)), 0, 32);
         $mapperMock->expects($this->once())
             ->method('createCreateStructFromType')
             ->with(
@@ -756,10 +755,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                     'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 )
             )->will(
-                $this->returnValue(new CreateStruct(array(
-                    'identifier' => 'testCopy',
-                    'remoteId' => $remoteId,
-                )))
+                $this->returnValue(new CreateStruct(array('identifier' => 'testCopy')))
             );
 
         $handlerMock = $this->getMock(
@@ -795,7 +791,8 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                         'created'
                     ),
                     $this->attribute(
-                        $this->matchesRegularExpression('/^cp_testCopy_' . substr($remoteId, 0, 7) . '_([a-f0-9]+)$/'),
+                        // temporary identifier of a copy is a md5 hash
+                        $this->matchesRegularExpression('/^[a-f0-9]+$/'),
                         'identifier'
                     )
                 )

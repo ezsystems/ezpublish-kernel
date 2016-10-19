@@ -401,38 +401,26 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
-        $originalRemoteId = $createStruct->remoteId;
-        // truncate remoteId to 32 chars to keep BC length of that field
-        $createStruct->remoteId = substr(sha1(uniqid(get_class($createStruct), true)), 0, 32);
-        $createStruct->identifier = $this->getContentTypeCopyIdentifier($createStruct, $originalRemoteId);
+        $createStruct->remoteId = md5(uniqid(get_class($createStruct), true));
+
+        // extract actual identifier name, without "copy_of_" and number
+        $originalIdentifier = preg_replace('/^copy_of_(.+)_\d+$/', '$1', $createStruct->identifier);
+
+        // set temporary identifier
+        $createStruct->identifier = $createStruct->remoteId;
 
         // Set FieldDefinition ids to null to trigger creating new id
         foreach ($createStruct->fieldDefinitions as $fieldDefinition) {
             $fieldDefinition->id = null;
         }
 
-        return $this->internalCreate($createStruct);
-    }
-
-    /**
-     * Prepare identifier of a copy as
-     * cp_<sourceIdentifier>_<abbreviatedSourceRemoteId>_<newAbbreviatedRemoteId>
-     * to avoid making it too long.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
-     * @param $originalRemoteId
-     * @return string
-     */
-    private function getContentTypeCopyIdentifier(CreateStruct $createStruct, $originalRemoteId)
-    {
-        $abbrLen = 7;
-
-        return sprintf(
-            'cp_%s_%s_%s',
-            preg_replace("/^cp_(.+)(_[0-9a-f]{{$abbrLen}}){2}$/", '\1', $createStruct->identifier),
-            substr($originalRemoteId, 0, $abbrLen),
-            substr($createStruct->remoteId, 0, $abbrLen)
+        $contentTypeCopy = $this->internalCreate($createStruct);
+        $contentTypeCopy->identifier = $this->contentTypeGateway->updateContentTypeCopyIdentifier(
+            $contentTypeCopy->id,
+            'copy_of_' . $originalIdentifier . '_'
         );
+
+        return $contentTypeCopy;
     }
 
     /**

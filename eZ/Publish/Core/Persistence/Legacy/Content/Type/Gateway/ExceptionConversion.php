@@ -540,4 +540,18 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateContentTypeCopyIdentifier($typeId, $baseIdentifier)
+    {
+        try {
+            return $this->innerGateway->updateContentTypeCopyIdentifier($typeId, $baseIdentifier);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
 }

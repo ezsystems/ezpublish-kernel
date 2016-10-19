@@ -283,7 +283,7 @@ XML;
 
         return $href;
 
-        // @todo test identifier (cp_<sourceIdentifier>_<abbreviatedSourceRemoteId>_<newAbbreviatedRemoteId>)
+        // @todo test identifier (cp_<sourceIdentifier>_<copyNumber>)
     }
 
     /**
