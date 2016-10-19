@@ -69,10 +69,20 @@ class IntegerConverter implements Converter
     {
         if (isset($fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'])) {
             $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'];
+            // @deprecated false constraint value, see https://jira.ez.no/browse/EZP-26382
+            // @TODO: remove false to null conversion
+            if ($storageDef->dataInt1 === false) {
+                $storageDef->dataInt1 = null;
+            }
         }
 
         if (isset($fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'])) {
             $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'];
+            // @deprecated false constraint value, see https://jira.ez.no/browse/EZP-26382
+            // @TODO: remove false to null conversion
+            if ($storageDef->dataInt2 === false) {
+                $storageDef->dataInt2 = null;
+            }
         }
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
