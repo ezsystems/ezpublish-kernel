@@ -23,8 +23,8 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class IntegerValueValidator extends Validator
 {
     protected $constraints = array(
-        'minIntegerValue' => false,
-        'maxIntegerValue' => false,
+        'minIntegerValue' => null,
+        'maxIntegerValue' => null,
     );
 
     protected $constraintsSchema = array(
@@ -34,7 +34,7 @@ class IntegerValueValidator extends Validator
         ),
         'maxIntegerValue' => array(
             'type' => 'int',
-            'default' => false,
+            'default' => null,
         ),
     );
 
@@ -45,7 +45,14 @@ class IntegerValueValidator extends Validator
             switch ($name) {
                 case 'minIntegerValue':
                 case 'maxIntegerValue':
-                    if ($value !== false && !is_integer($value)) {
+                    if ($value === false) {
+                        @trigger_error(
+                            "The IntegerValueValidator constraint value 'false' is deprecated, and will be removed in 7.0. Use 'null' instead.",
+                            E_USER_DEPRECATED
+                        );
+                        $value = null;
+                    }
+                    if ($value !== null && !is_integer($value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
@@ -86,7 +93,7 @@ class IntegerValueValidator extends Validator
     {
         $isValid = true;
 
-        if ($this->constraints['maxIntegerValue'] !== false && $value->value > $this->constraints['maxIntegerValue']) {
+        if ($this->constraints['maxIntegerValue'] !== null && $value->value > $this->constraints['maxIntegerValue']) {
             $this->errors[] = new ValidationError(
                 'The value can not be higher than %size%.',
                 null,
@@ -97,7 +104,7 @@ class IntegerValueValidator extends Validator
             $isValid = false;
         }
 
-        if ($this->constraints['minIntegerValue'] !== false && $value->value < $this->constraints['minIntegerValue']) {
+        if ($this->constraints['minIntegerValue'] !== null && $value->value < $this->constraints['minIntegerValue']) {
             $this->errors[] = new ValidationError(
                 'The value can not be lower than %size%.',
                 null,
