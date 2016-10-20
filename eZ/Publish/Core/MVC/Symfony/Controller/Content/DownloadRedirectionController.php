@@ -66,7 +66,7 @@ class DownloadRedirectionController extends Controller
             )
         );
 
-        return new RedirectResponse($downloadUrl, 301);
+        return new RedirectResponse($downloadUrl, 302);
     }
 
     /**
