@@ -210,7 +210,7 @@ class Content extends RestController
             $request->getPathInfo()
         );
 
-        if ($content->contentInfo->mainLocationId === null) {
+        if ($content->contentInfo->mainLocationId === null || $content->versionInfo->status === VersionInfo::STATUS_DRAFT) {
             return $versionValue;
         }
 
@@ -329,18 +329,9 @@ class Content extends RestController
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
 
-        $versionList = new Values\VersionList(
+        return new Values\VersionList(
             $this->repository->getContentService()->loadVersions($contentInfo),
             $request->getPathInfo()
-        );
-
-        if ($contentInfo->mainLocationId === null) {
-            return $versionList;
-        }
-
-        return new Values\CachedValue(
-            $versionList,
-            array('locationId' => $contentInfo->mainLocationId)
         );
     }
 
