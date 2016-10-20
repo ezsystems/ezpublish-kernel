@@ -320,7 +320,7 @@ class Mapper
     }
 
     /**
-     * Creates a create struct from an existing $type.
+     * Creates an update struct from an existing $type.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      *
