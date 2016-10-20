@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
@@ -316,6 +317,34 @@ class Mapper
         $createStruct->sortOrder = $type->sortOrder;
 
         return $createStruct;
+    }
+
+    /**
+     * Creates a create struct from an existing $type.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct
+     */
+    public function createUpdateStructFromType(Type $type)
+    {
+        $updateStruct = new UpdateStruct();
+
+        $updateStruct->name = $type->name;
+        $updateStruct->description = $type->description;
+        $updateStruct->identifier = $type->identifier;
+        $updateStruct->modified = $type->modified;
+        $updateStruct->modifierId = $type->modifierId;
+        $updateStruct->remoteId = $type->remoteId;
+        $updateStruct->urlAliasSchema = $type->urlAliasSchema;
+        $updateStruct->nameSchema = $type->nameSchema;
+        $updateStruct->isContainer = $type->isContainer;
+        $updateStruct->initialLanguageId = $type->initialLanguageId;
+        $updateStruct->defaultAlwaysAvailable = $type->defaultAlwaysAvailable;
+        $updateStruct->sortField = $type->sortField;
+        $updateStruct->sortOrder = $type->sortOrder;
+
+        return $updateStruct;
     }
 
     /**

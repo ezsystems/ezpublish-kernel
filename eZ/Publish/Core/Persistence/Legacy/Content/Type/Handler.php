@@ -415,12 +415,10 @@ class Handler implements BaseContentTypeHandler
         }
 
         $contentTypeCopy = $this->internalCreate($createStruct);
-        $contentTypeCopy->identifier = $this->contentTypeGateway->updateContentTypeCopyIdentifier(
-            $contentTypeCopy->id,
-            'copy_of_' . $originalIdentifier . '_'
-        );
+        $updateStruct = $this->mapper->createUpdateStructFromType($contentTypeCopy);
+        $updateStruct->identifier = 'copy_of_' . $originalIdentifier . '_' . $contentTypeCopy->id;
 
-        return $contentTypeCopy;
+        return $this->update($contentTypeCopy->id, $contentTypeCopy->status, $updateStruct);
     }
 
     /**
