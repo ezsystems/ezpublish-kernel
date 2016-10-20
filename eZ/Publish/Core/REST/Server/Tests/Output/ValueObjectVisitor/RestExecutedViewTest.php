@@ -85,6 +85,8 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
             array('/View/Result'),
             array('/View/Result[@media-type="application/vnd.ez.api.ViewResult+xml"]'),
             array('/View/Result[@href="/content/views/test_view/results"]'),
+            array('/View/Result/searchHits/searchHit[@score="0.123" and @index="alexandria"]'),
+            array('/View/Result/searchHits/searchHit[@score="0.234" and @index="waze"]'),
         );
     }
 
@@ -144,6 +146,8 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     protected function buildContentSearchHit()
     {
         return new SearchHit([
+            'score' => 0.123,
+            'index' => 'alexandria',
             'valueObject' => new ApiValues\Content([
                 'versionInfo' => new Content\VersionInfo(['contentInfo' => new ContentInfo()]),
             ]),
@@ -155,6 +159,10 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
      */
     protected function buildLocationSearchHit()
     {
-        return new SearchHit(['valueObject' => new ApiValues\Location()]);
+        return new SearchHit([
+            'score' => 0.234,
+            'index' => 'waze',
+            'valueObject' => new ApiValues\Location(),
+        ]);
     }
 }

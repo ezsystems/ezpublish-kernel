@@ -2176,10 +2176,10 @@ Perform a query on images within the media section, sorted by name, limiting res
     <ViewInput>
       <identifier>TitleView</identifier>
       <ContentQuery>
-        <Criteria>
+        <Filter>
           <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
           <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
-        </Criteria>
+        </Filter>
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
@@ -2206,9 +2206,9 @@ Perform a query on images within the media section, sorted by name, limiting res
       <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
       <public>false</public>
       <LocationQuery>
-        <Criteria>
+        <Filter>
           <ParentLocationIdCriterion>2</ParentLocationIdCriterion>
-        </Criteria>
+        </Filter>
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
@@ -7390,7 +7390,7 @@ View XML Schema
           <xsd:choice>
             <xsd:element name="contentTypeFacetBuilder" type="facetBuilderType" />
             <xsd:element name="criterionFacetBuilder" type="facetBuilderType" />
-            <xsd:element name="dateRangeFacetBulder" type="dateRangeFacetBuilderType" />
+            <xsd:element name="dateRangeFacetBuilder" type="dateRangeFacetBuilderType" />
             <xsd:element name="fieldFacetBuilder" type="fieldFacetBuilderType"></xsd:element>
             <xsd:element name="fieldRangeFacetBuilder" type="fieldRangeFacetBuilderType"></xsd:element>
             <xsd:element name="locationFacetBuilder" type="locationFacetBuilderType" />
@@ -7403,7 +7403,10 @@ View XML Schema
 
       <xsd:complexType name="queryType">
         <xsd:all>
-          <xsd:element name="Criterion" type="criterionType" />
+          <!-- Criteria is deprecated since 6.6.0. Use 'Filter' instead. -->
+          <xsd:element name="Criteria" type="criterionType" />
+          <xsd:element name="Filter" type="criterionType" />
+          <xsd:element name="Query" type="criterionType" />
           <xsd:element name="limit" type="xsd:int" />
           <xsd:element name="offset" type="xsd:int" />
           <xsd:element name="FacetBuilders" type="facetBuilderListType" />
