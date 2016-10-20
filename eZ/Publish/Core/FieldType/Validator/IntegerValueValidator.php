@@ -45,9 +45,11 @@ class IntegerValueValidator extends Validator
             switch ($name) {
                 case 'minIntegerValue':
                 case 'maxIntegerValue':
-                    // @deprecated false constraint value, see https://jira.ez.no/browse/EZP-26382
-                    // @TODO: remove false to null conversion
                     if ($value === false) {
+                        @trigger_error(
+                            "The IntegerValueValidator constraint value 'false' is deprecated, and will be removed in 7.0. Use 'null' instead.",
+                            E_USER_DEPRECATED
+                        );
                         $value = null;
                     }
                     if ($value !== null && !is_integer($value)) {

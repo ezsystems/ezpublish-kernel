@@ -69,20 +69,18 @@ class IntegerConverter implements Converter
     {
         if (isset($fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'])) {
             $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'];
-            // @deprecated false constraint value, see https://jira.ez.no/browse/EZP-26382
-            // @TODO: remove false to null conversion
-            if ($storageDef->dataInt1 === false) {
-                $storageDef->dataInt1 = null;
-            }
         }
-
         if (isset($fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'])) {
             $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'];
-            // @deprecated false constraint value, see https://jira.ez.no/browse/EZP-26382
-            // @TODO: remove false to null conversion
-            if ($storageDef->dataInt2 === false) {
-                $storageDef->dataInt2 = null;
-            }
+        }
+
+        if ($storageDef->dataInt1 === false || $storageDef->dataInt2 === false) {
+            @trigger_error(
+                "The IntegerValueValidator constraint value 'false' is deprecated, and will be removed in 7.0. Use 'null' instead.",
+                E_USER_DEPRECATED
+            );
+            $storageDef->dataInt1 = $storageDef->dataInt1 === false ? null : $storageDef->dataInt1;
+            $storageDef->dataInt2 = $storageDef->dataInt2 === false ? null : $storageDef->dataInt2;
         }
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
