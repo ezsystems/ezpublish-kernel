@@ -74,7 +74,7 @@ class TransactionHandler implements TransactionHandlerInterface
         try {
             $this->dbHandler->commit();
         } catch (Exception $e) {
-            throw new RuntimeException($e->getMessage());
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 
@@ -99,7 +99,7 @@ class TransactionHandler implements TransactionHandlerInterface
                 $this->languageHandler->clearCache();
             }
         } catch (Exception $e) {
-            throw new RuntimeException($e->getMessage());
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 }
