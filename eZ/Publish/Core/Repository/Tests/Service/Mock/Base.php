@@ -47,9 +47,9 @@ abstract class Base extends PHPUnit_Framework_TestCase
     private $spiMockHandlers = array();
 
     /**
-     * @var \eZ\Publish\SPI\IO\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Repository\Mapper\SortClauseMapper|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $IOMock;
+    private $sortClauseMapperMock;
 
     /**
      * Get Real repository with mocked dependencies.
@@ -64,6 +64,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
             $repository = new Repository(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
+                $this->getSortClauseMapperMock(),
                 $serviceSettings,
                 $this->getStubbedUser(14)
             );
@@ -262,5 +263,19 @@ abstract class Base extends PHPUnit_Framework_TestCase
                 ),
             )
         );
+    }
+
+    /**
+     * Returns Location Children Query Type mock.
+     *
+     * @return \eZ\Publish\Core\Repository\Mapper\SortClauseMapper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getSortClauseMapperMock()
+    {
+        if (!isset($this->sortClauseMapperMock)) {
+            $this->sortClauseMapperMock = $this->getMock('eZ\\Publish\\Core\\Repository\\Mapper\\SortClauseMapper');
+        }
+
+        return $this->sortClauseMapperMock;
     }
 }
