@@ -60,6 +60,7 @@ services:
         arguments:
             - "@ezpublish.api.persistence_handler"
             - "@ezpublish.spi.search"
+            - "@ezpublish.sort_clause_mapper"
         lazy: true
 
     ezpublish.api.service.content:

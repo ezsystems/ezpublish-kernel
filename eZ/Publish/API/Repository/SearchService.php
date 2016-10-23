@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
@@ -96,4 +97,13 @@ interface SearchService
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true);
+
+    /**
+     * Get SortClause built from $location's sort options.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     */
+    public function getSortClauseFromLocation(Location $location);
 }

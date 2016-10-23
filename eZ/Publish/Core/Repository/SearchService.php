@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location as LocationCriterion;
@@ -22,6 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Mapper\SortClauseMapper;
 use eZ\Publish\SPI\Search\Handler;
 
 /**
@@ -55,12 +57,18 @@ class SearchService implements SearchServiceInterface
     protected $permissionsCriterionHandler;
 
     /**
+     * @var \eZ\Publish\Core\Repository\Mapper\SortClauseMapper
+     */
+    protected $sortClauseMapper;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
+     * @param \eZ\Publish\Core\Repository\Mapper\SortClauseMapper $sortClauseMapper
      * @param array $settings
      */
     public function __construct(
@@ -68,6 +76,7 @@ class SearchService implements SearchServiceInterface
         Handler $searchHandler,
         Helper\DomainMapper $domainMapper,
         PermissionsCriterionHandler $permissionsCriterionHandler,
+        SortClauseMapper $sortClauseMapper,
         array $settings = array()
     ) {
         $this->repository = $repository;
@@ -78,6 +87,7 @@ class SearchService implements SearchServiceInterface
             //'defaultSetting' => array(),
         );
         $this->permissionsCriterionHandler = $permissionsCriterionHandler;
+        $this->sortClauseMapper = $sortClauseMapper;
     }
 
     /**
@@ -318,5 +328,17 @@ class SearchService implements SearchServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Get SortClause built from $location's sort options.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     */
+    public function getSortClauseFromLocation(Location $location)
+    {
+        return $this->sortClauseMapper->getSortClauseFromLocation($location);
     }
 }
