@@ -269,6 +269,10 @@ interface ContentService
     /**
      * Publishes a content version.
      *
+     * Publishes a content version and deletes archive versions if they overflow max archive versions.
+     * Max archive versions are currently a configuration for default max limit, by default set to 5.
+     * @todo Introduce null|int ContentType->versionArchiveLimit to be able to let admins override this per type.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
