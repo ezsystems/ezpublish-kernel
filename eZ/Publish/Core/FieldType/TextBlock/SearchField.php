@@ -34,7 +34,7 @@ class SearchField implements Indexable
             new Search\Field(
                 'value',
                 $field->value->data,
-                new Search\FieldType\StringField()
+                new Search\FieldType\TextField()
             ),
             new Search\Field(
                 'fulltext',
