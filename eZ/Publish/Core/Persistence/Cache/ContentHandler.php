@@ -223,11 +223,11 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::listVersions
      */
-    public function listVersions($contentId)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId));
+        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status));
 
-        return $this->persistenceHandler->contentHandler()->listVersions($contentId);
+        return $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
     }
 
     /**

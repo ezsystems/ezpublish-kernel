@@ -1655,6 +1655,71 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the publishVersion() method, and that it creates limited archives.
+     *
+     * @todo Adapt this when per content type archive limited is added on repository Content Type model.
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testPublishVersionNotCreatingUnlimitedArchives()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion1();
+
+        // Create a new draft with versionNo = 2
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 3
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 4
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 5
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 6
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 7
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        $versionInfoList = $contentService->loadVersions($content->contentInfo);
+
+        $this->assertEquals(6, count($versionInfoList));
+        $this->assertEquals(2, $versionInfoList[0]->versionNo);
+        $this->assertEquals(7, $versionInfoList[5]->versionNo);
+
+        $this->assertEquals(
+            [
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_PUBLISHED,
+            ],
+            [
+                $versionInfoList[0]->status,
+                $versionInfoList[1]->status,
+                $versionInfoList[2]->status,
+                $versionInfoList[3]->status,
+                $versionInfoList[4]->status,
+                $versionInfoList[5]->status,
+            ]
+        );
+    }
+
+    /**
      * Test for the newContentMetadataUpdateStruct() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
