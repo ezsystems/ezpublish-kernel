@@ -107,7 +107,10 @@ class FieldDefinitionCreateStruct extends ValueObject
     public $defaultValue;
 
     /**
-     * Indicates if th the content is searchable by this attribute.
+     * Indicates if the field is indexed for FullText search.
+     *
+     * Means that if FieldType is indexable and this is true, then content for the Field will be indexed
+     * for FullText search. Field either way will (if supported) still be queryable with Field specific Criteria.
      *
      * @var bool
      */

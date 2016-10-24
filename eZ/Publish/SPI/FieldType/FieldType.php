@@ -176,7 +176,11 @@ interface FieldType
     public function applyDefaultSettings(&$fieldSettings);
 
     /**
-     * Indicates if the field type supports indexing and sort keys for searching.
+     * Indicates if the field is indexed for FullText search.
+     *
+     * Implies that this fieldType must implement {@see eZ\Publish\SPI\FieldType\Indexable} with a
+     * {@see eZ\Publish\SPI\Search\FieldType\FullTextField} field, if false field can still be filtered
+     * and sorted as long as fieldType implements {@see eZ\Publish\SPI\FieldType\Indexable}.
      *
      * @return bool
      */

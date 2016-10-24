@@ -95,7 +95,13 @@ class FieldDefinitionUpdateStruct extends ValueObject
     public $defaultValue;
 
     /**
-     * If set the the searchable flag is set to this value.
+     * If set the the searchable flag is updated to indicate if the field is indexed for FullText search.
+     *
+     * Means that if FieldType is indexable and this is true, then content for the Field will be indexed
+     * for FullText search. Field either way will (if supported) still be queryable with Field specific Criteria.
+     *
+     * Note: Changes to this flag means existing content with this attribute will need to be re-indexed, until async
+     *       indexing support is added this needs to be done manually.
      *
      * @var bool
      */
