@@ -30,6 +30,13 @@ class FullTextValue extends ValueObject
     public $fieldDefinitionId;
 
     /**
+     * Content object field identifier.
+     *
+     * @var string
+     */
+    public $fieldDefinitionIdentifier;
+
+    /**
      * @var string
      */
     public $languageCode;
