@@ -119,8 +119,9 @@ class DoctrineDatabase extends Gateway
             } else {
                 $integerValue = 0;
             }
-            // Split transformed text on whitespace
-            $wordArray = explode(' ', $this->transformationProcessor->transform($fullTextValue->value, $this->fullTextSearchConfiguration['commands']));
+            $text = $this->transformationProcessor->transform($fullTextValue->value, $this->fullTextSearchConfiguration['commands']);
+            // split by non-words
+            $wordArray = preg_split('/\W/u', $text, -1, PREG_SPLIT_NO_EMPTY);
             foreach ($wordArray as $word) {
                 if (trim($word) === '') {
                     continue;

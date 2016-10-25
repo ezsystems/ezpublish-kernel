@@ -615,8 +615,11 @@ class SearchEngineIndexingTest extends BaseTest
             ['lowercase text', 'LOWERCASE TEXT'],
             ['text-with-hyphens', 'text-with-hyphens'],
             ['text containing spaces', 'text containing spaces'],
-            ['"quoted text"', '"quoted text"'],
+            ['"quoted text"', 'quoted text'],
             ['ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝ', 'àáâãäåçèéêëìíîïðñòóôõöøùúûüý'],
+            ['with boundary.', 'with boundary'],
+            ['it\'s', 'it\'s'],
+            ['with_underscore', 'with_underscore'],
         ];
     }
 
