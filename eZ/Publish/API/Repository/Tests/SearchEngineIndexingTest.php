@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -580,10 +581,20 @@ class SearchEngineIndexingTest extends BaseTest
      *
      * @param string $text Content Item field value text (to be indexed)
      * @param string $searchForText text based on which Content Item should be found
+     * @param array $ignoreForSetupFactories list of SetupFactories to be ignored
      * @dataProvider getSpecialFullTextCases
      */
-    public function testIndexingSpecialFullTextCases($text, $searchForText)
+    public function testIndexingSpecialFullTextCases($text, $searchForText, array $ignoreForSetupFactories = [])
     {
+        // check if provided data should be ignored for the current Search Engine (via SetupFactory)
+        if (!empty($ignoreForSetupFactories) && in_array(get_class($this->getSetupFactory()), $ignoreForSetupFactories)) {
+            $this->markTestIncomplete(sprintf(
+                'Handling FullText Searching for the phrase {%s} is incomplete for %s',
+                $searchForText,
+                get_class($this->getSetupFactory())
+            ));
+        }
+
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -618,7 +629,8 @@ class SearchEngineIndexingTest extends BaseTest
             ['"quoted text"', 'quoted text'],
             ['ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝ', 'àáâãäåçèéêëìíîïðñòóôõöøùúûüý'],
             ['with boundary.', 'with boundary'],
-            ['it\'s', 'it\'s'],
+            // @todo: Remove as soon as elastic is updated to later version not affected
+            ["it's", "it's", [LegacyElasticsearch::class]],
             ['with_underscore', 'with_underscore'],
         ];
     }
