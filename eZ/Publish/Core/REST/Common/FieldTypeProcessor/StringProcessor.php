@@ -13,11 +13,8 @@ use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 class StringProcessor extends FieldTypeProcessor
 {
-
     /**
-     *
      * {@inheritdoc}
-     *
      */
     public function preProcessValueHash($incomingValueHash)
     {
