@@ -43,7 +43,7 @@ class Repository implements RepositoryInterface
     protected $searchHandler;
 
     /**
-     * Instance of Query Type Registry.
+     * Instance of Sort Clause Mapper.
      *
      * @var \eZ\Publish\Core\Repository\Helper\SortClauseMapper
      */

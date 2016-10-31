@@ -266,7 +266,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns Location Children Query Type mock.
+     * Returns Sort Clause Mapper mock.
      *
      * @return \eZ\Publish\Core\Repository\Mapper\SortClauseMapper|\PHPUnit_Framework_MockObject_MockObject
      */
