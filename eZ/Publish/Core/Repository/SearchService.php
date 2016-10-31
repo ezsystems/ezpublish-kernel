@@ -331,11 +331,11 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * Get SortClause built from $location's sort options.
+     * Get SortClause objects built from $location's sort options.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause[]
      */
     public function getSortClauseFromLocation(Location $location)
     {

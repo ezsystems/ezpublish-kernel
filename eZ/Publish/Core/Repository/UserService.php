@@ -218,9 +218,7 @@ class UserService implements UserServiceInterface
             new CriterionParentLocationId($location->id),
         ]);
 
-        $searchQuery->sortClauses = [
-            $this->repository->getSearchService()->getSortClauseFromLocation($location),
-        ];
+        $searchQuery->sortClauses = $this->repository->getSearchService()->getSortClauseFromLocation($location);
 
         return $this->repository->getSearchService()->findLocations($searchQuery, array(), false);
     }
@@ -952,9 +950,7 @@ class UserService implements UserServiceInterface
         $searchQuery->limit = $limit;
         $searchQuery->performCount = false;
 
-        $searchQuery->sortClauses = [
-            $this->repository->getSearchService()->getSortClauseFromLocation($mainGroupLocation),
-        ];
+        $searchQuery->sortClauses = $this->repository->getSearchService()->getSortClauseFromLocation($mainGroupLocation);
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
