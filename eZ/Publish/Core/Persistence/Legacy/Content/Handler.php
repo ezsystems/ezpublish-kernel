@@ -562,6 +562,8 @@ class Handler implements BaseContentHandler
     /**
      * Returns the versions for $contentId.
      *
+     * Result is returned with oldest version first (sorted by created, alternatively version id if auto increment).
+     *
      * @param int $contentId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
