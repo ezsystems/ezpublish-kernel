@@ -1109,7 +1109,7 @@ class UserService implements UserServiceInterface
 
     /**
      * Verifies if the provided login and password are valid.
-     * 
+     *
      * @param string $login User login
      * @param string $password User password
      * @param \eZ\Publish\SPI\Persistence\User $spiUser Loaded user handler
