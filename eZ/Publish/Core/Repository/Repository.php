@@ -407,12 +407,12 @@ class Repository implements RepositoryInterface
         }
 
         // Uses SPI to avoid triggering permission checks in Role/User service
-        $permissionSets = array();
+        $permissionSets = [];
         $roleDomainMapper = $this->getRoleDomainMapper();
         $limitationService = $this->getLimitationService();
         $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($user->getUserId(), true);
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            $permissionSet = array('limitation' => null, 'policies' => array());
+            $permissionSet = ['limitation' => null, 'policies' => []];
 
             $spiRole = $this->persistenceHandler->userHandler()->loadRole($spiRoleAssignment->roleId);
             foreach ($spiRole->policies as $spiPolicy) {
@@ -440,6 +440,7 @@ class Repository implements RepositoryInterface
             }
 
             if (!empty($permissionSet['policies'])) {
+                $permissionSet['policies'] = $this->removeOverlappingPolicies($permissionSet['policies']);
                 if ($spiRoleAssignment->limitationIdentifier !== null) {
                     $permissionSet['limitation'] = $limitationService
                         ->getLimitationType($spiRoleAssignment->limitationIdentifier)
@@ -454,7 +455,38 @@ class Repository implements RepositoryInterface
             return $permissionSets;
         }
 
-        return false;// No policies matching $module and $function, or they contained limitations
+        // No policies matching $module and $function, or they contained limitations
+        return false;
+    }
+
+    /**
+     * Remove policies that overlap existing all modules or all functions w/o limitations policies.
+     *
+     * @param \eZ\Publish\Core\Repository\Values\User\Policy[] $policies
+     * @return \eZ\Publish\Core\Repository\Values\User\Policy[]
+     */
+    protected function removeOverlappingPolicies(array $policies)
+    {
+        $tmpPolicies = $policies;
+        foreach ($tmpPolicies as $tmpPolicy) {
+            // a policy can overlap other policy only if it has no limitations
+            if (empty($tmpPolicy->getLimitations())) {
+                if ($tmpPolicy->module === '*') {
+                    // if there's "all modules" policy w/o limitations, any other policy overlaps it
+                    return [$tmpPolicy];
+                }
+
+                // remove from the original array overlapping policies with narrow scope
+                foreach ($policies as $idx => $policy) {
+                    if ($policy->isNarrow($tmpPolicy)) {
+                        unset($policies[$idx]);
+                    }
+                }
+            }
+        }
+
+        // restore keys order before returning
+        return array_values($policies);
     }
 
     /**
@@ -1085,7 +1117,7 @@ class Repository implements RepositoryInterface
     /**
      * Enqueue an event to be triggered at commit or directly if no transaction has started.
      *
-     * @param Callable $event
+     * @param callable $event
      */
     public function commitEvent($event)
     {
