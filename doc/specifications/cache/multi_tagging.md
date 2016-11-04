@@ -54,7 +54,7 @@ Tags applied to Content View and Content REST Object:
 
 - `path-<path-location-id>`
 
-##### Relations
+##### Content Relations
 
 
 
@@ -66,6 +66,18 @@ Tags applied to Content View and Content REST Object:
 _Note: These tags are mainly relevant for field (field, embed, link) relations as change like deletion of realtion has an
 effect on the output of the given content (it should not render links to the given relation anymore)._
 
+
+
+#### Other eZ Repository domains
+
+Tags for other domains in the Repository also have tags, e.g.:
+- `content-type-<id>` _(TODO: We might have to differ between the one used on content, or introduce one for drafts if we want to cache that)_
+- `content-type-group-<id>`
+- `section-<id>`
+- `object-state-<id>`
+- `object-state-group-<id>`
+- `role-<id>`
+- _(..)_
 
 
 ## Recommendations

@@ -59,11 +59,11 @@ class FOSPurgeClient implements PurgeClientInterface
         }
 
         // @todo: Need to take advantage of xkey if enabled to avoid BAN unless VCL handles this for us.
-        $this->cacheManager->invalidate(array('xkey' => '^(' . implode('|', $tags) . ')$'));
+        $this->cacheManager->invalidate(['xkey' => '^(' . implode('|', $tags) . ')$']);
     }
 
     public function purgeAll()
     {
-        $this->cacheManager->invalidate(array('xkey' => '.*'));
+        $this->cacheManager->invalidate(['xkey' => '.*']);
     }
 }
