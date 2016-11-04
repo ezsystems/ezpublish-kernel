@@ -628,7 +628,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(4))
             ->method('clear')
-            ->with('content', $this->isType('integer'))
+            ->with('user', 'role', 'assignments', 'byGroup')
             ->will($this->returnValue(true));
 
         $this->cacheMock
@@ -640,7 +640,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(6))
             ->method('clear')
-            ->with('content', 'info', $this->isType('integer'))
+            ->with('content', $this->isType('integer'))
             ->will($this->returnValue(true));
 
         $this->cacheMock
@@ -652,7 +652,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(8))
             ->method('clear')
-            ->with('user', 'role', 'assignments', 'byGroup')
+            ->with('content', 'info', $this->isType('integer'))
             ->will($this->returnValue(true));
 
         $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler');
@@ -674,12 +674,24 @@ class LocationHandlerTest extends HandlerTest
             ->with('contentId')
             ->will($this->returnValue(42));
 
-        $innerHandlerMock
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject $handler */
+        $handler = $this
+            ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Cache\\LocationHandler')
+            ->setMethods(['load'])
+            ->setConstructorArgs(
+                [
+                    $this->cacheMock,
+                    $this->persistenceHandlerMock,
+                    $this->loggerMock
+                ]
+            )
+            ->getMock();
+
+        $handler
             ->expects($this->any())
             ->method('load')
             ->will($this->returnValue($locationMock));
 
-        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->swap(33, 66);
     }
 
