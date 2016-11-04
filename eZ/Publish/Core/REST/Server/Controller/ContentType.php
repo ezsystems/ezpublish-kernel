@@ -198,12 +198,9 @@ class ContentType extends RestController
     {
         $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
-        return new Values\CachedValue(
-            new Values\RestContentType(
-                $contentType,
-                $contentType->getFieldDefinitions()
-            ),
-            array('content-type' => $contentType->id)
+        return new Values\RestContentType(
+            $contentType,
+            $contentType->getFieldDefinitions()
         );
     }
 

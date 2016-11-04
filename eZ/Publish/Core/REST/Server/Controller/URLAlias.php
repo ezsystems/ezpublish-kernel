@@ -97,7 +97,7 @@ class URLAlias extends RestController
                 $this->urlAliasService->listLocationAliases($location, $custom),
                 $request->getPathInfo()
             ),
-            array('location' => $location->id)
+            array('locationId' => $location->id)
         );
     }
 

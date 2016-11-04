@@ -80,7 +80,7 @@ class BinaryContent extends RestController
             } else {
                 return new CachedValue(
                     $variation,
-                    array('location' => $content->contentInfo->mainLocationId)
+                    array('locationId' => $content->contentInfo->mainLocationId)
                 );
             }
         } catch (InvalidVariationException $e) {

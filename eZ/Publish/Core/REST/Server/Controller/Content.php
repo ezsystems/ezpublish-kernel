@@ -103,7 +103,7 @@ class Content extends RestController
 
         return new Values\CachedValue(
             $restContent,
-            array('location' => $contentInfo->mainLocationId)
+            array('locationId' => $contentInfo->mainLocationId)
         );
     }
 
@@ -216,7 +216,7 @@ class Content extends RestController
 
         return new Values\CachedValue(
             $versionValue,
-            array('location' => $content->contentInfo->mainLocationId)
+            array('locationId' => $content->contentInfo->mainLocationId)
         );
     }
 
@@ -581,7 +581,7 @@ class Content extends RestController
 
         return new Values\CachedValue(
             $relationListValue,
-            array('location' => $contentInfo->mainLocationId)
+            array('locationId' => $contentInfo->mainLocationId)
         );
     }
 
@@ -613,7 +613,7 @@ class Content extends RestController
 
                 return new Values\CachedValue(
                     $relation,
-                    array('location' => $contentInfo->mainLocationId)
+                    array('locationId' => $contentInfo->mainLocationId)
                 );
             }
         }
