@@ -8,7 +8,8 @@ Feature: Running searches using REST views
          And I set header "accept" for "View" object
          And I make a "ViewInput" object
          And I set field "identifier" to "some_identifier"
-         And I set field "ContentQuery" to an empty array
+         And I set field "contentQuery" to a Query object
+         And I set the "filter" property of the Query to a valid Criterion
          And I send the request
         Then response contains a "eZ\Publish\Core\REST\Client\Values\View" object
          And the View contains Search Hits

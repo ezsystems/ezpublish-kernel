@@ -2176,10 +2176,10 @@ Perform a query on images within the media section, sorted by name, limiting res
     <ViewInput>
       <identifier>TitleView</identifier>
       <ContentQuery>
-        <Criteria>
+        <Filter>
           <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
           <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
-        </Criteria>
+        </Filter>
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
@@ -2206,9 +2206,9 @@ Perform a query on images within the media section, sorted by name, limiting res
       <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
       <public>false</public>
       <LocationQuery>
-        <Criteria>
+        <Filter>
           <ParentLocationIdCriterion>2</ParentLocationIdCriterion>
-        </Criteria>
+        </Filter>
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
@@ -3784,7 +3784,7 @@ Copy Content Type
 :Resource: /content/types/<ID>
 :Method:      COPY or POST with header: X-HTTP-Method-Override COPY
 :Description: copies a content type. A new remoteId is generated, and the identifier of the copy is set to
-              copy_of_<identifier>_<remoteId> (or another random string).
+              copy_of_<originalBaseIdentifier>_<newTypeId> (or another random string).
 :Response:
 
 .. code:: http
@@ -7390,7 +7390,7 @@ View XML Schema
           <xsd:choice>
             <xsd:element name="contentTypeFacetBuilder" type="facetBuilderType" />
             <xsd:element name="criterionFacetBuilder" type="facetBuilderType" />
-            <xsd:element name="dateRangeFacetBulder" type="dateRangeFacetBuilderType" />
+            <xsd:element name="dateRangeFacetBuilder" type="dateRangeFacetBuilderType" />
             <xsd:element name="fieldFacetBuilder" type="fieldFacetBuilderType"></xsd:element>
             <xsd:element name="fieldRangeFacetBuilder" type="fieldRangeFacetBuilderType"></xsd:element>
             <xsd:element name="locationFacetBuilder" type="locationFacetBuilderType" />
@@ -7403,7 +7403,10 @@ View XML Schema
 
       <xsd:complexType name="queryType">
         <xsd:all>
-          <xsd:element name="Criterion" type="criterionType" />
+          <!-- Criteria is deprecated since 6.6.0. Use 'Filter' instead. -->
+          <xsd:element name="Criteria" type="criterionType" />
+          <xsd:element name="Filter" type="criterionType" />
+          <xsd:element name="Query" type="criterionType" />
           <xsd:element name="limit" type="xsd:int" />
           <xsd:element name="offset" type="xsd:int" />
           <xsd:element name="FacetBuilders" type="facetBuilderListType" />
@@ -9769,6 +9772,39 @@ ErrorMessage XML Schema
           <xsd:element name="errorCode" type="xsd:string"></xsd:element>
           <xsd:element name="errorMessage" type="xsd:string"></xsd:element>
           <xsd:element name="errorDescription" type="xsd:string"></xsd:element>
+          <xsd:element name="errorDetails" minOccurs="0">
+            <xsd:complexType>
+              <xsd:all>
+                <xsd:element name="fields" minOccurs="1">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="field" minOccurs="1" maxOccurs="unbounded">
+                        <xsd:attribute name="fieldTypeId" type="xsd:integer"/>
+                        <xsd:complexType>
+                          <xsd:all>
+                            <xsd:element name="errors" minOccurs="1">
+                              <xsd:complexType>
+                                <xsd:sequence>
+                                  <xsd:element name="error" minOccurs="1" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                      <xsd:all>
+                                        <xsd:element name="type" type="xsd:string"/>
+                                        <xsd:element name="message" type="xsd:string"/>
+                                      </xsd:all>
+                                    </xsd:complexType>
+                                  </xsd:element>
+                                </xsd:sequence>
+                              </xsd:complexType>
+                            </xsd:element>
+                          </xsd:all>
+                        </xsd:complexType>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:all>
+            </xsd:complexType>
+          </xsd:element>
         </xsd:all>
       </xsd:complexType>
       <xsd:element name="ErrorMessage" type="vnd.ez.api.ErrorMessage"></xsd:element>

@@ -1087,19 +1087,19 @@ ezpublish_rest_unassignRoleFromUserGroup:
 ezpublish_rest_createSession:
     path: /user/sessions
     defaults:
-        _controller: ezpublish_rest.controller.user:createSession
+        _controller: ezpublish_rest.controller.session:createSessionAction
     methods: [POST]
 
 ezpublish_rest_deleteSession:
     path: /user/sessions/{sessionId}
     defaults:
-        _controller: ezpublish_rest.controller.user:deleteSession
+        _controller: ezpublish_rest.controller.session:deleteSessionAction
     methods: [DELETE]
 
 ezpublish_rest_refreshSession:
     path: /user/sessions/{sessionId}/refresh
     defaults:
-        _controller: ezpublish_rest.controller.user:refreshSession
+        _controller: ezpublish_rest.controller.session:refreshSessionAction
     methods: [POST]
 
 

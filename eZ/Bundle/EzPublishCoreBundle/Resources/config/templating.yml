@@ -226,6 +226,7 @@ services:
             - "@security.authorization_checker"
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
+            - "@ezpublish.content_info_location_loader.main"
 
     ezpublish.view_builder.block:
         class: "%ezpublish.view_builder.block.class%"

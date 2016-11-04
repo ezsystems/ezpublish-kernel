@@ -153,7 +153,6 @@ EOF;
             '_route_params' => array(
                 'contentId' => $content->id,
                 'locationId' => $location->id,
-                'language' => $language,
             ),
             'location' => $location,
             'content' => $content,
@@ -163,6 +162,7 @@ EOF;
                 'content' => $content,
                 'location' => $location,
                 'isPreview' => true,
+                'language' => $language,
             ),
             'siteaccess' => $previewSiteAccess,
             'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),

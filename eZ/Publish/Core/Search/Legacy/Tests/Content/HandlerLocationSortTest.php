@@ -127,7 +127,8 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
                 $this->getDatabaseHandler(),
                 $this->getContentTypeHandler(),
                 $this->getDefinitionBasedTransformationProcessor(),
-                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler())
+                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
+                $this->getFullTextSearchConfiguration()
             ),
             $this->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper')->disableOriginalConstructor()->getMock(),
             $this->getLocationMapperMock(),

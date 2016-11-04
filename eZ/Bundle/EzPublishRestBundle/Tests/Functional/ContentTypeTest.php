@@ -74,7 +74,7 @@ XML;
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeCreate>
-  <identifier>testCreateContentType</identifier>
+  <identifier>tCreate</identifier>
   <names>
     <value languageCode="eng-GB">testCreateContentType</value>
   </names>
@@ -242,7 +242,7 @@ XML;
     public function testListContentTypesByIdentifier()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=testCreateContentType')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=tCreate')
         );
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
@@ -283,7 +283,7 @@ XML;
 
         return $href;
 
-        // @todo test identifier (copy_of_<sourceIdentifier)
+        // @todo test identifier (copy_of_<originalBaseIdentifier>_<newTypeId>)
     }
 
     /**

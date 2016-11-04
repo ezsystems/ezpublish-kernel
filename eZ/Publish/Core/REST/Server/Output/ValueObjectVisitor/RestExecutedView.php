@@ -116,10 +116,10 @@ class RestExecutedView extends ValueObjectVisitor
         foreach ($data->searchResults->searchHits as $searchHit) {
             $generator->startObjectElement('searchHit');
 
-            $generator->startAttribute('score', 0);
+            $generator->startAttribute('score', (float)$searchHit->score);
             $generator->endAttribute('score');
 
-            $generator->startAttribute('index', 0);
+            $generator->startAttribute('index', (string)$searchHit->index);
             $generator->endAttribute('index');
 
             $generator->startObjectElement('value');

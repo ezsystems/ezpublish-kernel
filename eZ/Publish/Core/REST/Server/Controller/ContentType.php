@@ -342,8 +342,8 @@ class ContentType extends RestController
     }
 
     /**
-     * Copies a content type. The identifier of the copy
-     * is changed to copy_of_<identifier> and a new remoteId is generated.
+     * Copies a content type. The identifier of the copy is changed to
+     * copy_of_<originalBaseIdentifier>_<newTypeId> and a new remoteId is generated.
      *
      * @param $contentTypeId
      *

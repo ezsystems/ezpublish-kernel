@@ -53,3 +53,8 @@ services:
             - "@ezpublish.api.service.location"
             - "@ezpublish.api.service.content"
             - "@ezpublish.spi.persistence.cache.locationHandler"
+
+    ezpublish.content_info_location_loader.main:
+        class: 'eZ\Publish\Core\Helper\ContentInfoLocationLoader\SudoMainLocationLoader'
+        arguments:
+            - "@ezpublish.api.repository"

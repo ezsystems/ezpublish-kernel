@@ -28,6 +28,44 @@ parameters:
     ezpublish.search.legacy.gateway.criterion_field_value_handler.composite.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
     ezpublish.search.legacy.gateway.criterion_field_value_handler.simple.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple
 
+    # Full text search configuration options.
+    ezpublish.search.legacy.criterion_handler.full_text.configuration:
+        stopWordThresholdFactor: 0.66
+        enableWildcards: true
+        commands:
+            - "latin-exta_lowercase"
+            - "latin1_lowercase"
+            - "ascii_lowercase"
+            - "latin_lowercase"
+            - "cyrillic_lowercase"
+            - "greek_lowercase"
+            - "apostrophe_normalize"
+            - "apostrophe_to_doublequote"
+            - "ascii_search_cleanup"
+            - "cyrillic_diacritical"
+            - "cyrillic_search_cleanup"
+            - "cyrillic_transliterate_ascii"
+            - "doublequote_normalize"
+            - "endline_search_normalize"
+            - "greek_diacritical"
+            - "greek_normalize"
+            - "greek_transliterate_ascii"
+            - "hebrew_transliterate_ascii"
+            - "hyphen_normalize"
+            - "inverted_to_normal"
+            - "latin1_diacritical"
+            - "latin1_transliterate_ascii"
+            - "latin-exta_diacritical"
+            - "latin-exta_transliterate_ascii"
+            - "latin_search_cleanup"
+            - "latin_search_decompose"
+            - "math_to_ascii"
+            - "punctuation_normalize"
+            - "space_normalize"
+            - "special_decompose"
+            - "specialwords_search_normalize"
+            - "tab_search_normalize"
+
 services:
     ezpublish.search.legacy.gateway.criterion_handler.base:
         abstract: true
@@ -103,6 +141,7 @@ services:
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.api.storage_engine.transformation_processor"
+            - "%ezpublish.search.legacy.criterion_handler.full_text.configuration%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}

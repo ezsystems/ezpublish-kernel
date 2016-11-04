@@ -81,7 +81,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
             ),
             'maxIntegerValue' => array(
                 'type' => 'int',
-                'default' => false,
+                'default' => null,
             ),
         );
         $validator = new IntegerValueValidator();
@@ -246,15 +246,15 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                     'maxIntegerValue' => 2,
                 ),
                 array(
-                    'minIntegerValue' => false,
-                    'maxIntegerValue' => false,
+                    'minIntegerValue' => null,
+                    'maxIntegerValue' => null,
                 ),
                 array(
                     'minIntegerValue' => -5,
-                    'maxIntegerValue' => false,
+                    'maxIntegerValue' => null,
                 ),
                 array(
-                    'minIntegerValue' => false,
+                    'minIntegerValue' => null,
                     'maxIntegerValue' => 12,
                 ),
                 array(

@@ -224,6 +224,15 @@ services:
         arguments:
             - "@ezpublish.api.service.search"
 
+    ezpublish_rest.controller.session:
+        class: eZ\Publish\Core\REST\Server\Controller\SessionController
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - "@ezpublish_rest.session_authenticator"
+            - "%ezpublish_rest.csrf_token_intention%"
+            - "@?security.csrf.token_manager"
+            - "@?security.csrf.token_storage"
+
     ezpublish_rest.request_listener:
         class: "%ezpublish_rest.request_listener.class%"
         tags:
@@ -286,11 +295,15 @@ services:
         class: "%ezpublish_rest.field_type_processor.ezobjectrelationlist.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelationlist }
+        calls:
+            - [setRouter, ["@router"]]
 
     ezpublish_rest.field_type_processor.ezobjectrelation:
         class: "%ezpublish_rest.field_type_processor.ezobjectrelation.class%"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelation }
+        calls:
+            - [setRouter, ["@router"]]
 
     ezpublish_rest.field_type_processor.eztime:
         class: "%ezpublish_rest.field_type_processor.eztime.class%"

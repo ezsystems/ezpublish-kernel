@@ -25,15 +25,11 @@ use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\User as RepositoryUser;
 use eZ\Publish\API\Repository\Exceptions as ApiExceptions;
-use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException as RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 /**
  * User controller.
@@ -88,6 +84,18 @@ class User extends RestController
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
+
+    /**
+     * @var \Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface
+     * @deprecated This property is deprecated since 6.5, and will be removed in 7.0.
+     */
+    private $csrfTokenStorage;
+
+    /**
+     * @var \eZ\Publish\Core\REST\Server\Controller\SessionController
+     * @deprecated This property is added for backward compatibility. It is deprecated, and will be removed in 7.0.
+     */
+    private $sessionController;
 
     /**
      * Construct controller.
@@ -969,64 +977,17 @@ class User extends RestController
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the login or password are incorrect or invalid CSRF
      *
      * @return Values\UserSession|Values\Conflict
+     *
+     * @deprecated Deprecated since 6.5. Use SessionController::refreshSessionAction().
      */
     public function createSession(Request $request)
     {
-        /** @var $sessionInput \eZ\Publish\Core\REST\Server\Values\SessionInput */
-        $sessionInput = $this->inputDispatcher->parse(
-            new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
-                $request->getContent()
-            )
+        @trigger_error(
+            E_USER_DEPRECATED,
+            'The session actions from the User controller are deprecated since 6.5. Use the SessionController instead.'
         );
-        $request->attributes->set('username', $sessionInput->login);
-        $request->attributes->set('password', $sessionInput->password);
 
-        try {
-            $csrfToken = '';
-            $csrfTokenManager = $this->container->get('security.csrf.token_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE);
-            $session = $request->getSession();
-            if ($session->isStarted()) {
-                if ($csrfTokenManager) {
-                    $csrfToken = $request->headers->get('X-CSRF-Token');
-                    if (
-                        !$csrfTokenManager->isTokenValid(
-                            new CsrfToken(
-                                $this->container->getParameter('ezpublish_rest.csrf_token_intention'),
-                                $csrfToken
-                            )
-                        )
-                    ) {
-                        throw new UnauthorizedException('Missing or invalid CSRF token', $csrfToken);
-                    }
-                }
-            }
-
-            $authenticator = $this->container->get('ezpublish_rest.session_authenticator');
-            $token = $authenticator->authenticate($request);
-            // If CSRF token has not been generated yet (i.e. session not started), we generate it now.
-            // This will seamlessly start the session.
-            if ($csrfTokenManager && !$csrfToken) {
-                $csrfToken = $csrfTokenManager->getToken(
-                    $this->container->getParameter('ezpublish_rest.csrf_token_intention')
-                )->getValue();
-            }
-
-            return new Values\UserSession(
-                $token->getUser()->getAPIUser(),
-                $session->getName(),
-                $session->getId(),
-                $csrfToken,
-                !$token->hasAttribute('isFromSession')
-            );
-        } catch (Exceptions\UserConflictException $e) {
-            // Already logged in with another user, this will be converted to HTTP status 409
-            return new Values\Conflict();
-        } catch (AuthenticationException $e) {
-            throw new UnauthorizedException('Invalid login or password', $request->getPathInfo());
-        } catch (AccessDeniedException $e) {
-            throw new UnauthorizedException($e->getMessage(), $request->getPathInfo());
-        }
+        return $this->sessionController->createSessionAction($request);
     }
 
     /**
@@ -1034,26 +995,20 @@ class User extends RestController
      *
      * @param string $sessionId
      *
-     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the CSRF token is missing or invalid.
      *
      * @return \eZ\Publish\Core\REST\Server\Values\UserSession
+     *
+     * @deprecated Deprecated since 6.5. Use SessionController::refreshSessionAction().
      */
     public function refreshSession($sessionId, Request $request)
     {
-        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
-        $session = $request->getSession();
-        $inputCsrf = $request->headers->get('X-CSRF-Token');
-        if ($session === null || !$session->isStarted() || $session->getId() != $sessionId) {
-            throw new RestNotFoundException('Session not valid');
-        }
-
-        return new Values\UserSession(
-            $this->repository->getCurrentUser(),
-            $session->getName(),
-            $session->getId(),
-            $inputCsrf,
-            false
+        @trigger_error(
+            E_USER_DEPRECATED,
+            'The session actions from the User controller are deprecated since 6.5. Use the SessionController instead.'
         );
+
+        return $this->sessionController->refreshSessionAction($sessionId, $request);
     }
 
     /**
@@ -1061,21 +1016,21 @@ class User extends RestController
      *
      * @param string $sessionId
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     * @return Values\DeletedUserSession|\Symfony\Component\HttpFoundation\Response
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the CSRF token is missing or invalid.
      * @throws RestNotFoundException
+     *
+     * @deprecated Deprecated since 6.5. Use SessionController::refreshSessionAction().
      */
     public function deleteSession($sessionId, Request $request)
     {
-        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
-        $session = $this->container->get('session');
-        if (!$session->isStarted() || $session->getId() != $sessionId) {
-            throw new RestNotFoundException("Session not found: '{$sessionId}'.");
-        }
-
-        return new Values\DeletedUserSession(
-            $this->container->get('ezpublish_rest.session_authenticator')->logout($request)
+        @trigger_error(
+            E_USER_DEPRECATED,
+            'The session actions from the User controller are deprecated since 6.5. Use the SessionController instead.'
         );
+
+        return $this->sessionController->deleteSessionAction($sessionId, $request);
     }
 
     /**
@@ -1090,5 +1045,20 @@ class User extends RestController
         $pathParts = explode('/', $path);
 
         return array_pop($pathParts);
+    }
+
+    public function setTokenStorage(TokenStorageInterface $csrfTokenStorage)
+    {
+        @trigger_error(
+            E_USER_DEPRECATED,
+            'setTokenStorage() is deprecated since 6.5 and will be removed in 7.0.'
+        );
+
+        $this->csrfTokenStorage = $csrfTokenStorage;
+    }
+
+    public function setSessionController(SessionController $sessionController)
+    {
+        $this->sessionController = $sessionController;
     }
 }
