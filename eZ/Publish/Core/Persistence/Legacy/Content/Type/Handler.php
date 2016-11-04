@@ -401,15 +401,24 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
-        $createStruct->remoteId = substr(sha1(uniqid(get_class($createStruct), true)), 0, 7);
-        $createStruct->identifier = 'cpy_' . $createStruct->identifier . '_' . $createStruct->remoteId;
+        $createStruct->remoteId = md5(uniqid(get_class($createStruct), true));
+
+        // extract actual identifier name, without "copy_of_" and number
+        $originalIdentifier = preg_replace('/^copy_of_(.+)_\d+$/', '$1', $createStruct->identifier);
+
+        // set temporary identifier
+        $createStruct->identifier = $createStruct->remoteId;
 
         // Set FieldDefinition ids to null to trigger creating new id
         foreach ($createStruct->fieldDefinitions as $fieldDefinition) {
             $fieldDefinition->id = null;
         }
 
-        return $this->internalCreate($createStruct);
+        $contentTypeCopy = $this->internalCreate($createStruct);
+        $updateStruct = $this->mapper->createUpdateStructFromType($contentTypeCopy);
+        $updateStruct->identifier = 'copy_of_' . $originalIdentifier . '_' . $contentTypeCopy->id;
+
+        return $this->update($contentTypeCopy->id, $contentTypeCopy->status, $updateStruct);
     }
 
     /**
