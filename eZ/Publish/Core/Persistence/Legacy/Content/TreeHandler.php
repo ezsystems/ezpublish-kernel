@@ -116,7 +116,7 @@ class TreeHandler
     /**
      * Returns the versions for $contentId.
      *
-     * Result is returned with oldest version first (sorted by created, or version id as long as it's auto increment).
+     * Result is returned with oldest version first (using version id as it has index and is auto increment).
      *
      * @param int $contentId
      *

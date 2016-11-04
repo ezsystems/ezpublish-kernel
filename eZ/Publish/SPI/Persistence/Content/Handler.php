@@ -170,7 +170,7 @@ interface Handler
     /**
      * Returns the versions for $contentId.
      *
-     * Result is returned with oldest version first (sorted by created, alternatively version id if auto increment).
+     * Result is returned with oldest version first (sorted by created, alternatively version number or id if auto increment).
      *
      * @param int $contentId
      *
