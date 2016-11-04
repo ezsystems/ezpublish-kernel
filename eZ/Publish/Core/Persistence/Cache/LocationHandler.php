@@ -190,8 +190,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $return = $locationHandler->swap($locationId1, $locationId2);
 
-        $location1 = $locationHandler->load($locationId1);
-        $location2 = $locationHandler->load($locationId2);
+        $location1 = $this->load($locationId1);
+        $location2 = $this->load($locationId2);
 
         $this->cache->clear('location', $locationId1);
         $this->cache->clear('location', $locationId2);
