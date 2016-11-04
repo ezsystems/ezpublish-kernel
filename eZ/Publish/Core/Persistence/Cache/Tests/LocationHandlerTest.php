@@ -682,7 +682,7 @@ class LocationHandlerTest extends HandlerTest
                 [
                     $this->cacheMock,
                     $this->persistenceHandlerMock,
-                    $this->loggerMock
+                    $this->loggerMock,
                 ]
             )
             ->getMock();
