@@ -760,7 +760,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
 
         $handlerMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            array('load', 'internalCreate'),
+            array('load', 'internalCreate', 'update'),
             array($gatewayMock, $mapperMock, $this->getUpdateHandlerMock())
         );
         $handlerMock->expects($this->once())
@@ -791,11 +791,41 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                         'created'
                     ),
                     $this->attribute(
-                        $this->matchesRegularExpression('/^cpy_testCopy_([a-z0-9]+)$/'),
+                    // temporary identifier of a copy is a md5 hash
+                        $this->matchesRegularExpression('/^[a-f0-9]+$/'),
                         'identifier'
                     )
                 )
             )->will(
+                $this->returnValue(new Type([
+                    'id' => 24,
+                    'identifier' => md5(uniqid(get_class($handlerMock), true)),
+                    'status' => Type::STATUS_DEFINED,
+                ]))
+            );
+
+        $mapperMock->expects($this->once())
+            ->method('createUpdateStructFromType')
+            ->with(
+                $this->attribute(
+                    $this->matchesRegularExpression('/^[a-f0-9]+$/'),
+                    'identifier'
+                )
+            )->will(
+                $this->returnValue(new UpdateStruct())
+            );
+
+        $handlerMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $this->equalTo(24),
+                $this->equalTo(Type::STATUS_DEFINED),
+                $this->attribute(
+                    $this->equalTo('copy_of_testCopy_24'),
+                    'identifier'
+                )
+            )
+            ->will(
                 $this->returnValue(new Type())
             );
 
