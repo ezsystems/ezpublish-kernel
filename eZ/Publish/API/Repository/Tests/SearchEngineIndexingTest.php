@@ -663,6 +663,7 @@ class SearchEngineIndexingTest extends BaseTest
             ['text-with-hyphens', 'text-with-hyphens'],
             ['text containing spaces', 'text containing spaces'],
             ['"quoted text"', '"quoted text"'],
+            ['ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝ', 'àáâãäåçèéêëìíîïðñòóôõöøùúûüý'],
         ];
     }
 
