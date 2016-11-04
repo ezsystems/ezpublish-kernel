@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
+use eZ\Publish\API\Repository\SearchServiceSortClause as SearchServiceSortClauseInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
@@ -29,7 +30,7 @@ use eZ\Publish\SPI\Search\Handler;
 /**
  * Search service.
  */
-class SearchService implements SearchServiceInterface
+class SearchService implements SearchServiceInterface, SearchServiceSortClauseInterface
 {
     /**
      * @var \eZ\Publish\Core\Repository\Repository
