@@ -204,9 +204,9 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             try {
                 $this->logger->logCall(__METHOD__, array('url' => $url));
                 $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
-                $cache->set($urlAlias->id)->save();
 
                 if (!$urlAlias->isHistory) {
+                    $cache->set($urlAlias->id)->save();
                     $urlAliasCache = $this->cache->getItem('urlAlias', $urlAlias->id);
                     $urlAliasCache->set($urlAlias)->save();
                 }
