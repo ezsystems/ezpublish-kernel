@@ -352,7 +352,7 @@
         <script>
             if (typeof(mapsScriptLoaded) == 'undefined') {
                 var myScript = document.createElement('script');
-                myScript.src = '//maps.googleapis.com/maps/api/js?key={{ ezpublish.configResolver.parameter('google_maps_api_key') }}';
+                myScript.src = '//maps.googleapis.com/maps/api/js?key={{ ezpublish.configResolver.parameter('api_keys.google_maps') }}';
                 mapsScriptLoaded = true;
                 document.body.appendChild(myScript);
             }
