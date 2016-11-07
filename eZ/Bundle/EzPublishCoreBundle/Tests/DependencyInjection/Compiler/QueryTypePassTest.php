@@ -93,4 +93,40 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
             [['Test:Test' => new Reference($serviceId)]]
         );
     }
+
+    /**
+     * Tests query type name override using the 'alias' tag attribute.
+     *
+     * The QueryType class will still be registered, as the aliases are different from the
+     * built-in alias of the class.
+     */
+    public function testTaggedOverride()
+    {
+        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle']);
+
+        $def = new Definition();
+        $def->addTag('ezpublish.query_type', ['alias' => 'overridden_type']);
+        $def->setClass(self::$queryTypeClass);
+        $this->setDefinition('test.query_type_override', $def);
+
+        $def = new Definition();
+        $def->addTag('ezpublish.query_type', ['alias' => 'other_overridden_type']);
+        $def->setClass(self::$queryTypeClass);
+        $this->setDefinition('test.query_type_other_override', $def);
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasService('ezpublish.query_type.convention.querytypebundle_testquerytype');
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'ezpublish.query_type.registry',
+            'addQueryTypes',
+            [
+                [
+                    'overridden_type' => new Reference('test.query_type_override'),
+                    'other_overridden_type' => new Reference('test.query_type_other_override'),
+                    'Test:Test' => new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype'),
+                ],
+            ]
+        );
+    }
 }

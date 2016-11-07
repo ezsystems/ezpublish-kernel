@@ -31,12 +31,13 @@ class QueryTypePass implements CompilerPassInterface
             $queryTypeDefinition = $container->getDefinition($taggedServiceId);
             $queryTypeClass = $container->getParameterBag()->resolveValue($queryTypeDefinition->getClass());
 
-            for ($i = 0, $count = count($tags); $i < $count; ++$i) {
-                // TODO: Check for duplicates
-                $queryTypes[$queryTypeClass::getName()] = new Reference($taggedServiceId);
-            }
+            $queryTypesClasses[$queryTypeClass] = [];
 
-            $queryTypesClasses[$queryTypeClass] = true;
+            for ($i = 0, $count = count($tags); $i < $count; ++$i) {
+                $name = isset($tags[$i]['alias']) ? $tags[$i]['alias'] : $queryTypeClass::getName();
+                $queryTypes[$name] = new Reference($taggedServiceId);
+                $queryTypesClasses[$queryTypeClass][$name] = true;
+            }
         }
 
         // named by convention query types
@@ -60,8 +61,10 @@ class QueryTypePass implements CompilerPassInterface
                         throw new Exception("Expected $queryTypeClassName to be defined in $queryTypeFilePath");
                     }
 
-                    // skip if the class was already registered as a tagged service
-                    if (isset($queryTypesClasses[$queryTypeClassName])) {
+                    $queryTypeName = $queryTypeClassName::getName();
+
+                    // skip if the class was already registered as a tagged service with the same name
+                    if (isset($queryTypesClasses[$queryTypeClassName][$queryTypeName])) {
                         continue;
                     }
 
@@ -73,7 +76,7 @@ class QueryTypePass implements CompilerPassInterface
                     $serviceId = 'ezpublish.query_type.convention.' . strtolower($bundleName) . '_' . strtolower($queryTypeFileName);
                     $queryTypeServices[$serviceId] = new Definition($queryTypeClassName);
 
-                    $queryTypes[$queryTypeClassName::getName()] = new Reference($serviceId);
+                    $queryTypes[$queryTypeName] = new Reference($serviceId);
                 }
 
                 $container->addDefinitions($queryTypeServices);
