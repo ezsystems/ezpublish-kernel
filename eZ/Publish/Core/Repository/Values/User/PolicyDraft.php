@@ -9,6 +9,11 @@ namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\PolicyDraft as APIPolicyDraft;
 
+/**
+ * Class PolicyDraft
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
+ */
 class PolicyDraft extends APIPolicyDraft
 {
     /**

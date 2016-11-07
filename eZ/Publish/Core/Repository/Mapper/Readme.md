@@ -1,6 +1,6 @@
 # Mappers
 
-Collection of light mappers meant for use in Repository
+Collection of light mappers meant for internal use in Repository
 and/or RepositoryServices.
 
 Given their use they can not rely on Repository or RepositoryServices as

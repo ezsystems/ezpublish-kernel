@@ -14,6 +14,8 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  * Internal service to deal with limitations and limitation types.
+ *
+ * @internal Meant for internal use by Repository.
  */
 class LimitationService
 {

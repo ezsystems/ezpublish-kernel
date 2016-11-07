@@ -18,6 +18,8 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
  * @property-read int $priority the priority in the group ordering
  * @property-read string $defaultLanguageCode the default language of the object state group names and description used for fallback.
  * @property-read string[] $languageCodes the available languages
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class ObjectState extends APIObjectState
 {

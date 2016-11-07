@@ -26,6 +26,8 @@ use eZ\Publish\SPI\Persistence\User\RoleCreateStruct as SPIRoleCreateStruct;
 
 /**
  * Internal service to map Role objects between API and SPI values.
+ *
+ * @internal Meant for internal use by Repository.
  */
 class RoleDomainMapper
 {

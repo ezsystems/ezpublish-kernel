@@ -27,6 +27,8 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
  * @property-read boolean $isSearchable indicates if the field is searchable
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
  * @property-read mixed $defaultValue the default value of the field
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class FieldDefinition extends APIFieldDefinition
 {

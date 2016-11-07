@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * This class is used for creating a new content object.
  *
  * @property \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+ *
+ * @internal Meant for internal use by Repository, type hint against API instead.
  */
 class ContentCreateStruct extends APIContentCreateStruct
 {

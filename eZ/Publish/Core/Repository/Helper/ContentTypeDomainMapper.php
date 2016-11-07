@@ -31,7 +31,7 @@ use DateTime;
 /**
  * ContentTypeDomainMapper is an internal service.
  *
- * @internal
+ * @internal Meant for internal use by Repository.
  */
 class ContentTypeDomainMapper
 {

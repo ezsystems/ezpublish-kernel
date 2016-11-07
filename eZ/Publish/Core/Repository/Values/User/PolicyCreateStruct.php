@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class is used to create a policy.
+ *
+ * @internal Meant for internal use by Repository, type hint against API instead.
  */
 class PolicyCreateStruct extends APIPolicyCreateStruct
 {

@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 
 /**
  * this class represents a trash item, which is actually a trashed location.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class TrashItem extends APITrashItem
 {

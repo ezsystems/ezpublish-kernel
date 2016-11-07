@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 
 /**
  * This class represents a user reference for use in sessions and Repository.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class UserReference implements APIUserReference
 {

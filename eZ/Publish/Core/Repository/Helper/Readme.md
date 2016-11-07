@@ -1,6 +1,6 @@
 # Helpers
 
-Collection of light helpers and services meant for use in Repository
+Collection of light helpers and services meant for internal use in Repository
 and/or RepositoryServices.
 
 Given their use they can not rely on Repository or RepositoryServices as

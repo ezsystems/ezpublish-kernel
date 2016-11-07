@@ -17,6 +17,8 @@ use eZ\Publish\SPI\FieldType\Value;
  * This class represents a FieldType available to Public API users.
  *
  * @see eZ\Publish\API\Repository\FieldType
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class FieldType implements FieldTypeInterface
 {

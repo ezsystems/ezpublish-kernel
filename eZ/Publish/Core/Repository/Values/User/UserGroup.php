@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
 
 /**
  * This class represents a user group.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class UserGroup extends APIUserGroup
 {

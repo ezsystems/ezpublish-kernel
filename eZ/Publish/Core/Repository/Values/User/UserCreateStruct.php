@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used to create a new user in the repository.
+ *
+ * @internal Meant for internal use by Repository, type hint against API instead.
  */
 class UserCreateStruct extends APIUserCreateStruct
 {

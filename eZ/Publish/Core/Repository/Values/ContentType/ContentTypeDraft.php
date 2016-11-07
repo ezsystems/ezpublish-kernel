@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
 
 /**
  * This class represents a draft of a content type.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class ContentTypeDraft extends APIContentTypeDraft
 {

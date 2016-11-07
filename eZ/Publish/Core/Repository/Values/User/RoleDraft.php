@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
 
 /**
  * This class represents a draft of a role.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class RoleDraft extends APIRoleDraft
 {

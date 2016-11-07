@@ -16,6 +16,11 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
+/**
+ * Internal service to map Location to SortClauses.
+ *
+ * @internal Meant for internal use by Repository.
+ */
 class SortClauseMapper
 {
     /**

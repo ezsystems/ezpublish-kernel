@@ -36,7 +36,7 @@ use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
  *
  * Tokens are the field definition identifiers which are used in the class edit-interface.
  *
- * @internal
+ * @internal Meant for internal use by Repository.
  */
 class NameSchemaService
 {

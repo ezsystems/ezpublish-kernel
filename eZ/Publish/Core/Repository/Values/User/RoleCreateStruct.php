@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateS
 
 /**
  * This class is used to create a new role.
+ *
+ * @internal Meant for internal use by Repository, type hint against API instead.
  */
 class RoleCreateStruct extends APIRoleCreateStruct
 {

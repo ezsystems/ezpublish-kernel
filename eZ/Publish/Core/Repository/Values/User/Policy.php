@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 
 /**
  * This class represents a policy value.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class Policy extends APIPolicy
 {

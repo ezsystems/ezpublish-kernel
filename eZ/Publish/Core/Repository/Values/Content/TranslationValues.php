@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\TranslationValues as APITranslation
  * This value object is used for adding a translation to a version.
  *
  * @property-write FieldCollection $fields
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class TranslationValues extends APITranslationValues
 {

@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 /**
  * This class is used for updating a policy. The limitations of the policy are replaced
  * with those which are added in instances of this class.
+ *
+ * @internal Meant for internal use by Repository, type hint against API instead.
  */
 class PolicyUpdateStruct extends APIPolicyUpdateStruct
 {

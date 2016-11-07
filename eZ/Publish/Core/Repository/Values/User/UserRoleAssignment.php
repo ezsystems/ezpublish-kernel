@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\UserRoleAssignment as APIUserRoleAssig
 
 /**
  * This class represents a user to role assignment.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class UserRoleAssignment extends APIUserRoleAssignment
 {

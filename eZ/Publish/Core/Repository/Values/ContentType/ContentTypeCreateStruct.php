@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
  * this class is used for creating content types.
  *
  * @property \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[] $fieldDefinitions the collection of field definitions
+ *
+ * @internal Meant for internal use by Repository, type hint against API instead.
  */
 class ContentTypeCreateStruct extends APIContentTypeCreateStruct
 {

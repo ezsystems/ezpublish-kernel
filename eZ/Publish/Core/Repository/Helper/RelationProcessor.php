@@ -18,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreat
 /**
  * RelationProcessor is an internal service used for handling field relations upon Content creation or update.
  *
- * @internal
+ * @internal Meant for internal use by Repository.
  */
 class RelationProcessor
 {

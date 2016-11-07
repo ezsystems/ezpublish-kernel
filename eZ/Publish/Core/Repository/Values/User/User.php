@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 /**
  * This class represents a user value.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class User extends APIUser
 {

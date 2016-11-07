@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\User\Role as APIRole;
  * This class represents a role.
  *
  * @property-read \eZ\Publish\API\Repository\Values\User\Policy[] $policies Policies assigned to this role
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class Role extends APIRole
 {

@@ -14,6 +14,8 @@ use RuntimeException;
 
 /**
  * Registry for SPI FieldTypes.
+ *
+ * @internal Meant for internal use by Repository.
  */
 class FieldTypeRegistry
 {

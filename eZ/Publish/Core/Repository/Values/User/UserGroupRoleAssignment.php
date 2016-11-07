@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment as APIUserGrou
 
 /**
  * This class represents a user group to role assignment.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
 {
