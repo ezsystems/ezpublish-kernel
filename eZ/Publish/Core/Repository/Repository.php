@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Mapper\SortClauseMapper;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
@@ -38,6 +39,13 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\SPI\Search\Handler
      */
     protected $searchHandler;
+
+    /**
+     * Instance of Sort Clause Mapper.
+     *
+     * @var \eZ\Publish\Core\Repository\Helper\SortClauseMapper
+     */
+    protected $sortClauseMapper;
 
     /**
      * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
@@ -247,17 +255,20 @@ class Repository implements RepositoryInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
+     * @param \eZ\Publish\Core\Repository\Mapper\SortClauseMapper $sortClauseMapper
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user
      */
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
+        SortClauseMapper $sortClauseMapper,
         array $serviceSettings = array(),
         APIUserReference $user = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
+        $this->sortClauseMapper = $sortClauseMapper;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
             'contentType' => array(),
@@ -735,6 +746,7 @@ class Repository implements RepositoryInterface
             $this->searchHandler,
             $this->getDomainMapper(),
             $this->getPermissionsCriterionHandler(),
+            $this->sortClauseMapper,
             $this->serviceSettings['search']
         );
 

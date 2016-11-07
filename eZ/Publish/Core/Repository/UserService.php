@@ -26,7 +26,6 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\SPI\Persistence\User as SPIUser;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
@@ -179,13 +178,7 @@ class UserService implements UserServiceInterface
             $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
-        $searchResult = $this->searchSubGroups(
-            $mainGroupLocation->id,
-            $mainGroupLocation->sortField,
-            $mainGroupLocation->sortOrder,
-            $offset,
-            $limit
-        );
+        $searchResult = $this->searchSubGroups($mainGroupLocation, $offset, $limit);
         if ($searchResult->totalCount == 0) {
             return array();
         }
@@ -205,32 +198,25 @@ class UserService implements UserServiceInterface
     /**
      * Returns (searches) subgroups of a user group described by its main location.
      *
-     * @param mixed $locationId
-     * @param int|null $sortField
-     * @param int $sortOrder
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset
      * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchSubGroups($locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = 25)
+    protected function searchSubGroups(Location $location, $offset = 0, $limit = 25)
     {
         $searchQuery = new LocationQuery();
 
         $searchQuery->offset = $offset;
         $searchQuery->limit = $limit;
 
-        $searchQuery->filter = new CriterionLogicalAnd(
-            array(
-                new CriterionContentTypeId($this->settings['userGroupClassID']),
-                new CriterionParentLocationId($locationId),
-            )
-        );
+        $searchQuery->filter = new CriterionLogicalAnd([
+            new CriterionContentTypeId($this->settings['userGroupClassID']),
+            new CriterionParentLocationId($location->id),
+        ]);
 
-        $searchQuery->sortClauses = array();
-        if ($sortField !== null) {
-            $searchQuery->sortClauses[] = $this->getSortClauseBySortField($sortField, $sortOrder);
-        }
+        $searchQuery->sortClauses = $this->repository->getSearchService()->getSortClauseFromLocation($location);
 
         return $this->repository->getSearchService()->findLocations($searchQuery, array(), false);
     }
@@ -962,9 +948,7 @@ class UserService implements UserServiceInterface
         $searchQuery->limit = $limit;
         $searchQuery->performCount = false;
 
-        $searchQuery->sortClauses = array(
-            $this->getSortClauseBySortField($mainGroupLocation->sortField, $mainGroupLocation->sortOrder),
-        );
+        $searchQuery->sortClauses = $this->repository->getSearchService()->getSortClauseFromLocation($mainGroupLocation);
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
@@ -1075,7 +1059,7 @@ class UserService implements UserServiceInterface
                 $content->getVersionInfo()->getContentInfo()->mainLocationId
             );
             $parentLocation = $locationService->loadLocation($mainLocation->parentLocationId);
-            $subGroups = $this->searchSubGroups($mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0);
+            $subGroups = $this->searchSubGroups($mainLocation, 0, 0);
             $subGroupCount = $subGroups->totalCount;
         }
 
@@ -1142,59 +1126,6 @@ class UserService implements UserServiceInterface
 
             default:
                 return md5($password);
-        }
-    }
-
-    /**
-     * Instantiates a correct sort clause object based on provided location sort field and sort order.
-     *
-     * @param int $sortField
-     * @param int $sortOrder
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
-     */
-    protected function getSortClauseBySortField($sortField, $sortOrder = Location::SORT_ORDER_ASC)
-    {
-        $sortOrder = $sortOrder == Location::SORT_ORDER_DESC ? LocationQuery::SORT_DESC : LocationQuery::SORT_ASC;
-        switch ($sortField) {
-            case Location::SORT_FIELD_PATH:
-                return new SortClause\Location\Path($sortOrder);
-
-            case Location::SORT_FIELD_PUBLISHED:
-                return new SortClause\DatePublished($sortOrder);
-
-            case Location::SORT_FIELD_MODIFIED:
-                return new SortClause\DateModified($sortOrder);
-
-            case Location::SORT_FIELD_SECTION:
-                return new SortClause\SectionIdentifier($sortOrder);
-
-            case Location::SORT_FIELD_DEPTH:
-                return new SortClause\Location\Depth($sortOrder);
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CLASS_NAME:
-
-            case Location::SORT_FIELD_PRIORITY:
-                return new SortClause\Location\Priority($sortOrder);
-
-            case Location::SORT_FIELD_NAME:
-                return new SortClause\ContentName($sortOrder);
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_NODE_ID:
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
-
-            default:
-                return new SortClause\Location\Path($sortOrder);
         }
     }
 }
