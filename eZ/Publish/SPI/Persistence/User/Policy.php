@@ -81,25 +81,4 @@ class Policy extends ValueObject
      *                   Can not be a empty array as '*' should be used in this case.
      */
     public $limitations;
-
-    /**
-     * Return true if at least one of the given policies overlaps this policy (has a wider scope).
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\Policy[] $policies
-     * @return bool
-     */
-    public function overlaps(array $policies)
-    {
-        foreach ($policies as $policy) {
-            // a policy can overlap other policy only if it has no limitations
-            if ($policy->limitations === '*' &&
-                ($this->module === $policy->module || $policy->module === '*') &&
-                ($this->function === $policy->function || $policy->function === '*')
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

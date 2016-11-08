@@ -19,6 +19,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use Exception;
@@ -436,7 +437,7 @@ class Repository implements RepositoryInterface
                     return true;
                 }
 
-                if ($spiPolicy->limitations !== '*' && $spiPolicy->overlaps($spiRole->policies)) {
+                if ($spiPolicy->limitations !== '*' && $this->isOverlappedByWiderPolicy($spiPolicy, $spiRole->policies)) {
                     continue;
                 }
 
@@ -459,6 +460,28 @@ class Repository implements RepositoryInterface
         }
 
         // No policies matching $module and $function, or they contained limitations
+        return false;
+    }
+
+    /**
+     * Return true if at least one of the given policies overlaps $policy (has a wider scope).
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy[] $policies
+     * @return bool
+     */
+    private function isOverlappedByWiderPolicy(Policy $policy, array $policies)
+    {
+        foreach ($policies as $widerPolicy) {
+            // a policy can overlap other policy only if it has no limitations
+            if ($widerPolicy->limitations === '*' &&
+                ($policy->module === $widerPolicy->module || $widerPolicy->module === '*') &&
+                ($policy->function === $widerPolicy->function || $widerPolicy->function === '*')
+            ) {
+                return true;
+            }
+        }
+
         return false;
     }
 
