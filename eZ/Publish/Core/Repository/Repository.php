@@ -474,10 +474,19 @@ class Repository implements RepositoryInterface
     {
         foreach ($rolePolicies as $rolePolicy) {
             // a policy can overlap other policy only if it has no limitations
-            if ($rolePolicy->limitations === '*' &&
-                ($policy->module === $rolePolicy->module || $rolePolicy->module === '*') &&
-                ($policy->function === $rolePolicy->function || $rolePolicy->function === '*')
-            ) {
+            if ($rolePolicy->limitations !== '*') {
+                continue;
+            }
+
+            if ($rolePolicy->module === '*') {
+                return true;
+            }
+
+            if ($policy->module !== $rolePolicy->module) {
+                continue;
+            }
+
+            if ($rolePolicy->function === '*' || $policy->function === $rolePolicy->function) {
                 return true;
             }
         }
