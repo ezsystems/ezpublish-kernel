@@ -437,7 +437,7 @@ class Repository implements RepositoryInterface
                     return true;
                 }
 
-                if ($spiPolicy->limitations !== '*' && $this->isOverlappedByWiderPolicy($spiPolicy, $spiRole->policies)) {
+                if ($spiPolicy->limitations !== '*' && $this->isOverlappedByWiderRolePolicy($spiPolicy, $spiRole->policies)) {
                     continue;
                 }
 
@@ -467,16 +467,16 @@ class Repository implements RepositoryInterface
      * Return true if at least one of the given policies overlaps $policy (has a wider scope).
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     * @param \eZ\Publish\SPI\Persistence\User\Policy[] $policies
+     * @param \eZ\Publish\SPI\Persistence\User\Policy[] $rolePolicies
      * @return bool
      */
-    private function isOverlappedByWiderPolicy(Policy $policy, array $policies)
+    private function isOverlappedByWiderRolePolicy(Policy $policy, array $rolePolicies)
     {
-        foreach ($policies as $widerPolicy) {
+        foreach ($rolePolicies as $rolePolicy) {
             // a policy can overlap other policy only if it has no limitations
-            if ($widerPolicy->limitations === '*' &&
-                ($policy->module === $widerPolicy->module || $widerPolicy->module === '*') &&
-                ($policy->function === $widerPolicy->function || $widerPolicy->function === '*')
+            if ($rolePolicy->limitations === '*' &&
+                ($policy->module === $rolePolicy->module || $rolePolicy->module === '*') &&
+                ($policy->function === $rolePolicy->function || $rolePolicy->function === '*')
             ) {
                 return true;
             }
