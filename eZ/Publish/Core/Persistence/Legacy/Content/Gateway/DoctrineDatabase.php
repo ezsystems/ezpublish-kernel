@@ -990,6 +990,8 @@ class DoctrineDatabase extends Gateway
     /**
      * Returns all version data for the given $contentId.
      *
+     * Result is returned with oldest version first (using version id as it has index and is auto increment).
+     *
      * @param mixed $contentId
      *
      * @return string[][]

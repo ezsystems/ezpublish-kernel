@@ -114,6 +114,8 @@ class TreeHandler
     /**
      * Returns the versions for $contentId.
      *
+     * Result is returned with oldest version first (using version id as it has index and is auto increment).
+     *
      * @param int $contentId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
