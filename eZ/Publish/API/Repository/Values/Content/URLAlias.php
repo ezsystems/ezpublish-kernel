@@ -35,6 +35,8 @@ class URLAlias extends ValueObject
      * A unique identifier for the alias
      * (in legacy implementation this would be <parentid>-<md5text>).
      *
+     * Note: currently this will only be unique when $isHistory flag is false.
+     *
      * @var string
      */
     protected $id;
