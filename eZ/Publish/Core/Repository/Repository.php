@@ -436,11 +436,14 @@ class Repository implements RepositoryInterface
                     return true;
                 }
 
+                if ($spiPolicy->limitations !== '*' && $spiPolicy->overlaps($spiRole->policies)) {
+                    continue;
+                }
+
                 $permissionSet['policies'][] = $roleDomainMapper->buildDomainPolicyObject($spiPolicy);
             }
 
             if (!empty($permissionSet['policies'])) {
-                $permissionSet['policies'] = $this->removeOverlappingPolicies($permissionSet['policies']);
                 if ($spiRoleAssignment->limitationIdentifier !== null) {
                     $permissionSet['limitation'] = $limitationService
                         ->getLimitationType($spiRoleAssignment->limitationIdentifier)
@@ -457,36 +460,6 @@ class Repository implements RepositoryInterface
 
         // No policies matching $module and $function, or they contained limitations
         return false;
-    }
-
-    /**
-     * Remove policies that overlap existing all modules or all functions w/o limitations policies.
-     *
-     * @param \eZ\Publish\Core\Repository\Values\User\Policy[] $policies
-     * @return \eZ\Publish\Core\Repository\Values\User\Policy[]
-     */
-    protected function removeOverlappingPolicies(array $policies)
-    {
-        $tmpPolicies = $policies;
-        foreach ($tmpPolicies as $tmpPolicy) {
-            // a policy can overlap other policy only if it has no limitations
-            if (empty($tmpPolicy->getLimitations())) {
-                if ($tmpPolicy->module === '*') {
-                    // if there's "all modules" policy w/o limitations, any other policy overlaps it
-                    return [$tmpPolicy];
-                }
-
-                // remove from the original array overlapping policies with narrow scope
-                foreach ($policies as $idx => $policy) {
-                    if ($policy->isNarrow($tmpPolicy)) {
-                        unset($policies[$idx]);
-                    }
-                }
-            }
-        }
-
-        // restore keys order before returning
-        return array_values($policies);
     }
 
     /**

@@ -33,19 +33,4 @@ class Policy extends APIPolicy
     {
         return $this->limitations;
     }
-
-    /**
-     * Return true if the scope of current Policy object is more narrow than the scope of $policy.
-     *
-     * @param \eZ\Publish\Core\Repository\Values\User\Policy $policy
-     * @return bool
-     */
-    public function isNarrow(Policy $policy)
-    {
-        return
-            !empty($this->limitations) && empty($policy->getLimitations()) &&
-            ($this->module === $policy->module || $policy->module === '*') &&
-            ($this->function === $policy->function || $policy->function === '*')
-        ;
-    }
 }
