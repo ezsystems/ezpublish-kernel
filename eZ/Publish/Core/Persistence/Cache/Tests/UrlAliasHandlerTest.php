@@ -688,11 +688,15 @@ class UrlAliasHandlerTest extends HandlerTest
 
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::lookup
-     * @group justme
      */
-    public function testLookupIsMiss()
+    public function testLookupIsMissActive()
     {
-        $urlAlias = new UrlAlias(array('id' => 55));
+        $urlAlias = new UrlAlias(
+            [
+                'id' => 55,
+                'isHistory' => false,
+            ]
+        );
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
@@ -721,7 +725,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $newUrlAliasCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
         $newUrlAliasCacheItem
             ->expects($this->once())
-             ->method('set')
+            ->method('set')
             ->with($urlAlias)
             ->will($this->returnValue($newUrlAliasCacheItem));
 
@@ -730,16 +734,105 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method('save')
             ->with();
 
+        $historyUrlAliasCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->will($this->returnValue(true));
+
         $this->cacheMock
-                ->expects($this->at(0))
-                ->method('getItem')
-                ->with('urlAlias', 'url', '/url')
-                ->will($this->returnValue($missedUrlAliasIdCacheItem));
+            ->expects($this->at(0))
+            ->method('getItem')
+            ->with('urlAlias', 'url', '/url')
+            ->will($this->returnValue($missedUrlAliasIdCacheItem));
         $this->cacheMock
-             ->expects($this->at(1))
-                ->method('getItem')
-                ->with('urlAlias', 55)
-                ->will($this->returnValue($newUrlAliasCacheItem));
+            ->expects($this->at(1))
+            ->method('getItem')
+            ->with('urlAlias', 'url', 'history', '/url')
+            ->will($this->returnValue($historyUrlAliasCacheItem));
+        $this->cacheMock
+            ->expects($this->at(2))
+            ->method('getItem')
+            ->with('urlAlias', 55)
+            ->will($this->returnValue($newUrlAliasCacheItem));
+
+        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('urlAliasHandler')
+            ->will($this->returnValue($innerHandler));
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('lookup')
+            ->with('/url')
+            ->will($this->returnValue($urlAlias));
+
+        $handler = $this->persistenceCacheHandler->urlAliasHandler();
+        $handler->lookup('/url');
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::lookup
+     */
+    public function testLookupIsMissHistory()
+    {
+        $urlAlias = new UrlAlias(
+            [
+                'id' => 55,
+                'isHistory' => true,
+            ]
+        );
+
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $missedUrlAliasIdCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $missedUrlAliasIdCacheItem
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $missedUrlAliasIdCacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->will($this->returnValue(true));
+
+        $historyUrlAliasCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->will($this->returnValue(true));
+
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('set')
+            ->with($urlAlias)
+            ->will($this->returnValue($historyUrlAliasCacheItem));
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('save')
+            ->with();
+
+        $this->cacheMock
+            ->expects($this->at(0))
+            ->method('getItem')
+            ->with('urlAlias', 'url', '/url')
+            ->will($this->returnValue($missedUrlAliasIdCacheItem));
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('getItem')
+            ->with('urlAlias', 'url', 'history', '/url')
+            ->will($this->returnValue($historyUrlAliasCacheItem));
 
         $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
         $this->persistenceHandlerMock
@@ -809,6 +902,58 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->never())
             ->method('set');
+
+        $handler = $this->persistenceCacheHandler->urlAliasHandler();
+        $handler->lookup('/url');
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::lookup
+     */
+    public function testLookupHasHistoryCache()
+    {
+        $urlAlias = new UrlAlias(array('id' => 55));
+
+        $this->loggerMock
+            ->expects($this->never())
+            ->method('logCall');
+
+        $missedUrlAliasIdCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $missedUrlAliasIdCacheItem
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $missedUrlAliasIdCacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->will($this->returnValue(true));
+
+        $historyUrlAliasCacheItem = $this->getMock('Stash\Interfaces\ItemInterface');
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($urlAlias));
+
+        $historyUrlAliasCacheItem
+            ->expects($this->once())
+            ->method('isMiss')
+            ->will($this->returnValue(false));
+
+        $this->cacheMock
+            ->expects($this->at(0))
+            ->method('getItem')
+            ->with('urlAlias', 'url', '/url')
+            ->will($this->returnValue($missedUrlAliasIdCacheItem));
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('getItem')
+            ->with('urlAlias', 'url', 'history', '/url')
+            ->will($this->returnValue($historyUrlAliasCacheItem));
+
+        $this->persistenceHandlerMock
+            ->expects($this->never())
+            ->method('urlAliasHandler');
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->lookup('/url');
