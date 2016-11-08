@@ -294,7 +294,7 @@ class RepositoryTest extends BaseServiceMockTest
         );
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('getRoleDomainMapper', 'getCurrentUserReference', 'removeOverlappingPolicies'),
+            array('getRoleDomainMapper', 'getCurrentUserReference'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -327,7 +327,6 @@ class RepositoryTest extends BaseServiceMockTest
         $permissionSets = array();
         /* @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
         $count = 0;
-        $repositoryMockMethodInvocationCount = 2;
         foreach ($roleAssignments as $i => $roleAssignment) {
             $permissionSet = array('limitation' => null);
             foreach ($roles[$roleAssignment->roleId]->policies as $k => $policy) {
@@ -347,11 +346,6 @@ class RepositoryTest extends BaseServiceMockTest
                     ->will($return);
             }
             if (!empty($permissionSet['policies'])) {
-                $repositoryMock
-                    ->expects($this->at($repositoryMockMethodInvocationCount++))
-                    ->method('removeOverlappingPolicies')
-                    ->with($permissionSet['policies'])
-                    ->will($this->returnValue($permissionSet['policies']));
                 $permissionSets[] = $permissionSet;
             }
         }
@@ -437,7 +431,7 @@ class RepositoryTest extends BaseServiceMockTest
         );
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('getRoleDomainMapper', 'getCurrentUserReference', 'removeOverlappingPolicies'),
+            array('getRoleDomainMapper', 'getCurrentUserReference'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -549,7 +543,7 @@ class RepositoryTest extends BaseServiceMockTest
         $limitationTypeMock = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('getRoleDomainMapper', 'getCurrentUserReference', 'getLimitationService', 'removeOverlappingPolicies'),
+            array('getRoleDomainMapper', 'getCurrentUserReference', 'getLimitationService'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -595,8 +589,6 @@ class RepositoryTest extends BaseServiceMockTest
         }
 
         $permissionSets = array();
-        $count = 0;
-        $repositoryMockMethodInvocationCount = 3;
         /** @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
         foreach ($roleAssignments as $i => $roleAssignment) {
             $permissionSet = array();
@@ -611,13 +603,6 @@ class RepositoryTest extends BaseServiceMockTest
             }
 
             $permissionSet['limitation'] = "limitation-{$i}";
-            if (!empty($permissionSet['policies'])) {
-                $repositoryMock
-                    ->expects($this->at($repositoryMockMethodInvocationCount++))
-                    ->method('removeOverlappingPolicies')
-                    ->with($permissionSet['policies'])
-                    ->will($this->returnValue($permissionSet['policies']));
-            }
             $limitationTypeMock
                 ->expects($this->at($i))
                 ->method('buildValue')
