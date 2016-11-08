@@ -23,10 +23,16 @@ class RolePolicyLimitationTest extends BaseLimitationTest
      */
     public function providerForTestRolePoliciesWithOverlappingLimitations()
     {
+        // get actual locations count for the given subtree when user is (by default) an admin
+        $actualSubtreeLocationsCount = $this->getSubtreeLocationsCount('/1/2/');
+        $this->assertGreaterThan(0, $actualSubtreeLocationsCount);
+
         return [
-            ['content', '*'],
-            ['content', 'read'],
-            ['*', '*'],
+            [$actualSubtreeLocationsCount, 'content', '*'],
+            [$actualSubtreeLocationsCount, 'content', 'read'],
+            [$actualSubtreeLocationsCount, '*', '*'],
+            // different module / all functions should not overlap other policies
+            [0, 'user', '*'],
         ];
     }
 
@@ -34,18 +40,19 @@ class RolePolicyLimitationTest extends BaseLimitationTest
      * Test if role with wider policy is not overlapped by limitation (uncovered in EZP-26476).
      *
      * @dataProvider providerForTestRolePoliciesWithOverlappingLimitations
-     * @param $wideRoleModule
-     * @param $wideRoleFunction
+     * @param int $expectedSubtreeLocationsCount
+     * @param string $widePolicyModule
+     * @param string $widePolicyFunction
      */
-    public function testRolePoliciesWithOverlappingLimitations($wideRoleModule, $wideRoleFunction)
-    {
+    public function testRolePoliciesWithOverlappingLimitations(
+        $expectedSubtreeLocationsCount,
+        $widePolicyModule,
+        $widePolicyFunction
+    ) {
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
-        // get actual locations count for the given subtree when user is (by default) an admin
         $subtreePathString = '/1/2/';
-        $actualSubtreeLocationsCount = $this->getSubtreeLocationsCount($subtreePathString);
-        $this->assertGreaterThan(0, $actualSubtreeLocationsCount);
 
         // EZP-26476 use case:
 
@@ -53,7 +60,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
         $roleName = 'role_with_overlapping_policies';
         $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
 
-        $this->addPolicyToNewRole($roleCreateStruct, $wideRoleModule, $wideRoleFunction, []);
+        $this->addPolicyToNewRole($roleCreateStruct, $widePolicyModule, $widePolicyFunction, []);
         $this->addPolicyToNewRole($roleCreateStruct, 'user', 'login', []);
         $this->addPolicyToNewRole($roleCreateStruct, 'content', 'read', [
             new ContentTypeLimitation([
@@ -83,7 +90,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
         $this->refreshSearch($repository);
 
         // check if searching by subtree returns the same result as for an admin
-        $this->assertEquals($actualSubtreeLocationsCount, $this->getSubtreeLocationsCount($subtreePathString));
+        $this->assertEquals($expectedSubtreeLocationsCount, $this->getSubtreeLocationsCount($subtreePathString));
     }
 
     /**
