@@ -96,6 +96,7 @@ class FullTextMapper
                 [
                     'id' => $field->id,
                     'fieldDefinitionId' => $field->fieldDefinitionId,
+                    'fieldDefinitionIdentifier' => $fieldDefinition->identifier,
                     'languageCode' => $field->languageCode,
                     'value' => !is_array($value) ? $value : implode(' ', $value),
                 ]

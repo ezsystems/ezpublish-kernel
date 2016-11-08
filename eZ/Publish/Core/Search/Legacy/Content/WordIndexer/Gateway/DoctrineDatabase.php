@@ -119,8 +119,9 @@ class DoctrineDatabase extends Gateway
             } else {
                 $integerValue = 0;
             }
-            // Split transformed text on whitespace
-            $wordArray = explode(' ', $this->transformationProcessor->transform($fullTextValue->value, $this->fullTextSearchConfiguration['commands']));
+            $text = $this->transformationProcessor->transform($fullTextValue->value, $this->fullTextSearchConfiguration['commands']);
+            // split by non-words
+            $wordArray = preg_split('/\W/u', $text, -1, PREG_SPLIT_NO_EMPTY);
             foreach ($wordArray as $word) {
                 if (trim($word) === '') {
                     continue;
@@ -129,10 +130,12 @@ class DoctrineDatabase extends Gateway
                 if (mb_strlen($word) > 150) {
                     $word = mb_substr($word, 0, 150);
                 }
-                $indexArray[] = ['Word' => $word,
+                $indexArray[] = [
+                    'Word' => $word,
                     'ContentClassAttributeID' => $fullTextValue->fieldDefinitionId,
-                    'identifier' => $fullTextValue->id,
-                    'integer_value' => $integerValue, ];
+                    'identifier' => $fullTextValue->fieldDefinitionIdentifier,
+                    'integer_value' => $integerValue,
+                ];
                 $indexArrayOnlyWords[$word] = 1;
                 ++$wordCount;
                 // if we have "www." before word than
@@ -141,7 +144,7 @@ class DoctrineDatabase extends Gateway
                     $additionalUrlWord = substr($word, 4);
                     $indexArray[] = ['Word' => $additionalUrlWord,
                         'ContentClassAttributeID' => $fullTextValue->fieldDefinitionId,
-                        'identifier' => $fullTextValue->id,
+                        'identifier' => $fullTextValue->fieldDefinitionIdentifier,
                         'integer_value' => $integerValue, ];
                     $indexArrayOnlyWords[$additionalUrlWord] = 1;
                     ++$wordCount;
@@ -250,7 +253,20 @@ class DoctrineDatabase extends Gateway
                 $nextWordId = 0;
             }
             $frequency = 0;
-            $this->searchIndex->addObjectWordLink($wordId, $contentId, $frequency, $placement, $nextWordId, $prevWordId, $fullTextData->contentTypeId, $contentFieldId, $fullTextData->published, $fullTextData->sectionId, $identifier, $integerValue);
+            $this->searchIndex->addObjectWordLink(
+                $wordId,
+                $contentId,
+                $frequency,
+                $placement,
+                $nextWordId,
+                $prevWordId,
+                $fullTextData->contentTypeId,
+                $contentFieldId,
+                $fullTextData->published,
+                $fullTextData->sectionId,
+                $identifier,
+                $integerValue
+            );
             $prevWordId = $wordId;
             ++$placement;
         }
