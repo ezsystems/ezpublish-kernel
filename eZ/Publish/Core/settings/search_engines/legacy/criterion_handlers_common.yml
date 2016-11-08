@@ -39,8 +39,6 @@ parameters:
             - "latin_lowercase"
             - "cyrillic_lowercase"
             - "greek_lowercase"
-            - "apostrophe_normalize"
-            - "apostrophe_to_doublequote"
             - "ascii_search_cleanup"
             - "cyrillic_diacritical"
             - "cyrillic_search_cleanup"
