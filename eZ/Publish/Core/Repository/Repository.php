@@ -465,6 +465,7 @@ class Repository implements RepositoryInterface
 
     /**
      * Return true if at least one of the given policies overlaps $policy (has a wider scope).
+     * A policy can overlap other policy only if it has no limitations.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @param \eZ\Publish\SPI\Persistence\User\Policy[] $rolePolicies
