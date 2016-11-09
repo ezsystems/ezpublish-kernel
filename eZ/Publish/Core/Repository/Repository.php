@@ -437,7 +437,7 @@ class Repository implements RepositoryInterface
                     return true;
                 }
 
-                if ($spiPolicy->limitations !== '*' && $this->isOverlappedByWiderRolePolicy($spiPolicy, $spiRole->policies)) {
+                if ($spiPolicy->limitations !== '*' && $this->isOverlappedByPolicyOnSameRole($spiPolicy, $spiRole->policies)) {
                     continue;
                 }
 
@@ -471,7 +471,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\SPI\Persistence\User\Policy[] $rolePolicies
      * @return bool
      */
-    private function isOverlappedByWiderRolePolicy(Policy $policy, array $rolePolicies)
+    private function isOverlappedByPolicyOnSameRole(Policy $policy, array $rolePolicies)
     {
         foreach ($rolePolicies as $rolePolicy) {
             // a policy can overlap other policy only if it has no limitations
