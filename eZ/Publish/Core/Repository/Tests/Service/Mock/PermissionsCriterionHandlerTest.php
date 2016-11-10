@@ -162,7 +162,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
                         'policies' => array(new Policy(array('limitations' => '*')), $policy1),
                     ),
                 ),
-                $criterionMock,
+                new Criterion\LogicalOr(array(new Criterion\MatchAll(), $criterionMock)),
             ),
             array(
                 $criterionMock,
@@ -173,7 +173,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
                         'policies' => array(new Policy(array('limitations' => array())), $policy1),
                     ),
                 ),
-                $criterionMock,
+                new Criterion\LogicalOr(array(new Criterion\MatchAll(), $criterionMock)),
             ),
             array(
                 $criterionMock,
@@ -292,7 +292,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
                         'policies' => array(new Policy(array('limitations' => '*'))),
                     ),
                 ),
-                $criterionMock,
+                new Criterion\LogicalAnd(array($criterionMock, new Criterion\MatchAll())),
             ),
             array(
                 $criterionMock,
@@ -307,7 +307,12 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
                         'policies' => array(new Policy(array('limitations' => '*'))),
                     ),
                 ),
-                new Criterion\LogicalOr(array($criterionMock, $criterionMock)),
+                new Criterion\LogicalOr(
+                    array(
+                        new Criterion\LogicalAnd(array($criterionMock, new Criterion\MatchAll())),
+                        new Criterion\LogicalAnd(array($criterionMock, new Criterion\MatchAll())),
+                    )
+                ),
             ),
         );
     }
