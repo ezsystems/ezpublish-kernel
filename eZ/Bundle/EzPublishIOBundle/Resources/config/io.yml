@@ -1,8 +1,92 @@
 parameters:
+    ezpublish.core.io.command.migrate_files.class: eZ\Bundle\EzPublishIOBundle\Command\MigrateFilesCommand
+    ezpublish.core.io.migration.file_lister_registry.class: eZ\Bundle\EzPublishIOBundle\Migration\FileListerRegistry\ConfigurableRegistry
+    ezpublish.core.io.migration.file_lister.binary_file_lister.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\BinaryFileLister
+    ezpublish.core.io.migration.file_lister.image_file_lister.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\ImageFileLister
+    ezpublish.core.io.migration.file_lister.media_file_lister.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\BinaryFileLister
+    ezpublish.core.io.migration.file_lister.file_iterator.binary_file_iterator.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileIterator\LegacyStorageFileIterator
+    ezpublish.core.io.migration.file_lister.file_iterator.media_file_iterator.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileIterator\LegacyStorageFileIterator
+    ezpublish.core.io.migration.file_lister.file_row_reader.binary_file_row_reader.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader\LegacyStorageBinaryFileRowReader
+    ezpublish.core.io.migration.file_lister.file_row_reader.media_file_row_reader.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader\LegacyStorageMediaFileRowReader
+    ezpublish.core.io.migration.file_migrator.class: eZ\Bundle\EzPublishIOBundle\Migration\FileMigrator\FileMigrator
+    ezpublish.core.io.migration.migration_handler.class: eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandler
     ezpublish.core.io.stream_file_listener.class: eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener
     ezpublish.core.io.flysystem.default_adapter.class: League\Flysystem\Adapter\Local
 
 services:
+    ezpublish.core.io.command.migrate_files:
+        class: "%ezpublish.core.io.command.migrate_files.class%"
+        arguments:
+            - "%ez_io.metadata_handlers%"
+            - "%ez_io.binarydata_handlers%"
+            - "@ezpublish.core.io.migration.file_lister_registry"
+            - "@ezpublish.core.io.migration.file_migrator"
+        tags:
+            - { name: console.command }
+
+    ezpublish.core.io.migration.file_lister_registry:
+        class: "%ezpublish.core.io.migration.file_lister_registry.class%"
+
+    ezpublish.core.io.migration.migration_handler:
+        class: "%ezpublish.core.io.migration.migration_handler.class%"
+        arguments:
+            - "@ezpublish.core.io.metadata_handler.factory"
+            - "@ezpublish.core.io.binarydata_handler.factory"
+            - "@logger"
+
+    ezpublish.core.io.migration.file_lister.binary_file_lister:
+        class: "%ezpublish.core.io.migration.file_lister.binary_file_lister.class%"
+        parent: ezpublish.core.io.migration.migration_handler
+        arguments:
+            - "@ezpublish.core.io.migration.file_lister.file_iterator.binary_file_iterator"
+            - "%ezsettings.default.binary_dir%"
+        tags:
+            - { name: "ezpublish.core.io.migration.file_lister", identifier: "binary_file" }
+
+    ezpublish.core.io.migration.file_lister.media_file_lister:
+        class: "%ezpublish.core.io.migration.file_lister.media_file_lister.class%"
+        parent: ezpublish.core.io.migration.migration_handler
+        arguments:
+            - "@ezpublish.core.io.migration.file_lister.file_iterator.media_file_iterator"
+            - "%ezsettings.default.binary_dir%"
+        tags:
+            - { name: "ezpublish.core.io.migration.file_lister", identifier: "media_file" }
+
+    ezpublish.core.io.migration.file_lister.image_file_lister:
+        class: "%ezpublish.core.io.migration.file_lister.image_file_lister.class%"
+        parent: ezpublish.core.io.migration.migration_handler
+        arguments:
+            - "@ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list"
+            - "@ezpublish.image_alias.variation_path_generator"
+            - "@liip_imagine.filter.configuration"
+            - "%ezsettings.default.image.published_images_dir%"
+        tags:
+            - { name: "ezpublish.core.io.migration.file_lister", identifier: "image_file" }
+
+    ezpublish.core.io.migration.file_lister.file_iterator.binary_file_iterator:
+        class: "%ezpublish.core.io.migration.file_lister.file_iterator.binary_file_iterator.class%"
+        arguments:
+            - "@ezpublish.core.io.migration.file_lister.file_row_reader.binary_file_row_reader"
+
+    ezpublish.core.io.migration.file_lister.file_iterator.media_file_iterator:
+        class: "%ezpublish.core.io.migration.file_lister.file_iterator.media_file_iterator.class%"
+        arguments:
+            - "@ezpublish.core.io.migration.file_lister.file_row_reader.media_file_row_reader"
+
+    ezpublish.core.io.migration.file_lister.file_row_reader.binary_file_row_reader:
+        class: "%ezpublish.core.io.migration.file_lister.file_row_reader.binary_file_row_reader.class%"
+        arguments:
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+
+    ezpublish.core.io.migration.file_lister.file_row_reader.media_file_row_reader:
+        class: "%ezpublish.core.io.migration.file_lister.file_row_reader.media_file_row_reader.class%"
+        arguments:
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+
+    ezpublish.core.io.migration.file_migrator:
+        class: "%ezpublish.core.io.migration.file_migrator.class%"
+        parent: ezpublish.core.io.migration.migration_handler
+
     # Builds the binarydata and metadata handler based on the siteaccess config
     ezpublish.core.io.metadata_handler:
         class: eZ\Publish\Core\IO\IOMetadataHandler
