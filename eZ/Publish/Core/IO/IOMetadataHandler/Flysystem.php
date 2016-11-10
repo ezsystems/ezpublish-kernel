@@ -53,15 +53,22 @@ class Flysystem implements IOMetadataHandler
             throw new BinaryFileNotFoundException($spiBinaryFileId);
         }
 
-        $spiBinaryFile = new SPIBinaryFile();
-        $spiBinaryFile->id = $spiBinaryFileId;
-        $spiBinaryFile->size = $info['size'];
+        return $this->getSPIBinaryForMetadata($info, $spiBinaryFileId);
+    }
 
-        if (isset($info['timestamp'])) {
-            $spiBinaryFile->mtime = new DateTime('@' . $info['timestamp']);
+    public function loadList($scope = null, $limit = null, $offset = null)
+    {
+        $metadataList = $this->getMetadataListWithoutDirectories($scope);
+        $offset = $offset === null ? 0 : $offset;
+        $limit = $limit === null ? count($metadataList) : $offset + $limit;
+        $limit = $limit > count($metadataList) ? count($metadataList) : $limit;
+        $spiBinaryFileList = [];
+
+        for ($i = $offset; $i < $limit; ++$i) {
+            $spiBinaryFileList[] = $this->getSPIBinaryForMetadata($metadataList[$i]);
         }
 
-        return $spiBinaryFile;
+        return $spiBinaryFileList;
     }
 
     public function exists($spiBinaryFileId)
@@ -79,5 +86,68 @@ class Flysystem implements IOMetadataHandler
      */
     public function deleteDirectory($spiPath)
     {
+    }
+
+    public function count($scope = null)
+    {
+        return count($this->getMetadataListWithoutDirectories($scope));
+    }
+
+    /**
+     * Return the metadata of all entries in $scope except directories.
+     *
+     * @param string|null $scope The file scope, one of 'binaryfile', 'image', 'mediafile', or null
+     * @return array
+     */
+    private function getMetadataListWithoutDirectories($scope = null)
+    {
+        $metadataList = $this->filesystem->listContents(
+            $scope ? $this->getFilePrefixForScope($scope) : '',
+            true
+        );
+
+        $filteredMetadataList = [];
+        foreach ($metadataList as $metadata) {
+            if (array_key_exists('size', $metadata)) {
+                $filteredMetadataList[] = $metadata;
+            }
+        }
+
+        return $filteredMetadataList;
+    }
+
+    /**
+     * Get the file prefix (storage path) for the given $scope.
+     *
+     * @param $scope
+     * @return string
+     */
+    private function getFilePrefixForScope($scope)
+    {
+        switch ($scope) {
+            case 'image':
+                return 'images';
+
+            case 'binaryfile':
+                return 'original';
+
+            case 'mediafile':
+                return 'original';
+        }
+
+        return 'UNKNOWN_FILE_PREFIX';
+    }
+
+    private function getSPIBinaryForMetadata($metadata, $spiBinaryFileId = null)
+    {
+        $spiBinaryFile = new SPIBinaryFile();
+        $spiBinaryFile->id = $spiBinaryFileId ?: $metadata['path'];
+        $spiBinaryFile->size = $metadata['size'];
+
+        if (isset($metadata['timestamp'])) {
+            $spiBinaryFile->mtime = new DateTime('@' . $metadata['timestamp']);
+        }
+
+        return $spiBinaryFile;
     }
 }
