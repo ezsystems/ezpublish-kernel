@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
@@ -365,6 +363,8 @@ class ExceptionConversion extends Gateway
 
     /**
      * Returns all version data for the given $contentId.
+     *
+     * Result is returned with oldest version first (using version id as it has index and is auto increment).
      *
      * @param mixed $contentId
      *

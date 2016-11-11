@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
@@ -33,6 +31,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
  *
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class ContentType extends APIContentType
 {

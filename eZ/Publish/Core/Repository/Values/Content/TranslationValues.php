@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
@@ -16,6 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\TranslationValues as APITranslation
  * This value object is used for adding a translation to a version.
  *
  * @property-write FieldCollection $fields
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class TranslationValues extends APITranslationValues
 {

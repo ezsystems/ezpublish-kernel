@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository;
 
@@ -25,7 +23,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -295,13 +292,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $childLocations = array();
-        $searchResult = $this->searchChildrenLocations(
-            $location->id,
-            $location->sortField,
-            $location->sortOrder,
-            $offset,
-            $limit
-        );
+        $searchResult = $this->searchChildrenLocations($location, $offset, $limit);
         foreach ($searchResult->searchHits as $searchHit) {
             $childLocations[] = $searchHit->valueObject;
         }
@@ -323,13 +314,7 @@ class LocationService implements LocationServiceInterface
      */
     public function getLocationChildCount(APILocation $location)
     {
-        $searchResult = $this->searchChildrenLocations(
-            $location->id,
-            $location->sortField,
-            $location->sortOrder,
-            0,
-            0
-        );
+        $searchResult = $this->searchChildrenLocations($location, 0, 0);
 
         return $searchResult->totalCount;
     }
@@ -337,32 +322,20 @@ class LocationService implements LocationServiceInterface
     /**
      * Searches children locations of the provided parent location id.
      *
-     * @param mixed $parentLocationId
-     * @param int $sortField
-     * @param int $sortOrder
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset
      * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchChildrenLocations(
-        $parentLocationId,
-        $sortField = null,
-        $sortOrder = APILocation::SORT_ORDER_ASC,
-        $offset = 0,
-        $limit = -1
-    ) {
-        $query = new LocationQuery(
-            array(
-                'filter' => new Criterion\ParentLocationId($parentLocationId),
-                'offset' => $offset >= 0 ? (int)$offset : 0,
-                'limit' => $limit >= 0 ? (int)$limit : null,
-            )
-        );
-
-        if ($sortField !== null) {
-            $query->sortClauses = array($this->getSortClauseBySortField($sortField, $sortOrder));
-        }
+    protected function searchChildrenLocations(APILocation $location, $offset = 0, $limit = -1)
+    {
+        $query = new LocationQuery([
+            'filter' => new Criterion\ParentLocationId($location->id),
+            'offset' => $offset >= 0 ? (int)$offset : 0,
+            'limit' => $limit >= 0 ? (int)$limit : null,
+            'sortClauses' => $this->repository->getSearchService()->getSortClauseFromLocation($location),
+        ]);
 
         return $this->repository->getSearchService()->findLocations($query);
     }
@@ -756,58 +729,5 @@ class LocationService implements LocationServiceInterface
     public function newLocationUpdateStruct()
     {
         return new LocationUpdateStruct();
-    }
-
-    /**
-     * Instantiates a correct sort clause object based on provided location sort field and sort order.
-     *
-     * @param int $sortField
-     * @param int $sortOrder
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
-     */
-    protected function getSortClauseBySortField($sortField, $sortOrder = APILocation::SORT_ORDER_ASC)
-    {
-        $sortOrder = $sortOrder == APILocation::SORT_ORDER_DESC ? Query::SORT_DESC : Query::SORT_ASC;
-        switch ($sortField) {
-            case APILocation::SORT_FIELD_PATH:
-                return new SortClause\Location\Path($sortOrder);
-
-            case APILocation::SORT_FIELD_PUBLISHED:
-                return new SortClause\DatePublished($sortOrder);
-
-            case APILocation::SORT_FIELD_MODIFIED:
-                return new SortClause\DateModified($sortOrder);
-
-            case APILocation::SORT_FIELD_SECTION:
-                return new SortClause\SectionIdentifier($sortOrder);
-
-            case APILocation::SORT_FIELD_DEPTH:
-                return new SortClause\Location\Depth($sortOrder);
-
-            //@todo: sort clause not yet implemented
-            // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
-
-            //@todo: sort clause not yet implemented
-            // case APILocation::SORT_FIELD_CLASS_NAME:
-
-            case APILocation::SORT_FIELD_PRIORITY:
-                return new SortClause\Location\Priority($sortOrder);
-
-            case APILocation::SORT_FIELD_NAME:
-                return new SortClause\ContentName($sortOrder);
-
-            //@todo: sort clause not yet implemented
-            // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
-
-            case APILocation::SORT_FIELD_NODE_ID:
-                return new SortClause\Location\Id($sortOrder);
-
-            case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
-                return new SortClause\ContentId($sortOrder);
-
-            default:
-                return new SortClause\Location\Path($sortOrder);
-        }
     }
 }

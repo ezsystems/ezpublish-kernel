@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
@@ -14,6 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 
 /**
  * this class represents a trash item, which is actually a trashed location.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class TrashItem extends APITrashItem
 {

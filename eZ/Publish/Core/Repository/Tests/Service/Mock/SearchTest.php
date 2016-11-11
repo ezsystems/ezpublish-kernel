@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
@@ -46,6 +44,7 @@ class SearchTest extends BaseServiceMockTest
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $sortClauseMapperMock = $this->getSortClauseMapperMock();
         $settings = array('teh setting');
 
         $service = new SearchService(
@@ -53,6 +52,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
+            $sortClauseMapperMock,
             $settings
         );
 
@@ -77,6 +77,12 @@ class SearchTest extends BaseServiceMockTest
         $this->assertAttributeSame(
             $permissionsCriterionHandlerMock,
             'permissionsCriterionHandler',
+            $service
+        );
+
+        $this->assertAttributeSame(
+            $sortClauseMapperMock,
+            'sortClauseMapper',
             $service
         );
 
@@ -133,6 +139,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -179,6 +186,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -213,6 +221,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -250,6 +259,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -325,6 +335,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -408,6 +419,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -447,6 +459,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $this->getPermissionsCriterionHandlerMock(),
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -528,6 +541,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $this->getPermissionsCriterionHandlerMock(),
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -560,6 +574,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -596,6 +611,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -660,6 +676,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -724,6 +741,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -785,6 +803,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
+            $this->getSortClauseMapperMock(),
             array()
         );
 
@@ -821,6 +840,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $this->getPermissionsCriterionHandlerMock(),
+            $this->getSortClauseMapperMock(),
             array()
         );
 

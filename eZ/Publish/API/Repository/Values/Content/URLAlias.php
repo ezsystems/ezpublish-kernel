@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
@@ -34,6 +32,8 @@ class URLAlias extends ValueObject
     /**
      * A unique identifier for the alias
      * (in legacy implementation this would be <parentid>-<md5text>).
+     *
+     * Note: currently this will only be unique when $isHistory flag is false.
      *
      * @var string
      */

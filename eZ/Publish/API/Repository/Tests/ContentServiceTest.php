@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
@@ -2644,26 +2642,12 @@ class ContentServiceTest extends BaseContentServiceTest
         $versions = $contentService->loadVersions($contentVersion2->contentInfo);
         /* END: Use Case */
 
-        $expectedVersionIds = array(
-            $contentService->loadVersionInfo($contentVersion2->contentInfo, 1)->id => true,
-            $contentService->loadVersionInfo($contentVersion2->contentInfo, 2)->id => true,
-        );
+        $expectedVersionsOrder = [
+            $contentService->loadVersionInfo($contentVersion2->contentInfo, 1),
+            $contentService->loadVersionInfo($contentVersion2->contentInfo, 2),
+        ];
 
-        foreach ($versions as $actualVersion) {
-            if (!isset($expectedVersionIds[$actualVersion->id])) {
-                $this->fail("Unexpected version with ID '{$actualVersion->id}' loaded.");
-            }
-            unset($expectedVersionIds[$actualVersion->id]);
-        }
-
-        if (!empty($expectedVersionIds)) {
-            $this->fail(
-                sprintf(
-                    "Expected versions not loaded: '%s'",
-                    implode("', '", $expectedVersionIds)
-                )
-            );
-        }
+        $this->assertEquals($expectedVersionsOrder, $versions);
     }
 
     /**

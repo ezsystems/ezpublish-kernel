@@ -4,12 +4,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\PolicyDraft as APIPolicyDraft;
 
+/**
+ * Class PolicyDraft.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
+ */
 class PolicyDraft extends APIPolicyDraft
 {
     /**

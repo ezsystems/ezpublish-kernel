@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
@@ -200,14 +198,25 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $cache = $this->cache->getItem('urlAlias', 'url', $cacheKey);
         $urlAliasId = $cache->get();
         if ($cache->isMiss()) {
+            $urlAliasHistoryCache = $this->cache->getItem('urlAlias', 'url', 'history', $cacheKey);
+            $historyUrlAlias = $urlAliasHistoryCache->get();
+
+            if (!$urlAliasHistoryCache->isMiss()) {
+                return $historyUrlAlias;
+            }
+
             // Also cache "not found" as this function is heavliy used and hance should be cached
             try {
                 $this->logger->logCall(__METHOD__, array('url' => $url));
                 $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
-                $cache->set($urlAlias->id)->save();
 
-                $urlAliasCache = $this->cache->getItem('urlAlias', $urlAlias->id);
-                $urlAliasCache->set($urlAlias)->save();
+                if ($urlAlias->isHistory) {
+                    $urlAliasHistoryCache->set($urlAlias)->save();
+                } else {
+                    $cache->set($urlAlias->id)->save();
+                    $urlAliasCache = $this->cache->getItem('urlAlias', $urlAlias->id);
+                    $urlAliasCache->set($urlAlias)->save();
+                }
             } catch (APINotFoundException $e) {
                 $cache->set(self::NOT_FOUND)->save();
                 throw $e;

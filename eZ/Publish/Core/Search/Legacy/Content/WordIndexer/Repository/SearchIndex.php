@@ -139,10 +139,19 @@ class SearchIndex
      * @param $identifier
      * @param $integerValue
      */
-    public function addObjectWordLink($wordId, $contentId, $frequency, $placement, $nextWordId, $prevWordId,
-                                      $contentTypeId, $fieldTypeId, $published, $sectionId, $identifier,
-                                      $integerValue)
-    {
+    public function addObjectWordLink($wordId,
+                                      $contentId,
+                                      $frequency,
+                                      $placement,
+                                      $nextWordId,
+                                      $prevWordId,
+                                      $contentTypeId,
+                                      $fieldTypeId,
+                                      $published,
+                                      $sectionId,
+                                      $identifier,
+                                      $integerValue
+    ) {
         $assoc = [
             'word_id' => $wordId,
             'contentobject_id' => $contentId,

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\Content\Query\Criterion;
 
@@ -20,6 +18,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as APISubtr
  * This is a internal subtree criterion intended for use by permission system (SubtreeLimitationType) only!
  * And will be applied by SQL based search engines on Content Search to avoid performance problems.
  * @see https://jira.ez.no/browse/EZP-23037
+ *
+ * @internal Meant for internal use by Repository.
  */
 class PermissionSubtree extends APISubtreeCriterion
 {

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
@@ -26,6 +24,8 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  * @property-read int $status the status of this version. One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
  * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
  * @property-read array $languageCodes a collection of all languages which exist in this version.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class VersionInfo extends APIVersionInfo
 {

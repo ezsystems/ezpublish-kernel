@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
@@ -29,6 +27,8 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
  * @property-read boolean $isSearchable indicates if the field is searchable
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
  * @property-read mixed $defaultValue the default value of the field
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class FieldDefinition extends APIFieldDefinition
 {

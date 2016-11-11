@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository;
 
@@ -1571,17 +1569,6 @@ class ContentService implements ContentServiceInterface
 
             $versions[] = $versionInfo;
         }
-
-        usort(
-            $versions,
-            function (VersionInfo $a, VersionInfo $b) {
-                if ($a->creationDate->getTimestamp() === $b->creationDate->getTimestamp()) {
-                    return 0;
-                }
-
-                return ($a->creationDate->getTimestamp() < $b->creationDate->getTimestamp()) ? -1 : 1;
-            }
-        );
 
         return $versions;
     }

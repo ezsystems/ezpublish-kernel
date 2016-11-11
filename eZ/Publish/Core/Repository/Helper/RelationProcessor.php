@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
@@ -20,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreat
 /**
  * RelationProcessor is an internal service used for handling field relations upon Content creation or update.
  *
- * @internal
+ * @internal Meant for internal use by Repository.
  */
 class RelationProcessor
 {
