@@ -56,8 +56,11 @@ class FOSPurgeClient implements PurgeClientInterface
             return;
         }
 
-        // @todo: Need to take advantage of xkey if enabled to avoid BAN unless VCL handles this for us.
-        $this->cacheManager->invalidate(['xkey' => '^(' . implode('|', $tags) . ')$']);
+        // As xkey only support one tag (key) being invalidated at a time, we loop.
+        // These will be queued by FOS\HttpCache\ProxyClient\Varnish and handled on kernel.terminate.
+        foreach (array_unique($tags) as $tag) {
+            $this->cacheManager->invalidatePath('/', ['xkey' => $tag]);
+        }
     }
 
     public function purgeAll()
