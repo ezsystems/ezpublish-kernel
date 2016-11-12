@@ -111,6 +111,10 @@ class ContentViewBuilder implements ViewBuilder
 
         $view->setContent($content);
 
+        if (!$view->isEmbed()) {
+            $view->setRelations($this->repository->getContentService()->loadRelations($content->getVersionInfo()));
+        }
+
         if (isset($location)) {
             if ($location->contentId !== $content->id) {
                 throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');

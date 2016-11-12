@@ -20,7 +20,7 @@ Changes affecting version compatibility with former or future versions.
   - parent
   - siblings
   - children
-  - reverse relations _(TODO)_
+  - reverse relations
 
   This covers what was supported before, but more reliably, BC break here is for custom Smart Cache handlers that did
   custom cache clearing logic _(introduced in eZ Platform 1.x)_. If you use this we are currently looking for feedback

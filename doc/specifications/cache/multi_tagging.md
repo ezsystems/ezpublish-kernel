@@ -71,7 +71,7 @@ effect on the output of the given content (it should not render links to the giv
 #### Other eZ Repository domains
 
 Tags for other domains in the Repository also have tags, e.g.:
-- `content-type-<id>` _(TODO: We might have to differ between the one used on content, or introduce one for drafts if we want to cache that)_
+- `content-type-<id>`
 - `content-type-group-<id>`
 - `section-<id>`
 - `object-state-<id>`

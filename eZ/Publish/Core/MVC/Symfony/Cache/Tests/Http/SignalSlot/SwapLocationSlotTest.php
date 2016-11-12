@@ -10,9 +10,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal;
 
-/**
- * @todo Fixme
- */
 class SwapLocationSlotTest extends AbstractContentSlotTest
 {
     public function setUp()
