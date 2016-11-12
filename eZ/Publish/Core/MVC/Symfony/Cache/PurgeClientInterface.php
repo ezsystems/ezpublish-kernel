@@ -15,7 +15,7 @@ interface PurgeClientInterface
      *
      * It's up to the implementor to decide whether to purge $locationIds right away or to delegate to a separate process.
      *
-     * @deprecate Since 6.7, use {link purgeByTags()}
+     * @deprecate Since 6.7, use {@link purgeByTags()}
      *
      * @param array $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
      */
