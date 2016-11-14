@@ -629,6 +629,8 @@ class SearchEngineIndexingTest extends BaseTest
             ['"quoted text"', 'quoted text'],
             ['ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝ', 'àáâãäåçèéêëìíîïðñòóôõöøùúûüý'],
             ['with boundary.', 'with boundary'],
+            ['Folder1.', 'Folder1.'],
+            ['whitespaces', "     whitespaces  \n \t "],
             // @todo: Remove as soon as elastic is updated to later version not affected
             ["it's", "it's", [LegacyElasticsearch::class]],
             ['with_underscore', 'with_underscore'],
