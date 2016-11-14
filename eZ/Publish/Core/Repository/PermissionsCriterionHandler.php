@@ -118,7 +118,6 @@ class PermissionsCriterionHandler
             foreach ($permissionSet['policies'] as $policy) {
                 $limitations = $policy->getLimitations();
                 if ($limitations === '*' || empty($limitations)) {
-                    $policyOrCriteria[] = new Criterion\MatchAll();
                     continue;
                 }
 
