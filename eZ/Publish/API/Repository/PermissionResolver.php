@@ -7,6 +7,7 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\API\Repository\Values\Model;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -81,10 +82,10 @@ interface PermissionResolver
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *
      * @param string $module The module, e.g. 'content', to check permissions on
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\Model $object The object to check if the user has access to
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target Optional specific target, e.g. Location to get precise permission info
      *
      *  @return \eZ\Publish\API\Repository\Values\User\PermissionInfo[]
      */
-    public function getUserPermissionInfo($module, ValueObject $object, ValueObject $target = null);
+    public function getUserPermissionInfo($module, Model $object, ValueObject $target = null);
 }

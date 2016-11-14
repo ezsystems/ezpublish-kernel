@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\SPI\Limitation;
 
-use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;
+use eZ\Publish\API\Repository\Values\Model as APIModel;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 
@@ -25,16 +25,34 @@ interface Type
     /**
      * Constants for return value of {@see evaluate()}.
      *
-     * Currently ACCESS_ABSTAIN must mean that evaluate does not support the provided $object or $targets,
-     * this is currently only supported by role limitations as policy limitations should not allow this.
+     * ACCESS_GRANTED: Current user has access.
+     *
+     * ACCESS_DENIED: Current user does not have access.
+     *
+     * ACCESS_ABSTAIN_WRONG_MODEL: The given limitation type does not support the provided $object, which in case
+     * the limitation is a role limitation, means the limitation can safely be ignored. E.g. Subtree limitation
+     * on a role with a section/edit policy (which is not a domain contained within the content tree). However when
+     * returned from a policy limitation this is considered no access, as it implies miss configuration.
+     *
+     * ACCESS_ABSTAIN_INSUFFICIENT_CONTEXT: Implies info needed to determine if user has access or not is missing.
+     * When checking user access `canUser()` this means user does not have access, however in the context of getting
+     * permission info to provide UI options to user, this should instead mean limitation values should be returned.
+     * As these values represent the choices the user need to make to fulfill the limitation for the missing context.
      *
      * @note In future version constant values might change to 1, 0 and -1 as used in Symfony.
      *
-     * @since 5.3.2
+     * @since 6.7.0 (ACCESS_GRANTED, ACCESS_DENIED, ACCESS_ABSTAIN since 5.3.2)
      */
     const ACCESS_GRANTED = true;
-    const ACCESS_ABSTAIN = null;
     const ACCESS_DENIED = false;
+    const ACCESS_ABSTAIN_WRONG_MODEL = null;
+    const ACCESS_ABSTAIN_INSUFFICIENT_CONTEXT = 0;
+
+
+    /**
+     * @deprecated since 6.7, use ACCESS_ABSTAIN_WRONG_MODEL.
+     */
+    const ACCESS_ABSTAIN = null;
 
     /**
      * Constants for valueSchema() return values.
@@ -90,13 +108,13 @@ interface Type
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
+     * @param \eZ\Publish\API\Repository\Values\Model $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets An array of location, parent or "assignment"
      *                                                                 objects, if null: none where provided by caller
      *
      * @return bool|null Returns one of ACCESS_* constants
      */
-    public function evaluate(APILimitationValue $value, APIUserReference $currentUser, APIValueObject $object, array $targets = null);
+    public function evaluate(APILimitationValue $value, APIUserReference $currentUser, APIModel $object, array $targets = null);
 
     /**
      * Returns Criterion for use in find() query.
