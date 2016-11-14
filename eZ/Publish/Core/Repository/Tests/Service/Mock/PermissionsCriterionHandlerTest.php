@@ -155,25 +155,25 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ),
             array(
                 $criterionMock,
-                1,
+                0,
                 array(
                     array(
                         'limitation' => null,
                         'policies' => array(new Policy(array('limitations' => '*')), $policy1),
                     ),
                 ),
-                $criterionMock,
+                false,
             ),
             array(
                 $criterionMock,
-                1,
+                0,
                 array(
                     array(
                         'limitation' => null,
                         'policies' => array(new Policy(array('limitations' => array())), $policy1),
                     ),
                 ),
-                $criterionMock,
+                false,
             ),
             array(
                 $criterionMock,
