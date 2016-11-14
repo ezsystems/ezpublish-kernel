@@ -116,7 +116,10 @@ class PermissionsCriterionHandler
             foreach ($permissionSet['policies'] as $policy) {
                 $limitations = $policy->getLimitations();
                 if ($limitations === '*' || empty($limitations)) {
-                    continue;
+                    // Given policy gives full access, optimize away all role policies (but not role limitation if any)
+                    // This should be optimized on create/update of Roles, however we keep this here for bc with older data
+                    $policyOrCriteria = [];
+                    break;
                 }
 
                 $limitationsAndCriteria = array();
