@@ -91,6 +91,9 @@ class RolePolicyLimitationTest extends BaseLimitationTest
 
         // check if searching by subtree returns the same result as for an admin
         $this->assertEquals($expectedSubtreeLocationsCount, $this->getSubtreeLocationsCount($subtreePathString));
+
+        // check if searching by subtree which is not a part of role assignment limitation does not return results
+        $this->assertEquals(0, $this->getSubtreeLocationsCount('/1/5/'));
     }
 
     /**
