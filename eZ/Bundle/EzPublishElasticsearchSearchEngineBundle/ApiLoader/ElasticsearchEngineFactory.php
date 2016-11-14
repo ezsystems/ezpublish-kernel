@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\EzPublishElasticsearchSearchEngineExtension;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -26,6 +27,11 @@ class ElasticsearchEngineFactory implements ContainerAwareInterface
      */
     private $defaultConnection;
 
+    /**
+     * @var string
+     */
+    private $searchEngineClass;
+
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
         $defaultConnection,
@@ -33,6 +39,7 @@ class ElasticsearchEngineFactory implements ContainerAwareInterface
     ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->defaultConnection = $defaultConnection;
+        $this->searchEngineClass = $searchEngineClass;
     }
 
     public function buildEngine()
@@ -44,10 +51,13 @@ class ElasticsearchEngineFactory implements ContainerAwareInterface
             $connection = $repositoryConfig['search']['connection'];
         }
 
-        $engineId = $this->container->getParameter(
-            "ez_search_engine_elasticsearch.connection.$connection.engine_id"
+        return new $this->searchEngineClass(
+            $this->container->get(sprintf('%s.%s', EzPublishElasticsearchSearchEngineExtension::CONTENT_SEARCH_GATEWAY_ID, $connection)),
+            $this->container->get(sprintf('%s.%s', EzPublishElasticsearchSearchEngineExtension::LOCATION_SEARCH_GATEWAY_ID, $connection)),
+            $this->container->get('ezpublish.search.elasticsearch.mapper'),
+            $this->container->get('ezpublish.search.elasticsearch.extractor'),
+            $this->container->getParameter("ez_search_engine_elasticsearch.connection.$connection.location_document_type_identifier"),
+            $this->container->getParameter("ez_search_engine_elasticsearch.connection.$connection.location_document_type_identifier")
         );
-
-        return $this->container->get($engineId);
     }
 }
