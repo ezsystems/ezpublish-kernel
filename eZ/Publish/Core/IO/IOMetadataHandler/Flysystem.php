@@ -56,9 +56,9 @@ class Flysystem implements IOMetadataHandler
         return $this->getSPIBinaryForMetadata($info, $spiBinaryFileId);
     }
 
-    public function loadList($scope = null, $limit = null, $offset = null)
+    public function loadList($limit = null, $offset = null)
     {
-        $metadataList = $this->getMetadataListWithoutDirectories($scope);
+        $metadataList = $this->getMetadataListWithoutDirectories();
         $offset = $offset === null ? 0 : $offset;
         $limit = $limit === null ? count($metadataList) : $offset + $limit;
         $limit = $limit > count($metadataList) ? count($metadataList) : $limit;
@@ -88,23 +88,19 @@ class Flysystem implements IOMetadataHandler
     {
     }
 
-    public function count($scope = null)
+    public function count()
     {
-        return count($this->getMetadataListWithoutDirectories($scope));
+        return count($this->getMetadataListWithoutDirectories());
     }
 
     /**
-     * Return the metadata of all entries in $scope except directories.
+     * Return the metadata of all entries except directories.
      *
-     * @param string|null $scope The file scope, one of 'binaryfile', 'image', 'mediafile', or null
      * @return array
      */
-    private function getMetadataListWithoutDirectories($scope = null)
+    private function getMetadataListWithoutDirectories()
     {
-        $metadataList = $this->filesystem->listContents(
-            $scope ? $this->getFilePrefixForScope($scope) : '',
-            true
-        );
+        $metadataList = $this->filesystem->listContents('', true);
 
         $filteredMetadataList = [];
         foreach ($metadataList as $metadata) {
@@ -114,28 +110,6 @@ class Flysystem implements IOMetadataHandler
         }
 
         return $filteredMetadataList;
-    }
-
-    /**
-     * Get the file prefix (storage path) for the given $scope.
-     *
-     * @param $scope
-     * @return string
-     */
-    private function getFilePrefixForScope($scope)
-    {
-        switch ($scope) {
-            case 'image':
-                return 'images';
-
-            case 'binaryfile':
-                return 'original';
-
-            case 'mediafile':
-                return 'original';
-        }
-
-        return 'UNKNOWN_FILE_PREFIX';
     }
 
     private function getSPIBinaryForMetadata($metadata, $spiBinaryFileId = null)

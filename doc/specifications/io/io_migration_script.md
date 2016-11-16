@@ -60,17 +60,7 @@ by running the command without any argument.
 
 By using different arguments, any kind of migration is possible. This would
 migrate files from DFS to AWS/S3.
-`php app/console ezplatform:io:migrate-files --from=nfs,dfs--to=aws_s3,aws_s3`
-
-### Migration handlers
-
-There are 3 types of files to migrate, with corresponding legacy tables:
-- binary files (ezbinaryfile)
-- media files (ezmedia)
-- images (ezimagefile)
-
-These are implemented using MigrationHandlerInterface and can be looked up in
-a MigrationHandlerRegistry.
+`php app/console ezplatform:io:migrate-files --from=nfs,dfs --to=aws_s3,aws_s3`
 
 ### Replicate Adapter
 

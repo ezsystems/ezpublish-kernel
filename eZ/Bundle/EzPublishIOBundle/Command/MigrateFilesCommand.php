@@ -9,7 +9,6 @@
 namespace eZ\Bundle\EzPublishIOBundle\Command;
 
 use eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandlerInterface;
-use eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandlerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,20 +22,20 @@ class MigrateFilesCommand extends Command
 
     private $configuredBinarydataHandlers;
 
-    /** @var \eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandlerRegistry */
-    private $migrationHandlerRegistry;
+    /** @var \eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandlerInterface */
+    private $migrationHandler;
 
     public function __construct(
         $configuredMetadataHandlers,
         $configuredBinarydataHandlers,
-        MigrationHandlerRegistry $migrationHandlerRegistry
+        MigrationHandlerInterface $migrationHandler
     ) {
         $this->configuredMetadataHandlers = $configuredMetadataHandlers;
         $this->configuredBinarydataHandlers = $configuredBinarydataHandlers;
         $this->configuredMetadataHandlers['default'] = [];
         $this->configuredBinarydataHandlers['default'] = [];
 
-        $this->migrationHandlerRegistry = $migrationHandlerRegistry;
+        $this->migrationHandler = $migrationHandler;
 
         parent::__construct();
     }
@@ -49,9 +48,6 @@ class MigrateFilesCommand extends Command
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'Migrate from <from_metadata_handler>,<from_binarydata_handler>')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'Migrate to <to_metadata_handler>,<to_binarydata_handler>')
             ->addOption('list-io-configs', null, InputOption::VALUE_NONE, 'List available IO configurations')
-            ->addOption('skip-binary-files', null, InputOption::VALUE_NONE, 'Skip copying binary files')
-            ->addOption('skip-media-files', null, InputOption::VALUE_NONE, 'Skip copying media files')
-            ->addOption('skip-image-files', null, InputOption::VALUE_NONE, 'Skip copying image files')
             ->addOption('remove-files', null, InputOption::VALUE_NONE, 'Remove source files after copying')
             ->addOption('bulk-count', null, InputOption::VALUE_REQUIRED, 'Number of files processed at once', 100)
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute a dry run')
@@ -108,32 +104,16 @@ EOT
             "Migrating from '$fromHandlers[0],$fromHandlers[1]' to '$toHandlers[0],$toHandlers[1]'",
             '',
         ]);
+        $this->migrationHandler->setIODataHandlersByIdentifiers(
+            $fromHandlers[0],
+            $fromHandlers[1],
+            $toHandlers[0],
+            $toHandlers[1]
+        );
 
-        $binaryFilesCount = $mediaFilesCount = $imageFilesCount = 0;
-        $migrationHandlers = [];
-        if (!$input->getOption('skip-binary-files')) {
-            $migrationHandlers['binary_file'] = $this->migrationHandlerRegistry
-                ->getItem('binary_file')
-                ->setIODataHandlersByIdentifiers($fromHandlers[0], $fromHandlers[1], $toHandlers[0], $toHandlers[1]);
-            $binaryFilesCount = $migrationHandlers['binary_file']->countFiles();
-        }
-        if (!$input->getOption('skip-media-files')) {
-            $migrationHandlers['media_file'] = $this->migrationHandlerRegistry
-                ->getItem('media_file')
-                ->setIODataHandlersByIdentifiers($fromHandlers[0], $fromHandlers[1], $toHandlers[0], $toHandlers[1]);
-            $mediaFilesCount = $migrationHandlers['media_file']->countFiles();
-        }
-        if (!$input->getOption('skip-image-files')) {
-            $migrationHandlers['image_file'] = $this->migrationHandlerRegistry
-                ->getItem('image_file')
-                ->setIODataHandlersByIdentifiers($fromHandlers[0], $fromHandlers[1], $toHandlers[0], $toHandlers[1]);
-            $imageFilesCount = $migrationHandlers['image_file']->countFiles();
-        }
-
-        $totalCount = $binaryFilesCount + $mediaFilesCount + $imageFilesCount;
+        $totalCount = $this->migrationHandler->countFiles();
         $output->writeln([
-            "Found total files to update: $totalCount",
-            "(binary files: $binaryFilesCount, media files: $mediaFilesCount, image files: $imageFilesCount)",
+            'Found total files to update: ' . $totalCount,
             '',
         ]);
 
@@ -158,36 +138,12 @@ EOT
         $bulkCount = $input->getOption('bulk-count');
         $dryRun = $input->getOption('dry-run');
 
-        if (!$input->getOption('skip-binary-files')) {
-            $output->writeln('Migrating binary files');
-            $this->migrateFiles(
-                $migrationHandlers['binary_file'],
-                $binaryFilesCount,
-                $bulkCount,
-                $dryRun,
-                $output
-            );
-        }
-        if (!$input->getOption('skip-media-files')) {
-            $output->writeln('Migrating media files');
-            $this->migrateFiles(
-                $migrationHandlers['media_file'],
-                $mediaFilesCount,
-                $bulkCount,
-                $dryRun,
-                $output
-            );
-        }
-        if (!$input->getOption('skip-image-files')) {
-            $output->writeln('Migrating image files');
-            $this->migrateFiles(
-                $migrationHandlers['image_file'],
-                $imageFilesCount,
-                $bulkCount,
-                $dryRun,
-                $output
-            );
-        }
+        $this->migrateFiles(
+            $totalCount,
+            $bulkCount,
+            $dryRun,
+            $output
+        );
     }
 
     /**
@@ -274,14 +230,12 @@ EOT
     /**
      * Migrate files.
      *
-     * @param MigrationHandlerInterface $migrationHandler
      * @param int $fileCount
      * @param int $bulkCount
      * @param bool $dryRun
      * @param OutputInterface $output
      */
     protected function migrateFiles(
-        MigrationHandlerInterface $migrationHandler,
         $fileCount,
         $bulkCount,
         $dryRun,
@@ -296,11 +250,11 @@ EOT
         $progress->start();
 
         for ($pass = 0; $pass <= $passCount; ++$pass) {
-            $metadataList = $migrationHandler->loadMetadataList($bulkCount, $pass * $bulkCount);
+            $metadataList = $this->migrationHandler->loadMetadataList($bulkCount, $pass * $bulkCount);
 
             foreach ($metadataList as $metadata) {
                 if (!$dryRun) {
-                    $migrationHandler->migrateFile($metadata);
+                    $this->migrationHandler->migrateFile($metadata);
                 }
 
                 $progress->clear();

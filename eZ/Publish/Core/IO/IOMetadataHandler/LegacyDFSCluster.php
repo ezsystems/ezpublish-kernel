@@ -280,18 +280,13 @@ SQL
         return $spiBinaryFile;
     }
 
-    public function loadList($scope = null, $limit = null, $offset = null)
+    public function loadList($limit = null, $offset = null)
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM ezdfsfile WHERE ' .
-            ($scope !== null ? 'scope LIKE :scope AND ' : '') .
-            'expired != 1 AND mtime > 0' .
+            'SELECT * FROM ezdfsfile WHERE expired != 1 AND mtime > 0' .
             ($limit !== null ? ' LIMIT :limit' : '') .
             ($offset !== null ? ' OFFSET :offset' : '')
         );
-        if ($scope !== null) {
-            $stmt->bindValue('scope', $scope);
-        }
         if ($limit !== null) {
             $stmt->bindValue('limit', $limit, \PDO::PARAM_INT);
         }
@@ -311,16 +306,9 @@ SQL
         return $spiBinaryFileList;
     }
 
-    public function count($scope = null)
+    public function count()
     {
-        $stmt = $this->db->prepare(
-            'SELECT count(name_hash) as count FROM ezdfsfile WHERE ' .
-            ($scope !== null ? 'scope LIKE :scope AND ' : '') .
-            'expired != 1 AND mtime > 0'
-        );
-        if ($scope !== null) {
-            $stmt->bindValue('scope', $scope);
-        }
+        $stmt = $this->db->prepare('SELECT count(name_hash) as count FROM ezdfsfile WHERE expired != 1 AND mtime > 0');
         $stmt->execute();
 
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);

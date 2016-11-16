@@ -9,17 +9,17 @@
 namespace eZ\Bundle\EzPublishIOBundle\Migration;
 
 use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
+use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
+use eZ\Publish\SPI\IO\BinaryFile;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
-abstract class MigrationHandler implements MigrationHandlerInterface
+class MigrationHandler implements MigrationHandlerInterface
 {
     /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
     private $metadataHandlerFactory;
 
     /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
     private $binarydataHandlerFactory;
-
-    /** @var string */
-    protected $scope;
 
     /** @var \eZ\Publish\Core\IO\IOMetadataHandler */
     protected $fromMetadataHandler;
@@ -34,11 +34,9 @@ abstract class MigrationHandler implements MigrationHandlerInterface
     protected $toBinarydataHandler;
 
     public function __construct(
-        $scope,
         HandlerFactory $metadataHandlerFactory,
         HandlerFactory $binarydataHandlerFactory
     ) {
-        $this->scope = $scope;
         $this->metadataHandlerFactory = $metadataHandlerFactory;
         $this->binarydataHandlerFactory = $binarydataHandlerFactory;
     }
@@ -55,5 +53,54 @@ abstract class MigrationHandler implements MigrationHandlerInterface
         $this->toBinarydataHandler = $this->binarydataHandlerFactory->getConfiguredHandler($toBinarydataHandlerIdentifier);
 
         return $this;
+    }
+
+    public function countFiles()
+    {
+        return $this->fromMetadataHandler->count();
+    }
+
+    public function loadMetadataList($limit = null, $offset = null)
+    {
+        return $this->fromMetadataHandler->loadList($limit, $offset);
+    }
+
+    public function migrateFile(BinaryFile $binaryFile)
+    {
+        try {
+            $binaryFileResource = $this->fromBinarydataHandler->getResource($binaryFile->id);
+        } catch (BinaryFileNotFoundException $e) {
+            //TODO log
+
+            return false;
+        }
+
+        $binaryFileCreateStruct = new BinaryFileCreateStruct();
+        $binaryFileCreateStruct->id = $binaryFile->id;
+        $binaryFileCreateStruct->setInputStream($binaryFileResource);
+
+        try {
+            $this->toBinarydataHandler->create($binaryFileCreateStruct);
+        } catch (\RuntimeException $e) {
+            //TODO log
+
+            return false;
+        }
+
+        $metadataCreateStruct = new BinaryFileCreateStruct();
+        $metadataCreateStruct->id = $binaryFile->id;
+        $metadataCreateStruct->size = $binaryFile->size;
+        $metadataCreateStruct->mtime = $binaryFile->mtime;
+        $metadataCreateStruct->mimeType = $this->fromMetadataHandler->getMimeType($binaryFile->id);
+
+        try {
+            $this->toMetadataHandler->create($metadataCreateStruct);
+        } catch (\RuntimeException $e) {
+            //TODO log
+
+            return false;
+        }
+
+        return true;
     }
 }

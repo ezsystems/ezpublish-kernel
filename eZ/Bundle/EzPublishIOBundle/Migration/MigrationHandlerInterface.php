@@ -14,7 +14,6 @@ use eZ\Publish\SPI\IO\BinaryFile;
 interface MigrationHandlerInterface
 {
     public function __construct(
-        $scope,
         HandlerFactory $metadataHandlerFactory,
         HandlerFactory $binarydataHandlerFactory
     );
