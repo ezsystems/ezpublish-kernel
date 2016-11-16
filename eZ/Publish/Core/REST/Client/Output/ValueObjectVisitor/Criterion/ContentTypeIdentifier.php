@@ -18,7 +18,13 @@ class ContentTypeIdentifier extends ValueObjectVisitor
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $generator->startValueElement('ContentTypeIdentifierCriterion', $data->value);
-        $generator->endValueElement('ContentTypeIdentifierCriterion');
+        $contentTypeIdentifiers = is_array($data->value) ? $data->value : [$data->value];
+
+        $generator->startList('ContentTypeIdentifierCriterion');
+        foreach ($contentTypeIdentifiers as $contentTypeIdentifier) {
+            $generator->startValueElement('ContentTypeIdentifierCriterion', $contentTypeIdentifier);
+            $generator->endValueElement('ContentTypeIdentifierCriterion');
+        }
+        $generator->endList('ContentTypeIdentifierCriterion');
     }
 }
