@@ -55,15 +55,11 @@ matrix:
 #      env: TEST_CONFIG="phpunit.xml"
 
 
-# test only master (+ Pull requests)
+# test only master, stable branches and pull requests
 branches:
   only:
     - master
-    - "6.1"
-    - "6.2"
-    - "6.3"
-    - "6.4"
-    - "6.5"
+    - /^\d.\d+$/
 
 # setup requirements for running unit/integration/behat tests
 before_script:
