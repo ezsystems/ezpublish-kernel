@@ -330,9 +330,8 @@ class PermissionResolver implements PermissionResolverInterface
              *
              * These are already filtered by hasAccess and given hasAccess did not return boolean
              * there must be some, so only return true if one of them says yes.
-             *
-             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
              */
+            /** @var \eZ\Publish\API\Repository\Values\User\Policy $policy */
             foreach ($permissionSet['policies'] as $policy) {
                 $policyLimitations = [];
 
@@ -403,7 +402,7 @@ class PermissionResolver implements PermissionResolverInterface
 
         if (!$setPasses) {
             $access = PermissionInfo::ACCESS_DENIED;
-        } else if (empty($limitationSets)) {
+        } elseif (empty($limitationSets)) {
             $access = PermissionInfo::ACCESS_GRANTED;
         }
 

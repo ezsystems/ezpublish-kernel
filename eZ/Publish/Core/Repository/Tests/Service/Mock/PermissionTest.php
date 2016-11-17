@@ -1682,9 +1682,7 @@ class PermissionTest extends BaseServiceMockTest
         $this->assertNotEmpty($permissionInfo->limitationSets);
         $this->assertEquals(count($expectedLimitationSets), count($permissionInfo->limitationSets));
 
-        /**
-         * @var \eZ\Publish\API\Repository\Values\User\Limitation[][] $limitationSets
-         */
+        /** @var \eZ\Publish\API\Repository\Values\User\Limitation[][] $limitationSets */
         $limitationSets = $permissionInfo->limitationSets;
 
         foreach ($limitationSets as $i => $limitationSet) {
