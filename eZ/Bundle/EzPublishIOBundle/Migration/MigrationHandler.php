@@ -12,6 +12,7 @@ use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use Psr\Log\LoggerInterface;
 
 class MigrationHandler implements MigrationHandlerInterface
 {
@@ -20,6 +21,9 @@ class MigrationHandler implements MigrationHandlerInterface
 
     /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
     private $binarydataHandlerFactory;
+
+    /** @var \Psr\Log\LoggerInterface */
+    private $logger;
 
     /** @var \eZ\Publish\Core\IO\IOMetadataHandler */
     protected $fromMetadataHandler;
@@ -35,10 +39,12 @@ class MigrationHandler implements MigrationHandlerInterface
 
     public function __construct(
         HandlerFactory $metadataHandlerFactory,
-        HandlerFactory $binarydataHandlerFactory
+        HandlerFactory $binarydataHandlerFactory,
+        LoggerInterface $logger = null
     ) {
         $this->metadataHandlerFactory = $metadataHandlerFactory;
         $this->binarydataHandlerFactory = $binarydataHandlerFactory;
+        $this->logger = $logger;
     }
 
     public function setIODataHandlersByIdentifiers(
@@ -70,7 +76,9 @@ class MigrationHandler implements MigrationHandlerInterface
         try {
             $binaryFileResource = $this->fromBinarydataHandler->getResource($binaryFile->id);
         } catch (BinaryFileNotFoundException $e) {
-            //TODO log
+            if (isset($this->logger)) {
+                $this->logger->error("Cannot load binary data for: '{$binaryFile->id}'. Error: " . $e->getMessage());
+            }
 
             return false;
         }
@@ -82,7 +90,9 @@ class MigrationHandler implements MigrationHandlerInterface
         try {
             $this->toBinarydataHandler->create($binaryFileCreateStruct);
         } catch (\RuntimeException $e) {
-            //TODO log
+            if (isset($this->logger)) {
+                $this->logger->error("Cannot migrate binary data for: '{$binaryFile->id}'. Error: " . $e->getMessage());
+            }
 
             return false;
         }
@@ -96,9 +106,15 @@ class MigrationHandler implements MigrationHandlerInterface
         try {
             $this->toMetadataHandler->create($metadataCreateStruct);
         } catch (\RuntimeException $e) {
-            //TODO log
+            if (isset($this->logger)) {
+                $this->logger->error("Cannot migrate metadata for: '{$binaryFile->id}'. Error: " . $e->getMessage());
+            }
 
             return false;
+        }
+
+        if (isset($this->logger)) {
+            $this->logger->info("Successfully migrated: '{$binaryFile->id}'");
         }
 
         return true;

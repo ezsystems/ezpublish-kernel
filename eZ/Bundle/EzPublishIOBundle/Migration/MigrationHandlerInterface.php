@@ -10,12 +10,14 @@ namespace eZ\Bundle\EzPublishIOBundle\Migration;
 
 use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
 use eZ\Publish\SPI\IO\BinaryFile;
+use Psr\Log\LoggerInterface;
 
 interface MigrationHandlerInterface
 {
     public function __construct(
         HandlerFactory $metadataHandlerFactory,
-        HandlerFactory $binarydataHandlerFactory
+        HandlerFactory $binarydataHandlerFactory,
+        LoggerInterface $logger = null
     );
 
     /**

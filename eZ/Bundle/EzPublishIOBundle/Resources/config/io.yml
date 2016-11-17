@@ -19,6 +19,7 @@ services:
         arguments:
             - "@ezpublish.core.io.metadata_handler.factory"
             - "@ezpublish.core.io.binarydata_handler.factory"
+            - "@logger"
 
     # Builds the binarydata and metadata handler based on the siteaccess config
     ezpublish.core.io.metadata_handler:
