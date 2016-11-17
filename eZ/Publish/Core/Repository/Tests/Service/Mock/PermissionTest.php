@@ -7,13 +7,16 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\User\PermissionInfo;
+use eZ\Publish\Core\Repository\Values\User\Policy;
 use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role;
-use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Mock test case for PermissionResolver.
@@ -577,7 +580,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         $policies = array();
         foreach ($policiesData as $policyData) {
-            $policies[] = new Policy(
+            $policies[] = new SPIPolicy(
                 array(
                     'module' => $policyData[0],
                     'function' => $policyData[1],
@@ -931,6 +934,768 @@ class PermissionTest extends BaseServiceMockTest
             $userReferenceMock,
             $permissionResolverMock->getCurrentUserReference()
         );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @group permission-lookup
+     */
+    public function testLookupGrantedSimple()
+    {
+        $module = 'module';
+        $function = 'function';
+        $limitations = [];
+        $permissionResolver = $this->getPermissionResolverMock(['hasAccess']);
+
+        $permissionResolver
+            ->expects($this->once())
+            ->method('hasAccess')
+            ->with($module, $function)
+            ->willReturn(true);
+
+        $permissionInfo = $permissionResolver->lookup($module, $function, $limitations);
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertSame(PermissionInfo::ACCESS_GRANTED, $permissionInfo->access);
+        $this->assertEmpty($permissionInfo->limitationSets);
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @group permission-lookup
+     */
+    public function testLookupDeniedSimple()
+    {
+        $module = 'module';
+        $function = 'function';
+        $limitations = [];
+        $permissionResolver = $this->getPermissionResolverMock(['hasAccess']);
+
+        $permissionResolver
+            ->expects($this->once())
+            ->method('hasAccess')
+            ->with($module, $function)
+            ->willReturn(false);
+
+        $permissionInfo = $permissionResolver->lookup($module, $function, $limitations);
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertSame(PermissionInfo::ACCESS_DENIED, $permissionInfo->access);
+        $this->assertEmpty($permissionInfo->limitationSets);
+    }
+
+    protected function assertLimitationTypeForLookup()
+    {
+        $limitationTypeMock = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
+        $limitationTypeMock
+            ->expects($this->any())
+            ->method('evaluateSingle')
+            ->with(
+                $this->isInstanceOf('eZ\Publish\API\Repository\Values\User\Limitation'),
+                $this->anything()
+            )
+            ->will(
+                $this->returnCallback(
+                    function (Limitation $limitation, $value) {
+                        return in_array($value, $limitation->limitationValues);
+                    }
+                )
+            );
+
+        $limitationService = $this->getLimitationServiceMock(['getLimitationType']);
+        $limitationService
+            ->expects($this->any())
+            ->method('getLimitationType')
+            ->with($this->anything())
+            ->will($this->returnValue($limitationTypeMock));
+    }
+
+    public function providerForTestLookupGranted()
+    {
+        return [
+            0 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                ],
+            ],
+            1 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                    new Limitation\SectionLimitation(['limitationValues' => [5]]),
+                ],
+            ],
+            2 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [10, 11, 12]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [4]]),
+                    new Limitation\SectionLimitation(['limitationValues' => [10]]),
+                ],
+            ],
+            3 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [4]]),
+                ],
+            ],
+            4 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [4]]),
+                ],
+            ],
+            5 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(),
+                        ],
+                    ],
+                ],
+                [],
+            ],
+            6 => [
+                [
+                    [
+                        'limitation' => new Limitation\LocationLimitation(['limitationValues' => [2, 3, 4]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [2]]),
+                ],
+            ],
+            7 => [
+                [
+                    [
+                        'limitation' => new Limitation\LocationLimitation(['limitationValues' => [2, 3, 4]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => new Limitation\LocationLimitation(['limitationValues' => [5, 6, 7]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [4, 5, 6]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [6]]),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * Permission sets without Role Limitations, resolving to granted permission.
+     *
+     * @group permission-lookup
+     * @dataProvider providerForTestLookupGranted
+     *
+     * @param array $permissionSets
+     * @param array $limitations
+     */
+    public function testLookupGranted($permissionSets, $limitations)
+    {
+        $module = 'module';
+        $function = 'function';
+        $permissionResolver = $this->getPermissionResolverMock(['hasAccess']);
+        $this->assertLimitationTypeForLookup();
+
+        $permissionResolver
+            ->expects($this->once())
+            ->method('hasAccess')
+            ->with($module, $function)
+            ->willReturn($permissionSets);
+
+        $permissionInfo = $permissionResolver->lookup($module, $function, $limitations);
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertSame(PermissionInfo::ACCESS_GRANTED, $permissionInfo->access);
+        $this->assertEmpty($permissionInfo->limitationSets);
+    }
+
+    public function providerForTestLookupDenied()
+    {
+        return [
+            0 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [4]]),
+                ],
+            ],
+            1 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                    new Limitation\SectionLimitation(['limitationValues' => [7]]),
+                ],
+            ],
+            2 => [
+                [
+                    [
+                        'limitation' => new Limitation\LocationLimitation(['limitationValues' => [2, 3, 4]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                    new Limitation\SectionLimitation(['limitationValues' => [5]]),
+                ],
+            ],
+            3 => [
+                [
+                    [
+                        'limitation' => new Limitation\LocationLimitation(['limitationValues' => [2, 3, 4]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [4]]),
+                    new Limitation\SectionLimitation(['limitationValues' => [5]]),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * Permission sets without Role Limitations, resolving to denied permission.
+     *
+     * @group permission-lookup
+     * @dataProvider providerForTestLookupDenied
+     *
+     * @param array $permissionSets
+     * @param array $limitations
+     */
+    public function testLookupDenied($permissionSets, $limitations)
+    {
+        $module = 'module';
+        $function = 'function';
+        $permissionResolver = $this->getPermissionResolverMock(['hasAccess']);
+        $this->assertLimitationTypeForLookup();
+
+        $permissionResolver
+            ->expects($this->once())
+            ->method('hasAccess')
+            ->with($module, $function)
+            ->willReturn($permissionSets);
+
+        $permissionInfo = $permissionResolver->lookup($module, $function, $limitations);
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertSame(PermissionInfo::ACCESS_DENIED, $permissionInfo->access);
+        $this->assertEmpty($permissionInfo->limitationSets);
+    }
+
+    public function providerForTestLookupLimited()
+    {
+        return [
+            0 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                ],
+                [
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                    ],
+                ],
+            ],
+            1 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                ],
+                [
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                    ],
+                ],
+            ],
+            2 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                ],
+                [
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                    ],
+                    [
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                    ],
+                ],
+            ],
+            3 => [
+                [
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                ],
+                [
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                    ],
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                    ],
+                ],
+            ],
+            4 => [
+                [
+                    [
+                        'limitation' => new Limitation\LocationLimitation(['limitationValues' => [1, 3, 5, 7]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => null,
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                ],
+                [
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                    ],
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                    ],
+                ],
+            ],
+            5 => [
+                [
+                    [
+                        'limitation' => new Limitation\SectionLimitation(['limitationValues' => [1, 3, 4, 7]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => new Limitation\ContentTypeLimitation(['limitationValues' => [10, 14, 15]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                ],
+                [
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                        new Limitation\SectionLimitation(['limitationValues' => [1, 3, 4, 7]]),
+                    ],
+                    [
+                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 14, 15]]),
+                    ],
+                ],
+            ],
+            6 => [
+                [
+                    [
+                        'limitation' => new Limitation\SectionLimitation(['limitationValues' => [1, 3, 4, 7]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\LocationLimitation(['limitationValues' => [1, 2, 3]]),
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                    [
+                        'limitation' => new Limitation\ContentTypeLimitation(['limitationValues' => [10, 14, 15]]),
+                        'policies' => [
+                            new Policy(
+                                [
+                                    'limitations' => [
+                                        new Limitation\SectionLimitation(['limitationValues' => [4, 5, 6]]),
+                                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ],
+                [
+                    new Limitation\LocationLimitation(['limitationValues' => [1]]),
+                    new Limitation\SectionLimitation(['limitationValues' => [4]]),
+                ],
+                [
+                    [
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [7, 8, 9]]),
+                    ],
+                    [
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 11, 12]]),
+                        new Limitation\ContentTypeLimitation(['limitationValues' => [10, 14, 15]]),
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * Permission sets without Role Limitations, resolving to granted permission.
+     *
+     * @group permission-lookup
+     * @dataProvider providerForTestLookupLimited
+     *
+     * @param array $permissionSets
+     * @param array $limitations
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation[][] $expectedLimitationSets
+     */
+    public function testLookupLimited($permissionSets, $limitations, $expectedLimitationSets)
+    {
+        $module = 'module';
+        $function = 'function';
+        $permissionResolver = $this->getPermissionResolverMock(['hasAccess']);
+        $this->assertLimitationTypeForLookup();
+
+        $permissionResolver
+            ->expects($this->once())
+            ->method('hasAccess')
+            ->with($module, $function)
+            ->willReturn($permissionSets);
+
+        $permissionInfo = $permissionResolver->lookup($module, $function, $limitations);
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertSame(PermissionInfo::ACCESS_LIMITED, $permissionInfo->access);
+
+        $this->assertNotEmpty($permissionInfo->limitationSets);
+        $this->assertEquals(count($expectedLimitationSets), count($permissionInfo->limitationSets));
+
+        /**
+         * @var \eZ\Publish\API\Repository\Values\User\Limitation[][] $limitationSets
+         */
+        $limitationSets = $permissionInfo->limitationSets;
+
+        foreach ($limitationSets as $i => $limitationSet) {
+            $this->assertEquals(count($expectedLimitationSets[$i]), count($limitationSet));
+
+            foreach ($limitationSet as $k => $limitation) {
+                $expectedLimitation = $expectedLimitationSets[$i][$k];
+                $this->assertEquals($expectedLimitation->getIdentifier(), $limitation->getIdentifier());
+                $this->assertEquals($expectedLimitation->limitationValues, $limitation->limitationValues);
+            }
+        }
     }
 
     protected $permissionResolverMock;
