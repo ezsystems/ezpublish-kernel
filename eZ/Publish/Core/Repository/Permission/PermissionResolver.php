@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\API\Repository\Values\User\PermissionInfo;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use Exception;
@@ -262,5 +263,155 @@ class PermissionResolver implements PermissionResolverInterface
         --$this->sudoNestingLevel;
 
         return $returnValue;
+    }
+
+    public function lookup(
+        $module,
+        $function,
+        array $limitations = [],
+        APIUserReference $userReference = null
+    ) {
+        $limitationSets = [];
+        $permissionSets = $this->hasAccess($module, $function, $userReference);
+
+        if ($permissionSets === true) {
+            return new PermissionInfo(['access' => PermissionInfo::ACCESS_GRANTED]);
+        }
+
+        if ($permissionSets === false) {
+            return new PermissionInfo(['access' => PermissionInfo::ACCESS_DENIED]);
+        }
+
+        /** @var \eZ\Publish\API\Repository\Values\User\Limitation[] $queryLimitationMap */
+        $queryLimitationMap = [];
+        foreach ($limitations as $limitation) {
+            $queryLimitationMap[$limitation->getIdentifier()] = $limitation;
+        }
+
+        $setPasses = false;
+
+        foreach ($permissionSets as $permissionSet) {
+            $roleLimitations = [];
+
+            /**
+             * First deal with Role limitation if any.
+             *
+             * Here we accept ACCESS_GRANTED and ACCESS_ABSTAIN, the latter in cases where $object and $targets
+             * are not supported by limitation.
+             *
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
+             */
+            if ($permissionSet['limitation'] instanceof Limitation) {
+                $limitation = $permissionSet['limitation'];
+                $identifier = $limitation->getIdentifier();
+
+                if (isset($queryLimitationMap[$identifier])) {
+                    $value = reset($queryLimitationMap[$identifier]->limitationValues);
+                    $type = $this->limitationService->getLimitationType($identifier);
+
+                    // Try with next role permission set
+                    if (!$type->evaluateSingle($limitation, $value)) {
+                        continue;
+                    }
+                } else {
+                    // todo How to decide if this is at all relevant for module/function?
+                    // ACCESS_ABSTAIN is returned by evaluate().
+                    // Maybe it could be modelled on the permission map instead?
+                    $roleLimitations[] = $limitation;
+                }
+            }
+
+            $policyLimitationSet = [];
+
+            $policiesPass = false;
+
+            /**
+             * Loop over all policies.
+             *
+             * These are already filtered by hasAccess and given hasAccess did not return boolean
+             * there must be some, so only return true if one of them says yes.
+             *
+             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
+             */
+            foreach ($permissionSet['policies'] as $policy) {
+                $policyLimitations = [];
+
+                $limitations = $policy->getLimitations();
+                if ($limitations === '*') {
+                    $limitations = [];
+                }
+
+                /** @var \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations */
+                foreach ($limitations as $limitation) {
+                    $identifier = $limitation->getIdentifier();
+
+                    if (isset($queryLimitationMap[$identifier])) {
+                        $value = reset($queryLimitationMap[$identifier]->limitationValues);
+                        $type = $this->limitationService->getLimitationType($identifier);
+
+                        if ($type->evaluateSingle($limitation, $value)) {
+                            // Continue evaluating
+                            continue;
+                        } else {
+                            // Break to next policy, all limitations must either pass or record
+                            break 2;
+                        }
+                    } else {
+                        // Record limitation for return
+                        $policyLimitations[] = $limitation;
+                    }
+                }
+
+                $policiesPass = true;
+
+                // Break if a policy allows access without limitation
+                if (empty($policyLimitations)) {
+                    $policyLimitationSet = [];
+                    break;
+                }
+
+                // Else, add limitation to policy set
+                $policyLimitationSet[] = $policyLimitations;
+            }
+
+            // Try with next role permission set
+            if (!$policiesPass) {
+                continue;
+            }
+
+            $setPasses = true;
+            $setLimitations = [];
+
+            foreach ($policyLimitationSet as $policyLimitations) {
+                $setLimitations = array_merge($policyLimitations, $roleLimitations);
+            }
+
+            if (empty($setLimitations) && !empty($roleLimitations)) {
+                $setLimitations = $roleLimitations;
+            }
+
+            // Break if a set allows access without limitation
+            if (empty($setLimitations)) {
+                $limitationSets = [];
+                break;
+            }
+
+            $limitationSets = array_merge($limitationSets, [$setLimitations]);
+        }
+
+        $access = PermissionInfo::ACCESS_LIMITED;
+
+        if (!$setPasses) {
+            $access = PermissionInfo::ACCESS_DENIED;
+        } else if (empty($limitationSets)) {
+            $access = PermissionInfo::ACCESS_GRANTED;
+        }
+
+        return new PermissionInfo(
+            [
+                'access' => $access,
+                'limitationSets' => $limitationSets,
+            ]
+        );
     }
 }
