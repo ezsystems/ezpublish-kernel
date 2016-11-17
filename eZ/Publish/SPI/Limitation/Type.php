@@ -99,6 +99,16 @@ interface Type
     public function evaluate(APILimitationValue $value, APIUserReference $currentUser, APIValueObject $object, array $targets = null);
 
     /**
+     * Evaluates a single given value against a limitation.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function evaluateSingle(APILimitationValue $limitation, $value);
+
+    /**
      * Returns Criterion for use in find() query.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If the limitation does not support
