@@ -65,4 +65,23 @@ interface PermissionResolver
      * @return bool
      */
     public function canUser($module, $function, ValueObject $object, array $targets = []);
+
+    /**
+     * Looks up user's permission information for the given module, function and a set
+     * of limitations.
+     *
+     * @param string $module
+     * @param string $function
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $userReference User for
+     *        which the information is returned, current user will be used if null
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\PermissionInfo
+     */
+    public function lookup(
+        $module,
+        $function,
+        array $limitations = [],
+        UserReference $userReference = null
+    );
 }
