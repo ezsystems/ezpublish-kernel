@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
 
 /**
- * LocationLimitation is a Content limitation.
+ * Base class for limitation types requiring persistence handler.
  */
-class AbstractPersistenceLimitationType
+abstract class AbstractPersistenceLimitationType extends BaseLimitationType
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler

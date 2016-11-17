@@ -164,6 +164,17 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         return false;
     }
 
+    public function evaluateSingle(APILimitationValue $limitation, $value)
+    {
+        foreach ($value->limitationValues as $limitationPathString) {
+            if (strpos($value, $limitationPathString) === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Evaluate permissions for ContentCreateStruct against LocationCreateStruct placements.
      *

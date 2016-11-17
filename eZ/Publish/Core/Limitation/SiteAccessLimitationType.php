@@ -16,12 +16,11 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation as API
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
  * SiteAccessLimitation is a User limitation.
  */
-class SiteAccessLimitationType implements SPILimitationTypeInterface
+class SiteAccessLimitationType extends BaseLimitationType
 {
     /**
      * @var array

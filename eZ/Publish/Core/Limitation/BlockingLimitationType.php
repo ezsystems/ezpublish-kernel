@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
  * BlockingLimitationType is a limitation type that always says no to the permission system.
@@ -25,7 +24,7 @@ use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
  * It is for use in cases where a limitation is not implemented, or limitation is legacy specific
  * and it is then not possible to know when to say yes, so we need to say no.
  */
-class BlockingLimitationType implements SPILimitationTypeInterface
+class BlockingLimitationType extends BaseLimitationType
 {
     /**
      * @var string
