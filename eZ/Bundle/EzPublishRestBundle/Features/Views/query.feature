@@ -11,6 +11,7 @@ Feature: Running searches using REST views
          And I set field "contentQuery" to a Query object
          And I set the "filter" property of the Query to a valid Criterion
          And I send the request
-        Then response contains a "eZ\Publish\Core\REST\Client\Values\View" object
+        Then response status code is 200
+         And response contains a "eZ\Publish\Core\REST\Client\Values\View" object
          And the View contains Search Hits
          And the Search Hits are Content objects
