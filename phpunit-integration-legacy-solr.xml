@@ -25,6 +25,7 @@
                         all services here.
             -->
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/PermissionResolverTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceMaximumSupportedLanguagesTest.php</file>
