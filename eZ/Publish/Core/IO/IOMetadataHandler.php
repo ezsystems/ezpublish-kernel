@@ -46,16 +46,6 @@ interface IOMetadataHandler
     public function load($spiBinaryFileId);
 
     /**
-     * Loads and returns metadata for files, optionally limited by $limit and $offset.
-     *
-     * @param int|null $limit The number of files to load data for, or null
-     * @param int|null $offset The offset used when loading in batches, or null
-     *
-     * @return BinaryFile[]
-     */
-    public function loadList($limit = null, $offset = null);
-
-    /**
      * Checks if a file $path exists.
      *
      * @param string $path
@@ -74,11 +64,4 @@ interface IOMetadataHandler
     public function getMimeType($spiBinaryFileId);
 
     public function deleteDirectory($spiPath);
-
-    /**
-     * Count all files.
-     *
-     * @return int
-     */
-    public function count();
 }

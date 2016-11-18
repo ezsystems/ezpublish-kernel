@@ -62,13 +62,13 @@ By using different arguments, any kind of migration is possible. This would
 migrate files from DFS to AWS/S3.
 `php app/console ezplatform:io:migrate-files --from=nfs,dfs --to=aws_s3,aws_s3`
 
-### Replicate Adapter
+Other script options are:
+```
+--list-io-configs          List available IO configurations
+--remove-files             Remove source files after copying
+--bulk-count=BULK-COUNT    Number of files processed at once [default: 100]
+--dry-run                  Execute a dry run
+```
 
-Migration between flysystem-based adapters (currently local files and NFS) can
-be done with [Replicate Adapter](http://flysystem.thephpleague.com/adapter/replicate/)
-
-### Open questions
-If a handler is identical in from and to, is it ignored?
-What are the script options?
-Should we allow running the script without arguments?
-How is output/logging done?
+Script logging follows common settings, i.e. by default the migration will be
+logged if you use `--env=dev`.

@@ -8,7 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\Command;
 
-use eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandlerInterface;
+use eZ\Bundle\EzPublishIOBundle\Migration\FileListerRegistry;
+use eZ\Bundle\EzPublishIOBundle\Migration\FileMigratorInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,20 +25,32 @@ class MigrateFilesCommand extends Command
     /** @var mixed Configuration for binary data handlers */
     private $configuredBinarydataHandlers;
 
-    /** @var \eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandlerInterface */
-    private $migrationHandler;
+    /** @var \eZ\Bundle\EzPublishIOBundle\Migration\FileListerRegistry */
+    private $fileListerRegistry;
+
+    /** @var \eZ\Bundle\EzPublishIOBundle\Migration\FileListerInterface[] */
+    private $fileListers;
+
+    /** @var \eZ\Bundle\EzPublishIOBundle\Migration\FileMigratorInterface */
+    private $fileMigrator;
 
     public function __construct(
         $configuredMetadataHandlers,
         $configuredBinarydataHandlers,
-        MigrationHandlerInterface $migrationHandler
+        FileListerRegistry $fileListerRegistry,
+        FileMigratorInterface $fileMigrator
     ) {
         $this->configuredMetadataHandlers = $configuredMetadataHandlers;
         $this->configuredBinarydataHandlers = $configuredBinarydataHandlers;
         $this->configuredMetadataHandlers['default'] = [];
         $this->configuredBinarydataHandlers['default'] = [];
 
-        $this->migrationHandler = $migrationHandler;
+        $this->fileListerRegistry = $fileListerRegistry;
+        $this->fileMigrator = $fileMigrator;
+
+        foreach ($this->fileListerRegistry->getIdentifiers() as $fileListerIdentifier) {
+            $this->fileListers[] = $this->fileListerRegistry->getItem($fileListerIdentifier);
+        }
 
         parent::__construct();
     }
@@ -114,14 +127,25 @@ EOT
             "Migrating from '$fromHandlers[0],$fromHandlers[1]' to '$toHandlers[0],$toHandlers[1]'",
             '',
         ]);
-        $this->migrationHandler->setIODataHandlersByIdentifiers(
+
+        $totalCount = 0;
+        foreach ($this->fileListers as $fileLister) {
+            $fileLister->setIODataHandlersByIdentifiers(
+                $fromHandlers[0],
+                $fromHandlers[1],
+                $toHandlers[0],
+                $toHandlers[1]
+            );
+
+            $totalCount += $fileLister->countFiles();
+        }
+        $this->fileMigrator->setIODataHandlersByIdentifiers(
             $fromHandlers[0],
             $fromHandlers[1],
             $toHandlers[0],
             $toHandlers[1]
         );
 
-        $totalCount = $this->migrationHandler->countFiles();
         $output->writeln([
             'Total number of files to update: ' . ($totalCount === null ? 'unknown' : $totalCount),
             '',
@@ -238,39 +262,41 @@ EOT
         $progress->setMessage('Starting migration...');
         $progress->start();
 
-        $pass = 0;
         $elapsedFileCount = 0;
         $timestamp = microtime(true);
         $updateFrequency = 1;
 
-        do {
-            $metadataList = $this->migrationHandler->loadMetadataList($bulkCount, $pass * $bulkCount);
+        foreach ($this->fileListers as $fileLister) {
+            $pass = 0;
+            do {
+                $metadataList = $fileLister->loadMetadataList($bulkCount, $pass * $bulkCount);
 
-            foreach ($metadataList as $metadata) {
-                if (!$dryRun) {
-                    $this->migrationHandler->migrateFile($metadata);
-                }
-
-                $progress->setMessage('Updated file ' . $metadata->id);
-                $progress->advance();
-                ++$elapsedFileCount;
-
-                // Magic that ensures the progressbar is updated ca. once per second
-                if (($elapsedFileCount % $updateFrequency) === 0) {
-                    $newTimestamp = microtime(true);
-                    if ($newTimestamp - $timestamp > 0.5 && $updateFrequency > 1) {
-                        $updateFrequency = (int)($updateFrequency / 2);
-                        $progress->setRedrawFrequency($updateFrequency);
-                    } elseif ($newTimestamp - $timestamp < 0.1 && $updateFrequency < 10000) {
-                        $updateFrequency = $updateFrequency * 2;
-                        $progress->setRedrawFrequency($updateFrequency);
+                foreach ($metadataList as $metadata) {
+                    if (!$dryRun) {
+                        $this->fileMigrator->migrateFile($metadata);
                     }
-                    $timestamp = $newTimestamp;
-                }
-            }
 
-            ++$pass;
-        } while (count($metadataList) > 0);
+                    $progress->setMessage('Updated file ' . $metadata->id);
+                    $progress->advance();
+                    ++$elapsedFileCount;
+
+                    // Magic that ensures the progressbar is updated ca. once per second
+                    if (($elapsedFileCount % $updateFrequency) === 0) {
+                        $newTimestamp = microtime(true);
+                        if ($newTimestamp - $timestamp > 0.5 && $updateFrequency > 1) {
+                            $updateFrequency = (int)($updateFrequency / 2);
+                            $progress->setRedrawFrequency($updateFrequency);
+                        } elseif ($newTimestamp - $timestamp < 0.1 && $updateFrequency < 10000) {
+                            $updateFrequency = $updateFrequency * 2;
+                            $progress->setRedrawFrequency($updateFrequency);
+                        }
+                        $timestamp = $newTimestamp;
+                    }
+                }
+
+                ++$pass;
+            } while (count($metadataList) > 0);
+        }
 
         $progress->setMessage('');
         $progress->finish();

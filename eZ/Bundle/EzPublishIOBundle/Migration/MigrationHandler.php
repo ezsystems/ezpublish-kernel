@@ -9,21 +9,18 @@
 namespace eZ\Bundle\EzPublishIOBundle\Migration;
 
 use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
-use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
-use eZ\Publish\SPI\IO\BinaryFile;
-use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use Psr\Log\LoggerInterface;
 
-class MigrationHandler implements MigrationHandlerInterface
+abstract class MigrationHandler implements MigrationHandlerInterface
 {
     /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
-    private $metadataHandlerFactory;
+    protected $metadataHandlerFactory;
 
     /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
-    private $binarydataHandlerFactory;
+    protected $binarydataHandlerFactory;
 
     /** @var \Psr\Log\LoggerInterface */
-    private $logger;
+    protected $logger;
 
     /** @var \eZ\Publish\Core\IO\IOMetadataHandler */
     protected $fromMetadataHandler;
@@ -61,62 +58,22 @@ class MigrationHandler implements MigrationHandlerInterface
         return $this;
     }
 
-    public function countFiles()
+    protected function logError($message)
     {
-        return $this->fromMetadataHandler->count();
-    }
-
-    public function loadMetadataList($limit = null, $offset = null)
-    {
-        return $this->fromMetadataHandler->loadList($limit, $offset);
-    }
-
-    public function migrateFile(BinaryFile $binaryFile)
-    {
-        try {
-            $binaryFileResource = $this->fromBinarydataHandler->getResource($binaryFile->id);
-        } catch (BinaryFileNotFoundException $e) {
-            if (isset($this->logger)) {
-                $this->logger->error("Cannot load binary data for: '{$binaryFile->id}'. Error: " . $e->getMessage());
-            }
-
-            return false;
-        }
-
-        $binaryFileCreateStruct = new BinaryFileCreateStruct();
-        $binaryFileCreateStruct->id = $binaryFile->id;
-        $binaryFileCreateStruct->setInputStream($binaryFileResource);
-
-        try {
-            $this->toBinarydataHandler->create($binaryFileCreateStruct);
-        } catch (\RuntimeException $e) {
-            if (isset($this->logger)) {
-                $this->logger->error("Cannot migrate binary data for: '{$binaryFile->id}'. Error: " . $e->getMessage());
-            }
-
-            return false;
-        }
-
-        $metadataCreateStruct = new BinaryFileCreateStruct();
-        $metadataCreateStruct->id = $binaryFile->id;
-        $metadataCreateStruct->size = $binaryFile->size;
-        $metadataCreateStruct->mtime = $binaryFile->mtime;
-        $metadataCreateStruct->mimeType = $this->fromMetadataHandler->getMimeType($binaryFile->id);
-
-        try {
-            $this->toMetadataHandler->create($metadataCreateStruct);
-        } catch (\RuntimeException $e) {
-            if (isset($this->logger)) {
-                $this->logger->error("Cannot migrate metadata for: '{$binaryFile->id}'. Error: " . $e->getMessage());
-            }
-
-            return false;
-        }
-
         if (isset($this->logger)) {
-            $this->logger->info("Successfully migrated: '{$binaryFile->id}'");
+            $this->logger->error($message);
         }
+    }
 
-        return true;
+    protected function logInfo($message)
+    {
+        if (isset($this->logger)) {
+            $this->logger->info($message);
+        }
+    }
+
+    protected function logMissingFile($id)
+    {
+        $this->logInfo("File with id $id not found");
     }
 }

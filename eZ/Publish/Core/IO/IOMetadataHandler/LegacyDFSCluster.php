@@ -279,40 +279,4 @@ SQL
 
         return $spiBinaryFile;
     }
-
-    public function loadList($limit = null, $offset = null)
-    {
-        $stmt = $this->db->prepare(
-            'SELECT * FROM ezdfsfile WHERE expired != 1 AND mtime > 0' .
-            ($limit !== null ? ' LIMIT :limit' : '') .
-            ($offset !== null ? ' OFFSET :offset' : '')
-        );
-        if ($limit !== null) {
-            $stmt->bindValue('limit', $limit, \PDO::PARAM_INT);
-        }
-        if ($offset !== null) {
-            $stmt->bindValue('offset', $offset, \PDO::PARAM_INT);
-        }
-        $stmt->execute();
-
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        $spiBinaryFileList = [];
-        foreach ($rows as $row) {
-            $row['id'] = $this->removePrefix($row['name']);
-            $spiBinaryFileList[] = $this->mapArrayToSPIBinaryFile($row);
-        }
-
-        return $spiBinaryFileList;
-    }
-
-    public function count()
-    {
-        $stmt = $this->db->prepare('SELECT count(name_hash) as count FROM ezdfsfile WHERE expired != 1 AND mtime > 0');
-        $stmt->execute();
-
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-        return (int)$row['count'];
-    }
 }

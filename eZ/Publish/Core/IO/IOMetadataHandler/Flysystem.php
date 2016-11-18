@@ -53,22 +53,15 @@ class Flysystem implements IOMetadataHandler
             throw new BinaryFileNotFoundException($spiBinaryFileId);
         }
 
-        return $this->getSPIBinaryForMetadata($info, $spiBinaryFileId);
-    }
+        $spiBinaryFile = new SPIBinaryFile();
+        $spiBinaryFile->id = $spiBinaryFileId;
+        $spiBinaryFile->size = $info['size'];
 
-    public function loadList($limit = null, $offset = null)
-    {
-        $metadataList = $this->getMetadataListWithoutDirectories();
-        $offset = $offset === null ? 0 : $offset;
-        $limit = $limit === null ? count($metadataList) : $offset + $limit;
-        $limit = $limit > count($metadataList) ? count($metadataList) : $limit;
-        $spiBinaryFileList = [];
-
-        for ($i = $offset; $i < $limit; ++$i) {
-            $spiBinaryFileList[] = $this->getSPIBinaryForMetadata($metadataList[$i]);
+        if (isset($info['timestamp'])) {
+            $spiBinaryFile->mtime = new DateTime('@' . $info['timestamp']);
         }
 
-        return $spiBinaryFileList;
+        return $spiBinaryFile;
     }
 
     public function exists($spiBinaryFileId)
@@ -86,42 +79,5 @@ class Flysystem implements IOMetadataHandler
      */
     public function deleteDirectory($spiPath)
     {
-    }
-
-    public function count()
-    {
-        return count($this->getMetadataListWithoutDirectories());
-    }
-
-    /**
-     * Return the metadata of all entries except directories.
-     *
-     * @return array
-     */
-    private function getMetadataListWithoutDirectories()
-    {
-        $metadataList = $this->filesystem->listContents('', true);
-
-        $filteredMetadataList = [];
-        foreach ($metadataList as $metadata) {
-            if (array_key_exists('size', $metadata)) {
-                $filteredMetadataList[] = $metadata;
-            }
-        }
-
-        return $filteredMetadataList;
-    }
-
-    private function getSPIBinaryForMetadata($metadata, $spiBinaryFileId = null)
-    {
-        $spiBinaryFile = new SPIBinaryFile();
-        $spiBinaryFile->id = $spiBinaryFileId ?: $metadata['path'];
-        $spiBinaryFile->size = $metadata['size'];
-
-        if (isset($metadata['timestamp'])) {
-            $spiBinaryFile->mtime = new DateTime('@' . $metadata['timestamp']);
-        }
-
-        return $spiBinaryFile;
     }
 }
