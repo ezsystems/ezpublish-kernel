@@ -166,7 +166,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
 
     public function evaluateSingle(APILimitationValue $limitation, $value)
     {
-        foreach ($value->limitationValues as $limitationPathString) {
+        foreach ($limitation->limitationValues as $limitationPathString) {
             if (strpos($value, $limitationPathString) === 0) {
                 return true;
             }
