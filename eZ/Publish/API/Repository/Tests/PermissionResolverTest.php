@@ -6,6 +6,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\PermissionInfo;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 
 /**
@@ -754,5 +757,115 @@ class PermissionResolverTest extends BaseTest
         $this->markTestIncomplete(
             'Cannot be tested on current fixture since policy with unsupported limitation value is not available.'
         );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @see \eZ\Publish\API\Repository\PermissionResolver::lookup()
+     */
+    public function testLookupAccessGranted()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $permissionResolver = $repository->getPermissionResolver();
+
+        // Set created user as current user reference
+        $permissionResolver->setCurrentUserReference($user);
+
+        $permissionInfo = $permissionResolver->lookup(
+            'content',
+            'read',
+            [
+                new SectionLimitation(['limitationValues' => [1]]),
+                new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
+            ]
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertEquals(PermissionInfo::ACCESS_GRANTED, $permissionInfo->access);
+        $this->assertEmpty($permissionInfo->limitationSets);
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @see \eZ\Publish\API\Repository\PermissionResolver::lookup()
+     */
+    public function testLookupAccessLimited()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $permissionResolver = $repository->getPermissionResolver();
+
+        // Set created user as current user reference
+        $permissionResolver->setCurrentUserReference($user);
+
+        $permissionInfo = $permissionResolver->lookup(
+            'content',
+            'read',
+            [
+                new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
+            ]
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertEquals(PermissionInfo::ACCESS_LIMITED, $permissionInfo->access);
+        $this->assertCount(1, $permissionInfo->limitationSets);
+        $this->assertCount(1, $permissionInfo->limitationSets[0]);
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation',
+            $permissionInfo->limitationSets[0][0]
+        );
+        $this->assertEquals([1, 6, 3], $permissionInfo->limitationSets[0][0]->limitationValues);
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @see \eZ\Publish\API\Repository\PermissionResolver::lookup()
+     */
+    public function testLookupAccessDenied()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $permissionResolver = $repository->getPermissionResolver();
+
+        // Set created user as current user reference
+        $permissionResolver->setCurrentUserReference($user);
+
+        $permissionInfo = $permissionResolver->lookup(
+            'content',
+            'read',
+            [
+                new SectionLimitation(['limitationValues' => [1]]),
+                new SubtreeLimitation(['limitationValues' => ['/1/5/']]),
+            ]
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\User\PermissionInfo',
+            $permissionInfo
+        );
+        $this->assertEquals(PermissionInfo::ACCESS_DENIED, $permissionInfo->access);
+        $this->assertEmpty($permissionInfo->limitationSets);
     }
 }
