@@ -18,8 +18,10 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class MigrateFilesCommand extends Command
 {
+    /** @var mixed Configuration for metadata handlers */
     private $configuredMetadataHandlers;
 
+    /** @var mixed Configuration for binary data handlers */
     private $configuredBinarydataHandlers;
 
     /** @var \eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandlerInterface */
@@ -82,13 +84,17 @@ EOT
             return;
         }
 
+        $bulkCount = (int)$input->getOption('bulk-count');
+        if ($bulkCount < 1) {
+            $output->writeln('The value for --bulk-count must be a positive integer.');
+
+            return;
+        }
+
         $output->writeln($this->getProcessedHelp());
 
         $fromHandlers = $input->getOption('from') ? explode(',', $input->getOption('from')) : null;
         $toHandlers = $input->getOption('to') ? explode(',', $input->getOption('to')) : null;
-        if (!$this->areHandlerOptionsValid($fromHandlers, $toHandlers, $output)) {
-            return;
-        }
 
         if (!$fromHandlers) {
             $fromHandlers = ['default', 'default'];
@@ -98,6 +104,10 @@ EOT
                 array_keys($this->configuredMetadataHandlers)[0],
                 array_keys($this->configuredBinarydataHandlers)[0],
             ];
+        }
+
+        if (!$this->validateHandlerOptions($fromHandlers, $toHandlers, $output)) {
+            return;
         }
 
         $output->writeln([
@@ -113,7 +123,7 @@ EOT
 
         $totalCount = $this->migrationHandler->countFiles();
         $output->writeln([
-            'Found total files to update: ' . $totalCount,
+            'Total number of files to update: ' . ($totalCount === null ? 'unknown' : $totalCount),
             '',
         ]);
 
@@ -135,13 +145,10 @@ EOT
             return;
         }
 
-        $bulkCount = $input->getOption('bulk-count');
-        $dryRun = $input->getOption('dry-run');
-
         $this->migrateFiles(
             $totalCount,
             $bulkCount,
-            $dryRun,
+            $input->getOption('dry-run'),
             $output
         );
     }
@@ -169,56 +176,35 @@ EOT
      * @param OutputInterface $output
      * @return bool
      */
-    protected function areHandlerOptionsValid(
+    protected function validateHandlerOptions(
         $fromHandlers,
         $toHandlers,
         OutputInterface $output
     ) {
-        if ($fromHandlers) {
-            if (count($fromHandlers) !== 2) {
-                $output->writeln('Enter two comma separated values for the --from option: <from_metadata_handler>,<from_binarydata_handler>');
+        foreach (['From' => $fromHandlers, 'To' => $toHandlers] as $direction => $handlers) {
+            $lowerDirection = strtolower($direction);
+            if (count($handlers) !== 2) {
+                $output->writeln(
+                    "Enter two comma separated values for the --$lowerDirection option: " .
+                    "<{$lowerDirection}_metadata_handler>,<{$lowerDirection}_binarydata_handler>"
+                );
 
                 return false;
             }
 
-            if (!in_array($fromHandlers[0], array_keys($this->configuredMetadataHandlers))) {
-                $output->writeln("From meta data handler '$fromHandlers[0]' is not configured.");
-                $this->outputConfiguredHandlers($output);
+            foreach (['meta' => $handlers[0], 'binary' => $handlers[1]] as $fileDataType => $handler) {
+                if (!in_array($handler, array_keys(
+                    $fileDataType === 'meta' ? $this->configuredMetadataHandlers : $this->configuredBinarydataHandlers
+                ))) {
+                    $output->writeln("$direction $fileDataType data handler '$handler' is not configured.");
+                    $this->outputConfiguredHandlers($output);
 
-                return false;
-            }
-
-            if (!in_array($fromHandlers[1], array_keys($this->configuredBinarydataHandlers))) {
-                $output->writeln("From binary data handler '$fromHandlers[1]' is not configured.");
-                $this->outputConfiguredHandlers($output);
-
-                return false;
-            }
-        }
-
-        if ($toHandlers) {
-            if (count($toHandlers) !== 2) {
-                $output->writeln('Enter two comma separated values for the --to option: <to_metadata_handler>,<to_binarydata_handler>');
-
-                return false;
-            }
-
-            if (!in_array($toHandlers[0], array_keys($this->configuredMetadataHandlers))) {
-                $output->writeln("To meta data handler '$toHandlers[0]' is not configured.");
-                $this->outputConfiguredHandlers($output);
-
-                return false;
-            }
-
-            if (!in_array($toHandlers[1], array_keys($this->configuredBinarydataHandlers))) {
-                $output->writeln("To binary data handler '$toHandlers[1]' is not configured.");
-                $this->outputConfiguredHandlers($output);
-
-                return false;
+                    return false;
+                }
             }
         }
 
-        if ($fromHandlers && $toHandlers && $fromHandlers === $toHandlers) {
+        if ($fromHandlers === $toHandlers) {
             $output->writeln('From and to handlers are the same. Nothing to do.');
 
             return false;
@@ -230,26 +216,34 @@ EOT
     /**
      * Migrate files.
      *
-     * @param int $fileCount
-     * @param int $bulkCount
+     * @param int|null $totalFileCount Total count of files, null if unknown
+     * @param int $bulkCount Number of files to process in each batch
      * @param bool $dryRun
      * @param OutputInterface $output
      */
     protected function migrateFiles(
-        $fileCount,
+        $totalFileCount = null,
         $bulkCount,
         $dryRun,
         OutputInterface $output
     ) {
-        $passCount = ceil($fileCount / $bulkCount);
-
-        $progress = new ProgressBar($output, $fileCount);
-        $progress->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
+        $progress = new ProgressBar($output, $totalFileCount);
+        if ($totalFileCount) {
+            $progress->setFormat("%message%\n %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%");
+        } else {
+            $progress->setFormat("%message%\n %current% [%bar%] %elapsed:6s% %memory:6s%");
+        }
 
         $output->writeln('');
+        $progress->setMessage('Starting migration...');
         $progress->start();
 
-        for ($pass = 0; $pass <= $passCount; ++$pass) {
+        $pass = 0;
+        $elapsedFileCount = 0;
+        $timestamp = microtime(true);
+        $updateFrequency = 1;
+
+        do {
             $metadataList = $this->migrationHandler->loadMetadataList($bulkCount, $pass * $bulkCount);
 
             foreach ($metadataList as $metadata) {
@@ -257,20 +251,30 @@ EOT
                     $this->migrationHandler->migrateFile($metadata);
                 }
 
-                $progress->clear();
-
-                $output->write("\r");
-                $output->writeln('Updated file ' . $metadata->id);
-                $output->write("\r");
-
-                $progress->display();
-
+                $progress->setMessage('Updated file ' . $metadata->id);
                 $progress->advance();
-            }
-        }
+                ++$elapsedFileCount;
 
+                // Magic that ensures the progressbar is updated ca. once per second
+                if (($elapsedFileCount % $updateFrequency) === 0) {
+                    $newTimestamp = microtime(true);
+                    if ($newTimestamp - $timestamp > 0.5 && $updateFrequency > 1) {
+                        $updateFrequency = (int)($updateFrequency / 2);
+                        $progress->setRedrawFrequency($updateFrequency);
+                    } elseif ($newTimestamp - $timestamp < 0.1 && $updateFrequency < 10000) {
+                        $updateFrequency = $updateFrequency * 2;
+                        $progress->setRedrawFrequency($updateFrequency);
+                    }
+                    $timestamp = $newTimestamp;
+                }
+            }
+
+            ++$pass;
+        } while (count($metadataList) > 0);
+
+        $progress->setMessage('');
         $progress->finish();
 
-        $output->writeln('');
+        $output->writeln("\n\nFinished processing $elapsedFileCount files.");
     }
 }

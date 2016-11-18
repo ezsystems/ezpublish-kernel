@@ -8,18 +8,10 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\Migration;
 
-use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
 use eZ\Publish\SPI\IO\BinaryFile;
-use Psr\Log\LoggerInterface;
 
 interface MigrationHandlerInterface
 {
-    public function __construct(
-        HandlerFactory $metadataHandlerFactory,
-        HandlerFactory $binarydataHandlerFactory,
-        LoggerInterface $logger = null
-    );
-
     /**
      * Set the from/to handlers based on identifiers.
      * Returns the MigrationHandler.
@@ -41,7 +33,7 @@ interface MigrationHandlerInterface
     /**
      * Count the number of existing files.
      *
-     * @return int
+     * @return int|null Number of files, or null if they cannot be counted
      */
     public function countFiles();
 
