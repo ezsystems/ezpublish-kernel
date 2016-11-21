@@ -590,17 +590,6 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
         $gatewayMock->expects(
             $this->once()
         )->method(
-            'loadTypeData'
-        )->with(
-            $this->equalTo(23),
-            $this->equalTo(0)
-        )->will(
-            $this->returnValue(array(42))
-        );
-
-        $gatewayMock->expects(
-            $this->once()
-        )->method(
             'countInstancesOfType'
         )->with(
             $this->equalTo(23)
@@ -625,47 +614,11 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     */
-    public function testDeleteThrowsNotFoundException()
-    {
-        $gatewayMock = $this->getGatewayMock();
-
-        $gatewayMock->expects(
-            $this->once()
-        )->method(
-            'loadTypeData'
-        )->with(
-            $this->equalTo(23),
-            $this->equalTo(0)
-        )->will(
-            $this->returnValue(array())
-        );
-
-        $gatewayMock->expects($this->never())->method('delete');
-
-        $handler = $this->getHandler();
-        $res = $handler->delete(23, 0);
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
      * @expectedException \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     public function testDeleteThrowsBadStateException()
     {
         $gatewayMock = $this->getGatewayMock();
-
-        $gatewayMock->expects(
-            $this->once()
-        )->method(
-            'loadTypeData'
-        )->with(
-            $this->equalTo(23),
-            $this->equalTo(0)
-        )->will(
-            $this->returnValue(array(42))
-        );
 
         $gatewayMock->expects(
             $this->once()
