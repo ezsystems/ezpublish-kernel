@@ -27,6 +27,13 @@
 </ul>
 {% endblock %}
 
+{% block ezrichtext_settings %}
+    <ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
+        {% set rows = settings.numRows %}
+        {{ block( 'settings_preferredrows' ) }}
+    </ul>
+{% endblock %}
+
 {% block ezcountry_settings %}
 <ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
     {% set defaultValue = '' %}
