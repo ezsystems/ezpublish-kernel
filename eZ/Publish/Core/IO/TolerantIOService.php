@@ -83,7 +83,10 @@ class TolerantIOService extends IOService
         } catch (BinaryFileNotFoundException $e) {
             $this->logMissingFile($binaryFileId);
 
-            return $this->createMissingBinaryFile($binaryFileId);
+            return new MissingBinaryFile([
+                'id' => $binaryFileId,
+                'uri' => $this->binarydataHandler->getUri($this->getPrefixedUri($binaryFileId)),
+            ]);
         }
 
         if (!isset($spiBinaryFile->uri)) {
@@ -108,23 +111,11 @@ class TolerantIOService extends IOService
         } catch (BinaryFileNotFoundException $e) {
             $this->logMissingFile($binaryFileUri);
 
-            return $this->createMissingBinaryFile($binaryFileId);
-        }
-    }
-
-    /**
-     * @param $binaryFileId
-     *
-     * @return \eZ\Publish\Core\IO\Values\MissingBinaryFile
-     */
-    private function createMissingBinaryFile($binaryFileId)
-    {
-        return new MissingBinaryFile(
-            array(
+            return new MissingBinaryFile([
                 'id' => $binaryFileId,
                 'uri' => $this->binarydataHandler->getUri($this->getPrefixedUri($binaryFileId)),
-            )
-        );
+            ]);
+        }
     }
 
     private function logMissingFile($id)
