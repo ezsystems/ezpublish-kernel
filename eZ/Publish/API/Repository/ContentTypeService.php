@@ -194,7 +194,9 @@ interface ContentTypeService
     /**
      * Delete a Content Type object.
      *
-     * Deletes a content type if it has no instances
+     * Deletes a content type if it has no instances. If content type in state STATUS_DRAFT is
+     * given, only the draft content type will be deleted. Otherwise, if content type in state
+     * STATUS_DEFINED is given, all content type data will be deleted.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there exist content objects of this type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type
