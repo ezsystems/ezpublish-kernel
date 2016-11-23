@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\Proxy;
 
@@ -15,7 +13,6 @@ use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -24,36 +21,6 @@ use Symfony\Component\Finder\Finder;
 class TagAwareStore extends Store implements ContentPurger
 {
     const TAG_CACHE_DIR = 'ez';
-
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    private $fs;
-
-    /**
-     * Injects a Filesystem instance
-     * For unit tests only.
-     *
-     * @internal
-     *
-     * @param \Symfony\Component\Filesystem\Filesystem $fs
-     */
-    public function setFilesystem(Filesystem $fs)
-    {
-        $this->fs = $fs;
-    }
-
-    /**
-     * @return \Symfony\Component\Filesystem\Filesystem
-     */
-    public function getFilesystem()
-    {
-        if (!isset($this->fs)) {
-            $this->fs = new Filesystem();
-        }
-
-        return $this->fs;
-    }
 
     /**
      * Writes a cache entry to the store for the given Request and Response.
@@ -91,8 +58,6 @@ class TagAwareStore extends Store implements ContentPurger
 
     /**
      * Save digest for the given tag.
-     *
-     * @internal This is almost verbatim copy of save() from parent class as it is private.
      *
      * @param string $tag    The tag key
      * @param string $digest The digest hash to store representing the cache item.
@@ -139,7 +104,7 @@ class TagAwareStore extends Store implements ContentPurger
             return $this->purge($request->getUri());
         }
 
-        // Deprecated, see purgeAllContent(): Purge everything
+        // For BC with older purge code covering most use cases.
         $locationId = $request->headers->get('X-Location-Id');
         if ($locationId === '*' || $locationId === '.*') {
             return $this->purgeAllContent();
@@ -177,8 +142,10 @@ class TagAwareStore extends Store implements ContentPurger
      */
     public function purgeAllContent()
     {
-        $cacheTagsCacheDir = $this->getTagPath();
-        $this->getFilesystem()->remove($cacheTagsCacheDir);
+        $fs = new Filesystem();
+        $fs->remove($this->getTagPath());
+        $fs->remove($this->getPath());
+        return true;
     }
 
     /**
@@ -190,28 +157,22 @@ class TagAwareStore extends Store implements ContentPurger
      */
     private function purgeByCacheTag($tag)
     {
-        $fs = $this->getFilesystem();
         $cacheTagsCacheDir = $this->getTagPath($tag);
-        if (!$fs->exists($cacheTagsCacheDir) || !is_dir($cacheTagsCacheDir)) {
+        if (!file_exists($cacheTagsCacheDir) || !is_dir($cacheTagsCacheDir)) {
             return false;
         }
 
         $files = (new Finder())->files()->in($cacheTagsCacheDir);
-        try {
-            foreach ($files as $file) {
-                // @todo Load the cache and either get all tags to delete them to, or expire the cache instead of deleting
-                if ($digest = file_get_contents($file->getRealPath())) {
-                    $fs->remove($this->getPath($digest));
-                }
+        foreach ($files as $file) {
+            // @todo Change to be able to reuse parent::invalidate() or parent::purge() ?
+            if ($digest = file_get_contents($file->getRealPath())) {
+                @unlink($this->getPath($digest));
             }
-            $fs->remove($files);
-            // we let folder stay in case another process have just written new cache tags
-        } catch (IOException $e) {
-            // Log the error in the standard error log and at least try to remove the lock file
-            error_log($e->getMessage());
-
-            return false;
+            @unlink($file);
         }
+
+        // We let folder stay in case another process have just written new cache tags.
+        return true;
     }
 
     /**

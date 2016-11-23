@@ -70,7 +70,7 @@ effect on the output of the given content (it should not render links to the giv
 
 #### Other eZ Repository domains
 
-Tags for other domains in the Repository also have tags, e.g.:
+Other domains in the Repository also have tags which follows it's name, e.g.:
 - `content-type-<id>`
 - `content-type-group-<id>`
 - `section-<id>`
