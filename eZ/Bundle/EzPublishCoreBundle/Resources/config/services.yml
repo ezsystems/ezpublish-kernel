@@ -197,3 +197,11 @@ services:
 
     ez_query:
         alias: ezpublish.controller.query
+
+    ezplatform.core.jms_translation.catalog_mapper_file_writer:
+        class: eZ\Bundle\EzPublishCoreBundle\Translation\CatalogueMapperFileWriter
+        decorates: jms_translation.file_writer
+        arguments:
+            - "@ezplatform.core.jms_translation.catalog_mapper_file_writer.inner"
+            - "@jms_translation.loader_manager"
+        public: false

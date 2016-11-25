@@ -17,6 +17,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\HttpCachePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ImaginePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\JmsTranslationBundlePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterSearchEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
