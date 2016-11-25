@@ -12,13 +12,14 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Search\IndexerDataProvider;
+use eZ\Publish\SPI\Search\Indexing;
 
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, Indexing
 {
     /**
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
@@ -347,5 +348,99 @@ class Handler implements SearchHandlerInterface
     public function flush()
     {
         $this->gateway->flush();
+    }
+
+    /**
+     * Create search engine index.
+     *
+     * @param $bulkCount
+     * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
+     * @param callable $onOutput
+     * @param callable $onBatchStarted
+     * @param callable $onBatchFinished
+     * @param callable $onBulkProcessed
+     * @param callable $onError
+     */
+    public function createSearchIndex(
+        $bulkCount,
+        IndexerDataProvider $dataProvider,
+        callable $onOutput,
+        callable $onBatchStarted,
+        callable $onBatchFinished,
+        callable $onBulkProcessed,
+        callable $onError
+    ) {
+        $this->setCommit(true);
+        $this->purgeIndex();
+
+        $totalCount = $dataProvider->getPublishedContentCount();
+
+        // get content objects current version ids generator
+        $contentCurrentVersionIds = $dataProvider->getContentObjects();
+
+        //Indexing Content
+        $onOutput('Indexing Content...');
+
+        $onBatchStarted($totalCount);
+        $i = 0;
+        do {
+            $contentObjects = array();
+
+            for ($k = 0; $k <= $bulkCount; ++$k) {
+                $row = $contentCurrentVersionIds->current();
+                // check if there is data
+                if ($row === null) {
+                    break;
+                }
+
+                try {
+                    $contentObjects[] = $dataProvider->loadContentObjectVersion($row['id'], $row['current_version']);
+                } catch (NotFoundException $e) {
+                    $onError("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
+                }
+            }
+
+            if (!empty($contentObjects)) {
+                $this->bulkIndexContent($contentObjects);
+            }
+            $onBulkProcessed($k);
+        } while (($i += $bulkCount) < $totalCount);
+
+        $onBatchFinished();
+
+        // Indexing Locations
+        $onOutput('Indexing Locations...');
+        $totalLocations = $dataProvider->getLocationsCount();
+        $onBatchStarted($totalLocations);
+
+        // get location nodes ids generator
+        $locationsNodesIds = $dataProvider->getLocations();
+
+        $i = 0;
+        do {
+            $locations = array();
+
+            for ($k = 0; $k <= $bulkCount; ++$k) {
+                $locationId = $locationsNodesIds->current();
+                // check if there is data
+                if ($locationId === null) {
+                    break;
+                }
+
+                try {
+                    $locations[] = $dataProvider->loadLocation($locationId);
+                } catch (NotFoundException $e) {
+                    $onError("Could not load Location with id $locationId, so skipped for indexing. Full exception: " . $e->getMessage());
+                }
+            }
+
+            if (!empty($locations)) {
+                $this->bulkIndexLocations($locations);
+            }
+
+            $onBulkProcessed($k);
+        } while (($i += $bulkCount) < $totalCount);
+
+        $onBatchFinished();
     }
 }

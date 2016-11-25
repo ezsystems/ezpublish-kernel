@@ -25,6 +25,8 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper;
+use eZ\Publish\SPI\Search\IndexerDataProvider;
+use eZ\Publish\SPI\Search\Indexing;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -47,7 +49,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, Indexing
 {
     /**
      * Content locator gateway.
@@ -399,5 +401,69 @@ class Handler implements SearchHandlerInterface
     public function commit($flush = false)
     {
         // Not needed with Legacy Storage/Search Engine
+    }
+
+    /**
+     * Create search engine index.
+     *
+     * @param $bulkCount
+     * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
+     * @param callable $onOutput
+     * @param callable $onBatchStarted
+     * @param callable $onBatchFinished
+     * @param callable $onBulkProcessed
+     * @param callable $onError
+     */
+    public function createSearchIndex(
+        $bulkCount,
+        IndexerDataProvider $dataProvider,
+        callable $onOutput,
+        callable $onBatchStarted,
+        callable $onBatchFinished,
+        callable $onBulkProcessed,
+        callable $onError
+    ) {
+        $this->purgeIndex();
+
+        $totalCount = $dataProvider->getPublishedContentCount();
+
+        // get content objects current version ids generator
+        $contentCurrentVersionIds = $dataProvider->getContentObjects();
+
+        $onOutput('Indexing content...');
+        $onBatchStarted($totalCount);
+        $i = 0;
+        do {
+            $contentObjects = [];
+
+            for ($k = 0; $k <= $bulkCount; ++$k) {
+                $row = $contentCurrentVersionIds->current();
+                // check if there is data
+                if ($row === null) {
+                    break;
+                }
+
+                try {
+                    $contentObjects[] = $dataProvider->loadContentObjectVersion(
+                        $row['id'],
+                        $row['current_version']
+                    );
+                } catch (NotFoundException $e) {
+                    $onError("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
+                }
+                $contentCurrentVersionIds->next();
+            }
+
+            foreach ($contentObjects as $contentObject) {
+                try {
+                    $this->indexContent($contentObject);
+                } catch (NotFoundException $e) {
+                    $onError('Content with id ' . $contentObject->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
+                }
+            }
+            $onBulkProcessed($k);
+        } while (($i += $bulkCount) < $totalCount);
+
+        $onBatchFinished();
     }
 }
