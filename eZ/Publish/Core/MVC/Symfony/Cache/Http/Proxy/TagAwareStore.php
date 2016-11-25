@@ -138,13 +138,15 @@ class TagAwareStore extends Store implements ContentPurger
      *
      * @deprecated Use cache:clear, with multi tagging theoretically there shouldn't be need to delete all anymore from core.
      *
+     * @internal @param Filesystem $fs Internal argument for unit tests to be able to mock Filesystem class.
      * @return bool
      */
-    public function purgeAllContent()
+    public function purgeAllContent(Filesystem $fs = null)
     {
-        $fs = new Filesystem();
+        $fs = $fs ?: new Filesystem();
         $fs->remove($this->getTagPath());
-        $fs->remove($this->getPath());
+        $fs->remove($this->root);
+
         return true;
     }
 
@@ -152,14 +154,12 @@ class TagAwareStore extends Store implements ContentPurger
      * Purges cache for tag.
      *
      * @param string $tag
-     *
-     * @return bool
      */
     private function purgeByCacheTag($tag)
     {
         $cacheTagsCacheDir = $this->getTagPath($tag);
         if (!file_exists($cacheTagsCacheDir) || !is_dir($cacheTagsCacheDir)) {
-            return false;
+            return;
         }
 
         $files = (new Finder())->files()->in($cacheTagsCacheDir);
@@ -170,9 +170,7 @@ class TagAwareStore extends Store implements ContentPurger
             }
             @unlink($file);
         }
-
         // We let folder stay in case another process have just written new cache tags.
-        return true;
     }
 
     /**

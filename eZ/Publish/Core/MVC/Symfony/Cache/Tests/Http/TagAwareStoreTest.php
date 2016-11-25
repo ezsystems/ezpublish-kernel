@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\CacheTests\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\Proxy\TagAwareStore;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use PHPUnit_Framework_TestCase;
 
@@ -30,18 +29,6 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
     {
         array_map('unlink', glob(__DIR__ . '/*.purging'));
         parent::tearDown();
-    }
-
-    public function testGetFilesystem()
-    {
-        $this->assertInstanceOf('Symfony\\Component\\Filesystem\\Filesystem', $this->store->getFilesystem());
-    }
-
-    public function testSetFilesystem()
-    {
-        $fs = new Filesystem();
-        $this->store->setFilesystem($fs);
-        $this->assertSame($fs, $this->store->getFilesystem());
     }
 
     public function testGetPath()
