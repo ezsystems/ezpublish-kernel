@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishLegacySearchEngineBundle;
 
@@ -15,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriteriaConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\SortClauseConverterPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\AggregateFieldValueMapperPass;
 
 class EzPublishLegacySearchEngineBundle extends Bundle
 {
@@ -25,6 +24,7 @@ class EzPublishLegacySearchEngineBundle extends Bundle
         $container->addCompilerPass(new CriteriaConverterPass());
         $container->addCompilerPass(new CriterionFieldValueHandlerRegistryPass());
         $container->addCompilerPass(new SortClauseConverterPass());
+        $container->addCompilerPass(new AggregateFieldValueMapperPass());
     }
 
     public function getContainerExtension()

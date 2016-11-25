@@ -4111,6 +4111,47 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for FullText on the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFullTextOnNewContent()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            'eng-GB'
+        );
+
+        $contentCreateStruct->setField('name', 'foxes');
+
+        $englishContent = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                array($locationService->newLocationCreateStruct(2))
+            )->versionInfo
+        );
+
+        $this->refreshSearch($repository);
+
+        $query = new Query(
+            array(
+                'query' => new Criterion\FullText('foxes'),
+            )
+        );
+
+        $searchResult = $searchService->findContentInfo($query);
+
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($englishContent->id, $searchResult->searchHits[0]->valueObject->id);
+    }
+
+    /**
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
