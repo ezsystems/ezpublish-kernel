@@ -5,6 +5,7 @@
  */
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\FieldType\Relation\Type;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use Symfony\Component\Routing\RouterInterface;
@@ -16,19 +17,53 @@ abstract class BaseRelationProcessor extends FieldTypeProcessor
      */
     private $router;
 
+    /**
+     * @var \eZ\Publish\Core\Repository\LocationService
+     */
+    private $locationService;
+
+    /**
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     */
     public function setRouter(RouterInterface $router)
     {
         $this->router = $router;
     }
 
+    /**
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     */
+    public function setLocationService(LocationService $locationService)
+    {
+        $this->locationService = $locationService;
+    }
+
+    /**
+     * @return bool
+     */
     public function canMapContentHref()
     {
         return isset($this->router);
     }
 
+    /**
+     * @param  int $contentId
+     * @return string
+     */
     public function mapToContentHref($contentId)
     {
         return $this->router->generate('ezpublish_rest_loadContent', ['contentId' => $contentId]);
+    }
+
+    /**
+     * @param  int $locationId
+     * @return string
+     */
+    public function mapToLocationHref($locationId)
+    {
+        return $this->router->generate('ezpublish_rest_loadLocation', [
+            'locationPath' => $this->locationService->loadLocation($locationId)->pathString,
+        ]);
     }
 
     public function preProcessFieldSettingsHash($incomingSettingsHash)

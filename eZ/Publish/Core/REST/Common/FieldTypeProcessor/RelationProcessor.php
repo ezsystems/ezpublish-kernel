@@ -31,4 +31,17 @@ class RelationProcessor extends BaseRelationProcessor
 
         return $outgoingValueHash;
     }
+
+    public function postProcessFieldSettingsHash($outgoingSettingsHash)
+    {
+        $outgoingSettingsHash = parent::postProcessFieldSettingsHash($outgoingSettingsHash);
+
+        if (isset($outgoingSettingsHash['selectionRoot'])) {
+            $outgoingSettingsHash['selectionRootHref'] = $this->mapToLocationHref(
+                $outgoingSettingsHash['selectionRoot']
+            );
+        }
+
+        return $outgoingSettingsHash;
+    }
 }
