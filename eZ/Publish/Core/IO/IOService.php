@@ -291,7 +291,10 @@ class IOService implements IOServiceInterface
         }
 
         if (strpos($spiBinaryFileId, $this->settings['prefix'] . '/') !== 0) {
-            throw new InvalidArgumentException('$id', "Prefix {$this->settings['prefix']} not found in {$spiBinaryFileId}");
+            throw new InvalidBinaryFileIdException(
+                $spiBinaryFileId,
+                "it does not contain prefix '{$this->settings['prefix']}'. Is 'var_dir' config correct?"
+            );
         }
 
         return substr($spiBinaryFileId, strlen($this->settings['prefix']) + 1);
