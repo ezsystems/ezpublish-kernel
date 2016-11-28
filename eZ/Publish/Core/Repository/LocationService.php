@@ -334,7 +334,7 @@ class LocationService implements LocationServiceInterface
             'filter' => new Criterion\ParentLocationId($location->id),
             'offset' => $offset >= 0 ? (int)$offset : 0,
             'limit' => $limit >= 0 ? (int)$limit : null,
-            'sortClauses' => $this->repository->getSearchService()->getSortClauseFromLocation($location),
+            'sortClauses' => $location->getSortClauses(),
         ]);
 
         return $this->repository->getSearchService()->findLocations($query);

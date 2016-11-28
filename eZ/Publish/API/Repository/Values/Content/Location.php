@@ -8,7 +8,9 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * This class represents a location in the repository.
@@ -54,6 +56,35 @@ abstract class Location extends ValueObject
 
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
+
+    /**
+     * Map for Location sort fields to their respective SortClauses.
+     *
+     * Those not here (class name/identifier and modified subnode) are
+     * missing/deprecated and will most likely be removed in the future.
+     */
+    const SORT_FIELD_MAP = [
+        self::SORT_FIELD_PATH => SortClause\Location\Path::class,
+        self::SORT_FIELD_PUBLISHED => SortClause\DatePublished::class,
+        self::SORT_FIELD_MODIFIED => SortClause\DateModified::class,
+        self::SORT_FIELD_SECTION => SortClause\SectionIdentifier::class,
+        self::SORT_FIELD_DEPTH => SortClause\Location\Depth::class,
+        //self::SORT_FIELD_CLASS_IDENTIFIER => false,
+        //self::SORT_FIELD_CLASS_NAME => false,
+        self::SORT_FIELD_PRIORITY => SortClause\Location\Priority::class,
+        self::SORT_FIELD_NAME => SortClause\ContentName::class,
+        //self::SORT_FIELD_MODIFIED_SUBNODE => false,
+        self::SORT_FIELD_NODE_ID => SortClause\Location\Id::class,
+        self::SORT_FIELD_CONTENTOBJECT_ID => SortClause\ContentId::class,
+    ];
+
+    /**
+     * Map for Location sort order to their respective Query SORT constants.
+     */
+    const SORT_ORDER_MAP = [
+        self::SORT_ORDER_DESC => Query::SORT_DESC,
+        self::SORT_ORDER_ASC => Query::SORT_ASC,
+    ];
 
     /**
      * Location ID.
@@ -161,4 +192,26 @@ abstract class Location extends ValueObject
      * @var mixed
      */
     protected $sortOrder;
+
+    /**
+     * Get SortClause objects built from Locations's sort options.
+     *
+     * @throws NotImplementedException If sort field has a deprecated/unsupported value which does not have a Sort Clause.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause[]
+     */
+    public function getSortClauses()
+    {
+        $map = self::SORT_FIELD_MAP;
+        if (!isset($map[$this->sortField])) {
+            throw new NotImplementedException(
+                "Sort clause not implemented for Location sort field with value {$this->sortField}"
+            );
+        }
+
+        $sortClause = new $map[$this->sortField]();
+        $sortClause->direction = self::SORT_ORDER_MAP[$this->sortOrder];
+
+        return [$sortClause];
+    }
 }
