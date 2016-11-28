@@ -51,7 +51,10 @@ class Prefix implements UrlDecorator
         }
 
         if (strpos($url, $this->prefix) !== 0) {
-            throw new InvalidBinaryFileIdException($url);
+            throw new InvalidBinaryFileIdException(
+                $url,
+                "it does not contain prefix '{$this->prefix}'. Is 'var_dir' config correct?"
+            );
         }
 
         return trim(substr($url, strlen($this->prefix)), '/');
