@@ -124,6 +124,10 @@ class Configuration extends SiteAccessConfiguration
                                         $v['fields_groups']['default'] = 'content';
                                     }
 
+                                    if (!isset($v['options'])) {
+                                        $v['options'] = array();
+                                    }
+
                                     return $v;
                                 }
                             )
@@ -168,6 +172,15 @@ class Configuration extends SiteAccessConfiguration
                                 ->children()
                                     ->arrayNode('list')->prototype('scalar')->end()->end()
                                     ->scalarNode('default')->defaultValue('content')->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('options')
+                                ->info('Options for repository.')
+                                ->children()
+                                    ->scalarNode('default_version_archive_limit')
+                                        ->defaultValue(5)
+                                        ->info('Default version archive limit (0-50), only enforced on publish, not on un-publish.')
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()

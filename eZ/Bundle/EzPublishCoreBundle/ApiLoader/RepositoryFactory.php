@@ -87,6 +87,8 @@ class RepositoryFactory implements ContainerAwareInterface
      */
     public function buildRepository(PersistenceHandler $persistenceHandler, SearchHandler $searchHandler)
     {
+        $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
+
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             $searchHandler,
@@ -98,6 +100,7 @@ class RepositoryFactory implements ContainerAwareInterface
                     'policyMap' => $this->policyMap,
                 ),
                 'languages' => $this->configResolver->getParameter('languages'),
+                'content' => ['default_version_archive_limit' => $config['options']['default_version_archive_limit']],
             ),
             new UserReference($this->configResolver->getParameter('anonymous_user_id'))
         );
