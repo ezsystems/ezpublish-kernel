@@ -1,109 +1,7 @@
-# Listing Content and Locations
+## QueryTypes
+QueryTypes are named objects that build a Query.
 
-Starting from Platform 2015.07, listing content and locations in a project is
-much easier, using a couple standardized mechanisms.
-
-Predefined, named queries can be defined in any bundle. They can then be used from twig, using a
-[custom controller](#query_controller), or from PHP code using the [QueryType Registry](#fixme). The controller supports
-[template overriding](#template_override), making it easy to use different templates for different calls.
-
-## <a name="query_controller"></a> The query controller
-A new controller is added : `ez_query`. It has actions for each type of Search operation:
-- `ez_query:contentInfo` will run a Content Query and return ContentInfo items.
-  Unless you explicitly need data from the Content (Fields, Versions), **always prefer ContentInfo**, as it performs much better.
-  Most query templates should anyway iterate over the items, and render them using the viewController.
-- `ez_query:content` will run a Content Query and return Content items
-- `ez_query:locations` will run a Location Query and return Location items
-
-They requires two arguments:
-- `queryTypeName`, the name of the QueryType to run. Example: `AcmeBundle:LatestArticles'
-- `viewType`, similar to what `viewContent` and `viewLocation` expect. Examples: `list`, `tree`, `full_list`...
-
-They also support a `parameters` hash. It will be passed on to the QueryType when building the Query, and made available
-from the query template.
-
-```jinja
-{{ render(controller(
-    'ez_query:contentQuery',
-    {
-        'queryTypeName': 'AcmeBundle:LatestContent',
-        'viewType': 'list',
-        'parameters': {'type': 'article'}
-    }
-)) }}
-```
-
-### <a name="template_override"></a>Rendering of queries
-The `ez_query` actions support template override. They support several matchers.
-- `QueryType\Name`: matches the QueryType's name
-- `QueryType\Parameter`: matches the value of one or several of the parameters
-- `QueryType\Expression`: matches the parameters with an [Expression](http://symfony.com/en/doc/current/components/expression_language/index.html).
-
-Assuming we want to render the `AcmeBundle:LatestContent` query using
-`AcmeBundle:query/list/latest_articles.html.twig` when the `ContentType` parameter has the value 'article':
-
-```yaml
-system:
-    default:
-        # Or content_query to create a template override for a content query
-        location_query:
-            # Matches the ViewType passed to the controller
-            list:
-                latest_articles:
-                    template: "AcmeBundle:query/list/latest_articles.html.twig"
-                    match:
-                        QueryType\Name: 'AcmeBundle:LatestContent'
-                        QueryType\Parameters: {ContentType: "article"}
-```
-
-#### Template matchers
-
-##### `QueryType\Name`
-Matches the QueryType's name (exact match).
-
-##### `QueryType\Parameters`
-Matches the parameters against a given hash. The hash must contain the parameter's name as the key,
-and the match value as the value:
-
-```yaml
-match:
-    QueryType\Parameters:
-        type: "article",
-        category: "development"
-```
-
-Each parameter will be matched exactly. The matcher will match if ALL of the provided parameters match what is contained
-in the hash. More complex cases must be covered with `QueryType\Expression`.
-
-##### `QueryType\Expression`
-Uses Symfony's [Expression Language](http://symfony.com/en/doc/current/components/expression_language/index.html)
-for advanced matching.
-This matcher expects a valid expression language string as the input. The expression must be
-evaluated to a boolean. The parameters hash is available as `parameters`
-
-In the example below, 'type' must be either 'article' or 'blog_post'.
-
-```yaml
-match:
-    QueryType\Expression: "parameters['type'] in ['article', 'blog_post']"
-```
-
-### Query controller templates
-The templates used by this controller provide you with the results from the query. The results can be iterated over, and
-displayed using the object's properties or the `ez_content` controller actions.
-
-
-#### Available variables
-
-`location_list`                | array | Array of resulting Location. *Only set by the contentInfo action*
-`content_list`                 | array | Array of resulting Content. *Only set by the contentInfo action*
-`content_info_list`            | array | Array of resulting ContentInfo. *Only set by the contentInfo action*
-`list_count`                   | int   | Number of items in the resultset, within the limit if any
-`total_count`                  | int   | Total number of items in the search result
-`parameters`                   | array | The `parameters` hash that was passed to the Query
-
-## QueryType objects
-To make a new QueryType available to the Query Controller, you need to create a class that implements the QueryType
+To define a new QueryType, you need to create a class that implements the QueryType
 interface, and register it as such in the service container.
 
 ### The QueryType interface
@@ -202,6 +100,7 @@ custom QueryType. Example: `AcmeBundle\Ez\QueryType\LatestContentQueryType`.
 
 #### Using a service tag
 If the proposed convention doesn't work for you, QueryTypes can be manually tagged in the service declaration:
+
 ```yaml
 acme.query.latest_content:
     class: AcmeBundle\Query\LatestContent
@@ -209,7 +108,29 @@ acme.query.latest_content:
         - {name: ezpublish.query_type}
 ```
 
-The effect is exactly the same than registering by convention.
+The effect is exactly the same than registering by convention. Defining a QueryType as a service is required
+if the class has custom dependencies.
+
+##### QueryType name override
+
+> Added in eZ Platform 1.7
+
+You may specify an 'alias' tag attribute that will be used to register the QueryType. It allows you to use the same
+class, with different arguments, as different QueryTypes:
+
+```yaml
+acme.query.latest_articles:
+    class: AcmeBundle\Query\LatestContent
+    arguments: ['article']
+    tags:
+        - {name: ezpublish.query_type, alias: latest_articles}
+
+acme.query.latest_links:
+    class: AcmeBundle\Query\LatestContent
+    arguments: ['link']
+    tags:
+        - {name: ezpublish.query_type, alias: latest_links}
+```
 
 ### The OptionsResolverBasedQueryType abstract class
 An abstract class based on Symfony's `OptionsResolver` eases implementation of QueryTypes with parameters.
