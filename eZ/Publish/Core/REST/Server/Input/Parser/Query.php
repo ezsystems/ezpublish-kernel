@@ -89,10 +89,14 @@ abstract class Query extends CriterionParser
      * @param array $criteriaArray
      * @param ParsingDispatcher $parsingDispatcher
      *
-     * @return CriterionValue
+     * @return CriterionValue|null A criterion, or a LogicalAnd with a set of Criterion, or null if an empty array was given
      */
     private function processCriteriaArray(array $criteriaArray, ParsingDispatcher $parsingDispatcher)
     {
+        if (count($criteriaArray) === 0) {
+            return null;
+        }
+
         $criteria = array();
         foreach ($criteriaArray as $criterionName => $criterionData) {
             $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
