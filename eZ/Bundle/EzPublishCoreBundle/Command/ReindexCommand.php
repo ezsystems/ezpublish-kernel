@@ -65,7 +65,7 @@ EOT
         $noCommit = $input->getOption('no-commit');
 
         if (!is_numeric($iterationCount) || (int)$iterationCount < 1) {
-            throw new RuntimeException("'bulk_count' argument should be > 0, got '{$iterationCount}'");
+            throw new RuntimeException("'--iteration-count' option should be > 0, got '{$iterationCount}'");
         }
 
         $this->searchIndexer->createSearchIndex($output, intval($iterationCount), empty($noCommit));
