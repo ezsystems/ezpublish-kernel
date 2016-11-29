@@ -1101,13 +1101,28 @@ class LocationServiceTest extends BaseTest
         $locationService->swapLocation($mediaLocation, $demoDesignLocation);
         /* END: Use Case */
 
+        // Reload Locations, IDs swapped
+        $demoDesignLocation = $locationService->loadLocation($mediaLocationId);
+        $mediaLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        // Assert Location's Content is updated
         $this->assertEquals(
             $mediaContentInfo->id,
-            $locationService->loadLocation($demoDesignLocationId)->getContentInfo()->id
+            $mediaLocation->getContentInfo()->id
         );
         $this->assertEquals(
             $demoDesignContentInfo->id,
-            $locationService->loadLocation($mediaLocationId)->getContentInfo()->id
+            $demoDesignLocation->getContentInfo()->id
+        );
+
+        // Assert URL aliases are updated
+        $this->assertEquals(
+            $mediaLocation->id,
+            $repository->getURLAliasService()->lookup('/Design/Media')->destination
+        );
+        $this->assertEquals(
+            $demoDesignLocation->id,
+            $repository->getURLAliasService()->lookup('/Plain-site')->destination
         );
     }
 

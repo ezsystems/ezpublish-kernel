@@ -503,6 +503,12 @@ class LocationService implements LocationServiceInterface
         $this->repository->beginTransaction();
         try {
             $this->persistenceHandler->locationHandler()->swap($loadedLocation1->id, $loadedLocation2->id);
+            $this->persistenceHandler->urlAliasHandler()->locationSwapped(
+                $location1->id,
+                $location1->parentLocationId,
+                $location2->id,
+                $location2->parentLocationId
+            );
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();

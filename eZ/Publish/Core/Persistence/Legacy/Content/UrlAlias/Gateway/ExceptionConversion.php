@@ -34,6 +34,17 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
+    public function setTable($name)
+    {
+        try {
+            return $this->innerGateway->setTable($name);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
     /**
      * Loads list of aliases by given $locationId.
      *
@@ -99,12 +110,22 @@ class ExceptionConversion extends Gateway
         }
     }
 
+    public function historizeBeforeSwap($action, $languageMask)
+    {
+        try {
+            $this->innerGateway->historizeBeforeSwap($action, $languageMask);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
     /**
      * Marks all entries with given $id as history entries.
      *
-     * This method is used by Handler::locationMoved(). For this reason rows are not updated with next id value as
-     * all entries with given id are being marked as history and there is no need for id separation.
-     * Thus only "link" and "is_original" columns are updated.
+     * This method is used by Handler::locationMoved(). Each row is separately historized
+     * because future publishing needs to be able to take over history entries safely.
      *
      * @param mixed $id
      * @param mixed $link
@@ -362,6 +383,17 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getNextId();
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    public function getLocationContentMainLanguageId($locationId)
+    {
+        try {
+            return $this->innerGateway->getLocationContentMainLanguageId($locationId);
         } catch (DBALException $e) {
             throw new \RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
