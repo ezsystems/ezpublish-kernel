@@ -5,6 +5,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Translation;
 
+use JMS\TranslationBundle\Exception\InvalidArgumentException;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\FileWriter;
@@ -35,52 +36,44 @@ class CatalogueMapperFileWriter extends FileWriter
 
     public function write(MessageCatalogue $catalogue, $domain, $filePath, $format)
     {
-        if ($catalogue->getLocale() !== 'en' && $this->hasEnglishCatalogue($filePath)) {
-            $englishCatalogue = $this->loadEnglishCatalogue($filePath, $domain, $format);
+        $newCatalogue = new MessageCatalogue();
+        $newCatalogue->setLocale($catalogue->getLocale());
 
-            foreach (array_keys($catalogue->getDomains()) as $catalogueDomainString) {
-                $domainMessageCollection = $catalogue->getDomain($catalogueDomainString);
-                /** @var Message $message */
-                foreach ($domainMessageCollection->all() as $message) {
-                    if ($message->getDomain() !== $domain) {
-                        continue;
-                    }
-
-                    if ($message->getId() !== $message->getSourceString()) {
-                        continue;
-                    }
-
-                    try {
-                        $englishString = $englishCatalogue
-                            ->get($message->getId(), $message->getDomain())
-                            ->getLocaleString();
-                    } catch (\JMS\TranslationBundle\Exception\InvalidArgumentException $e) {
-                        continue;
-                    }
-                    $message->setDesc($englishString);
-                    $catalogue->set($message);
-                }
+        foreach (array_keys($catalogue->getDomains()) as $catalogueDomainString) {
+            if ($catalogue->getLocale() !== 'en' && $this->hasEnglishCatalogue($filePath)) {
+                $englishCatalogue = $this->loadEnglishCatalogue($filePath, $domain, $format);
             }
-        } else {
-            foreach (array_keys($catalogue->getDomains()) as $catalogueDomainString) {
-                $domainMessageCollection = $catalogue->getDomain($catalogueDomainString);
-                /** @var Message $message */
-                foreach ($domainMessageCollection->all() as $message) {
-                    if ($message->getDomain() !== $domain) {
-                        continue;
-                    }
 
-                    if ($message->getId() !== $message->getSourceString()) {
-                        continue;
-                    }
-
-                    $message->setDesc($message->getLocaleString());
-                    $catalogue->set($message);
+            $domainMessageCollection = $catalogue->getDomain($catalogueDomainString);
+            /** @var Message $message */
+            foreach ($domainMessageCollection->all() as $message) {
+                if ($message->getDomain() !== $domain) {
+                    continue;
                 }
+
+                $newMessage = $this->makeXliffMessage($message);
+
+                if ($message->getId() === $message->getSourceString()) {
+                    if (isset($englishCatalogue)) {
+                        try {
+                            $newMessage->setDesc(
+                                $englishCatalogue
+                                    ->get($message->getId(), $message->getDomain())
+                                    ->getLocaleString()
+                            );
+                        } catch (InvalidArgumentException $e) {
+                            continue;
+                        }
+                    } else {
+                        $newMessage->setDesc($message->getLocaleString());
+                    }
+                }
+
+                $newCatalogue->add($newMessage);
             }
         }
 
-        $this->innerFileWriter->write($catalogue, $domain, $filePath, $format);
+        $this->innerFileWriter->write($newCatalogue, $domain, $filePath, $format);
     }
 
     /**
@@ -111,5 +104,20 @@ class CatalogueMapperFileWriter extends FileWriter
     private function hasEnglishCatalogue($foreignFilePath)
     {
         return file_exists($this->getEnglishFilePath($foreignFilePath));
+    }
+
+    /**
+     * @param $message
+     * @return Message\XliffMessage
+     */
+    private function makeXliffMessage(Message $message)
+    {
+        $newMessage = new Message\XliffMessage($message->getId(), $message->getDomain());
+        $newMessage->setNew($message->isNew());
+        $newMessage->setLocaleString($message->getLocaleString());
+        $newMessage->setSources($message->getSources());
+        $newMessage->addNote('key: ' . $message->getId());
+
+        return $newMessage;
     }
 }
