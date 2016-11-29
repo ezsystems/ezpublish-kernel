@@ -205,3 +205,10 @@ services:
             - "@ezplatform.core.jms_translation.catalog_mapper_file_writer.inner"
             - "@jms_translation.loader_manager"
         public: false
+
+    ezplatform.core.translation.extractor.fieldtypes:
+        class: eZ\Publish\Core\MVC\Symfony\Translation\FieldTypesTranslationExtractor
+        arguments:
+            - "@ezpublish.field_type_collection.factory"
+        tags:
+            - { name: jms_translation.extractor, alias: ez_fieldtypes }
