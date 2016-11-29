@@ -14,8 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 
 /**
  * Search service.
- *
- * @method \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] getSortClauseFromLocation(\eZ\Publish\API\Repository\Values\Content\Location $location)
  */
 interface SearchService
 {
