@@ -118,6 +118,7 @@ class Exception extends ValueObjectVisitor
         $generator->endValueElement('errorMessage');
 
         if ($data instanceof Translatable && $this->translator) {
+            /** @Ignore */
             $errorDescription = $this->translator->trans($data->getMessageTemplate(), $data->getParameters(), 'repository_exceptions');
         } else {
             $errorDescription = $data->getMessage();
