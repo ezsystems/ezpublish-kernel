@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 /**
  * Test case for 11+ string issue in EZP-21771.
  *
- * @issue EZP-21711
+ * Issue EZP-21711
  */
 class EZP21771EzStringTest extends BaseTest
 {

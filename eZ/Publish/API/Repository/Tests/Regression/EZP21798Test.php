@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 /**
  * Test case for language issues in EZP-21798.
  *
- * @issue EZP-21798
+ * Issue EZP-21798
  */
 class EZP21798Test extends BaseTest
 {

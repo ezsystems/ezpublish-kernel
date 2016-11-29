@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * @issue EZP-21906
+ * Issue EZP-21906.
  */
 class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
 {

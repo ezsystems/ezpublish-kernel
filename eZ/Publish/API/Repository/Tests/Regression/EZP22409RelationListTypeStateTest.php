@@ -15,7 +15,7 @@ use DateTime;
 /**
  * Test case for RelationList using alterate ContentType states issue in EZP-22409.
  *
- * @issue EZP-22409
+ * Issue EZP-22409
  */
 class EZP22409RelationListTypeStateTest extends BaseTest
 {

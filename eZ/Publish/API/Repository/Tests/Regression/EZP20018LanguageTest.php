@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
 /**
  * Test case for language issues in EZP-20018.
  *
- * @issue EZP-20018
+ * Issue EZP-20018
  */
 class EZP20018LanguageTest extends BaseTest
 {

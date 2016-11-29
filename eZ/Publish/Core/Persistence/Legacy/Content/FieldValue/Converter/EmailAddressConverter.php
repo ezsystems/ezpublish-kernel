@@ -21,7 +21,7 @@ class EmailAddressConverter implements Converter
     /**
      * Factory for current class.
      *
-     * @note Class should instead be configured as service if it gains dependencies.
+     * Note: Class should instead be configured as service if it gains dependencies.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddressConverter
      */

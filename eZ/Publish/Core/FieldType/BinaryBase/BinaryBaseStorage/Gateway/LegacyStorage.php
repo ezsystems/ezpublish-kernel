@@ -174,8 +174,6 @@ abstract class LegacyStorage extends Gateway
      *
      * @param string $path
      *
-     * @protected
-     *
      * @return string
      */
     public function removeMimeFromPath($path)
@@ -272,8 +270,6 @@ abstract class LegacyStorage extends Gateway
      *
      * @param string $path
      * @param string $mimeType
-     *
-     * @protected
      *
      * @return string
      */

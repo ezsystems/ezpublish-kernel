@@ -14,7 +14,7 @@ use DateTime;
 /**
  * Test case for issue EZP-21089.
  *
- * @issue EZP-21089
+ * Issue EZP-21089
  *
  *     Creating an article with public api throw warning on xmltext in regards to relations
  *

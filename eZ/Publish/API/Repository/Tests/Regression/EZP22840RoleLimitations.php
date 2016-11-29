@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 /**
- * @issue EZP-22840
+ * Issue EZP-22840.
  */
 class EZP22840RoleLimitations extends BaseTest
 {

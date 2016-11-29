@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 /**
  * Test case for issue EZP-21069.
  *
- * @issue EZP-21069
+ * Issue EZP-21069
  *
  *     Search Service : when using the field criterion the query checks object attributes for all versions,
  *     it should use only attributes of the current version
