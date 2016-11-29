@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -63,12 +64,31 @@ class TranslationHelper
      */
     public function getTranslatedContentName(Content $content, $forcedLanguage = null)
     {
+        return $this->getTranslatedContentNameByVersionInfo(
+            $content->getVersionInfo(),
+            $forcedLanguage
+        );
+    }
+
+    /**
+     * Returns content name, translated, from a VersionInfo object.
+     * By default this method uses prioritized languages, unless $forcedLanguage is provided.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param string $forcedLanguage
+     *
+     * @return string
+     */
+    private function getTranslatedContentNameByVersionInfo(VersionInfo $versionInfo, $forcedLanguage = null)
+    {
         foreach ($this->getLanguages($forcedLanguage) as $lang) {
-            $translatedName = $content->getVersionInfo()->getName($lang);
+            $translatedName = $versionInfo->getName($lang);
             if ($translatedName !== null) {
                 return $translatedName;
             }
         }
+
+        return '';
     }
 
     /**
@@ -88,8 +108,8 @@ class TranslationHelper
             return $contentInfo->name;
         }
 
-        return $this->getTranslatedContentName(
-            $this->contentService->loadContentByContentInfo($contentInfo),
+        return $this->getTranslatedContentNameByVersionInfo(
+            $this->contentService->loadVersionInfo($contentInfo),
             $forcedLanguage
         );
     }
