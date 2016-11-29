@@ -9,7 +9,7 @@ namespace eZ\Publish\API\Repository\Tests\Regression;
 use eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
- * @issue https://jira.ez.no/browse/EZP-26327
+ * Issue https://jira.ez.no/browse/EZP-26327.
  * @group ezp26327
  */
 class EZP26327UrlAliasHistorizationTest extends BaseTest

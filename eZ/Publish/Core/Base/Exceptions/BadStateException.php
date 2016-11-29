@@ -16,7 +16,7 @@ use eZ\Publish\Core\Base\TranslatableBase;
 /**
  * BadState Exception implementation.
  *
- * @use: throw new BadState( 'nodes', 'array' );
+ * Usage: throw new BadState( 'nodes', 'array' );
  */
 class BadStateException extends APIBadStateException implements Translatable
 {

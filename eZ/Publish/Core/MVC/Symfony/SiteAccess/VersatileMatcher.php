@@ -19,7 +19,7 @@ interface VersatileMatcher extends Matcher
     /**
      * Returns matcher object corresponding to $siteAccessName or null if non applicable.
      *
-     * @note VersatileMatcher objects always receive a request with cleaned up pathinfo (i.e. no SiteAccess part inside).
+     * Note: VersatileMatcher objects always receive a request with cleaned up pathinfo (i.e. no SiteAccess part inside).
      *
      * @param string $siteAccessName
      *

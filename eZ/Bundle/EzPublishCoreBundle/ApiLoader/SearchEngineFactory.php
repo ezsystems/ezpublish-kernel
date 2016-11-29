@@ -37,7 +37,7 @@ class SearchEngineFactory
     /**
      * Registers $searchHandler as a valid search engine with identifier $searchEngineIdentifier.
      *
-     * @note It is strongly recommended to register a lazy persistent handler.
+     * Note It is strongly recommended to register a lazy persistent handler.
      *
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param string $searchEngineIdentifier

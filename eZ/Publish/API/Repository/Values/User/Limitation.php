@@ -41,13 +41,11 @@ abstract class Limitation extends ValueObject
     abstract public function getIdentifier();
 
     /**
-     * An list of IDs or identifiers for which the limitation should be applied.
+     * A read-only list of IDs or identifiers for which the limitation should be applied.
      *
      * The value of this property must conform to a hash, which means that it
      * may only consist of array and scalar values, but must not contain objects
      * or resources.
-     *
-     * @readonly
      *
      * @var mixed[]
      */

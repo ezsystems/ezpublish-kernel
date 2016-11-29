@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
 /**
  * Test case for ObjectState issues in EZP-20018.
  *
- * @issue EZP-20018
+ * Issue EZP-20018
  */
 class EZP20018ObjectStateTest extends BaseTest
 {

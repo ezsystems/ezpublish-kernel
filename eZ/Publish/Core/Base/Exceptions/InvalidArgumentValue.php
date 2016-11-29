@@ -13,7 +13,7 @@ use Exception;
 /**
  * Invalid Argument Type Exception implementation.
  *
- * @use: throw new InvalidArgument( 'nodes', 'array' );
+ * Usage: throw new InvalidArgument( 'nodes', 'array' );
  */
 class InvalidArgumentValue extends InvalidArgumentException
 {
