@@ -41,6 +41,8 @@ class FieldValue extends ValueObject
     public $externalData;
 
     /**
+     * @deprecated since 6.7, use {@see \eZ\Publish\SPI\FieldType\Indexable::getDefaultSortField} instead.
+     *
      * A value which can be used for sorting.
      *
      * Note: For the "old" storage engine we will need adaptors to map them to
