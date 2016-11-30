@@ -8,22 +8,12 @@
  */
 namespace eZ\Publish\Core\IO\Exception;
 
-use Exception;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 class InvalidBinaryFileIdException extends InvalidArgumentValue
 {
-    public function __construct($id, $message = null)
+    public function __construct($id)
     {
-        $parameters = ['%id%' => $id];
-        $string = "Argument 'BinaryFile::id' is invalid: '%id%' is wrong value";
-        if ($message) {
-            $string .= ', %message%';
-            $parameters['%message%'] = $message;
-        }
-
-        $this->setMessageTemplate($string);
-        $this->setParameters($parameters);
-        Exception::__construct($this->getBaseTranslation(), 0);
+        parent::__construct('BinaryFile::id', $id, 'BinaryFile');
     }
 }
