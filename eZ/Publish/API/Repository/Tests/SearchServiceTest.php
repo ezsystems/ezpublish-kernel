@@ -887,7 +887,7 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    public function getRelationFieldFilterContentSearches()
+    public function getRelationFieldFilterSearches()
     {
         $fixtureDir = $this->getFixtureDir();
 
@@ -962,24 +962,28 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * Purely for creating relation data needed for testFindRelationFieldContentInfoFiltered().
+     * Purely for creating relation data needed for testFindRelationFieldContentInfoFiltered()
+     * and testFindRelationFieldLocationsFiltered().
      */
     public function testRelationContentCreation()
     {
         $repository = $this->getRepository();
         $galleryType = $repository->getContentTypeService()->loadContentTypeByIdentifier('gallery');
         $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct(2);// Home
 
         $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
         $createStruct->setField('name', 'Image gallery');
         $createStruct->setField('image', 49);// Images folder
-        $draft = $contentService->createContent($createStruct);
+        $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
         $contentService->publishVersion($draft->getVersionInfo());
 
         $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
         $createStruct->setField('name', 'User gallery');
         $createStruct->setField('image', 4);// User folder
-        $draft = $contentService->createContent($createStruct);
+        $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
         $contentService->publishVersion($draft->getVersionInfo());
 
         $this->refreshSearch($repository);
@@ -988,15 +992,29 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for FieldRelation using findContentInfo() method.
      *
-     * @dataProvider getRelationFieldFilterContentSearches
+     * @dataProvider getRelationFieldFilterSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testRelationContentCreation
      */
-    public function testFindRelationFieldContentInfoFiltered($queryData, $fixture, $closure = null)
+    public function testFindRelationFieldContentInfoFiltered($queryData, $fixture)
     {
-        $this->getRepository(false);// To make sure repo is setup w/o removing data from testRelationContentCreation
+        $this->getRepository(false);// To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
         $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true, true, false);
+        $this->assertQueryFixture($query, $fixture, null, true, true, false);
+    }
+
+    /**
+     * Test for FieldRelation using findLocations() method.
+     *
+     * @dataProvider getRelationFieldFilterSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testRelationContentCreation
+     */
+    public function testFindRelationFieldLocationsFiltered($queryData, $fixture)
+    {
+        $this->getRepository(false);// To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
+        $query = new LocationQuery($queryData);
+        $this->assertQueryFixture($query, $fixture, null, true, false, false);
     }
 
     public function testFindSingle()
