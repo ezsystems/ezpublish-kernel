@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
-use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryAbsolutePathException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Psr\Log\LoggerInterface;
@@ -68,14 +68,14 @@ class TolerantIOService extends IOService
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFile|\eZ\Publish\Core\IO\Values\MissingBinaryFile
      *
-     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryAbsolutePathException
      */
     public function loadBinaryFile($binaryFileId)
     {
         $this->checkBinaryFileId($binaryFileId);
 
         if ($this->isAbsolutePath($binaryFileId)) {
-            throw new InvalidBinaryFileIdException($binaryFileId, "binary file ids can not begin with a '/'");
+            throw new InvalidBinaryAbsolutePathException($binaryFileId);
         }
 
         try {

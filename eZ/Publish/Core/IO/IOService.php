@@ -13,6 +13,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException;
 use eZ\Publish\Core\IO\Exception\IOException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
@@ -282,7 +283,7 @@ class IOService implements IOServiceInterface
      *
      * @return string
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException
      */
     protected function removeUriPrefix($spiBinaryFileId)
     {
@@ -291,10 +292,7 @@ class IOService implements IOServiceInterface
         }
 
         if (strpos($spiBinaryFileId, $this->settings['prefix'] . '/') !== 0) {
-            throw new InvalidBinaryFileIdException(
-                $spiBinaryFileId,
-                "it does not contain prefix '{$this->settings['prefix']}'. Is 'var_dir' config correct?"
-            );
+            throw new InvalidBinaryPrefixException($spiBinaryFileId);
         }
 
         return substr($spiBinaryFileId, strlen($this->settings['prefix']) + 1);

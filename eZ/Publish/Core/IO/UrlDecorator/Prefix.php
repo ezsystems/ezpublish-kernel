@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
-use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException;
 use eZ\Publish\Core\IO\UrlDecorator;
 
 /**
@@ -51,10 +51,7 @@ class Prefix implements UrlDecorator
         }
 
         if (strpos($url, $this->prefix) !== 0) {
-            throw new InvalidBinaryFileIdException(
-                $url,
-                "it does not contain prefix '{$this->prefix}'. Is 'var_dir' config correct?"
-            );
+            throw new InvalidBinaryPrefixException($url);
         }
 
         return trim(substr($url, strlen($this->prefix)), '/');
