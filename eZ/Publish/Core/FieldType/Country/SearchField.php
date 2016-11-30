@@ -136,4 +136,24 @@ class SearchField implements Indexable
     {
         return 'sort_value';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        if (empty($field->value->data) || !is_array($field->value->data)) {
+            return [];
+        }
+
+        $nameList = [];
+        foreach ($field->value->data as $alpha2) {
+            if (!isset($this->countriesInfo[$alpha2])) {
+                continue;
+            }
+            $nameList[] = $this->countriesInfo[$alpha2]['Name'];
+        }
+
+        return $nameList;
+    }
 }

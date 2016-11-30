@@ -55,4 +55,14 @@ interface Indexable
      * @return string
      */
     public function getDefaultSortField();
+
+    /**
+     * Get full text data to be indexed by a Search Engine.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     *
+     * @return string[]
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition);
 }

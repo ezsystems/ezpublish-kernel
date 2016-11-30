@@ -112,4 +112,27 @@ class SearchField implements Indexable
     {
         return 'sort_value';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        $fieldSettings = $fieldDefinition->fieldTypeConstraints->fieldSettings;
+
+        if (!is_array($field->value->data) || !isset($fieldSettings['options'])) {
+            return [];
+        }
+        $options = $fieldSettings['options'];
+
+        $positionSet = array_flip($field->value->data);
+        $values = [];
+        foreach ($options as $index => $value) {
+            if (isset($positionSet[$index])) {
+                $values[] = $value;
+            }
+        }
+
+        return $values;
+    }
 }

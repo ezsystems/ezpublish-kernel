@@ -114,4 +114,16 @@ class SearchField implements Indexable
     {
         return 'sort_value';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        if (empty($field->value->data) || !is_array($field->value->data)) {
+            return [];
+        }
+
+        return array_column($field->value->data, 'name');
+    }
 }

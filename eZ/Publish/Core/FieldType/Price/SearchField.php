@@ -83,4 +83,14 @@ class SearchField implements Indexable
     {
         return $this->getDefaultMatchField();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\FullTextFieldValue(($field->value->data / 1000)),
+        ];
+    }
 }

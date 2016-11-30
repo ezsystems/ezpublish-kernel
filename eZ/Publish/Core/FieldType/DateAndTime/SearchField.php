@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\DateAndTime;
 
+use DateTime;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
@@ -75,5 +76,19 @@ class SearchField implements Indexable
     public function getDefaultSortField()
     {
         return $this->getDefaultMatchField();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        $dateTime = new DateTime();
+        $dateTime->setTimestamp($field->value->data['timestamp']);
+
+        return [
+            // format taken from {@see \eZ\Publish\Core\FieldType\DateAndTime\Value::$stringFormat}
+            $dateTime->format('U'),
+        ];
     }
 }

@@ -94,4 +94,18 @@ class SearchField implements Indexable
     {
         return $this->getDefaultMatchField();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        if (empty($field->value->data['alternativeText'])) {
+            return [];
+        }
+
+        return [
+            $field->value->data['alternativeText'],
+        ];
+    }
 }

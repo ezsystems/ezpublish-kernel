@@ -83,4 +83,20 @@ class SearchField implements Indexable
     {
         return $this->getDefaultMatchField();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        // The field type stores date value as a timestamp of the start of the day in the
+        // environment's timezone.
+        // We format this as Y-m-d and add Z to signify UTC (zero offset).
+        $dateTime = new DateTime();
+        $dateTime->setTimestamp($field->value->data['timestamp']);
+
+        return [
+            $dateTime->format('Y-m-d\\Z'),
+        ];
+    }
 }
