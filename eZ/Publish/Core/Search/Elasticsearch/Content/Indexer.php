@@ -32,7 +32,7 @@ class Indexer extends SearchIndexer
      */
     public function createSearchIndex(OutputInterface $output, $iterationCount, $commit)
     {
-        $this->logger->notice('Creating Elasticsearch Search Engine Index...');
+        $output->writeln('Creating Elasticsearch Search Engine Index...');
 
         if (!$this->searchHandler instanceof SearchHandler) {
             throw new RuntimeException(sprintf('Expected to find an instance of %s, but found %s', SearchHandler::class, get_class($this->searchHandler)));
@@ -81,7 +81,7 @@ class Indexer extends SearchIndexer
         $progress->finish();
         $output->writeln('');
 
-        $this->logger->notice('Finished creating Elasticsearch Search Engine Index');
+        $output->writeln('Finished creating Elasticsearch Search Engine Index');
     }
 
     /**
