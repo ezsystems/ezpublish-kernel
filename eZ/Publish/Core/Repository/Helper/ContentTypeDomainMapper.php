@@ -224,7 +224,7 @@ class ContentTypeDomainMapper
         $fieldDefinition = new FieldDefinition(
             array(
                 'names' => $spiFieldDefinition->name,
-                'descriptions' => $spiFieldDefinition->description,
+                'descriptions' => (is_array($spiFieldDefinition->description)) ? $spiFieldDefinition->description : [],
                 'id' => $spiFieldDefinition->id,
                 'identifier' => $spiFieldDefinition->identifier,
                 'fieldGroup' => $spiFieldDefinition->fieldGroup,
