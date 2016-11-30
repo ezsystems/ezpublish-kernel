@@ -18,6 +18,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\HttpCachePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ImaginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterSearchEngineIndexerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterSearchEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
@@ -62,6 +63,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new RegisterLimitationTypePass());
         $container->addCompilerPass(new RegisterStorageEnginePass());
         $container->addCompilerPass(new RegisterSearchEnginePass());
+        $container->addCompilerPass(new RegisterSearchEngineIndexerPass());
         $container->addCompilerPass(new LegacyStorageEnginePass());
         $container->addCompilerPass(new LocalePass());
         $container->addCompilerPass(new ContentViewPass());

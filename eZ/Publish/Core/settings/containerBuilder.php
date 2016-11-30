@@ -47,6 +47,7 @@ $loader->load('storage_engines/shortcuts.yml');
 $loader->load('search_engines/common.yml');
 $loader->load('settings.yml');
 $loader->load('utils.yml');
+$loader->load('tests/common.yml');
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 

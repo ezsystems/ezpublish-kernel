@@ -15,6 +15,7 @@ parameters:
     ezpublish.search.elasticsearch.connection.document_type_identifier.content: 'content'
     ezpublish.search.elasticsearch.connection.document_type_identifier.location: 'location'
     ezpublish.spi.search.elasticsearch.class: eZ\Publish\Core\Search\Elasticsearch\Content\Handler
+    ezpublish.spi.search.elasticsearch.indexer.class: eZ\Publish\Core\Search\Elasticsearch\Content\Indexer
     ezpublish.search.elasticsearch.serializer.class: eZ\Publish\Core\Search\Elasticsearch\Content\Serializer
     ezpublish.search.elasticsearch.mapper.standard.class: eZ\Publish\Core\Search\Elasticsearch\Content\Mapper\StandardMapper
     ezpublish.search.elasticsearch.gateway.native.class: eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Native
@@ -89,4 +90,15 @@ services:
             - "%ezpublish.search.elasticsearch.connection.document_type_identifier.location%"
         tags:
             - {name: ezpublish.searchEngine, alias: elasticsearch}
+        lazy: true
+
+    ezpublish.spi.search.elasticsearch.indexer:
+        class: "%ezpublish.spi.search.elasticsearch.indexer.class%"
+        arguments:
+            - "@logger"
+            - "@ezpublish.api.storage_engine"
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.search.elasticsearch"
+        tags:
+            - {name: ezpublish.searchEngineIndexer, alias: elasticsearch}
         lazy: true

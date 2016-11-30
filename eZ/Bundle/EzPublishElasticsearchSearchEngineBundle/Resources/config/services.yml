@@ -8,5 +8,6 @@ services:
         arguments:
             - "@ezpublish.api.repository_configuration_provider"
             - "%ez_search_engine_elasticsearch.default_connection%"
+            - "%ezpublish.spi.search.elasticsearch.class%"
         calls:
             - [setContainer, ["@service_container"]]

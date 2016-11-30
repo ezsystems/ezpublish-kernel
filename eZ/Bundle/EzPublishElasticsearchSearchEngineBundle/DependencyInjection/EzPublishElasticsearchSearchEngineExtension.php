@@ -114,15 +114,14 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
         $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition($locationSearchGatewayId, $locationSearchGatewayDef);
 
-        // Search handler
-        $searchEngineDef = new DefinitionDecorator(self::MAIN_SEARCH_ENGINE_ID);
-        $searchEngineDef->replaceArgument(0, new Reference($contentSearchGatewayId));
-        $searchEngineDef->replaceArgument(1, new Reference($locationSearchGatewayId));
-        $searchEngineDef->replaceArgument(4, $connectionParams['document_type_name']['content']);
-        $searchEngineDef->replaceArgument(5, $connectionParams['document_type_name']['location']);
-        $searchEngineId = self::MAIN_SEARCH_ENGINE_ID . ".$connectionName";
-        $container->setDefinition($searchEngineId, $searchEngineDef);
-        $container->setParameter("$alias.connection.$connectionName.engine_id", $searchEngineId);
+        $container->setParameter(
+            "$alias.connection.$connectionName.content_document_type_identifier",
+            $connectionParams['document_type_name']['content']
+        );
+        $container->setParameter(
+            "$alias.connection.$connectionName.location_document_type_identifier",
+            $connectionParams['document_type_name']['location']
+        );
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container)

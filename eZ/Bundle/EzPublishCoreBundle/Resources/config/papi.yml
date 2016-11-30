@@ -6,6 +6,7 @@ parameters:
     ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
     ezpublish.api.search_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
+    ezpublish.api.search_engine.indexer.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineIndexerFactory
 
     # Symfony event converter Slot
     ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
@@ -64,12 +65,25 @@ services:
         arguments:
             - "@ezpublish.api.repository_configuration_provider"
 
+    ezpublish.api.search_engine.indexer.factory:
+            class: "%ezpublish.api.search_engine.indexer.factory.class%"
+            arguments:
+                - "@ezpublish.api.repository_configuration_provider"
+
     ezpublish.spi.search:
         alias: ezpublish.spi.search_engine
+
+    ezpublish.spi.search.indexer:
+        alias: ezpublish.spi.search_engine.indexer
 
     ezpublish.spi.search_engine:
         class: "%ezpublish.api.search_engine.class%"
         factory: ["@ezpublish.api.search_engine.factory", buildSearchEngine]
+        public: false
+
+    ezpublish.spi.search_engine.indexer:
+        class: "%ezpublish.search.common.indexer.class%"
+        factory: ["@ezpublish.api.search_engine.indexer.factory", buildSearchEngineIndexer]
         public: false
 
     # Signal Slot API wrapper
