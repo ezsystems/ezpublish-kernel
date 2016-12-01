@@ -190,15 +190,14 @@ class InstallPlatformCommand extends Command
      */
     private function indexData(OutputInterface $output)
     {
-        if ($this->searchEngine === 'solr') {
-            $output->writeln('Solr search engine configured, executing command ezplatform:solr_create_index');
-            $this->executeCommand($output, 'ezplatform:solr_create_index');
+        if (!in_array($this->searchEngine, ['solr', 'elasticsearch'])) {
+            return;
         }
 
-        if ($this->searchEngine === 'elasticsearch') {
-            $output->writeln('Elasticsearch search engine configured, executing command ezplatform:elasticsearch_create_index');
-            $this->executeCommand($output, 'ezplatform:elasticsearch_create_index');
-        }
+        $output->writeln(
+            sprintf('%s search engine configured, executing command ezplatform:reindex', $this->searchEngine)
+        );
+        $this->executeCommand($output, 'ezplatform:reindex');
     }
 
     /**
