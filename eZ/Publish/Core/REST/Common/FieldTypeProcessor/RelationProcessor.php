@@ -36,7 +36,7 @@ class RelationProcessor extends BaseRelationProcessor
     {
         $outgoingSettingsHash = parent::postProcessFieldSettingsHash($outgoingSettingsHash);
 
-        if (isset($outgoingSettingsHash['selectionRoot'])) {
+        if (!empty($outgoingSettingsHash['selectionRoot'])) {
             $outgoingSettingsHash['selectionRootHref'] = $this->mapToLocationHref(
                 $outgoingSettingsHash['selectionRoot']
             );

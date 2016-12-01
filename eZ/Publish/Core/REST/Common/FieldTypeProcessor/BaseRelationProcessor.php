@@ -18,7 +18,7 @@ abstract class BaseRelationProcessor extends FieldTypeProcessor
     private $router;
 
     /**
-     * @var \eZ\Publish\Core\Repository\LocationService
+     * @var \eZ\Publish\API\Repository\LocationService
      */
     private $locationService;
 
@@ -62,7 +62,7 @@ abstract class BaseRelationProcessor extends FieldTypeProcessor
     public function mapToLocationHref($locationId)
     {
         return $this->router->generate('ezpublish_rest_loadLocation', [
-            'locationPath' => $this->locationService->loadLocation($locationId)->pathString,
+            'locationPath' => implode('/', $this->locationService->loadLocation($locationId)->path),
         ]);
     }
 
