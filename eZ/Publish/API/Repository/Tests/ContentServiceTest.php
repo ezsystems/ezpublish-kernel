@@ -1657,9 +1657,9 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the publishVersion() method, and that it creates limited archives.
      *
-     * @todo Adapt this when per content type archvie limited is added on repository Content Type model.
+     * @todo Adapt this when per content type archive limited is added on repository Content Type model.
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @depe nds \eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testPublishVersionNotCreatingUnlimitedArchives()
     {
