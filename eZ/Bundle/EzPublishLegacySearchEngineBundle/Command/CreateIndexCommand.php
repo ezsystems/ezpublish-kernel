@@ -22,6 +22,8 @@ use RuntimeException;
 use PDO;
 
 /**
+ * @deprecated since 6.7, use ezplatform:reindex command instead.
+ *
  * Console command ezplatform:create_sql_search_index indexes content objects for legacy search
  * engine.
  */
@@ -90,6 +92,11 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        @trigger_error(
+            sprintf('%s is deprecated since 6.7. Use ezplatform:reindex command instead', $this->getName()),
+            E_USER_DEPRECATED
+        );
+
         $bulkCount = $input->getArgument('bulk_count');
         // Indexing Content
         $totalCount = $this->getContentObjectsTotalCount(

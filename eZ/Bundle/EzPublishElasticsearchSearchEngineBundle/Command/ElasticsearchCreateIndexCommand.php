@@ -15,6 +15,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use PDO;
 
+/**
+ * @deprecated since 6.7, use ezplatform:reindex command instead.
+ */
 class ElasticsearchCreateIndexCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -32,6 +35,11 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        @trigger_error(
+            sprintf('%s is deprecated since 6.7. Use ezplatform:reindex command instead', $this->getName()),
+            E_USER_DEPRECATED
+        );
+
         $bulkCount = $input->getArgument('bulk_count');
 
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
