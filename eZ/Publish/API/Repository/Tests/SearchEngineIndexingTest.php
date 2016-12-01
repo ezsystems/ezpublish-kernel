@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch as LegacyElasticsearchSetupFactory;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -32,6 +33,13 @@ class SearchEngineIndexingTest extends BaseTest
      */
     public function testFindContentInfoFullTextIsSearchable()
     {
+        $setupFactory = $this->getSetupFactory();
+        if (!$setupFactory instanceof LegacySolrSetupFactory && !$setupFactory instanceof LegacyElasticsearchSetupFactory) {
+            $this->markTestSkipped(
+                'Legacy Search Engine is missing full text indexing implementation'
+            );
+        }
+
         $searchTerm = 'pamplemousse';
         $content = $this->createFullTextIsSearchableContent($searchTerm, true);
 
