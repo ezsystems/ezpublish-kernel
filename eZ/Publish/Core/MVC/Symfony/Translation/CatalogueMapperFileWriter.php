@@ -118,6 +118,10 @@ class CatalogueMapperFileWriter extends FileWriter
         $newMessage->setSources($message->getSources());
         $newMessage->addNote('key: ' . $message->getId());
 
+        if ($desc = $message->getDesc()) {
+            $newMessage->setDesc($desc);
+        }
+
         return $newMessage;
     }
 }
