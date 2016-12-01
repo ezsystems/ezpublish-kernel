@@ -328,7 +328,7 @@ class StandardMapper implements MapperInterface
                             $indexField->type
                         );
 
-                        if ($indexField->type instanceof FieldType\FullTextField) {
+                        if ($indexField->type instanceof FieldType\FullTextField && $fieldDefinition->isSearchable) {
                             $fields[] = new Field(
                                 $name . '_meta_all_' . str_replace('-', '_', $languageCode),
                                 $indexField->value,
