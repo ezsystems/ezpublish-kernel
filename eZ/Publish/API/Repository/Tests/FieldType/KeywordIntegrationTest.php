@@ -335,13 +335,4 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     {
         return ['commit', 'delete'];
     }
-
-    protected function checkSearchEngineSupport()
-    {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "Keyword field type is not searchable with Legacy Search Engine"
-            );
-        }
-    }
 }
