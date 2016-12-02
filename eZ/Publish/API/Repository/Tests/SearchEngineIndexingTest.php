@@ -10,6 +10,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch as LegacyElasticsearchSetupFactory;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
@@ -27,6 +29,169 @@ use DateTime;
  */
 class SearchEngineIndexingTest extends BaseTest
 {
+    /**
+     * Test that indexing full text data depends on the isSearchable flag on the field definition.
+     */
+    public function testFindContentInfoFullTextIsSearchable()
+    {
+        $searchTerm = 'pamplemousse';
+        $content = $this->createFullTextIsSearchableContent($searchTerm, true);
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query(
+            [
+                'query' => new Criterion\FullText($searchTerm),
+            ]
+        );
+
+        $searchResult = $searchService->findContentInfo($query);
+
+        $this->assertEquals(1, $searchResult->totalCount);
+        $contentInfo = $searchResult->searchHits[0]->valueObject;
+        $this->assertEquals($content->id, $contentInfo->id);
+
+        return $contentInfo;
+    }
+
+    /**
+     * Test that indexing full text data depends on the isSearchable flag on the field definition.
+     *
+     * @depends testFindContentInfoFullTextIsSearchable
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testFindLocationsFullTextIsSearchable(ContentInfo $contentInfo)
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ($setupFactory instanceof LegacyElasticsearchSetupFactory) {
+            $this->markTestSkipped(
+                'Elasticsearch Search Engine is missing full text Location search implementation'
+            );
+        }
+
+        $searchTerm = 'pamplemousse';
+
+        $repository = $this->getRepository(false);
+        $searchService = $repository->getSearchService();
+
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\FullText($searchTerm),
+            ]
+        );
+
+        $searchResult = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals(
+            $contentInfo->mainLocationId,
+            $searchResult->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test that indexing full text data depends on the isSearchable flag on the field definition.
+     *
+     * @depends testFindContentInfoFullTextIsSearchable
+     */
+    public function testFindContentInfoFullTextIsNotSearchable()
+    {
+        $searchTerm = 'pamplemousse';
+        $this->createFullTextIsSearchableContent($searchTerm, false);
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query(
+            [
+                'query' => new Criterion\FullText($searchTerm),
+            ]
+        );
+
+        $searchResult = $searchService->findContentInfo($query);
+
+        $this->assertEquals(0, $searchResult->totalCount);
+    }
+
+    /**
+     * Test that indexing full text data depends on the isSearchable flag on the field definition.
+     *
+     * @depends testFindLocationsFullTextIsSearchable
+     */
+    public function testFindLocationsFullTextIsNotSearchable()
+    {
+        $searchTerm = 'pamplemousse';
+
+        $repository = $this->getRepository(false);
+        $searchService = $repository->getSearchService();
+
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\FullText($searchTerm),
+            ]
+        );
+
+        $searchResult = $searchService->findLocations($query);
+
+        $this->assertEquals(0, $searchResult->totalCount);
+    }
+
+    /**
+     * Creates Content for testing full text search depending on the isSearchable flag.
+     *
+     * @see testFindContentInfoFullTextIsearchable
+     * @see testFindLocationsFullTextIsSearchable
+     * @see testFindContentInfoFullTextIsNotSearchable
+     * @see testFindLocationsFullTextIsNotSearchable
+     *
+     * @param string $searchText
+     * @param bool $isSearchable
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createFullTextIsSearchableContent($searchText, $isSearchable)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        if (!$isSearchable) {
+            $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+            $fieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+            $fieldDefinitionUpdateStruct->isSearchable = false;
+
+            $fieldDefinition = $contentType->getFieldDefinition('name');
+
+            $contentTypeService->updateFieldDefinition(
+                $contentTypeDraft,
+                $fieldDefinition,
+                $fieldDefinitionUpdateStruct
+            );
+
+            $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+            $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        }
+
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+
+        $contentCreateStruct->setField('name', $searchText);
+        $contentCreateStruct->setField('short_name', 'hello world');
+        $content = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $this->refreshSearch($repository);
+
+        return $content;
+    }
+
     /**
      * EZP-26186: Make sure index is NOT deleted on removal of version draft (affected Solr & content index on Elastic).
      */
