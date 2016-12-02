@@ -319,6 +319,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
             'foo' => array(
                 'storage' => array(
@@ -333,6 +336,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -366,6 +372,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -403,6 +412,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -440,6 +452,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -487,6 +502,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
             'foo' => array(
                 'search' => array(
@@ -503,6 +521,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -538,6 +559,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'list' => ['content'],
                     'default' => 'content',
                 ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));

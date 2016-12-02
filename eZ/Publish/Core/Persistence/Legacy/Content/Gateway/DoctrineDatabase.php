@@ -988,23 +988,40 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Returns all version data for the given $contentId.
+     * Returns all version data for the given $contentId, optionally filtered by status.
      *
      * Result is returned with oldest version first (using version id as it has index and is auto increment).
      *
      * @param mixed $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return string[][]
      */
-    public function listVersions($contentId)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
         $query = $this->queryBuilder->createVersionInfoFindQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version'),
-                $query->bindValue($contentId, null, \PDO::PARAM_INT)
-            )
+
+        $filter = $query->expr->eq(
+            $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version'),
+            $query->bindValue($contentId, null, \PDO::PARAM_INT)
         );
+
+        if ($status !== null) {
+            $filter = $query->expr->lAnd(
+                $filter,
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('status', 'ezcontentobject_version'),
+                    $query->bindValue($status, null, \PDO::PARAM_INT)
+                )
+            );
+        }
+
+        $query->where($filter);
+
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
 
         return $this->listVersionsHelper($query);
     }

@@ -206,10 +206,12 @@ abstract class Gateway
      * Result is returned with oldest version first (using version id as it has index and is auto increment).
      *
      * @param mixed $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return string[][]
      */
-    abstract public function listVersions($contentId);
+    abstract public function listVersions($contentId, $status = null, $limit = -1);
 
     /**
      * Returns all version numbers for the given $contentId.

@@ -116,13 +116,15 @@ class TreeHandler
      *
      * Result is returned with oldest version first (using version id as it has index and is auto increment).
      *
-     * @param int $contentId
+     * @param mixed $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions($contentId)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
-        $rows = $this->contentGateway->listVersions($contentId);
+        $rows = $this->contentGateway->listVersions($contentId, $status, $limit);
         if (empty($rows)) {
             return array();
         }

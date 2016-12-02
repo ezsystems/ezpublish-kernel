@@ -171,10 +171,12 @@ interface Handler
      * Result is returned with oldest version first (sorted by created, alternatively version number or id if auto increment).
      *
      * @param int $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions($contentId);
+    public function listVersions($contentId, $status = null, $limit = -1);
 
     /**
      * Copy Content with Fields, Versions & Relations from $contentId in $version.
