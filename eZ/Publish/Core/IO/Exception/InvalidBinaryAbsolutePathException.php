@@ -15,7 +15,7 @@ class InvalidBinaryAbsolutePathException extends InvalidBinaryFileIdException
     public function __construct($id, $code = 0)
     {
         $this->setMessageTemplate("Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, binary file ids can not begin with a '/'");
-        $this->setParameters(['id' => $id]);
+        $this->setParameters(['%id%' => $id]);
 
         // Parent does not let us set specifc message, so we jump all the way up to root Exception __construct().
         Exception::__construct($this->getBaseTranslation(), $code);

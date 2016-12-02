@@ -292,7 +292,7 @@ class IOService implements IOServiceInterface
         }
 
         if (strpos($spiBinaryFileId, $this->settings['prefix'] . '/') !== 0) {
-            throw new InvalidBinaryPrefixException($spiBinaryFileId);
+            throw new InvalidBinaryPrefixException($spiBinaryFileId, $this->settings['prefix'] . '/');
         }
 
         return substr($spiBinaryFileId, strlen($this->settings['prefix']) + 1);

@@ -51,7 +51,7 @@ class Prefix implements UrlDecorator
         }
 
         if (strpos($url, $this->prefix) !== 0) {
-            throw new InvalidBinaryPrefixException($url);
+            throw new InvalidBinaryPrefixException($url, $this->prefix);
         }
 
         return trim(substr($url, strlen($this->prefix)), '/');
