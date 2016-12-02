@@ -298,6 +298,7 @@ services:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelationlist }
         calls:
             - [setRouter, ["@router"]]
+            - [setLocationService, ["@ezpublish.api.service.location"]]
 
     ezpublish_rest.field_type_processor.ezobjectrelation:
         class: "%ezpublish_rest.field_type_processor.ezobjectrelation.class%"
@@ -305,6 +306,7 @@ services:
             - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelation }
         calls:
             - [setRouter, ["@router"]]
+            - [setLocationService, ["@ezpublish.api.service.location"]]
 
     ezpublish_rest.field_type_processor.eztime:
         class: "%ezpublish_rest.field_type_processor.eztime.class%"
