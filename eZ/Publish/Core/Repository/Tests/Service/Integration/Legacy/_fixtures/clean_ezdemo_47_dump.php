@@ -4724,7 +4724,7 @@ return array(
       'identifier' => 'shopping_basket_label',
       'is_information_collector' => '0',
       'is_required' => '0',
-      'is_searchable' => '0',
+      'is_searchable' => '1',
       'placement' => '15',
       'serialized_data_text' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
