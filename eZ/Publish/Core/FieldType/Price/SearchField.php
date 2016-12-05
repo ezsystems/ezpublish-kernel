@@ -93,4 +93,20 @@ class SearchField implements Indexable
             new Search\FullTextFieldValue(($field->value->data / 1000)),
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'value',
+                // @todo: Data is yet empty, this seems wrong, so we use the
+                // sort field for now
+                $field->value->sortKey['sort_key_int'] / 1000,
+                new Search\FieldType\PriceField()
+            ),
+        ];
+    }
 }

@@ -135,4 +135,45 @@ class SearchField implements Indexable
 
         return $values;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        $indexes = [];
+        $values = [];
+        $options = $fieldDefinition->fieldTypeConstraints->fieldSettings['options'];
+        $positionSet = array_flip($field->value->data);
+
+        foreach ($options as $index => $value) {
+            if (isset($positionSet[$index])) {
+                $values[] = $value;
+                $indexes[] = $index;
+            }
+        }
+
+        return [
+            new Search\Field(
+                'selected_option_value',
+                $values,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'selected_option_index',
+                $indexes,
+                new Search\FieldType\MultipleIntegerField()
+            ),
+            new Search\Field(
+                'selected_option_count',
+                count($indexes),
+                new Search\FieldType\IntegerField()
+            ),
+            new Search\Field(
+                'sort_value',
+                implode('-', $indexes),
+                new Search\FieldType\StringField()
+            ),
+        ];
+    }
 }

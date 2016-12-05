@@ -91,4 +91,18 @@ class SearchField implements Indexable
             (string) $field->value->data,
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'value',
+                $field->value->data,
+                new Search\FieldType\FloatField()
+            ),
+        ];
+    }
 }

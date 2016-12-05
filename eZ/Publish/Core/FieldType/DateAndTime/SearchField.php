@@ -91,4 +91,18 @@ class SearchField implements Indexable
             $dateTime->format('U'),
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'value',
+                $field->value->data['timestamp'],
+                new Search\FieldType\DateField()
+            ),
+        ];
+    }
 }

@@ -18,6 +18,8 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 interface Indexable
 {
     /**
+     * @deprecated since 6.7, use getFullTextData and/or getFilterData instead.
+     *
      * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
@@ -65,4 +67,13 @@ interface Indexable
      * @return string[]
      */
     public function getFullTextData(Field $field, FieldDefinition $fieldDefinition);
+
+    /**
+     * Get non-fulltext index data.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition);
 }

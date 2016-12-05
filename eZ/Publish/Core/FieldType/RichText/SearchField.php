@@ -148,4 +148,21 @@ class SearchField implements Indexable
             $this->extractText($document->documentElement),
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        $document = new DOMDocument();
+        $document->loadXML($field->value->data);
+
+        return [
+            new Search\Field(
+                'value',
+                $this->extractShortText($document),
+                new Search\FieldType\StringField()
+            ),
+        ];
+    }
 }

@@ -100,4 +100,26 @@ class SearchField implements Indexable
             $field->value->externalData['address'],
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'value_address',
+                $field->value->externalData['address'],
+                new Search\FieldType\StringField()
+            ),
+            new Search\Field(
+                'value_location',
+                [
+                    'latitude' => $field->value->externalData['latitude'],
+                    'longitude' => $field->value->externalData['longitude'],
+                ],
+                new Search\FieldType\GeoLocationField()
+            ),
+        ];
+    }
 }

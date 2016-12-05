@@ -156,4 +156,73 @@ class SearchField implements Indexable
 
         return $nameList;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        if (empty($field->value->data)) {
+            return [];
+        }
+
+        $nameList = [];
+        $IDCList = [];
+        $alpha2List = [];
+        $alpha3List = [];
+
+        foreach ($field->value->data as $alpha2) {
+            if (isset($this->countriesInfo[$alpha2])) {
+                $nameList[] = $this->countriesInfo[$alpha2]['Name'];
+                $IDCList[] = $this->countriesInfo[$alpha2]['IDC'];
+                $alpha2List[] = $this->countriesInfo[$alpha2]['Alpha2'];
+                $alpha3List[] = $this->countriesInfo[$alpha2]['Alpha3'];
+            }
+        }
+
+        return [
+            new Search\Field(
+                'idc',
+                $IDCList,
+                new Search\FieldType\MultipleIntegerField()
+            ),
+            new Search\Field(
+                'alpha2',
+                $alpha2List,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'alpha3',
+                $alpha3List,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'name',
+                $nameList,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'sort_value',
+                $this->getSortValue($field->value->data),
+                new Search\FieldType\StringField()
+            ),
+        ];
+    }
+
+    /**
+     * Get sort value for the given countries (stored as a field data/value).
+     *
+     * @param array $countriesAlpha2List 2-letter country codes list
+     * @return string
+     */
+    protected function getSortValue(array $countriesAlpha2List)
+    {
+        $countries = [];
+        foreach ($countriesAlpha2List as $alpha2) {
+            $countries[] = mb_strtolower($this->countriesInfo[$alpha2]['Name']);
+        }
+        sort($countries);
+
+        return implode(',', $countries);
+    }
 }

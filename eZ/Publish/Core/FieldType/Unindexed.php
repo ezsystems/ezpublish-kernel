@@ -75,4 +75,12 @@ class Unindexed implements Indexable
     {
         return [];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [];
+    }
 }
