@@ -136,7 +136,6 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         );
         $request = $this->getRequestByPathInfo($path);
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($locationId, $request->attributes->get('locationId'));
     }
 
     public function testMatchRequestLocationCaseRedirectWithRootLocation()
@@ -190,12 +189,11 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
+            'semanticPathinfo' => $path,
+            'needsRedirect' => true,
         );
         $request = $this->getRequestByPathInfo($requestedPath);
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($locationId, $request->attributes->get('locationId'));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestLocationCaseRedirectWithRootRootLocation()
@@ -249,12 +247,11 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
+            'semanticPathinfo' => $path,
+            'needsRedirect' => true,
         );
         $request = $this->getRequestByPathInfo($requestedPath);
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($locationId, $request->attributes->get('locationId'));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestResourceCaseRedirectWithRootLocation()
@@ -298,11 +295,11 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'semanticPathinfo' => $path,
+            'needsRedirect' => true,
         );
         $request = $this->getRequestByPathInfo($requestedPath);
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestVirtualCaseRedirectWithRootLocation()
@@ -344,11 +341,11 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'semanticPathinfo' => $path,
+            'needsRedirect' => true,
         );
         $request = $this->getRequestByPathInfo($requestedPath);
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestWithRootLocationAndExclusion()
@@ -404,6 +401,5 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             'layout' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($destinationId, $request->attributes->get('locationId'));
     }
 }
