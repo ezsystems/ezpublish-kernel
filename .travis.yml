@@ -4,6 +4,9 @@ sudo: required
 
 language: php
 
+# Workaround for java not started issues: https://github.com/travis-ci/travis-ci/issues/6928
+group: deprecated
+
 services:
   - mysql
   - postgresql
