@@ -16,6 +16,22 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
 
     private $fieldTypeHashGenerator;
 
+    private $iniPrecisions;
+
+    /**
+     * To make sure float values are serialized with same precision across php versions we force precision.
+     */
+    public function setUp()
+    {
+        $this->iniPrecisions = [ini_set('precision', 17), ini_set('serialize_precision', 17)];
+    }
+
+    public function TearDown()
+    {
+        ini_set('precision', $this->iniPrecisions[0]);
+        ini_set('serialize_precision', $this->iniPrecisions[1]);
+    }
+
     /**
      * Initializes the field type hash generator.
      */

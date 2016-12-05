@@ -1180,10 +1180,19 @@ abstract class ContentTypeBase extends BaseServiceTest
                     );
                     break;
 
+                case 'creationDate':
+                case 'modificationDate':
+                    $this->assertEquals(
+                        $typeCreate->$propertyName->getTimestamp(),
+                        $contentType->$propertyName->getTimestamp()
+                    );
+                    break;
+
                 default:
                     $this->assertEquals(
                         $typeCreate->$propertyName,
-                        $contentType->$propertyName
+                        $contentType->$propertyName,
+                        "Did not assert that property '${propertyName}' is equal on struct and resulting value object"
                     );
                     break;
             }

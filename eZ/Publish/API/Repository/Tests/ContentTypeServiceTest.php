@@ -127,12 +127,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             array(
                 'identifier' => $group->identifier,
                 'creatorId' => $group->creatorId,
-                'creationDate' => $group->creationDate,
+                'creationDate' => $group->creationDate->getTimestamp(),
             ),
             array(
                 'identifier' => $createStruct->identifier,
                 'creatorId' => $createStruct->creatorId,
-                'creationDate' => $createStruct->creationDate,
+                'creationDate' => $createStruct->creationDate->getTimestamp(),
             )
         );
         $this->assertNotNull(
@@ -810,10 +810,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                         $contentType->contentTypeGroups
                     );
                     break;
+
+                case 'creationDate':
+                case 'modificationDate':
+                    $this->assertEquals(
+                        $typeCreate->$propertyName->getTimestamp(),
+                        $contentType->$propertyName->getTimestamp()
+                    );
+                    break;
+
                 default:
                     $this->assertEquals(
                         $typeCreate->$propertyName,
-                        $contentType->$propertyName
+                        $contentType->$propertyName,
+                        "Did not assert that property '${propertyName}' is equal on struct and resulting value object"
                     );
                     break;
             }
