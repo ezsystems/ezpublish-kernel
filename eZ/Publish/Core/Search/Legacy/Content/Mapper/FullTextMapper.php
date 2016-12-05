@@ -12,7 +12,6 @@ use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Search\Legacy\Content\FullTextData;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Search\Legacy\Content\FullTextValue;
 
@@ -87,8 +86,9 @@ class FullTextMapper
                 continue;
             }
 
-            $value = $this->getFullTextFieldValue($field, $fieldDefinition);
-            if (empty($value)) {
+            $fieldType = $this->fieldRegistry->getType($field->type);
+            $values = $fieldType->getFullTextData($field, $fieldDefinition);
+            if (empty($values)) {
                 continue;
             }
 
@@ -98,37 +98,11 @@ class FullTextMapper
                     'fieldDefinitionId' => $field->fieldDefinitionId,
                     'fieldDefinitionIdentifier' => $fieldDefinition->identifier,
                     'languageCode' => $field->languageCode,
-                    'value' => !is_array($value) ? $value : implode(' ', $value),
+                    'value' => implode(' ', $values),
                 ]
             );
         }
 
         return $fullTextValues;
-    }
-
-    /**
-     * Get FullTextField value.
-     *
-     * @param Content\Field $field
-     * @param Type\FieldDefinition $fieldDefinition
-     * @return string
-     */
-    private function getFullTextFieldValue(Content\Field $field, Type\FieldDefinition $fieldDefinition)
-    {
-        $fieldType = $this->fieldRegistry->getType($field->type);
-        $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
-
-        // find value to be returned (stored in FullTextField)
-        $fullTextFieldValue = '';
-        foreach ($indexFields as $field) {
-            /** @var \eZ\Publish\SPI\Search\Field $field */
-            if ($field->type instanceof FieldType\FullTextField) {
-                $fullTextFieldValue = $field->value;
-                break;
-            }
-        }
-
-        // some full text fields are stored as an array of strings
-        return !is_array($fullTextFieldValue) ? $fullTextFieldValue : implode(' ', $fullTextFieldValue);
     }
 }
