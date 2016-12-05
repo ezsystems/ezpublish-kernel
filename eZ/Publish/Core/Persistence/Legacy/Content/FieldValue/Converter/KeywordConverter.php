@@ -36,6 +36,7 @@ class KeywordConverter implements Converter
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -47,6 +48,7 @@ class KeywordConverter implements Converter
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = array();
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -80,6 +82,6 @@ class KeywordConverter implements Converter
      */
     public function getIndexColumn()
     {
-        return false;
+        return 'sort_key_string';
     }
 }
