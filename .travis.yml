@@ -34,18 +34,18 @@ matrix:
   include:
 # 5.6
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0"
+      env: TEST_CONFIG="phpunit.xml"
     - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb" SYMFONY_VERSION="~2.7.0"
-    - php: 5.6
-      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
+#    - php: 5.6
+#      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
 # 7.0
+#    - php: 7.0
+#      env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=dev SYMFONY_DEBUG=1
+#    - php: 7.0
+#      env: BEHAT_OPTS="--profile=rest --suite=fullJson" RUN_INSTALL=1
     - php: 7.0
-      env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=dev SYMFONY_DEBUG=1
-    - php: 7.0
-      env: BEHAT_OPTS="--profile=rest --suite=fullJson" RUN_INSTALL=1
-    - php: 7.0
-      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0"
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
     - php: 7.0
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
 # 7.1
