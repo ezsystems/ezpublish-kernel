@@ -158,9 +158,8 @@ class Handler implements UrlAliasHandlerInterface
                             'text_md5' => $newTextMD5,
                         )
                     );
-
                 } catch (\RuntimeException $e) {
-                    while($e->getPrevious() !== null) {
+                    while ($e->getPrevious() !== null) {
                         $e = $e->getPrevious();
                         if ($e instanceof UniqueConstraintViolationException) {
                             // Concurrency! someone else inserted the same row that we where going to.
