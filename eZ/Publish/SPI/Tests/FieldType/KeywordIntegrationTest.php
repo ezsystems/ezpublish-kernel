@@ -108,7 +108,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             array(
                 'data' => array(),
                 'externalData' => array('foo', 'bar', 'sindelfingen'),
-                'sortKey' => false,
+                'sortKey' => 'foo,bar,sindelfingen',
             )
         );
     }
@@ -130,7 +130,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         );
 
         $this->assertEquals(array(), $field->value->data);
-        $this->assertNull($field->value->sortKey);
+        $this->assertEquals('foo,bar,sindelfingen', $field->value->sortKey);
     }
 
     /**
@@ -178,7 +178,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             array(
                 'data' => array(),
                 'externalData' => array('sindelfingen', 'baz'),
-                'sortKey' => false,
+                'sortKey' => 'sindelfingen,baz',
             )
         );
     }
@@ -201,6 +201,6 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         );
 
         $this->assertEquals(array(), $field->value->data);
-        $this->assertNull($field->value->sortKey);
+        $this->assertEquals('sindelfingen,baz', $field->value->sortKey);
     }
 }

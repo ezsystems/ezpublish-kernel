@@ -100,16 +100,13 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @todo Review this, created from copy/paste to unblock failing tests!
-     *       According to me (PA) sorting on keywords should not be supported.
-     *
      * @param \eZ\Publish\Core\FieldType\Keyword\Value $value
      *
      * @return array
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        return implode(',', $value->values);
     }
 
     /**

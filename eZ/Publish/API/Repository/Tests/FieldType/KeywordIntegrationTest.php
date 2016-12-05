@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class KeywordIntegrationTest extends BaseIntegrationTest
+class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 {
     /**
      * Get name of tested field type.
@@ -314,5 +314,25 @@ class KeywordIntegrationTest extends BaseIntegrationTest
                 new KeywordValue(array('0')),
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return 'add';
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return 'branch';
+    }
+
+    protected function getValidMultivaluedSearchValuesOne()
+    {
+        return ['add', 'branch'];
+    }
+
+    protected function getValidMultivaluedSearchValuesTwo()
+    {
+        return ['commit', 'delete'];
     }
 }

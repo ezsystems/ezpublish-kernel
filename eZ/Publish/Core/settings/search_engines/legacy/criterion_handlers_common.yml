@@ -251,6 +251,7 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezcountry}
             - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezobjectrelationlist}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezkeyword}
 
     ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.hypen_separated:
         parent: ezpublish.search.legacy.gateway.criterion_field_value_handler.base

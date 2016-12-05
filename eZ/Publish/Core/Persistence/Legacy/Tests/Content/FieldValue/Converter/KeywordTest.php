@@ -65,7 +65,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldValue($storageFieldValue, $fieldValue);
         $this->assertSame(array(), $fieldValue->data);
-        $this->assertNull($fieldValue->sortKey);
+        $this->assertEquals('', $fieldValue->sortKey);
     }
 
     /**
