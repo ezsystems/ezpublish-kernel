@@ -969,7 +969,7 @@ class SearchEngineIndexingTest extends BaseTest
         $foundContentInfo = $results->searchHits[0]->valueObject->contentInfo;
         /** @var \eZ\Publish\Core\Repository\Values\Content\Content $foundContentInfo */
         $this->assertEquals($publishedContent->id, $foundContentInfo->id);
-        $this->assertEquals($newContentMetadataUpdateStruct->publishedDate, $foundContentInfo->publishedDate);
+        $this->assertEquals($newContentMetadataUpdateStruct->publishedDate->getTimestamp(), $foundContentInfo->publishedDate->getTimestamp());
         $this->assertEquals($newLocation->id, $foundContentInfo->mainLocationId);
         $this->assertEquals($newContentMetadataUpdateStruct->remoteId, $foundContentInfo->remoteId);
 
