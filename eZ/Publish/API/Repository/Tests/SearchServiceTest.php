@@ -737,7 +737,7 @@ class SearchServiceTest extends BaseTest
     public function testFindContentInfoFiltered($queryData, $fixture, $closure = null)
     {
         $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true);
+        $this->assertQueryFixture($query, $fixture, $closure, true);
     }
 
     /**
@@ -789,7 +789,7 @@ class SearchServiceTest extends BaseTest
         }
 
         $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true);
+        $this->assertQueryFixture($query, $fixture, $closure, true);
     }
 
     /**
@@ -855,7 +855,7 @@ class SearchServiceTest extends BaseTest
     public function testQueryContentInfo($queryData, $fixture, $closure = null)
     {
         $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true);
+        $this->assertQueryFixture($query, $fixture, $closure, true);
     }
 
     /**
@@ -2525,7 +2525,7 @@ class SearchServiceTest extends BaseTest
     public function testFindAndSortContentInfo($queryData, $fixture, $closure = null)
     {
         $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true);
+        $this->assertQueryFixture($query, $fixture, $closure, true);
     }
 
     /**
@@ -2850,7 +2850,7 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture(
             $query,
             $fixture,
-            $this->getContentInfoFixtureClosure(),
+            null,
             true,
             false,
             true,
@@ -4714,28 +4714,5 @@ class SearchServiceTest extends BaseTest
     protected function getFixtureDir()
     {
         return __DIR__ . '/_fixtures/' . getenv('fixtureDir') . '/';
-    }
-
-    /**
-     * For findContentInfo tests, to reuse fixtures for findContent tests.
-     *
-     * @param null|callable $closure
-     *
-     * @return callable
-     */
-    private function getContentInfoFixtureClosure($closure = null)
-    {
-        /** @var $data \eZ\Publish\API\Repository\Values\Content\Search\SearchResult */
-        return function (&$data) use ($closure) {
-            foreach ($data->searchHits as $searchHit) {
-                if ($searchHit->valueObject instanceof Content) {
-                    $searchHit->valueObject = $searchHit->valueObject->getVersionInfo()->getContentInfo();
-                }
-            }
-
-            if (isset($closure)) {
-                $closure($data);
-            }
-        };
     }
 }
