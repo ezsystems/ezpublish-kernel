@@ -4435,8 +4435,15 @@ class SearchServiceTest extends BaseTest
      * @param bool $info
      * @param bool $id
      */
-    protected function assertQueryFixture(Query $query, $fixture, $closure = null, $ignoreScore = true, $info = false, $id = true)
-    {
+    protected function assertQueryFixture(
+        Query $query,
+        $fixture,
+        $closure = null,
+        $ignoreScore = true,
+        $info = false,
+        $id = true,
+        $skipNotImplemented = false
+    ) {
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -4464,6 +4471,10 @@ class SearchServiceTest extends BaseTest
             }
             $this->simplifySearchResult($result);
         } catch (NotImplementedException $e) {
+            if (!$skipNotImplemented) {
+                throw $e;
+            }
+
             $this->markTestSkipped(
                 'This feature is not supported by the current search backend: ' . $e->getMessage()
             );
