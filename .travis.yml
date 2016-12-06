@@ -12,6 +12,13 @@ matrix:
       group: stable
 
 
+# test only master, stable branches and pull requests
+branches:
+  only:
+    - master
+    - /^\d.\d+$/
+
+
 # execute phpunit or behat as the script command
 script:
   - git --version
