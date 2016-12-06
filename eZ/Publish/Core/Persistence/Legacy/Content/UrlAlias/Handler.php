@@ -161,17 +161,31 @@ class Handler implements UrlAliasHandlerInterface
                     $newId = $existingLocationEntry['id'];
                 }
 
-                $newId = $this->gateway->insertRow(
-                    array(
-                        'id' => $newId,
-                        'link' => $newId,
-                        'parent' => $parentId,
-                        'action' => $action,
-                        'lang_mask' => $languageMask,
-                        'text' => $newText,
-                        'text_md5' => $newTextMD5,
-                    )
-                );
+                try {
+                    $newId = $this->gateway->insertRow(
+                        array(
+                            'id' => $newId,
+                            'link' => $newId,
+                            'parent' => $parentId,
+                            'action' => $action,
+                            'lang_mask' => $languageMask,
+                            'text' => $newText,
+                            'text_md5' => $newTextMD5,
+                        )
+                    );
+                } catch (\RuntimeException $e) {
+                    while ($e->getPrevious() !== null) {
+                        $e = $e->getPrevious();
+                        if ($e instanceof UniqueConstraintViolationException) {
+                            // Concurrency! someone else inserted the same row that we where going to.
+                            // let's do another loop pass
+                            $uniqueCounter += 1;
+                            continue 2;
+                        }
+                    }
+
+                    throw $e;
+                }
 
                 break;
             }
