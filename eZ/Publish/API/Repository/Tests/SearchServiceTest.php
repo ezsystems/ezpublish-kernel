@@ -220,83 +220,6 @@ class SearchServiceTest extends BaseTest
             ),
             15 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
-                        'user_group_name_value_s',
-                        Criterion\Operator::EQ,
-                        'Members'
-                    ),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'Field.php',
-            ),
-            16 => array(
-                array(
-                    'filter' => new Criterion\CustomField(
-                        'user_group_name_value_s',
-                        Criterion\Operator::CONTAINS,
-                        'Members'
-                    ),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'Field.php',
-            ),
-            17 => array(
-                array(
-                    'filter' => new Criterion\CustomField(
-                        'user_group_name_value_s',
-                        Criterion\Operator::LT,
-                        'Members'
-                    ),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'CustomFieldLt.php',
-            ),
-            18 => array(
-                array(
-                    'filter' => new Criterion\CustomField(
-                        'user_group_name_value_s',
-                        Criterion\Operator::LTE,
-                        'Members'
-                    ),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'CustomFieldLte.php',
-            ),
-            19 => array(
-                array(
-                    'filter' => new Criterion\CustomField(
-                        'user_group_name_value_s',
-                        Criterion\Operator::GT,
-                        'Members'
-                    ),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'CustomFieldGt.php',
-            ),
-            20 => array(
-                array(
-                    'filter' => new Criterion\CustomField(
-                        'user_group_name_value_s',
-                        Criterion\Operator::GTE,
-                        'Members'
-                    ),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'CustomFieldGte.php',
-            ),
-            21 => array(
-                array(
-                    'filter' => new Criterion\CustomField(
-                        'user_group_name_value_s',
-                        Criterion\Operator::BETWEEN,
-                        array('Administrator users', 'Members')
-                    ),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'CustomFieldBetween.php',
-            ),
-            22 => array(
-                array(
                     'filter' => new Criterion\RemoteId(
                         array('f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca')
                     ),
@@ -304,7 +227,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'RemoteId.php',
             ),
-            23 => array(
+            16 => array(
                 array(
                     'filter' => new Criterion\SectionId(
                         array(2)
@@ -313,7 +236,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SectionId.php',
             ),
-            24 => array(
+            17 => array(
                 array(
                     'filter' => new Criterion\Field(
                         'name',
@@ -324,7 +247,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'Field.php',
             ),
-            25 => array(
+            18 => array(
                 array(
                     'filter' => new Criterion\Field(
                         'name',
@@ -335,7 +258,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldIn.php',
             ),
-            26 => array(
+            19 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -346,7 +269,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldBetween.php',
             ),
-            27 => array(
+            20 => array(
                 array(
                     'filter' => new Criterion\LogicalOr(
                         array(
@@ -366,7 +289,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldOr.php',
             ),
-            28 => array(
+            21 => array(
                 array(
                     'filter' => new Criterion\Subtree(
                         '/1/5/'
@@ -375,7 +298,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'Subtree.php',
             ),
-            29 => array(
+            22 => array(
                 array(
                     'filter' => new Criterion\LocationId(
                         array(1, 2, 5)
@@ -384,7 +307,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LocationId.php',
             ),
-            30 => array(
+            23 => array(
                 array(
                     'filter' => new Criterion\ParentLocationId(
                         array(1)
@@ -393,7 +316,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'ParentLocationId.php',
             ),
-            31 => array(
+            24 => array(
                 array(
                     'filter' => new Criterion\LocationRemoteId(
                         array('3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983')
@@ -402,7 +325,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LocationRemoteId.php',
             ),
-            32 => array(
+            25 => array(
                 array(
                     // There is no Status Criterion anymore, this should match all published as well
                     'filter' => new Criterion\Subtree(
@@ -432,7 +355,7 @@ class SearchServiceTest extends BaseTest
                     );
                 },
             ),
-            33 => array(
+            26 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::MODIFIER,
@@ -446,7 +369,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            34 => array(
+            27 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::MODIFIER,
@@ -460,7 +383,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            35 => array(
+            28 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::OWNER,
@@ -474,7 +397,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            36 => array(
+            29 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::OWNER,
@@ -488,7 +411,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            37 => array(
+            30 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -502,7 +425,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            38 => array(
+            31 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -516,7 +439,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            39 => array(
+            32 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -530,7 +453,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            40 => array(
+            33 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -544,7 +467,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            41 => array(
+            34 => array(
                 array(
                     'filter' => new Criterion\Ancestor(
                         array(
@@ -560,6 +483,91 @@ class SearchServiceTest extends BaseTest
                 $fixtureDir . 'AncestorContent.php',
             ),
         );
+    }
+
+    public function getFilterContentSearchesCustomField()
+    {
+        $fixtureDir = $this->getFixtureDir();
+
+        return [
+            0 => [
+                [
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::EQ,
+                        'Members'
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ],
+                $fixtureDir . 'Field.php',
+            ],
+            1 => [
+                [
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::CONTAINS,
+                        'Members'
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ],
+                $fixtureDir . 'Field.php',
+            ],
+            2 => [
+                [
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::LT,
+                        'Members'
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ],
+                $fixtureDir . 'CustomFieldLt.php',
+            ],
+            3 => [
+                [
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::LTE,
+                        'Members'
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ],
+                $fixtureDir . 'CustomFieldLte.php',
+            ],
+            4 => [
+                [
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::GT,
+                        'Members'
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ],
+                $fixtureDir . 'CustomFieldGt.php',
+            ],
+            5 => [
+                [
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::GTE,
+                        'Members'
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ],
+                $fixtureDir . 'CustomFieldGte.php',
+            ],
+            6 => [
+                [
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::BETWEEN,
+                        array('Administrator users', 'Members')
+                    ),
+                    'sortClauses' => array(new SortClause\ContentId()),
+                ],
+                $fixtureDir . 'CustomFieldBetween.php',
+            ],
+        ];
     }
 
     public function getContentQuerySearches()
@@ -741,6 +749,65 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindLocationsContentFiltered($queryData, $fixture, $closure = null)
     {
+        $query = new LocationQuery($queryData);
+        $this->assertQueryFixture($query, $fixture, $closure);
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @dataProvider getFilterContentSearchesCustomField
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFindContentFilteredCustomField($queryData, $fixture, $closure = null)
+    {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $this->markTestSkipped(
+                'Custom fields are not supported by the legacy search engine.'
+            );
+        }
+
+        $query = new Query($queryData);
+        $this->assertQueryFixture($query, $fixture, $closure);
+    }
+
+    /**
+     * Test for the findContentInfo() method.
+     *
+     * @dataProvider getFilterContentSearchesCustomField
+     * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
+     */
+    public function testFindContentInfoFilteredCustomField($queryData, $fixture, $closure = null)
+    {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $this->markTestSkipped(
+                'Custom fields are not supported by the legacy search engine.'
+            );
+        }
+
+        $query = new Query($queryData);
+        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true);
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getFilterContentSearchesCustomField
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     */
+    public function testFindLocationsContentFilteredCustomField($queryData, $fixture, $closure = null)
+    {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $this->markTestSkipped(
+                'Custom fields are not supported by the legacy search engine.'
+            );
+        }
+
         $query = new LocationQuery($queryData);
         $this->assertQueryFixture($query, $fixture, $closure);
     }
