@@ -4588,13 +4588,13 @@ class SearchServiceTest extends BaseTest
             }
             $this->simplifySearchResult($result);
         } catch (NotImplementedException $e) {
-            if (!$skipNotImplemented) {
-                throw $e;
+            if (isset($_ENV['skipForNotImplementedException']) || $skipNotImplemented) {
+                $this->markTestSkipped(
+                    'This feature is not supported by the current search backend: ' . $e->getMessage()
+                );
             }
 
-            $this->markTestSkipped(
-                'This feature is not supported by the current search backend: ' . $e->getMessage()
-            );
+            throw $e;
         }
 
         if (!is_file($fixture)) {
