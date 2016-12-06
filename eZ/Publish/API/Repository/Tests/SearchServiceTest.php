@@ -2509,6 +2509,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetContentType.php',
+                false,
             ),
             array(
                 new Query(
@@ -2528,6 +2529,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetContentTypeMinCount.php',
+                false,
             ),
             array(
                 new Query(
@@ -2547,6 +2549,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetContentTypeMinLimit.php',
+                false,
             ),
             array(
                 new Query(
@@ -2565,6 +2568,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetSection.php',
+                false,
             ),
             array(
                 new Query(
@@ -2583,6 +2587,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetUser.php',
+                false,
             ),
             array(
                 new Query(
@@ -2597,6 +2602,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetTerm.php',
+                true,
             ),
             /* @todo: It needs to be defined how this one is supposed to work.
             array(
@@ -2612,6 +2618,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetCriterion.php',
+                true,
             ), // */
             /* @todo: Add sane ranges here:
             array(
@@ -2627,6 +2634,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetDateRange.php',
+                true,
             ), // */
             array(
                 new Query(
@@ -2645,6 +2653,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetFieldSimple.php',
+                true,
             ),
             array(
                 new Query(
@@ -2664,6 +2673,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetFieldRegexp.php',
+                true,
             ),
             array(
                 new Query(
@@ -2684,6 +2694,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetFieldRegexpSortTerm.php',
+                true,
             ),
             array(
                 new Query(
@@ -2704,6 +2715,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetFieldRegexpSortCount.php',
+                true,
             ),
             /* @todo: Add sane ranges here:
             array(
@@ -2721,6 +2733,7 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/FacetFieldRegexpSortCount.php',
+                true,
             ), // */
         );
     }
@@ -2732,9 +2745,17 @@ class SearchServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFindFacettedContent(Query $query, $fixture)
+    public function testFindFacettedContent(Query $query, $fixture, $skipNotImplemented)
     {
-        $this->assertQueryFixture($query, $fixture);
+        $this->assertQueryFixture(
+            $query,
+            $fixture,
+            null,
+            true,
+            false,
+            true,
+            $skipNotImplemented
+        );
     }
 
     /**
@@ -2743,9 +2764,17 @@ class SearchServiceTest extends BaseTest
      * @dataProvider getFacettedSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      */
-    public function testFindFacettedContentInfo(Query $query, $fixture)
+    public function testFindFacettedContentInfo(Query $query, $fixture, $skipNotImplemented)
     {
-        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure(), true);
+        $this->assertQueryFixture(
+            $query,
+            $fixture,
+            $this->getContentInfoFixtureClosure(),
+            true,
+            false,
+            true,
+            $skipNotImplemented
+        );
     }
 
     /**
