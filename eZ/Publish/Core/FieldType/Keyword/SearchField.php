@@ -31,6 +31,11 @@ class SearchField implements Indexable
                 implode(' ', $field->value->externalData),
                 new Search\FieldType\StringField()
             ),
+            new Search\Field(
+                'fulltext',
+                $field->value->externalData,
+                new Search\FieldType\FullTextField()
+            ),
         );
     }
 

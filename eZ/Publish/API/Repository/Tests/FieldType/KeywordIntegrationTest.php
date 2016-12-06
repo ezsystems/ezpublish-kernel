@@ -333,4 +333,16 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     {
         return ['commit', 'delete'];
     }
+
+    public function checkFullTextSupport()
+    {
+        // Does nothing
+    }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return [
+            ['add', 'branch'],
+        ];
+    }
 }
