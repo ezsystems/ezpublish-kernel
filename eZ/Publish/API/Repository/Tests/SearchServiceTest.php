@@ -2798,6 +2798,13 @@ class SearchServiceTest extends BaseTest
      */
     public function testQueryCustomField()
     {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $this->markTestSkipped(
+                'Custom fields are not supported by the legacy search engine.'
+            );
+        }
+
         $query = new Query(
             array(
                 'query' => new Criterion\CustomField(
