@@ -2747,6 +2747,13 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindFacettedContent(Query $query, $fixture, $skipNotImplemented)
     {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $this->markTestSkipped(
+                'Facets are not supported by the legacy search engine.'
+            );
+        }
+
         $this->assertQueryFixture(
             $query,
             $fixture,
@@ -2766,6 +2773,13 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindFacettedContentInfo(Query $query, $fixture, $skipNotImplemented)
     {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $this->markTestSkipped(
+                'Facets are not supported by the legacy search engine.'
+            );
+        }
+
         $this->assertQueryFixture(
             $query,
             $fixture,
