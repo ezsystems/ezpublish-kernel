@@ -30,32 +30,11 @@ env:
     - COMPOSE_FILE="doc/docker-compose/base-dev.yml:doc/docker-compose/selenium.yml"
 
 matrix:
-  fast_finish: true
   include:
-# 5.6
-    - php: 5.6
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0"
-    - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb" SYMFONY_VERSION="~2.7.0"
-    - php: 5.6
-      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
-# 7.0
     - php: 7.0
-      env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=dev SYMFONY_DEBUG=1
+      group: stable
     - php: 7.0
-      env: BEHAT_OPTS="--profile=rest --suite=fullJson" RUN_INSTALL=1
-    - php: 7.0
-      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0"
-    - php: 7.0
-      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="single" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
-# 7.1
-    - php: 7.1
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 7.1
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
-# hhvm - disabled, no need to enable before travis has newer versions avaiable
-#    - php: hhvm
-#      env: TEST_CONFIG="phpunit.xml"
+      group: deprecated
 
 
 # test only master, stable branches and pull requests
@@ -64,21 +43,16 @@ branches:
     - master
     - /^\d.\d+$/
 
-# setup requirements for running unit/integration/behat tests
-before_script:
-  # Prepare system
-  - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
-  - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
-  - if [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
-  # Detecting timezone issues by testing on random timezone
-  - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
-  - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
+
 
 # execute phpunit or behat as the script command
 script:
-  - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
-  - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/behat $BEHAT_OPTS" ; fi
-  - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"  ; fi
+  - git --version
+  - git branch --no-color --no-abbrev -v
+  - git describe --exact-match --tags
+  - git log --pretty="%H" -n1 HEAD
+  - git rev-list travis_debug..master
+
 
 # disable mail notifications
 notifications:
