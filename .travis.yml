@@ -1,48 +1,15 @@
 # Use trusty for better performance (and avoiding mysql/postgres/solr gone issues on precise and container infra)
 dist: trusty
 sudo: required
-
 language: php
 
-# Workaround for java not started issues: https://github.com/travis-ci/travis-ci/issues/6928
-group: deprecated
-
-services:
-  - mysql
-  - postgresql
-
-# Mysql isn't installed on trusty (only client is), so we need to specifically install it
-addons:
-  apt:
-    packages:
-    - mysql-server-5.6
-    - mysql-client-core-5.6
-    - mysql-client-5.6
-    - redis-server
-
-cache:
-  directories:
-    - $HOME/.composer/cache/files
-
-env:
-  global:
-    # For functional tests
-    - COMPOSE_FILE="doc/docker-compose/base-dev.yml:doc/docker-compose/selenium.yml"
 
 matrix:
   include:
     - php: 7.0
-      group: stable
-    - php: 7.0
       group: deprecated
-
-
-# test only master, stable branches and pull requests
-branches:
-  only:
-    - master
-    - /^\d.\d+$/
-
+    - php: 7.0
+      group: stable
 
 
 # execute phpunit or behat as the script command
@@ -52,6 +19,7 @@ script:
   - git describe --exact-match --tags
   - git log --pretty="%H" -n1 HEAD
   - git rev-list travis_debug..master
+  - composer show -s
 
 
 # disable mail notifications
