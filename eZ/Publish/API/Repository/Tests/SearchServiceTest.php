@@ -4551,6 +4551,7 @@ class SearchServiceTest extends BaseTest
      * @param null|callable $closure
      * @param bool $info
      * @param bool $id
+     * @param bool $skipNotImplemented
      */
     protected function assertQueryFixture(
         Query $query,
