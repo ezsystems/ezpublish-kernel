@@ -18,6 +18,8 @@ branches:
     - master
     - /^\d.\d+$/
 
+before_script:
+  - composer selfupdate --snapshot
 
 # execute phpunit or behat as the script command
 script:
