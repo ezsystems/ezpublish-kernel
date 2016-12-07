@@ -8,7 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader;
 
-class LegacyStorageMediaFileRowReader extends LegacyStorageFileRowReader
+final class LegacyStorageMediaFileRowReader extends LegacyStorageFileRowReader
 {
     /**
      * Returns the table name to store data in.

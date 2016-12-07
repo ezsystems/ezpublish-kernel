@@ -44,7 +44,7 @@ abstract class MigrationHandler implements MigrationHandlerInterface
         $this->logger = $logger;
     }
 
-    public function setIODataHandlersByIdentifiers(
+    final public function setIODataHandlersByIdentifiers(
         $fromMetadataHandlerIdentifier,
         $fromBinarydataHandlerIdentifier,
         $toMetadataHandlerIdentifier,
@@ -58,21 +58,21 @@ abstract class MigrationHandler implements MigrationHandlerInterface
         return $this;
     }
 
-    protected function logError($message)
+    final protected function logError($message)
     {
         if (isset($this->logger)) {
             $this->logger->error($message);
         }
     }
 
-    protected function logInfo($message)
+    final protected function logInfo($message)
     {
         if (isset($this->logger)) {
             $this->logger->info($message);
         }
     }
 
-    protected function logMissingFile($id)
+    final protected function logMissingFile($id)
     {
         $this->logInfo("File with id $id not found");
     }

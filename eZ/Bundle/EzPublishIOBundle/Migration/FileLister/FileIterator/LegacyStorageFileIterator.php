@@ -16,7 +16,7 @@ use eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileIteratorInterface;
  *
  * The returned items are filename of binary/media files (video/87c2bfd00.wmv).
  */
-class LegacyStorageFileIterator implements FileIteratorInterface
+final class LegacyStorageFileIterator implements FileIteratorInterface
 {
     /** @var mixed Last fetched item. */
     private $item;

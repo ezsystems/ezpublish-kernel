@@ -14,7 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 /**
  * A registry of FileListerInterfaces that uses an identifier string to identify the lister.
  */
-class IdentifierBased implements FileListerRegistry
+final class IdentifierBased implements FileListerRegistry
 {
     /** @var \eZ\Bundle\EzPublishIOBundle\Migration\FileListerInterface[] */
     private $registry = [];

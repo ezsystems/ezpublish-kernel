@@ -14,7 +14,7 @@ use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
-class FileMigrator extends MigrationHandler implements FileMigratorInterface
+final class FileMigrator extends MigrationHandler implements FileMigratorInterface
 {
     public function migrateFile(BinaryFile $binaryFile)
     {

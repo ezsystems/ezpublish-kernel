@@ -1,6 +1,7 @@
 # IO migration
 
 > Added in 6.7 / 2016.12
+> NB: This feature is experimental, for the time being. Use with caution!
 
 ### Context
 This document describes a command script that can migrate binary files
@@ -65,7 +66,6 @@ migrate files from DFS to AWS/S3.
 Other script options are:
 ```
 --list-io-configs          List available IO configurations
---remove-files             Remove source files after copying
 --bulk-count=BULK-COUNT    Number of files processed at once [default: 100]
 --dry-run                  Execute a dry run
 ```

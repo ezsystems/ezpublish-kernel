@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class MigrationFileListerPass implements CompilerPassInterface
+final class MigrationFileListerPass implements CompilerPassInterface
 {
     /**
      * Registers the FileListerInterface into the file lister registry.

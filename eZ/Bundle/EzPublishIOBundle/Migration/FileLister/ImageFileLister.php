@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use LimitIterator;
 use Psr\Log\LoggerInterface;
 
-class ImageFileLister extends MigrationHandler implements FileListerInterface
+final class ImageFileLister extends MigrationHandler implements FileListerInterface
 {
     /** @var ImageFileList */
     private $imageFileList;

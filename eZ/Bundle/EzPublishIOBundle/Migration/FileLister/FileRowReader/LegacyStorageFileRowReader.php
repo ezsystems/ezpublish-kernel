@@ -27,7 +27,7 @@ abstract class LegacyStorageFileRowReader implements FileRowReaderInterface
         $this->dbHandler = $dbHandler;
     }
 
-    public function init()
+    final public function init()
     {
         $selectQuery = $this->dbHandler->createSelectQuery();
         $selectQuery->select('filename, mime_type')->from($this->dbHandler->quoteTable($this->getStorageTable()));
@@ -42,14 +42,14 @@ abstract class LegacyStorageFileRowReader implements FileRowReaderInterface
      */
     abstract protected function getStorageTable();
 
-    public function getRow()
+    final public function getRow()
     {
         $row = $this->statement->fetch();
 
         return $this->prependMimeToPath($row['filename'], $row['mime_type']);
     }
 
-    public function getCount()
+    final public function getCount()
     {
         return $this->statement->rowCount();
     }

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class MigrateFilesCommand extends Command
+final class MigrateFilesCommand extends Command
 {
     /** @var mixed Configuration for metadata handlers */
     private $configuredMetadataHandlers;
@@ -63,16 +63,15 @@ class MigrateFilesCommand extends Command
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'Migrate from <from_metadata_handler>,<from_binarydata_handler>')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'Migrate to <to_metadata_handler>,<to_binarydata_handler>')
             ->addOption('list-io-configs', null, InputOption::VALUE_NONE, 'List available IO configurations')
-            ->addOption('remove-files', null, InputOption::VALUE_NONE, 'Remove source files after copying')
             ->addOption('bulk-count', null, InputOption::VALUE_REQUIRED, 'Number of files processed at once', 100)
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute a dry run')
             ->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> migrates files from one IO repository
-to another.
+to another. It can for example be used to migrate local files from the default
+IO configuration to a new IO configuration, like a clustered setup.
 
-It can for example be used to migrate local files from the default IO
-configuration to a new IO configuration, like a clustered setup.
+<fg=red>NB: This command is experimental. Use with caution!</>
 
 The <info>--from</info> and <info>--to</info> values must be specified as <info><metadata_handler>,<binarydata_handler></info>.
 If <info>--from</info> is omitted, the default IO configuration will be used.
