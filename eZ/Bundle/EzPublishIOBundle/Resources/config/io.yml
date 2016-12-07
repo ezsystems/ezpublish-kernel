@@ -1,6 +1,6 @@
 parameters:
     ezpublish.core.io.command.migrate_files.class: eZ\Bundle\EzPublishIOBundle\Command\MigrateFilesCommand
-    ezpublish.core.io.migration.file_lister_registry.class: eZ\Bundle\EzPublishIOBundle\Migration\FileListerRegistry\IdentifierBased
+    ezpublish.core.io.migration.file_lister_registry.class: eZ\Bundle\EzPublishIOBundle\Migration\FileListerRegistry\ConfigurableRegistry
     ezpublish.core.io.migration.file_lister.binary_file_lister.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\BinaryFileLister
     ezpublish.core.io.migration.file_lister.image_file_lister.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\ImageFileLister
     ezpublish.core.io.migration.file_lister.media_file_lister.class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\BinaryFileLister
@@ -57,7 +57,7 @@ services:
         parent: ezpublish.core.io.migration.migration_handler
         arguments:
             - "@ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list"
-            - "@ezpublish.image_alias.variation_path_generator.original_directory"
+            - "@ezpublish.image_alias.variation_path_generator"
             - "@liip_imagine.filter.configuration"
             - "%ezsettings.default.image.published_images_dir%"
         tags:

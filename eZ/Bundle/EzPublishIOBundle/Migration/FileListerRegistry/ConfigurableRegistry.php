@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the IdentifierBased class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -12,9 +10,9 @@ use eZ\Bundle\EzPublishIOBundle\Migration\FileListerRegistry;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
- * A registry of FileListerInterfaces that uses an identifier string to identify the lister.
+ * A registry of FileListerInterfaces which is configurable via the array passed to its constructor.
  */
-final class IdentifierBased implements FileListerRegistry
+final class ConfigurableRegistry implements FileListerRegistry
 {
     /** @var \eZ\Bundle\EzPublishIOBundle\Migration\FileListerInterface[] */
     private $registry = [];

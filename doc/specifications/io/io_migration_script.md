@@ -1,7 +1,8 @@
 # IO migration
 
-> Added in 6.7 / 2016.12
-> NB: This feature is experimental, for the time being. Use with caution!
+> Added in 6.8
+
+**NB: This feature is experimental, for the time being. Use with caution!**
 
 ### Context
 This document describes a command script that can migrate binary files
@@ -10,20 +11,19 @@ from an IO repository to another.
 A common use-case is to migrate local files, stored with the default IO
 configuration, to a new IO configuration.
 
-### 
 We will consider the following IO configuration for this document:
 
 ```yaml
 ez_io:
     binarydata_handlers:
-        // native binarydata handler, filesystem
+        # native binarydata handler, filesystem
         default:
         nfs:
             flysystem:
                 adapter: nfs_adapter
         aws_s3:
     metadata_handlers:
-        // native metadata handler, filesystem
+        # native metadata handler, filesystem
         default:
         dfs:
             legacy_dfs_cluster:
@@ -39,7 +39,7 @@ ezpublish:
 ```
 
 ### Console script
-Migrating is done by running the `ezplatform:io:migrate-files` console script:
+Migrating is done by running the `ezplatform:io:migrate-files` console script
 from one set of io handlers to another:
 ```
 php app/console ezplatform:io:migrate-files
@@ -51,8 +51,9 @@ Migration expects that IO handlers specified in the `from` and `to`
 arguments are configured in the `ez_io` section.
 
 Without any argument, the command migrates files from the `default`
-io handlers, that use the filesystem for storage. With the configuration
-above, executing the script without any argument would be like running:
+io handlers, which use the filesystem for storage, to the first defined
+non-default io handlers. With the configuration above, executing the script
+without any argument would be like running:
 
 `php app/console ezplatform:io:migrate-files --from=default,default --to=nfs,dfs`
 
@@ -65,7 +66,7 @@ migrate files from DFS to AWS/S3.
 
 Other script options are:
 ```
---list-io-configs          List available IO configurations
+--list-io-handlers         List available IO handlers
 --bulk-count=BULK-COUNT    Number of files processed at once [default: 100]
 --dry-run                  Execute a dry run
 ```

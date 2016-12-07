@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the MigrationHandler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -11,16 +9,19 @@ namespace eZ\Bundle\EzPublishIOBundle\Migration;
 use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
 use Psr\Log\LoggerInterface;
 
+/**
+ * The migration handler sets up from/to IO data handlers, and provides logging, for file migrators and listers.
+ */
 abstract class MigrationHandler implements MigrationHandlerInterface
 {
     /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
-    protected $metadataHandlerFactory;
+    private $metadataHandlerFactory;
 
     /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
-    protected $binarydataHandlerFactory;
+    private $binarydataHandlerFactory;
 
     /** @var \Psr\Log\LoggerInterface */
-    protected $logger;
+    private $logger;
 
     /** @var \eZ\Publish\Core\IO\IOMetadataHandler */
     protected $fromMetadataHandler;

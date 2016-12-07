@@ -10,6 +10,9 @@ namespace eZ\Bundle\EzPublishIOBundle\Migration;
 
 use eZ\Publish\SPI\IO\BinaryFile;
 
+/**
+ * Interface for file migrators, mandates the migrateFile method.
+ */
 interface FileMigratorInterface extends MigrationHandlerInterface
 {
     /**

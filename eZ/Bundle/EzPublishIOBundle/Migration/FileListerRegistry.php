@@ -14,11 +14,6 @@ namespace eZ\Bundle\EzPublishIOBundle\Migration;
 interface FileListerRegistry
 {
     /**
-     * @param \eZ\Bundle\EzPublishIOBundle\Migration\FileListerInterface[] $items Hash of FileListerInterfaces, with identifier string as key.
-     */
-    public function __construct(array $items = []);
-
-    /**
      * Returns the FileListerInterface matching the argument.
      *
      * @param string $identifier An identifier string.

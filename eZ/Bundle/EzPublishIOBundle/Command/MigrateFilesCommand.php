@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the MigrateFilesCommand class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -35,15 +33,19 @@ final class MigrateFilesCommand extends Command
     private $fileMigrator;
 
     public function __construct(
-        $configuredMetadataHandlers,
-        $configuredBinarydataHandlers,
+        array $configuredMetadataHandlers,
+        array $configuredBinarydataHandlers,
         FileListerRegistry $fileListerRegistry,
         FileMigratorInterface $fileMigrator
     ) {
         $this->configuredMetadataHandlers = $configuredMetadataHandlers;
         $this->configuredBinarydataHandlers = $configuredBinarydataHandlers;
-        $this->configuredMetadataHandlers['default'] = [];
-        $this->configuredBinarydataHandlers['default'] = [];
+        if (!array_key_exists('default', $this->configuredMetadataHandlers)) {
+            $this->configuredMetadataHandlers['default'] = [];
+        }
+        if (!array_key_exists('default', $this->configuredBinarydataHandlers)) {
+            $this->configuredBinarydataHandlers['default'] = [];
+        }
 
         $this->fileListerRegistry = $fileListerRegistry;
         $this->fileMigrator = $fileMigrator;
@@ -62,7 +64,7 @@ final class MigrateFilesCommand extends Command
             ->setDescription('Migrates files from one IO repository to another')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'Migrate from <from_metadata_handler>,<from_binarydata_handler>')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'Migrate to <to_metadata_handler>,<to_binarydata_handler>')
-            ->addOption('list-io-configs', null, InputOption::VALUE_NONE, 'List available IO configurations')
+            ->addOption('list-io-handlers', null, InputOption::VALUE_NONE, 'List available IO handlers')
             ->addOption('bulk-count', null, InputOption::VALUE_REQUIRED, 'Number of files processed at once', 100)
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute a dry run')
             ->setHelp(
@@ -90,7 +92,7 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('list-io-configs')) {
+        if ($input->getOption('list-io-handlers')) {
             $this->outputConfiguredHandlers($output);
 
             return;
@@ -146,7 +148,8 @@ EOT
         );
 
         $output->writeln([
-            'Total number of files to update: ' . ($totalCount === null ? 'unknown' : $totalCount),
+            'Total number of files to migrate: ' . ($totalCount === null ? 'unknown' : $totalCount),
+            'This number does not include image aliases, but they will also be migrated.',
             '',
         ]);
 
@@ -301,5 +304,11 @@ EOT
         $progress->finish();
 
         $output->writeln("\n\nFinished processing $elapsedFileCount files.");
+        if ($totalFileCount && $totalFileCount > $elapsedFileCount) {
+            $output->writeln([
+                'Files that could not be migrated: ' . ($totalFileCount - $elapsedFileCount),
+                '',
+            ]);
+        }
     }
 }
