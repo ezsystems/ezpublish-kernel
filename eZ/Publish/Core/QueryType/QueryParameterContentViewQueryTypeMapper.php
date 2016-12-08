@@ -61,13 +61,22 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
 
     /**
      * @param ContentView $contentView
-     * @param string $queryParameterValue
+     * @param string|array $queryParameterValue
      *
      * @return mixed
      */
     private function evaluateExpression(ContentView $contentView, $queryParameterValue)
     {
-        if (substr($queryParameterValue, 0, 2) === '@=') {
+        if (is_array($queryParameterValue)) {
+            $queryParameters = [];
+            foreach ($queryParameterValue as $name => $value) {
+                $queryParameters[$name] = $this->evaluateExpression($contentView, $value);
+            }
+
+            return $queryParameters;
+        }
+
+        if (is_string($queryParameterValue) && substr($queryParameterValue, 0, 2) === '@=') {
             $language = new ExpressionLanguage();
 
             return $language->evaluate(
@@ -78,8 +87,8 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
                     'content' => $contentView->getContent(),
                 ]
             );
-        } else {
-            return $queryParameterValue;
         }
+
+        return $queryParameterValue;
     }
 }
