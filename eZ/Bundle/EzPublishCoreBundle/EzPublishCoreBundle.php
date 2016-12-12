@@ -21,7 +21,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterSearchEngineIndexerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterSearchEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass;
@@ -64,7 +63,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new RegisterStorageEnginePass());
         $container->addCompilerPass(new RegisterSearchEnginePass());
         $container->addCompilerPass(new RegisterSearchEngineIndexerPass());
-        $container->addCompilerPass(new LegacyStorageEnginePass());
         $container->addCompilerPass(new LocalePass());
         $container->addCompilerPass(new ContentViewPass());
         $container->addCompilerPass(new LocationViewPass());
