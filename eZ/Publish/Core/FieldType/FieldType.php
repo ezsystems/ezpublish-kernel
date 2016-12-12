@@ -252,8 +252,6 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * @deprecated since 6.7, use {@see \eZ\Publish\SPI\FieldType\Indexable::getDefaultSortField} instead.
-     *
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * Return value is mixed. It should be something which is sensible for
@@ -264,6 +262,8 @@ abstract class FieldType implements FieldTypeInterface
      *
      * For the legacy storage it is up to the field converters to set this
      * value in either sort_key_string or sort_key_int.
+     *
+     * @deprecated since 6.8
      *
      * @param \eZ\Publish\Core\FieldType\Value $value
      *
@@ -308,10 +308,10 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * @deprecated since 6.7, discover how the field type is searchable from
-     *             \eZ\Publish\SPI\FieldType\Indexable implementation for the field type.
-     *
      * Returns whether the field type is searchable.
+     *
+     * @deprecated since 6.8, discover how the field type is searchable from
+     *             \eZ\Publish\SPI\FieldType\Indexable implementation for the field type.
      *
      * @return bool
      */
