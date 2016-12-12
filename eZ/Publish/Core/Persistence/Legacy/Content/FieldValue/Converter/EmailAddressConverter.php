@@ -23,6 +23,8 @@ class EmailAddressConverter implements Converter
      *
      * Note: Class should instead be configured as service if it gains dependencies.
      *
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddressConverter
      */
     public static function create()

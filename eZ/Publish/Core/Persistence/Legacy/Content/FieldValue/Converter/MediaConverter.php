@@ -20,7 +20,9 @@ class MediaConverter extends BinaryFileConverter
      *
      * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return MediaConverter
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MediaConverter
      */
     public static function create()
     {
