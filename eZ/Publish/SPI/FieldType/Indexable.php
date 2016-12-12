@@ -18,9 +18,9 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 interface Indexable
 {
     /**
-     * @deprecated since 6.7, use getFullTextData and/or getFilterData instead.
-     *
      * Get index data for field for search backend.
+     *
+     * @deprecated since 6.8, use getFullTextData and/or getFilterData instead.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
