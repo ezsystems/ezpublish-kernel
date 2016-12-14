@@ -365,16 +365,17 @@ class StandardMapper implements MapperInterface
         }
 
         $fullTextData = $fieldType->getFullTextData($field, $fieldDefinition);
-        foreach ($fullTextData as $fullTextValue) {
+        if (!empty($fullTextData)) {
             $name = $this->fieldNameGenerator->getName(
                 'fulltext',
                 $fieldDefinition->identifier,
                 $contentType->identifier
             );
+            // reuse FieldType\MultipleStringField since $fullTextData is an array of strings
             $searchFields[] = new Field(
                 $name . '_meta_all_' . str_replace('-', '_', $languageCode),
-                $fullTextValue,
-                new FieldType\FullTextField()
+                $fullTextData,
+                new FieldType\MultipleStringField()
             );
         }
 
