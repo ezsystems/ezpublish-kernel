@@ -37,7 +37,7 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
         $queryOptions = $contentView->getParameter('query');
         $queryType = $this->queryTypeRegistry->getQueryType($queryOptions['query_type']);
 
-        return $queryType->getQuery($this->extractParameters($contentView));
+        return $queryType->getQuery($this->extractParametersFromContentView($contentView));
     }
 
     /**
@@ -45,15 +45,14 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
      *
      * @return array
      */
-    private function extractParameters(ContentView $contentView)
+    private function extractParametersFromContentView(ContentView $contentView)
     {
         $queryParameters = [];
 
         $queryOptions = $contentView->getParameter('query');
         if (isset($queryOptions['parameters'])) {
             foreach ($queryOptions['parameters'] as $name => $value) {
-                $queryParameters[$name] = is_array($value) ?
-                    $this->processParametersArray($contentView, $value) : $this->evaluateExpression($contentView, $value);
+                $queryParameters[$name] = $this->extractParameters($contentView, $value);
             }
         }
 
@@ -62,18 +61,22 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
 
     /**
      * @param ContentView $contentView
-     * @param array $queryParametersArray
+     * @param array $queryParameterValue
      *
-     * @return array
+     * @return array|string
      */
-    private function processParametersArray(ContentView $contentView, $queryParametersArray)
+    private function extractParameters(ContentView $contentView, $queryParameterValue)
     {
-        $queryParameters = [];
-        foreach ($queryParametersArray as $name => $value) {
-            $queryParameters[$name] = $this->evaluateExpression($contentView, $value);
+        if (is_array($queryParameterValue)) {
+            $queryParameters = [];
+            foreach ($queryParameterValue as $name => $value) {
+                $queryParameters[$name] = $this->extractParameters($contentView, $value);
+            }
+
+            return $queryParameters;
         }
 
-        return $queryParameters;
+        return $this->evaluateExpression($contentView, $queryParameterValue);
     }
 
     /**
