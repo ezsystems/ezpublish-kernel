@@ -4461,6 +4461,13 @@ class SearchServiceTest extends BaseTest
      */
     public function testFulltextLocationSearchComplex(array $data)
     {
+        $setupFactory = $this->getSetupFactory();
+        if ($setupFactory instanceof LegacyElasticsearch) {
+            $this->markTestIncomplete(
+                'Fulltext criterion is not supported with Location search in Elasticsearch engine'
+            );
+        }
+
         // Do not initialize from scratch
         $repository = $this->getRepository(false);
         list($criterion, $content1, $content2, $content3) = $data;
