@@ -58,7 +58,7 @@ class Collection extends Handler
         switch ($criterion->operator) {
             case Criterion\Operator::CONTAINS:
                 $quotedColumn = $this->dbHandler->quoteColumn($column);
-                $value = $this->lowerCase($criterion->value);
+                $value = $this->prepareLikeString($criterion->value);
                 $filter = $query->expr->lOr(
                     array(
                         $query->expr->eq(
