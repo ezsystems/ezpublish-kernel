@@ -8712,6 +8712,13 @@ Country�</literallayout></para></section>
       'original_id' => '0',
       'role_id' => '5',
     ),
+    51 => array(
+      'function_name' => 'publish',
+      'id' => '378',
+      'module_name' => 'content',
+      'original_id' => '0',
+      'role_id' => '3',
+    ),
   ),
   'ezpolicy_limitation' => array(
     0 => array(

@@ -500,9 +500,9 @@ class UserHandlerTest extends TestCase
         );
 
         $this->assertQueryResult(
-            [[implode("\n", array_fill(0, 27, '3, ' . APIRole::STATUS_DEFINED))]],
+            [[implode("\n", array_fill(0, 28, '3, ' . APIRole::STATUS_DEFINED))]],
             $this->handler->createSelectQuery()->select('role_id, original_id')->from('ezpolicy')->where('role_id = 3'),
-            'Expected 27 policies for the published role.'
+            'Expected 28 policies for the published role.'
         );
 
         $this->assertQueryResult(

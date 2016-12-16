@@ -122,14 +122,22 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Give Anonymous user role additional rights
         $role = $roleService->loadRoleByIdentifier('Anonymous');
+        $roleDraft = $roleService->createRoleDraft($role);
         $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreateStruct->addLimitation(new SectionLimitation(array('limitationValues' => array(1))));
         $policyCreateStruct->addLimitation(new LocationLimitation(array('limitationValues' => array(2))));
         $policyCreateStruct->addLimitation(new ContentTypeLimitation(array('limitationValues' => array(1))));
-        $roleService->addPolicy($role, $policyCreateStruct);
+        $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+
+        $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'publish');
+        $policyCreateStruct->addLimitation(new SectionLimitation(array('limitationValues' => array(1))));
+        $policyCreateStruct->addLimitation(new LocationLimitation(array('limitationValues' => array(2))));
+        $policyCreateStruct->addLimitation(new ContentTypeLimitation(array('limitationValues' => array(1))));
+        $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
 
         // Set Anonymous user as current
-        $repository->setCurrentUser($repository->getUserService()->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($repository->getUserService()->loadUser($anonymousUserId));
 
         // Create a new content object:
         $contentCreate = $contentService->newContentCreateStruct(
