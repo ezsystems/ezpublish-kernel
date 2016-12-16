@@ -87,7 +87,7 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
      */
     private function evaluateExpression(ContentView $contentView, $queryParameterValue)
     {
-        if (substr($queryParameterValue, 0, 2) === '@=') {
+        if (is_string($queryParameterValue) && substr($queryParameterValue, 0, 2) === '@=') {
             $language = new ExpressionLanguage();
 
             return $language->evaluate(
