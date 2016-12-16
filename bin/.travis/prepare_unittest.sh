@@ -42,6 +42,9 @@ if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
     echo "> Require ezsystems/ezplatform-solr-search-engine:^1.0.0@dev"
     composer require --no-update ezsystems/ezplatform-solr-search-engine:^1.0.0@dev
     COMPOSER_UPDATE="true"
+
+    # Because of either some changes in travis, composer or git, composer is not able to pick version for "self" on inclusion of solr anymore, so we force it:
+    export COMPOSER_ROOT_VERSION=`php -r 'echo json_decode(file_get_contents("./composer.json"), true)["extra"]["branch-alias"]["dev-tmp_ci_branch"];'`
 fi
 
 # Switch to another Symfony version if asked for

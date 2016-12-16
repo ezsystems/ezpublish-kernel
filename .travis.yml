@@ -67,6 +67,8 @@ branches:
 
 # setup requirements for running unit/integration/behat tests
 before_script:
+  # Disable memory_limit for composer in PHP 5.6
+  - echo "memory_limit=-1" >> ~/.phpenv/versions/5.6/etc/conf.d/travis.ini
   # Prepare system
   - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
   - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
