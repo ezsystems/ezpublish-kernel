@@ -1440,12 +1440,8 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
-        if (!$content->getVersionInfo()->getContentInfo()->published) {
-            if (!$this->repository->canUser('content', 'create', $content)) {
-                throw new UnauthorizedException('content', 'create', array('contentId' => $content->id));
-            }
-        } elseif (!$this->repository->canUser('content', 'edit', $content)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $content->id));
+        if (!$this->repository->canUser('content', 'publish', $content)) {
+            throw new UnauthorizedException('content', 'publish', array('contentId' => $content->id));
         }
 
         $this->repository->beginTransaction();
