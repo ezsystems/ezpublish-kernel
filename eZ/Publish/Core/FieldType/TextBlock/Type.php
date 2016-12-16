@@ -119,11 +119,14 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\TextBlock\Value $value
      *
-     * @return array
+     * @return string
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        return $this->transformationProcessor->transformByGroup(
+            mb_substr(strtok(trim($value->text), "\r\n"), 0, 255),
+            'lowercase'
+        );
     }
 
     /**
@@ -165,7 +168,7 @@ class Type extends FieldType
      */
     public function isSearchable()
     {
-        return false;
+        return true;
     }
 
     /**
