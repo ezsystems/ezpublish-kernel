@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
@@ -22,9 +20,11 @@ class ISBNConverter implements Converter
     /**
      * Factory for current class.
      *
-     * @note Class should instead be configured as service if it gains dependencies.
+     * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return ISBN
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ISBNConverter
      */
     public static function create()
     {

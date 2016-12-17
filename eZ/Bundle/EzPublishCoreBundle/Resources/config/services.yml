@@ -197,3 +197,36 @@ services:
 
     ez_query:
         alias: ezpublish.controller.query
+
+    ezplatform.core.jms_translation.catalog_mapper_file_writer:
+        class: eZ\Publish\Core\MVC\Symfony\Translation\CatalogueMapperFileWriter
+        decorates: jms_translation.file_writer
+        arguments:
+            - "@ezplatform.core.jms_translation.catalog_mapper_file_writer.inner"
+            - "@jms_translation.loader_manager"
+        public: false
+
+    ezplatform.core.translation.extractor.fieldtypes:
+        class: eZ\Publish\Core\MVC\Symfony\Translation\FieldTypesTranslationExtractor
+        arguments:
+            - "@ezpublish.field_type_collection.factory"
+        tags:
+            - { name: jms_translation.extractor, alias: ez_fieldtypes }
+
+    ezplatform.core.translation.file_visitor.exception_message_template:
+        parent: jms_translation.extractor.file.default_php_extractor
+        class: eZ\Publish\Core\MVC\Symfony\Translation\ExceptionMessageTemplateFileVisitor
+        tags:
+            - { name: jms_translation.file_visitor, alias: ez_exception_message_template }
+
+    ezplatform.core.translation.file_visitor.translatable_exceptions:
+        parent: jms_translation.extractor.file.default_php_extractor
+        class: eZ\Publish\Core\MVC\Symfony\Translation\TranslatableExceptionsFileVisitor
+        tags:
+            - { name: jms_translation.file_visitor, alias: ez_translatable_exception }
+
+    ezplatform.core.translation.file_visitor.validation_errors:
+        parent: jms_translation.extractor.file.default_php_extractor
+        class: eZ\Publish\Core\MVC\Symfony\Translation\ValidationErrorFileVisitor
+        tags:
+            - { name: jms_translation.file_visitor, alias: ez_validation_error }

@@ -91,21 +91,6 @@ class Handler implements UrlAliasHandlerInterface
         $this->slugConverter = $slugConverter;
     }
 
-    /**
-     * This method creates or updates an urlalias from a new or changed content name in a language
-     * (if published). It also can be used to create an alias for a new location of content.
-     * On update the old alias is linked to the new one (i.e. a history alias is generated).
-     *
-     * $alwaysAvailable controls whether the url alias is accessible in all
-     * languages.
-     *
-     * @param mixed $locationId
-     * @param mixed $parentLocationId
-     * @param string $name the new name computed by the name schema or url alias schema
-     * @param string $languageCode
-     * @param bool $alwaysAvailable
-     * @param bool $updatePathIdentificationString legacy storage specific for updating ezcontentobject_tree.path_identification_string
-     */
     public function publishUrlAliasForLocation(
         $locationId,
         $parentLocationId,
@@ -114,10 +99,44 @@ class Handler implements UrlAliasHandlerInterface
         $alwaysAvailable = false,
         $updatePathIdentificationString = false
     ) {
+        $languageId = $this->languageHandler->loadByLanguageCode($languageCode)->id;
+
+        $this->internalPublishUrlAliasForLocation(
+            $locationId,
+            $parentLocationId,
+            $name,
+            $languageId,
+            $alwaysAvailable,
+            $updatePathIdentificationString
+        );
+    }
+
+    /**
+     * Internal publish method, accepting language ID instead of language code and optionally
+     * new alias ID (used when swapping Locations).
+     *
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationSwapped()
+     *
+     * @param int $locationId
+     * @param int $parentLocationId
+     * @param string $name
+     * @param int $languageId
+     * @param bool $alwaysAvailable
+     * @param bool $updatePathIdentificationString legacy storage specific for updating ezcontentobject_tree.path_identification_string
+     * @param int $newId
+     */
+    private function internalPublishUrlAliasForLocation(
+        $locationId,
+        $parentLocationId,
+        $name,
+        $languageId,
+        $alwaysAvailable = false,
+        $updatePathIdentificationString = false,
+        $newId = null
+    ) {
         $parentId = $this->getRealAliasId($parentLocationId);
         $name = $this->slugConverter->convert($name, 'location_' . $locationId);
         $uniqueCounter = $this->slugConverter->getUniqueCounterValue($name, $parentId == 0);
-        $languageId = $this->languageHandler->loadByLanguageCode($languageCode)->id;
         $languageMask = $languageId | (int)$alwaysAvailable;
         $action = 'eznode:' . $locationId;
         $cleanup = false;
@@ -140,21 +159,33 @@ class Handler implements UrlAliasHandlerInterface
                 if (!empty($existingLocationEntry)) {
                     $cleanup = true;
                     $newId = $existingLocationEntry['id'];
-                } else {
-                    $newId = null;
                 }
 
-                $newId = $this->gateway->insertRow(
-                    array(
-                        'id' => $newId,
-                        'link' => $newId,
-                        'parent' => $parentId,
-                        'action' => $action,
-                        'lang_mask' => $languageMask,
-                        'text' => $newText,
-                        'text_md5' => $newTextMD5,
-                    )
-                );
+                try {
+                    $newId = $this->gateway->insertRow(
+                        array(
+                            'id' => $newId,
+                            'link' => $newId,
+                            'parent' => $parentId,
+                            'action' => $action,
+                            'lang_mask' => $languageMask,
+                            'text' => $newText,
+                            'text_md5' => $newTextMD5,
+                        )
+                    );
+                } catch (\RuntimeException $e) {
+                    while ($e->getPrevious() !== null) {
+                        $e = $e->getPrevious();
+                        if ($e instanceof UniqueConstraintViolationException) {
+                            // Concurrency! someone else inserted the same row that we where going to.
+                            // let's do another loop pass
+                            $uniqueCounter += 1;
+                            continue 2;
+                        }
+                    }
+
+                    throw $e;
+                }
 
                 break;
             }
@@ -168,17 +199,20 @@ class Handler implements UrlAliasHandlerInterface
                 // entry id then reusable entry should be updated with the existing location entry id.
                 // Note: existing location entry may be downgraded and relinked later, depending on its language.
                 $existingLocationEntry = $this->gateway->loadAutogeneratedEntry($action, $parentId);
-                $newId = $row['id'];
+
                 if (!empty($existingLocationEntry)) {
                     // Always cleanup when active autogenerated entry exists on the same level
                     $cleanup = true;
-                    if ($existingLocationEntry['id'] != $row['id']) {
-                        $newId = $existingLocationEntry['id'];
-                    } else {
+                    $newId = $existingLocationEntry['id'];
+                    if ($existingLocationEntry['id'] == $row['id']) {
                         // If we are reusing existing location entry merge existing language mask
                         $languageMask |= ($row['lang_mask'] & ~1);
                     }
+                } elseif ($newId === null) {
+                    // Use reused row ID only if publishing normally, else use given $newId
+                    $newId = $row['id'];
                 }
+
                 $this->gateway->updateRow(
                     $parentId,
                     $newTextMD5,
@@ -208,6 +242,7 @@ class Handler implements UrlAliasHandlerInterface
             $uniqueCounter += 1;
         }
 
+        /* @var $newText */
         if ($updatePathIdentificationString) {
             $this->locationGateway->updatePathIdentificationString(
                 $locationId,
@@ -547,7 +582,7 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     * Notifies the underlying engine that a location has moved.
+     * Notifies the underlying engine that a location was copied.
      *
      * This method triggers the creation of the autogenerated aliases for the copied locations
      *
@@ -565,9 +600,109 @@ class Handler implements UrlAliasHandlerInterface
         $this->copySubtree(
             $actionMap,
             $oldParentAliasId,
-            $newParentAliasId,
-            $locationId
+            $newParentAliasId
         );
+    }
+
+    public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)
+    {
+        $location1Entries = $this->gateway->loadLocationEntries($location1Id);
+        $location2Entries = $this->gateway->loadLocationEntries($location2Id);
+
+        $location1MainLanguageId = $this->gateway->getLocationContentMainLanguageId($location1Id);
+        $location2MainLanguageId = $this->gateway->getLocationContentMainLanguageId($location2Id);
+
+        // Load autogenerated entries to find alias ID
+        $autoLocation1 = $this->gateway->loadAutogeneratedEntry("eznode:{$location1Id}");
+        $autoLocation2 = $this->gateway->loadAutogeneratedEntry("eznode:{$location2Id}");
+
+        // Historize everything first to avoid name conflicts in case swapped Locations are siblings
+        $this->historizeBeforeSwap($location1Entries, $location2Entries);
+
+        foreach ($location2Entries as $row) {
+            $alwaysAvailable = (bool)($row['lang_mask'] & 1);
+            $languageIds = $this->extractLanguageIdsFromMask($row['lang_mask']);
+
+            foreach ($languageIds as $languageId) {
+                $isMainLanguage = $languageId == $location2MainLanguageId;
+                $this->internalPublishUrlAliasForLocation(
+                    $location1Id,
+                    $location1ParentId,
+                    $row['text'],
+                    $languageId,
+                    $isMainLanguage && $alwaysAvailable,
+                    $isMainLanguage,
+                    $autoLocation1['id']
+                );
+            }
+        }
+
+        foreach ($location1Entries as $row) {
+            $alwaysAvailable = (bool)($row['lang_mask'] & 1);
+            $languageIds = $this->extractLanguageIdsFromMask($row['lang_mask']);
+
+            foreach ($languageIds as $languageId) {
+                $isMainLanguage = $languageId == $location1MainLanguageId;
+                $this->internalPublishUrlAliasForLocation(
+                    $location2Id,
+                    $location2ParentId,
+                    $row['text'],
+                    $languageId,
+                    $isMainLanguage && $alwaysAvailable,
+                    $isMainLanguage,
+                    $autoLocation2['id']
+                );
+            }
+        }
+    }
+
+    /**
+     * Historizes given existing active entries for two swapped Locations.
+     *
+     * This should be done before republishing URL aliases, in order to avoid unnecessary
+     * conflicts when swapped Locations are siblings.
+     *
+     * We need to historize everything separately per language (mask), in case the entries
+     * remain history future publishing reusages need to be able to take them over cleanly.
+     *
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationSwapped()
+     *
+     * @param array $location1Entries
+     * @param array $location2Entries
+     */
+    private function historizeBeforeSwap($location1Entries, $location2Entries)
+    {
+        foreach ($location1Entries as $row) {
+            $this->gateway->historizeBeforeSwap($row['action'], $row['lang_mask']);
+        }
+
+        foreach ($location2Entries as $row) {
+            $this->gateway->historizeBeforeSwap($row['action'], $row['lang_mask']);
+        }
+    }
+
+    /**
+     * Extracts every language Ids contained in $languageMask.
+     *
+     * @param int $languageMask
+     *
+     * @return int[] An array of language IDs
+     */
+    private function extractLanguageIdsFromMask($languageMask)
+    {
+        $exp = 2;
+        $languageIds = [];
+
+        // Decomposition of $languageMask into its binary components.
+        while ($exp <= $languageMask) {
+            if ($languageMask & $exp) {
+                $languageIds[] = $exp;
+            }
+
+            $exp *= 2;
+        }
+
+        return $languageIds;
     }
 
     /**

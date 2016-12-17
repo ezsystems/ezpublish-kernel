@@ -114,7 +114,8 @@ class ContentService implements ContentServiceInterface
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
-            //'defaultSetting' => array(),
+            // Version archive limit (0-50), only enforced on publish, not on un-publish.
+            'default_version_archive_limit' => 5,
         );
     }
 
@@ -1421,6 +1422,9 @@ class ContentService implements ContentServiceInterface
     /**
      * Publishes a content version.
      *
+     * Publishes a content version and deletes archive versions if they overflow max archive versions.
+     * Max archive versions are currently a configuration, but might be moved to be a param of ContentType in the future.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
@@ -1459,6 +1463,9 @@ class ContentService implements ContentServiceInterface
     /**
      * Publishes a content version.
      *
+     * Publishes a content version and deletes archive versions if they overflow max archive versions.
+     * Max archive versions are currently a configuration, but might be moved to be a param of ContentType in the future.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -1481,14 +1488,33 @@ class ContentService implements ContentServiceInterface
         $metadataUpdateStruct->publicationDate = $publicationDate;
         $metadataUpdateStruct->modificationDate = $currentTime;
 
+        $contentId = $versionInfo->getContentInfo()->id;
         $spiContent = $this->persistenceHandler->contentHandler()->publish(
-            $versionInfo->getContentInfo()->id,
+            $contentId,
             $versionInfo->versionNo,
             $metadataUpdateStruct
         );
+
         $content = $this->domainMapper->buildContentDomainObject($spiContent);
 
         $this->publishUrlAliasesForContent($content);
+
+        // Delete version archive overflow if any, limit is 0-50 (however 0 will mean 1 if content is unpublished)
+        $archiveList = $this->persistenceHandler->contentHandler()->listVersions(
+            $contentId,
+            APIVersionInfo::STATUS_ARCHIVED,
+            100 // Limited to avoid publishing taking to long, besides SE limitations this is why limit is max 50
+        );
+
+        $maxVersionArchiveCount = max(0, min(50, $this->settings['default_version_archive_limit']));
+        while (!empty($archiveList) && count($archiveList) > $maxVersionArchiveCount) {
+            /** @var \eZ\Publish\SPI\Persistence\Content\VersionInfo $archiveVersion */
+            $archiveVersion = array_shift($archiveList);
+            $this->persistenceHandler->contentHandler()->deleteVersion(
+                $contentId,
+                $archiveVersion->versionNo
+            );
+        }
 
         return $content;
     }
@@ -1520,7 +1546,9 @@ class ContentService implements ContentServiceInterface
         }
 
         $versionList = $this->persistenceHandler->contentHandler()->listVersions(
-            $versionInfo->contentInfo->id
+            $versionInfo->contentInfo->id,
+            null,
+            2
         );
 
         if (count($versionList) === 1) {

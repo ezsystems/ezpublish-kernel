@@ -5,6 +5,12 @@ clone_folder: c:\projects\ezpublish-kernel
 skip_commits:
     message: /\[skip ci\]/i
 
+# test only master, stable branches and pull requests
+branches:
+    only:
+        - master
+        - /^\d.\d+$/
+
 init:
     - SET PATH=c:\php;%PATH%
     - SET COMPOSER_NO_INTERACTION=1

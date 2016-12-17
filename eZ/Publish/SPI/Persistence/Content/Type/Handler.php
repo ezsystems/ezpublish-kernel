@@ -130,7 +130,6 @@ interface Handler
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      */
     public function delete($contentTypeId, $status);
 

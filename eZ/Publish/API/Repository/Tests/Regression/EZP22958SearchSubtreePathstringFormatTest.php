@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * @issue EZP-21906
+ * Issue EZP-21906.
  */
 class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
 {

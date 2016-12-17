@@ -47,8 +47,6 @@ class MapLocationDistance extends FieldBase
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      *
-     * @caching
-     *
      * @param string $fieldIdentifier
      *
      * @return array

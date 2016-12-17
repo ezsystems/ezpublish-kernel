@@ -19,9 +19,11 @@ class KeywordConverter implements Converter
     /**
      * Factory for current class.
      *
-     * @note Class should instead be configured as service if it gains dependencies.
+     * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return Keyword
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter
      */
     public static function create()
     {
@@ -36,6 +38,7 @@ class KeywordConverter implements Converter
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -47,6 +50,7 @@ class KeywordConverter implements Converter
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = array();
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -80,6 +84,6 @@ class KeywordConverter implements Converter
      */
     public function getIndexColumn()
     {
-        return false;
+        return 'sort_key_string';
     }
 }

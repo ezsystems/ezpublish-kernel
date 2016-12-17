@@ -9,8 +9,6 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
-use eZ\Publish\API\Repository\SearchServiceSortClause as SearchServiceSortClauseInterface;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -18,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 /**
  * SearchService class.
  */
-class SearchService implements SearchServiceInterface, SearchServiceSortClauseInterface
+class SearchService implements SearchServiceInterface
 {
     /**
      * Aggregated service.
@@ -135,17 +133,5 @@ class SearchService implements SearchServiceInterface, SearchServiceSortClauseIn
     public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
         return $this->service->findLocations($query, $languageFilter, $filterOnUserPermissions);
-    }
-
-    /**
-     * Get SortClause built from $location's sort options.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
-     */
-    public function getSortClauseFromLocation(Location $location)
-    {
-        return $this->service->getSortClauseFromLocation($location);
     }
 }

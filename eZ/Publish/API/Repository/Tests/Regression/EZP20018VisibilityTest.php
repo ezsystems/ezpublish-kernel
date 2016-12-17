@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 /**
  * Test case for Visibility issues in EZP-20018.
  *
- * @issue EZP-20018
+ * Issue EZP-20018
  */
 class EZP20018VisibilityTest extends BaseTest
 {

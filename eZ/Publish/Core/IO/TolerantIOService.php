@@ -8,8 +8,9 @@
  */
 namespace eZ\Publish\Core\IO;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
-use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryAbsolutePathException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Psr\Log\LoggerInterface;
@@ -67,14 +68,14 @@ class TolerantIOService extends IOService
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFile|\eZ\Publish\Core\IO\Values\MissingBinaryFile
      *
-     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryAbsolutePathException
      */
     public function loadBinaryFile($binaryFileId)
     {
         $this->checkBinaryFileId($binaryFileId);
 
         if ($this->isAbsolutePath($binaryFileId)) {
-            throw new InvalidBinaryFileIdException($binaryFileId, 'Binary file ids can not begin with a /');
+            throw new InvalidBinaryAbsolutePathException($binaryFileId);
         }
 
         try {
@@ -82,7 +83,10 @@ class TolerantIOService extends IOService
         } catch (BinaryFileNotFoundException $e) {
             $this->logMissingFile($binaryFileId);
 
-            return $this->createMissingBinaryFile($binaryFileId);
+            return new MissingBinaryFile([
+                'id' => $binaryFileId,
+                'uri' => $this->binarydataHandler->getUri($this->getPrefixedUri($binaryFileId)),
+            ]);
         }
 
         if (!isset($spiBinaryFile->uri)) {
@@ -94,29 +98,24 @@ class TolerantIOService extends IOService
 
     public function loadBinaryFileByUri($binaryFileUri)
     {
-        $binaryFileId = $this->removeUriPrefix($this->binarydataHandler->getIdFromUri($binaryFileUri));
+        try {
+            $binaryFileId = $this->removeUriPrefix($this->binarydataHandler->getIdFromUri($binaryFileUri));
+        } catch (InvalidArgumentException $e) {
+            $this->logMissingFile($binaryFileUri);
+
+            return new MissingBinaryFile(['uri' => $binaryFileUri]);
+        }
+
         try {
             return $this->loadBinaryFile($binaryFileId);
         } catch (BinaryFileNotFoundException $e) {
             $this->logMissingFile($binaryFileUri);
 
-            return $this->createMissingBinaryFile($binaryFileId);
-        }
-    }
-
-    /**
-     * @param $binaryFileId
-     *
-     * @return \eZ\Publish\Core\IO\Values\MissingBinaryFile
-     */
-    private function createMissingBinaryFile($binaryFileId)
-    {
-        return new MissingBinaryFile(
-            array(
+            return new MissingBinaryFile([
                 'id' => $binaryFileId,
                 'uri' => $this->binarydataHandler->getUri($this->getPrefixedUri($binaryFileId)),
-            )
-        );
+            ]);
+        }
     }
 
     private function logMissingFile($id)

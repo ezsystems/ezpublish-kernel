@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor;
 use PHPUnit_Framework_TestCase;
 
@@ -57,6 +58,40 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
             $outputSettings,
             $processor->postProcessFieldSettingsHash($inputSettings)
         );
+    }
+
+    public function testpostProcessFieldSettingsHashLocation()
+    {
+        $processor = $this->getProcessor();
+
+        $serviceLocationMock = $this->getMockBuilder('eZ\Publish\API\Repository\LocationService')->getMock();
+        $processor->setLocationService($serviceLocationMock);
+
+        $serviceLocationMock
+            ->method('loadLocation')
+            ->with('42')
+            ->willReturn(new Location(['path' => ['1', '25', '42']]));
+
+        $routerMock = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
+        $processor->setRouter($routerMock);
+
+        $routerMock
+            ->method('generate')
+            ->with('ezpublish_rest_loadLocation', ['locationPath' => '1/25/42'])
+            ->willReturn('/api/ezp/v2/content/locations/1/25/42');
+
+        $hash = $processor->postProcessFieldSettingsHash(['selectionDefaultLocation' => 42]);
+
+        $this->assertEquals([
+            'selectionDefaultLocation' => 42,
+            'selectionDefaultLocationHref' => '/api/ezp/v2/content/locations/1/25/42',
+        ], $hash);
+
+        //empty cases
+        $hash = $processor->postProcessFieldSettingsHash(['selectionDefaultLocation' => '']);
+        $this->assertEquals(['selectionDefaultLocation' => ''], $hash);
+        $hash = $processor->postProcessFieldSettingsHash(['selectionDefaultLocation' => null]);
+        $this->assertEquals(['selectionDefaultLocation' => null], $hash);
     }
 
     public function testPostProcessValueHash()

@@ -25,7 +25,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->converter = MediaConverter::create();
+        $this->converter = new MediaConverter();
     }
 
     /**

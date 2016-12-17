@@ -13,7 +13,7 @@ use Exception;
 /**
  * Invalid Argument Type Exception implementation.
  *
- * @use: throw new InvalidArgument( 'nodes', 'array' );
+ * Usage: throw new InvalidArgument( 'nodes', 'array' );
  */
 class InvalidArgumentValue extends InvalidArgumentException
 {
@@ -29,15 +29,17 @@ class InvalidArgumentValue extends InvalidArgumentException
     {
         $valueStr = is_string($value) ? $value : var_export($value, true);
         $parameters = ['%actualValue%' => $valueStr];
-        $whatIsWrong = "'%actualValue%' is wrong value";
+        $this->setMessageTemplate("'%actualValue%' is wrong value");
         if ($className) {
-            $whatIsWrong .= " in class '%className%'";
+            $this->setMessageTemplate("'%actualValue%' is wrong value in class '%className%'");
             $parameters['%className%'] = $className;
         }
+        $whatIsWrong = $this->getMessageTemplate();
 
         parent::__construct($argumentName, $whatIsWrong, $previous);
 
         // Alter the message template & inject new parameters.
+        /** @Ignore */
         $this->setMessageTemplate(str_replace('%whatIsWrong%', $whatIsWrong, $this->getMessageTemplate()));
         $this->addParameters($parameters);
         $this->message = $this->getBaseTranslation();

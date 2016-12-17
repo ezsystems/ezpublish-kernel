@@ -37,7 +37,7 @@ class StorageEngineFactory
     /**
      * Registers $persistenceHandler as a valid storage engine, with identifier $storageEngineIdentifier.
      *
-     * @note It is strongly recommenced to register a lazy persistent handler.
+     * Note: It is strongly recommenced to register a lazy persistent handler.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param string $storageEngineIdentifier

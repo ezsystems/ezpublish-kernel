@@ -11,6 +11,7 @@ imports:
 
 parameters:
     ezpublish.spi.search.legacy.class: eZ\Publish\Core\Search\Legacy\Content\Handler
+    ezpublish.spi.search.legacy.indexer.class: eZ\Publish\Core\Search\Legacy\Content\Indexer
     ezpublish.search.legacy.gateway.content.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\DoctrineDatabase
     ezpublish.search.legacy.gateway.content.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\ExceptionConversion
     ezpublish.search.legacy.gateway.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
@@ -91,4 +92,15 @@ services:
             - "@ezpublish.search.legacy.fulltext_mapper"
         tags:
             - {name: ezpublish.searchEngine, alias: legacy}
+        lazy: true
+
+    ezpublish.spi.search.legacy.indexer:
+        class: "%ezpublish.spi.search.legacy.indexer.class%"
+        arguments:
+            - "@logger"
+            - "@ezpublish.api.storage_engine"
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.search.legacy"
+        tags:
+            - {name: ezpublish.searchEngineIndexer, alias: legacy}
         lazy: true

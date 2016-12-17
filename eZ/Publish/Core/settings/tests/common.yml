@@ -1,0 +1,3 @@
+services:
+    logger:
+        class: Psr\Log\NullLogger

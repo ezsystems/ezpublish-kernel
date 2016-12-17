@@ -28,7 +28,7 @@ interface Type
      * Currently ACCESS_ABSTAIN must mean that evaluate does not support the provided $object or $targets,
      * this is currently only supported by role limitations as policy limitations should not allow this.
      *
-     * @note In future version constant values might change to 1, 0 and -1 as used in Symfony.
+     * Note: In future version constant values might change to 1, 0 and -1 as used in Symfony.
      *
      * @since 5.3.2
      */

@@ -120,6 +120,10 @@ class BinaryStreamResponse extends Response
             $filename = $this->file->id;
         }
 
+        if (empty($filenameFallback)) {
+            $filenameFallback = mb_convert_encoding($filename, 'ASCII');
+        }
+
         $dispositionHeader = $this->headers->makeDisposition($disposition, $filename, $filenameFallback);
         $this->headers->set('Content-Disposition', $dispositionHeader);
 

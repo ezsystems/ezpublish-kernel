@@ -9,7 +9,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Repository\Mapper\SortClauseMapper;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
@@ -83,19 +82,16 @@ class RepositoryFactory implements ContainerAwareInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
-     * @param \eZ\Publish\Core\Repository\Mapper\SortClauseMapper $sortClauseMapper
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function buildRepository(
-        PersistenceHandler $persistenceHandler,
-        SearchHandler $searchHandler,
-        SortClauseMapper $sortClauseMapper
-    ) {
+    public function buildRepository(PersistenceHandler $persistenceHandler, SearchHandler $searchHandler)
+    {
+        $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
+
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             $searchHandler,
-            $sortClauseMapper,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
@@ -104,6 +100,7 @@ class RepositoryFactory implements ContainerAwareInterface
                     'policyMap' => $this->policyMap,
                 ),
                 'languages' => $this->configResolver->getParameter('languages'),
+                'content' => ['default_version_archive_limit' => $config['options']['default_version_archive_limit']],
             ),
             new UserReference($this->configResolver->getParameter('anonymous_user_id'))
         );

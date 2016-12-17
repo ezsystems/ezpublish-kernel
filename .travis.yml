@@ -4,6 +4,9 @@ sudo: required
 
 language: php
 
+# Workaround for java not started issues: https://github.com/travis-ci/travis-ci/issues/6928
+group: deprecated
+
 services:
   - mysql
   - postgresql
@@ -29,12 +32,9 @@ env:
 matrix:
   fast_finish: true
   include:
-# 5.5
-    - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # 5.6
+    - php: 5.6
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0"
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb" SYMFONY_VERSION="~2.7.0"
     - php: 5.6
@@ -43,30 +43,31 @@ matrix:
     - php: 7.0
       env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=dev SYMFONY_DEBUG=1
     - php: 7.0
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 7.0
       env: BEHAT_OPTS="--profile=rest --suite=fullJson" RUN_INSTALL=1
     - php: 7.0
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0"
     - php: 7.0
       env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="single" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
+# 7.1
+    - php: 7.1
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 7.1
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # hhvm - disabled, no need to enable before travis has newer versions avaiable
 #    - php: hhvm
 #      env: TEST_CONFIG="phpunit.xml"
 
 
-# test only master (+ Pull requests)
+# test only master, stable branches and pull requests
 branches:
   only:
     - master
-    - "6.1"
-    - "6.2"
-    - "6.3"
-    - "6.4"
-    - "6.5"
+    - /^\d.\d+$/
 
 # setup requirements for running unit/integration/behat tests
 before_script:
+  # Disable memory_limit for composer in PHP 5.6
+  - echo "memory_limit=-1" >> ~/.phpenv/versions/5.6/etc/conf.d/travis.ini
   # Prepare system
   - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
   - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi

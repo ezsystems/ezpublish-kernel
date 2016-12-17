@@ -37,7 +37,7 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
         $queryOptions = $contentView->getParameter('query');
         $queryType = $this->queryTypeRegistry->getQueryType($queryOptions['query_type']);
 
-        return $queryType->getQuery($this->extractParameters($contentView));
+        return $queryType->getQuery($this->extractParametersFromContentView($contentView));
     }
 
     /**
@@ -45,18 +45,38 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
      *
      * @return array
      */
-    private function extractParameters(ContentView $contentView)
+    private function extractParametersFromContentView(ContentView $contentView)
     {
         $queryParameters = [];
 
         $queryOptions = $contentView->getParameter('query');
         if (isset($queryOptions['parameters'])) {
             foreach ($queryOptions['parameters'] as $name => $value) {
-                $queryParameters[$name] = $this->evaluateExpression($contentView, $value);
+                $queryParameters[$name] = $this->extractParameters($contentView, $value);
             }
         }
 
         return $queryParameters;
+    }
+
+    /**
+     * @param ContentView $contentView
+     * @param array $queryParameterValue
+     *
+     * @return array|string
+     */
+    private function extractParameters(ContentView $contentView, $queryParameterValue)
+    {
+        if (is_array($queryParameterValue)) {
+            $queryParameters = [];
+            foreach ($queryParameterValue as $name => $value) {
+                $queryParameters[$name] = $this->extractParameters($contentView, $value);
+            }
+
+            return $queryParameters;
+        }
+
+        return $this->evaluateExpression($contentView, $queryParameterValue);
     }
 
     /**
@@ -67,7 +87,7 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
      */
     private function evaluateExpression(ContentView $contentView, $queryParameterValue)
     {
-        if (substr($queryParameterValue, 0, 2) === '@=') {
+        if (is_string($queryParameterValue) && substr($queryParameterValue, 0, 2) === '@=') {
             $language = new ExpressionLanguage();
 
             return $language->evaluate(
@@ -78,8 +98,8 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
                     'content' => $contentView->getContent(),
                 ]
             );
-        } else {
-            return $queryParameterValue;
         }
+
+        return $queryParameterValue;
     }
 }

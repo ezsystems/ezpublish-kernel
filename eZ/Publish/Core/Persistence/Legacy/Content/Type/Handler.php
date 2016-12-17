@@ -328,7 +328,6 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      *
      * @param mixed $contentTypeId
      * @param int $status
@@ -337,16 +336,6 @@ class Handler implements BaseContentTypeHandler
      */
     public function delete($contentTypeId, $status)
     {
-        if (!$this->contentTypeGateway->loadTypeData($contentTypeId, $status)) {
-            throw new NotFoundException(
-                'ContentType',
-                array(
-                    'id' => $contentTypeId,
-                    'status' => $status,
-                )
-            );
-        }
-
         if (Type::STATUS_DEFINED === $status && $this->contentTypeGateway->countInstancesOfType($contentTypeId)) {
             throw new BadStateException(
                 '$contentTypeId',

@@ -16,7 +16,7 @@ use InvalidArgumentException;
 /**
  * A criterion that matches content based on its visibility.
  *
- * @warning This Criterion acts on all locations of a Content, so it will include hidden
+ * Warning: This Criterion acts on all locations of a Content, so it will include hidden
  * content within the tree you are searching for if content has visible location elsewhere.
  * This is intentional and you should rather use LocationSearch if this is not the behaviour you want.
  */

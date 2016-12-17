@@ -184,13 +184,23 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     public function swap($locationId1, $locationId2)
     {
         $this->logger->logCall(__METHOD__, array('location1' => $locationId1, 'location2' => $locationId2));
-        $return = $this->persistenceHandler->locationHandler()->swap($locationId1, $locationId2);
+        $locationHandler = $this->persistenceHandler->locationHandler();
+
+        $return = $locationHandler->swap($locationId1, $locationId2);
 
         $this->cache->clear('location', $locationId1);
         $this->cache->clear('location', $locationId2);
         $this->cache->clear('location', 'subtree');
         $this->cache->clear('content', 'locations');
         $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        // This ensures that Content cache is updated for possible main Location change
+        $location1 = $this->load($locationId1);
+        $location2 = $this->load($locationId2);
+        $this->cache->clear('content', $location1->contentId);
+        $this->cache->clear('content', $location2->contentId);
+        $this->cache->clear('content', 'info', $location1->contentId);
+        $this->cache->clear('content', 'info', $location2->contentId);
 
         return $return;
     }

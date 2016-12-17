@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
-use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException;
 use eZ\Publish\Core\IO\UrlDecorator;
 
 /**
@@ -51,7 +51,7 @@ class Prefix implements UrlDecorator
         }
 
         if (strpos($url, $this->prefix) !== 0) {
-            throw new InvalidBinaryFileIdException($url);
+            throw new InvalidBinaryPrefixException($url, $this->prefix);
         }
 
         return trim(substr($url, strlen($this->prefix)), '/');

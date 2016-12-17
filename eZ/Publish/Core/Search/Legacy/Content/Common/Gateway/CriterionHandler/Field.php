@@ -93,8 +93,6 @@ class Field extends FieldBase
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      * @throws \RuntimeException if no converter is found
      *
-     * @caching
-     *
      * @param string $fieldIdentifier
      *
      * @return array

@@ -16,7 +16,7 @@ use eZ\Publish\Core\Base\TranslatableBase;
 /**
  * Invalid Argument Type Exception implementation.
  *
- * @use: throw new InvalidArgumentException( 'nodes', 'array' );
+ * Usage: throw new InvalidArgumentException( 'nodes', 'array' );
  */
 class InvalidArgumentException extends APIInvalidArgumentException implements Translatable
 {

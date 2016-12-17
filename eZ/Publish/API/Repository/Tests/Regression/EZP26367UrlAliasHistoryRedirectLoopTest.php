@@ -9,7 +9,7 @@ namespace eZ\Publish\API\Repository\Tests\Regression;
 use eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
- * @issue https://jira.ez.no/browse/EZP-26367
+ * Issue https://jira.ez.no/browse/EZP-26367.
  * @group regression
  * @group ezp26367
  * @group cache

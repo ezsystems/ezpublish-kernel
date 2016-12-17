@@ -255,7 +255,6 @@ class MemoryCachingHandler implements BaseContentTypeHandler
 
     /**
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      *
      * @param mixed $contentTypeId
      * @param int $status

@@ -334,7 +334,7 @@ class LocationService implements LocationServiceInterface
             'filter' => new Criterion\ParentLocationId($location->id),
             'offset' => $offset >= 0 ? (int)$offset : 0,
             'limit' => $limit >= 0 ? (int)$limit : null,
-            'sortClauses' => $this->repository->getSearchService()->getSortClauseFromLocation($location),
+            'sortClauses' => $location->getSortClauses(),
         ]);
 
         return $this->repository->getSearchService()->findLocations($query);
@@ -503,6 +503,12 @@ class LocationService implements LocationServiceInterface
         $this->repository->beginTransaction();
         try {
             $this->persistenceHandler->locationHandler()->swap($loadedLocation1->id, $loadedLocation2->id);
+            $this->persistenceHandler->urlAliasHandler()->locationSwapped(
+                $location1->id,
+                $location1->parentLocationId,
+                $location2->id,
+                $location2->parentLocationId
+            );
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();

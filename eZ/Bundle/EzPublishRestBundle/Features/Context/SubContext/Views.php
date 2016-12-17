@@ -5,7 +5,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\REST\Client\Values\View;
 use PHPUnit_Framework_Assert as Assertion;
@@ -51,6 +51,6 @@ trait Views
     public function iSetTheFilterPropertyOfTheQuery($field)
     {
         // @todo this could be improved if setFieldToValue used PropertyAccessor.
-        $this->requestObject->contentQuery->$field = new ContentTypeIdentifier('folder');
+        $this->requestObject->contentQuery->$field = new Criterion\ContentTypeIdentifier('folder');
     }
 }

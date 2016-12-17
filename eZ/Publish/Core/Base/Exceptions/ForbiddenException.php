@@ -27,6 +27,7 @@ class ForbiddenException extends APIForbiddenException implements Translatable
      */
     public function __construct($messageTemplate, array $parameters = [])
     {
+        /** @Ignore */
         $this->setMessageTemplate($messageTemplate);
         $this->setParameters($parameters);
 

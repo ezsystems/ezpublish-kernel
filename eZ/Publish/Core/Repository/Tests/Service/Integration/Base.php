@@ -178,6 +178,14 @@ abstract class Base extends PHPUnit_Framework_TestCase
             $actualValue = $actualValue->getArrayCopy();
         }
 
+        // For PHP 7.1 make sure we just compare the timestamp and not the offset value
+        if ($expectedValue instanceof \DateTimeInterface) {
+            $expectedValue = $expectedValue->getTimestamp();
+        }
+        if ($actualValue instanceof \DateTimeInterface) {
+            $actualValue = $actualValue->getTimestamp();
+        }
+
         if ($equal) {
             $this->assertEquals(
                 $expectedValue,
