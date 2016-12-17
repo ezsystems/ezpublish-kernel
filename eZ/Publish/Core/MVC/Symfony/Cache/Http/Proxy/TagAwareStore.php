@@ -23,6 +23,36 @@ class TagAwareStore extends Store implements ContentPurger
     const TAG_CACHE_DIR = 'ez';
 
     /**
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    private $fs;
+
+    /**
+     * Injects a Filesystem instance
+     * For unit tests only.
+     *
+     * @internal
+     *
+     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     */
+    public function setFilesystem(Filesystem $fs)
+    {
+        $this->fs = $fs;
+    }
+
+    /**
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
+    private function getFilesystem()
+    {
+        if (!isset($this->fs)) {
+            $this->fs = new Filesystem();
+        }
+
+        return $this->fs;
+    }
+
+    /**
      * Writes a cache entry to the store for the given Request and Response.
      *
      * Existing entries are read and any that match the response are removed. This
@@ -62,7 +92,7 @@ class TagAwareStore extends Store implements ContentPurger
      * @param string $tag    The tag key
      * @param string $digest The digest hash to store representing the cache item.
      *
-     * @return bool|void
+     * @return bool
      */
     private function saveTag($tag, $digest)
     {
@@ -87,6 +117,8 @@ class TagAwareStore extends Store implements ContentPurger
         }
 
         @chmod($path, 0666 & ~umask());
+
+        return true;
     }
 
     /**
@@ -141,9 +173,9 @@ class TagAwareStore extends Store implements ContentPurger
      * @internal @param Filesystem $fs Internal argument for unit tests to be able to mock Filesystem class.
      * @return bool
      */
-    public function purgeAllContent(Filesystem $fs = null)
+    public function purgeAllContent()
     {
-        $fs = $fs ?: new Filesystem();
+        $fs = $this->getFilesystem();
         $fs->remove($this->getTagPath());
         $fs->remove($this->root);
 

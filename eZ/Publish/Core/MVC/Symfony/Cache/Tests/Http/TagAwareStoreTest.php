@@ -151,9 +151,14 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
         $locationCacheDir = $this->store->getTagPath();
 
         $fs
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('remove')
             ->with($locationCacheDir);
+
+        $fs
+            ->expects($this->at(1))
+            ->method('remove')
+            ->with(__DIR__);
 
         $this->store->purgeAllContent();
     }
@@ -165,9 +170,14 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
         $locationCacheDir = $this->store->getTagPath();
 
         $fs
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('remove')
             ->with($locationCacheDir);
+
+        $fs
+            ->expects($this->at(1))
+            ->method('remove')
+            ->with(__DIR__);
 
         $request = Request::create('/', 'BAN');
         $request->headers->set('X-Location-Id', '.*');
@@ -181,9 +191,14 @@ class TagAwareStoreTest extends PHPUnit_Framework_TestCase
         $locationCacheDir = $this->store->getTagPath();
 
         $fs
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('remove')
             ->with($locationCacheDir);
+
+        $fs
+            ->expects($this->at(1))
+            ->method('remove')
+            ->with(__DIR__);
 
         $request = Request::create('/', 'PURGE');
         $request->headers->set('X-Location-Id', '*');
