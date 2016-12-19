@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
  * The UrlAlias Handler provides nice urls management.
