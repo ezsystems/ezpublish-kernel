@@ -4697,6 +4697,96 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test scenario with writer and publisher users.
+     * Writer can only create content. Publisher can publish this content.
+     */
+    public function testPublishWorkflow()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $this->createRoleWithPolicies('Publisher', [
+            ['content', 'read'],
+            ['content', 'create'],
+            ['content', 'publish'],
+        ]);
+
+        $this->createRoleWithPolicies('Writer', [
+            ['content', 'read'],
+            ['content', 'create'],
+        ]);
+
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+
+        $publisherUser = $this->createCustomUserWithLogin(
+            'publisher',
+            'publisher@example.com',
+            'Publishers',
+            'Publisher'
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+        $draft = $this->createContentDraftVersion1();
+
+        $repository->getPermissionResolver()->setCurrentUserReference($publisherUser);
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        $contentService->loadContent($content->id);
+    }
+
+    /**
+     * Test publish / content policy is required to be able to publish content.
+     *
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @expectedExceptionMessageRegExp /User does not have access to 'publish' 'content'/
+     */
+    public function testPublishContentWithoutPublishPolicyThrowsException()
+    {
+        $repository = $this->getRepository();
+
+        $this->createRoleWithPolicies('Writer', [
+            ['content', 'read'],
+            ['content', 'create'],
+            ['content', 'edit'],
+        ]);
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+
+        $this->createContentVersion1();
+    }
+
+    /**
+     * Simplify creating custom role with limited set of policies.
+     *
+     * @param $roleName
+     * @param array $policies e.g. [ ['content', 'create'], ['content', 'edit'], ]
+     */
+    private function createRoleWithPolicies($roleName, array $policies)
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
+        foreach ($policies as $policy) {
+            $policyCreateStruct = $roleService->newPolicyCreateStruct($policy[0], $policy[1]);
+            $roleCreateStruct->addPolicy($policyCreateStruct);
+        }
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
+    }
+
+    /**
      * Asserts that all aliases defined in $expectedAliasProperties with the
      * given properties are available in $actualAliases and not more.
      *
