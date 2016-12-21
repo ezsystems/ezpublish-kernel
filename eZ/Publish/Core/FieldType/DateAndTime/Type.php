@@ -148,7 +148,10 @@ class Type extends FieldType
     /**
      * Converts an $hash to the Value defined by the field type.
      *
-     * @param mixed $hash Null or associative array containing timestamp and optionally date in RFC850 format.
+     * @param mixed $hash Null or associative array containing timestamp and optionally date in RFC850 format,
+     *                    and optionally date in parseable string format (e.g. 'now', '+3 days')
+     *
+     * @deprecated timestamp is no longer used and will be removed in a future version.
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value $value
      */
@@ -160,6 +163,10 @@ class Type extends FieldType
 
         if (isset($hash['rfc850']) && $hash['rfc850']) {
             return Value::fromString($hash['rfc850']);
+        }
+
+        if (isset($hash['timestring']) && is_string($hash['timestring'])) {
+            return Value::fromString($hash['timestring']);
         }
 
         return Value::fromTimestamp((int)$hash['timestamp']);
