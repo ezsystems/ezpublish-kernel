@@ -691,6 +691,56 @@ class ImageTest extends FieldTypeTest
                     ),
                 ),
             ),
+
+            // file is an image file but filename ends with .php
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'FileSizeValidator' => array(
+                            'maxFileSize' => 1,
+                        ),
+                    ),
+                ),
+                new ImageValue(
+                    array(
+                        'id' => __DIR__ . '/phppng.php',
+                        'fileName' => basename(__DIR__ . '/phppng.php'),
+                        'fileSize' => filesize(__DIR__ . '/phppng.php'),
+                        'alternativeText' => null,
+                        'uri' => '',
+                    )
+                ),
+                array(
+                    new ValidationError(
+                        'A valid image file is required.', null, [], 'id'
+                    ),
+                ),
+            ),
+
+            // file is an image file but filename ends with .PHP (upper case)
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'FileSizeValidator' => array(
+                            'maxFileSize' => 1,
+                        ),
+                    ),
+                ),
+                new ImageValue(
+                    array(
+                        'id' => __DIR__ . '/phppng2.PHP',
+                        'fileName' => basename(__DIR__ . '/phppng2.PHP'),
+                        'fileSize' => filesize(__DIR__ . '/phppng2.PHP'),
+                        'alternativeText' => null,
+                        'uri' => '',
+                    )
+                ),
+                array(
+                    new ValidationError(
+                        'A valid image file is required.', null, [], 'id'
+                    ),
+                ),
+            ),
         );
     }
 }
