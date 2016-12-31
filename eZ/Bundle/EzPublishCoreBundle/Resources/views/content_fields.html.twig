@@ -274,7 +274,6 @@
 {% endblock %}
 
 {# @todo:
- # - include Gmaps JS only once if the field is used several times in the page
  # - add translate filter
  #}
 {% block ezgmaplocation_field %}
@@ -350,11 +349,13 @@
 
     {% if hasContent and showMap %}
         <script>
-            if (typeof(mapsScriptLoaded) == 'undefined') {
-                var myScript = document.createElement('script');
-                myScript.src = '//maps.googleapis.com/maps/api/js?key={{ ezpublish.configResolver.parameter('api_keys.google_maps') }}';
-                mapsScriptLoaded = true;
-                document.body.appendChild(myScript);
+            if (typeof(window.ezgmaplocationMapsScriptLoaded) == 'undefined') {
+                (function (win, doc) {
+                    var myScript = document.createElement('script');
+                    myScript.src = '//maps.googleapis.com/maps/api/js?key={{ ezpublish.configResolver.parameter('api_keys.google_maps') }}';
+                    win.ezgmaplocationMapsScriptLoaded = true;
+                    doc.body.appendChild(myScript);
+                })(window, document)
             }
         </script>
         <script type="text/javascript">
