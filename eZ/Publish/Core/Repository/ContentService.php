@@ -1895,6 +1895,7 @@ class ContentService implements ContentServiceInterface
             array(
                 'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
+                'alwaysAvailable' => $contentType->defaultAlwaysAvailable,
             )
         );
     }
