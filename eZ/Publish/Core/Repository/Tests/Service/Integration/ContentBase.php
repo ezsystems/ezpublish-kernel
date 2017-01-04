@@ -673,7 +673,7 @@ abstract class ContentBase extends BaseServiceTest
             'contentType' => $contentType,
             'sectionId' => null,
             'ownerId' => null,
-            'alwaysAvailable' => null,
+            'alwaysAvailable' => $contentType->defaultAlwaysAvailable,
             'remoteId' => null,
             'mainLanguageCode' => 'eng-GB',
             'modificationDate' => null,
