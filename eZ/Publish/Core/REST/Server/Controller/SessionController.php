@@ -94,6 +94,7 @@ class SessionController extends Controller
         } catch (AuthenticationException $e) {
             throw new UnauthorizedException('Invalid login or password', $request->getPathInfo());
         } catch (AccessDeniedException $e) {
+            $this->authenticator->logout($request);
             throw new UnauthorizedException($e->getMessage(), $request->getPathInfo());
         }
     }
