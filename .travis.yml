@@ -59,7 +59,7 @@ matrix:
 branches:
   only:
     - master
-    - /^\d.\d+$/
+    - /^6.\d+$/
 
 # setup requirements for running unit/integration/behat tests
 before_script:
