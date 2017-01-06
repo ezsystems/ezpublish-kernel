@@ -29,14 +29,9 @@ env:
 matrix:
   fast_finish: true
   include:
-# 5.6
-    - php: 5.6
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
-#    - php: 5.6
-#      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
 # 7.0
+    - php: 7.0
+      env: TEST_CONFIG="phpunit.xml"
     - php: 7.0
       env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
     - php: 7.0
@@ -45,12 +40,16 @@ matrix:
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
     - php: 7.0
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
+    - php: 7.0
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
 # 7.1
     - php: 7.1
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="^3.2.0"
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 7.1
+      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
     - php: 7.1
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
-# hhvm - disabled, no need to enable before travis has newer versions avaiable
+# hhvm - disabled, no need to enable before travis has newer version
 #    - php: hhvm
 #      env: TEST_CONFIG="phpunit.xml"
 
