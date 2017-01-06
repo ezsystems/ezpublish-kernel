@@ -7,7 +7,7 @@
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
     "require": {
-        "php": "~5.6|~7.0",
+        "php": "^7.0",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-intl": "*",
@@ -57,7 +57,10 @@
         }
     },
     "config": {
-        "process-timeout": 3000
+        "process-timeout": 3000,
+        "platform": {
+            "php": "7.0"
+        }
     },
     "extra": {
         "_ci_branch-comment_": "Keep ci branch up-to-date with master or branch if on stable. ci is never on github but convention used for ci behat testing!",
