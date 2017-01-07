@@ -19,6 +19,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use Exception;
@@ -407,12 +408,12 @@ class Repository implements RepositoryInterface
         }
 
         // Uses SPI to avoid triggering permission checks in Role/User service
-        $permissionSets = array();
+        $permissionSets = [];
         $roleDomainMapper = $this->getRoleDomainMapper();
         $limitationService = $this->getLimitationService();
         $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($user->getUserId(), true);
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            $permissionSet = array('limitation' => null, 'policies' => array());
+            $permissionSet = ['limitation' => null, 'policies' => []];
 
             $spiRole = $this->persistenceHandler->userHandler()->loadRole($spiRoleAssignment->roleId);
             foreach ($spiRole->policies as $spiPolicy) {
@@ -436,6 +437,10 @@ class Repository implements RepositoryInterface
                     return true;
                 }
 
+                if ($spiPolicy->limitations !== '*' && $this->isOverlappedByPolicyOnSameRole($spiPolicy, $spiRole->policies)) {
+                    continue;
+                }
+
                 $permissionSet['policies'][] = $roleDomainMapper->buildDomainPolicyObject($spiPolicy);
             }
 
@@ -454,7 +459,40 @@ class Repository implements RepositoryInterface
             return $permissionSets;
         }
 
-        return false;// No policies matching $module and $function, or they contained limitations
+        // No policies matching $module and $function, or they contained limitations
+        return false;
+    }
+
+    /**
+     * Return true if at least one of the given policies overlaps $policy (has a wider scope).
+     * A policy can overlap other policy only if it has no limitations.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy[] $rolePolicies
+     * @return bool
+     */
+    private function isOverlappedByPolicyOnSameRole(Policy $policy, array $rolePolicies)
+    {
+        foreach ($rolePolicies as $rolePolicy) {
+            // a policy can overlap other policy only if it has no limitations
+            if ($rolePolicy->limitations !== '*') {
+                continue;
+            }
+
+            if ($rolePolicy->module === '*') {
+                return true;
+            }
+
+            if ($policy->module !== $rolePolicy->module) {
+                continue;
+            }
+
+            if ($rolePolicy->function === '*' || $policy->function === $rolePolicy->function) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1085,7 +1123,7 @@ class Repository implements RepositoryInterface
     /**
      * Enqueue an event to be triggered at commit or directly if no transaction has started.
      *
-     * @param Callable $event
+     * @param callable $event
      */
     public function commitEvent($event)
     {
