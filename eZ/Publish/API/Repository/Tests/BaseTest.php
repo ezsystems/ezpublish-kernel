@@ -136,7 +136,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function isVersion4()
     {
-        return (isset($_ENV['backendVersion']) && '4' === $_ENV['backendVersion']);
+        return isset($_ENV['backendVersion']) && '4' === $_ENV['backendVersion'];
     }
 
     /**
@@ -333,6 +333,32 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function createCustomUserVersion1($userGroupName, $roleIdentifier, RoleLimitation $roleLimitation = null)
     {
+        return $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            $userGroupName,
+            $roleIdentifier,
+            $roleLimitation
+        );
+    }
+
+    /**
+     * Create a user with new user group and assign a existing role (optionally with RoleLimitation).
+     *
+     * @param string $login User login
+     * @param string $email User e-mail
+     * @param string $userGroupName Name of the new user group to create
+     * @param string $roleIdentifier Role identifier to assign to the new group
+     * @param RoleLimitation|null $roleLimitation
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createCustomUserWithLogin(
+        $login,
+        $email,
+        $userGroupName,
+        $roleIdentifier,
+        RoleLimitation $roleLimitation = null
+    ) {
         $repository = $this->getRepository();
 
         /* BEGIN: Inline */
@@ -359,8 +385,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
+            $login,
+            $email,
             'secret',
             'eng-US'
         );
@@ -368,7 +394,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         // Set some fields required by the user ContentType
         $userCreate->setField('first_name', 'Example');
-        $userCreate->setField('last_name', 'User');
+        $userCreate->setField('last_name', ucfirst($login));
 
         // Create a new user instance.
         $user = $userService->createUser($userCreate, array($userGroup));
