@@ -1895,6 +1895,8 @@ class ContentService implements ContentServiceInterface
     /**
      * Instantiates a new content create struct object.
      *
+     * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
      *
@@ -1906,6 +1908,7 @@ class ContentService implements ContentServiceInterface
             array(
                 'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
+                'alwaysAvailable' => $contentType->defaultAlwaysAvailable,
             )
         );
     }

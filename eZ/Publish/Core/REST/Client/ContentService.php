@@ -652,6 +652,8 @@ class ContentService implements APIContentService, Sessionable
     /**
      * Instantiates a new content create struct object.
      *
+     * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
      *
