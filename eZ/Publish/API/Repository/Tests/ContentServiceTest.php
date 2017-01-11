@@ -8,9 +8,13 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -494,6 +498,24 @@ class ContentServiceTest extends BaseContentServiceTest
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
             $contentInfo
         );
+
+        return $contentInfo;
+    }
+
+    /**
+     * Test for the returned value of the loadContentInfo() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoSetsExpectedContentInfo(ContentInfo $contentInfo)
+    {
+        $this->assertPropertiesCorrectUnsorted(
+            $this->getExpectedMediaContentInfoProperties(),
+            $contentInfo
+        );
     }
 
     /**
@@ -533,6 +555,38 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo', $contentInfo);
+
+        return $contentInfo;
+    }
+
+    /**
+     * Test for the returned value of the loadContentInfoByRemoteId() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoByRemoteIdSetsExpectedContentInfo(ContentInfo $contentInfo)
+    {
+        $this->assertPropertiesCorrectUnsorted(
+            [
+                'id' => 10,
+                'contentTypeId' => 4,
+                'name' => 'Anonymous User',
+                'sectionId' => 2,
+                'currentVersionNo' => 2,
+                'published' => true,
+                'ownerId' => 14,
+                'modificationDate' => $this->createDateTime(1072180405),
+                'publishedDate' => $this->createDateTime(1033920665),
+                'alwaysAvailable' => 1,
+                'remoteId' => 'faaeb9be3bd98ed09f606fc16d144eca',
+                'mainLanguageCode' => 'eng-US',
+                'mainLocationId' => 45,
+            ],
+            $contentInfo
+        );
     }
 
     /**
@@ -605,6 +659,39 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
+            $versionInfo
+        );
+
+        return $versionInfo;
+    }
+
+    /**
+     * Test for the returned value of the loadVersionInfoById() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     */
+    public function testLoadVersionInfoByIdSetsExpectedVersionInfo(VersionInfo $versionInfo)
+    {
+        $this->assertPropertiesCorrect(
+            [
+                'names' => [
+                    'eng-US' => 'Media',
+                ],
+                'contentInfo' => new ContentInfo($this->getExpectedMediaContentInfoProperties()),
+                'id' => 472,
+                'versionNo' => 1,
+                'modificationDate' => $this->createDateTime(1060695457),
+                'creatorId' => 14,
+                'creationDate' => $this->createDateTime(1060695450),
+                'status' => 1,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => [
+                    'eng-US',
+                ],
+            ],
             $versionInfo
         );
     }
@@ -738,28 +825,52 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Data provider for testLoadContentByRemoteId().
+     *
+     * @return array
+     */
+    public function contentRemoteIdVersionLanguageProvider()
+    {
+        return [
+            ['f5c88a2209584891056f987fd965b0ba', null, null],
+            ['f5c88a2209584891056f987fd965b0ba', ['eng-US'], null],
+            ['f5c88a2209584891056f987fd965b0ba', null, 1],
+            ['f5c88a2209584891056f987fd965b0ba', ['eng-US'], 1],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', null, null],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', ['eng-US'], null],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', null, 1],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', ['eng-US'], 1],
+        ];
+    }
+
+    /**
      * Test for the loadContentByRemoteId() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId
+     * @dataProvider contentRemoteIdVersionLanguageProvider
+     *
+     * @param string $remoteId
+     * @param array|null $languages
+     * @param int $versionNo
      */
-    public function testLoadContentByRemoteId()
+    public function testLoadContentByRemoteId($remoteId, $languages, $versionNo)
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        // Remote id of the "Media" folder
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         $contentService = $repository->getContentService();
 
-        // Load the Content for "Media" folder
-        $content = $contentService->loadContentByRemoteId($mediaRemoteId);
-        /* END: Use Case */
+        $content = $contentService->loadContentByRemoteId($remoteId, $languages, $versionNo);
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            Content::class,
             $content
         );
+
+        $this->assertEquals($remoteId, $content->contentInfo->remoteId);
+        if ($languages !== null) {
+            $this->assertEquals($languages, $content->getVersionInfo()->languageCodes);
+        }
+        $this->assertEquals($versionNo ?: 1, $content->getVersionInfo()->versionNo);
     }
 
     /**
@@ -797,14 +908,16 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testPublishVersion()
     {
+        $time = time();
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            $content
-        );
+        $this->assertInstanceOf(Content::class, $content);
+        $this->assertTrue($content->contentInfo->published);
+        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $content->versionInfo->status);
+        $this->assertGreaterThanOrEqual($time, $content->contentInfo->publishedDate->getTimestamp());
+        $this->assertGreaterThanOrEqual($time, $content->contentInfo->modificationDate->getTimestamp());
 
         return $content;
     }
@@ -968,6 +1081,38 @@ class ContentServiceTest extends BaseContentServiceTest
         // is already published.
         $contentService->publishVersion($draft->getVersionInfo());
         /* END: Use Case */
+    }
+
+    /**
+     * Test that publishVersion() does not affect publishedDate (assuming previous version exists).
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::publishVersion
+     */
+    public function testPublishVersionDoesNotChangePublishedDate()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $publishedContent = $this->createContentVersion1();
+
+        // force timestamps to differ
+        sleep(1);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('name', 'New name');
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+        $republishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $this->assertEquals(
+            $publishedContent->contentInfo->publishedDate->getTimestamp(),
+            $republishedContent->contentInfo->publishedDate->getTimestamp()
+        );
+        $this->assertGreaterThan(
+            $publishedContent->contentInfo->modificationDate->getTimestamp(),
+            $republishedContent->contentInfo->modificationDate->getTimestamp()
+        );
     }
 
     /**
@@ -1227,7 +1372,7 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the newContentUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct
      * @group user
      */
     public function testNewContentUpdateStruct()
@@ -1241,7 +1386,15 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
+            ContentUpdateStruct::class,
+            $updateStruct
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'initialLanguageCode' => null,
+                'fields' => [],
+            ],
             $updateStruct
         );
     }
@@ -1555,6 +1708,32 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the createContentDraft() method with third parameter.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
+     */
+    public function testCreateContentDraftWithThirdParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->loadContent(4);
+        $user = $this->createUserVersion1();
+
+        $draftContent = $contentService->createContentDraft(
+            $content->contentInfo,
+            $content->getVersionInfo(),
+            $user
+        );
+
+        $this->assertInstanceOf(
+            Content::class,
+            $draftContent
+        );
+    }
+
+    /**
      * Test for the publishVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
@@ -1667,7 +1846,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @todo Adapt this when per content type archive limited is added on repository Content Type model.
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testPublishVersionNotCreatingUnlimitedArchives()
     {
@@ -1730,7 +1909,7 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the newContentMetadataUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct
      * @group user
      */
     public function testNewContentMetadataUpdateStruct()
@@ -1743,13 +1922,17 @@ class ContentServiceTest extends BaseContentServiceTest
         // Creates a new metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
+        foreach ($metadataUpdate as $propertyName => $propertyValue) {
+            $this->assertNull($propertyValue, "Property '{$propertyName}' initial value should be null'");
+        }
+
         $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-GB';
         $metadataUpdate->alwaysAvailable = false;
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentMetadataUpdateStruct',
+            ContentMetadataUpdateStruct::class,
             $metadataUpdate
         );
     }
@@ -1851,11 +2034,11 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the updateContentMetadata() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
-    public function testUpdateContentMetadataThrowsInvalidArgumentException()
+    public function testUpdateContentMetadataThrowsInvalidArgumentExceptionOnDuplicateRemoteId()
     {
         $repository = $this->getRepository();
 
@@ -1878,6 +2061,25 @@ class ContentServiceTest extends BaseContentServiceTest
             $metadataUpdate
         );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateContentMetadataThrowsInvalidArgumentExceptionOnNoMetadataPropertiesSet()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo(4);
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+
+        // Throws an exception because no properties are set in $contentMetadataUpdateStruct
+        $contentService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
     }
 
     /**
@@ -2140,6 +2342,60 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             $publishedContent->getVersionInfo()->getContentInfo()->mainLocationId,
             $versionInfo->getContentInfo()->mainLocationId
+        );
+
+        return [
+            'versionInfo' => $versionInfo,
+            'draftContent' => $draftContent,
+        ];
+    }
+
+    /**
+     * Test for the returned value of the loadVersionInfoById() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoByIdWithSecondParameter
+     * @covers \eZ\Publish\API\Repository\ContentService::loadVersionInfoById
+     *
+     * @param array $data
+     */
+    public function testLoadVersionInfoByIdWithSecondParameterSetsExpectedVersionInfo(array $data)
+    {
+        /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo */
+        $versionInfo = $data['versionInfo'];
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $draftContent */
+        $draftContent = $data['draftContent'];
+
+        $this->assertPropertiesCorrect(
+            [
+                'names' => [
+                    'eng-US' => 'An awesome forum',
+                ],
+                'contentInfo' => new ContentInfo([
+                    'id' => $draftContent->contentInfo->id,
+                    'contentTypeId' => 28,
+                    'name' => 'An awesome forum',
+                    'sectionId' => 1,
+                    'currentVersionNo' => 1,
+                    'published' => true,
+                    'ownerId' => 14,
+                    // this Content Object is created at the test runtime
+                    'modificationDate' => $versionInfo->contentInfo->modificationDate,
+                    'publishedDate' => $versionInfo->contentInfo->publishedDate,
+                    'alwaysAvailable' => 1,
+                    'remoteId' => 'abcdef0123456789abcdef0123456789',
+                    'mainLanguageCode' => 'eng-US',
+                    'mainLocationId' => $draftContent->contentInfo->mainLocationId,
+                ]),
+                'id' => $draftContent->versionInfo->id,
+                'versionNo' => 2,
+                'creatorId' => 14,
+                'status' => 0,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => [
+                    'eng-US',
+                ],
+            ],
+            $versionInfo
         );
     }
 
@@ -2469,6 +2725,25 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertLocaleFieldsEquals($draftLocalized->getFields(), 'eng-GB');
+
+        return $draft;
+    }
+
+    /**
+     * Test for the loadContent() method using undefined translation.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithSecondParameter
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $contentDraft
+     */
+    public function testLoadContentWithSecondParameterThrowsNotFoundException(Content $contentDraft)
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $contentService->loadContent($contentDraft->id, array('ger-DE'), null, false);
     }
 
     /**
@@ -2701,6 +2976,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadVersions()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
      */
     public function testLoadVersions()
     {
@@ -2721,6 +2998,49 @@ class ContentServiceTest extends BaseContentServiceTest
         ];
 
         $this->assertEquals($expectedVersionsOrder, $versions);
+
+        return $versions;
+    }
+
+    /**
+     * Test for the loadVersions() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersions
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo[] $versions
+     */
+    public function testLoadVersionsSetsExpectedVersionInfo(array $versions)
+    {
+        $this->assertCount(2, $versions);
+
+        $expectedVersions = [
+            [
+                'versionNo' => 1,
+                'creatorId' => 14,
+                'status' => VersionInfo::STATUS_ARCHIVED,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US'],
+            ],
+            [
+                'versionNo' => 2,
+                'creatorId' => 10,
+                'status' => VersionInfo::STATUS_PUBLISHED,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US', 'eng-GB'],
+            ],
+        ];
+
+        $this->assertPropertiesCorrect($expectedVersions[0], $versions[0]);
+        $this->assertPropertiesCorrect($expectedVersions[1], $versions[1]);
+        $this->assertEquals(
+            $versions[1]->creationDate->getTimestamp(),
+            $versions[0]->creationDate->getTimestamp()
+        );
+        $this->assertGreaterThanOrEqual(
+            $versions[1]->modificationDate->getTimestamp(),
+            $versions[0]->modificationDate->getTimestamp()
+        );
     }
 
     /**
@@ -4766,6 +5086,28 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the newTranslationInfo() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo
+     */
+    public function testNewTranslationInfo()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $translationInfo = $contentService->newTranslationInfo();
+
+        $this->assertInstanceOf(
+            TranslationInfo::class,
+            $translationInfo
+        );
+
+        foreach ($translationInfo as $propertyName => $propertyValue) {
+            $this->assertNull($propertyValue, "Property '{$propertyName}' initial value should be null'");
+        }
+    }
+
+    /**
      * Simplify creating custom role with limited set of policies.
      *
      * @param $roleName
@@ -4991,5 +5333,29 @@ class ContentServiceTest extends BaseContentServiceTest
                 )
             ),
         );
+    }
+
+    /**
+     * Gets expected property values for the "Media" ContentInfo ValueObject.
+     *
+     * @return array
+     */
+    private function getExpectedMediaContentInfoProperties()
+    {
+        return [
+            'id' => 41,
+            'contentTypeId' => 1,
+            'name' => 'Media',
+            'sectionId' => 3,
+            'currentVersionNo' => 1,
+            'published' => true,
+            'ownerId' => 14,
+            'modificationDate' => $this->createDateTime(1060695457),
+            'publishedDate' => $this->createDateTime(1060695457),
+            'alwaysAvailable' => 1,
+            'remoteId' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+            'mainLanguageCode' => 'eng-US',
+            'mainLocationId' => 43,
+        ];
     }
 }
