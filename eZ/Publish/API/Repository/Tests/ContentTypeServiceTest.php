@@ -1023,14 +1023,52 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $secondFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
         $typeCreate->addFieldDefinition($secondFieldCreate);
 
-        $groups = array(
+        $groups = [
             $contentTypeService->loadContentTypeGroupByIdentifier('Media'),
             $contentTypeService->loadContentTypeGroupByIdentifier('Setup'),
-        );
+        ];
 
         // Throws exception, due to duplicate "title" field
-        $secondType = $contentTypeService->createContentType($typeCreate, $groups);
+        $contentTypeService->createContentType($typeCreate, $groups);
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method trying to create a content type with already
+     * existing identifier.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Another ContentType with identifier 'blog-post' exists
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentType
+     */
+    public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateContentTypeIdentifier()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        // create published content type with identifier "blog-post"
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct('blog-post');
+        $typeCreateStruct->remoteId = 'other-remote-id';
+        $typeCreateStruct->creatorId = $repository->getPermissionResolver()->getCurrentUserReference()->getUserId();
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-US';
+        $typeCreateStruct->names = ['eng-US' => 'A name.'];
+        $typeCreateStruct->descriptions = ['eng-US' => 'A description.'];
+
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('test', 'eztext');
+        $typeCreateStruct->addFieldDefinition($fieldCreate);
+
+        // Throws an exception because content type with identifier "blog-post" already exists
+        $contentTypeService->createContentType(
+            $typeCreateStruct,
+            [
+                $contentTypeService->loadContentTypeGroupByIdentifier('Content'),
+            ]
+        );
     }
 
     /**
@@ -1089,6 +1127,30 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             ),
             $validationErrors['temperature'][0]->getTranslatableMessage()
         );
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method called with no groups.
+     *
+     * @depends \eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$contentTypeGroups' is invalid: Argument must contain at least one ContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     */
+    public function testCreateContentTypeThrowsInvalidArgumentExceptionGroupsEmpty()
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
+            'new-type'
+        );
+        $contentTypeCreateStruct->mainLanguageCode = 'eng-GB';
+        $contentTypeCreateStruct->names = array('eng-GB' => 'Test type');
+
+        // Thrown an exception because array of content type groups is empty
+        $contentTypeService->createContentType($contentTypeCreateStruct, []);
     }
 
     /**
@@ -1316,6 +1378,41 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Throws exception, since remote ID of type "folder" is used
         $contentTypeService->updateContentTypeDraft($contentTypeDraft, $typeUpdate);
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$contentTypeDraft' is invalid: There is no ContentType draft assigned to the authenticated user
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
+     */
+    public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionNoDraftForAuthenticatedUser()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $roleService = $repository->getRoleService();
+
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
+
+        // create Role allowing Content Type updates
+        $roleCreateStruct = $roleService->newRoleCreateStruct('ContentTypeUpdaters');
+        $policyCreateStruct = $roleService->newPolicyCreateStruct('class', 'update');
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+        $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
+
+        $user = $this->createUserVersion1();
+        $roleService->assignRoleToUser(
+            $roleService->loadRoleByIdentifier('ContentTypeUpdaters'),
+            $user
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        // Throws exception, since draft belongs to another user
+        $contentTypeService->updateContentTypeDraft($contentTypeDraft, $typeUpdate);
     }
 
     /**
@@ -1698,6 +1795,27 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Throws exception, sine "body" has already been removed
         $contentTypeService->removeFieldDefinition($loadedDraft, $bodyField);
         /* END: Use Case */
+    }
+
+    /**
+     * Test removeFieldDefinition() method for field in a different draft throws an exception.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
+     */
+    public function testRemoveFieldDefinitionThrowsInvalidArgumentExceptionOnWrongDraft()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft01 = $this->createContentTypeDraft();
+        $contentTypeDraft02 = $this->createContentTypeDraft();
+
+        $bodyField = $contentTypeDraft02->getFieldDefinition('body');
+
+        // Throws an exception because $bodyField field belongs to another draft
+        $contentTypeService->removeFieldDefinition($contentTypeDraft01, $bodyField);
     }
 
     /**
@@ -2183,6 +2301,43 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the publishContentTypeDraft() method setting proper ContentType nameSchema.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testPublishContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     */
+    public function testPublishContentTypeDraftSetsNameSchema()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
+            'new-type'
+        );
+        $typeCreateStruct->names = [
+            'eng-GB' => 'Type title',
+        ];
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
+        $titleFieldCreate->position = 1;
+        $typeCreateStruct->addFieldDefinition($titleFieldCreate);
+
+        $type = $contentTypeService->createContentType(
+            $typeCreateStruct,
+            [
+                $contentTypeService->loadContentTypeGroupByIdentifier('Content'),
+            ]
+        );
+
+        $contentTypeService->publishContentTypeDraft($type);
+
+        $loadedContentType = $contentTypeService->loadContentType($type->id);
+
+        $this->assertEquals('<title>', $loadedContentType->nameSchema);
+    }
+
+    /**
      * Test for the publishContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
@@ -2202,6 +2357,39 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Throws exception, since no draft exists anymore
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method trying to create Content Type without any fields.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$contentTypeDraft' is invalid: The content type draft should have at least one field definition
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testPublishContentTypeDraft
+     */
+    public function testPublishContentTypeDraftThrowsInvalidArgumentExceptionWithoutFields()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
+            'no-fields-type'
+        );
+        $typeCreateStruct->remoteId = 'new-unique-remoteid';
+        $typeCreateStruct->creatorId = $repository->getPermissionResolver()->getCurrentUserReference()->getUserId();
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-US';
+        $typeCreateStruct->names = ['eng-US' => 'A name.'];
+        $typeCreateStruct->descriptions = ['eng-US' => 'A description.'];
+
+        $contentTypeDraft = $contentTypeService->createContentType(
+            $typeCreateStruct,
+            [
+                $contentTypeService->loadContentTypeGroupByIdentifier('Content'),
+            ]
+        );
+        // Throws an exception because Content Type draft should have at least one field definition.
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
     }
 
     /**
