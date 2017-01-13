@@ -9,13 +9,14 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class CacheFactory.
  *
- * Service "ezpublish.cache_pool", selects a Stash cache service based on siteaccess[-group] setting "cache_pool_name"
+ * Service "ezpublish.cache_pool", selects a Symfony cache service based on siteaccess[-group] setting "cache_service_name"
  */
 class CacheFactory implements ContainerAwareInterface
 {
@@ -24,10 +25,12 @@ class CacheFactory implements ContainerAwareInterface
     /**
      * @param ConfigResolverInterface $configResolver
      *
-     * @return \Stash\Interfaces\PoolInterface
+     * @return \Symfony\Component\Cache\Adapter\TagAwareAdapter
      */
     public function getCachePool(ConfigResolverInterface $configResolver)
     {
-        return $this->container->get(sprintf('stash.%s_cache', $configResolver->getParameter('cache_pool_name')));
+        return new TagAwareAdapter(
+            $this->container->get($configResolver->getParameter('cache_service_name'))
+        );
     }
 }

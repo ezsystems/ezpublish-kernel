@@ -10,6 +10,7 @@ group: deprecated
 services:
   - mysql
   - postgresql
+  - redis-server
 
 # Mysql isn't installed on trusty (only client is), so we need to specifically install it
 addons:
@@ -18,7 +19,6 @@ addons:
     - mysql-server-5.6
     - mysql-client-core-5.6
     - mysql-client-5.6
-    - redis-server
 
 cache:
   directories:

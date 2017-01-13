@@ -259,10 +259,10 @@ class Legacy extends SetupFactory
             $contentTypeHandler->clearCache();
         }
 
-        /** @var $decorator \eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator */
-        $decorator = $this->getServiceContainer()->get('ezpublish.cache_pool.spi.cache.decorator');
+        /** @var $cachePool \Psr\Cache\CacheItemPoolInterface */
+        $cachePool = $this->getServiceContainer()->get('ezpublish.cache_pool');
 
-        $decorator->clearAllTestData();
+        $cachePool->clear();
     }
 
     /**

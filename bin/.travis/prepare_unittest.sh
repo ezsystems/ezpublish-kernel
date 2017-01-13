@@ -11,7 +11,15 @@ fi
 
 # Enable redis
 if [ "$CUSTOM_CACHE_POOL" = "singleredis" ] ; then
-    echo extension = redis.so >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    echo 'extension = redis.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+    # Configure redis to work in memory mode and avoid running out of memory
+    sudo chmod 777 /etc/redis/conf.d/local.conf
+    echo 'maxmemory 50mb' >> /etc/redis/conf.d/local.conf
+    echo 'maxmemory-policy allkeys-lru' >> /etc/redis/conf.d/local.conf
+    echo 'save ""' >> /etc/redis/conf.d/local.conf
+    echo 'appendfsync no' >> /etc/redis/conf.d/local.conf
+    redis-server /etc/redis/redis.conf
 fi
 
 # Setup DB

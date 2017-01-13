@@ -56,9 +56,10 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                     ->scalarNode('dsn')->info('Full database DSN. Will replace settings above.')->example('mysql://root:root@localhost:3306/ezdemo')->end()
                 ->end()
             ->end()
-            ->scalarNode('cache_pool_name')
-                ->example('ez_site_x')
-                ->info('The cache pool name to use for a siteaccess / siteaccess-group, *must* be present under stash.caches: yml config. Default value is "default". NB! Setting is Deprecated, will be made redundant in future version.')
+            ->scalarNode('cache_service_name')
+                ->example('cache.app')
+                ->defaultValue('cache.app')
+                ->info('The cache pool service name to use for a siteaccess / siteaccess-group, *must* be present.')
             ->end()
             ->scalarNode('var_dir')
                 ->cannotBeEmpty()
@@ -147,8 +148,8 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         if (isset($scopeSettings['repository'])) {
             $contextualizer->setContextualParameter('repository', $currentScope, $scopeSettings['repository']);
         }
-        if (isset($scopeSettings['cache_pool_name'])) {
-            $contextualizer->setContextualParameter('cache_pool_name', $currentScope, $scopeSettings['cache_pool_name']);
+        if (isset($scopeSettings['cache_service_name'])) {
+            $contextualizer->setContextualParameter('cache_service_name', $currentScope, $scopeSettings['cache_service_name']);
         }
         if (isset($scopeSettings['var_dir'])) {
             $contextualizer->setContextualParameter('var_dir', $currentScope, $scopeSettings['var_dir']);

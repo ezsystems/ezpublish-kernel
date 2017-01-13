@@ -1,5 +1,4 @@
 parameters:
-    ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator
     ignored_storage_files:
         -
             var/ezdemo_site/storage/images/design/plain-site/172-2-eng-US/eZ-Publish-Demo-Design-without-demo-content1.png
@@ -7,13 +6,6 @@ parameters:
     ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory
 
 services:
-    ezpublish.cache_pool.spi.cache.decorator:
-        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
-
-    # disable cache - TODO fix bug with trash recover
-    ezpublish.api.persistence_handler:
-        alias: ezpublish.spi.persistence.legacy
-
     ezpublish.signalslot.signal_dispatcher.factory:
         class: "%ezpublish.signalslot.signal_dispatcher.factory.class%"
         arguments:
