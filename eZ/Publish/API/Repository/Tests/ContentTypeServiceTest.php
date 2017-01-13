@@ -911,6 +911,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$contentTypeCreateStruct' is invalid: Another ContentType with identifier 'folder' exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateIdentifier()
@@ -921,6 +922,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct('folder');
+        $typeCreate->mainLanguageCode = 'eng-GB';
+        $typeCreate->names = ['eng-GB' => 'Article'];
 
         $firstFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
         $typeCreate->addFieldDefinition($firstFieldCreate);
@@ -936,10 +939,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
-     * Test for the createContentType() method.
+     * Test for the createContentType() method trying to create Content Type with already existing
+     * remoteId.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::createContentType()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Another ContentType with remoteId 'a3d405b81be900468eb153d774f4f0d2' exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateRemoteId()
@@ -951,6 +956,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct('news-article');
         $typeCreate->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
+        $typeCreate->mainLanguageCode = 'eng-GB';
+        $typeCreate->names = ['eng-GB' => 'Article'];
 
         $firstFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
         $typeCreate->addFieldDefinition($firstFieldCreate);
@@ -961,15 +968,16 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
 
         // Throws exception, since "folder" type has this remote ID
-        $secondType = $contentTypeService->createContentType($typeCreate, $groups);
+        $contentTypeService->createContentType($typeCreate, $groups);
         /* END: Use Case */
     }
 
     /**
-     * Test for the createContentType() method.
+     * Test for the createContentType() method creating content with duplicate field identifiers.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::createContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$contentTypeCreateStruct' is invalid: Argument contains duplicate field definition identifier 'title'
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateFieldIdentifier()
@@ -980,6 +988,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct('blog-post');
+        $typeCreate->mainLanguageCode = 'eng-GB';
+        $typeCreate->names = ['eng-GB' => 'Blog post'];
 
         $firstFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
         $typeCreate->addFieldDefinition($firstFieldCreate);
