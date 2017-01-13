@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Translation\Message;
 use Exception;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
@@ -165,8 +166,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the createContentTypeGroup() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$contentTypeGroupCreateStruct' is invalid: A group with the identifier 'Content' already exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testCreateContentTypeGroupThrowsInvalidArgumentException()
@@ -335,6 +337,21 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $loadedGroups
         );
 
+        foreach ($loadedGroups as $loadedGroup) {
+            $this->assertStructPropertiesCorrect(
+                $contentTypeService->loadContentTypeGroup($loadedGroup->id),
+                $loadedGroup,
+                [
+                    'id',
+                    'identifier',
+                    'creationDate',
+                    'modificationDate',
+                    'creatorId',
+                    'modifierId',
+                ]
+            );
+        }
+
         return $loadedGroups;
     }
 
@@ -490,8 +507,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the updateContentTypeGroup() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$contentTypeGroupUpdateStruct->identifier' is invalid: given identifier already exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupThrowsInvalidArgumentException()
@@ -516,8 +534,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the deleteContentTypeGroup() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContentTypeGroup()
     {
@@ -531,19 +550,15 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $contentTypeService->createContentTypeGroup($groupCreate);
 
-        // ...
-
         $group = $contentTypeService->loadContentTypeGroupByIdentifier('new-group');
 
         $contentTypeService->deleteContentTypeGroup($group);
         /* END: Use Case */
 
-        try {
-            $contentTypeService->loadContentTypeGroup($group->id);
-            $this->fail('Content type group not deleted.');
-        } catch (NotFoundException $e) {
-            // All fine
-        }
+        // loadContentTypeGroup should throw NotFoundException
+        $contentTypeService->loadContentTypeGroup($group->id);
+
+        $this->fail('Content type group not deleted.');
     }
 
     /**
@@ -786,8 +801,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the createContentType() method struct values.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::createContentType
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     *
+     * @param array $data
      */
     public function testCreateContentTypeStructValues(array $data)
     {
@@ -801,13 +818,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                     $this->assertFieldDefinitionsCorrect(
                         $typeCreate->fieldDefinitions,
                         $contentType->fieldDefinitions
-                    );
-                    break;
-
-                case 'contentTypeGroups':
-                    $this->assertContentTypeGroupsCorrect(
-                        $groups,
-                        $contentType->contentTypeGroups
                     );
                     break;
 
@@ -828,6 +838,15 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                     break;
             }
         }
+
+        $this->assertContentTypeGroupsCorrect(
+            $groups,
+            $contentType->contentTypeGroups
+        );
+
+        $this->assertNotNull(
+            $contentType->id
+        );
     }
 
     /**
@@ -898,10 +917,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         usort($actualGroups, $sorter);
 
         foreach ($expectedGroups as $key => $expectedGroup) {
-            $this->assertPropertiesCorrect(
+            $this->assertStructPropertiesCorrect(
                 $expectedGroup,
                 $actualGroups[$key],
-                $this->groupProperties
+                [
+                    'id',
+                    'identifier',
+                    'creationDate',
+                    'modificationDate',
+                    'creatorId',
+                    'modifierId',
+                ]
             );
         }
     }
@@ -934,7 +960,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
 
         // Throws exception, since type "folder" exists
-        $secondType = $contentTypeService->createContentType($typeCreate, $groups);
+        $contentTypeService->createContentType($typeCreate, $groups);
         /* END: Use Case */
     }
 
@@ -1235,6 +1261,15 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $expectedValues,
             $updatedType
         );
+
+        foreach ($originalType->fieldDefinitions as $index => $expectedFieldDefinition) {
+            $actualFieldDefinition = $updatedType->fieldDefinitions[$index];
+            $this->assertInstanceOf(
+                FieldDefinition::class,
+                $actualFieldDefinition
+            );
+            $this->assertEquals($expectedFieldDefinition, $actualFieldDefinition);
+        }
     }
 
     /**
@@ -1910,6 +1945,26 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinitionUpdateStruct',
             $updateStruct
         );
+
+        return $updateStruct;
+    }
+
+    /**
+     * Test for the newFieldDefinitionUpdateStruct() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+     */
+    public function testNewFieldDefinitionUpdateStructValues($fieldDefinitionUpdateStruct)
+    {
+        foreach ($fieldDefinitionUpdateStruct as $propertyName => $propertyValue) {
+            $this->assertNull(
+                $propertyValue,
+                "Property '$propertyName' is not null."
+            );
+        }
     }
 
     /**
@@ -2006,13 +2061,44 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
-     * Test for the updateFieldDefinition() method.
+     * Test for the updateFieldDefinition() method using an empty FieldDefinitionUpdateStruct.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      */
-    public function testUpdateFieldDefinitionThrowsInvalidArgumentException()
+    public function testUpdateFieldDefinitionWithEmptyStruct()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $fieldDefinition = $contentTypeDraft->getFieldDefinition('body');
+        $fieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdateStruct
+        );
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft($contentTypeDraft->id);
+        $updatedFieldDefinition = $contentTypeDraft->getFieldDefinition('body');
+
+        self::assertEquals(
+            $fieldDefinition,
+            $updatedFieldDefinition
+        );
+    }
+
+    /**
+     * Test for the updateFieldDefinition() method with already defined field identifier.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition
+     * depends \eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$fieldDefinitionUpdateStruct' is invalid: Another FieldDefinition with identifier 'title' exists in the ContentType
+     */
+    public function testUpdateFieldDefinitionThrowsInvalidArgumentExceptionFieldIdentifierExists()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
@@ -2036,11 +2122,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
-     * Test for the updateFieldDefinition() method.
+     * Test for the updateFieldDefinition() method trying to update non-existent field.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$fieldDefinition' is invalid: The given FieldDefinition does not belong to the ContentType
      */
     public function testUpdateFieldDefinitionThrowsInvalidArgumentExceptionForUndefinedField()
     {
@@ -2639,8 +2726,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the deleteContentType() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContentType()
     {
@@ -2654,12 +2742,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService->deleteContentType($commentType);
         /* END: Use Case */
 
-        try {
-            $contentTypeService->loadContentType($commentType->id);
-            $this->fail('Content type could be loaded after delete.');
-        } catch (NotFoundException $e) {
-            // All fine
-        }
+        $contentTypeService->loadContentType($commentType->id);
+        $this->fail('Content type could be loaded after delete.');
     }
 
     /**
@@ -2729,20 +2813,32 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $originalType = $data['originalType'];
         $copiedType = $data['copiedType'];
 
+        $this->assertCopyContentTypeValues($originalType, $copiedType);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $originalType
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $copiedType
+     * @param array $excludedProperties
+     */
+    private function assertCopyContentTypeValues($originalType, $copiedType, $excludedProperties = [])
+    {
+        $allProperties = [
+            'names',
+            'descriptions',
+            'creatorId',
+            'modifierId',
+            'urlAliasSchema',
+            'nameSchema',
+            'isContainer',
+            'mainLanguageCode',
+            'contentTypeGroups',
+        ];
+        $properties = array_diff($allProperties, $excludedProperties);
         $this->assertStructPropertiesCorrect(
             $originalType,
             $copiedType,
-            array(
-                'names',
-                'descriptions',
-                'creatorId',
-                'modifierId',
-                'urlAliasSchema',
-                'nameSchema',
-                'isContainer',
-                'mainLanguageCode',
-                'contentTypeGroups',
-            )
+            $properties
         );
 
         $this->assertNotEquals(
@@ -2824,6 +2920,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             ),
             $copiedType
         );
+        $this->assertCopyContentTypeValues($commentType, $copiedType, ['creatorId', 'modifierId']);
     }
 
     /**
