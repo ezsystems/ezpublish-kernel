@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Class AbstractHandler.
@@ -18,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 abstract class AbstractHandler
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
      */
     protected $cache;
 
@@ -35,12 +36,12 @@ abstract class AbstractHandler
     /**
      * Setups current handler with everything needed.
      *
-     * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
+     * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
-        CacheServiceDecorator $cache,
+        TagAwareAdapterInterface $cache,
         PersistenceHandler $persistenceHandler,
         PersistenceLogger $logger
     ) {

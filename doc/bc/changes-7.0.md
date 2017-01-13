@@ -10,6 +10,18 @@ Changes affecting version compatibility with former or future versions.
 * Requirement for Symfony has been lifted to 3.2, and will be further lifted to 3.4LTS once that is out and all our own
   thrirdpart libraries are known to work correctly with it.
 
+* "cache_pool" service is now a Symfony 3 Cache Pool instead of Stash. if you type hinted against PSR-6 you should be
+  somewhat safe, but be on the lookout for nuances in behaviour. If you used Stash features like cache hierarchy,
+  you'll need to adapt. Recommendation is to adapt to use Symfony Cache, but you can also setup and use Stash yourself.
+
+* "cache_pool" service is now a Symfony 3 Cache Pool instead of Stash. if you type hinted against PSR-6 you should be
+  somewhat safe, but be on the lookout for nuances in behaviour. If you used Stash features like cache hierarchy,
+  you'll need to adapt. Recommendation is to adapt to use Symfony Cache, but you can also setup and use Stash yourself.
+
+* "cache_pool_name" siteaccess setting has been removed & replaced by "cache_service_name" as the semantic is different.
+  The new setting should contain the full service name of a  symfony cache service, by default app_cache.app is used.
+
+
 ## Deprecations
 
 _7.0 is a major version, hence does not introduce deprecations but rather removes some previously deprecated features,
