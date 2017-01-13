@@ -8,10 +8,12 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use PHPUnit_Framework_TestCase;
+
 /**
  * Test case for Persistence\Cache\Handler.
  */
-class PersistenceHandlerTest extends HandlerTest
+class PersistenceHandlerTest extends AbstractBaseHandlerTest
 {
     /**
      * Test that instance is of correct type.

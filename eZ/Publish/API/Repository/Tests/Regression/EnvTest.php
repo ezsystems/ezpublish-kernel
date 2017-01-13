@@ -16,17 +16,23 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 class EnvTest extends BaseTest
 {
     /**
-     * Verify Redis is setup if asked for.
+     * Verify Redis cache is setup if asked for, if not file system
      */
-    public function testVerifyStashDriver()
+    public function testVerifyCacheDriver()
     {
         /** @var \Stash\Pool $pool */
         $pool = $this->getSetupFactory()->getServiceContainer()->get('ezpublish.cache_pool');
 
+        $this->assertInstanceOf('\Symfony\Component\Cache\Adapter\TagAwareAdapter', $pool);
+
+        $reflectionPool = new \ReflectionProperty ($pool, 'itemsAdapter');
+        $reflectionPool->setAccessible(true);
+        $innerPool = $reflectionPool->getValue($pool);
+
         if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
-            $this->assertInstanceOf('\Stash\Driver\Redis', $pool->getDriver());
+            $this->assertInstanceOf('\Symfony\Component\Cache\Adapter\RedisAdapter', $innerPool);
         } else {
-            $this->assertInstanceOf('\Stash\Driver\Ephemeral', $pool->getDriver());
+            $this->assertInstanceOf('\Symfony\Component\Cache\Adapter\FilesystemAdapter', $innerPool);
         }
     }
 }

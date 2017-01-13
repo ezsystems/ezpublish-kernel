@@ -25,9 +25,21 @@ $containerBuilder->addResource(new FileResource(__FILE__));
 
 // Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
 if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
+    /*
+     * Symfony\Component\Cache\Adapter\RedisAdapter
+     * @param \Redis|\RedisArray|\RedisCluster|\Predis\Client $redisClient
+     * public function __construct($redisClient, $namespace = '', $defaultLifetime = 0)
+     *
+     * $redis = new \Redis();
+     * $redis->connect('127.0.0.1', 6379, 2.5);
+     */
     $containerBuilder
-        ->register('ezpublish.cache_pool.driver', 'Stash\Driver\Redis')
-        ->addArgument(['servers' => [['server' => getenv('CACHE_HOST') ?: '127.0.0.1']]]);
+        ->register('ezpublish.cache_pool.driver.redis', 'Redis')
+        ->addMethodCall('connect', [(getenv('CACHE_HOST') ?: '127.0.0.1'), 6379, 2.5]);
+
+    $containerBuilder
+        ->register('ezpublish.cache_pool.driver', 'Symfony\Component\Cache\Adapter\RedisAdapter')
+        ->setArguments(['@ezpublish.cache_pool.driver.redis', '', 120]);
 }
 
 $settingsPath = $installDir . '/eZ/Publish/Core/settings/';

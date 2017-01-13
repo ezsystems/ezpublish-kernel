@@ -35,9 +35,9 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
     public function providerGetService()
     {
         return array(
-            array('default', 'stash.default_cache'),
-            array('ez_site1', 'stash.ez_site1_cache'),
-            array('xyZ', 'stash.xyZ_cache'),
+            array('default', 'default'),
+            array('ez_site1', 'ez_site1'),
+            array('xyZ', 'xyZ'),
         );
     }
 
@@ -49,18 +49,18 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
-            ->with('cache_pool_name')
+            ->with('cache_service_name')
             ->will($this->returnValue($name));
 
         $this->container
             ->expects($this->once())
             ->method('get')
             ->with($expected)
-            ->will($this->returnValue(false));
+            ->will($this->returnValue($this->getMock('Symfony\Component\Cache\Adapter\AdapterInterface')));
 
         $factory = new CacheFactory();
         $factory->setContainer($this->container);
 
-        $this->assertFalse($factory->getCachePool($this->configResolver));
+        $this->assertInstanceOf('Symfony\Component\Cache\Adapter\TagAwareAdapter', $factory->getCachePool($this->configResolver));
     }
 }
