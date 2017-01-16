@@ -37,7 +37,7 @@ class SearchEngineIndexerFactory
     /**
      * Registers $searchEngineIndexer as a valid search engine indexer with identifier $searchEngineIdentifier.
      *
-     * @note It is strongly recommended to register indexer as a lazy service.
+     * note: It is strongly recommended to register indexer as a lazy service.
      *
      * @param \eZ\Publish\Core\Search\Common\Indexer $searchEngineIndexer
      * @param string $searchEngineIdentifier
