@@ -320,7 +320,7 @@
         <div class="ez-fielddefinition-setting-name">Selection root:</div>
         <div class="ez-fielddefinition-setting-value">
         {% if rootLocationId %}
-            {{ render( controller( "ez_content:viewAction", {'locationId': rootLocationId,  'viewType': 'line'} ), {'strategy': 'esi'}) }}
+            {{ render( controller( "ez_content:viewAction", {'locationId': rootLocationId,  'viewType': 'line', 'layout': false} ), {'strategy': 'esi'}) }}
         {% else %}
             <em>No defined root</em>
         {% endif %}
