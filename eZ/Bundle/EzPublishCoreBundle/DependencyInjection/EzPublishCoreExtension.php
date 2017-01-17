@@ -301,6 +301,8 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
             new FileLocator(__DIR__ . '/../../../Publish/Core/settings')
         );
         $coreLoader->load('repository.yml');
+        $coreLoader->load('repository/inner.yml');
+        $coreLoader->load('repository/signalslot.yml');
         $coreLoader->load('fieldtype_external_storages.yml');
         $coreLoader->load('fieldtypes.yml');
         $coreLoader->load('indexable_fieldtypes.yml');
