@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
-  <file date="2017-01-17T12:00:18Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
+  <file date="2017-01-17T15:15:59Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
     <header>
       <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
       <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
@@ -10,11 +10,13 @@
         <source>'%actualValue%' is wrong value</source>
         <target>'%actualValue%' is wrong value</target>
         <note>key: '%actualValue%' is wrong value</note>
+        <jms:reference-file line="32">/eZ/Publish/Core/Base/Exceptions/InvalidArgumentValue.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="7a87971cc45ac957c7db1a4907f8e7f4325e3e32" resname="'%actualValue%' is wrong value in class '%className%'">
         <source>'%actualValue%' is wrong value in class '%className%'</source>
         <target>'%actualValue%' is wrong value in class '%className%'</target>
         <note>key: '%actualValue%' is wrong value in class '%className%'</note>
+        <jms:reference-file line="34">/eZ/Publish/Core/Base/Exceptions/InvalidArgumentValue.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="894070fe84612fd5871c1b09bc79f85c2e17d384" resname="A value is set for non translatable field definition '%identifier%' with language '%languageCode%'">
         <source>A value is set for non translatable field definition '%identifier%' with language '%languageCode%'</source>
@@ -27,16 +29,43 @@
         <source>Argument '%argumentName%' has a bad state: %whatIsWrong%</source>
         <target>Argument '%argumentName%' has a bad state: %whatIsWrong%</target>
         <note>key: Argument '%argumentName%' has a bad state: %whatIsWrong%</note>
+        <jms:reference-file line="34">/eZ/Publish/Core/Base/Exceptions/BadStateException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="ec22a1547bcd0b3131346b94db7783d8ba4fc12f" resname="Argument '%argumentName%' is invalid: %whatIsWrong%">
         <source>Argument '%argumentName%' is invalid: %whatIsWrong%</source>
         <target>Argument '%argumentName%' is invalid: %whatIsWrong%</target>
         <note>key: Argument '%argumentName%' is invalid: %whatIsWrong%</note>
+        <jms:reference-file line="34">/eZ/Publish/Core/Base/Exceptions/InvalidArgumentException.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="5184b29eed2fee5c130959375be31ea55010adb8" resname="Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%'">
+        <source>Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%'</source>
+        <target state="new">Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%'</target>
+        <note>key: Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%'</note>
+        <jms:reference-file line="31">/eZ/Publish/Core/Base/Exceptions/InvalidArgumentType.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="77a999c48ddb299d4c8af74d195bdf44dda4883c" resname="Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%', got '%actualType%'">
+        <source>Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%', got '%actualType%'</source>
+        <target state="new">Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%', got '%actualType%'</target>
+        <note>key: Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%', got '%actualType%'</note>
+        <jms:reference-file line="33">/eZ/Publish/Core/Base/Exceptions/InvalidArgumentType.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="6a5a5e4df0f09cc7587d11571aa90c31e68c15c6" resname="Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, binary file ids can not begin with a '/'">
+        <source>Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, binary file ids can not begin with a '/'</source>
+        <target state="new">Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, binary file ids can not begin with a '/'</target>
+        <note>key: Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, binary file ids can not begin with a '/'</note>
+        <jms:reference-file line="17">/eZ/Publish/Core/IO/Exception/InvalidBinaryAbsolutePathException.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="0afe736d44da00b87ed3fe777775661ddf10a455" resname="Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, it does not contain prefix '%prefix%'. Is 'var_dir' config correct?">
+        <source>Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, it does not contain prefix '%prefix%'. Is 'var_dir' config correct?</source>
+        <target state="new">Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, it does not contain prefix '%prefix%'. Is 'var_dir' config correct?</target>
+        <note>key: Argument 'BinaryFile::id' is invalid: '%id%' is wrong value, it does not contain prefix '%prefix%'. Is 'var_dir' config correct?</note>
+        <jms:reference-file line="17">/eZ/Publish/Core/IO/Exception/InvalidBinaryPrefixException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="8967aa151e1b84f60c505163d42350eb6a96e948" resname="Content fields did not validate">
         <source>Content fields did not validate</source>
         <target>Content fields did not validate</target>
         <note>key: Content fields did not validate</note>
+        <jms:reference-file line="45">/eZ/Publish/Core/Base/Exceptions/ContentFieldValidationException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="ebf71981c65ff4930b2b3f704b9e5383e92e06a6" resname="Content type cannot be unlinked from the only remaining group">
         <source>Content type cannot be unlinked from the only remaining group</source>
@@ -54,21 +83,25 @@
         <source>ContentType FieldDefinitions did not validate</source>
         <target>ContentType FieldDefinitions did not validate</target>
         <note>key: ContentType FieldDefinitions did not validate</note>
+        <jms:reference-file line="45">/eZ/Publish/Core/Base/Exceptions/ContentTypeFieldDefinitionValidationException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="dbf0b883e33a6e7c433ffa9a536fd214cda39b5c" resname="Could not find %classType% class '%className%'">
         <source>Could not find %classType% class '%className%'</source>
         <target>Could not find %classType% class '%className%'</target>
         <note>key: Could not find %classType% class '%className%'</note>
+        <jms:reference-file line="41">/eZ/Publish/Core/Base/Exceptions/MissingClass.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="ff3e1dacaa764a0e94a86b173f9c93509fcaadeb" resname="Could not find '%what%' with identifier '%identifier%'">
         <source>Could not find '%what%' with identifier '%identifier%'</source>
         <target>Could not find '%what%' with identifier '%identifier%'</target>
         <note>key: Could not find '%what%' with identifier '%identifier%'</note>
+        <jms:reference-file line="36">/eZ/Publish/Core/Base/Exceptions/NotFoundException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="2b84fad03f5a98d0fa25c78b1d3717ba108835e6" resname="Could not find class '%className%'">
         <source>Could not find class '%className%'</source>
         <target>Could not find class '%className%'</target>
         <note>key: Could not find class '%className%'</note>
+        <jms:reference-file line="39">/eZ/Publish/Core/Base/Exceptions/MissingClass.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="2f4e9f3ca70239ade7c9789a3da3c26b1216fb16" resname="Current version is already in status DRAFT">
         <source>Current version is already in status DRAFT</source>
@@ -93,6 +126,7 @@
         <source>FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type (%ezpublish.fieldType.eznull.class%)</source>
         <target>FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type (%ezpublish.fieldType.eznull.class%)</target>
         <note>key: FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type (%ezpublish.fieldType.eznull.class%)</note>
+        <jms:reference-file line="32">/eZ/Publish/Core/Base/Exceptions/NotFound/FieldTypeNotFoundException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="25f2ccabd8883a36aee5754ce43741c211cf378a" resname="FieldType '%identifier%' is singular and can't be repeated in a ContentType">
         <source>FieldType '%identifier%' is singular and can't be repeated in a ContentType</source>
@@ -103,11 +137,13 @@
         <source>Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%</source>
         <target>Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%</target>
         <note>key: Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%</note>
+        <jms:reference-file line="32">/eZ/Publish/Core/Base/Exceptions/NotFound/LimitationNotFoundException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="71fd5f8839faaadfe7c61def7e4b42d429959952" resname="Limitations did not validate">
         <source>Limitations did not validate</source>
         <target>Limitations did not validate</target>
         <note>key: Limitations did not validate</note>
+        <jms:reference-file line="40">/eZ/Publish/Core/Base/Exceptions/LimitationValidationException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="f915c78ee350c1b4fb3d3adac7584a12fcc0cfdf" resname="Only empty content type groups can be deleted">
         <source>Only empty content type groups can be deleted</source>
@@ -173,11 +209,13 @@
         <source>User does not have access to '%function%' '%module%'</source>
         <target>User does not have access to '%function%' '%module%'</target>
         <note>key: User does not have access to '%function%' '%module%'</note>
+        <jms:reference-file line="38">/eZ/Publish/Core/Base/Exceptions/UnauthorizedException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="649224015306dff4831eceb63d49e66d7c0c4f1b" resname="User does not have access to '%function%' '%module%' with: %with%'">
         <source>User does not have access to '%function%' '%module%' with: %with%'</source>
         <target>User does not have access to '%function%' '%module%' with: %with%'</target>
         <note>key: User does not have access to '%function%' '%module%' with: %with%'</note>
+        <jms:reference-file line="42">/eZ/Publish/Core/Base/Exceptions/UnauthorizedException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="dfb77818edfca3ee72ed24e16c643a84203ecfa7" resname="Version in status PUBLISHED cannot be deleted">
         <source>Version in status PUBLISHED cannot be deleted</source>
