@@ -23,7 +23,7 @@ class GlobCollector implements Collector
      */
     public function __construct($kernelRootDir)
     {
-        $this->tranlationPattern = $kernelRootDir . sprintf('%1$s..%1$svendor%1$sezsystems%1$sezplatform-i18n-*%1$s*%1$s*.xlf', DIRECTORY_SEPARATOR);
+        $this->tranlationPattern = $kernelRootDir . sprintf('%1$s..%1$svendor%1$sezplatform-i18n%1$sezplatform-i18n-*%1$s*%1$s*.xlf', DIRECTORY_SEPARATOR);
     }
 
     /**
