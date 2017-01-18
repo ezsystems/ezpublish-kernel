@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use Exception;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 
 /**
@@ -19,6 +20,14 @@ use eZ\Publish\Core\Repository\Values\User\UserReference;
  */
 class RepositoryTest extends BaseTest
 {
+    /**
+     * Test for the getRepository() method.
+     */
+    public function testGetRepository()
+    {
+        $this->assertInstanceOf(Repository::class, $this->getSetupFactory()->getRepository(true));
+    }
+
     /**
      * Test for the getContentService() method.
      *
