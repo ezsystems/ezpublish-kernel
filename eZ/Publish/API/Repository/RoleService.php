@@ -292,6 +292,8 @@ interface RoleService
     /**
      * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs.
      *
+     * @deprecated Since 6.8, not currently in use as permission system needs to know about role assignment limitations.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
      * @param mixed $userId

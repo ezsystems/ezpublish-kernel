@@ -253,6 +253,8 @@ interface Handler
     /**
      * Returns the user policies associated with the user (including inherited policies from user groups).
      *
+     * @deprecated Since 6.8, not currently in use as permission system needs to know about role assignment limitations.
+     *
      * @param mixed $userId
      *              In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
      *
