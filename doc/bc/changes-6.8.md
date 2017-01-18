@@ -28,7 +28,7 @@ Changes affecting version compatibility with former or future versions.
 
 ## Deprecations
 
-* `X-Location-Id`, is deprecated in 6.7 in favour of `xkey` *(for use both with and without [Varnish xkey VMOD](https://github.com/varnish/varnish-modules/blob/master/docs/xkey.rst))*.
+* `X-Location-Id`, is deprecated in favour of `xkey` *(for use both with and without [Varnish xkey VMOD](https://github.com/varnish/varnish-modules/blob/master/docs/xkey.rst))*.
 
 
 ## Removed features

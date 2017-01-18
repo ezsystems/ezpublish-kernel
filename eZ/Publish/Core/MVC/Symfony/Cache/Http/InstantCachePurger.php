@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Class InstantCachePurger.
  *
- * @deprecated since 6.7 will be removed in 7.0, use PurgeClient directly.
+ * @deprecated since 6.8 will be removed in 7.0, use PurgeClient directly.
  */
 class InstantCachePurger implements GatewayCachePurger
 {
