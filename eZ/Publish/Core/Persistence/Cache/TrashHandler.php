@@ -12,12 +12,12 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInt
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
  */
 class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 {
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function loadTrashItem($id)
     {
@@ -27,7 +27,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function trashSubtree($locationId)
     {
@@ -41,7 +41,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function recover($trashedId, $newParentId)
     {
@@ -55,7 +55,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
@@ -65,7 +65,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function emptyTrash()
     {
@@ -74,7 +74,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function deleteTrashItem($trashedId)
     {

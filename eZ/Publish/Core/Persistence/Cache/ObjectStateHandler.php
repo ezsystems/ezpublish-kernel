@@ -12,12 +12,12 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
  */
 class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerInterface
 {
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::createGroup
+     * {@inheritdoc}
      */
     public function createGroup(InputStruct $input)
     {
@@ -31,7 +31,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadGroup
+     * {@inheritdoc}
      */
     public function loadGroup($groupId)
     {
@@ -46,7 +46,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadGroupByIdentifier
+     * {@inheritdoc}
      */
     public function loadGroupByIdentifier($identifier)
     {
@@ -56,7 +56,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
+     * {@inheritdoc}
      */
     public function loadAllGroups($offset = 0, $limit = -1)
     {
@@ -87,7 +87,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadObjectStates
+     * {@inheritdoc}
      */
     public function loadObjectStates($groupId)
     {
@@ -115,7 +115,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::updateGroup
+     * {@inheritdoc}
      */
     public function updateGroup($groupId, InputStruct $input)
     {
@@ -128,7 +128,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::deleteGroup
+     * {@inheritdoc}
      */
     public function deleteGroup($groupId)
     {
@@ -143,7 +143,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::create
+     * {@inheritdoc}
      */
     public function create($groupId, InputStruct $input)
     {
@@ -156,7 +156,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::load
+     * {@inheritdoc}
      */
     public function load($stateId)
     {
@@ -171,7 +171,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadByIdentifier
+     * {@inheritdoc}
      */
     public function loadByIdentifier($identifier, $groupId)
     {
@@ -181,7 +181,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::update
+     * {@inheritdoc}
      */
     public function update($stateId, InputStruct $input)
     {
@@ -194,7 +194,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::setPriority
+     * {@inheritdoc}
      */
     public function setPriority($stateId, $priority)
     {
@@ -207,7 +207,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::delete
+     * {@inheritdoc}
      */
     public function delete($stateId)
     {
@@ -221,7 +221,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::setContentState
+     * {@inheritdoc}
      */
     public function setContentState($contentId, $groupId, $stateId)
     {
@@ -234,7 +234,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::getContentState
+     * {@inheritdoc}
      */
     public function getContentState($contentId, $stateGroupId)
     {
@@ -253,7 +253,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::getContentCount
+     * {@inheritdoc}
      *
      * @todo cache results
      */

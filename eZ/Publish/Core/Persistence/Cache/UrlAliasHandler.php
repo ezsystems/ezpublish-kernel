@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterf
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
  */
 class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterface
 {
@@ -24,7 +24,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     const NOT_FOUND = 0;
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * {@inheritdoc}
      */
     public function publishUrlAliasForLocation(
         $locationId,
@@ -57,7 +57,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::createCustomUrlAlias
+     * {@inheritdoc}
      */
     public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
     {
@@ -94,7 +94,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::createGlobalUrlAlias
+     * {@inheritdoc}
      */
     public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
     {
@@ -123,7 +123,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::listGlobalURLAliases
+     * {@inheritdoc}
      */
     public function listGlobalURLAliases($languageCode = null, $offset = 0, $limit = -1)
     {
@@ -133,7 +133,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::listURLAliasesForLocation
+     * {@inheritdoc}
      */
     public function listURLAliasesForLocation($locationId, $custom = false)
     {
@@ -166,7 +166,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::removeURLAliases
+     * {@inheritdoc}
      */
     public function removeURLAliases(array $urlAliases)
     {
@@ -188,7 +188,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::lookup
+     * {@inheritdoc}
      */
     public function lookup($url)
     {
@@ -231,7 +231,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::loadUrlAlias
+     * {@inheritdoc}
      */
     public function loadUrlAlias($id)
     {
@@ -248,7 +248,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationMoved
+     * {@inheritdoc}
      */
     public function locationMoved($locationId, $oldParentId, $newParentId)
     {
@@ -268,7 +268,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationCopied
+     * {@inheritdoc}
      */
     public function locationCopied($locationId, $newLocationId, $newParentId)
     {
@@ -292,7 +292,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationDeleted
+     * {@inheritdoc}
      */
     public function locationDeleted($locationId)
     {
@@ -325,7 +325,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::swap
+     * {@inheritdoc}
      */
     public function locationSwapped($location1ParentId, $location1Id, $location2ParentId, $location2Id)
     {
