@@ -1440,12 +1440,8 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
-        if (!$content->getVersionInfo()->getContentInfo()->published) {
-            if (!$this->repository->canUser('content', 'create', $content)) {
-                throw new UnauthorizedException('content', 'create', array('contentId' => $content->id));
-            }
-        } elseif (!$this->repository->canUser('content', 'edit', $content)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $content->id));
+        if (!$this->repository->canUser('content', 'publish', $content)) {
+            throw new UnauthorizedException('content', 'publish', array('contentId' => $content->id));
         }
 
         $this->repository->beginTransaction();
@@ -1899,6 +1895,8 @@ class ContentService implements ContentServiceInterface
     /**
      * Instantiates a new content create struct object.
      *
+     * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
      *
@@ -1910,6 +1908,7 @@ class ContentService implements ContentServiceInterface
             array(
                 'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
+                'alwaysAvailable' => $contentType->defaultAlwaysAvailable,
             )
         );
     }

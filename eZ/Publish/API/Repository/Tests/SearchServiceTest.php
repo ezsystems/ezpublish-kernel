@@ -4342,9 +4342,12 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * Test for the findContent() method.
+     * This test prepares data for other tests.
      *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @see testFulltextContentSearchComplex
+     * @see testFulltextLocationSearchComplex
+     *
+     * @return array
      */
     public function testFulltextComplex()
     {
@@ -4352,7 +4355,6 @@ class SearchServiceTest extends BaseTest
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
-        $searchService = $repository->getSearchService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
         $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
@@ -4386,21 +4388,39 @@ class SearchServiceTest extends BaseTest
 
         $this->refreshSearch($repository);
 
-        $query = new Query(
+        $criterion = new Criterion\FullText(
+            'red apple',
             [
-                'query' => new Criterion\FullText(
-                    'red apple',
-                    [
-                        'boost' => [
-                            'short_name' => 2,
-                        ],
-                        'fuzziness' => .1,
-                    ]
-                ),
+                'boost' => [
+                    'short_name' => 2,
+                ],
+                'fuzziness' => .1,
             ]
         );
 
-        $searchResult = $searchService->findContent($query, ['languages' => ['eng-GB']]);
+        return [$criterion, $content1, $content2, $content3];
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends testFulltextComplex
+     *
+     * @param array $data
+     */
+    public function testFulltextContentSearchComplex(array $data)
+    {
+        // Do not initialize from scratch
+        $repository = $this->getRepository(false);
+        $searchService = $repository->getSearchService();
+        list($criterion, $content1, $content2, $content3) = $data;
+
+        $searchResult = $searchService->findContent(
+            new Query(['query' => $criterion]),
+            ['languages' => ['eng-GB']]
+        );
+        $searchHits = $searchResult->searchHits;
 
         $this->assertEquals(3, $searchResult->totalCount);
 
@@ -4408,22 +4428,84 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
             usort(
-                $searchResult->searchHits,
+                $searchHits,
                 function ($a, $b) {
                     return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
                 }
             );
 
-            $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
-            $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
-            $this->assertEquals($content3->id, $searchResult->searchHits[2]->valueObject->id);
+            $this->assertEquals($content1->id, $searchHits[0]->valueObject->id);
+            $this->assertEquals($content2->id, $searchHits[1]->valueObject->id);
+            $this->assertEquals($content3->id, $searchHits[2]->valueObject->id);
 
             return;
         }
 
-        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
-        $this->assertEquals($content3->id, $searchResult->searchHits[1]->valueObject->id);
-        $this->assertEquals($content2->id, $searchResult->searchHits[2]->valueObject->id);
+        // Assert scores are descending
+        $this->assertGreaterThan($searchHits[1]->score, $searchHits[0]->score);
+        $this->assertGreaterThan($searchHits[2]->score, $searchHits[1]->score);
+
+        // Assert order
+        $this->assertEquals($content1->id, $searchHits[0]->valueObject->id);
+        $this->assertEquals($content3->id, $searchHits[1]->valueObject->id);
+        $this->assertEquals($content2->id, $searchHits[2]->valueObject->id);
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends testFulltextComplex
+     *
+     * @param array $data
+     */
+    public function testFulltextLocationSearchComplex(array $data)
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ($setupFactory instanceof LegacyElasticsearch) {
+            $this->markTestIncomplete(
+                'Fulltext criterion is not supported with Location search in Elasticsearch engine'
+            );
+        }
+
+        // Do not initialize from scratch
+        $repository = $this->getRepository(false);
+        list($criterion, $content1, $content2, $content3) = $data;
+        $searchService = $repository->getSearchService();
+
+        $searchResult = $searchService->findLocations(
+            new LocationQuery(['query' => $criterion]),
+            ['languages' => ['eng-GB']]
+        );
+        $searchHits = $searchResult->searchHits;
+
+        $this->assertEquals(3, $searchResult->totalCount);
+
+        // Legacy search engine does have scoring, sorting the results by ID in that case
+        $setupFactory = $this->getSetupFactory();
+        if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            usort(
+                $searchHits,
+                function ($a, $b) {
+                    return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
+                }
+            );
+
+            $this->assertEquals($content1->id, $searchHits[0]->valueObject->contentId);
+            $this->assertEquals($content2->id, $searchHits[1]->valueObject->contentId);
+            $this->assertEquals($content3->id, $searchHits[2]->valueObject->contentId);
+
+            return;
+        }
+
+        // Assert scores are descending
+        $this->assertGreaterThan($searchHits[1]->score, $searchHits[0]->score);
+        $this->assertGreaterThan($searchHits[2]->score, $searchHits[1]->score);
+
+        // Assert order
+        $this->assertEquals($content1->id, $searchHits[0]->valueObject->contentId);
+        $this->assertEquals($content3->id, $searchHits[1]->valueObject->contentId);
+        $this->assertEquals($content2->id, $searchHits[2]->valueObject->contentId);
     }
 
     /**

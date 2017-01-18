@@ -122,14 +122,22 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Give Anonymous user role additional rights
         $role = $roleService->loadRoleByIdentifier('Anonymous');
+        $roleDraft = $roleService->createRoleDraft($role);
         $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreateStruct->addLimitation(new SectionLimitation(array('limitationValues' => array(1))));
         $policyCreateStruct->addLimitation(new LocationLimitation(array('limitationValues' => array(2))));
         $policyCreateStruct->addLimitation(new ContentTypeLimitation(array('limitationValues' => array(1))));
-        $roleService->addPolicy($role, $policyCreateStruct);
+        $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+
+        $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'publish');
+        $policyCreateStruct->addLimitation(new SectionLimitation(array('limitationValues' => array(1))));
+        $policyCreateStruct->addLimitation(new LocationLimitation(array('limitationValues' => array(2))));
+        $policyCreateStruct->addLimitation(new ContentTypeLimitation(array('limitationValues' => array(1))));
+        $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
 
         // Set Anonymous user as current
-        $repository->setCurrentUser($repository->getUserService()->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($repository->getUserService()->loadUser($anonymousUserId));
 
         // Create a new content object:
         $contentCreate = $contentService->newContentCreateStruct(
@@ -4686,6 +4694,96 @@ class ContentServiceTest extends BaseContentServiceTest
             $loadedContent1->getFieldValue('name', 'eng-US'),
             $loadedContent2->getFieldValue('name', 'eng-US')
         );
+    }
+
+    /**
+     * Test scenario with writer and publisher users.
+     * Writer can only create content. Publisher can publish this content.
+     */
+    public function testPublishWorkflow()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $this->createRoleWithPolicies('Publisher', [
+            ['content', 'read'],
+            ['content', 'create'],
+            ['content', 'publish'],
+        ]);
+
+        $this->createRoleWithPolicies('Writer', [
+            ['content', 'read'],
+            ['content', 'create'],
+        ]);
+
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+
+        $publisherUser = $this->createCustomUserWithLogin(
+            'publisher',
+            'publisher@example.com',
+            'Publishers',
+            'Publisher'
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+        $draft = $this->createContentDraftVersion1();
+
+        $repository->getPermissionResolver()->setCurrentUserReference($publisherUser);
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        $contentService->loadContent($content->id);
+    }
+
+    /**
+     * Test publish / content policy is required to be able to publish content.
+     *
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @expectedExceptionMessageRegExp /User does not have access to 'publish' 'content'/
+     */
+    public function testPublishContentWithoutPublishPolicyThrowsException()
+    {
+        $repository = $this->getRepository();
+
+        $this->createRoleWithPolicies('Writer', [
+            ['content', 'read'],
+            ['content', 'create'],
+            ['content', 'edit'],
+        ]);
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+
+        $this->createContentVersion1();
+    }
+
+    /**
+     * Simplify creating custom role with limited set of policies.
+     *
+     * @param $roleName
+     * @param array $policies e.g. [ ['content', 'create'], ['content', 'edit'], ]
+     */
+    private function createRoleWithPolicies($roleName, array $policies)
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
+        foreach ($policies as $policy) {
+            $policyCreateStruct = $roleService->newPolicyCreateStruct($policy[0], $policy[1]);
+            $roleCreateStruct->addPolicy($policyCreateStruct);
+        }
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
     }
 
     /**
