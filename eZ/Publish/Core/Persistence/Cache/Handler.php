@@ -222,9 +222,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Begin transaction.
-     *
-     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     * {@inheritdoc}
      */
     public function beginTransaction()
     {
@@ -232,13 +230,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Commit transaction.
-     *
-     * Commit transaction, or throw exceptions if no transactions has been started.
-     *
-     * @throws \RuntimeException If no transaction has been started
-     *
-     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     * {@inheritdoc}
      */
     public function commit()
     {
@@ -246,13 +238,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Rollback transaction.
-     *
-     * Rollback transaction, or throw exceptions if no transactions has been started.
-     *
-     * @throws \RuntimeException If no transaction has been started
-     *
-     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     * {@inheritdoc}
      */
     public function rollback()
     {

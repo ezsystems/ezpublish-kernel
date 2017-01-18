@@ -16,13 +16,10 @@ use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface
 class TransactionHandler extends AbstractHandler implements TransactionHandlerInterface
 {
     /**
-     * Begin transaction.
+     * @todo Maybe this can be solved by contributing to Symfony, as in for instance using a layered cache with memory
+     * cache first and use saveDefered so cache is not persisted before commit is made, and ommited on rollback.
      *
-     * @todo Consider to either disable cache or layer it with in-memory cache per transaction, last layer would be the
-     *       normal layer. At the moment *all* cache is cleared on rollback for simplicity, as they are not frequent.
-     *
-     * Begins an transaction, make sure you'll call commit or rollback when done,
-     * otherwise work will be lost.
+     * {@inheritdoc}
      */
     public function beginTransaction()
     {
@@ -31,11 +28,7 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     }
 
     /**
-     * Commit transaction.
-     *
-     * Commit transaction, or throw exceptions if no transactions has been started.
-     *
-     * @throws \RuntimeException If no transaction has been started
+     * {@inheritdoc}
      */
     public function commit()
     {
@@ -44,17 +37,12 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     }
 
     /**
-     * Rollback transaction.
-     *
-     * Rollback transaction, or throw exceptions if no transactions has been started.
-     *
-     * @throws \RuntimeException If no transaction has been started
+     * {@inheritdoc}
      */
     public function rollback()
     {
         $this->logger->logCall(__METHOD__);
-        // {@see beginTransaction()}
-        $this->cache->clear();
+        $this->cache->clear();// TIMBER!! @see beginTransaction()
         $this->persistenceHandler->transactionHandler()->rollback();
     }
 }

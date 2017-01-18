@@ -22,7 +22,7 @@ use eZ\Publish\SPI\Persistence\User\Policy;
 class UserHandler extends AbstractHandler implements UserHandlerInterface
 {
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::create
+     * {@inheritdoc}
      */
     public function create(User $user)
     {
@@ -36,7 +36,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::load
+     * {@inheritdoc}
      */
     public function load($userId)
     {
@@ -46,7 +46,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadByLogin
+     * {@inheritdoc}
      */
     public function loadByLogin($login)
     {
@@ -56,7 +56,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadByEmail
+     * {@inheritdoc}
      */
     public function loadByEmail($email)
     {
@@ -66,7 +66,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::update
+     * {@inheritdoc}
      */
     public function update(User $user)
     {
@@ -80,7 +80,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::delete
+     * {@inheritdoc}
      */
     public function delete($userId)
     {
@@ -96,7 +96,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::createRole
+     * {@inheritdoc}
      */
     public function createRole(RoleCreateStruct $createStruct)
     {
@@ -106,7 +106,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::createRoleDraft
+     * {@inheritdoc}
      */
     public function createRoleDraft($roleId)
     {
@@ -116,7 +116,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRole
+     * {@inheritdoc}
      */
     public function loadRole($roleId, $status = Role::STATUS_DEFINED)
     {
@@ -136,7 +136,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleByIdentifier
+     * {@inheritdoc}
      */
     public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
     {
@@ -146,7 +146,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleDraftByRoleId
+     * {@inheritdoc}
      */
     public function loadRoleDraftByRoleId($roleId)
     {
@@ -156,7 +156,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoles
+     * {@inheritdoc}
      */
     public function loadRoles()
     {
@@ -166,7 +166,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleAssignment
+     * {@inheritdoc}
      */
     public function loadRoleAssignment($roleAssignmentId)
     {
@@ -176,7 +176,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleAssignmentsByRoleId
+     * {@inheritdoc}
      */
     public function loadRoleAssignmentsByRoleId($roleId)
     {
@@ -186,7 +186,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleAssignmentsByGroupId
+     * {@inheritdoc}
      */
     public function loadRoleAssignmentsByGroupId($groupId, $inherit = false)
     {
@@ -209,7 +209,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::updateRole
+     * {@inheritdoc}
      */
     public function updateRole(RoleUpdateStruct $struct)
     {
@@ -220,7 +220,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::deleteRole
+     * {@inheritdoc}
      */
     public function deleteRole($roleId, $status = Role::STATUS_DEFINED)
     {
@@ -236,7 +236,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::publishRoleDraft
+     * {@inheritdoc}
      */
     public function publishRoleDraft($roleDraftId)
     {
@@ -263,7 +263,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::addPolicyByRoleDraft
+     * {@inheritdoc}
      */
     public function addPolicyByRoleDraft($roleId, Policy $policy)
     {
@@ -273,7 +273,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::addPolicy
+     * {@inheritdoc}
      */
     public function addPolicy($roleId, Policy $policy)
     {
@@ -286,7 +286,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::updatePolicy
+     * {@inheritdoc}
      */
     public function updatePolicy(Policy $policy)
     {
@@ -299,7 +299,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::deletePolicy
+     * {@inheritdoc}
      */
     public function deletePolicy($policyId)
     {
@@ -310,7 +310,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadPoliciesByUserId
+     * {@inheritdoc}
      */
     public function loadPoliciesByUserId($userId)
     {
@@ -320,7 +320,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::assignRole
+     * {@inheritdoc}
      */
     public function assignRole($contentId, $roleId, array $limitation = null)
     {
@@ -335,7 +335,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::unassignRole
+     * {@inheritdoc}
      */
     public function unassignRole($contentId, $roleId)
     {
@@ -350,7 +350,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::removeRoleAssignment
+     * {@inheritdoc}
      */
     public function removeRoleAssignment($roleAssignmentId)
     {

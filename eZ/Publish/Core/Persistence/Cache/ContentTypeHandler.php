@@ -26,7 +26,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStr
 class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerInterface
 {
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::createGroup
+     * {@inheritdoc}
      */
     public function createGroup(GroupCreateStruct $struct)
     {
@@ -39,7 +39,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::updateGroup
+     * {@inheritdoc}
      */
     public function updateGroup(GroupUpdateStruct $struct)
     {
@@ -54,7 +54,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::deleteGroup
+     * {@inheritdoc}
      */
     public function deleteGroup($groupId)
     {
@@ -67,7 +67,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::loadGroup
+     * {@inheritdoc}
      */
     public function loadGroup($groupId)
     {
@@ -82,7 +82,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::loadGroupByIdentifier
+     * {@inheritdoc}
      */
     public function loadGroupByIdentifier($identifier)
     {
@@ -92,7 +92,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::loadAllGroups
+     * {@inheritdoc}
      */
     public function loadAllGroups()
     {
@@ -102,7 +102,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::loadContentTypes
+     * {@inheritdoc}
      */
     public function loadContentTypes($groupId, $status = Type::STATUS_DEFINED)
     {
@@ -112,7 +112,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::load
+     * {@inheritdoc}
      */
     public function load($typeId, $status = Type::STATUS_DEFINED)
     {
@@ -134,7 +134,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::loadByIdentifier
+     * {@inheritdoc}
      */
     public function loadByIdentifier($identifier)
     {
@@ -156,7 +156,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::loadByRemoteId
+     * {@inheritdoc}
      */
     public function loadByRemoteId($remoteId)
     {
@@ -166,7 +166,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::create
+     * {@inheritdoc}
      */
     public function create(CreateStruct $contentType)
     {
@@ -184,7 +184,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::update
+     * {@inheritdoc}
      */
     public function update($typeId, $status, UpdateStruct $struct)
     {
@@ -208,7 +208,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::delete
+     * {@inheritdoc}
      */
     public function delete($typeId, $status)
     {
@@ -226,7 +226,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::createDraft
+     * {@inheritdoc}
      */
     public function createDraft($modifierId, $typeId)
     {
@@ -236,7 +236,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::copy
+     * {@inheritdoc}
      */
     public function copy($userId, $typeId, $status)
     {
@@ -246,7 +246,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::unlink
+     * {@inheritdoc}
      */
     public function unlink($groupId, $typeId, $status)
     {
@@ -261,7 +261,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::link
+     * {@inheritdoc}
      */
     public function link($groupId, $typeId, $status)
     {
@@ -276,7 +276,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getFieldDefinition
+     * {@inheritdoc}
      */
     public function getFieldDefinition($id, $status)
     {
@@ -286,7 +286,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getContentCount
+     * {@inheritdoc}
      */
     public function getContentCount($contentTypeId)
     {
@@ -296,7 +296,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::addFieldDefinition
+     * {@inheritdoc}
      */
     public function addFieldDefinition($typeId, $status, FieldDefinition $struct)
     {
@@ -316,7 +316,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::removeFieldDefinition
+     * {@inheritdoc}
      */
     public function removeFieldDefinition($typeId, $status, $fieldDefinitionId)
     {
@@ -334,7 +334,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::updateFieldDefinition
+     * {@inheritdoc}
      */
     public function updateFieldDefinition($typeId, $status, FieldDefinition $struct)
     {
@@ -352,7 +352,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish
+     * {@inheritdoc}
      */
     public function publish($typeId)
     {
@@ -369,7 +369,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getSearchableFieldMap
+     * {@inheritdoc}
      */
     public function getSearchableFieldMap()
     {

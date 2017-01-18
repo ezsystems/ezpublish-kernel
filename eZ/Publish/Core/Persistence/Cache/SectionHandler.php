@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Section\Handler
  *
  * @todo Consider loadAll & loadByIdentifier cache, however then loadAll() must be used
  *       by all (incl create) but update & delete to avoid doing several cache lookups.
@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterfac
 class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 {
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
+     * {@inheritdoc}
      */
     public function create($name, $identifier)
     {
@@ -31,7 +31,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
+     * {@inheritdoc}
      */
     public function update($id, $name, $identifier)
     {
@@ -45,7 +45,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
+     * {@inheritdoc}
      */
     public function load($id)
     {
@@ -60,9 +60,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * Get all section data.
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Section[]
+     * {@inheritdoc}
      */
     public function loadAll()
     {
@@ -72,13 +70,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * Get section data by identifier.
-     *
-     * @param string $identifier
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Section
+     * {@inheritdoc}
      */
     public function loadByIdentifier($identifier)
     {
@@ -88,7 +80,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
+     * {@inheritdoc}
      */
     public function delete($id)
     {
@@ -101,7 +93,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
+     * {@inheritdoc}
      */
     public function assign($sectionId, $contentId)
     {
@@ -116,11 +108,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * Number of content assignments a Section has.
-     *
-     * @param mixed $sectionId
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function assignmentsCount($sectionId)
     {
@@ -130,11 +118,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * Number of role policies using a Section in limitations.
-     *
-     * @param mixed $sectionId
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function policiesCount($sectionId)
     {
@@ -144,7 +128,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::countRoleAssignmentsUsingSection
+     * {@inheritdoc}
      */
     public function countRoleAssignmentsUsingSection($sectionId)
     {

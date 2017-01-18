@@ -18,14 +18,14 @@ use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Handler
  */
 class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 {
     const ALL_TRANSLATIONS_KEY = '0';
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::create
+     * {@inheritdoc}
      */
     public function create(CreateStruct $struct)
     {
@@ -36,7 +36,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::createDraftFromVersion
+     * {@inheritdoc}
      */
     public function createDraftFromVersion($contentId, $srcVersion, $userId)
     {
@@ -46,7 +46,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::copy
+     * {@inheritdoc}
      */
     public function copy($contentId, $versionNo = null)
     {
@@ -56,7 +56,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::load
+     * {@inheritdoc}
      */
     public function load($contentId, $version, array $translations = null)
     {
@@ -73,7 +73,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfo
+     * {@inheritdoc}
      */
     public function loadContentInfo($contentId)
     {
@@ -88,7 +88,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfoByRemoteId
+     * {@inheritdoc}
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
@@ -103,7 +103,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadVersionInfo
+     * {@inheritdoc}
      */
     public function loadVersionInfo($contentId, $versionNo)
     {
@@ -113,7 +113,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadDraftsForUser
+     * {@inheritdoc}
      */
     public function loadDraftsForUser($userId)
     {
@@ -123,7 +123,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::setStatus
+     * {@inheritdoc}
      */
     public function setStatus($contentId, $status, $version)
     {
@@ -140,7 +140,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::updateMetadata
+     * {@inheritdoc}
      */
     public function updateMetadata($contentId, MetadataUpdateStruct $struct)
     {
@@ -156,7 +156,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::updateContent
+     * {@inheritdoc}
      */
     public function updateContent($contentId, $versionNo, UpdateStruct $struct)
     {
@@ -172,7 +172,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::deleteContent
+     * {@inheritdoc}
      */
     public function deleteContent($contentId)
     {
@@ -205,7 +205,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::deleteVersion
+     * {@inheritdoc}
      */
     public function deleteVersion($contentId, $versionNo)
     {
@@ -221,7 +221,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::listVersions
+     * {@inheritdoc}
      */
     public function listVersions($contentId, $status = null, $limit = -1)
     {
@@ -231,7 +231,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::addRelation
+     * {@inheritdoc}
      */
     public function addRelation(RelationCreateStruct $relation)
     {
@@ -241,7 +241,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::removeRelation
+     * {@inheritdoc}
      */
     public function removeRelation($relationId, $type)
     {
@@ -250,7 +250,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadRelations
+     * {@inheritdoc}
      */
     public function loadRelations($sourceContentId, $sourceContentVersionNo = null, $type = null)
     {
@@ -267,7 +267,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadReverseRelations
+     * {@inheritdoc}
      */
     public function loadReverseRelations($destinationContentId, $type = null)
     {
@@ -277,7 +277,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::publish
+     * {@inheritdoc}
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $struct)
     {
