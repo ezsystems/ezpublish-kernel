@@ -63,14 +63,11 @@ class TrashItem extends APITrashItem
             case 'contentId':
                 return $this->contentInfo->id;
             case 'path':
-                if ($this->path !== null) {
-                    return $this->path;
-                }
                 if (isset($this->pathString[1]) && $this->pathString[0] === '/') {
-                    return $this->path = explode('/', trim($this->pathString, '/'));
+                    return explode('/', trim($this->pathString, '/'));
                 }
 
-                return $this->path = array();
+                return [];
         }
 
         return parent::__get($property);
