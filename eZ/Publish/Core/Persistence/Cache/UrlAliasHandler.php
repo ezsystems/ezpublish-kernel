@@ -327,23 +327,23 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     /**
      * {@inheritdoc}
      */
-    public function locationSwapped($location1ParentId, $location1Id, $location2ParentId, $location2Id)
+    public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)
     {
         $this->logger->logCall(
             __METHOD__,
             [
-                'location1ParentId' => $location1ParentId,
                 'location1Id' => $location1Id,
-                'location2ParentId' => $location2ParentId,
+                'location1ParentId' => $location1ParentId,
                 'location2Id' => $location2Id,
+                'location2ParentId' => $location2ParentId,
             ]
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationSwapped(
-            $location1ParentId,
             $location1Id,
-            $location2ParentId,
-            $location2Id
+            $location1ParentId,
+            $location2Id,
+            $location2ParentId
         );
 
         $this->clearLocation($location1Id);

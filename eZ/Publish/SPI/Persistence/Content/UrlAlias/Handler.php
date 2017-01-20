@@ -152,7 +152,7 @@ interface Handler
      * @param string|int $location2Id
      * @param string|int $location2ParentId
      */
-    public function locationSwapped($location1ParentId, $location1Id, $location2ParentId, $location2Id);
+    public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId);
 
     /**
      * Notifies the underlying engine that a location was deleted or moved to trash.
