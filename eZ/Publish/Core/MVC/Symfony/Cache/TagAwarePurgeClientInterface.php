@@ -8,18 +8,32 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache;
 
-interface PurgeClientInterface
+/**
+ * A purge client able to purge from a list of tags.
+ */
+interface TagAwarePurgeClientInterface
 {
     /**
      * Triggers the cache purge $locationIds.
      *
      * It's up to the implementor to decide whether to purge $locationIds right away or to delegate to a separate process.
      *
-     * @deprecate Since 6.8, use {@link TagAwarePurgeClientInterface::purgeByTags()}
+     * @deprecate Since 6.8, use {@link purgeByTags()}
      *
      * @param array $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
      */
     public function purge($locationIds);
+
+    /**
+     * Triggers the cache purge/invalidation of cache by $tags.
+     *
+     * See doc/specifications/cache/multi_tagging.md for list of system tags and conventions.
+     *
+     * @since 6.8
+     *
+     * @param string[] $tags Tags that
+     */
+    public function purgeByTags(array $tags);
 
     /**
      * Purges all content elements currently in cache.

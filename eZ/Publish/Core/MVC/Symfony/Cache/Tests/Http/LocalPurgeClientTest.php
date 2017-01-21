@@ -29,8 +29,8 @@ class LocalPurgeClientTest extends PHPUnit_Framework_TestCase
     public function testPurge()
     {
         $locationIds = array(123, 456, 789);
-        $expectedBanRequest = Request::create('http://localhost', 'BAN');
-        $expectedBanRequest->headers->set('X-Location-Id', '(' . implode('|', $locationIds) . ')');
+        $expectedBanRequest = Request::create('http://localhost', 'PURGE');
+        $expectedBanRequest->headers->set('xkey', 'location-123 location-456 location-789');
 
         $cacheStore = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger');
         $cacheStore

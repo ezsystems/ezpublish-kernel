@@ -1,5 +1,7 @@
 # FOSHttpCacheBundle usage in eZ
 
+_@todo: UPDATE_
+
 As of v5.4 / v2014.11, usage of [FOSHttpCacheBundle](http://foshttpcachebundle.readthedocs.org/) has been introduced,
 impacting the following features:
 
