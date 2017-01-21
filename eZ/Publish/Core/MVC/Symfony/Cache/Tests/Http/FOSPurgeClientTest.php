@@ -9,7 +9,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient;
+use FOS\HttpCache\ProxyClient\ProxyClientInterface;
+use FOS\HttpCacheBundle\CacheManager;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
 {
@@ -26,12 +29,12 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->cacheManager = $this->getMockBuilder('\FOS\HttpCacheBundle\CacheManager')
+        $this->cacheManager = $this->getMockBuilder(CacheManager::class)
             ->setConstructorArgs(
                 array(
-                    $this->getMock('\FOS\HttpCache\ProxyClient\ProxyClientInterface'),
+                    $this->getMock(ProxyClientInterface::class),
                     $this->getMock(
-                        '\Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+                        UrlGeneratorInterface::class
                     ),
                 )
             )
@@ -52,8 +55,8 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
         $locationId = 123;
         $this->cacheManager
             ->expects($this->once())
-            ->method('invalidate')
-            ->with(array('X-Location-Id' => "^($locationId)$"));
+            ->method('invalidatePath')
+            ->with('/', ['xkey' => "location-$locationId", 'Host' => 'localhost']);
 
         $this->purgeClient->purge($locationId);
     }
@@ -63,10 +66,12 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
      */
     public function testPurge(array $locationIds)
     {
-        $this->cacheManager
-            ->expects($this->once())
-            ->method('invalidate')
-            ->with(array('X-Location-Id' => '^(' . implode('|', $locationIds) . ')$'));
+        foreach ($locationIds as $key => $locationId) {
+            $this->cacheManager
+                ->expects($this->at($key))
+                ->method('invalidatePath')
+                ->with('/', ['xkey' => "location-$locationId", 'Host' => 'localhost']);
+        }
 
         $this->purgeClient->purge($locationIds);
     }
@@ -85,7 +90,7 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('X-Location-Id' => '.*'));
+            ->with(array('xkey' => '.*'));
 
         $this->purgeClient->purgeAll();
     }

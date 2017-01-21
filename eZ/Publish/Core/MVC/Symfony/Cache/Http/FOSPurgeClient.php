@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\TagAwarePurgeClientInterface;
 use FOS\HttpCacheBundle\CacheManager;
 
 /**
@@ -17,7 +18,7 @@ use FOS\HttpCacheBundle\CacheManager;
  * Only support BAN requests on purpose, to be able to invalidate cache for a
  * collection of Location/Content objects.
  */
-class FOSPurgeClient implements PurgeClientInterface
+class FOSPurgeClient implements PurgeClientInterface, TagAwarePurgeClientInterface
 {
     /**
      * @var CacheManager
@@ -40,15 +41,34 @@ class FOSPurgeClient implements PurgeClientInterface
             return;
         }
 
-        if (!is_array($locationIds)) {
-            $locationIds = array($locationIds);
+        $this->purgeByTags(
+            array_map(
+                function ($locationId) {
+                    return 'location-' . $locationId;
+                },
+                (array)$locationIds
+            )
+        );
+    }
+
+    public function purgeByTags(array $tags)
+    {
+        if (empty($tags)) {
+            return;
         }
 
-        $this->cacheManager->invalidate(array('X-Location-Id' => '^(' . implode('|', $locationIds) . ')$'));
+        // As xkey only support one tag (key) being invalidated at a time, we loop.
+        // These will be queued by FOS\HttpCache\ProxyClient\Varnish and handled on kernel.terminate.
+        foreach (array_unique($tags) as $tag) {
+            $this->cacheManager->invalidatePath(
+                '/',
+                ['xkey' => $tag, 'Host' => empty($_SERVER['SERVER_NAME']) ? 'localhost' : $_SERVER['SERVER_NAME']]
+            );
+        }
     }
 
     public function purgeAll()
     {
-        $this->cacheManager->invalidate(array('X-Location-Id' => '.*'));
+        $this->cacheManager->invalidate(['xkey' => '.*']);
     }
 }
