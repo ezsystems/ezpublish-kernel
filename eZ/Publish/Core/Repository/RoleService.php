@@ -733,7 +733,7 @@ class RoleService implements RoleServiceInterface
     {
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->deletePolicy($policy->id);
+            $this->userHandler->deletePolicy($policy->id, $policy->roleId);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
