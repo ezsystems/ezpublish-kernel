@@ -53,7 +53,7 @@ class UserHandlerTest extends AbstractCacheHandlerTest
             ['addPolicyByRoleDraft', [9, $policy]],
             ['addPolicy', [9, $policy], ['role-9']],
             ['updatePolicy', [$policy], ['policy-13', 'role-9']],
-            ['deletePolicy', [13], ['policy-13']],
+            ['deletePolicy', [13, 9], ['policy-13', 'role-9']],
             ['loadPoliciesByUserId', [14]],
             ['assignRole', [14, 9], ['role-assignment-group-list-14', 'role-assignment-role-list-9']],
             ['unassignRole', [14, 9], ['role-assignment-group-list-14', 'role-assignment-role-list-9']],

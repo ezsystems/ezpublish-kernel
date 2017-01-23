@@ -385,12 +385,12 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function deletePolicy($policyId)
+    public function deletePolicy($policyId, $roleId)
     {
         $this->logger->logCall(__METHOD__, array('policy' => $policyId));
-        $this->persistenceHandler->userHandler()->deletePolicy($policyId);
+        $this->persistenceHandler->userHandler()->deletePolicy($policyId, $roleId);
 
-        $this->cache->invalidateTags(['policy-' . $policyId]);
+        $this->cache->invalidateTags(['policy-' . $policyId, 'role-' . $roleId]);
     }
 
     /**

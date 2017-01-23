@@ -21,6 +21,10 @@ Changes affecting version compatibility with former or future versions.
 * "cache_pool_name" siteaccess setting has been removed & replaced by "cache_service_name" as the semantic is different.
   The new setting should contain the full service name of a  symfony cache service, by default app_cache.app is used.
 
+* SPI: eZ\Publish\SPI\Persistence\User::deletePolicy adds role id argument
+  Id of Role is added on deletePolicy() to be able to properly clear cache
+  for the affected role.
+
 
 ## Deprecations
 
