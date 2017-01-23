@@ -170,7 +170,6 @@ class TagAwareStore extends Store implements ContentPurger
      *
      * @deprecated Use cache:clear, with multi tagging theoretically there shouldn't be need to delete all anymore from core.
      *
-     * @internal @param Filesystem $fs Internal argument for unit tests to be able to mock Filesystem class.
      * @return bool
      */
     public function purgeAllContent()

@@ -18,6 +18,8 @@ interface ContentPurger extends RequestAwarePurger
     /**
      * Purges all cached content.
      *
+     * @deprecated Use cache:clear, with multi tagging theoretically there shouldn't be need to delete all anymore from core.
+     *
      * @return bool
      */
     public function purgeAllContent();
