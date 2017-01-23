@@ -447,8 +447,9 @@ class Handler implements BaseUserHandler
      * Removes a policy from a role.
      *
      * @param mixed $policyId
+     * @param mixed $roleId
      */
-    public function deletePolicy($policyId)
+    public function deletePolicy($policyId, $roleId)
     {
         // Each policy can only be associated to exactly one role. Thus it is
         // sufficient to use the policyId for identification and just remove
