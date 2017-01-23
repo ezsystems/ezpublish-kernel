@@ -149,7 +149,7 @@ class Type extends FieldType
      * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash Null or associative array containing one of the following (first value found in the order below is picked):
-                          'rfc850': Date in RFC 850 format (DateTime::RFC850)
+     *                    'rfc850': Date in RFC 850 format (DateTime::RFC850)
      *                    'timestring': Date in parseable string format supported by DateTime (e.g. 'now', '+3 days')
      *                    'timestamp': Unix timestamp
      *
