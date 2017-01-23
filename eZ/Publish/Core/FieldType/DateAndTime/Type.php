@@ -150,8 +150,7 @@ class Type extends FieldType
      *
      * @param mixed $hash Null or associative array containing timestamp and optionally date in RFC850 format,
      *                    and optionally date in parseable string format (e.g. 'now', '+3 days')
-     *
-     * @deprecated timestamp is no longer used and will be removed in a future version.
+     *                    RFC850 date overrides string format, which overrides timestamp.
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value $value
      */
