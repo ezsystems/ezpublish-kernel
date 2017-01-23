@@ -922,7 +922,7 @@ class UserHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('deletePolicy')
-            ->with(55)
+            ->with(55, 33)
             ->will(
                 $this->returnValue(true)
             );
@@ -934,7 +934,7 @@ class UserHandlerTest extends HandlerTest
             ->will($this->returnValue(true));
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->deletePolicy(55);
+        $handler->deletePolicy(55, 33);
     }
 
     /**
