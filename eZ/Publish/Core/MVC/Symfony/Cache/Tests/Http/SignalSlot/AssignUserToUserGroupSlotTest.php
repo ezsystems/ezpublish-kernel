@@ -8,6 +8,27 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-class AssignUserToUserGroupSlotTest
+use eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal;
+
+class AssignUserToUserGroupSlotTest extends AbstractContentSlotTest
 {
+    public function createSignal()
+    {
+        return new AssignUserToUserGroupSignal(['userId' => $this->contentId, 'userGroupId' => 99]);
+    }
+
+    public function generateTags()
+    {
+        return ['content-' . $this->contentId, 'content-99'];
+    }
+
+    public function getSlotClass()
+    {
+        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignUserToUserGroupSlot';
+    }
+
+    public function getReceivedSignalClasses()
+    {
+        return ['eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal'];
+    }
 }

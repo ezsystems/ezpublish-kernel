@@ -18,8 +18,16 @@ use eZ\Publish\Core\SignalSlot\Signal;
  * The User's Content's HTTP cache must be cleared, yes.
  * And the user must be logged out, or its user hash cleared (not sure we can without clearing for all users)
  */
-class UnassignUserFromUserGroupSlot extends PurgeAllHttpCacheSlot
+class UnassignUserFromUserGroupSlot extends AbstractContentSlot
 {
+    /**
+     * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal $signal
+     */
+    protected function generateTags(Signal $signal)
+    {
+        return ['content-' . $signal->userId, 'content-' . $signal->userGroupId];
+    }
+
     protected function supports(Signal $signal)
     {
         return $signal instanceof Signal\UserService\UnAssignUserFromUserGroupSignal;
