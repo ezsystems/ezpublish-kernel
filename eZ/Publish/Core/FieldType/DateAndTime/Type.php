@@ -148,9 +148,10 @@ class Type extends FieldType
     /**
      * Converts an $hash to the Value defined by the field type.
      *
-     * @param mixed $hash Null or associative array containing timestamp and optionally date in RFC850 format,
-     *                    and optionally date in parseable string format (e.g. 'now', '+3 days')
-     *                    RFC850 date overrides string format, which overrides timestamp.
+     * @param mixed $hash Null or associative array containing one of the following (first value found in the order below is picked):
+     *                    'rfc850': Date in RFC 850 format (DateTime::RFC850)
+     *                    'timestring': Date in parseable string format supported by DateTime (e.g. 'now', '+3 days')
+     *                    'timestamp': Unix timestamp
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value $value
      */
