@@ -39,8 +39,8 @@ COMPOSER_UPDATE=""
 
 # solr package search API integration tests
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
-    echo "> Require ezsystems/ezplatform-solr-search-engine:^1.1.0@dev"
-    composer require --no-update ezsystems/ezplatform-solr-search-engine:^1.1.0@dev
+    echo "> Require ezsystems/ezplatform-solr-search-engine:1.1.*"
+    composer require --no-update ezsystems/ezplatform-solr-search-engine:1.1.*
     COMPOSER_UPDATE="true"
 
     # Because of either some changes in travis, composer or git, composer is not able to pick version for "self" on inclusion of solr anymore, so we force it:
