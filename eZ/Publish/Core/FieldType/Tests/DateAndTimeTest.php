@@ -216,6 +216,35 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
+     * @param mixed $inputValue
+     * @param array $expectedResult
+     *
+     * @dataProvider provideInputForFromHash
+     */
+    public function testFromHash($inputHash, $expectedResult)
+    {
+        $this->assertIsValidHashValue($inputHash);
+
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $actualResult = $fieldType->fromHash($inputHash);
+
+        // Tests may run slowly. Allow 20 seconds margin of error.
+        $this->assertGreaterThanOrEqual(
+            $expectedResult,
+            $actualResult,
+            'fromHash() method did not create expected result.'
+        );
+        if ($expectedResult->value !== null) {
+            $this->assertLessThan(
+                $expectedResult->value->getTimestamp() + 20,
+                $actualResult->value->getTimestamp(),
+                'fromHash() method did not create expected result.'
+            );
+        }
+    }
+
+    /**
      * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
@@ -271,6 +300,18 @@ class DateAndTimeTest extends FieldTypeTest
                     'timestamp' => $date->getTimeStamp(),
                 ),
                 DateAndTimeValue::fromTimestamp($date->getTimeStamp()),
+            ),
+            array(
+                array(
+                    'timestring' => 'now',
+                ),
+                DateAndTimeValue::fromTimestamp(time()),
+            ),
+            array(
+                array(
+                    'timestring' => '+42 seconds',
+                ),
+                DateAndTimeValue::fromTimestamp(time() + 42),
             ),
         );
     }

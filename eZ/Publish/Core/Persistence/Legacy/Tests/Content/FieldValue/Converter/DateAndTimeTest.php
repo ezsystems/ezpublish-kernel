@@ -254,10 +254,14 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        sleep(1);
+        $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
+
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($time, $fieldDef->defaultValue->data['timestamp']);
+        self::assertEquals($time + 1, $dateTimeFromString->getTimestamp());
     }
 
     /**
@@ -282,12 +286,16 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
+
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($timestamp, $fieldDef->defaultValue->data['timestamp']);
+        self::assertGreaterThanOrEqual($timestamp, $dateTimeFromString->getTimestamp());
         // Giving a margin of 1 second for test execution
         self::assertLessThanOrEqual($timestamp + 1, $fieldDef->defaultValue->data['timestamp']);
+        self::assertLessThanOrEqual($timestamp + 1, $dateTimeFromString->getTimestamp());
     }
 
     /**
@@ -314,12 +322,16 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
+
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($timestamp, $fieldDef->defaultValue->data['timestamp']);
+        self::assertGreaterThanOrEqual($timestamp, $dateTimeFromString->getTimestamp());
         // Giving a margin of 1 second for test execution
         self::assertLessThanOrEqual($timestamp + 1, $fieldDef->defaultValue->data['timestamp']);
+        self::assertLessThanOrEqual($timestamp + 1, $dateTimeFromString->getTimestamp());
     }
 
     /**
