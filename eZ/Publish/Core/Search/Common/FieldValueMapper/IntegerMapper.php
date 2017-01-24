@@ -8,16 +8,16 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
 use eZ\Publish\Core\Search\Common\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType\FloatField;
+use eZ\Publish\SPI\Search\FieldType\IntegerField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps raw field values to something search engine can understand.
+ * Common integer field value mapper implementation.
  */
-class FloatMapper extends FieldValueMapper
+class IntegerMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped.
@@ -28,7 +28,7 @@ class FloatMapper extends FieldValueMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof FloatField;
+        return $field->type instanceof IntegerField;
     }
 
     /**
@@ -40,6 +40,18 @@ class FloatMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (float)$field->value;
+        return $this->convert($field->value);
+    }
+
+    /**
+     * Convert to a proper search engine representation.
+     *
+     * @param mixed $value
+     *
+     * @return int
+     */
+    protected function convert($value)
+    {
+        return (int)$value;
     }
 }

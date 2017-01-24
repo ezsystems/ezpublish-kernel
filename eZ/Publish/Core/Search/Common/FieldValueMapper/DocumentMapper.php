@@ -1,23 +1,23 @@
 <?php
 
 /**
- * File containing the PriceMapper document field value mapper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType\PriceField;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
+use eZ\Publish\SPI\Search\FieldType\DocumentField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps PriceField document field values to something Elasticsearch can index.
+ * Common document field value mapper implementation.
  */
-class PriceMapper extends FieldValueMapper
+class DocumentMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped.
@@ -28,11 +28,11 @@ class PriceMapper extends FieldValueMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof PriceField;
+        return $field->type instanceof DocumentField;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
@@ -40,6 +40,6 @@ class PriceMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (double)$field->value;
+        return $field->value;
     }
 }
