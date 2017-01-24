@@ -31,7 +31,7 @@ class SearchField implements Indexable
         return array(
             new Search\Field(
                 'value',
-                $field->value->data,
+                $this->extractShortText($field->value->data),
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
@@ -40,6 +40,18 @@ class SearchField implements Indexable
                 new Search\FieldType\FullTextField()
             ),
         );
+    }
+
+    /**
+     * Extracts short snippet of the given $string.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    private function extractShortText($string)
+    {
+        return mb_substr(strtok(trim($string), "\r\n"), 0, 255);
     }
 
     /**
