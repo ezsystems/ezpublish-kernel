@@ -9,8 +9,7 @@ features:
 
 ## Http cache clear
 Varnish proxy client from FOSHttpCache lib is now used for clearing eZ Http cache, even when using Symfony HttpCache.
-A single `BAN` request is sent to registered purge servers, containing a `xkey` header.
-This header contains cache items tags that need to be cleared.
+It sends, for each cache tag that needs to be expired, a `PURGE` request with a `xkey` header to the registered purge servers.
 
 ### Symfony reverse proxy
 Symfony reverse proxy (aka HttpCache) is supported out of the box, all you have to do is to activate it.
