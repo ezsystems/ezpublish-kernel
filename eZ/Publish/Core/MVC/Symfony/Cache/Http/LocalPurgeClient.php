@@ -28,9 +28,6 @@ class LocalPurgeClient implements PurgeClientInterface, TagAwarePurgeClientInter
         $this->cacheStore = $cacheStore;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function purge($locationIds)
     {
         if (empty($locationIds)) {
@@ -47,9 +44,6 @@ class LocalPurgeClient implements PurgeClientInterface, TagAwarePurgeClientInter
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function purgeByTags(array $tags)
     {
         if (empty($tags)) {
@@ -61,9 +55,6 @@ class LocalPurgeClient implements PurgeClientInterface, TagAwarePurgeClientInter
         $this->cacheStore->purgeByRequest($purgeRequest);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function purgeAll()
     {
         $this->cacheStore->purgeAllContent();
