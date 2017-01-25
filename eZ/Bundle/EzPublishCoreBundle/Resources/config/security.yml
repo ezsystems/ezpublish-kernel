@@ -1,13 +1,9 @@
 parameters:
-    security.authentication.provider.dao.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider
-    security.authentication.provider.anonymous.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider
-    security.authentication.success_handler.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\DefaultAuthenticationSuccessHandler
     ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
     ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
     ezpublish.security.voter.value_object.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter
     ezpublish.security.controller.class: eZ\Publish\Core\MVC\Symfony\Controller\SecurityController
     ezpublish.security.login_listener.class: eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
-    security.http_utils.class: eZ\Publish\Core\MVC\Symfony\Security\HttpUtils
     ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
     ezpublish.user.hash_generator.class: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
     ezpublish.user.identity_definer.role_id.class: eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider\RoleContextProvider
