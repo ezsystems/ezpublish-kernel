@@ -9,7 +9,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient;
+use FOS\HttpCache\ProxyClient\ProxyClientInterface;
+use FOS\HttpCacheBundle\CacheManager;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
 {
@@ -26,12 +29,12 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->cacheManager = $this->getMockBuilder('\FOS\HttpCacheBundle\CacheManager')
+        $this->cacheManager = $this->getMockBuilder(CacheManager::class)
             ->setConstructorArgs(
                 array(
-                    $this->getMock('\FOS\HttpCache\ProxyClient\ProxyClientInterface'),
+                    $this->getMock(ProxyClientInterface::class),
                     $this->getMock(
-                        '\Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+                        UrlGeneratorInterface::class
                     ),
                 )
             )
