@@ -1,6 +1,4 @@
 parameters:
-    twig.extension.intl.class: Twig_Extensions_Extension_Intl
-
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
 
     ezpublish.view_manager.class: eZ\Bundle\EzPublishCoreBundle\View\Manager
@@ -25,8 +23,6 @@ parameters:
     ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
     ezpublish.twig.extension.rich_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RichTextExtension
 
-    assetic.asset_factory.class: eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory
-
     ezpublish.view.cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
     ezpublish.view.block_cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\BlockCacheResponseListener
     ezpublish.view.view_parameters.injector.viewbase_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ViewbaseLayout
@@ -47,8 +43,9 @@ parameters:
     ezpublish.view_provider.registry.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Registry
 
 services:
+    # Enable Twig intl extension
     twig.extension.intl:
-        class: "%twig.extension.intl.class%"
+        class: Twig_Extensions_Extension_Intl
         tags:
             - {name: twig.extension}
 

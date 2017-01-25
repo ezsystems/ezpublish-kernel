@@ -27,6 +27,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BlockViewPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RouterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TranslationCollectorPass;
@@ -70,6 +71,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new BlockViewPass());
         $container->addCompilerPass(new SignalSlotPass());
         $container->addCompilerPass(new IdentityDefinerPass());
+        $container->addCompilerPass(new RouterPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new RichTextHtml5ConverterPass());
         $container->addCompilerPass(new FragmentPass());

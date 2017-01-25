@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 
 /**
  * Tweaks Symfony fragment framework.
@@ -32,7 +33,7 @@ class FragmentPass implements CompilerPassInterface
         $fragmentListenerDef = $container->findDefinition('fragment.listener');
         $fragmentListenerDef
             ->setFactory([new Reference('ezpublish.fragment_listener.factory'), 'buildFragmentListener'])
-            ->addArgument('%fragment.listener.class%');
+            ->addArgument(FragmentListener::class);
 
         // Looping over all fragment renderers to decorate them
         // This is to make sure they are siteaccess aware (siteaccess is serialized in rendered path).
