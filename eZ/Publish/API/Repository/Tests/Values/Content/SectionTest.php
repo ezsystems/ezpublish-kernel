@@ -1,97 +1,91 @@
 <?php
 
 /**
- * File containing the UserTest class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Tests\Values\User;
+namespace eZ\Publish\API\Repository\Tests\Values\Content;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
-use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\Section;
 use PHPUnit_Framework_TestCase;
 
-/**
- * Test internal integrity of @see \eZ\Publish\Core\Repository\Values\User\User ValueObject.
- */
-class UserTest extends PHPUnit_Framework_TestCase
+class SectionTest extends PHPUnit_Framework_TestCase
 {
     use ValueObjectTestTrait;
 
     /**
      * Test a new class and default values on properties.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__construct
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__construct
      */
     public function testNewClass()
     {
-        $user = new User();
+        $section = new Section();
 
         $this->assertPropertiesCorrect(
             [
-                'login' => null,
-                'email' => null,
-                'passwordHash' => null,
-                'hashAlgorithm' => null,
-                'maxLogin' => null,
-                'enabled' => false,
+                'id' => null,
+                'identifier' => null,
+                'name' => null,
             ],
-            $user
+            $section
         );
     }
 
     /**
      * Test retrieving missing property.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__get
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testMissingProperty()
     {
-        $user = new User();
-        $value = $user->notDefined;
+        $section = new Section();
+        $value = $section->notDefined;
         self::fail('Succeeded getting non existing property');
     }
 
     /**
      * Test setting read only property.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__set
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__set
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testReadOnlyProperty()
     {
-        $user = new User();
-        $user->login = 'user';
+        $section = new Section();
+        $section->id = 22;
         self::fail('Succeeded setting read only property');
     }
 
     /**
      * Test if property exists.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__isset
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__isset
      */
     public function testIsPropertySet()
     {
-        $user = new User();
-        $value = isset($user->notDefined);
+        $section = new Section();
+        $value = isset($section->notDefined);
         self::assertEquals(false, $value);
 
-        $value = isset($user->login);
+        $value = isset($section->id);
         self::assertEquals(true, $value);
     }
 
     /**
      * Test unsetting a property.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__unset
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__unset
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testUnsetProperty()
     {
-        $user = new User(['login' => 'admin']);
-        unset($user->login);
+        $section = new Section(['id' => 1]);
+        unset($section->id);
         self::fail('Unsetting read-only property succeeded');
     }
 }

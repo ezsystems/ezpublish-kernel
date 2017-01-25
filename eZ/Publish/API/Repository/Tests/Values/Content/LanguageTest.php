@@ -1,97 +1,93 @@
 <?php
 
 /**
- * File containing the UserTest class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Tests\Values\User;
+namespace eZ\Publish\API\Repository\Tests\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
-use eZ\Publish\Core\Repository\Values\User\User;
 use PHPUnit_Framework_TestCase;
 
-/**
- * Test internal integrity of @see \eZ\Publish\Core\Repository\Values\User\User ValueObject.
- */
-class UserTest extends PHPUnit_Framework_TestCase
+class LanguageTest extends PHPUnit_Framework_TestCase
 {
     use ValueObjectTestTrait;
 
     /**
-     * Test a new class and default values on properties.
-     *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__construct
+     * Test default properties of just created class.
      */
     public function testNewClass()
     {
-        $user = new User();
+        $language = new Language();
 
         $this->assertPropertiesCorrect(
             [
-                'login' => null,
-                'email' => null,
-                'passwordHash' => null,
-                'hashAlgorithm' => null,
-                'maxLogin' => null,
-                'enabled' => false,
+                'id' => null,
+                'languageCode' => null,
+                'name' => null,
+                'enabled' => null,
             ],
-            $user
+            $language
         );
     }
 
     /**
      * Test retrieving missing property.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__get
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
+     * @expectedExceptionMessage Property 'notDefined' not found on class
      */
     public function testMissingProperty()
     {
-        $user = new User();
-        $value = $user->notDefined;
+        $language = new Language();
+        $value = $language->notDefined;
         self::fail('Succeeded getting non existing property');
     }
 
     /**
      * Test setting read only property.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__set
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__set
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
+     * @expectedExceptionMessage Property 'id' is readonly on class
      */
     public function testReadOnlyProperty()
     {
-        $user = new User();
-        $user->login = 'user';
+        $language = new Language();
+        $language->id = 42;
         self::fail('Succeeded setting read only property');
     }
 
     /**
      * Test if property exists.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__isset
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__isset
      */
     public function testIsPropertySet()
     {
-        $user = new User();
-        $value = isset($user->notDefined);
+        $language = new Language();
+        $value = isset($language->notDefined);
         self::assertEquals(false, $value);
 
-        $value = isset($user->login);
+        $value = isset($language->id);
         self::assertEquals(true, $value);
     }
 
     /**
      * Test unsetting a property.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__unset
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__unset
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
+     * @expectedExceptionMessage Property 'id' is readonly on class
      */
     public function testUnsetProperty()
     {
-        $user = new User(['login' => 'admin']);
-        unset($user->login);
+        $language = new Language(['id' => 2]);
+        unset($language->id);
         self::fail('Unsetting read-only property succeeded');
     }
 }

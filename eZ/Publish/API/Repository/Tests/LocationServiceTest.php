@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
+use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -308,7 +309,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      *
-     * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocation
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testLoadLocation()
@@ -324,9 +325,10 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            Location::class,
             $location
         );
+        self::assertEquals(5, $location->id);
 
         return $location;
     }
@@ -507,6 +509,12 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInternalType('array', $locations);
+        self::assertNotEmpty($locations);
+
+        foreach ($locations as $location) {
+            self::assertInstanceOf(Location::class, $location);
+            self::assertEquals($contentInfo->id, $location->getContentInfo()->id);
+        }
 
         return $locations;
     }
@@ -679,7 +687,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren()
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationChildren
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadLocationChildren()
@@ -696,9 +704,15 @@ class LocationServiceTest extends BaseTest
         $childLocations = $locationService->loadLocationChildren($location);
         /* END: Use Case */
 
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList', $childLocations);
+        $this->assertInstanceOf(LocationList::class, $childLocations);
         $this->assertInternalType('array', $childLocations->locations);
+        $this->assertNotEmpty($childLocations->locations);
         $this->assertInternalType('int', $childLocations->totalCount);
+
+        foreach ($childLocations->locations as $childLocation) {
+            $this->assertInstanceOf(Location::class, $childLocation);
+            $this->assertEquals($location->id, $childLocation->parentLocationId);
+        }
 
         return $childLocations;
     }
@@ -887,7 +901,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the newLocationUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct
      */
     public function testNewLocationUpdateStruct()
     {
@@ -900,7 +914,17 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
+            LocationUpdateStruct::class,
+            $updateStruct
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'priority' => null,
+                'remoteId' => null,
+                'sortField' => null,
+                'sortOrder' => null,
+            ],
             $updateStruct
         );
     }

@@ -4342,6 +4342,44 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findContent() method searching for content filtered by languages.
+     *
+     * @covers \eZ\Publish\Core\Repository\SearchService::findContent
+     */
+    public function testFindContentWithLanguageFilter()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query(
+            [
+                'filter' => new Criterion\ContentId([4]),
+                'offset' => 0,
+            ]
+        );
+        $searchResult = $searchService->findContent(
+            $query,
+            ['languages' => ['eng-US']],
+            false
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            SearchResult::class,
+            $searchResult
+        );
+
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertCount($searchResult->totalCount, $searchResult->searchHits);
+        foreach ($searchResult->searchHits as $searchHit) {
+            $this->assertInstanceOf(
+                SearchHit::class,
+                $searchHit
+            );
+        }
+    }
+
+    /**
      * This test prepares data for other tests.
      *
      * @see testFulltextContentSearchComplex

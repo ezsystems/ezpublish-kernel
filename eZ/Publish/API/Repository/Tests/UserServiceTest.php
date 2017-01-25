@@ -8,9 +8,15 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use Exception;
 
 /**
@@ -87,6 +93,36 @@ class UserServiceTest extends BaseTest
             $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $subUserGroup);
         }
         /* END: Use Case */
+    }
+
+    /**
+     * Test loading sub groups throwing NotFoundException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadSubUserGroups
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadSubUserGroupsThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $parentGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            [
+                                'contentInfo' => new ContentInfo(
+                                ['id' => 123456]
+                            ),
+                            ]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->loadSubUserGroups($parentGroup);
     }
 
     /**
@@ -199,7 +235,7 @@ class UserServiceTest extends BaseTest
 
         $versionInfo = $userGroup->getVersionInfo();
 
-        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $versionInfo->status);
+        $this->assertEquals(APIVersionInfo::STATUS_PUBLISHED, $versionInfo->status);
         $this->assertEquals(1, $versionInfo->versionNo);
 
         return $userGroup;
@@ -428,6 +464,32 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test deleting user group throwing NotFoundException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::deleteUserGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteUserGroupThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            ['contentInfo' => new ContentInfo(['id' => 123456])]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->deleteUserGroup($userGroup);
+    }
+
+    /**
      * Test for the moveUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
@@ -538,9 +600,47 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test moving a user group below another group throws NotFoundException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::moveUserGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testMoveUserGroupThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userGroupToMove = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            ['contentInfo' => new ContentInfo(['id' => 123456])]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $parentUserGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            ['contentInfo' => new ContentInfo(['id' => 123455])]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->moveUserGroup($userGroupToMove, $parentUserGroup);
+    }
+
+    /**
      * Test for the newUserGroupUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::newUserGroupUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\UserService::newUserGroupUpdateStruct
      */
     public function testNewUserGroupUpdateStruct()
     {
@@ -553,9 +653,12 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupUpdateStruct',
+            UserGroupUpdateStruct::class,
             $groupUpdate
         );
+
+        $this->assertNull($groupUpdate->contentUpdateStruct);
+        $this->assertNull($groupUpdate->contentMetadataUpdateStruct);
     }
 
     /**
@@ -627,7 +730,7 @@ class UserServiceTest extends BaseTest
 
         $versionInfo = $userGroup->getVersionInfo();
 
-        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $versionInfo->status);
+        $this->assertEquals(APIVersionInfo::STATUS_PUBLISHED, $versionInfo->status);
         $this->assertEquals(2, $versionInfo->versionNo);
     }
 
@@ -670,7 +773,7 @@ class UserServiceTest extends BaseTest
 
         $versionInfo = $userGroup->getVersionInfo();
 
-        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $versionInfo->status);
+        $this->assertEquals(APIVersionInfo::STATUS_PUBLISHED, $versionInfo->status);
         $this->assertEquals(1, $versionInfo->versionNo);
     }
 
@@ -733,6 +836,26 @@ class UserServiceTest extends BaseTest
         );
 
         return $userCreate;
+    }
+
+    /**
+     * Test updating a user group throws ContentFieldValidationException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::updateUserGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     */
+    public function testUpdateUserGroupThrowsContentFieldValidationExceptionOnRequiredFieldEmpty()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $userGroup = $userService->loadUserGroup(42);
+        $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $userGroupUpdateStruct->contentUpdateStruct->setField('name', '', 'eng-US');
+
+        $userService->updateUserGroup($userGroup, $userGroupUpdateStruct);
     }
 
     /**
@@ -929,8 +1052,9 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the createUser() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'userCreateStruct' is invalid: User with provided login already exists
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testCreateUserThrowsInvalidArgumentException()
@@ -1002,6 +1126,38 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->fail('User object still exists after rollback.');
+    }
+
+    /**
+     * Test creating a user throwing NotFoundException.
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
+     */
+    public function testCreateUserThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userCreateStruct = $userService->newUserCreateStruct('new_user', 'new_user@ez.no', 'password', 'eng-GB');
+        $userCreateStruct->setField('first_name', 'New');
+        $userCreateStruct->setField('last_name', 'User');
+
+        $parentGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            [
+                                'contentInfo' => new ContentInfo(['id' => 123456]),
+                            ]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->createUser($userCreateStruct, [$parentGroup]);
     }
 
     /**
@@ -1365,7 +1521,20 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserUpdateStruct',
+            UserUpdateStruct::class,
+            $userUpdate
+        );
+
+        $this->assertNull($userUpdate->contentUpdateStruct);
+        $this->assertNull($userUpdate->contentMetadataUpdateStruct);
+
+        $this->assertPropertiesCorrect(
+            [
+                'email' => null,
+                'password' => null,
+                'enabled' => null,
+                'maxLogin' => null,
+            ],
             $userUpdate
         );
     }
@@ -1453,7 +1622,7 @@ class UserServiceTest extends BaseTest
     public function testUpdateUserReturnsPublishedVersion($user)
     {
         $this->assertEquals(
-            VersionInfo::STATUS_PUBLISHED,
+            APIVersionInfo::STATUS_PUBLISHED,
             $user->getVersionInfo()->status
         );
     }
@@ -1613,7 +1782,7 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the loadUserGroupsOfUser() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadUserGroupsOfUser()
@@ -1626,19 +1795,20 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // This array will contain the "Editors" user group name
-        $userGroupNames = array();
+        $userGroupNames = [];
         foreach ($userService->loadUserGroupsOfUser($user) as $userGroup) {
+            $this->assertInstanceOf(UserGroup::class, $userGroup);
             $userGroupNames[] = $userGroup->getFieldValue('name');
         }
         /* END: Use Case */
 
-        $this->assertEquals(array('Editors'), $userGroupNames);
+        $this->assertEquals(['Editors'], $userGroupNames);
     }
 
     /**
      * Test for the loadUsersOfUserGroup() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()
+     * @covers \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadUsersOfUserGroup()
@@ -1656,6 +1826,7 @@ class UserServiceTest extends BaseTest
         // This array will contain the email of the newly created "Editor" user
         $email = array();
         foreach ($userService->loadUsersOfUserGroup($group) as $user) {
+            $this->assertInstanceOf(User::class, $user);
             $email[] = $user->email;
         }
         /* END: Use Case */
@@ -1707,8 +1878,9 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the assignUserToUserGroup() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
+     * @covers \eZ\Publish\API\Repository\UserService::assignUserToUserGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'user' is invalid: user is already in the given user group
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testAssignUserToUserGroup
      */
     public function testAssignUserToUserGroupThrowsInvalidArgumentException()
@@ -1801,10 +1973,11 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the unAssignUserFromUserGroup() method.
+     * Test for the unAssignUserFromUserGroup() method removing user from the last group.
      *
-     * @see \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup()
+     * @covers \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Argument 'user' has a bad state: user only has one user group, cannot unassign from last group
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUnAssignUserFromUserGroup
      */
     public function testUnAssignUserFromUserGroupThrowsBadStateArgumentException()
@@ -1815,11 +1988,9 @@ class UserServiceTest extends BaseTest
         $editorsGroupId = $this->generateId('group', 13);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
-        // $administratorGroupId is the ID of the "Administrator" group in an
-        // eZ Publish demo installation
 
-        // This call will fail with an "InvalidArgumentException", because the
-        // user is not assigned to the "Administrator" group
+        // This call will fail with an "BadStateException", because the
+        // user has to be assigned to at least one group
         $userService->unAssignUserFromUserGroup(
             $user,
             $userService->loadUserGroup($editorsGroupId)

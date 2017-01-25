@@ -10,6 +10,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 /**
  * Test case for operations in the LanguageService using in memory storage.
@@ -23,7 +25,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the newLanguageCreateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::newLanguageCreateStruct()
+     * @covers \eZ\Publish\API\Repository\LanguageService::newLanguageCreateStruct
      */
     public function testNewLanguageCreateStruct()
     {
@@ -36,7 +38,16 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LanguageCreateStruct',
+            LanguageCreateStruct::class,
+            $languageCreate
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'languageCode' => null,
+                'name' => null,
+                'enabled' => true,
+            ],
             $languageCreate
         );
     }
@@ -46,7 +57,7 @@ class LanguageServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testNewLanguageCreateStruct
      */
     public function testCreateLanguage()
@@ -77,7 +88,7 @@ class LanguageServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testCreateLanguageSetsIdPropertyOnReturnedLanguage($language)
@@ -90,7 +101,7 @@ class LanguageServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testCreateLanguageSetsExpectedProperties($language)
@@ -112,8 +123,9 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the createLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'languageCreateStruct' is invalid: language with specified language code already exists
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testCreateLanguageThrowsInvalidArgumentException()
@@ -139,7 +151,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the loadLanguageById() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::loadLanguageById()
+     * @covers eZ\Publish\API\Repository\LanguageService::loadLanguageById
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testLoadLanguageById()
@@ -160,7 +172,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
+            Language::class,
             $language
         );
     }
@@ -168,7 +180,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the loadLanguageById() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::loadLanguageById()
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguageById
      */
@@ -188,7 +200,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the updateLanguageName() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguageById
      */
     public function testUpdateLanguageName()
@@ -215,20 +227,43 @@ class LanguageServiceTest extends BaseTest
 
         // Verify that the service returns an updated language instance.
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
+            Language::class,
             $updatedLanguage
         );
 
         // Verify that the service also persists the changes
         $updatedLanguage = $languageService->loadLanguageById($languageId);
+        $this->assertPropertiesCorrect(
+            [
+                'id' => $language->id,
+                'name' => 'New language name.',
+                'languageCode' => $language->languageCode,
+                'enabled' => $language->enabled,
+            ],
+            $updatedLanguage
+        );
+    }
 
-        $this->assertEquals('New language name.', $updatedLanguage->name);
+    /**
+     * Test service method for updating language name throwing InvalidArgumentException.
+     *
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'newName' is invalid: '1' is wrong value
+     */
+    public function testUpdateLanguageNameThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $languageService = $repository->getContentLanguageService();
+
+        $language = $languageService->loadLanguage('eng-GB');
+        $languageService->updateLanguageName($language, 1);
     }
 
     /**
      * Test for the enableLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::enableLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::enableLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguageById
      */
     public function testEnableLanguage()
@@ -257,7 +292,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the disableLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::disableLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::disableLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguageById
      */
     public function testDisableLanguage()
@@ -286,7 +321,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the loadLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::loadLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testLoadLanguage()
@@ -307,13 +342,21 @@ class LanguageServiceTest extends BaseTest
         $language = $languageService->loadLanguage('eng-NZ');
         /* END: Use Case */
 
-        $this->assertEquals($languageId, $language->id);
+        $this->assertPropertiesCorrect(
+            [
+                'id' => $languageId,
+                'languageCode' => 'eng-NZ',
+                'name' => 'English',
+                'enabled' => true,
+            ],
+            $language
+        );
     }
 
     /**
      * Test for the loadLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::loadLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguage
      */
@@ -330,12 +373,25 @@ class LanguageServiceTest extends BaseTest
     }
 
     /**
+     * Test service method for loading language throwing InvalidArgumentException.
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'languageCode' is invalid: language code has an invalid value
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
+     */
+    public function testLoadLanguageThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $repository->getContentLanguageService()->loadLanguage(PHP_INT_MAX);
+    }
+
+    /**
      * Test for the loadLanguages() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::loadLanguages()
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguages
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
-     *
-     * @todo Enhance to check for language codes and properties?
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguage
      */
     public function testLoadLanguages()
     {
@@ -359,8 +415,15 @@ class LanguageServiceTest extends BaseTest
         $languageService->createLanguage($languageCreateFrench);
 
         $languages = $languageService->loadLanguages();
+        self::assertInternalType('array', $languages);
         foreach ($languages as $language) {
-            // Operate on each language
+            self::assertInstanceOf(Language::class, $language);
+            $singleLanguage = $languageService->loadLanguage($language->languageCode);
+            $this->assertStructPropertiesCorrect(
+                $singleLanguage,
+                $language,
+                ['id', 'languageCode', 'name', 'enabled']
+            );
         }
         /* END: Use Case */
 
@@ -371,7 +434,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the loadLanguages() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::loadLanguages()
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguages
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function loadLanguagesReturnsAnEmptyArrayByDefault()
@@ -386,8 +449,10 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the deleteLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::deleteLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguages
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedExceptionMessage Could not find 'Language' with identifier 'eng-NZ'
      */
     public function testDeleteLanguage()
     {
@@ -412,6 +477,10 @@ class LanguageServiceTest extends BaseTest
 
         // +1 -1
         $this->assertEquals($beforeCount, count($languageService->loadLanguages()));
+
+        // ensure just created & deleted language doesn't exist
+        $languageService->loadLanguage($languageCreateEnglish->languageCode);
+        self::fail('Language is still returned after being deleted');
     }
 
     /**
@@ -421,8 +490,9 @@ class LanguageServiceTest extends BaseTest
      * service, but because there is no topological sort for test dependencies
      * we cannot declare them here.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::deleteLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'language' is invalid: Deleting language logic error, some content still references that language and therefore it can't be deleted
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testDeleteLanguage
      * @depend(s) eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
@@ -465,7 +535,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the getDefaultLanguageCode() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::getDefaultLanguageCode()
+     * @covers \eZ\Publish\API\Repository\LanguageService::getDefaultLanguageCode
      */
     public function testGetDefaultLanguageCode()
     {
@@ -501,7 +571,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the createLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testCreateLanguageInTransactionWithRollback()
@@ -546,7 +616,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the createLanguage() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testCreateLanguageInTransactionWithCommit()
@@ -587,7 +657,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the updateLanguageName() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
      */
     public function testUpdateLanguageNameInTransactionWithRollback()
@@ -625,7 +695,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the updateLanguageName() method.
      *
-     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
      */
     public function testUpdateLanguageNameInTransactionWithCommit()

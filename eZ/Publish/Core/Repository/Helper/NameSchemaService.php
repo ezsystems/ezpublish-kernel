@@ -179,7 +179,7 @@ class NameSchemaService
      * @param array $fieldMap
      * @param array $languageCodes
      *
-     * @return string
+     * @return string[]
      */
     public function resolve($nameSchema, $contentType, array $fieldMap, array $languageCodes)
     {
