@@ -9,14 +9,13 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
-use eZ\Publish\Core\MVC\Symfony\Cache\TagAwarePurgeClientInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * LocalPurgeClient emulates an Http PURGE request to be received by the Proxy Tag cache store.
  * Handy for single-serve using Symfony Proxy..
  */
-class LocalPurgeClient implements PurgeClientInterface, TagAwarePurgeClientInterface
+class LocalPurgeClient implements PurgeClientInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\ContentPurger
@@ -28,27 +27,18 @@ class LocalPurgeClient implements PurgeClientInterface, TagAwarePurgeClientInter
         $this->cacheStore = $cacheStore;
     }
 
-    public function purge($locationIds)
-    {
-        if (empty($locationIds)) {
-            return;
-        }
-
-        $this->purgeByTags(
-            array_map(
-                function ($locationId) {
-                    return 'location-' . $locationId;
-                },
-                (array)$locationIds
-            )
-        );
-    }
-
-    public function purgeByTags(array $tags)
+    public function purge($tags)
     {
         if (empty($tags)) {
             return;
         }
+
+        $tags = array_map(
+            function ($tag) {
+                return is_numeric($tag) ? 'location-' . $tag : $tag;
+            },
+            (array)$tags
+        );
 
         $purgeRequest = Request::create('http://localhost/', 'PURGE');
         $purgeRequest->headers->set('xkey', implode(' ', $tags));
