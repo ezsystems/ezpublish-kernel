@@ -1,143 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
-  <file date="2017-01-17T15:15:59Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
+  <file date="2017-01-26T14:55:58Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
     <header>
       <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
       <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
     </header>
     <body>
       <trans-unit id="06a34ac23ac86f7c4368380203e3dd4d91489fa0" resname="ezauthor.name">
-        <source>ezauthor.name</source>
+        <source>Authors</source>
         <target>Authors</target>
         <note>key: ezauthor.name</note>
       </trans-unit>
       <trans-unit id="e4ca4a21a1e442e6a1232320b2184b9e4105c73f" resname="ezbinaryfile.name">
-        <source>ezbinaryfile.name</source>
+        <source>File</source>
         <target>File</target>
         <note>key: ezbinaryfile.name</note>
       </trans-unit>
       <trans-unit id="129dd46eabe280c49a0e9d424d9cbf676621aec9" resname="ezboolean.name">
-        <source>ezboolean.name</source>
+        <source>Checkbox</source>
         <target>Checkbox</target>
         <note>key: ezboolean.name</note>
       </trans-unit>
       <trans-unit id="c4c3e3c536a09969467c7c9bb584459b47317fed" resname="ezcountry.name">
-        <source>ezcountry.name</source>
+        <source>Country</source>
         <target>Country</target>
         <note>key: ezcountry.name</note>
       </trans-unit>
       <trans-unit id="3bd547a05c5a7b5ee111cc5ca608df9199f04c51" resname="ezdate.name">
-        <source>ezdate.name</source>
+        <source>Date</source>
         <target>Date</target>
         <note>key: ezdate.name</note>
       </trans-unit>
       <trans-unit id="42d9e26b6e8e65856f709461b589cb7925a9f43e" resname="ezdatetime.name">
-        <source>ezdatetime.name</source>
+        <source>Date and time</source>
         <target>Date and time</target>
         <note>key: ezdatetime.name</note>
       </trans-unit>
       <trans-unit id="d772ac8909929964906cbefd41c468c9a5d2be26" resname="ezemail.name">
-        <source>ezemail.name</source>
+        <source>E-mail address</source>
         <target>E-mail address</target>
         <note>key: ezemail.name</note>
       </trans-unit>
       <trans-unit id="0a1f3297ccc08882f5a4610f9af8fc4148c74adc" resname="ezfloat.name">
-        <source>ezfloat.name</source>
+        <source>Float</source>
         <target>Float</target>
         <note>key: ezfloat.name</note>
       </trans-unit>
       <trans-unit id="fcabb29fdb097d916c88328daad461c1ea765121" resname="ezgmaplocation.name">
-        <source>ezgmaplocation.name</source>
+        <source>Map location</source>
         <target>Map location</target>
         <note>key: ezgmaplocation.name</note>
       </trans-unit>
       <trans-unit id="6300f890f00d9999466b4abc478857b0d29022b4" resname="ezimage.name">
-        <source>ezimage.name</source>
+        <source>Image</source>
         <target>Image</target>
         <note>key: ezimage.name</note>
       </trans-unit>
       <trans-unit id="3b0f44cd332c71e78209a1a4b235bc6a1e6d374b" resname="ezinteger.name">
-        <source>ezinteger.name</source>
+        <source>Integer</source>
         <target>Integer</target>
         <note>key: ezinteger.name</note>
       </trans-unit>
       <trans-unit id="b55e4568224820cbddc794f6c2bd002baec6a5d0" resname="ezisbn.name">
-        <source>ezisbn.name</source>
+        <source>ISBN</source>
         <target>ISBN</target>
         <note>key: ezisbn.name</note>
       </trans-unit>
       <trans-unit id="c564457bc5723491788fa3d0723e3716824b4a0d" resname="ezkeyword.name">
-        <source>ezkeyword.name</source>
+        <source>Keywords</source>
         <target>Keywords</target>
         <note>key: ezkeyword.name</note>
       </trans-unit>
       <trans-unit id="fc0d2c8719e7c36f101ff6ddcbdfc804bf8f3da7" resname="ezmedia.name">
-        <source>ezmedia.name</source>
+        <source>Media</source>
         <target>Media</target>
         <note>key: ezmedia.name</note>
       </trans-unit>
       <trans-unit id="feb25b24199466f077038c5e6e38209deae21471" resname="ezobjectrelation.name">
-        <source>ezobjectrelation.name</source>
+        <source>Content relation (single)</source>
         <target>Content relation (single)</target>
         <note>key: ezobjectrelation.name</note>
       </trans-unit>
       <trans-unit id="44d2ac9ae83f6b73fa8f61fad66a77d76d2159f0" resname="ezobjectrelationlist.name">
-        <source>ezobjectrelationlist.name</source>
+        <source>Content relations (multiple)</source>
         <target>Content relations (multiple)</target>
         <note>key: ezobjectrelationlist.name</note>
       </trans-unit>
       <trans-unit id="6ce4370c413c1a478e8e3c0a072a340584338b84" resname="ezpage.name">
-        <source>ezpage.name</source>
+        <source>Layout</source>
         <target>Layout</target>
         <note>key: ezpage.name</note>
       </trans-unit>
+      <trans-unit id="3accdb01fd6ce79f38be1b4622659b61be77b608" resname="ezprice.name">
+        <source>Price</source>
+        <target>Price</target>
+        <note>key: ezprice.name</note>
+      </trans-unit>
       <trans-unit id="213da4efa5baa8b47c34dc4b645df7115d07d66e" resname="ezrichtext.name">
-        <source>ezrichtext.name</source>
+        <source>Rich text</source>
         <target>Rich text</target>
         <note>key: ezrichtext.name</note>
       </trans-unit>
       <trans-unit id="3229c3fc41a4af84f0fd1636f0678aac770359bc" resname="ezselection.name">
-        <source>ezselection.name</source>
+        <source>Selection</source>
         <target>Selection</target>
         <note>key: ezselection.name</note>
       </trans-unit>
       <trans-unit id="5ee0acaf0f051f903ef78be433acbfe4412e4a59" resname="ezsrrating.name">
-        <source>ezsrrating.name</source>
+        <source>Rating</source>
         <target>Rating</target>
         <note>key: ezsrrating.name</note>
       </trans-unit>
       <trans-unit id="d958019d9702d5e89f247c24563da97ea0205f58" resname="ezstring.name">
-        <source>ezstring.name</source>
+        <source>Text line</source>
         <target>Text line</target>
         <note>key: ezstring.name</note>
       </trans-unit>
       <trans-unit id="e35280b88546fdd18c84ce9c401e17cbfca56e72" resname="eztext.name">
-        <source>eztext.name</source>
+        <source>Text block</source>
         <target>Text block</target>
         <note>key: eztext.name</note>
       </trans-unit>
       <trans-unit id="503c2801427b2d773d020ef953413d14c17968bd" resname="eztime.name">
-        <source>eztime.name</source>
+        <source>Time</source>
         <target>Time</target>
         <note>key: eztime.name</note>
       </trans-unit>
       <trans-unit id="69c0e446226061b7f2ca2b22fd4eb09e6b4e9518" resname="ezurl.name">
-        <source>ezurl.name</source>
+        <source>URL</source>
         <target>URL</target>
         <note>key: ezurl.name</note>
       </trans-unit>
       <trans-unit id="0317c233c19b3c191acc92971bfb616c7fe298de" resname="ezuser.name">
-        <source>ezuser.name</source>
+        <source>User account</source>
         <target>User account</target>
         <note>key: ezuser.name</note>
       </trans-unit>
-      <trans-unit id="5d286b4410a54e510bfbef0f01639555" resname="ezprice.name">
-        <source>ezprice.name</source>
-        <target>Price</target>
-      </trans-unit>
-      <trans-unit id="ac326172d1684cddd1c14170e8bde9c6" resname="ezxmltext.name">
-        <source>ezxmltext.name</source>
+      <trans-unit id="eca4f3a013d6ff43a82a3c2a8f32594b115a49fc" resname="ezxmltext.name">
+        <source>XML block</source>
         <target>XML block</target>
+        <note>key: ezxmltext.name</note>
       </trans-unit>
     </body>
   </file>

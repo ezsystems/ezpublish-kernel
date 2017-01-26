@@ -16,6 +16,7 @@ echo '# Extract Kernel : EzPublishCoreBundle';
   "$@"
 
 echo '# Clean file references';
-sed -i "s|/../../../../.././vendor/ezsystems/ezpublish-kernel/|/|g" ./vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Resources/translations/*.xlf
+sed -i "s|>.*/vendor/ezsystems/ezpublish-kernel/|>|g" ./vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Resources/translations/*.xlf
 
+cd vendor/ezsystems/ezpublish-kernel;
 echo 'Translation extraction done';
