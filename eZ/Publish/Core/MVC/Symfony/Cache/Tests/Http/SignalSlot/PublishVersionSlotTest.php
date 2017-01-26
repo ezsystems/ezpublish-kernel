@@ -50,7 +50,6 @@ class PublishVersionSlotTest extends AbstractContentSlotTest
     public function testDoesNotReceiveOtherSignals($signal)
     {
         $this->purgeClientMock->expects($this->never())->method('purge');
-        $this->purgeClientMock->expects($this->never())->method('purgeByTags');
         $this->purgeClientMock->expects($this->never())->method('purgeAll');
 
         $this->spiLocationHandlerMock->expects($this->never())->method('loadLocationsByContent');
@@ -73,7 +72,7 @@ class PublishVersionSlotTest extends AbstractContentSlotTest
                 ]
             );
 
-        $this->purgeClientMock->expects($this->once())->method('purgeByTags')->with($this->generateTags());
+        $this->purgeClientMock->expects($this->once())->method('purge')->with($this->generateTags());
         $this->purgeClientMock->expects($this->never())->method('purgeAll');
         parent::receive($signal);
     }

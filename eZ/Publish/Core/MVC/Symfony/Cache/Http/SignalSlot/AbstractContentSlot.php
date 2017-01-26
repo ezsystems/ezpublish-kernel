@@ -27,7 +27,7 @@ abstract class AbstractContentSlot extends AbstractSlot
      */
     protected function purgeHttpCache(Signal $signal)
     {
-        return $this->purgeClient->purgeByTags($this->generateTags($signal));
+        return $this->purgeClient->purge($this->generateTags($signal));
     }
 
     /**

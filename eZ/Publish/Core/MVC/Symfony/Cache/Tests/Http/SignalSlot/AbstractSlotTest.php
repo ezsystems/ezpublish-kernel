@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use PHPUnit_Framework_TestCase;
 
 abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase
@@ -22,7 +23,7 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->purgeClientMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface');
+        $this->purgeClientMock = $this->getMock(PurgeClientInterface::class);
         $this->slot = $this->createSlot();
         $this->signal = $this->createSignal();
     }
@@ -40,7 +41,6 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase
     public function testDoesNotReceiveOtherSignals($signal)
     {
         $this->purgeClientMock->expects($this->never())->method('purge');
-        $this->purgeClientMock->expects($this->never())->method('purgeByTags');
         $this->purgeClientMock->expects($this->never())->method('purgeAll');
 
         $this->slot->receive($signal);
@@ -51,7 +51,7 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase
      */
     public function testReceivePurgesCacheForTags($signal)
     {
-        $this->purgeClientMock->expects($this->once())->method('purgeByTags')->with($this->generateTags());
+        $this->purgeClientMock->expects($this->once())->method('purge')->with($this->generateTags());
         $this->purgeClientMock->expects($this->never())->method('purgeAll');
         $this->receive($signal);
     }
