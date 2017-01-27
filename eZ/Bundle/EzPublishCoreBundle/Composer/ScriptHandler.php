@@ -123,7 +123,7 @@ Note:
 - For development use you can enable full debugging by setting SYMFONY_ENV to "dev".
 - Last command will give you url to frontend of installation, add "/ez" to reach backend.
 
-Performance tip:
+Performance tips:
 - Use PHP 7.0 (or better yet PHP 7.1), and make sure opcache is enabled. It will be over 2x faster than PHP 5.6!
 - Dump autoload class map, even in development: <fg=green>composer dump-autoload --optimize</>
 - Follow full install instructions below to setup nginx or Apache. PHP's built-in dev server used in the last step of Quick Install is a single process and not capable of handling several downloads in parallel.
