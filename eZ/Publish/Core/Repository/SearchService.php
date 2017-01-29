@@ -309,12 +309,6 @@ class SearchService implements SearchServiceInterface
 
         $result = $this->searchHandler->findLocations($query, $languageFilter);
 
-        foreach ($result->searchHits as $hit) {
-            $hit->valueObject = $this->domainMapper->buildLocationDomainObject(
-                $hit->valueObject
-            );
-        }
-
-        return $result;
+        return $this->domainMapper->buildLocationDomainObjectsOnSearchResult($result);
     }
 }
