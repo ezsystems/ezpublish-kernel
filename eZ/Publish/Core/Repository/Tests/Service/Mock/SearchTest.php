@@ -15,6 +15,8 @@ use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -226,7 +228,7 @@ class SearchTest extends BaseServiceMockTest
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -333,7 +335,7 @@ class SearchTest extends BaseServiceMockTest
             ->will(
                 $this->returnValue(
                     $contentServiceMock = $this
-                        ->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
+                        ->getMockBuilder(ContentService::class)
                         ->disableOriginalConstructor()
                         ->getMock()
                 )
@@ -343,7 +345,7 @@ class SearchTest extends BaseServiceMockTest
         $handlerQuery = new Query(array('filter' => new Criterion\MatchAll(), 'limit' => 25));
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
-        $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $contentMock = $this->getMockForAbstractClass(Content::class);
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
@@ -406,20 +408,20 @@ class SearchTest extends BaseServiceMockTest
             ->will(
                 $this->returnValue(
                     $contentServiceMock = $this
-                        ->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
+                        ->getMockBuilder(ContentService::class)
                         ->disableOriginalConstructor()
                         ->getMock()
                 )
             );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock, 'limit' => 10));
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
-        $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $contentMock = $this->getMockForAbstractClass(Content::class);
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
@@ -487,7 +489,7 @@ class SearchTest extends BaseServiceMockTest
         $searchHandlerMock->expects($this->never())->method('findContent');
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -529,7 +531,7 @@ class SearchTest extends BaseServiceMockTest
             ->will(
                 $this->returnValue(
                     $contentServiceMock = $this
-                        ->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
+                        ->getMockBuilder(ContentService::class)
                         ->disableOriginalConstructor()
                         ->getMock()
                 )
@@ -537,7 +539,7 @@ class SearchTest extends BaseServiceMockTest
 
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
-        $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $contentMock = $this->getMockForAbstractClass(Content::class);
         $domainMapperMock->expects($this->never())
             ->method($this->anything());
 
@@ -606,7 +608,7 @@ class SearchTest extends BaseServiceMockTest
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -643,7 +645,7 @@ class SearchTest extends BaseServiceMockTest
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -683,7 +685,7 @@ class SearchTest extends BaseServiceMockTest
             ->will(
                 $this->returnValue(
                     $contentServiceMock = $this
-                        ->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
+                        ->getMockBuilder(ContentService::class)
                         ->disableOriginalConstructor()
                         ->getMock()
                 )
@@ -691,7 +693,7 @@ class SearchTest extends BaseServiceMockTest
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -702,7 +704,7 @@ class SearchTest extends BaseServiceMockTest
 
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
-        $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $contentMock = $this->getMockForAbstractClass(Content::class);
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
@@ -743,12 +745,12 @@ class SearchTest extends BaseServiceMockTest
         );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock, 'limit' => 10));
         $spiLocation = new SPILocation();
-        $locationMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $locationMock = $this->getMockForAbstractClass(Location::class);
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
@@ -756,7 +758,7 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->equalTo($query))
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    $spiResult = new SearchResult(
                         array(
                             'searchHits' => array(new SearchHit(array('valueObject' => $spiLocation))),
                             'totalCount' => 1,
@@ -765,25 +767,31 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        $domainMapperMock->expects($this->once())
-            ->method('buildLocationDomainObject')
-            ->with($this->equalTo($spiLocation))
-            ->will($this->returnValue($locationMock));
-
         $permissionsCriterionResolverMock->expects($this->once())
             ->method('getPermissionsCriterion')
             ->with('content', 'read')
             ->will($this->returnValue(true));
 
+        $endResult = new SearchResult(
+            [
+                'searchHits' => [new SearchHit(['valueObject' => $locationMock])],
+                'totalCount' => 1,
+            ]
+        );
+
+        $domainMapperMock->expects($this->once())
+            ->method('buildLocationDomainObjectsOnSearchResult')
+            ->with($this->equalTo($spiResult))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($endResult) {
+                $spiResult->searchHits[0] = $endResult->searchHits[0];
+
+                return [];
+            });
+
         $result = $service->findLocations($query, array(), true);
 
         $this->assertEquals(
-            new SearchResult(
-                array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $locationMock))),
-                    'totalCount' => 1,
-                )
-            ),
+            $endResult,
             $result
         );
     }
@@ -812,7 +820,7 @@ class SearchTest extends BaseServiceMockTest
         $serviceQuery = new LocationQuery();
         $handlerQuery = new LocationQuery(array('filter' => new Criterion\MatchAll(), 'limit' => 25));
         $spiLocation = new SPILocation();
-        $locationMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $locationMock = $this->getMockForAbstractClass(Location::class);
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
@@ -820,7 +828,7 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->equalTo($handlerQuery))
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    $spiResult = new SearchResult(
                         array(
                             'searchHits' => array(new SearchHit(array('valueObject' => $spiLocation))),
                             'totalCount' => 1,
@@ -829,54 +837,43 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
+        $permissionsCriterionResolverMock->expects($this->never())->method($this->anything());
+
+        $endResult = new SearchResult(
+            [
+                'searchHits' => [new SearchHit(['valueObject' => $locationMock])],
+                'totalCount' => 1,
+            ]
+        );
+
         $domainMapperMock->expects($this->once())
-            ->method('buildLocationDomainObject')
-            ->with($this->equalTo($spiLocation))
-            ->will($this->returnValue($locationMock));
+            ->method('buildLocationDomainObjectsOnSearchResult')
+            ->with($this->equalTo($spiResult))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($endResult) {
+                $spiResult->searchHits[0] = $endResult->searchHits[0];
+
+                return [];
+            });
 
         $result = $service->findLocations($serviceQuery, array(), false);
 
         $this->assertEquals(
-            new SearchResult(
-                array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $locationMock))),
-                    'totalCount' => 1,
-                )
-            ),
+            $endResult,
             $result
         );
-    }
-
-    public function providerForFindLocationsWhenDomainMapperThrowsException()
-    {
-        return [
-            [
-                new NotFoundException('content', 'id = 33'),
-                true,
-            ],
-            [
-                new UnauthorizedException('content', 'read', ['id' => 33]),
-                false,
-            ],
-        ];
     }
 
     /**
      * Test for the findLocations() method when search is out of sync with persistence.
      *
-     * @dataProvider providerForFindLocationsWhenDomainMapperThrowsException
      * @covers \eZ\Publish\Core\Repository\SearchService::findLocations
      */
-    public function testFindLocationsBackgroundIndexerWhenDomainMapperThrowsException($e, $index = true)
+    public function testFindLocationsBackgroundIndexerWhenDomainMapperThrowsException()
     {
         $indexer = $this->createMock(BackgroundIndexer::class);
-        if ($index) {
-            $indexer->expects($this->once())
-                ->method('registerLocation')
-                ->with($this->isInstanceOf(SPILocation::class));
-        } else {
-            $indexer->expects($this->never())->method($this->anything());
-        }
+        $indexer->expects($this->once())
+            ->method('registerLocation')
+            ->with($this->isInstanceOf(SPILocation::class));
 
         $service = $this->getMockBuilder(SearchService::class)
             ->setConstructorArgs([
@@ -901,9 +898,14 @@ class SearchTest extends BaseServiceMockTest
             ->willReturn($result);
 
         $mapper->expects($this->once())
-            ->method('buildLocationDomainObject')
-            ->with($this->isInstanceOf(SPILocation::class))
-            ->willThrowException($e);
+            ->method('buildLocationDomainObjectsOnSearchResult')
+            ->with($this->equalTo($result))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($location) {
+                unset($spiResult->searchHits[0]);
+                --$spiResult->totalCount;
+
+                return [$location];
+            });
 
         $finalResult = $service->findLocations(new LocationQuery());
 
@@ -935,7 +937,7 @@ class SearchTest extends BaseServiceMockTest
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(Criterion::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock));
@@ -967,11 +969,7 @@ class SearchTest extends BaseServiceMockTest
         );
 
         $spiLocation = new SPILocation();
-        $locationMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
-        $domainMapperMock->expects($this->once())
-            ->method('buildLocationDomainObject')
-            ->with($this->equalTo($spiLocation))
-            ->will($this->returnValue($locationMock));
+        $locationMock = $this->getMockForAbstractClass(Location::class);
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock
@@ -987,7 +985,7 @@ class SearchTest extends BaseServiceMockTest
             )
             ->will(
                 $this->returnValue(
-                    new SearchResult(
+                    $spiResult = new SearchResult(
                         array(
                             'searchHits' => array(new SearchHit(array('valueObject' => $spiLocation))),
                             'totalCount' => 1,
@@ -996,15 +994,26 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
+        $endResult = new SearchResult(
+            [
+                'searchHits' => [new SearchHit(['valueObject' => $locationMock])],
+                'totalCount' => 1,
+            ]
+        );
+
+        $domainMapperMock->expects($this->once())
+            ->method('buildLocationDomainObjectsOnSearchResult')
+            ->with($this->equalTo($spiResult))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($endResult) {
+                $spiResult->searchHits[0] = $endResult->searchHits[0];
+
+                return [];
+            });
+
         $result = $service->findLocations(new LocationQuery(), array(), false);
 
         $this->assertEquals(
-            new SearchResult(
-                array(
-                    'searchHits' => array(new SearchHit(array('valueObject' => $locationMock))),
-                    'totalCount' => 1,
-                )
-            ),
+            $endResult,
             $result
         );
     }
