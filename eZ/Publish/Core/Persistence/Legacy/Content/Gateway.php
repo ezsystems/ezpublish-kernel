@@ -177,6 +177,18 @@ abstract class Gateway
     abstract public function loadContentInfo($contentId);
 
     /**
+     * Loads rows of info for content identified by $contentIds.
+     *
+     * @see loadContentInfo For the returned structure.
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfoList For how this will only return items found and not throw.
+     *
+     * @param array $contentIds
+     *
+     * @return array[]
+     */
+    abstract public function loadContentInfoList(array $contentIds);
+
+    /**
      * Loads version info for content identified by $contentId and $versionNo.
      * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
      *  - names => Hash of content object names. Key is the language code, value is the name.

@@ -339,6 +339,20 @@ class Handler implements BaseContentHandler
         return $this->treeHandler->loadContentInfo($contentId);
     }
 
+    public function loadContentInfoList(array $contentIds)
+    {
+        $list = $this->mapper->extractContentInfoFromRows(
+            $this->contentGateway->loadContentInfoList($contentIds)
+        );
+
+        $listByContentId = [];
+        foreach ($list as $item) {
+            $listByContentId[$item->id] = $item;
+        }
+
+        return $listByContentId;
+    }
+
     /**
      * Returns the metadata object for a content identified by $remoteId.
      *
