@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
@@ -321,10 +322,11 @@ class DomainMapper
      * Builds domain location object from provided persistence location.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo|null $contentInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function buildLocationDomainObject(SPILocation $spiLocation)
+    public function buildLocationDomainObject(SPILocation $spiLocation, SPIContentInfo $contentInfo = null)
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
         if ($spiLocation->id == 1) {
@@ -348,7 +350,7 @@ class DomainMapper
             );
         } else {
             $contentInfo = $this->buildContentInfoDomainObject(
-                $this->contentHandler->loadContentInfo($spiLocation->contentId)
+                $contentInfo ?: $this->contentHandler->loadContentInfo($spiLocation->contentId)
             );
         }
 
@@ -367,6 +369,40 @@ class DomainMapper
                 'sortOrder' => $spiLocation->sortOrder,
             )
         );
+    }
+
+    /**
+     * Build API Location and corresponding ContentInfo domain objects and apply to LocationSearchResult.
+     *
+     * Loading of ContentInfo objects are done in one operation.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result SPI search result with SPI Location items as hits
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[] Locations we did not find content info for is retunred as an array.
+     */
+    public function buildLocationDomainObjectsOnSearchResult(SearchResult $result)
+    {
+        $contentIds = [];
+        foreach ($result->searchHits as $hit) {
+            $contentIds[] = $hit->valueObject->contentId;
+        }
+
+        $missingLocations = [];
+        $contentInfoList = $this->contentHandler->loadContentInfoList($contentIds);
+        foreach ($result->searchHits as $key => $hit) {
+            if (isset($contentInfoList[$hit->valueObject->contentId])) {
+                $hit->valueObject = $this->buildLocationDomainObject(
+                    $hit->valueObject,
+                    $contentInfoList[$hit->valueObject->contentId]
+                );
+            } else {
+                $missingLocations[] = $hit->valueObject;
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            }
+        }
+
+        return $missingLocations;
     }
 
     /**

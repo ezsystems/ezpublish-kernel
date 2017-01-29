@@ -334,21 +334,9 @@ class SearchService implements SearchServiceInterface
 
         $result = $this->searchHandler->findLocations($query, $languageFilter);
 
-        foreach ($result->searchHits as $key => $hit) {
-            try {
-                $hit->valueObject = $this->domainMapper->buildLocationDomainObject(
-                    $hit->valueObject
-                );
-            } catch (APINotFoundException $e) {
-                // Most likely stale data, so we register content for background re-indexing.
-                $this->backgroundIndexer->registerLocation($hit->valueObject);
-                unset($result->searchHits[$key]);
-                --$result->totalCount;
-            } catch (APIUnauthorizedException $e) {
-                // Most likely stale cached permission criterion, as ttl is only a few seconds we don't react to this
-                unset($result->searchHits[$key]);
-                --$result->totalCount;
-            }
+        $missingLocations = $this->domainMapper->buildLocationDomainObjectsOnSearchResult($result);
+        foreach ($missingLocations as $missingLocation) {
+            $this->backgroundIndexer->registerLocation($missingLocation);
         }
 
         return $result;
