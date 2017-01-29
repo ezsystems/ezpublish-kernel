@@ -340,6 +340,27 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * Return list of unique Content Info, with content id as key.
+     *
+     * @param array $contentIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
+     */
+    public function loadContentInfoList(array $contentIds)
+    {
+        $list = $this->mapper->extractContentInfoFromRows(
+            $this->contentGateway->loadContentInfoList($contentIds)
+        );
+
+        $listByContentId = [];
+        foreach ($list as $item) {
+            $listByContentId[$item->id] = $item;
+        }
+
+        return $listByContentId;
+    }
+
+    /**
      * Returns the metadata object for a content identified by $remoteId.
      *
      * @param mixed $remoteId

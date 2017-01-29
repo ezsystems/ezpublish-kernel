@@ -851,16 +851,31 @@ class DoctrineDatabase extends Gateway
      * @see loadContentInfo(), loadContentInfoByRemoteId()
      *
      * @param string $column
-     * @param mixed $id
+     * @param string|int|int[] If singular it will assumed to be int on id column, string otherwise.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      *
      * @return array
      */
-    private function internalLoadContentInfo($column, $id)
+    private function internalLoadContentInfo($column, $ids)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
+
+
+        if (is_array($ids)) {
+            $where = $query->expr->in(
+                $this->dbHandler->quoteColumn($column, 'ezcontentobject'),
+                array_map('intval', $ids)
+            );
+        } else {
+            $where = $query->expr->eq(
+                $this->dbHandler->quoteColumn($column, 'ezcontentobject'),
+                $query->bindValue($ids, null, $column === 'id' ? PDO::PARAM_INT : PDO::PARAM_STR)
+            );
+        }
+
+
         $query->select(
             'ezcontentobject.*',
             $this->dbHandler->aliasedColumn($query, 'main_node_id', 'ezcontentobject_tree')
@@ -878,22 +893,23 @@ class DoctrineDatabase extends Gateway
                     $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree')
                 )
             )
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn($column, 'ezcontentobject'),
-                $query->bindValue($id, null, $column === 'id' ? PDO::PARAM_INT : PDO::PARAM_STR)
-            )
-        );
+        )->where($where);
+
         $statement = $query->prepare();
         $statement->execute();
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($row)) {
-            throw new NotFound('content', "$column: $id");
+        $results = array();
+        foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $results[] = $row;
         }
 
-        return $row;
+        if (empty($results)) {
+            throw new NotFound('content', "$column: ".var_export($ids, true));
+        }
+
+        return $results;
     }
+
     /**
      * Loads info for content identified by $contentId.
      * Will basically return a hash containing all field values for ezcontentobject table plus some additional keys:
@@ -908,7 +924,24 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfo($contentId)
     {
-        return $this->internalLoadContentInfo('id', $contentId);
+        return $this->internalLoadContentInfo('id', [$contentId])[0];
+    }
+
+    /**
+     * Loads rows of info for content identified by $contentIds.
+     *
+     * @see loadContentInfo()
+     * @todo Define exception behavior, currently it will only trow if found none, not if count is wrong.
+     *
+     * @param array $contentIds
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array[]
+     */
+    public function loadContentInfoList(array $contentIds)
+    {
+        return $this->internalLoadContentInfo('id', $contentIds);
     }
 
     /**
@@ -924,7 +957,7 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        return $this->internalLoadContentInfo('remote_id', $remoteId);
+        return $this->internalLoadContentInfo('remote_id', $remoteId)[0];
     }
 
     /**

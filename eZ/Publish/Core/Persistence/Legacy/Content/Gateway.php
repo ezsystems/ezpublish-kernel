@@ -177,6 +177,20 @@ abstract class Gateway
     abstract public function loadContentInfo($contentId);
 
     /**
+     * Loads rows of info for content identified by $contentIds.
+     *
+     * @see loadContentInfo()
+     * @todo Define exception behavior, currently it will only trow if found none, not if count is wrong.
+     *
+     * @param array $contentIds
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array[]
+     */
+     abstract public function loadContentInfoList(array $contentIds);
+
+    /**
      * Loads version info for content identified by $contentId and $versionNo.
      * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
      *  - names => Hash of content object names. Key is the language code, value is the name.

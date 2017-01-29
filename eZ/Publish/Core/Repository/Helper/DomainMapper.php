@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
@@ -301,10 +302,11 @@ class DomainMapper
      * Builds domain location object from provided persistence location.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo|null $contentInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function buildLocationDomainObject(SPILocation $spiLocation)
+    public function buildLocationDomainObject(SPILocation $spiLocation, SPIContentInfo $contentInfo = null)
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
         if ($spiLocation->id == 1) {
@@ -328,7 +330,7 @@ class DomainMapper
             );
         } else {
             $contentInfo = $this->buildContentInfoDomainObject(
-                $this->contentHandler->loadContentInfo($spiLocation->contentId)
+                $contentInfo ?: $this->contentHandler->loadContentInfo($spiLocation->contentId)
             );
         }
 
@@ -347,6 +349,33 @@ class DomainMapper
                 'sortOrder' => $spiLocation->sortOrder,
             )
         );
+    }
+
+    /**
+     * Build API Location and corresponding ContentInfo domain objects and apply to LocationSearchResult.
+     *
+     * Loading of ContentInfo objects are done in one operation.
+     *
+     * @param SearchResult $result SPI search result with SPI Location items as hits
+     *
+     * @return SearchResult
+     */
+    public function buildLocationDomainObjectsOnSearchResult(SearchResult $result)
+    {
+        $contentIds = [];
+        foreach ($result->searchHits as $hit) {
+            $contentIds[] = $hit->valueObject->contentId;
+        }
+
+        $contentInfoList = $this->contentHandler->loadContentInfoList($contentIds);
+        foreach ($result->searchHits as $key => $hit) {
+            $hit->valueObject = $this->buildLocationDomainObject(
+                $hit->valueObject,
+                $contentInfoList[$hit->valueObject->contentId]
+            );
+        }
+
+        return $result;
     }
 
     /**

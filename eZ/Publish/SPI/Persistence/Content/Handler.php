@@ -77,6 +77,18 @@ interface Handler
     public function loadContentInfo($contentId);
 
     /**
+     * Return list of unique Content Info, with content id as key.
+     *
+     * @todo Define behaviour on missing item.
+     *
+     * @param array $contentIds
+     * @param array|null $languagePriority (@todo this will be added in some form as part of language work)
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
+     */
+    public function loadContentInfoList(array $contentIds);
+
+    /**
      * Returns the metadata object for a content identified by $remoteId.
      *
      * @param mixed $remoteId

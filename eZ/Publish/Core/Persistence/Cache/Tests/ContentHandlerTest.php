@@ -75,6 +75,7 @@ class ContentHandlerTest extends AbstractCacheHandlerTest
             ['load', [2, 1], 'ez-content-2-1-'.ContentHandler::ALL_TRANSLATIONS_KEY, $content],
             ['load', [2, 1, ['eng-GB', 'eng-US']], 'ez-content-2-1-eng-GB|eng-US', $content],
             ['loadContentInfo', [2], 'ez-content-info-2', $info],
+            ['loadContentInfoList', [[2]], 'ez-content-info-2', [2 => $info], true],
             ['loadContentInfoByRemoteId', ['3d8jrj'], 'ez-content-info-byRemoteId-3d8jrj', $info],
             ['loadVersionInfo', [2, 1], 'ez-content-version-info-2-1', $version],
         ];
