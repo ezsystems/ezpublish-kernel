@@ -26,13 +26,19 @@ class SwapLocation extends Slot
         if (!$signal instanceof Signal\LocationService\SwapLocationSignal) {
             return;
         }
-        $content1Info = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->content1Id);
-        $content2Info = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->content2Id);
+
+        $contentInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList([$signal->content1Id, $signal->content2Id]);
         $this->searchHandler->indexContent(
-            $this->persistenceHandler->contentHandler()->load($content1Info->id, $content1Info->currentVersionNo)
+            $this->persistenceHandler->contentHandler()->load(
+                $signal->content1Id,
+                $contentInfoList[$signal->content1Id]->currentVersionNo
+            )
         );
         $this->searchHandler->indexContent(
-            $this->persistenceHandler->contentHandler()->load($content2Info->id, $content2Info->currentVersionNo)
+            $this->persistenceHandler->contentHandler()->load(
+                $signal->content2Id,
+                $contentInfoList[$signal->content2Id]->currentVersionNo
+            )
         );
         $this->searchHandler->indexLocation($this->persistenceHandler->locationHandler()->load($signal->location1Id));
         $this->searchHandler->indexLocation($this->persistenceHandler->locationHandler()->load($signal->location2Id));
