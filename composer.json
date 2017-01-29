@@ -41,7 +41,9 @@
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
         "mockery/mockery": "~0.9.4",
         "symfony/assetic-bundle": "~2.3",
-        "ezsystems/behatbundle": "^6.1"
+        "ezsystems/behatbundle": "^6.1",
+        "phpspec/phpspec": "^3.2",
+        "memio/spec-gen": "^0.6"
     },
     "replace": {
         "ezsystems/ezpublish": "*",

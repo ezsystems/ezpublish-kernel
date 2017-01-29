@@ -1,0 +1,8 @@
+extensions:
+    Memio\SpecGen\MemioSpecGenExtension: ~
+
+suites:
+    kernel:
+        namespace: eZ
+        src_path: %paths.config%
+
