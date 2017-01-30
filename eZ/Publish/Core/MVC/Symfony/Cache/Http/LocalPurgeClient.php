@@ -41,7 +41,7 @@ class LocalPurgeClient implements PurgeClientInterface
         );
 
         $purgeRequest = Request::create('http://localhost/', 'PURGE');
-        $purgeRequest->headers->set('xkey', implode(' ', $tags));
+        $purgeRequest->headers->set('key', implode(' ', $tags));
         $this->cacheStore->purgeByRequest($purgeRequest);
     }
 

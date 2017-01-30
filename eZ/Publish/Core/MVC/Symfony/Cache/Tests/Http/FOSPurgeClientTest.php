@@ -56,7 +56,7 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidatePath')
-            ->with('/', ['xkey' => "location-$locationId", 'Host' => 'localhost']);
+            ->with('/', ['key' => "location-$locationId", 'Host' => 'localhost']);
 
         $this->purgeClient->purge($locationId);
     }
@@ -70,7 +70,7 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
             $this->cacheManager
                 ->expects($this->at($key))
                 ->method('invalidatePath')
-                ->with('/', ['xkey' => "location-$locationId", 'Host' => 'localhost']);
+                ->with('/', ['key' => "location-$locationId", 'Host' => 'localhost']);
         }
 
         $this->purgeClient->purge($locationIds);
@@ -90,7 +90,7 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('xkey' => '.*'));
+            ->with(array('key' => '.*'));
 
         $this->purgeClient->purgeAll();
     }

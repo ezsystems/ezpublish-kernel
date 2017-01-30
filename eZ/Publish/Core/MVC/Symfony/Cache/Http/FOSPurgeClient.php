@@ -40,7 +40,7 @@ class FOSPurgeClient implements PurgeClientInterface
             return;
         }
 
-        // As xkey only support one tag (key) being invalidated at a time, we loop.
+        // As key only support one tag being invalidated at a time, we loop.
         // These will be queued by FOS\HttpCache\ProxyClient\Varnish and handled on kernel.terminate.
         foreach (array_unique((array)$tags) as $tag) {
             if (is_numeric($tag)) {
@@ -49,13 +49,13 @@ class FOSPurgeClient implements PurgeClientInterface
 
             $this->cacheManager->invalidatePath(
                 '/',
-                ['xkey' => $tag, 'Host' => empty($_SERVER['SERVER_NAME']) ? 'localhost' : $_SERVER['SERVER_NAME']]
+                ['key' => $tag, 'Host' => empty($_SERVER['SERVER_NAME']) ? 'localhost' : $_SERVER['SERVER_NAME']]
             );
         }
     }
 
     public function purgeAll()
     {
-        $this->cacheManager->invalidate(['xkey' => '.*']);
+        $this->cacheManager->invalidate(['key' => '.*']);
     }
 }
