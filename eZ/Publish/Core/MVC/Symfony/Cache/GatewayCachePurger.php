@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache;
 
 /**
  * Interface for gateway cache purgers, i.e. Http cache purgers.
+ *
+ * @deprecated Since 6.8, use PurgeClientInterface directly.
  */
 interface GatewayCachePurger
 {

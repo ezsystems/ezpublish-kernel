@@ -12,8 +12,8 @@ use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * LocalPurgeClient emulates an Http PURGE request received by the cache store.
- * Handy for mono-server.
+ * LocalPurgeClient emulates an Http PURGE request to be received by the Proxy Tag cache store.
+ * Handy for single-serve using Symfony Proxy..
  */
 class LocalPurgeClient implements PurgeClientInterface
 {
@@ -22,34 +22,29 @@ class LocalPurgeClient implements PurgeClientInterface
      */
     protected $cacheStore;
 
-    public function __construct(RequestAwarePurger $cacheStore)
+    public function __construct(ContentPurger $cacheStore)
     {
         $this->cacheStore = $cacheStore;
     }
 
-    /**
-     * Triggers the cache purge $locationIds.
-     *
-     * @param mixed $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
-     */
-    public function purge($locationIds)
+    public function purge($tags)
     {
-        if (empty($locationIds)) {
+        if (empty($tags)) {
             return;
         }
 
-        if (!is_array($locationIds)) {
-            $locationIds = array($locationIds);
-        }
+        $tags = array_map(
+            function ($tag) {
+                return is_numeric($tag) ? 'location-' . $tag : $tag;
+            },
+            (array)$tags
+        );
 
-        $purgeRequest = Request::create('http://localhost/', 'BAN');
-        $purgeRequest->headers->set('X-Location-Id', '(' . implode('|', $locationIds) . ')');
+        $purgeRequest = Request::create('http://localhost/', 'PURGE');
+        $purgeRequest->headers->set('key', implode(' ', $tags));
         $this->cacheStore->purgeByRequest($purgeRequest);
     }
 
-    /**
-     * Purges all content elements currently in cache.
-     */
     public function purgeAll()
     {
         $this->cacheStore->purgeAllContent();

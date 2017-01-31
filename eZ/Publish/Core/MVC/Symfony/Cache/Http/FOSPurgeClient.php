@@ -34,21 +34,28 @@ class FOSPurgeClient implements PurgeClientInterface
         $this->cacheManager->flush();
     }
 
-    public function purge($locationIds)
+    public function purge($tags)
     {
-        if (empty($locationIds)) {
+        if (empty($tags)) {
             return;
         }
 
-        if (!is_array($locationIds)) {
-            $locationIds = array($locationIds);
-        }
+        // As key only support one tag being invalidated at a time, we loop.
+        // These will be queued by FOS\HttpCache\ProxyClient\Varnish and handled on kernel.terminate.
+        foreach (array_unique((array)$tags) as $tag) {
+            if (is_numeric($tag)) {
+                $tag = 'location-' . $tag;
+            }
 
-        $this->cacheManager->invalidate(array('X-Location-Id' => '^(' . implode('|', $locationIds) . ')$'));
+            $this->cacheManager->invalidatePath(
+                '/',
+                ['key' => $tag, 'Host' => empty($_SERVER['SERVER_NAME']) ? 'localhost' : $_SERVER['SERVER_NAME']]
+            );
+        }
     }
 
     public function purgeAll()
     {
-        $this->cacheManager->invalidate(array('X-Location-Id' => '.*'));
+        $this->cacheManager->invalidate(['key' => '.*']);
     }
 }

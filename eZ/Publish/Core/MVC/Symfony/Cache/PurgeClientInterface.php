@@ -15,14 +15,19 @@ interface PurgeClientInterface
      *
      * It's up to the implementor to decide whether to purge $locationIds right away or to delegate to a separate process.
      *
-     * @param array $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
+     * @param array $tags Cache tags to purge. Ex: location-123,
+     *        Since version 6.8 and until 7.0, integers or array of integers will be converted to location tags
+     *        (example: [2] => ['location-2']
+     *        In 7.x, only tags will be accepted.
      */
-    public function purge($locationIds);
+    public function purge($tags);
 
     /**
      * Purges all content elements currently in cache.
      *
      * It's up to the implementor to decide whether to purge $locationIds right away or to delegate to a separate process.
+     *
+     * @deprecated Since 6.8, use cache:clear, with multi tagging theoretically there shouldn't be need to delete all anymore from core.
      */
     public function purgeAll();
 }
