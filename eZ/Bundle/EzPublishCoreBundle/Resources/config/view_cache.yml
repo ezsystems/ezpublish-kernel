@@ -1,4 +1,12 @@
 services:
+    ezplatform.view_cache.response_subscriber:
+        class: 'eZ\Bundle\EzPublishCoreBundle\EventSubscriber\HttpCacheResponseSubscriber'
+        arguments:
+            - '@ezplatform.view_cache.response_configurator'
+            - '@ezplatform.view_cache.response_tagger.dispatcher'
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezplatform.view_cache.response_configurator:
         class: 'eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseConfigurator\ConfigurableResponseCacheConfigurator'
         arguments:

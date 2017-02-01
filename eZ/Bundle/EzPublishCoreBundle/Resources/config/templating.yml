@@ -296,12 +296,11 @@ services:
 
     ezpublish.view.cache_response_listener:
         class: "%ezpublish.view.cache_response_listener.class%"
+        deprecated: 'The "%service_id%" service is deprecated. Use "ezplatform.view_cache.response_subscriber" instead'
         arguments:
             - $content.view_cache$
             - $content.ttl_cache$
             - $content.default_ttl$
-        tags:
-            - { name: kernel.event_subscriber }
 
     ezpublish.view.block_cache_response_listener:
         class: "%ezpublish.view.block_cache_response_listener.class%"
