@@ -3,9 +3,7 @@
 namespace spec\eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Value;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\ConfigurableResponseCacheConfigurator;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseConfigurator\ResponseCacheConfigurator;
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\ResponseTagger;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Value\LocationTagger;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PhpSpec\ObjectBehavior;

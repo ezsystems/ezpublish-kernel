@@ -3,7 +3,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Value;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\ConfigurableResponseCacheConfigurator;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseConfigurator\ResponseCacheConfigurator;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\ResponseTagger;
 use Symfony\Component\HttpFoundation\Response;

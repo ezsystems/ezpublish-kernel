@@ -5,7 +5,6 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\ConfigurableResponseCacheConfigurator;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseConfigurator\ResponseCacheConfigurator;
 use Symfony\Component\HttpFoundation\Response;
 
