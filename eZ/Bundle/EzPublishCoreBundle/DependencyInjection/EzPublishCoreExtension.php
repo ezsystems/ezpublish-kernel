@@ -115,6 +115,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->handleLocale($config, $container, $loader);
         $this->handleHelpers($config, $container, $loader);
         $this->handleImage($config, $container, $loader);
+        $this->handleViewCache($config, $container, $loader);
 
         // Map settings
         $processor = new ConfigurationProcessor($container, 'ezsettings');
@@ -404,6 +405,11 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     private function handleHelpers(array $config, ContainerBuilder $container, FileLoader $loader)
     {
         $loader->load('helpers.yml');
+    }
+
+    private function handleViewCache(array $config, ContainerBuilder $container, FileLoader $loader)
+    {
+        $loader->load('view_cache.yml');
     }
 
     /**

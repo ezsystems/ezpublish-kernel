@@ -264,6 +264,7 @@
     {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
         {% for contentId in field.value.destinationContentIds %}
+        {{ fos_httpcache_tag('relation-' ~ contentId) }}
         <li>
             {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
         </li>
@@ -415,6 +416,7 @@
 {% block ezobjectrelation_field %}
 {% spaceless %}
 {% if not ez_is_field_empty( content, field ) %}
+    {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
     </div>

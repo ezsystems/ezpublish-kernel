@@ -1,0 +1,43 @@
+services:
+    ezplatform.view_cache.response_subscriber:
+        class: 'eZ\Bundle\EzPublishCoreBundle\EventSubscriber\HttpCacheResponseSubscriber'
+        arguments:
+            - '@ezplatform.view_cache.response_configurator'
+            - '@ezplatform.view_cache.response_tagger.dispatcher'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezplatform.view_cache.response_configurator:
+        class: 'eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseConfigurator\ConfigurableResponseCacheConfigurator'
+        arguments:
+            - '$content.view_cache$'
+            - '$content.ttl_cache$'
+            - '$content.default_ttl$'
+
+    ezplatform.view_cache.response_tagger.dispatcher:
+        class: 'eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Delegator\DispatcherTagger'
+        # Taggers are added by a compiler pass
+        arguments:
+            - []
+
+    ezplatform.view_cache.response_tagger.content_value_view:
+        class: 'eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Delegator\ContentValueViewTagger'
+        arguments: ['@ezplatform.view_cache.response_tagger.content_info']
+        tags:
+            - {name: ezplatform.cache_response_tagger}
+
+    ezplatform.view_cache.response_tagger.location_value_view:
+        class: 'eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Delegator\LocationValueViewTagger'
+        arguments: ['@ezplatform.view_cache.response_tagger.location']
+        tags:
+            - {name: ezplatform.cache_response_tagger}
+
+    ezplatform.view_cache.response_tagger.content_info:
+        class: 'eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Value\ContentInfoTagger'
+        tags:
+            - {name: ezplatform.cache_response_tagger}
+
+    ezplatform.view_cache.response_tagger.location:
+        class: 'eZ\Publish\Core\MVC\Symfony\Cache\Http\ResponseTagger\Value\LocationTagger'
+        tags:
+            - {name: ezplatform.cache_response_tagger}
