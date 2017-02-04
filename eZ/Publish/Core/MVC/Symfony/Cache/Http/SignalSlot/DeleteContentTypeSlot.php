@@ -27,6 +27,6 @@ class DeleteContentTypeSlot extends AbstractSlot
      */
     protected function purgeHttpCache(Signal $signal)
     {
-        return $this->purgeClient->purgeByTags(['content-type-' . $signal->contentTypeId]);
+        return $this->purgeClient->purge(['content-type-' . $signal->contentTypeId]);
     }
 }
