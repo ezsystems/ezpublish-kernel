@@ -129,16 +129,16 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Returns an array with data about the Group with $groupId.
+     * Returns an array with data about the Groups with $groupIds.
      *
-     * @param int $groupId
+     * @param int|int[] $groupIds
      *
      * @return array
      */
-    public function loadGroupData($groupId)
+    public function loadGroupData($groupIds)
     {
         try {
-            return $this->innerGateway->loadGroupData($groupId);
+            return $this->innerGateway->loadGroupData($groupIds);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

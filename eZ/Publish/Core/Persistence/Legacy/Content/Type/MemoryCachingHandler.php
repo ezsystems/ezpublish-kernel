@@ -120,6 +120,23 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadGroups(array $groupIds)
+    {
+        $groups = [];
+        foreach ($groupIds as $groupId) {
+            if (isset($this->groups[$groupId])) {
+                $groups[$groupId] = $this->groups[$groupId];
+            } else {
+                $groups[$groupId] = $this->groups[$groupId] = $this->innerHandler->loadGroup($groupId);
+            }
+        }
+
+        return $groups;
+    }
+
+    /**
      * @param string $identifier
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group

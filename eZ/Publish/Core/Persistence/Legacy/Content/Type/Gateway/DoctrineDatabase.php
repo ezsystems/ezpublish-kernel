@@ -413,7 +413,7 @@ class DoctrineDatabase extends Gateway
      */
     public function insertGroupAssignment($groupId, $typeId, $status)
     {
-        $groups = $this->loadGroupData($groupId);
+        $groups = $this->loadGroupData([$groupId]);
         $group = $groups[0];
 
         $q = $this->dbHandler->createInsertQuery();
@@ -468,25 +468,30 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data about Group with $groupId.
+     * Loads data about Groups with $groupIds.
      *
-     * @param mixed $groupId
+     * @param int|int[] $groupIds
      *
      * @return string[][]
      */
-    public function loadGroupData($groupId)
+    public function loadGroupData($groupIds)
     {
         $q = $this->createGroupLoadQuery();
         $q->where(
-            $q->expr->eq(
+            $q->expr->in(
                 $this->dbHandler->quoteColumn('id'),
-                $q->bindValue($groupId, null, \PDO::PARAM_INT)
+                is_array($groupIds) ? array_map('intval', $groupIds) : [(int)$groupIds]
             )
         );
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $results = array();
+        foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $results[] = $row;
+        }
+
+        return $results;
     }
 
     /**

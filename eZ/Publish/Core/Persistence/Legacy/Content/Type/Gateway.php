@@ -63,18 +63,18 @@ abstract class Gateway
     abstract public function deleteGroup($groupId);
 
     /**
-     * Returns an array with data about the Group with $groupId.
+     * Returns an array with data about the Group(s) with $groupIds.
      *
-     * @param int $groupId
+     * @param int|int[] $groupIds
      *
      * @return array
      */
-    abstract public function loadGroupData($groupId);
+    abstract public function loadGroupData($groupIds);
 
     /**
      * Returns an array with data about the Group with $identifier.
      *
-     * @param int $identifier
+     * @param string $identifier
      *
      * @return array
      */

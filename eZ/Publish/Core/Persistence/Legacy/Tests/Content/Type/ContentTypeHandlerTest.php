@@ -201,7 +201,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
             ->method('loadGroupData')
-            ->with($this->equalTo(23))
+            ->with($this->equalTo([23]))
             ->will($this->returnValue(array()));
 
         $mapperMock = $this->getMapperMock();

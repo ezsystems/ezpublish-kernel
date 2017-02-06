@@ -46,6 +46,18 @@ interface Handler
     public function loadGroup($groupId);
 
     /**
+     * Return list of unique Groups, with group id as key.
+     *
+     * @todo Define behaviour on missing item.
+     *
+     * @param array $groupIds
+     * @param array|null $languagePriority (@todo this will be added in some form as part of language work)
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
+     */
+    public function loadGroups(array $groupIds);
+
+    /**
      * Loads Type Group by identifier.
      *
      * Legacy note: Uses name for identifier.

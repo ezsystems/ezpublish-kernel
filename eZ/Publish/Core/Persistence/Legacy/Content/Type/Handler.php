@@ -119,7 +119,7 @@ class Handler implements BaseContentTypeHandler
     public function loadGroup($groupId)
     {
         $groups = $this->mapper->extractGroupsFromRows(
-            $this->contentTypeGateway->loadGroupData($groupId)
+            $this->contentTypeGateway->loadGroupData([$groupId])
         );
 
         if (count($groups) !== 1) {
@@ -127,6 +127,23 @@ class Handler implements BaseContentTypeHandler
         }
 
         return $groups[0];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadGroups(array $groupIds)
+    {
+        $groups = $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadGroupData($groupIds)
+        );
+
+        $listByGroupIds = [];
+        foreach ($groups as $group) {
+            $listByGroupIds[$group->id] = $group;
+        }
+
+        return $listByGroupIds;
     }
 
     /**

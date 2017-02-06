@@ -830,12 +830,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
+            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
         );
     }
 
@@ -882,12 +877,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
+            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
         );
     }
 
@@ -913,12 +903,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
+            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
         );
     }
 
@@ -937,12 +922,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
+            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
         );
     }
 
@@ -970,12 +950,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
+            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
         );
     }
 
@@ -997,12 +972,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         foreach ($spiContentTypes as $spiContentType) {
             $contentTypes[] = $this->contentTypeDomainMapper->buildContentTypeDomainObject(
                 $spiContentType,
-                array_map(
-                    function ($id) {
-                        return $this->contentTypeHandler->loadGroup($id);
-                    },
-                    $spiContentType->groupIds
-                )
+                $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
             );
         }
 
@@ -1054,12 +1024,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
+            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
         );
     }
 
