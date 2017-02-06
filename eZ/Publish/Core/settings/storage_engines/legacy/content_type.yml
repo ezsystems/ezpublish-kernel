@@ -16,6 +16,7 @@ services:
         class: "%ezpublish.persistence.legacy.content_type.gateway.class%"
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.api.storage_engine.legacy.connection"
             - "@ezpublish.persistence.legacy.language.mask_generator"
 
     ezpublish.persistence.legacy.content_type.gateway.exception_conversion:
