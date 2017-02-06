@@ -23,7 +23,7 @@ class SwapLocationSlot extends AbstractContentSlot
         return [
             'location-' . $signal->location1Id,
             'parent-' . $signal->location1Id,
-            'location-' . $signal->location1Id,
+            'location-' . $signal->location2Id,
             'parent-' . $signal->location2Id,
         ];
     }
