@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
@@ -91,6 +92,15 @@ class DoctrineDatabase extends Gateway
     protected $dbHandler;
 
     /**
+     * The native Doctrine connection.
+     *
+     * Meant to be used to transition from eZ/Zeta interface to Doctrine.
+     *
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
@@ -101,11 +111,13 @@ class DoctrineDatabase extends Gateway
      * Creates a new gateway based on $db.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
+     * @param \Doctrine\DBAL\Connection $connection
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct(DatabaseHandler $db, MaskGenerator $languageMaskGenerator)
+    public function __construct(DatabaseHandler $db, Connection $connection, MaskGenerator $languageMaskGenerator)
     {
         $this->dbHandler = $db;
+        $this->connection = $connection;
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
@@ -413,7 +425,7 @@ class DoctrineDatabase extends Gateway
      */
     public function insertGroupAssignment($groupId, $typeId, $status)
     {
-        $groups = $this->loadGroupData($groupId);
+        $groups = $this->loadGroupData([$groupId]);
         $group = $groups[0];
 
         $q = $this->dbHandler->createInsertQuery();
@@ -468,25 +480,22 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data about Group with $groupId.
+     * Loads data about Groups with $groupIds.
      *
-     * @param mixed $groupId
+     * @param int[] $groupIds
      *
      * @return string[][]
      */
-    public function loadGroupData($groupId)
+    public function loadGroupData(array $groupIds)
     {
-        $q = $this->createGroupLoadQuery();
-        $q->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $q->bindValue($groupId, null, \PDO::PARAM_INT)
-            )
-        );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q = $this->connection->createQueryBuilder();
+        $q
+            ->select('created', 'creator_id', 'id', 'modified', 'modifier_id', 'name')
+            ->from('ezcontentclassgroup')
+            ->where('id IN (:ids)')
+            ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY);
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $q->execute()->fetchAll();
     }
 
     /**
