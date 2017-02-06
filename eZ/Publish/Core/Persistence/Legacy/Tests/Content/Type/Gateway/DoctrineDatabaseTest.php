@@ -286,7 +286,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $data = $gateway->loadGroupData(2);
+        $data = $gateway->loadGroupData([2]);
 
         $this->assertEquals(
             array(
@@ -1280,6 +1280,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         if (!isset($this->gateway)) {
             $this->gateway = new DoctrineDatabase(
                 $this->getDatabaseHandler(),
+                $this->getDatabaseConnection(),
                 $this->getLanguageMaskGenerator()
             );
         }
