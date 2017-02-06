@@ -6,7 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Search\Legacy\Tests\Content\Location;
+namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence;
@@ -211,6 +211,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->contentTypeHandler = new ContentTypeHandler(
                 new ContentTypeGateway(
                     $this->getDatabaseHandler(),
+                    $this->getDatabaseConnection(),
                     $this->getLanguageMaskGenerator()
                 ),
                 new ContentTypeMapper($this->getConverterRegistry()),
