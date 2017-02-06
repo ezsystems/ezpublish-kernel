@@ -476,12 +476,6 @@ services:
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList }
 
-    ezpublish_rest.output.value_object_visitor.ContentTypeGroupCreateStruct:
-        parent: ezpublish_rest.output.value_object_visitor.base
-        class: "%ezpublish_rest.output.value_object_visitor.contenttypegroupcreatestruct.class%"
-        tags:
-            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct }
-
     ezpublish_rest.output.value_object_visitor.ContentTypeGroupRefList:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: "%ezpublish_rest.output.value_object_visitor.ContentTypeGroupRefList.class%"
