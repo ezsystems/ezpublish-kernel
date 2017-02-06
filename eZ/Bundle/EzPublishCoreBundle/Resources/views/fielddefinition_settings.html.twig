@@ -15,8 +15,7 @@
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.max-length.label'|trans|desc("Max string length:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if fielddefinition.validatorConfiguration.StringLengthValidator.maxStringLength %}
-            {{ fielddefinition.validatorConfiguration.StringLengthValidator.maxStringLength }}
-            {{ 'fielddefinition.max-length.unit'|trans|desc("characters")}}
+            {{ 'fielddefinition.max-length.value'|trans({'%max%': fielddefinition.validatorConfiguration.StringLengthValidator.maxStringLength})|desc("%max% characters")}}
         {% else %}
             <em>{{ 'fielddefinition.max-length.undefined'|trans|desc("No defined maximum string length")}}</em>
         {% endif %}
@@ -75,17 +74,17 @@
     {% else %}
         {% set interval = settings.dateInterval %}
         {% set defaultValue = 'fielddefinition.default-value.current_datetime_adjust_by'|trans|desc("Current datetime adjusted by") %}
-        {% set defaultValue = interval.y ? defaultValue ~ interval.y ~ ' ' ~ 'fielddefinition.interval.year'|trans|desc("year(s)") : defaultValue %}
-        {% set defaultValue = interval.m ? defaultValue ~ interval.m ~ ' ' ~ 'fielddefinition.interval.month'|trans|desc("month(s)") : defaultValue %}
-        {% set defaultValue = interval.d ? defaultValue ~ interval.d ~ ' ' ~ 'fielddefinition.interval.day'|trans|desc("day(s)") : defaultValue %}
-        {% set defaultValue = interval.h ? defaultValue ~ interval.h ~ ' ' ~ 'fielddefinition.interval.hour'|trans|desc("hour(s)") : defaultValue %}
-        {% set defaultValue = interval.i ? defaultValue ~ interval.i ~ ' ' ~ 'fielddefinition.interval.minute'|trans|desc("minute(s)") : defaultValue %}
-        {% set defaultValue = interval.s and settings.useSeconds ? defaultValue ~ interval.s ~ ' ' ~ 'fielddefinition.interval.second'|trans|desc("second(s)") : defaultValue %}
+        {% set defaultValue = interval.y ? 'fielddefinition.interval.year'|trans({'%default%': defaultValue, '%year%': interval.y})|desc("%default% %year% year(s)") : defaultValue %}
+        {% set defaultValue = interval.m ? 'fielddefinition.interval.month'|trans({'%default%': defaultValue, '%month%': interval.m})|desc("%default% %month% month(s)") : defaultValue %}
+        {% set defaultValue = interval.d ? 'fielddefinition.interval.day'|trans({'%default%': defaultValue, '%day%': interval.d})|desc("%default% %day% day(s)") : defaultValue %}
+        {% set defaultValue = interval.h ? 'fielddefinition.interval.hour'|trans({'%default%': defaultValue, '%hour%': interval.h})|desc("%default% %hour% hour(s)") : defaultValue %}
+        {% set defaultValue = interval.i ? 'fielddefinition.interval.minute'|trans({'%default%': defaultValue, '%minute%': interval.i})|desc("%default% %minute% minute(s)") : defaultValue %}
+        {% set defaultValue = interval.s and settings.useSeconds ? 'fielddefinition.interval.second'|trans({'%default%': defaultValue, '%second%': interval.s})|desc("%default% %second% second(s)") : defaultValue %}
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting use-seconds">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.use-seconds.label'|trans|desc("Use seconds:")}}</div>
-        <div class="ez-fielddefinition-setting-value">{{ settings.useSeconds ? 'fielddefinition.use-seconds.yes'|trans|desc("Yes") : 'fielddefinition.use-seconds.no'|trans|desc("No") }}</div>
+        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.use-seconds.yes_no'|transchoice(settings.useSeconds)|desc("{0} No|{1} Yes") }}</div>
     </li>
 </ul>
 {% endblock %}
@@ -111,7 +110,7 @@
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting use-seconds">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.use-seconds.label'|trans|desc("Use seconds:")}}</div>
-        <div class="ez-fielddefinition-setting-value">{{ settings.useSeconds ? 'fielddefinition.use-seconds.yes'|trans|desc("Yes") : 'fielddefinition.use-seconds.no'|trans|desc("No") }}</div>
+        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.use-seconds.yes_no'|transchoice(settings.useSeconds)|desc("{0} No|{1} Yes") }}</div>
     </li>
 </ul>
 {% endblock %}
@@ -296,8 +295,7 @@
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.maximum-file-size.label'|trans|desc("Maximum file size:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if fielddefinition.validatorConfiguration.FileSizeValidator.maxFileSize %}
-            {# TODO l10n / unit #}
-            {{ fielddefinition.validatorConfiguration.FileSizeValidator.maxFileSize }} {{ 'fielddefinition.maximum-file-size.unit'|trans|desc("bytes")}}
+            {{ 'fielddefinition.maximum-file-size.value'|trans({'%max%': fielddefinition.validatorConfiguration.FileSizeValidator.maxFileSize})|desc("%max% MB")}}
         {% else %}
             <em>{{ 'fielddefinition.maximum-file-size.undefined'|trans|desc("No defined maximum size")}}</em>
         {% endif %}
@@ -310,7 +308,7 @@
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.preferred-rows-number.label'|trans|desc("Preferred number of rows:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if rows %}
-            {{ rows }} {{ 'fielddefinition.preferred-rows-number.unit'|trans|desc("rows")}}
+            {{ 'fielddefinition.preferred-rows-number.value'|trans({'%rows%': rows})|desc("%rows% rows")}}
         {% else %}
             <em>{{ 'fielddefinition.preferred-rows-number.undefined'|trans|desc("No preferred number of rows")}}</em>
         {% endif %}
@@ -373,7 +371,7 @@
 {% block settings_allowmultiple %}
     <li class="ez-fielddefinition-setting multiple">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.multiple.label'|trans|desc("Allow multiple choices:")}}</div>
-        <div class="ez-fielddefinition-setting-value">{{ isMultiple ? 'fielddefinition.multiple.yes'|trans|desc("Yes") : 'fielddefinition.multiple.no'|trans|desc("No") }}</div>
+        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.multiple.yes_no'|transchoice(isMultiple)|desc("{0} No|{1} Yes") }}</div>
     </li>
 {% endblock %}
 
