@@ -44,6 +44,18 @@ interface Handler
     public function loadGroup($groupId);
 
     /**
+     * Return list of unique Content Type Groups, with group id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param array $groupIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
+     */
+    public function loadGroups(array $groupIds);
+
+    /**
      * Loads Type Group by identifier.
      *
      * Legacy note: Uses name for identifier.
