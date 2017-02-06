@@ -8,40 +8,31 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use PHPUnit_Framework_TestCase;
 
-abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements SlotTest
+abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AbstractSlot */
     protected $slot;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cachePurgerMock;
+    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $purgeClientMock;
 
-    private $contentId = 42;
-
-    private static $signal;
+    private $signal;
 
     public function setUp()
     {
-        $this->cachePurgerMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger');
+        $this->purgeClientMock = $this->getMock(PurgeClientInterface::class);
         $this->slot = $this->createSlot();
-        self::$signal = $this->createSignal();
+        $this->signal = $this->createSignal();
     }
 
     protected function createSlot()
     {
         $class = $this->getSlotClass();
 
-        return new $class($this->cachePurgerMock);
-    }
-
-    /**
-     * @return \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getCachePurger()
-    {
-        return $this->cachePurgerMock;
+        return new $class($this->purgeClientMock);
     }
 
     /**
@@ -49,34 +40,49 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
      */
     public function testDoesNotReceiveOtherSignals($signal)
     {
-        $this->cachePurgerMock->expects($this->never())->method('purgeForContent');
-        $this->cachePurgerMock->expects($this->never())->method('purgeAll');
+        $this->purgeClientMock->expects($this->never())->method('purge');
+        $this->purgeClientMock->expects($this->never())->method('purgeAll');
 
         $this->slot->receive($signal);
     }
+
+    /**
+     * @dataProvider getReceivedSignals
+     */
+    public function testReceivePurgesCacheForTags($signal)
+    {
+        $this->purgeClientMock->expects($this->once())->method('purge')->with($this->generateTags());
+        $this->purgeClientMock->expects($this->never())->method('purgeAll');
+        $this->receive($signal);
+    }
+
+    /**
+     * @return array
+     */
+    abstract public function generateTags();
 
     protected function receive($signal)
     {
         $this->slot->receive($signal);
     }
 
-    public static function getReceivedSignals()
+    public function getReceivedSignals()
     {
-        return [[static::createSignal()]];
+        return [[$this->createSignal()]];
     }
 
     /**
      * All existing SignalSlots.
      */
-    public static function getUnreceivedSignals()
+    public function getUnreceivedSignals()
     {
-        static $arguments = [];
+        $arguments = [];
 
         if (empty($arguments)) {
-            $signals = self::getAllSignals();
+            $signals = $this->getAllSignals();
 
             foreach ($signals as $signalClass) {
-                if (in_array($signalClass, static::getReceivedSignalClasses())) {
+                if (in_array($signalClass, $this->getReceivedSignalClasses())) {
                     continue;
                 }
                 $arguments[] = [new $signalClass()];
@@ -89,7 +95,7 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
     /**
      * @return array
      */
-    private static function getAllSignals()
+    private function getAllSignals()
     {
         return array(
             'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal',

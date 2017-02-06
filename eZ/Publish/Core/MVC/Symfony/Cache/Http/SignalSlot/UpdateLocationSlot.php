@@ -12,8 +12,10 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * A slot handling UpdateLocationSignal.
+ *
+ * @todo Signal missing info on parent location, which is relevant if priority of location was updated.
  */
-class UpdateLocationSlot extends PurgeForContentHttpCacheSlot
+class UpdateLocationSlot extends AbstractContentSlot
 {
     protected function supports(Signal $signal)
     {

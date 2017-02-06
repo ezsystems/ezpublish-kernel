@@ -13,7 +13,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling TrashSignal.
  */
-class TrashSlot extends PurgeForContentHttpCacheSlot
+class TrashSlot extends AbstractContentSlot
 {
     protected function supports(Signal $signal)
     {

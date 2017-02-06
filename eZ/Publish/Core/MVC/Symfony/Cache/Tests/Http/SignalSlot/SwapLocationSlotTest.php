@@ -10,19 +10,16 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal;
 
-/**
- * @todo Fixme
- */
-class SwapLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class SwapLocationSlotTest extends AbstractContentSlotTest
 {
     public function setUp()
     {
-        self::markTestIncomplete('fixme');
+        $this->markTestIncomplete('fixme');
     }
 
-    public static function createSignal()
+    public function createSignal()
     {
-        return new SwapLocationSignal(['content1Id' => self::getContentId()]);
+        return new SwapLocationSignal(['content1Id' => $this->contentId]);
     }
 
     public function getSlotClass()
@@ -30,7 +27,7 @@ class SwapLocationSlotTest extends AbstractPurgeForContentSlotTest implements Sl
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\SetContentStateSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal'];
     }

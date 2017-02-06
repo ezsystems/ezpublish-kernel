@@ -13,7 +13,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling AssignSectionSignal.
  */
-class AssignSectionSlot extends PurgeForContentHttpCacheSlot
+class AssignSectionSlot extends AbstractContentSlot
 {
     protected function supports(Signal $signal)
     {

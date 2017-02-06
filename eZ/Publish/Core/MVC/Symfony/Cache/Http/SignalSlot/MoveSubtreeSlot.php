@@ -13,8 +13,21 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling MoveSubtreeSignal.
  */
-class MoveSubtreeSlot extends PurgeAllHttpCacheSlot
+class MoveSubtreeSlot extends AbstractContentSlot
 {
+    /**
+     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal $signal
+     */
+    protected function generateTags(Signal $signal)
+    {
+        // @todo Missing info to clear sibling and parent cache of old parent!
+        return [
+            'path-' . $signal->locationId,
+            'location-' . $signal->newParentLocationId,
+            'parent-' . $signal->newParentLocationId,
+        ];
+    }
+
     protected function supports(Signal $signal)
     {
         return $signal instanceof Signal\LocationService\MoveSubtreeSignal;
