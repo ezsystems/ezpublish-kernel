@@ -16,6 +16,8 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    # Override the session attribute bag to set custom storage key so same is used as legacy
+    # @deprecated To be removed in 7.0 kernel, see 594b083d94f1cff7008fb0d7d54f40d0ce0a2ace
     session.attribute_bag:
-        class: "%session.attribute_bag.class%"
+        class: Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag
         arguments: ["%ezpublish.session.attribute_bag.storage_key%"]
