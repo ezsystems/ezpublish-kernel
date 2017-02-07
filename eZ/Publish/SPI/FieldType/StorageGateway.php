@@ -17,7 +17,7 @@ abstract class StorageGateway
      * Get sequence name bound to database table and column.
      *
      * Note: must be compatible with:
-     * @see \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\PostgresConnectionHandler::quoteIdentifier
+     * @see \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\PostgresConnectionHandler::getSequenceName
      *
      * @param string $table
      * @param string $column
@@ -25,7 +25,6 @@ abstract class StorageGateway
      */
     protected function getSequenceName($table, $column)
     {
-        // @todo: change to <table>_<column>_seq when merged into 7.0
-        return sprintf('%s_s', $table);
+        return sprintf('%s_%s_seq', $table, $column);
     }
 }

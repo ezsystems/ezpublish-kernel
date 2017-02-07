@@ -39,7 +39,7 @@ class PostgresConnectionHandler extends ConnectionHandler
      */
     public function getSequenceName($table, $column)
     {
-        return $table . '_s';
+        return sprintf('%s_%s_seq', $table, $column);
     }
 
     /**
