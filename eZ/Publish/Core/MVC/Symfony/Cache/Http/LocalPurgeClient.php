@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * LocalPurgeClient emulates an Http PURGE request received by the cache store.
  * Handy for mono-server.
+ *
+ * @deprecated since 6.8. Use LocalPurgeClient from the platform-http-cache package.
  */
 class LocalPurgeClient implements PurgeClientInterface
 {

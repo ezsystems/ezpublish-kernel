@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache;
 
+/**
+ * @deprecated since 6.8. Use PurgeClientInterface from the platform-http-cache package.
+ */
 interface PurgeClientInterface
 {
     /**

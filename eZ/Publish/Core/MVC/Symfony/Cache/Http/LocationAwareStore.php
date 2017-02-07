@@ -16,6 +16,8 @@ use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * LocationAwareStore implements all the logic for storing cache metadata regarding locations.
+ *
+ * @deprecated since 6.8. Replaced by TagAwareStore from the http-cache multi-tagging package.
  */
 class LocationAwareStore extends Store implements ContentPurger
 {
