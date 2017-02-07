@@ -16,6 +16,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Adds parent locations to the Http cache clear list, for given content.
  * Will consider direct parent for all content's locations.
+ *
+ * @deprecated since 6.8. Smart cache is replaced by http-cache multi-tagging from the platform-http-cache package.
  */
 class ParentLocationsListener implements EventSubscriberInterface
 {
