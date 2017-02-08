@@ -10,11 +10,16 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserSignal;
 
-class UpdateUserSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class UpdateUserSlotTest extends AbstractContentSlotTest
 {
-    public static function createSignal()
+    public function createSignal()
     {
-        return new UpdateUserSignal(['userId' => self::getContentId()]);
+        return new UpdateUserSignal(['userId' => $this->contentId]);
+    }
+
+    public function generateTags()
+    {
+        return ['content-' . $this->contentId];
     }
 
     public function getSlotClass()
@@ -22,7 +27,7 @@ class UpdateUserSlotTest extends AbstractPurgeForContentSlotTest implements Slot
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UpdateUserSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserSignal'];
     }

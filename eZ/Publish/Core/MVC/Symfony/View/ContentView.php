@@ -38,13 +38,16 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  * }
  * </code>
  */
-class ContentView extends BaseView implements View, ContentValueView, LocationValueView, EmbedView, CachableView
+class ContentView extends BaseView implements View, ContentValueView, LocationValueView, EmbedView, CachableView, RelationView
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;
 
     /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
     private $location;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Relation[] */
+    private $relations = [];
 
     /** @var bool */
     private $isEmbed = false;
@@ -81,6 +84,22 @@ class ContentView extends BaseView implements View, ContentValueView, LocationVa
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
+     */
+    public function setRelations($relations)
+    {
+        $this->relations = $relations;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public function getRelations()
+    {
+        return $this->relations;
     }
 
     protected function getInternalParameters()

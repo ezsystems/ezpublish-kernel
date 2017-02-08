@@ -10,11 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal;
 
-class SetContentStateSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
+class SetContentStateSlotTest extends AbstractContentSlotTest
 {
-    public static function createSignal()
+    public function createSignal()
     {
-        return new SetContentStateSignal(['contentId' => self::getContentId()]);
+        return new SetContentStateSignal(['contentId' => $this->contentId]);
     }
 
     public function getSlotClass()
@@ -22,7 +22,7 @@ class SetContentStateSlotTest extends AbstractPurgeForContentSlotTest implements
         return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\SetContentStateSlot';
     }
 
-    public static function getReceivedSignalClasses()
+    public function getReceivedSignalClasses()
     {
         return ['eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal'];
     }

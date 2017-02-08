@@ -13,15 +13,22 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling RecoverSignal.
  */
-class RecoverSlot extends PurgeForContentHttpCacheSlot
+class RecoverSlot extends AbstractContentSlot
 {
+    /**
+     * @param \eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal $signal
+     */
+    protected function generateTags(Signal $signal)
+    {
+        $tags = parent::generateTags($signal);
+        $tags[] = 'location-' . $signal->newParentLocationId;
+        $tags[] = 'parent-' . $signal->newParentLocationId;
+
+        return $tags;
+    }
+
     protected function supports(Signal $signal)
     {
         return $signal instanceof Signal\TrashService\RecoverSignal;
-    }
-
-    protected function extractLocationIds(Signal $signal)
-    {
-        return [$signal->newParentLocationId];
     }
 }
