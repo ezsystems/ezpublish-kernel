@@ -51,6 +51,8 @@ services:
         arguments:
             - []
             - "@?logger"
+        calls:
+            - [setExternalStorageHandler, ['@ezpublish.persistence.doctrine.external_storage_handler']]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezurl}
 
