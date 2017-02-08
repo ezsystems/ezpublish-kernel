@@ -2,7 +2,7 @@ parameters:
     ezpublish.persistence.field_type_registry.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\Storage\FieldTypeRegistryFactory
     ezpublish.persistence.field_type_registry.class: eZ\Publish\Core\Persistence\FieldTypeRegistry
     ezpublish.persistence.external_storage_registry.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\Storage\ExternalStorageRegistryFactory
-    ezpublish.persistence.external_storage_registry.class: eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+    ezpublish.persistence.external_storage_registry.class: eZ\Publish\Core\Persistence\Content\StorageRegistry
     ezpublish.persistence.slug_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
 
     # Transformation parser/compiler for search purpose

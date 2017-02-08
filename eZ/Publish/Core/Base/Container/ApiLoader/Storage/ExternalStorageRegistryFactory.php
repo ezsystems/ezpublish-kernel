@@ -52,7 +52,7 @@ class ExternalStorageRegistryFactory implements ContainerAwareInterface
      *
      * @param string $externalStorageRegistryClass
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     * @return \eZ\Publish\Core\Persistence\Content\StorageRegistry
      */
     public function buildExternalStorageRegistry($externalStorageRegistryClass)
     {

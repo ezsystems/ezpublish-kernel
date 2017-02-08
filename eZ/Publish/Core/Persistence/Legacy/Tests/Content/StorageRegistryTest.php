@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use eZ\Publish\Core\Persistence\Content\StorageRegistry;
 
 /**
  * Test case for StorageRegistry.
@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 class StorageRegistryTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::register
+     * @covers \eZ\Publish\Core\Persistence\Content\StorageRegistry::register
      */
     public function testRegister()
     {
@@ -34,7 +34,7 @@ class StorageRegistryTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
+     * @covers \eZ\Publish\Core\Persistence\Content\StorageRegistry::getStorage
      */
     public function testGetStorage()
     {
@@ -50,8 +50,8 @@ class StorageRegistryTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
-     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\StorageNotFound
+     * @covers \eZ\Publish\Core\Persistence\Content\StorageRegistry::getStorage
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Exception\StorageNotFound
      */
     public function testGetNotFound()
     {

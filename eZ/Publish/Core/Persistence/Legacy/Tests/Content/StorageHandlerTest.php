@@ -22,7 +22,7 @@ class StorageHandlerTest extends TestCase
     /**
      * StorageRegistry mock.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Content\StorageRegistry
      */
     protected $storageRegistryMock;
 
@@ -190,7 +190,7 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns a StorageRegistry mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     * @return \eZ\Publish\Core\Persistence\Content\StorageRegistry
      */
     protected function getStorageRegistryMock()
     {
