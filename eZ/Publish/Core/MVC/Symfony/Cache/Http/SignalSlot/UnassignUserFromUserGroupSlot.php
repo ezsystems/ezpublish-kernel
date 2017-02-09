@@ -17,6 +17,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
  * Is this right ? Does it require a full wipe of the cache ? Very unlikely.
  * The User's Content's HTTP cache must be cleared, yes.
  * And the user must be logged out, or its user hash cleared (not sure we can without clearing for all users)
+ *
+ * @deprecated since 6.8. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
 class UnassignUserFromUserGroupSlot extends PurgeAllHttpCacheSlot
 {

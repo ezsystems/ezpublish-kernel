@@ -13,6 +13,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * A slot handling DeleteLocationSignal.
+ *
+ * @deprecated since 6.8. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
 class DeleteLocationSlot extends PurgeForContentHttpCacheSlot
 {
