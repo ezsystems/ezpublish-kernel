@@ -58,6 +58,8 @@ services:
 
     ezpublish.fieldType.ezrichtext.externalStorage:
         class: "%ezpublish.fieldType.ezrichtext.externalStorage.class%"
+        calls:
+            - [setExternalStorageHandler, ['@ezpublish.persistence.doctrine.external_storage_handler']]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezrichtext}
 
