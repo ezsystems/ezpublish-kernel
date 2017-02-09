@@ -14,6 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
  * A slot handling DeleteContentSignal.
  *
  * @todo Change to clear precise cache items on content deletion (implies changes to how this signal is used and emitted).
+ *
+ * @deprecated since 6.8. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
 class DeleteContentSlot extends PurgeAllHttpCacheSlot
 {

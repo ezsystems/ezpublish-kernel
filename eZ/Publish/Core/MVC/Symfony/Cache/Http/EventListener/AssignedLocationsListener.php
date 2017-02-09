@@ -15,6 +15,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Adds content's assigned locations to the cache-clear list.
+ *
+ * @deprecated since 6.8. Smart cache is replaced by http-cache multi-tagging from the platform-http-cache package.
  */
 class AssignedLocationsListener implements EventSubscriberInterface
 {
