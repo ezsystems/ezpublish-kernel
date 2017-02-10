@@ -71,8 +71,6 @@ parameters:
     ezpublish_rest.input.handler.json.class: eZ\Publish\Core\REST\Common\Input\Handler\Json
     ezpublish_rest.input.handler.xml.class: eZ\Publish\Core\REST\Common\Input\Handler\Xml
 
-    ezpublish_rest.templated_router.class: "%router.class%"
-
 services:
     ezpublish_rest.routing.options_loader:
         class: "%ezpublish_rest.routing.options_loader.class%"
@@ -420,7 +418,7 @@ services:
             - { name: ezpublish_rest.input.handler, format: xml }
 
     ezpublish_rest.templated_router:
-        class: "%ezpublish_rest.templated_router.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
         parent: hautelook.router.template
         calls:
             - [ setOption, [ strict_requirements, ~ ] ]
