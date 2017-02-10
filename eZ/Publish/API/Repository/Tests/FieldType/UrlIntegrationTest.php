@@ -176,7 +176,7 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
     /**
      * Get update field externals data.
      *
-     * @return array
+     * @return \eZ\Publish\Core\FieldType\Url\Value::__construct
      */
     public function getValidUpdateFieldData()
     {
