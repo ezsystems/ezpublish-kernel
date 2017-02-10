@@ -261,6 +261,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @group fieldTypeIntegration
      */
     public function testCreateContentType()
     {
@@ -396,6 +397,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
      * @depends testCreateContentType
+     * @group fieldTypeIntegration
      */
     public function testLoadContentTypeField()
     {
@@ -493,6 +495,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent;
      * @depends testLoadContentTypeField
+     * @group fieldTypeIntegration
      */
     public function testCreateContent()
     {
@@ -588,6 +591,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends testCreateContent
+     * @group fieldTypeIntegration
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function testLoadField()
     {
@@ -601,6 +607,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testLoadField
+     * @group fieldTypeIntegration
      */
     public function testLoadFieldType()
     {
@@ -697,6 +704,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      * @depends testLoadFieldType
+     * @group fieldTypeIntegration
      */
     public function testUpdateField()
     {
@@ -733,6 +741,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testUpdateField
+     * @group fieldTypeIntegration
      */
     public function testUpdateTypeFieldStillAvailable($content)
     {
@@ -747,6 +756,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testUpdateTypeFieldStillAvailable
+     * @group fieldTypeIntegration
      */
     public function testUpdatedDataCorrect(Field $field)
     {
