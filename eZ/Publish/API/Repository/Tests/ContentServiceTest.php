@@ -3033,17 +3033,13 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertPropertiesCorrect($expectedVersions[0], $versions[0]);
         $this->assertPropertiesCorrect($expectedVersions[1], $versions[1]);
-        $this->assertEquals(
-            $versions[0]->creationDate->getTimestamp(),
+        $this->assertGreaterThanOrEqual(
             $versions[1]->creationDate->getTimestamp(),
-            'Creation time did not match within delta of 2 seconds',
-            2
+            $versions[0]->creationDate->getTimestamp()
         );
-        $this->assertEquals(
-            $versions[0]->modificationDate->getTimestamp(),
+        $this->assertGreaterThanOrEqual(
             $versions[1]->modificationDate->getTimestamp(),
-            'Creation time did not match within delta of 2 seconds',
-            2
+            $versions[0]->modificationDate->getTimestamp()
         );
     }
 
@@ -4821,6 +4817,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(2, count($locations));
     }
 
+    /**
+     */
     public function testURLAliasesCreatedForNewContent()
     {
         $repository = $this->getRepository();
@@ -4858,6 +4856,8 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
+    /**
+     */
     public function testURLAliasesCreatedForUpdatedContent()
     {
         $repository = $this->getRepository();
@@ -4931,6 +4931,8 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
+    /**
+     */
     public function testCustomURLAliasesNotHistorizedOnUpdatedContent()
     {
         $repository = $this->getRepository();
