@@ -8,14 +8,14 @@
  */
 namespace eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway;
 
-use eZ\Publish\Core\Persistence\Doctrine\Connection;
+use eZ\Publish\Core\Persistence\Doctrine\DoctrineConnection;
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway;
 use RuntimeException;
 
 class DoctrineStorage extends Gateway
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Doctrine\Connection
+     * @var \eZ\Publish\Core\Persistence\Doctrine\DoctrineConnection
      */
     protected $connection;
 
@@ -24,12 +24,12 @@ class DoctrineStorage extends Gateway
      */
     public function setConnection($connection)
     {
-        if (!$connection instanceof Connection) {
+        if (!$connection instanceof DoctrineConnection) {
             throw new RuntimeException(
                 sprintf(
                     '%s::setConnection expects an instance of %s, but %s given',
                     self::class,
-                    Connection::class,
+                    DoctrineConnection::class,
                     get_class($connection)
                 )
             );
@@ -58,7 +58,7 @@ class DoctrineStorage extends Gateway
                 ->select('id', 'remote_id')
                 ->from('ezcontentobject')
                 ->where($query->expr()->in('remote_id', ':remoteIds'))
-                ->setParameter(':remoteIds', $remoteIds, Connection::PARAM_STR_ARRAY)
+                ->setParameter(':remoteIds', $remoteIds, DoctrineConnection::PARAM_STR_ARRAY)
             ;
 
             $statement = $query->execute();
