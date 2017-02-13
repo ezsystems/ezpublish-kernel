@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
-use eZ\Publish\Core\Persistence\Doctrine\Connection;
+use eZ\Publish\Core\Persistence\Doctrine\DoctrineConnection;
 use PDO;
 use RuntimeException;
 
@@ -19,7 +19,7 @@ class DoctrineStorage extends Gateway
     const URL_LINK_TABLE = 'ezurl_object_link';
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Doctrine\Connection
+     * @var \eZ\Publish\Core\Persistence\Doctrine\DoctrineConnection
      */
     protected $connection;
 
@@ -28,12 +28,12 @@ class DoctrineStorage extends Gateway
      */
     public function setConnection($connection)
     {
-        if (!$connection instanceof Connection) {
+        if (!$connection instanceof DoctrineConnection) {
             throw new RuntimeException(
                 sprintf(
                     '%s::setConnection expects an instance of %s, but %s given',
                     self::class,
-                    Connection::class,
+                    DoctrineConnection::class,
                     get_class($connection)
                 )
             );
@@ -61,7 +61,7 @@ class DoctrineStorage extends Gateway
                 ->select('id', 'url')
                 ->from(self::URL_TABLE)
                 ->where('id IN (:ids)')
-                ->setParameter(':ids', $ids, Connection::PARAM_STR_ARRAY);
+                ->setParameter(':ids', $ids, DoctrineConnection::PARAM_STR_ARRAY);
 
             $statement = $query->execute();
             foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
@@ -93,7 +93,7 @@ class DoctrineStorage extends Gateway
                 ->where(
                     $query->expr()->in('url', ':urls')
                 )
-                ->setParameter(':urls', $urls, Connection::PARAM_STR_ARRAY);
+                ->setParameter(':urls', $urls, DoctrineConnection::PARAM_STR_ARRAY);
 
             $statement = $query->execute();
             foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
@@ -219,7 +219,7 @@ class DoctrineStorage extends Gateway
         $deleteQuery
             ->delete($this->connection->quoteIdentifier(self::URL_TABLE))
             ->where($deleteQuery->expr()->in('id', ':ids'))
-            ->setParameter(':ids', $ids, Connection::PARAM_STR_ARRAY)
+            ->setParameter(':ids', $ids, DoctrineConnection::PARAM_STR_ARRAY)
         ;
 
         $deleteQuery->execute();
