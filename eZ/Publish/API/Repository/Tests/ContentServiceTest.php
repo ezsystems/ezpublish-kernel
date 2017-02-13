@@ -3033,7 +3033,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertPropertiesCorrect($expectedVersions[0], $versions[0]);
         $this->assertPropertiesCorrect($expectedVersions[1], $versions[1]);
-        $this->assertEquals(
+        $this->assertGreaterThanOrEqual(
             $versions[1]->creationDate->getTimestamp(),
             $versions[0]->creationDate->getTimestamp()
         );
