@@ -8,12 +8,20 @@
  */
 namespace eZ\Publish\Core\Persistence\Doctrine;
 
-use Doctrine\DBAL\Connection as DoctrineConnection;
+use Doctrine\DBAL\Connection;
 
-class Connection extends DoctrineConnection
+/**
+ * Wrapper class adding extra features to \Doctrine\DBAL\Connection.
+ *
+ * Note: DoctrineConnection is used instead of Connection to avoid names collision.
+ */
+class DoctrineConnection extends Connection
 {
     /**
      * Get sequence name bound to database table and column.
+     *
+     * Note: must be compatible with:
+     * @see \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\PostgresConnectionHandler::quoteIdentifier
      *
      * @param string $table
      * @param string $column
