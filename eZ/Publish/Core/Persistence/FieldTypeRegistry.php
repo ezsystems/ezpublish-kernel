@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\Persistence;
 
 use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
+use eZ\Publish\SPI\Persistence\Content\StorageHandler;
+use eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry;
 use RuntimeException;
 
 /**
@@ -23,14 +25,32 @@ class FieldTypeRegistry
      *
      * @var mixed
      */
-    protected $coreFieldTypeMap = array();
+    protected $coreFieldTypeMap = [];
+
+    /**
+     * Map of FieldTypes where key is field type identifier and value is StorageHandler object complying
+     * to {@link \eZ\Publish\SPI\Persistence\Content\StorageHandler} interface.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\StorageHandler[]
+     */
+    protected $storageFieldTypeMap = [];
 
     /**
      * Map of FieldTypes where key is field type identifier and value is FieldType object.
      *
      * @var \eZ\Publish\SPI\Persistence\FieldType[]
      */
-    protected $fieldTypeMap = array();
+    protected $fieldTypeMap = [];
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry
+     */
+    protected $storageHandlerRegistry;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\StorageHandler
+     */
+    protected $defaultStorageHandler;
 
     /**
      * Creates FieldType registry.
@@ -41,10 +61,17 @@ class FieldTypeRegistry
      *
      * @param array $fieldTypeMap A map where key is field type identifier and value is
      *              a callable factory to get FieldType OR FieldType object.
+     * @param \eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry $storageHandlerRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\StorageHandler $defaultStorageHandler
      */
-    public function __construct(array $fieldTypeMap)
-    {
+    public function __construct(
+        array $fieldTypeMap,
+        StorageHandlerRegistry $storageHandlerRegistry,
+        StorageHandler $defaultStorageHandler
+    ) {
         $this->coreFieldTypeMap = $fieldTypeMap;
+        $this->storageHandlerRegistry = $storageHandlerRegistry;
+        $this->defaultStorageHandler = $defaultStorageHandler;
     }
 
     /**
@@ -79,6 +106,43 @@ class FieldTypeRegistry
     public function register($identifier, $fieldType)
     {
         $this->coreFieldTypeMap[$identifier] = $fieldType;
+    }
+
+    /**
+     * Register StorageHandler for the given FieldType identifier.
+     *
+     * @param string $fieldTypeIdentifier
+     * @param string $storageHandlerIdentifier
+     */
+    public function registerStorageHandler($fieldTypeIdentifier, $storageHandlerIdentifier)
+    {
+        $this->storageFieldTypeMap[$fieldTypeIdentifier] = $this->storageHandlerRegistry->get($storageHandlerIdentifier);
+    }
+
+    /**
+     * Get external storage for a FieldType.
+     *
+     * @param string $identifier FieldType identifier
+     * @return \eZ\Publish\SPI\Persistence\Content\StorageHandler
+     */
+    public function getStorageHandler($identifier)
+    {
+        if (!isset($this->coreFieldTypeMap[$identifier])) {
+            throw new FieldTypeNotFoundException($identifier);
+        }
+        if (!isset($this->storageFieldTypeMap[$identifier])) {
+            $this->storageFieldTypeMap[$identifier] = $this->defaultStorageHandler;
+        }
+
+        if (!$this->storageFieldTypeMap[$identifier] instanceof StorageHandler) {
+            throw new RuntimeException(sprintf(
+                'FieldType \'%s\' registered storage is not an instance of %s',
+                $identifier,
+                StorageHandler::class
+            ));
+        }
+
+        return $this->storageFieldTypeMap[$identifier];
     }
 
     /**

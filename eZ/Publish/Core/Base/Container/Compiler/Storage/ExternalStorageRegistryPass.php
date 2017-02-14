@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\Compiler\Storage;
 
+use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -25,7 +26,9 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.persistence.external_storage_registry.factory')) {
+        if (!$container->hasDefinition('ezpublish.persistence.external_storage_registry.factory') ||
+            !$container->hasDefinition('ezpublish.persistence.field_type_registry')
+        ) {
             return;
         }
 
@@ -35,7 +38,7 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
 
         // Gateways for external storage handlers.
         // Alias attribute is the corresponding field type string.
-        $externalStorageGateways = array();
+        $externalStorageGateways = [];
         // Referencing the services by alias (field type string)
         foreach ($container->findTaggedServiceIds('ezpublish.fieldType.externalStorageHandler.gateway') as $id => $attributes) {
             foreach ($attributes as $attribute) {
@@ -47,13 +50,16 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                     throw new LogicException('ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "identifier" attribute to identify the gateway. None given.');
                 }
 
-                $externalStorageGateways[$attribute['alias']] = array(
+                $externalStorageGateways[$attribute['alias']] = [
                     'id' => $id,
                     'identifier' => $attribute['identifier'],
-                );
+                ];
             }
         }
 
+        $fieldTypeRegistryDefinition = $container->getDefinition(
+            'ezpublish.persistence.field_type_registry'
+        );
         // External storage handlers for field types that need them.
         // Alias attribute is the field type string.
         foreach ($container->findTaggedServiceIds('ezpublish.fieldType.externalStorageHandler') as $id => $attributes) {
@@ -73,7 +79,7 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                 if (
                     is_subclass_of(
                         $storageHandlerClass,
-                        'eZ\\Publish\\Core\\FieldType\\GatewayBasedStorage'
+                        GatewayBasedStorage::class
                     )
                 ) {
                     if (!isset($externalStorageGateways[$attribute['alias']])) {
@@ -85,19 +91,27 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
 
                     $storageHandlerDef->addMethodCall(
                         'addGateway',
-                        array(
+                        [
                             $externalStorageGateways[$attribute['alias']]['identifier'],
                             new Reference($externalStorageGateways[$attribute['alias']]['id']),
-                        )
+                        ]
+                    );
+
+                    $fieldTypeRegistryDefinition->addMethodCall(
+                        'registerStorageHandler',
+                        [
+                            $attribute['alias'],
+                            $externalStorageGateways[$attribute['alias']]['identifier'],
+                        ]
                     );
                 }
 
                 $externalStorageRegistryFactoryDefinition->addMethodCall(
                     'registerExternalStorageHandler',
-                    array(
+                    [
                         $id,
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }

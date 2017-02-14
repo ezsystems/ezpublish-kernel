@@ -9,12 +9,13 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\StorageHandler as SPIStorageHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Handler for external storages.
  */
-class StorageHandler
+class StorageHandler implements SPIStorageHandler
 {
     /**
      * Storage registry.
