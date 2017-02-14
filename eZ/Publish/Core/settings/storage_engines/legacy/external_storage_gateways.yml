@@ -7,7 +7,7 @@ parameters:
     ezpublish.fieldType.ezimage.storage_gateway.class: eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezkeyword.storage_gateway.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezrichtext.storage_gateway.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage
+    ezpublish.fieldType.ezrichtext.storage_gateway.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezpage.storage_gateway.class: eZ\Publish\Core\FieldType\Page\PageStorage\Gateway\LegacyStorage
@@ -52,7 +52,7 @@ services:
         class: "%ezpublish.fieldType.ezrichtext.storage_gateway.class%"
         arguments: ["@ezpublish.fieldType.ezurl.storage_gateway"]
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezrichtext, identifier: LegacyStorage}
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezrichtext, identifier: DoctrineStorage}
 
     ezpublish.fieldType.ezurl.storage_gateway:
         class: "%ezpublish.fieldType.ezurl.storage_gateway.class%"
