@@ -57,6 +57,7 @@ $containerBuilder->addCompilerPass(new Compiler\FieldTypeCollectionPass());
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeNameableCollectionPass());
 $containerBuilder->addCompilerPass(new Compiler\RegisterLimitationTypePass());
 
+$containerBuilder->addCompilerPass(new Compiler\Storage\ExternalStorageHandlerRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Storage\ExternalStorageRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Storage\Legacy\FieldValueConverterRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Storage\Legacy\RoleLimitationConverterPass());

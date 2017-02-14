@@ -19,6 +19,8 @@ services:
             -
                 identifier: "LegacyStorage"
                 connection: "@ezpublish.api.storage_engine.legacy.dbhandler"
+        tags:
+            - {name: ezpublish.persistence.externalStorageHandler, identifier: LegacyStorage}
 
     ezpublish.fieldType.ezbinaryfile.storage_gateway:
         class: "%ezpublish.fieldType.ezbinaryfile.storage_gateway.class%"

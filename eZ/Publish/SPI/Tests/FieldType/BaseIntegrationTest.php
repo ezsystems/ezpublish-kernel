@@ -609,6 +609,13 @@ abstract class BaseIntegrationTest extends TestCase
      */
     protected function getHandler($identifier, $fieldType, $fieldValueConverter, $externalStorage)
     {
+        // Register default storage handler before accessing dependent services
+        /** @var \eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry $storageHandlerRegistry */
+        $storageHandlerRegistry = self::$container->get('ezpublish.persistence.external_storage_handler.registry');
+        /** @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $legacyStorageHandler */
+        $legacyStorageHandler = self::$container->get('ezpublish.persistence.legacy.external_storage_handler');
+        $storageHandlerRegistry->register('LegacyStorage', $legacyStorageHandler);
+
         /** @var \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry */
         $fieldTypeRegistry = self::$container->get('ezpublish.persistence.field_type_registry');
         /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry */

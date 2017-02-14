@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Base\Container\ApiLoader\Storage;
 
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
+use eZ\Publish\SPI\Persistence\Content\StorageHandler;
+use eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry;
 
 class FieldTypeRegistryFactory
 {
@@ -17,13 +19,21 @@ class FieldTypeRegistryFactory
      *
      * @param string $fieldTypeRegistryClass
      * @param \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory $fieldTypeCollectionFactory
+     * @param \eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry $storageHandlerRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\StorageHandler $defaultStorageHandler
      *
      * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry
      */
-    public function buildFieldTypeRegistry($fieldTypeRegistryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory)
-    {
+    public function buildFieldTypeRegistry(
+        $fieldTypeRegistryClass,
+        FieldTypeCollectionFactory $fieldTypeCollectionFactory,
+        StorageHandlerRegistry $storageHandlerRegistry,
+        StorageHandler $defaultStorageHandler
+    ) {
         return new $fieldTypeRegistryClass(
-            $fieldTypeCollectionFactory->getFieldTypes()
+            $fieldTypeCollectionFactory->getFieldTypes(),
+            $storageHandlerRegistry,
+            $defaultStorageHandler
         );
     }
 }

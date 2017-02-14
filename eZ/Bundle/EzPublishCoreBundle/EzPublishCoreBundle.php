@@ -40,6 +40,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\Re
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeNameableCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageHandlerRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\RoleLimitationConverterPass;
@@ -93,6 +94,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new ViewProvidersPass());
 
         // Storage passes
+        $container->addCompilerPass(new ExternalStorageHandlerRegistryPass());
         $container->addCompilerPass(new ExternalStorageRegistryPass());
         // Legacy Storage passes
         $container->addCompilerPass(new FieldValueConverterRegistryPass());
