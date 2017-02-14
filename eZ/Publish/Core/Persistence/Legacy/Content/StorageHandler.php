@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use eZ\Publish\Core\Persistence\Content\StorageRegistry;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\StorageHandler as SPIStorageHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -47,7 +48,8 @@ class StorageHandler implements SPIStorageHandler
      * Stores data from $field in its corresponding external storage.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @return mixed
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field)
     {

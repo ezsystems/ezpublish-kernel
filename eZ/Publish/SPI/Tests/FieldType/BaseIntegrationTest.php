@@ -620,7 +620,7 @@ abstract class BaseIntegrationTest extends TestCase
         $fieldTypeRegistry = self::$container->get('ezpublish.persistence.field_type_registry');
         /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry */
         $converterRegistry = self::$container->get('ezpublish.persistence.legacy.field_value_converter.registry');
-        /** @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry $storageRegistry */
+        /** @var \eZ\Publish\Core\Persistence\Content\StorageRegistry $storageRegistry */
         $storageRegistry = self::$container->get('ezpublish.persistence.external_storage_registry');
 
         $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();

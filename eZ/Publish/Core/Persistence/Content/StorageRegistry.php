@@ -1,12 +1,12 @@
 <?php
 
 /**
- * File containing the StorageRegistry class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Persistence\Legacy\Content;
+namespace eZ\Publish\Core\Persistence\Content;
 
 use eZ\Publish\SPI\FieldType\FieldStorage;
 use eZ\Publish\Core\FieldType\NullStorage;
@@ -21,7 +21,7 @@ class StorageRegistry
      *
      * @var array
      */
-    protected $storageMap = array();
+    protected $storageMap = [];
 
     /**
      * Create field storage registry with converter map.
