@@ -52,6 +52,9 @@ services:
         arguments:
             - "%legacy_dsn%"
 
+    ezpublish.api.storage_engine.doctrine.connection:
+        alias: ezpublish.api.storage_engine.legacy.connection
+
     ezpublish.spi.persistence.legacy.transactionhandler:
         class: "%ezpublish.spi.persistence.legacy.transactionhandler.class%"
         arguments:

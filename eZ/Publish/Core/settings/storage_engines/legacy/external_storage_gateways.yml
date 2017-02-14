@@ -1,5 +1,6 @@
 parameters:
     ezpublish.persistence.legacy.external_storage_handler.class: eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+    ezpublish.persistence.doctrine.external_storage_handler.class: eZ\Publish\Core\Persistence\Doctrine\Content\StorageHandler
 
     ezpublish.fieldType.ezbinaryfile.storage_gateway.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezgmaplocation.storage_gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
@@ -21,6 +22,16 @@ services:
                 connection: "@ezpublish.api.storage_engine.legacy.dbhandler"
         tags:
             - {name: ezpublish.persistence.externalStorageHandler, identifier: LegacyStorage}
+
+    ezpublish.persistence.doctrine.external_storage_handler:
+        class: "%ezpublish.persistence.doctrine.external_storage_handler.class%"
+        arguments:
+            - "@ezpublish.persistence.external_storage_registry"
+            -
+                identifier: "DoctrineStorage"
+                connection: "@ezpublish.api.storage_engine.doctrine.connection"
+        tags:
+            - {name: ezpublish.persistence.externalStorageHandler, identifier: DoctrineStorage}
 
     ezpublish.fieldType.ezbinaryfile.storage_gateway:
         class: "%ezpublish.fieldType.ezbinaryfile.storage_gateway.class%"
