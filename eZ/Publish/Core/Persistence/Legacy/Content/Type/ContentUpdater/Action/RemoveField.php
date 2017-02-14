@@ -10,8 +10,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\SPI\Persistence\Content\StorageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -43,7 +43,7 @@ class RemoveField extends Action
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\StorageHandler $storageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct(

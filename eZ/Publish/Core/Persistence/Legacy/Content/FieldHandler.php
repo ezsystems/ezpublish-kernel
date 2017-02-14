@@ -42,13 +42,6 @@ class FieldHandler
     protected $mapper;
 
     /**
-     * Storage Handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
-     */
-    protected $storageHandler;
-
-    /**
      * FieldType registry.
      *
      * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
@@ -67,20 +60,17 @@ class FieldHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         Gateway $contentGateway,
         Mapper $mapper,
-        StorageHandler $storageHandler,
         LanguageHandler $languageHandler,
         FieldTypeRegistry $fieldTypeRegistry
     ) {
         $this->contentGateway = $contentGateway;
         $this->mapper = $mapper;
-        $this->storageHandler = $storageHandler;
         $this->languageHandler = $languageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
@@ -177,10 +167,11 @@ class FieldHandler
             $this->mapper->convertToStorageValue($field)
         );
 
+        $storageHandler = $this->fieldTypeRegistry->getStorageHandler($field->type);
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ($this->storageHandler->storeFieldData($content->versionInfo, $field) === true) {
+        if ($storageHandler->storeFieldData($content->versionInfo, $field) === true) {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue($field)
@@ -222,10 +213,11 @@ class FieldHandler
             $this->mapper->convertToStorageValue($field)
         );
 
+        $storageHandler = $this->fieldTypeRegistry->getStorageHandler($field->type);
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ($this->storageHandler->copyFieldData($content->versionInfo, $field, $originalField) === true) {
+        if ($storageHandler->copyFieldData($content->versionInfo, $field, $originalField) === true) {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue($field)
@@ -250,10 +242,11 @@ class FieldHandler
             $this->mapper->convertToStorageValue($field)
         );
 
+        $storageHandler = $this->fieldTypeRegistry->getStorageHandler($field->type);
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ($this->storageHandler->storeFieldData($content->versionInfo, $field) === true) {
+        if ($storageHandler->storeFieldData($content->versionInfo, $field) === true) {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue($field)
@@ -285,10 +278,11 @@ class FieldHandler
             $this->mapper->convertToStorageValue($field)
         );
 
+        $storageHandler = $this->fieldTypeRegistry->getStorageHandler($field->type);
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ($this->storageHandler->copyFieldData($content->versionInfo, $field, $originalField) === true) {
+        if ($storageHandler->copyFieldData($content->versionInfo, $field, $originalField) === true) {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue($field)
@@ -304,7 +298,8 @@ class FieldHandler
     public function loadExternalFieldData(Content $content)
     {
         foreach ($content->fields as $field) {
-            $this->storageHandler->getFieldData($content->versionInfo, $field);
+            $storageHandler = $this->fieldTypeRegistry->getStorageHandler($field->type);
+            $storageHandler->getFieldData($content->versionInfo, $field);
         }
     }
 
@@ -400,10 +395,11 @@ class FieldHandler
             $this->mapper->convertToStorageValue($field)
         );
 
+        $storageHandler = $this->fieldTypeRegistry->getStorageHandler($field->type);
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ($this->storageHandler->copyFieldData($content->versionInfo, $field, $originalField) === true) {
+        if ($storageHandler->copyFieldData($content->versionInfo, $field, $originalField) === true) {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue($field)
@@ -458,7 +454,8 @@ class FieldHandler
     public function deleteFields($contentId, VersionInfo $versionInfo)
     {
         foreach ($this->contentGateway->getFieldIdsByType($contentId, $versionInfo->versionNo) as $fieldType => $ids) {
-            $this->storageHandler->deleteFieldData($fieldType, $versionInfo, $ids);
+            $storageHandler = $this->fieldTypeRegistry->getStorageHandler($fieldType);
+            $storageHandler->deleteFieldData($fieldType, $versionInfo, $ids);
         }
         $this->contentGateway->deleteFields($contentId, $versionInfo->versionNo);
     }

@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -35,11 +35,11 @@ class ContentUpdater
     protected $converterRegistry;
 
     /**
-     * Storage handler.
+     * Field Type Registry.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
      */
-    protected $storageHandler;
+    protected $fieldTypeRegistry;
 
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
@@ -51,20 +51,19 @@ class ContentUpdater
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
+     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         ContentGateway $contentGateway,
         Registry $converterRegistry,
-        StorageHandler $storageHandler,
-        ContentMapper $contentMapper
+        ContentMapper $contentMapper,
+        FieldTypeRegistry $fieldTypeRegistry
     ) {
         $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
-        $this->storageHandler = $storageHandler;
-        $this->storageHandler = $storageHandler;
         $this->contentMapper = $contentMapper;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -83,7 +82,7 @@ class ContentUpdater
                 $actions[] = new ContentUpdater\Action\RemoveField(
                     $this->contentGateway,
                     $fieldDef,
-                    $this->storageHandler,
+                    $this->fieldTypeRegistry->getStorageHandler($fieldDef->fieldType),
                     $this->contentMapper
                 );
             }
@@ -96,7 +95,7 @@ class ContentUpdater
                     $this->converterRegistry->getConverter(
                         $fieldDef->fieldType
                     ),
-                    $this->storageHandler,
+                    $this->fieldTypeRegistry->getStorageHandler($fieldDef->fieldType),
                     $this->contentMapper
                 );
             }

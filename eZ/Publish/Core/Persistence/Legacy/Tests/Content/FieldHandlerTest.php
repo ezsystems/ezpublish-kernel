@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -978,7 +979,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $mock = new FieldHandler(
             $this->getContentGatewayMock(),
             $this->getMapperMock(),
-            $this->getStorageHandlerMock(),
             $this->getLanguageHandler(),
             $this->getFieldTypeRegistryMock()
         );
@@ -1049,7 +1049,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     {
         if (!isset($this->fieldTypeRegistryMock)) {
             $this->fieldTypeRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\FieldTypeRegistry',
+                FieldTypeRegistry::class,
                 array(),
                 array(),
                 '',
@@ -1064,6 +1064,16 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 $this->isType('string')
             )->will(
                 $this->returnValue($this->getFieldTypeMock())
+            );
+
+            $this->fieldTypeRegistryMock->expects(
+                $this->any()
+            )->method(
+                'getStorageHandler'
+            )->with(
+                $this->isType('string')
+            )->will(
+                $this->returnValue($this->getStorageHandlerMock())
             );
         }
 

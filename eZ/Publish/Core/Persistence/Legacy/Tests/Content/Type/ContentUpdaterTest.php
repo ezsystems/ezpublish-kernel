@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use PHPUnit_Framework_TestCase;
@@ -44,6 +46,13 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $contentStorageHandlerMock;
+
+    /**
+     * FieldTypeRegistry mock.
+     *
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistryMock;
 
     /**
      * Content Updater to test.
@@ -250,7 +259,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     {
         if (!isset($this->contentStorageHandlerMock)) {
             $this->contentStorageHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
+                StorageHandler::class,
                 array(),
                 array(),
                 '',
@@ -259,6 +268,30 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
         }
 
         return $this->contentStorageHandlerMock;
+    }
+
+    /**
+     * Return FieldTypeRegistry mock.
+     *
+     * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getFieldTypeRegistryMock()
+    {
+        if (!isset($this->fieldTypeRegistryMock)) {
+            $this->fieldTypeRegistryMock = $this->getMockBuilder(FieldTypeRegistry::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+            ;
+
+            $this->fieldTypeRegistryMock
+                ->method('getStorageHandler')
+                ->with($this->isType('string'))
+                ->will(
+                    $this->returnValue($this->getContentStorageHandlerMock())
+                );
+        }
+
+        return $this->fieldTypeRegistryMock;
     }
 
     /**
@@ -292,8 +325,8 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
             $this->contentUpdater = new ContentUpdater(
                 $this->getContentGatewayMock(),
                 $this->getConverterRegistryMock(),
-                $this->getContentStorageHandlerMock(),
-                $this->getContentMapperMock()
+                $this->getContentMapperMock(),
+                $this->getFieldTypeRegistryMock()
             );
         }
 
