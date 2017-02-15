@@ -25,6 +25,5 @@ services:
             - "@filesystem"
             - "%kernel.cache_dir%"
             - "%kernel.environment%"
-            - "%search_engine%"
         tags:
             - { name: console.command }

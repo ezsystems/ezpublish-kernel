@@ -39,9 +39,6 @@ class InstallPlatformCommand extends Command
     /** @var string */
     private $environment;
 
-    /** @var string */
-    private $searchEngine;
-
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
     private $installers = array();
 
@@ -57,8 +54,7 @@ class InstallPlatformCommand extends Command
         CacheClearerInterface $cacheClearer,
         Filesystem $filesystem,
         $cacheDir,
-        $environment,
-        $searchEngine
+        $environment
     ) {
         $this->db = $db;
         $this->installers = $installers;
@@ -66,7 +62,6 @@ class InstallPlatformCommand extends Command
         $this->filesystem = $filesystem;
         $this->cacheDir = $cacheDir;
         $this->environment = $environment;
-        $this->searchEngine = $searchEngine;
         parent::__construct();
     }
 
@@ -178,7 +173,7 @@ class InstallPlatformCommand extends Command
     }
 
     /**
-     * Calls indexing commands on search engines known to need that.
+     * Calls indexing commands.
      *
      * @todo This should not be needed once/if the Installer starts using API in the future.
      *       So temporary measure until it is not raw SQL based for the data itself (as opposed to the schema).
@@ -190,12 +185,8 @@ class InstallPlatformCommand extends Command
      */
     private function indexData(OutputInterface $output)
     {
-        if (!in_array($this->searchEngine, ['solr', 'elasticsearch'])) {
-            return;
-        }
-
         $output->writeln(
-            sprintf('%s search engine configured, executing command ezplatform:reindex', $this->searchEngine)
+            sprintf('Search engine re-indexing, executing command ezplatform:reindex')
         );
         $this->executeCommand($output, 'ezplatform:reindex');
     }
