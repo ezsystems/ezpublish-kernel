@@ -43,6 +43,9 @@ class ImageVariation extends Variation
      * It will typically contain EXIF information from digital cameras or information about animated GIFs.
      * If there is no information, the info will be a boolean FALSE.
      *
+     * Beware: This information may contain e.g. HTML, JavaScript, or PHP code, and should be treated like any
+     * other user-submitted data. Make sure it is properly escaped before use.
+     *
      * @var mixed
      */
     protected $info;
