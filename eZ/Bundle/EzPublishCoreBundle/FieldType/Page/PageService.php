@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\Page\PageService as BasePageService;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
 class PageService extends BasePageService
