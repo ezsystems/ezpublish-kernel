@@ -229,7 +229,7 @@ class DateAndTimeTest extends FieldTypeTest
 
         $actualResult = $fieldType->fromHash($inputHash);
 
-        // Tests may run slowly. Allow 20 seconds margin of error.
+        // Tests may run slowly. Allow 60 seconds margin of error.
         $this->assertGreaterThanOrEqual(
             $expectedResult,
             $actualResult,
@@ -237,7 +237,7 @@ class DateAndTimeTest extends FieldTypeTest
         );
         if ($expectedResult->value !== null) {
             $this->assertLessThan(
-                $expectedResult->value->getTimestamp() + 20,
+                $expectedResult->value->getTimestamp() + 60,
                 $actualResult->value->getTimestamp(),
                 'fromHash() method did not create expected result.'
             );
