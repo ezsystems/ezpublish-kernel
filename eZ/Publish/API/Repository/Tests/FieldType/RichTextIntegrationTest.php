@@ -153,12 +153,7 @@ EOT
      */
     public function getSettingsSchema()
     {
-        return array(
-            'numRows' => array(
-                'type' => 'int',
-                'default' => 10,
-            ),
-        );
+        return [];
     }
 
     /**
@@ -168,9 +163,7 @@ EOT
      */
     public function getValidFieldSettings()
     {
-        return array(
-            'numRows' => 0,
-        );
+        return [];
     }
 
     /**
