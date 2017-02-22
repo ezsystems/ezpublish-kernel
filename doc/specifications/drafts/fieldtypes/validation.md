@@ -64,22 +64,67 @@ since it has the content type id, language and location parameters.
 Right now, Field value validation is the FieldType's responsibility, using `validate()`. Each FieldType has its own
 implementation of `validate()`, that returns an array of `SPI\FieldType\ValidationError`.
 
-How can we move that validation towards the Symfony component, and make it usable by the form component ?
-Do we really need to do this ? It is precisely what repository-forms does, but the side effect is that it complexifies
-development by requiring more FieldType code.
+However, repository-forms will run this FieldType validation without the need for any extra code,
+through the `FieldValueValidator`. Changing the Core to use Symfony validators doesn't have much value
+besides "doing the right thing".
 
-To integrate a FieldType into 
-- mapping the FieldType\Value to a Form object, using the FieldDefinition settings
-- ~~mapping the FieldDefinition validation & settings to form validators ?~~
-  validation is covered using a global `FieldValueValidator`, that executes the FieldTypes `validate()`
-  method of the fieldtype being validated
-
-Can we go as far as using annotations on a FieldValue ?
+Could we explore annotations or validator configuration on FieldType Values ? TextLine, Integer...
 Is it what we want ? It might be what some 3rd party want.
-Does it limit extensibility of FieldTypes (custom validation of an existing FieldType).
-  What about custom Values that inherit from the base one and customize validation ?
-  `MyRegexTextLineValue`
-  `MyZipCodeTextLineValue`
+
+```php
+$validator->validate($textLineValue);
+```
+
+This call can't work as is, since a TextLine Value has to be validated _against a FieldDefinition_.
+This is where the type is, and this is where the type's options are configured.
+
+It gets obvious with this configuration:
+
+```yaml
+eZ\Publish\Core\FieldType\TextLine\Value:
+    properties:
+        text:
+            - Length:
+                max: settings.maxLength
+                min: settings.minLength
+```
+
+How is `settings` interpreted ? When ?
+
+> Do we need standardized descriptions of FieldType Values properties, so that we can "map"
+> the properties to validation, forms... ?
+
+What about annotations ?
+They could make sense here, even though we may have to skew the syntax a bit,
+again because of preferences.
+
+```php
+// FieldType/TextLine/Value.php
+/**
+ * @Assert\Length(
+ *      min = definition.minLength,
+ *      max = definition.maxLength,
+ *      minMessage = "...",
+ *      maxMessage = "..."
+ * )
+ */
+public $text;
+
+// FieldType/TextLine/Definition.php
+/**
+ * @Assert\Type("int")
+ * @Assert\Range(min = 0, max = 255)
+ */
+public $minLength;
+```
+
+*Note: if each FieldType had a Definition value object in addition to Type and Value,
+we could make it easier to implement editing & validating a field definition.*
+
+> Does it limit extensibility of FieldTypes (custom validation of an existing FieldType).
+>   What about custom Values that inherit from the base one and customize validation ?
+>   `MyRegexTextLineValue`
+>   `MyZipCodeTextLineValue`
 
 The main question is **how complex is the code required to implement a FieldType edit form**.
 

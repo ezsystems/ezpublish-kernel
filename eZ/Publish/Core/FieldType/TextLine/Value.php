@@ -19,6 +19,15 @@ class Value extends BaseValue
      * Text content.
      *
      * @var string
+     *
+     * @Assert\Length(
+     *      min = definition.minLength,
+     *      max = definition.maxLength,
+     *      minMessage = "...",
+     *      maxMessage = "..."
+     * )
+     *
+     * @Form\Field('text', 'text_line')
      */
     public $text;
 
