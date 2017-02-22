@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -389,6 +390,49 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         sort($dataField->value->values);
         sort($value->values);
         $this->assertEquals($value, $dataField->value);
+    }
+
+    public function testKeywordsAreCaseSensitive()
+    {
+        $contentType = $this->testCreateContentType();
+        $publishedContent01 = $this->createAndPublishContent('Foo', $contentType, md5(uniqid() . microtime()));
+        $publishedContent02 = $this->createAndPublishContent('foo', $contentType, md5(uniqid() . microtime()));
+
+        $data = $publishedContent01->getField('data')->value;
+        $this->assertCount(1, $data->values);
+        $this->assertEquals('Foo', $data->values[0]);
+
+        $data = $publishedContent02->getField('data')->value;
+        $this->assertCount(1, $data->values);
+        $this->assertEquals('foo', $data->values[0]);
+    }
+
+    /**
+     * Create and publish content of $contentType with $fieldData.
+     *
+     * @param mixed $fieldData
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param string $remoteId
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createAndPublishContent($fieldData, ContentType $contentType, $remoteId)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $createStruct->setField('name', 'Test object');
+        $createStruct->setField(
+            'data',
+            $fieldData
+        );
+
+        $createStruct->remoteId = $remoteId;
+        $createStruct->alwaysAvailable = true;
+
+        $contentDraft = $contentService->createContent($createStruct);
+
+        return $contentService->publishVersion($contentDraft->versionInfo);
     }
 
     protected function getValidSearchValueOne()
