@@ -1,0 +1,52 @@
+# Definition of the TextLineFieldType
+# This line could also say TextLine, but the internal identifier is in fact 'ezstring'
+ezstring:
+    # FieldDefinition properties
+    definition_properties:
+        # Each key is a FieldDefinition setting
+        minLength:
+            type: integer
+            # We could guess that for the simplest cases
+            legacy_storage: data_int_1
+            # Constraints may be used:
+            #   - to validate API FieldDefinition input
+            #   - to build the editing form for the definition
+            constraints:
+                - Range: [0-255]
+                # self is the definition itself
+                - LesserThanOrEqual: self.maxLength
+        maxLength:
+            type: integer
+            legacy_storage: data_int_2
+            constraints:
+                - range: [0-255]
+                - GreaterThanOrEqual: self.minLength
+        defaultValue:
+            type: string
+            legacy_storage: data_text_1
+            constraints:
+                - Length:
+                    min: self.minLength
+                    max: self.maxLength
+
+    # FieldValue properties
+    value_properties:
+        # Each key is a FieldValue property
+        text:
+            type: string
+            legacy_storage: data_text
+            constraints:
+                - Length:
+                    # definition. refers to the FieldDefinition the edited field is an instance of
+                    min: definition.minLength
+                    max: definition.maxLength
+
+# This one is way harder to describe that way, as it has external storage
+ezurl:
+    value_properties:
+        text:
+            type: string
+            legacy_storage: ?
+        link:
+            type: string
+            legacy_storage: ?
