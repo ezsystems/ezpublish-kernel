@@ -123,7 +123,7 @@ class DateAndTimeConverter implements Converter
                 $data = array(
                     'rfc850' => null,
                     'timestamp' => $date->getTimestamp(), // @deprecated timestamp is no longer used and will be removed in a future version.
-                    'timestring' => sprintf('%+d seconds', $date->getTimestamp() - time()),
+                    'timestring' => $dateInterval->format('%y years, %m months, %d days, %h hours, %i minutes, %s seconds'),
                 );
                 break;
 
