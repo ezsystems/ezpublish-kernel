@@ -10,13 +10,14 @@ namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 abstract class Gateway extends StorageGateway
 {
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()
      */
-    abstract public function storeFieldData(Field $field, $contentTypeId);
+    abstract public function storeFieldData(Field $field, $contentTypeId, VersionInfo $versionInfo);
 
     /**
      * Sets the list of assigned keywords into $field->value->externalData.
@@ -36,6 +37,8 @@ abstract class Gateway extends StorageGateway
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::deleteFieldData()
+     * @param mixed $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      */
-    abstract public function deleteFieldData($fieldId);
+    abstract public function deleteFieldData($fieldId, VersionInfo $versionInfo = null);
 }
