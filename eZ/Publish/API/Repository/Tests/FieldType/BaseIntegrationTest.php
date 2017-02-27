@@ -46,6 +46,12 @@ use PHPUnit_Framework_AssertionFailedError;
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
     /**
+     * Content version archive limit (default).
+     * Note: currently there is no way to retrieve this setting from the ContentService.
+     */
+    const VERSION_ARCHIVE_LIMIT = 5;
+
+    /**
      * Identifier of the custom field.
      *
      * @var string
@@ -357,7 +363,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     protected function getOverride($key, array $overrideValues, $default)
     {
-        return (isset($overrideValues[$key]) ? $overrideValues[$key] : $default);
+        return isset($overrideValues[$key]) ? $overrideValues[$key] : $default;
     }
 
     /**
@@ -1001,5 +1007,30 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             $expectedValue,
             $fieldType->fromHash($hash)
         );
+    }
+
+    /**
+     * Test that exceeding default version archive limit has no effect on a published content.
+     */
+    public function testExceededVersionArchiveLimitHasNoEffectOnContent()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentDraft = $this->createContent($this->getValidCreationFieldData());
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+        // update and publish content to exceed version archive limit
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('data', $this->getValidUpdateFieldData());
+        for ($i = 0; $i < static::VERSION_ARCHIVE_LIMIT + 1; ++$i) {
+            $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+            $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+            $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+        }
+
+        $loadedContent = $contentService->loadContent(
+            $publishedContent->contentInfo->id,
+            ['eng-US']
+        );
+        $this->assertUpdatedFieldDataLoadedCorrect($loadedContent->getField('data'));
     }
 }
