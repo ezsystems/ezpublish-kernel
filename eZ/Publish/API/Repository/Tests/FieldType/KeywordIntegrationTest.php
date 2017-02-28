@@ -314,6 +314,83 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
     }
 
+    /**
+     * Test updating multiple contents with ezkeyword field preserves proper fields values.
+     */
+    public function testUpdateContentKeywords()
+    {
+        $contentType = $this->testCreateContentType();
+        $contentService = $this->getRepository()->getContentService();
+
+        $value01 = new KeywordValue(['foo', 'FOO', 'bar', 'baz']);
+        $contentDraft = $this->createContent($value01, $contentType);
+        $publishedContent01 = $contentService->publishVersion($contentDraft->versionInfo);
+        $this->assertContentFieldHasCorrectData($publishedContent01->contentInfo->id, $value01);
+
+        // create another content with the same value
+        $value02 = $value01;
+        $contentDraft = $this->createContent($value02, $contentType);
+        $publishedContent02 = $contentService->publishVersion($contentDraft->versionInfo);
+        $this->assertContentFieldHasCorrectData($publishedContent02->contentInfo->id, $value02);
+
+        // for the first content, create draft, remove one keyword and publish new version
+        $contentDraft = $contentService->createContentDraft($publishedContent01->contentInfo);
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $value01 = new KeywordValue(['foo', 'FOO', 'bar']);
+        $updateStruct->setField('data', $value01);
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $updateStruct);
+        $publishedContent01 = $contentService->publishVersion($contentDraft->versionInfo);
+        $this->assertContentFieldHasCorrectData($publishedContent01->contentInfo->id, $value01);
+        // reload and check the second content value01
+        $this->assertContentFieldHasCorrectData($publishedContent02->contentInfo->id, $value02);
+
+        // delete the second content
+        $contentService->deleteContent($publishedContent02->contentInfo);
+        // check if the first content was not affected
+        $this->assertContentFieldHasCorrectData($publishedContent01->contentInfo->id, $value01);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createContent($fieldData, $contentType = null)
+    {
+        if ($contentType === null) {
+            $contentType = $this->testCreateContentType();
+        }
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $createStruct->setField('name', 'Test object');
+        $createStruct->setField(
+            'data',
+            $fieldData
+        );
+
+        $createStruct->remoteId = md5(uniqid('', true) . microtime());
+        $createStruct->alwaysAvailable = true;
+
+        return $contentService->createContent($createStruct);
+    }
+
+    /**
+     * Check that the given Content Object contains proper Keywords.
+     *
+     * @param int $contentId
+     * @param \eZ\Publish\Core\FieldType\Keyword\Value $value
+     */
+    private function assertContentFieldHasCorrectData($contentId, KeywordValue $value)
+    {
+        $contentService = $this->getRepository()->getContentService();
+        $loadedContent = $contentService->loadContent($contentId, ['eng-US']);
+        $dataField = $loadedContent->getField('data');
+        sort($dataField->value->values);
+        sort($value->values);
+        $this->assertEquals($value, $dataField->value);
+    }
+
     protected function getValidSearchValueOne()
     {
         return 'add';
