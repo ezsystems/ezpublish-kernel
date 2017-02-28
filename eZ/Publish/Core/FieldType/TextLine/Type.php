@@ -15,6 +15,11 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyPath;
+use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
 
 /**
  * The TextLine field type.
@@ -35,6 +40,15 @@ class Type extends FieldType
             ),
         ),
     );
+    /**
+     * @var \Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface
+     */
+    private $metadataFactory;
+
+    public function __construct(MetadataFactoryInterface $metadataFactory)
+    {
+        $this->metadataFactory = $metadataFactory;
+    }
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
@@ -63,6 +77,49 @@ class Type extends FieldType
         }
 
         return $validationErrors;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     *
+     * @return \Symfony\Component\Validator\Constraint[]
+     */
+    public function getConstraints(FieldDefinition $fieldDefinition)
+    {
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+
+        /** @var ClassMetadata $metadata */
+        $metadata = clone $this->metadataFactory->getMetadataFor(Value::class);
+        $textProperties = $metadata->getPropertyMetadata('text');
+
+        $return = [];
+
+        /** @var \Symfony\Component\Validator\Mapping\PropertyMetadataInterface $textProperty */
+        foreach ($textProperties as $key => $textProperty) {
+            $constraints = $textProperty->getConstraints();
+            if (count($constraints)) {
+                foreach ($constraints as $constraint) {
+                    $fieldValueConstraint = clone $constraint;
+
+                    // search properties for values coming from the configuration
+                    foreach (get_object_vars($constraint) as $name => $value) {
+                        if (!is_string($value) || substr($value, 0, 7) != 'config[') {
+                            continue;
+                        }
+                        $propertyPath = substr($value, 6);
+                        $accessor = PropertyAccess::createPropertyAccessor();
+                        if ($accessor->isReadable($validatorConfiguration, $propertyPath)) {
+                            $fieldValueConstraint->$name = $accessor->getValue($validatorConfiguration, $propertyPath);
+                        } else {
+                            $fieldValueConstraint->$name = null;
+                        }
+                    }
+                    $return['text'][] = $fieldValueConstraint;
+                }
+            }
+        }
+
+        return $return;
     }
 
     /**

@@ -383,6 +383,8 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezstring}
+        arguments:
+            - "@validator"
 
     ezpublish.fieldType.ezurl:
         class: "%ezpublish.fieldType.ezurl.class%"

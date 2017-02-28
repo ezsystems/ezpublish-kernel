@@ -296,4 +296,13 @@ class FieldType implements FieldTypeInterface
     {
         return $this->internalFieldType->validate($fieldDef, $value);
     }
+
+    public function getConstraints(FieldDefinition $fieldDefinition)
+    {
+        if (!method_exists($this->internalFieldType, 'getConstraints')) {
+            return [];
+        }
+
+        return $this->internalFieldType->getConstraints($fieldDefinition);
+    }
 }
