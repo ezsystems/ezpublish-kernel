@@ -82,12 +82,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     {
         $fieldType = $this->getFieldType();
         self::assertSame(
-            array(
-                'numRows' => array(
-                    'type' => 'int',
-                    'default' => 10,
-                ),
-            ),
+            [],
             $fieldType->getSettingsSchema(),
             'The settings schema does not match what is expected.'
         );

@@ -10,7 +10,6 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter;
 use eZ\Publish\Core\FieldType;
-use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
@@ -106,15 +105,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
             array('fieldType', 'ezrichtext'),
             array(
                 'fieldTypeConstraints',
-                new FieldTypeConstraints(
-                    array(
-                        'fieldSettings' => new FieldSettings(
-                            array(
-                                'numRows' => 0,
-                            )
-                        ),
-                    )
-                ),
+                new FieldTypeConstraints(),
             ),
         );
     }
