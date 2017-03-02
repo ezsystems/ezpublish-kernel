@@ -3033,13 +3033,18 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertPropertiesCorrect($expectedVersions[0], $versions[0]);
         $this->assertPropertiesCorrect($expectedVersions[1], $versions[1]);
-        $this->assertGreaterThanOrEqual(
+        $this->assertEquals(
+            $versions[0]->creationDate->getTimestamp(),
             $versions[1]->creationDate->getTimestamp(),
-            $versions[0]->creationDate->getTimestamp()
+            'Creation time did not match within delta of 2 seconds',
+            2
+
         );
-        $this->assertGreaterThanOrEqual(
+        $this->assertEquals(
+            $versions[0]->modificationDate->getTimestamp(),
             $versions[1]->modificationDate->getTimestamp(),
-            $versions[0]->modificationDate->getTimestamp()
+            'Creation time did not match within delta of 2 seconds',
+            2
         );
     }
 

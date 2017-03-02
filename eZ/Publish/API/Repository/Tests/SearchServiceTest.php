@@ -4506,6 +4506,10 @@ class SearchServiceTest extends BaseTest
             );
         }
 
+        if ($setupFactory instanceof LegacySolrSetupFactory && getenv('SOLR_VERSION') === '4.10.4') {
+            $this->markTestSkipped("Skipping location search score test on Solr 4.10, you need Solr 6 for this!");
+        }
+
         // Do not initialize from scratch
         $repository = $this->getRepository(false);
         list($criterion, $content1, $content2, $content3) = $data;
