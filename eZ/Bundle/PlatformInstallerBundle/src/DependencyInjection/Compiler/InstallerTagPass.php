@@ -31,8 +31,11 @@ class InstallerTagPass implements CompilerPassInterface
                 if (!isset($tag['type'])) {
                     throw new \LogicException("ezplatform.installer service tag needs a 'type' attribute to identify the installer. None given for $id.");
                 }
+                if (!isset($tag['platform'])) {
+                    throw new \LogicException("ezplatform.installer service tag needs a 'platform' attribute to identify the database platform. None given for $id.");
+                }
 
-                $installers[$tag['type']] = new Reference($id);
+                $installers[$tag['platform'] . '_' . $tag['type']] = new Reference($id);
             }
         }
 

@@ -198,11 +198,13 @@ class InstallPlatformCommand extends Command
      */
     private function getInstaller($type)
     {
-        if (!isset($this->installers[$type])) {
+        $installerName = $this->db->getDatabasePlatform()->getName() . '_' . $type;
+
+        if (!isset($this->installers[$installerName])) {
             return false;
         }
 
-        return $this->installers[$type];
+        return $this->installers[$installerName];
     }
 
     /**

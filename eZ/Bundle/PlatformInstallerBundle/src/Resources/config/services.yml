@@ -1,6 +1,5 @@
 parameters:
     ezplatform.installer.db_based_installer.class: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
-    ezplatform.installer.clean_installer.class: EzSystems\PlatformInstallerBundle\Installer\CleanInstaller
     ezplatform.installer.install_command.class: EzSystems\PlatformInstallerBundle\Command\InstallPlatformCommand
 
 services:
@@ -10,11 +9,11 @@ services:
         arguments: ["@ezpublish.persistence.connection"]
         lazy: true
 
-    ezplatform.installer.clean_installer:
-        class: "%ezplatform.installer.clean_installer.class%"
+    ezplatform.installer.clean_installer.mysql:
+        class: EzSystems\PlatformInstallerBundle\Installer\DatabasePlatform\MySqlCleanInstaller
         parent: ezplatform.installer.db_based_installer
         tags:
-            - {name: ezplatform.installer, type: clean}
+            - {name: ezplatform.installer, type: clean, platform: mysql}
 
     ezplatform.installer.install_command:
         class: "%ezplatform.installer.install_command.class%"
