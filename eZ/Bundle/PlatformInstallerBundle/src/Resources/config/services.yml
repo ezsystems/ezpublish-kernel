@@ -15,6 +15,12 @@ services:
         tags:
             - {name: ezplatform.installer, type: clean, platform: mysql}
 
+    ezplatform.installer.clean_installer.postgresql:
+        class: EzSystems\PlatformInstallerBundle\Installer\DatabasePlatform\PostgreSqlCleanInstaller
+        parent: ezplatform.installer.db_based_installer
+        tags:
+            - {name: ezplatform.installer, type: clean, platform: postgresql}
+
     ezplatform.installer.install_command:
         class: "%ezplatform.installer.install_command.class%"
         arguments:
