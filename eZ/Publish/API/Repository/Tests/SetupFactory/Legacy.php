@@ -9,6 +9,8 @@
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Base\ServiceContainer;
+use EzSystems\PlatformInstallerBundle\Installer\DatabasePlatform\PostgreSqlCleanInstaller;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
@@ -301,9 +303,18 @@ class Legacy extends SetupFactory
     protected function initializeSchema()
     {
         if (!self::$schemaInitialized) {
-            $statements = $this->getSchemaStatements();
-
-            $this->applyStatements($statements);
+            switch (self::$db) {
+                case 'pgsql':
+                    $connection = $this->getDatabaseHandler()->getConnection();
+                    $installer = new PostgreSqlCleanInstaller($connection);
+                    $installer->setOutput(new NullOutput());
+                    $installer->importSchema();
+                    break;
+                default:
+                    $statements = $this->getSchemaStatements();
+                    $this->applyStatements($statements);
+                    break;
+            }
 
             self::$schemaInitialized = true;
         }
