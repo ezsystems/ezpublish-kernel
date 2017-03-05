@@ -532,8 +532,8 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:eztemplate | ezxhtml5:eztemplateinline">
-    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+  <xsl:template match="ezxhtml5:div[@data-ezelement='eztemplate'] | ezxhtml5:span[@data-ezelement='eztemplateinline']">
+    <xsl:element name="{@data-ezelement}" namespace="http://docbook.org/ns/docbook">
       <xsl:if test="@data-ezname">
         <xsl:attribute name="name">
           <xsl:value-of select="@data-ezname"/>
@@ -553,9 +553,9 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:eztemplate/ezxhtml5:ezcontent | ezxhtml5:eztemplateinline/ezxhtml5:ezcontent">
-    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
-      <xsl:apply-templates select="node()|@*"/>
+  <xsl:template match="ezxhtml5:div[@data-ezelement='eztemplate']/ezxhtml5:div[@data-ezelement='ezcontent'] | ezxhtml5:span[@data-ezelement='eztemplateinline']/ezxhtml5:span[@data-ezelement='ezcontent']">
+    <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
