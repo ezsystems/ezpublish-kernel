@@ -305,11 +305,25 @@
           <xsl:value-of select="./ezxhtml5:caption"/>
         </caption>
       </xsl:if>
+      <xsl:if test="./ezxhtml5:thead">
+        <thead>
+          <xsl:for-each select="./ezxhtml5:thead/ezxhtml5:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </thead>
+      </xsl:if>
       <tbody>
         <xsl:for-each select="./ezxhtml5:tr | ./ezxhtml5:tbody/ezxhtml5:tr">
           <xsl:apply-templates select="current()"/>
         </xsl:for-each>
       </tbody>
+      <xsl:if test="./ezxhtml5:tfoot">
+        <tfoot>
+          <xsl:for-each select="./ezxhtml5:tfoot/ezxhtml5:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </tfoot>
+      </xsl:if>
     </xsl:element>
   </xsl:template>
 
