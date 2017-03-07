@@ -26,7 +26,7 @@ class KeywordStorage extends GatewayBasedStorage
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        if (empty($field->value->externalData)) {
+        if (empty($field->value->externalData) && !is_array($field->value->externalData)) {
             return;
         }
 
