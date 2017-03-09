@@ -60,6 +60,12 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData(Field $field, $contentTypeId)
     {
+        if (empty($field->value->externalData) && !empty($field->id)) {
+            $this->deleteFieldData($field->id);
+
+            return;
+        }
+
         $existingKeywordMap = $this->getExistingKeywords($field->value->externalData, $contentTypeId);
 
         $this->deleteOldKeywordAssignments($field->id);

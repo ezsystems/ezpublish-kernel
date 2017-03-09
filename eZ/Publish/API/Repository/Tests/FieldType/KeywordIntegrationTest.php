@@ -345,4 +345,46 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             ['add', 'branch'],
         ];
     }
+
+    public function providerForTestTruncateField()
+    {
+        return [
+            [new KeywordValue()],
+            [new KeywordValue(null)],
+            [new KeywordValue([])],
+            // an empty array is what actually REST API sets when field should be truncated
+            [[]],
+        ];
+    }
+
+    /**
+     * Test that setting an empty value truncates field data.
+     *
+     * @dataProvider providerForTestTruncateField
+     * @param mixed $emptyValue data representing an empty value
+     * @todo Move this method to BaseIntegrationTest when fixed for all field types.
+     */
+    public function testTruncateField($emptyValue)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $fieldType = $repository->getFieldTypeService()->getFieldType($this->getTypeName());
+
+        $contentDraft = $this->testCreateContent();
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField('data', $emptyValue);
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $updateStruct);
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $content = $contentService->loadContent($publishedContent->contentInfo->id, ['eng-US']);
+
+        $fieldValue = $content->getField('data')->value;
+        self::assertTrue(
+            $fieldType->isEmptyValue($fieldValue),
+            'Field value is not empty: ' . var_export($fieldValue, true)
+        );
+    }
 }
