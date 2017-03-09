@@ -8,8 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
+use Exception;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\IOServiceInterface;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
@@ -54,7 +55,18 @@ class BinaryLoader implements LoaderInterface
                 $mimeType,
                 $this->extensionGuesser->guess($mimeType)
             );
-        } catch (NotFoundException $e) {
+        } catch (InvalidBinaryFileIdException $e) {
+            $message =
+                "Source image not found in $path. Repository images path are expected to be " .
+                'relative to the var/<site>/storage/images directory';
+
+            $suggestedPath = preg_replace('#var/[^/]+/storage/images/#', '', $path);
+            if ($suggestedPath !== $path) {
+                $message .= "\nSuggested value: '$suggestedPath'";
+            }
+
+            throw new NotLoadableException($message);
+        } catch (Exception $e) {
             throw new NotLoadableException("Source image not found in $path", 0, $e);
         }
     }
