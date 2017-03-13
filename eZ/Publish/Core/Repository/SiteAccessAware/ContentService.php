@@ -83,7 +83,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfo($contentId, array $languages = null)
     {
-        return $this->service->loadContentInfo($contentId);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $contentInfo = $this->service->loadContentInfo($contentId);
+
+        return $this->domainMapper->rebuildContentInfoDomainObject($contentInfo, $languages);
     }
 
     /**
@@ -102,7 +106,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfoByRemoteId($remoteId, array $languages = null)
     {
-        return $this->service->loadContentInfoByRemoteId($remoteId);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $contentInfo = $this->service->loadContentInfoByRemoteId($remoteId);
+
+        return $this->domainMapper->rebuildContentInfoDomainObject($contentInfo, $languages);
     }
 
     /**
@@ -122,7 +130,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfo(APIContentInfo $contentInfo, $versionNo = null, array $languages = null)
     {
-        return $this->service->loadVersionInfo($contentInfo, $versionNo);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $versionInfo = $this->service->loadVersionInfo($contentInfo, $versionNo);
+
+        return $this->domainMapper->rebuildVersionInfoDomainObject($versionInfo, $languages);
     }
 
     /**
@@ -142,7 +154,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById($contentId, $versionNo = null, array $languages = null)
     {
-        return $this->service->loadVersionInfoById($contentId, $versionNo);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $versionInfo = $this->service->loadVersionInfoById($contentId, $versionNo);
+
+        return $this->domainMapper->rebuildVersionInfoDomainObject($versionInfo, $languages);
     }
 
     /**
@@ -162,7 +178,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByContentInfo(APIContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
-        return $this->service->loadContentByContentInfo($contentInfo, $languages, $versionNo, $useAlwaysAvailable);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $content = $this->service->loadContentByContentInfo($contentInfo, $languages, $versionNo, $useAlwaysAvailable);
+
+        return $this->domainMapper->rebuildContentDomainObject($content, $languages);
     }
 
     /**
@@ -178,7 +198,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByVersionInfo(APIVersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = true)
     {
-        return $this->service->loadContentByVersionInfo($versionInfo, $languages, $useAlwaysAvailable);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $content = $this->service->loadContentByVersionInfo($versionInfo, $languages, $useAlwaysAvailable);
+
+        return $this->domainMapper->rebuildContentDomainObject($content, $languages);
     }
 
     /**
@@ -198,7 +222,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContent($contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
-        return $this->service->loadContent($contentId, $languages, $versionNo, $useAlwaysAvailable);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $content = $this->service->loadContent($contentId, $languages, $versionNo, $useAlwaysAvailable);
+
+        return $this->domainMapper->rebuildContentDomainObject($content, $languages);
     }
 
     /**
@@ -218,7 +246,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByRemoteId($remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
-        return $this->service->loadContentByRemoteId($remoteId, $languages, $versionNo, $useAlwaysAvailable);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $content = $this->service->loadContentByRemoteId($remoteId, $languages, $versionNo, $useAlwaysAvailable);
+
+        return $this->domainMapper->rebuildContentDomainObject($content, $languages);
     }
 
     /**
@@ -311,9 +343,19 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
-    public function loadContentDrafts(User $user = null)
+    public function loadContentDrafts(User $user = null, array $languages = null)
     {
-        return $this->service->loadContentDrafts($user);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $draftsVersionInfo = $this->service->loadContentDrafts($user);
+
+        $translatedDraftsVersionInfo = [];
+
+        foreach ($draftsVersionInfo as $versionInfo) {
+            $translatedDraftsVersionInfo[] = $this->domainMapper->rebuildVersionInfoDomainObject($versionInfo, $languages);
+        }
+
+        return $translatedDraftsVersionInfo;
     }
 
     /**
@@ -338,7 +380,12 @@ class ContentService implements ContentServiceInterface
      */
     public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null)
     {
-        return $this->service->translateVersion($translationInfo, $translationValues, $user);
+        $content = $this->service->translateVersion($translationInfo, $translationValues, $user);
+
+        return $this->domainMapper->rebuildContentDomainObject($content, [
+            $translationInfo->destinationLanguageCode,
+            $translationInfo->sourceLanguageCode,
+        ]);
     }
 
     /**
@@ -401,7 +448,17 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersions(APIContentInfo $contentInfo, array $languages = null)
     {
-        return $this->service->loadVersions($contentInfo);
+        $languages = $this->languageResolver->getLanguages($languages);
+
+        $versionsInfo = $this->service->loadVersions($contentInfo);
+
+        $translatedVersionsInfo = [];
+
+        foreach ($versionsInfo as $versionInfo) {
+            $translatedVersionsInfo[] = $this->domainMapper->rebuildVersionInfoDomainObject($versionInfo, $languages);
+        }
+
+        return $translatedVersionsInfo;
     }
 
     /**
