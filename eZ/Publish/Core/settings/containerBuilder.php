@@ -41,6 +41,7 @@ $loader->load('io.yml');
 $loader->load('repository.yml');
 $loader->load('repository/inner.yml');
 $loader->load('repository/signalslot.yml');
+$loader->load('repository/siteaccessaware.yml');
 $loader->load('roles.yml');
 $loader->load('storage_engines/common.yml');
 $loader->load('storage_engines/cache.yml');
