@@ -1033,4 +1033,26 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         );
         $this->assertUpdatedFieldDataLoadedCorrect($loadedContent->getField('data'));
     }
+
+    /**
+     * Test that deleting new draft does not affect data of published version.
+     */
+    public function testDeleteDraftOfPublishedContentDoesNotDeleteData()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $fieldType = $repository->getFieldTypeService()->getFieldType($this->getTypeName());
+
+        $contentDraft = $this->testCreateContent();
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+
+        $contentService->deleteVersion($contentDraft->versionInfo);
+        $loadedContent = $contentService->loadContent($publishedContent->contentInfo->id, ['eng-US']);
+
+        self::assertFalse(
+            $fieldType->isEmptyValue($loadedContent->getField('data')->value)
+        );
+    }
 }
