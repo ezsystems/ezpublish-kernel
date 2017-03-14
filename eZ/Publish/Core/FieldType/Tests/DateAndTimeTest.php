@@ -237,8 +237,8 @@ class DateAndTimeTest extends FieldTypeTest
         );
         if ($expectedResult->value !== null) {
             $this->assertLessThan(
-                $expectedResult->value->getTimestamp() + 20,
-                $actualResult->value->getTimestamp(),
+                $expectedResult->value->add(new DateInterval('PT20S')),
+                $actualResult->value,
                 'fromHash() method did not create expected result.'
             );
         }
