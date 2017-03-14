@@ -222,6 +222,7 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
             $request->setPathinfo($this->siteAccess->matcher->analyseURI($request->pathinfo));
         }
 
+        $siteAccessClass = $this->siteAccessClass;
         foreach ($this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration) {
             $matcher = $this->matcherBuilder->buildMatcher($matchingClass, $matchingConfiguration, $request);
             if (!$matcher instanceof VersatileMatcher) {
@@ -237,7 +238,6 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
                 continue;
             }
 
-            $siteAccessClass = $this->siteAccessClass;
             /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
             $siteAccess = new $siteAccessClass();
             $siteAccess->name = $siteAccessName;
@@ -248,9 +248,9 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
         }
 
         // No VersatileMatcher configured for $siteAccessName.
-        $this->logger->notice("Siteaccess '$siteAccessName' could not be reverse-matched against configuration. No VersatileMatcher found.");
+        $this->logger->notice("Siteaccess '$siteAccessName' could not be reverse-matched against configuration. No VersatileMatcher found. Returning default SiteAccess.");
 
-        return null;
+        return new $siteAccessClass($this->defaultSiteAccess, 'default');
     }
 
     /**

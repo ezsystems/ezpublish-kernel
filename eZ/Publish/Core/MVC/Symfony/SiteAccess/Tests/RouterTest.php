@@ -265,14 +265,13 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $matcherBuilder = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface');
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $matcherClass = 'Map\Host';
-        $matchedSiteAccess = 'foo';
+        $defaultSiteAccess = 'default_sa';
         $matcherConfig = array(
-            'phoenix-rises.fm' => $matchedSiteAccess,
-            'ez.no' => 'default_sa',
+            'phoenix-rises.fm' => 'foo',
         );
         $config = array($matcherClass => $matcherConfig);
 
-        $router = new Router($matcherBuilder, $logger, 'default_sa', $config, array($matchedSiteAccess, 'default_sa'));
+        $router = new Router($matcherBuilder, $logger, $defaultSiteAccess, $config, array($defaultSiteAccess, 'foo'));
         $router->setSiteAccess(new SiteAccess('test', 'test'));
         $request = $router->getRequest();
         $matcherBuilder
@@ -284,6 +283,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $logger
             ->expects($this->once())
             ->method('notice');
-        $this->assertNull($router->matchByName($matchedSiteAccess));
+        $this->assertEquals(new SiteAccess($defaultSiteAccess, 'default'), $router->matchByName($defaultSiteAccess));
     }
 }
