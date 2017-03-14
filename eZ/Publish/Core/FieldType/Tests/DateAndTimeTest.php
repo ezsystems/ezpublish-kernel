@@ -282,6 +282,8 @@ class DateAndTimeTest extends FieldTypeTest
     public function provideInputForFromHash()
     {
         $date = new \DateTime('Tue, 28 Aug 2012 12:20:00 +0200');
+        $dateNowPlus42S = new \DateTime();
+        $dateNowPlus42S->add(new DateInterval('PT42S'));
 
         return array(
             array(
@@ -305,13 +307,13 @@ class DateAndTimeTest extends FieldTypeTest
                 array(
                     'timestring' => 'now',
                 ),
-                DateAndTimeValue::fromTimestamp(time()),
+                new DateAndTimeValue(new \DateTime()),
             ),
             array(
                 array(
                     'timestring' => '+42 seconds',
                 ),
-                DateAndTimeValue::fromTimestamp(time() + 42),
+                new DateAndTimeValue($dateNowPlus42S),
             ),
         );
     }
