@@ -33,6 +33,8 @@ class ConnectionHandler implements DatabaseHandler
         } else {
             $parsed = $dsn;
         }
+        // use custom wrapper extending \Doctrine\DBAL\Connection
+        $parsed['wrapperClass'] = DoctrineConnection::class;
 
         return DriverManager::getConnection($parsed);
     }

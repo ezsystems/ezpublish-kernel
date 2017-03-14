@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType;
 
+use eZ\Publish\Core\Persistence\Content\StorageHandler;
 use eZ\Publish\SPI\FieldType\FieldStorage;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -33,6 +34,11 @@ abstract class GatewayBasedStorage implements FieldStorage
     protected $gateways;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Content\StorageHandler
+     */
+    protected $storageHandler = null;
+
+    /**
      * Construct from gateways.
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
@@ -42,6 +48,17 @@ abstract class GatewayBasedStorage implements FieldStorage
         foreach ($gateways as $identifier => $gateway) {
             $this->addGateway($identifier, $gateway);
         }
+    }
+
+    /**
+     * Set explicitly StorageHandler for specific FieldType Storage.
+     * If set will be used to override context and get proper Gateway.
+     *
+     * @param \eZ\Publish\Core\Persistence\Content\StorageHandler $storageHandler
+     */
+    public function setExternalStorageHandler(StorageHandler $storageHandler)
+    {
+        $this->storageHandler = $storageHandler;
     }
 
     /**
@@ -64,6 +81,10 @@ abstract class GatewayBasedStorage implements FieldStorage
      */
     protected function getGateway(array $context)
     {
+        if ($this->storageHandler !== null) {
+            $context = $this->storageHandler->getContext();
+        }
+
         if (!isset($this->gateways[$context['identifier']])) {
             throw new \OutOfBoundsException("No gateway for ${context['identifier']} available.");
         }
