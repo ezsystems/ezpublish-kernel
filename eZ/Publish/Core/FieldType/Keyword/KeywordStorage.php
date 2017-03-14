@@ -30,7 +30,7 @@ class KeywordStorage extends GatewayBasedStorage
 
         $contentTypeId = $gateway->getContentTypeId($field);
 
-        return $gateway->storeFieldData($field, $contentTypeId, $versionInfo);
+        return $gateway->storeFieldData($field, $contentTypeId);
     }
 
     /**
@@ -60,7 +60,7 @@ class KeywordStorage extends GatewayBasedStorage
     {
         $gateway = $this->getGateway($context);
         foreach ($fieldIds as $fieldId) {
-            $gateway->deleteFieldData($fieldId, $versionInfo);
+            $gateway->deleteFieldData($fieldId);
         }
     }
 

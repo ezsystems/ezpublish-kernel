@@ -3,9 +3,8 @@
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 class LegacyStorage extends Gateway
 {
@@ -56,11 +55,10 @@ class LegacyStorage extends Gateway
     /**
      * Stores the keyword list from $field->value->externalData.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field
      * @param mixed $contentTypeId
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      */
-    public function storeFieldData(Field $field, $contentTypeId, VersionInfo $versionInfo)
+    public function storeFieldData(Field $field, $contentTypeId)
     {
         if (empty($field->value->externalData) && !empty($field->id)) {
             $this->deleteFieldData($field->id);
@@ -68,10 +66,7 @@ class LegacyStorage extends Gateway
             return;
         }
 
-        $existingKeywordMap = $this->getExistingKeywords(
-            $field->value->externalData,
-            $contentTypeId
-        );
+        $existingKeywordMap = $this->getExistingKeywords($field->value->externalData, $contentTypeId);
 
         $this->deleteOldKeywordAssignments($field->id);
 
@@ -115,11 +110,10 @@ class LegacyStorage extends Gateway
      * Stores the keyword list from $field->value->externalData.
      *
      * @param mixed $fieldId
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      */
-    public function deleteFieldData($fieldId, VersionInfo $versionInfo = null)
+    public function deleteFieldData($fieldId)
     {
-        $this->deleteOldKeywordAssignments($fieldId, $versionInfo);
+        $this->deleteOldKeywordAssignments($fieldId);
         $this->deleteOrphanedKeywords();
     }
 
@@ -287,17 +281,9 @@ class LegacyStorage extends Gateway
         return $keywordIdMap;
     }
 
-    protected function deleteOldKeywordAssignments($fieldId, VersionInfo $versionInfo = null)
+    protected function deleteOldKeywordAssignments($fieldId)
     {
         $dbHandler = $this->getConnection();
-        // If current version being asked to be deleted is not published, then don't do that if
-        // there is some other version which is published (as keyword table is not versioned)
-        if ($versionInfo instanceof VersionInfo &&
-            $versionInfo->status !== VersionInfo::STATUS_PUBLISHED &&
-            $versionInfo->contentInfo->isPublished
-        ) {
-            return;
-        }
 
         $deleteQuery = $dbHandler->createDeleteQuery();
         $deleteQuery->deleteFrom(
