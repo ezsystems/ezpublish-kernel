@@ -263,6 +263,8 @@ abstract class FieldType implements FieldTypeInterface
      * For the legacy storage it is up to the field converters to set this
      * value in either sort_key_string or sort_key_int.
      *
+     * @deprecated since 6.8
+     *
      * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return mixed
@@ -307,6 +309,9 @@ abstract class FieldType implements FieldTypeInterface
 
     /**
      * Returns whether the field type is searchable.
+     *
+     * @deprecated since 6.8, discover how the field type is searchable from
+     *             \eZ\Publish\SPI\FieldType\Indexable implementation for the field type.
      *
      * @return bool
      */

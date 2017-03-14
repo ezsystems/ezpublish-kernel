@@ -13,7 +13,6 @@ parameters:
     ezpublish.fieldType.indexable.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\SearchField
     ezpublish.fieldType.indexable.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\SearchField
     ezpublish.fieldType.indexable.ezdate.class: eZ\Publish\Core\FieldType\Date\SearchField
-    ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
     ezpublish.fieldType.indexable.ezinteger.class: eZ\Publish\Core\FieldType\Integer\SearchField
@@ -39,11 +38,6 @@ services:
         class: "%ezpublish.fieldType.indexable.ezstring.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezstring}
-
-    ezpublish.fieldType.indexable.ezprice:
-        class: "%ezpublish.fieldType.indexable.ezprice.class%"
-        tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezprice}
 
     ezpublish.fieldType.indexable.ezgmaplocation:
         class: "%ezpublish.fieldType.indexable.ezgmaplocation.class%"
@@ -154,3 +148,4 @@ services:
             - {name: ezpublish.fieldType.indexable, alias: ezoption}
             - {name: ezpublish.fieldType.indexable, alias: ezpage}
             - {name: ezpublish.fieldType.indexable, alias: ezcomcomments}
+            - {name: ezpublish.fieldType.indexable, alias: ezprice}

@@ -76,4 +76,26 @@ class SearchField implements Indexable
     {
         return $this->getDefaultMatchField();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'value',
+                $field->value->data['timestamp'],
+                new Search\FieldType\DateField()
+            ),
+        ];
+    }
 }

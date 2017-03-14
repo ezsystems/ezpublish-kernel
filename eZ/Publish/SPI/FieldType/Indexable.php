@@ -20,6 +20,8 @@ interface Indexable
     /**
      * Get index data for field for search backend.
      *
+     * @deprecated since 6.8, use getFullTextData and/or getFilterData instead.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
@@ -55,4 +57,23 @@ interface Indexable
      * @return string
      */
     public function getDefaultSortField();
+
+    /**
+     * Get full text data to be indexed by a Search Engine.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     *
+     * @return string[]
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition);
+
+    /**
+     * Get non-fulltext index data.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition);
 }

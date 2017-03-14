@@ -88,4 +88,36 @@ class SearchField implements Indexable
     {
         return $this->getDefaultMatchField();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'file_name',
+                $field->value->externalData['fileName'],
+                new Search\FieldType\StringField()
+            ),
+            new Search\Field(
+                'file_size',
+                $field->value->externalData['fileSize'],
+                new Search\FieldType\IntegerField()
+            ),
+            new Search\Field(
+                'mime_type',
+                $field->value->externalData['mimeType'],
+                new Search\FieldType\StringField()
+            ),
+        ];
+    }
 }

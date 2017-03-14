@@ -311,29 +311,10 @@ class StandardMapper implements MapperInterface
                     if ($fieldDefinition->id !== $field->fieldDefinitionId) {
                         continue;
                     }
-
-                    $fieldType = $this->fieldRegistry->getType($field->type);
-                    $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
-
-                    foreach ($indexFields as $indexField) {
-                        $fields[] = new Field(
-                            $name = $this->fieldNameGenerator->getName(
-                                $indexField->name,
-                                $fieldDefinition->identifier,
-                                $contentType->identifier
-                            ),
-                            $indexField->value,
-                            $indexField->type
-                        );
-
-                        if ($indexField->type instanceof FieldType\FullTextField && $fieldDefinition->isSearchable) {
-                            $fields[] = new Field(
-                                $name . '_meta_all_' . str_replace('-', '_', $languageCode),
-                                $indexField->value,
-                                $indexField->type
-                            );
-                        }
-                    }
+                    $fields = array_merge(
+                        $fields,
+                        $this->getSearchFields($contentType, $field, $fieldDefinition, $languageCode)
+                    );
                 }
             }
 
@@ -345,6 +326,60 @@ class StandardMapper implements MapperInterface
         }
 
         return $fieldDocuments;
+    }
+
+    /**
+     * Get search fields for the given Content Field.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    protected function getSearchFields(
+        Type $contentType,
+        Content\Field $field,
+        Type\FieldDefinition $fieldDefinition,
+        $languageCode
+    ) {
+        $fieldType = $this->fieldRegistry->getType($field->type);
+        $searchFields = [];
+
+        $filterData = $fieldType->getFilterData($field, $fieldDefinition);
+        foreach ($filterData as $filterField) {
+            $searchFields[] = new Field(
+                $name = $this->fieldNameGenerator->getName(
+                    $filterField->name,
+                    $fieldDefinition->identifier,
+                    $contentType->identifier
+                ),
+                $filterField->value,
+                $filterField->type
+            );
+        }
+
+        if (!$fieldDefinition->isSearchable) {
+            return $searchFields;
+        }
+
+        $fullTextData = $fieldType->getFullTextData($field, $fieldDefinition);
+        if (!empty($fullTextData)) {
+            $name = $this->fieldNameGenerator->getName(
+                'fulltext',
+                $fieldDefinition->identifier,
+                $contentType->identifier
+            );
+            // reuse FieldType\MultipleStringField since $fullTextData is an array of strings
+            $searchFields[] = new Field(
+                $name . '_meta_all_' . str_replace('-', '_', $languageCode),
+                $fullTextData,
+                new FieldType\MultipleStringField()
+            );
+        }
+
+        return $searchFields;
     }
 
     /**

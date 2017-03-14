@@ -67,4 +67,20 @@ class Unindexed implements Indexable
     {
         return null;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [];
+    }
 }

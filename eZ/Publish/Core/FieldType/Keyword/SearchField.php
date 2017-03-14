@@ -56,4 +56,31 @@ class SearchField implements Indexable
     {
         return 'sort_value';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return $field->value->externalData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'value',
+                $field->value->externalData,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'sort_value',
+                implode(' ', $field->value->externalData),
+                new Search\FieldType\StringField()
+            ),
+        ];
+    }
 }

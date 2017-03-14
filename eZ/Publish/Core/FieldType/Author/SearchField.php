@@ -114,4 +114,60 @@ class SearchField implements Indexable
     {
         return 'sort_value';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        if (empty($field->value->data) || !is_array($field->value->data)) {
+            return [];
+        }
+
+        return array_column($field->value->data, 'name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        $name = [];
+        $id = [];
+        $email = [];
+
+        foreach ($field->value->data as $author) {
+            $name[] = $author['name'];
+            $id[] = $author['id'];
+            $email[] = $author['email'];
+        }
+
+        return [
+            new Search\Field(
+                'name',
+                $name,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'id',
+                $id,
+                new Search\FieldType\MultipleIntegerField()
+            ),
+            new Search\Field(
+                'email',
+                $email,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'count',
+                count($field->value->data),
+                new Search\FieldType\IntegerField()
+            ),
+            new Search\Field(
+                'sort_value',
+                implode('-', $name),
+                new Search\FieldType\StringField()
+            ),
+        ];
+    }
 }

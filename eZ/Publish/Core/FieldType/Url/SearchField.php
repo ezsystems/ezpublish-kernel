@@ -93,4 +93,42 @@ class SearchField implements Indexable
     {
         return $this->getDefaultMatchField();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullTextData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        if (empty($field->value->data['text'])) {
+            return [];
+        }
+
+        return [
+            $field->value->data['text'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterData(Field $field, FieldDefinition $fieldDefinition)
+    {
+        return [
+            new Search\Field(
+                'value_url',
+                $field->value->externalData,
+                new Search\FieldType\StringField()
+            ),
+            new Search\Field(
+                'value_id',
+                isset($field->value->data['urlId']) ? $field->value->data['urlId'] : '',
+                new Search\FieldType\StringField()
+            ),
+            new Search\Field(
+                'value_text',
+                $text = (isset($field->value->data['text']) ? $field->value->data['text'] : ''),
+                new Search\FieldType\StringField()
+            ),
+        ];
+    }
 }

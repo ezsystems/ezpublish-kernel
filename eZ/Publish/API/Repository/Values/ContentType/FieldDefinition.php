@@ -20,10 +20,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $fieldGroup the field group name
  * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldTypeIdentifier String identifier of the field type
- * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
- * @property-read boolean $isRequired indicates if this field is required in the content object
- * @property-read boolean $isSearchable indicates if the field is searchable
- * @property-read boolean $isInfoCollector indicates if this field is used for information collection
+ * @property-read bool $isTranslatable indicates if fields of this definition are translatable
+ * @property-read bool $isRequired indicates if this field is required in the content object
+ * @property-read bool $isSearchable indicates if the field is indexed for FullText search
+ * @property-read bool $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
  */
 abstract class FieldDefinition extends ValueObject
@@ -149,7 +149,10 @@ abstract class FieldDefinition extends ValueObject
     protected $defaultValue;
 
     /**
-     * Indicates if th the content is searchable by this attribute.
+     * Indicates if the field is indexed for FullText search.
+     *
+     * Means that if FieldType is indexable and this is true, then content for the Field will be indexed
+     * for FullText search. Field either way will (if supported) still be queryable with Field specific Criteria.
      *
      * @var bool
      */
