@@ -26,8 +26,8 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
-    const SELECTION_BROWSE = 0,
-          SELECTION_DROPDOWN = 1;
+    const SELECTION_BROWSE = 0;
+    const SELECTION_DROPDOWN = 1;
 
     protected $settingsSchema = array(
         'selectionMethod' => array(
@@ -157,7 +157,7 @@ class Type extends FieldType
         // ContentInfo
         if ($inputValue instanceof ContentInfo) {
             $inputValue = new Value($inputValue->id);
-        } elseif (is_integer($inputValue) || is_string($inputValue)) { // content id
+        } elseif (is_int($inputValue) || is_string($inputValue)) { // content id
             $inputValue = new Value($inputValue);
         }
 
@@ -173,7 +173,7 @@ class Type extends FieldType
      */
     protected function checkValueStructure(BaseValue $value)
     {
-        if (!is_integer($value->destinationContentId) && !is_string($value->destinationContentId)) {
+        if (!is_int($value->destinationContentId) && !is_string($value->destinationContentId)) {
             throw new InvalidArgumentType(
                 '$value->destinationContentId',
                 'string|int',

@@ -209,8 +209,6 @@ class SubtreeLimitationTypeTest extends Base
         self::assertCount($errorCount, $validationErrors);
     }
 
-    /**
-     */
     public function testValidateErrorWrongPath()
     {
         $limitation = new SubtreeLimitation(array('limitationValues' => array('/1/2/42/')));
@@ -527,7 +525,7 @@ class SubtreeLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump($v);// intentional, debug in case no exception above
+        var_dump($v); // intentional, debug in case no exception above
     }
 
     /**

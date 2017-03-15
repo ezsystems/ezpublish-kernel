@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class ContentTypeTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers POST /content/typegroups
+     * Covers POST /content/typegroups.
      */
     public function testCreateContentTypeGroup()
     {
@@ -38,7 +38,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeGroup
-     * @covers PATCH /content/typegroups/<contentTypeGroupId>
+     * Covers PATCH /content/typegroups/<contentTypeGroupId>
      *
      * @return string the updated content type href
      */
@@ -63,7 +63,7 @@ XML;
     /**
      * @depends testCreateContentTypeGroup
      * @returns string The created content type href
-     * @covers POST /content/typegroups/<contentTypeGroupId>/types?publish=true
+     * Covers POST /content/typegroups/<contentTypeGroupId>/types?publish=true
      *
      * @todo write test with full workflow (draft, edit, publish)
      */
@@ -125,7 +125,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeGroup
-     * @covers GET /content/typegroups/<contentTypeGroupId>
+     * Covers GET /content/typegroups/<contentTypeGroupId>
      *
      * @param string $contentTypeGroupHref
      */
@@ -139,7 +139,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/typegroups
+     * Covers GET /content/typegroups.
      */
     public function testLoadContentTypeGroupList()
     {
@@ -153,7 +153,7 @@ XML;
 
     /**
      * @depends testUpdateContentTypeGroup
-     * @covers GET /content/typegroups?identifier=<contentTypeGroupIdentifier>
+     * Covers GET /content/typegroups?identifier=<contentTypeGroupIdentifier>
      */
     public function testLoadContentTypeGroupListWithIdentifier()
     {
@@ -166,7 +166,7 @@ XML;
 
     /**
      * @depends testUpdateContentTypeGroup
-     * @covers GET /content/typegroups/<contentTypeGroupId>
+     * Covers GET /content/typegroups/<contentTypeGroupId>
      *
      * @param string $contentTypeGroupHref
      */
@@ -181,7 +181,7 @@ XML;
 
     /**
      * @depends testUpdateContentTypeGroup
-     * @covers GET /content/typegroups/<contentTypeGroupId>
+     * Covers GET /content/typegroups/<contentTypeGroupId>
      *
      * @param string $contentTypeGroupHref
      */
@@ -196,7 +196,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>
+     * Covers GET /content/types/<contentTypeId>
      */
     public function testLoadContentType($contentTypeHref)
     {
@@ -209,7 +209,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>
+     * Covers GET /content/types/<contentTypeId>
      */
     public function testLoadContentTypeNotFound($contentTypeHref)
     {
@@ -222,7 +222,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types
+     * Covers GET /content/types
      */
     public function testListContentTypes()
     {
@@ -235,7 +235,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types?identifier=<contentTypeIdentifier>
+     * Covers GET /content/types?identifier=<contentTypeIdentifier>
      */
     public function testListContentTypesByIdentifier()
     {
@@ -249,7 +249,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types?remoteid=<contentTypeRemoteId>
+     * Covers GET /content/types?remoteid=<contentTypeRemoteId>
      */
     public function testListContentTypesByRemoteId()
     {
@@ -263,7 +263,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers COPY /content/types/<contentTypeId>
+     * Covers COPY /content/types/<contentTypeId>
      *
      * @return string The copied content type href
      */
@@ -285,7 +285,7 @@ XML;
     }
 
     /**
-     * @covers POST /content/type/<contentTypeId>
+     * Covers POST /content/type/<contentTypeId>.
      * @depends testCopyContentType
      *
      * @return string the created content type draft href
@@ -318,7 +318,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeDraft
-     * @covers GET /content/types/<contentTypeId>/draft
+     * Covers GET /content/types/<contentTypeId>/draft
      */
     public function testLoadContentTypeDraft($contentTypeDraftHref)
     {
@@ -331,7 +331,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeDraft
-     * @covers PATCH /content/types/<contentTypeId>/draft
+     * Covers PATCH /content/types/<contentTypeId>/draft
      */
     public function testUpdateContentTypeDraft($contentTypeDraftHref)
     {
@@ -354,7 +354,7 @@ XML;
     }
 
     /**
-     * @covers POST /content/types/<contentTypeId>/draft/fielddefinitions
+     * Covers POST /content/types/<contentTypeId>/draft/fielddefinitions.
      * @depends testCreateContentTypeDraft
      *
      * @return string The content type draft field definition href
@@ -396,7 +396,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>/fieldDefinitions
+     * Covers GET /content/types/<contentTypeId>/fieldDefinitions
      *
      * @return string the href of the first field definition in the list
      */
@@ -415,7 +415,7 @@ XML;
 
     /**
      * @depends testAddContentTypeDraftFieldDefinition
-     * @covers GET /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
+     * Covers GET /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
      */
     public function testLoadContentTypeFieldDefinition($fieldDefinitionHref)
     {
@@ -428,7 +428,7 @@ XML;
 
     /**
      * @depends testAddContentTypeDraftFieldDefinition
-     * @covers PATCH /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
+     * Covers PATCH /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
      *
      * @todo the spec says PUT...
      */
@@ -458,7 +458,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /content/types/<contentTypeId>/draft/fieldDefinitions/<fieldDefinitionId>
+     * Covers DELETE /content/types/<contentTypeId>/draft/fieldDefinitions/<fieldDefinitionId>.
      * @depends testAddContentTypeDraftFieldDefinition
      */
     public function deleteContentTypeDraftFieldDefinition($fieldDefinitionHref)
@@ -471,7 +471,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /content/types/<contentTypeId>/draft
+     * Covers DELETE /content/types/<contentTypeId>/draft.
      * @depends testCreateContentTypeDraft
      */
     public function testDeleteContentTypeDraft($contentTypeDraftHref)
@@ -485,7 +485,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers PUBLISH /content/types/<contentTypeId>/draft
+     * Covers PUBLISH /content/types/<contentTypeId>/draft
      */
     public function testPublishContentTypeDraft($contentTypeHref)
     {
@@ -501,7 +501,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>/groups
+     * Covers GET /content/types/<contentTypeId>/groups
      */
     public function testLoadGroupsOfContentType($contentTypeHref)
     {
@@ -514,7 +514,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers POST /content/types/<contentTypeId>/groups
+     * Covers POST /content/types/<contentTypeId>/groups
      *
      * @return string the content type href
      */
@@ -530,7 +530,7 @@ XML;
 
     /**
      * @depends testLinkContentTypeToGroup
-     * @covers DELETE /content/types/{contentTypeId}/groups/{contentTypeGroupId}
+     * Covers DELETE /content/types/{contentTypeId}/groups/{contentTypeGroupId}
      */
     public function testUnlinkContentTypeFromGroup($contentTypeHref)
     {
@@ -555,7 +555,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeGroup
-     * @covers DELETE /content/typegroups/<contentTypeGroupId>
+     * Covers DELETE /content/typegroups/<contentTypeGroupId>
      */
     public function testDeleteContentTypeGroupNotEmpty($contentTypeGroupHref)
     {

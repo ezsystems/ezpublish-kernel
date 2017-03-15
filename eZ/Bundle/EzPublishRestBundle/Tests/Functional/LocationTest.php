@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class LocationTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers POST /content/objects/{contentId}/locations
+     * Covers POST /content/objects/{contentId}/locations.
      * @returns string location href
      */
     public function testCreateLocation()
@@ -48,7 +48,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers GET /content/locations?remoteId=<locationRemoteId>
+     * Covers GET /content/locations?remoteId=<locationRemoteId>
      */
     public function testRedirectLocationByRemoteId($locationHref)
     {
@@ -62,7 +62,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers GET /content/locations?id=<locationId>
+     * Covers GET /content/locations?id=<locationId>
      */
     public function testRedirectLocationById($locationHref)
     {
@@ -78,7 +78,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers GET /content/locations/{locationPath}
+     * Covers GET /content/locations/{locationPath}
      */
     public function testLoadLocation($locationHref)
     {
@@ -91,7 +91,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers COPY /content/locations/{locationPath}
+     * Covers COPY /content/locations/{locationPath}
      *
      * @return string the created location's href
      */
@@ -108,7 +108,7 @@ XML;
     }
 
     /**
-     * @covers MOVE /content/locations/{locationPath}
+     * Covers MOVE /content/locations/{locationPath}.
      * @depends testCopySubtree
      */
     public function testMoveSubtree($locationHref)
@@ -123,7 +123,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers GET /content/objects/{contentId}/locations
+     * Covers GET /content/objects/{contentId}/locations
      */
     public function testLoadLocationsForContent($contentHref)
     {
@@ -131,7 +131,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers SWAP /content/locations/{locationPath}
+     * Covers SWAP /content/locations/{locationPath}
      */
     public function testSwapLocation($locationHref)
     {
@@ -148,7 +148,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers GET /content/locations/{locationPath}/children
+     * Covers GET /content/locations/{locationPath}/children
      */
     public function testLoadLocationChildren($locationHref)
     {
@@ -161,7 +161,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /content/locations/{locationPath}
+     * Covers PATCH /content/locations/{locationPath}.
      * @depends testCreateLocation
      */
     public function testUpdateLocation($locationHref)
@@ -184,7 +184,7 @@ XML;
 
     /**
      * @depends testCreateLocation
-     * @covers DELETE /content/locations/{path}
+     * Covers DELETE /content/locations/{path}
      */
     public function testDeleteSubtree($locationHref)
     {

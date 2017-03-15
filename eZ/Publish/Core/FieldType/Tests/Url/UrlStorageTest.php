@@ -13,8 +13,6 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use PHPUnit_Framework_TestCase;
 
-/**
- */
 class UrlStorageTest extends PHPUnit_Framework_TestCase
 {
     public function testStoreFieldDataWithExistingUrl()

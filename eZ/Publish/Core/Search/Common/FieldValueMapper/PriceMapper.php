@@ -38,6 +38,6 @@ class PriceMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (double)$field->value;
+        return (float)$field->value;
     }
 }

@@ -29,6 +29,7 @@ class UrlRedecoratorTest extends PHPUnit_Framework_TestCase
             $this->targetDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator')
         );
     }
+
     public function testRedecorateFromSource()
     {
         $this->sourceDecoratorMock

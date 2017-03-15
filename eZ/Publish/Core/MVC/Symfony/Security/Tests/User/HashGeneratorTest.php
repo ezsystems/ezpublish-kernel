@@ -13,8 +13,8 @@ use eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator;
 class HashGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentityDefiner
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentityDefiners
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentityDefiner
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentityDefiners
      */
     public function testSetIdentityDefiner()
     {
@@ -35,8 +35,8 @@ class HashGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentity
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentity
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentity
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentity
      */
     public function testSetIdentity()
     {
@@ -47,11 +47,11 @@ class HashGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentity
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentity
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentityDefiner
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentityDefiners
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::generate
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentity
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentity
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentityDefiner
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::getIdentityDefiners
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::generate
      */
     public function testGenerate()
     {

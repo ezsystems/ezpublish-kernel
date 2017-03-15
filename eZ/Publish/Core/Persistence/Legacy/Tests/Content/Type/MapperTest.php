@@ -26,7 +26,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStr
 class MapperTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createGroupFromCreateStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createGroupFromCreateStruct
      */
     public function testCreateGroupFromCreateStruct()
     {
@@ -80,7 +80,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createTypeFromCreateStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createTypeFromCreateStruct
      */
     public function testTypeFromCreateStruct()
     {
@@ -143,7 +143,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createCreateStructFromType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createCreateStructFromType
      */
     public function testCreateStructFromType()
     {
@@ -209,7 +209,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractGroupsFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractGroupsFromRows
      */
     public function testExtractGroupsFromRows()
     {
@@ -233,10 +233,10 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypesFromRows
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypeFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractStorageFieldFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractFieldFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypesFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypeFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractStorageFieldFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractFieldFromRow
      */
     public function testExtractTypesFromRowsSingle()
     {
@@ -303,8 +303,8 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toStorageFieldDefinition
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -335,8 +335,8 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toFieldDefinition
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
     public function testToFieldDefinition()
     {

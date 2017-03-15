@@ -37,7 +37,7 @@ class FileSizeValidator extends Validator
         foreach ($constraints as $name => $value) {
             switch ($name) {
                 case 'maxFileSize':
-                    if ($value !== false && !is_integer($value)) {
+                    if ($value !== false && !is_int($value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,

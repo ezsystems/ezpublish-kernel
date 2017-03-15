@@ -19,8 +19,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
  * @property-read mixed $contentId calls getContentInfo()->id
  * @property-read mixed $id the id of the location
  * @property-read int $priority Position of the Location among its siblings when sorted using priority
- * @property-read boolean $hidden Indicates that the Location is explicitly marked as hidden.
- * @property-read boolean $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
+ * @property-read bool $hidden Indicates that the Location is explicitly marked as hidden.
+ * @property-read bool $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
  * @property-read string $remoteId a global unique id of the content object
  * @property-read mixed $parentLocationId the id of the parent location
  * @property-read string $pathString the path to this location e.g. /1/2/4/23 where 23 is current id.

@@ -70,6 +70,6 @@ class MapLocationStorage extends GatewayBasedStorage
      */
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        return (is_array($field->value->externalData) ? $field->value->externalData['address'] : null);
+        return is_array($field->value->externalData) ? $field->value->externalData['address'] : null;
     }
 }

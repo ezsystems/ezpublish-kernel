@@ -53,7 +53,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     protected $addFieldAction;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {

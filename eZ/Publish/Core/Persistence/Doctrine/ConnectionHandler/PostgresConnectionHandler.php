@@ -26,7 +26,7 @@ class PostgresConnectionHandler extends ConnectionHandler
      */
     public function getAutoIncrementValue($table, $column)
     {
-        return "nextval('"  . $this->getSequenceName($table, $column) . "')";
+        return "nextval('" . $this->getSequenceName($table, $column) . "')";
     }
 
     /**

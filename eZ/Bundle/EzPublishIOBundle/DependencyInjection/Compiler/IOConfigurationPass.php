@@ -36,6 +36,7 @@ class IOConfigurationPass implements CompilerPassInterface
         $this->metadataHandlerFactories = $metadataHandlerFactories;
         $this->binarydataHandlerFactories = $binarydataHandlerFactories;
     }
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *

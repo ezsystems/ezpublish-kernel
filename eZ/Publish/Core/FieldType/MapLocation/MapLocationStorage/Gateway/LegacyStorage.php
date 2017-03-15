@@ -239,7 +239,7 @@ class LegacyStorage extends Gateway
      */
     protected function hasFieldData($fieldId, $versionNo)
     {
-        return ($this->loadFieldData($fieldId, $versionNo) !== null);
+        return $this->loadFieldData($fieldId, $versionNo) !== null;
     }
 
     /**

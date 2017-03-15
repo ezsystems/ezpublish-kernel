@@ -22,10 +22,10 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
  * @property-read string $fieldGroup the field group name
  * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldTypeIdentifier String identifier of the field type
- * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
- * @property-read boolean $isRequired indicates if this field is required in the content object
- * @property-read boolean $isSearchable indicates if the field is searchable
- * @property-read boolean $isInfoCollector indicates if this field is used for information collection
+ * @property-read bool $isTranslatable indicates if fields of this definition are translatable
+ * @property-read bool $isRequired indicates if this field is required in the content object
+ * @property-read bool $isSearchable indicates if the field is searchable
+ * @property-read bool $isInfoCollector indicates if this field is used for information collection
  * @property-read mixed $defaultValue the default value of the field
  *
  * @internal Meant for internal use by Repository, type hint against API object instead.

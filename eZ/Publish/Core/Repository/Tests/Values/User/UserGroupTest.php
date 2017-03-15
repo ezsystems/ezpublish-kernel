@@ -11,9 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\Values\User;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use PHPUnit_Framework_TestCase;
 
-/**
- *
- */
 class UserGroupTest extends PHPUnit_Framework_TestCase
 {
     /**

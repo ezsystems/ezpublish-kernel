@@ -266,16 +266,16 @@ class Xml extends Handler
     protected function castScalarValue($stringValue)
     {
         switch (true) {
-            case (ctype_digit($stringValue)):
+            case ctype_digit($stringValue):
                 return (int)$stringValue;
 
-            case (preg_match('(^[0-9\.]+$)', $stringValue) === 1):
+            case preg_match('(^[0-9\.]+$)', $stringValue) === 1:
                 return (float)$stringValue;
 
-            case (strtolower($stringValue) === 'true'):
+            case strtolower($stringValue) === 'true':
                 return true;
 
-            case (strtolower($stringValue) === 'false'):
+            case strtolower($stringValue) === 'false':
                 return false;
         }
 

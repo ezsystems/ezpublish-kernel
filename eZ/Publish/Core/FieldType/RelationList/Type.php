@@ -29,8 +29,8 @@ class Type extends FieldType
     /**
      * @todo Consider to add all 6 selection options
      */
-    const SELECTION_BROWSE = 0,
-          SELECTION_DROPDOWN = 1;
+    const SELECTION_BROWSE = 0;
+    const SELECTION_DROPDOWN = 1;
 
     protected $settingsSchema = array(
         'selectionMethod' => array(
@@ -164,7 +164,7 @@ class Type extends FieldType
         // ContentInfo
         if ($inputValue instanceof ContentInfo) {
             $inputValue = new Value(array($inputValue->id));
-        } elseif (is_integer($inputValue) || is_string($inputValue)) {
+        } elseif (is_int($inputValue) || is_string($inputValue)) {
             // content id
             $inputValue = new Value(array($inputValue));
         } elseif (is_array($inputValue)) {
@@ -193,7 +193,7 @@ class Type extends FieldType
         }
 
         foreach ($value->destinationContentIds as $key => $destinationContentId) {
-            if (!is_integer($destinationContentId) && !is_string($destinationContentId)) {
+            if (!is_int($destinationContentId) && !is_string($destinationContentId)) {
                 throw new InvalidArgumentType(
                     "\$value->destinationContentIds[$key]",
                     'string|int',

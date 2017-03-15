@@ -55,6 +55,7 @@ class URLAliasServiceTest extends BaseTest
             );
         }
     }
+
     /**
      * Test for the createUrlAlias() method.
      *

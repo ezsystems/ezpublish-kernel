@@ -4489,8 +4489,6 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(2, count($locations));
     }
 
-    /**
-     */
     public function testURLAliasesCreatedForNewContent()
     {
         $repository = $this->getRepository();
@@ -4528,8 +4526,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
-    /**
-     */
     public function testURLAliasesCreatedForUpdatedContent()
     {
         $repository = $this->getRepository();
@@ -4603,8 +4599,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
-    /**
-     */
     public function testCustomURLAliasesNotHistorizedOnUpdatedContent()
     {
         $repository = $this->getRepository();

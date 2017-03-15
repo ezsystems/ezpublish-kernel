@@ -46,8 +46,8 @@ class LegacyStorage extends Gateway
             'has_stored_login' => array(
                 'name' => 'hasStoredlogin',
                 'cast' => function ($input) {
-                        return ($input == '1');
-                    },
+                    return $input == '1';
+                },
             ),
             'contentobject_id' => array(
                 'name' => 'contentId',
@@ -72,8 +72,8 @@ class LegacyStorage extends Gateway
             'is_enabled' => array(
                 'name' => 'enabled',
                 'cast' => function ($input) {
-                        return ($input == '1');
-                    },
+                    return $input == '1';
+                },
             ),
             'max_login' => array(
                 'name' => 'maxLogin',

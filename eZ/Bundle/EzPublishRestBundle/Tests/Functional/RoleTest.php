@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 class RoleTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers POST /user/roles
+     * Covers POST /user/roles.
      *
      * BC compatible mode, will return a role
      *
@@ -49,7 +49,7 @@ XML;
     }
 
     /**
-     * @covers POST /user/roles
+     * Covers POST /user/roles.
      *
      * BC incompatible mode, will return a role draft
      *
@@ -89,7 +89,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/roles
+     * Covers GET /user/roles.
      */
     public function testListRoles()
     {
@@ -102,7 +102,7 @@ XML;
 
     /**
      * @depends testCreateRole
-     * @covers GET /user/roles/{roleId}
+     * Covers GET /user/roles/{roleId}
      */
     public function testLoadRole($roleHref)
     {
@@ -115,7 +115,7 @@ XML;
 
     /**
      * @depends testCreateRole
-     * @covers POST /user/roles/{roleId}
+     * Covers POST /user/roles/{roleId}
      *
      * @return string The created role draft href
      */
@@ -154,7 +154,7 @@ XML;
 
     /**
      * @depends testCreateRoleDraft
-     * @covers GET /user/roles/{roleId}/draft
+     * Covers GET /user/roles/{roleId}/draft
      */
     public function testLoadRoleDraft($roleDraftHref)
     {
@@ -167,7 +167,7 @@ XML;
 
     /**
      * @depends testCreateRole
-     * @covers PATCH /user/roles/{roleId}
+     * Covers PATCH /user/roles/{roleId}
      */
     public function testUpdateRole($roleHref)
     {
@@ -195,7 +195,7 @@ XML;
 
     /**
      * @depends testCreateRoleDraft
-     * @covers PATCH /user/roles/{roleId}/draft
+     * Covers PATCH /user/roles/{roleId}/draft
      */
     public function testUpdateRoleDraft($roleDraftHref)
     {
@@ -221,7 +221,7 @@ XML;
     }
 
     /**
-     * @covers POST /user/roles/{roleId}/policies
+     * Covers POST /user/roles/{roleId}/policies.
      * @depends testCreateRole
      *
      * @return string The created policy href
@@ -257,7 +257,7 @@ XML;
     }
 
     /**
-     * @covers POST /user/roles/{roleId}/policies
+     * Covers POST /user/roles/{roleId}/policies.
      * @depends testCreateRoleDraft
      *
      * @return string The created policy href
@@ -297,7 +297,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/roles/{roleId}/policies/{policyId}
+     * Covers GET /user/roles/{roleId}/policies/{policyId}.
      * @depends testAddPolicy
      */
     public function testLoadPolicy($policyHref)
@@ -310,7 +310,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/roles/{roleId}/policies
+     * Covers GET /user/roles/{roleId}/policies.
      * @depends testCreateRole
      */
     public function testLoadPolicies($roleHref)
@@ -323,7 +323,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /user/roles/{roleId}/policies/{policyId}
+     * Covers PATCH /user/roles/{roleId}/policies/{policyId}.
      * @depends testAddPolicy
      */
     public function testUpdatePolicy($policyHref)
@@ -349,7 +349,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /user/roles/{roleId}/policies/{policyId}
+     * Covers PATCH /user/roles/{roleId}/policies/{policyId}.
      * @depends testAddPolicyByRoleDraft
      */
     public function testUpdatePolicyByRoleDraft($policyHref)
@@ -376,7 +376,7 @@ XML;
 
     /**
      * @depends testCreateRole
-     * @covers POST /user/users/{userId}/roles
+     * Covers POST /user/users/{userId}/roles
      *
      * @return string assigned role href
      *
@@ -408,7 +408,7 @@ XML;
     }
 
     /**
-     * @covers       POST /user/users/{userId}/roles
+     * @covers       \POST /user/users/{userId}/roles
      *
      * @param string $roleHref
      * @param array $limitation
@@ -457,7 +457,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/users/{userId}/roles/{roleId}
+     * Covers GET /user/users/{userId}/roles/{roleId}.
      * @depends testAssignRoleToUser
      */
     public function testLoadRoleAssignmentForUser($roleAssignmentHref)
@@ -470,7 +470,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/users/{userId}/roles/{roleId}
+     * Covers DELETE /user/users/{userId}/roles/{roleId}.
      * @depends testAssignRoleToUser
      */
     public function testUnassignRoleFromUser($roleAssignmentHref)
@@ -484,7 +484,7 @@ XML;
 
     /**
      * @depends testCreateRole
-     * @covers POST /user/groups/{groupId}/roles
+     * Covers POST /user/groups/{groupId}/roles
      *
      * @return string role assignment href
      */
@@ -523,7 +523,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/groups/{groupId}/roles/{roleId}
+     * Covers GET /user/groups/{groupId}/roles/{roleId}.
      * @depends testAssignRoleToUserGroup
      */
     public function testLoadRoleAssignmentForUserGroup($roleAssignmentHref)
@@ -537,7 +537,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/groups/{groupId}/roles/{roleId}
+     * Covers DELETE /user/groups/{groupId}/roles/{roleId}.
      * @depends testAssignRoleToUserGroup
      */
     public function testUnassignRoleFromUserGroup($roleAssignmentHref)
@@ -551,7 +551,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/users/{userId}/roles
+     * Covers GET /user/users/{userId}/roles.
      */
     public function testLoadRoleAssignmentsForUser()
     {
@@ -563,7 +563,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/groups/{groupPath}/roles
+     * Covers GET /user/groups/{groupPath}/roles.
      */
     public function testLoadRoleAssignmentsForUserGroup()
     {
@@ -575,7 +575,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/policies?userId={userId}
+     * Covers GET /user/policies?userId={userId}.
      */
     public function testListPoliciesForUser()
     {
@@ -587,7 +587,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/roles/{roleId}/policies/{policyId}
+     * Covers DELETE /user/roles/{roleId}/policies/{policyId}.
      * @depends testAddPolicy
      */
     public function testDeletePolicy($policyHref)
@@ -600,7 +600,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/roles/{roleId}/policies/{policyId}
+     * Covers DELETE /user/roles/{roleId}/policies/{policyId}.
      * @depends testAddPolicyByRoleDraft
      */
     public function testRemovePolicyByRoleDraft($policyHref)
@@ -613,7 +613,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/roles/{roleId}/policies
+     * Covers DELETE /user/roles/{roleId}/policies.
      * @depends testCreateRole
      */
     public function testDeletePolicies($roleHref)
@@ -626,7 +626,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/roles/{roleId}
+     * Covers DELETE /user/roles/{roleId}.
      * @depends testCreateRole
      */
     public function testDeleteRole($roleHref)
@@ -639,7 +639,7 @@ XML;
     }
 
     /**
-     * @covers PUBLISH /user/roles/{roleId}/draft
+     * Covers PUBLISH /user/roles/{roleId}/draft.
      * @depends testCreateRoleDraft
      */
     public function testPublishRoleDraft($roleDraftHref)
@@ -657,7 +657,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/roles/{roleId}/draft
+     * Covers DELETE /user/roles/{roleId}/draft.
      * @depends testCreateRoleDraft
      */
     public function testDeleteRoleDraft($roleDraftHref)

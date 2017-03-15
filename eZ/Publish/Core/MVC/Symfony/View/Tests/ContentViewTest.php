@@ -169,7 +169,7 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider badTemplateIdentifierProvider
      *
-     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      *
      * @param $badTemplateIdentifier
      */

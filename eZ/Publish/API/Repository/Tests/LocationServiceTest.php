@@ -1405,7 +1405,7 @@ class LocationServiceTest extends BaseTest
      * Related issue: EZP-21904
      *
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
-     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContentObjectLastLocation()
     {

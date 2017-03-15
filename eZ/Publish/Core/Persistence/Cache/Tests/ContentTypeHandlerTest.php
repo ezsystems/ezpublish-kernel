@@ -22,7 +22,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPITypeGroupUp
 class ContentTypeHandlerTest extends HandlerTest
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::createGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::createGroup
      */
     public function testCreateGroup()
     {
@@ -66,7 +66,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::updateGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -110,7 +110,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::deleteGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::deleteGroup
      */
     public function testDeleteGroup()
     {
@@ -138,7 +138,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadGroup
      */
     public function testLoadGroupIsMiss()
     {
@@ -188,7 +188,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadGroup
      */
     public function testLoadGroupHasCache()
     {
@@ -227,7 +227,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadGroupByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadGroupByIdentifier
      */
     public function testLoadGroupByIdentifier()
     {
@@ -253,7 +253,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadAllGroups
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadAllGroups
      */
     public function testLoadAllGroups()
     {
@@ -279,7 +279,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadContentTypes
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadContentTypes
      */
     public function testLoadContentTypes()
     {
@@ -305,7 +305,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::load
      */
     public function testLoadDraft()
     {
@@ -337,7 +337,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::load
      */
     public function testLoadCacheIsMiss()
     {
@@ -393,7 +393,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::load
      */
     public function testLoadHasCache()
     {
@@ -434,7 +434,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByIdentifier
      */
     public function testLoadByIdentifierIsMiss()
     {
@@ -510,7 +510,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByIdentifier
      */
     public function testLoadByIdentifierHasCache()
     {
@@ -573,7 +573,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByRemoteId
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByRemoteId
      */
     public function testLoadByRemoteId()
     {
@@ -599,7 +599,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::create
      */
     public function testCreate()
     {
@@ -671,7 +671,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::create
      */
     public function testCreateWithDraft()
     {
@@ -703,7 +703,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::update
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::update
      */
     public function testUpdate()
     {
@@ -791,7 +791,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::update
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::update
      */
     public function testUpdateDraft()
     {
@@ -827,7 +827,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::delete
      */
     public function testDelete()
     {
@@ -863,7 +863,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::delete
      */
     public function testDeleteDraft()
     {
@@ -891,7 +891,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::createDraft
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::createDraft
      */
     public function testCreateDraft()
     {
@@ -917,7 +917,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::copy
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::copy
      */
     public function testCopy()
     {
@@ -943,7 +943,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::link
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::link
      */
     public function testLink()
     {
@@ -973,7 +973,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::link
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::link
      */
     public function testLinkDraft()
     {
@@ -1001,7 +1001,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::unlink
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::unlink
      */
     public function testUnlink()
     {
@@ -1031,7 +1031,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::unlink
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::unlink
      */
     public function testUnlinkDraft()
     {
@@ -1059,7 +1059,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::getFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::getFieldDefinition
      */
     public function testGetFieldDefinition()
     {
@@ -1085,7 +1085,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::addFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::addFieldDefinition
      */
     public function testAddFieldDefinition()
     {
@@ -1125,7 +1125,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::addFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::addFieldDefinition
      */
     public function testAddFieldDefinitionDraft()
     {
@@ -1157,7 +1157,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::removeFieldDefinition
      */
     public function testRemoveFieldDefinition()
     {
@@ -1197,7 +1197,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::removeFieldDefinition
      */
     public function testRemoveFieldDefinitionDraft()
     {
@@ -1229,7 +1229,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::updateFieldDefinition
      */
     public function testUpdateFieldDefinition()
     {
@@ -1269,7 +1269,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::updateFieldDefinition
      */
     public function testUpdateFieldDefinitionDraft()
     {
@@ -1301,7 +1301,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::publish
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::publish
      */
     public function testPublish()
     {
@@ -1349,7 +1349,7 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::getContentCount
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::getContentCount
      */
     public function testGetContentCount()
     {

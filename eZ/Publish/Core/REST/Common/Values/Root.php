@@ -16,7 +16,7 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
 class Root extends RestValue
 {
     /**
-     * @var Resource[]
+     * @var resource[]
      */
     protected $resources;
 
@@ -26,7 +26,7 @@ class Root extends RestValue
     }
 
     /**
-     * @return Resource[]
+     * @return resource[]
      */
     public function getResources()
     {

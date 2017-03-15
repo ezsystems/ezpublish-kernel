@@ -122,10 +122,10 @@ class TestCase extends PHPUnit_Framework_TestCase
         );
 
         switch ($method) {
-            case 'PUBLISH': $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: PUBLISH'; break;
-            case 'MOVE':    $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: MOVE';    break;
-            case 'PATCH':   $method = 'PATCH'; $headers[] = 'X-HTTP-Method-Override: PATCH';   break;
-            case 'COPY':    $method = 'POST';  $headers[] = 'X-HTTP-Method-Override: COPY';    break;
+            case 'PUBLISH': $method = 'POST'; $headers[] = 'X-HTTP-Method-Override: PUBLISH'; break;
+            case 'MOVE':    $method = 'POST'; $headers[] = 'X-HTTP-Method-Override: MOVE'; break;
+            case 'PATCH':   $method = 'PATCH'; $headers[] = 'X-HTTP-Method-Override: PATCH'; break;
+            case 'COPY':    $method = 'POST'; $headers[] = 'X-HTTP-Method-Override: COPY'; break;
         }
 
         $request = new HttpRequest($method, $uri, $this->httpHost);

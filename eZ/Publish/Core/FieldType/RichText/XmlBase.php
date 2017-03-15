@@ -91,7 +91,7 @@ abstract class XmlBase
      *
      * @see startRecordingErrors()
      *
-     * @uses formatLibXmlError()
+     * @uses ::formatLibXmlError()
      *
      * @throws \RuntimeException If error recording is not started
      *

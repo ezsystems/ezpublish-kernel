@@ -34,7 +34,7 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
      */
     public function testRegisterFieldType()
     {
@@ -54,7 +54,7 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
      *
      * @expectedException \LogicException
      */
@@ -76,7 +76,7 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
      */
     public function testRegisterConverter()
     {
@@ -107,7 +107,7 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
      *
      * @expectedException \LogicException
      */
@@ -139,7 +139,7 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
      *
      * @expectedException \LogicException
      */
@@ -171,7 +171,7 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass::process
      */
     public function testRegisterConverterNoLazy()
     {

@@ -161,7 +161,6 @@ class DoctrineDatabase extends Gateway
         )->innerJoin(
             $this->handler->quoteTable('eznode_assignment'),
             $query->expr->lAnd(
-
                 $query->expr->eq(
                     $this->handler->quoteColumn('node_id', 'ezcontentobject_tree'),
                     $this->handler->quoteColumn('parent_node', 'eznode_assignment')
@@ -374,9 +373,9 @@ class DoctrineDatabase extends Gateway
     private function isHiddenByParent($pathString, array $rows)
     {
         $parentNodeIds = explode('/', trim($pathString, '/'));
-        array_pop($parentNodeIds);// remove self
+        array_pop($parentNodeIds); // remove self
         foreach ($rows as $row) {
-            if ($row['is_hidden'] &&  in_array($row['node_id'], $parentNodeIds)) {
+            if ($row['is_hidden'] && in_array($row['node_id'], $parentNodeIds)) {
                 return true;
             }
         }

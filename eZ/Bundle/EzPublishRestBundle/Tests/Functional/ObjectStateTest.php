@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class ObjectStateTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers POST /content/objectstategroups
+     * Covers POST /content/objectstategroups.
      *
      * @return string Object state group href
      */
@@ -53,7 +53,7 @@ XML;
     }
 
     /**
-     * @covers POST /content/objectstategroups/{objectStateGroupId}/objectstates
+     * Covers POST /content/objectstategroups/{objectStateGroupId}/objectstates.
      *
      * @return string Object state href
      * @depends testCreateObjectStateGroup
@@ -95,7 +95,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objectstategroups/{objectStateGroupId}
+     * Covers GET /content/objectstategroups/{objectStateGroupId}.
      * @depends testCreateObjectStateGroup
      */
     public function testLoadObjectStateGroup($objectStateGroupHref)
@@ -108,7 +108,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+     * Covers GET /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}.
      * @depends testCreateObjectState
      */
     public function testLoadObjectState($objectStateHref)
@@ -121,7 +121,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objectstategroups
+     * Covers GET /content/objectstategroups.
      */
     public function testLoadObjectStateGroups()
     {
@@ -133,7 +133,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objectstategroups/{objectStateGroupId}/objectstates
+     * Covers GET /content/objectstategroups/{objectStateGroupId}/objectstates.
      * @depends testCreateObjectStateGroup
      */
     public function testLoadObjectStates($objectStateGroupHref)
@@ -146,7 +146,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /content/objects/{contentId}/objectstates
+     * Covers PATCH /content/objects/{contentId}/objectstates.
      * @depends testCreateObjectState
      *
      * @return string The created folder content href
@@ -173,7 +173,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objects/{contentId}/objectstates
+     * Covers GET /content/objects/{contentId}/objectstates.
      * @depends testSetObjectStatesForContent
      */
     public function testGetObjectStatesForContent($contentHref)
@@ -186,7 +186,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+     * Covers PATCH /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}.
      * @depends testCreateObjectState
      */
     public function testUpdateObjectState($objectStateHref)
@@ -213,7 +213,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /content/objectstategroups/{objectStateGroupId}
+     * Covers PATCH /content/objectstategroups/{objectStateGroupId}.
      * @depends testCreateObjectStateGroup
      */
     public function testUpdateObjectStateGroup($objectStateGroupHref)
@@ -240,7 +240,7 @@ XML;
     }
 
     /**
-     * @covers DELETE
+     * Covers DELETE.
      * @depends testCreateObjectState
      */
     public function testDeleteObjectState($objectStateHref)
@@ -253,7 +253,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /content/objectstategroups/{objectStateGroupId}
+     * Covers DELETE /content/objectstategroups/{objectStateGroupId}.
      * @depends testCreateObjectStateGroup
      */
     public function testDeleteObjectStateGroup($objectStateGroupHref)
