@@ -58,7 +58,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     protected $contentMapperMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {
@@ -77,8 +77,8 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::determineActions
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::determineActions
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
      */
     public function testDetermineActions()
     {

@@ -26,7 +26,7 @@ class IntegerConverter implements Converter
      *
      * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return Integer
+     * @return int
      */
     public static function create()
     {

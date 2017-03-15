@@ -77,9 +77,9 @@ class MaskGenerator
      */
     public function isLanguageAlwaysAvailable($language, array $languages)
     {
-        return (isset($languages['always-available'])
+        return isset($languages['always-available'])
            && ($languages['always-available'] == $language)
-        );
+        ;
     }
 
     /**

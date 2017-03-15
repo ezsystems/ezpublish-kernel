@@ -11,9 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
-/**
- *
- */
 class LocationTest extends PHPUnit_Framework_TestCase
 {
     /**

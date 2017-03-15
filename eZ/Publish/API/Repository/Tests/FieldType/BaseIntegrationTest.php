@@ -357,7 +357,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     protected function getOverride($key, array $overrideValues, $default)
     {
-        return (isset($overrideValues[$key]) ? $overrideValues[$key] : $default);
+        return isset($overrideValues[$key]) ? $overrideValues[$key] : $default;
     }
 
     /**

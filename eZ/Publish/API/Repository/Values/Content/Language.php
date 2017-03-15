@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id the language id
  * @property-read string $languageCode the language code in
  * @property-read string $name human readable name of the language
- * @property-read boolean $enabled indicates if the language is enabled or not.
+ * @property-read bool $enabled indicates if the language is enabled or not.
  */
 class Language extends ValueObject
 {

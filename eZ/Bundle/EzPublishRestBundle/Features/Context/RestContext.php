@@ -133,7 +133,7 @@ class RestContext extends Context implements MinkAwareContext
      */
     private function setRestDriver($restDriver)
     {
-        $namespace = '\\' . __NAMESPACE__ .  '\\RestClient\\';
+        $namespace = '\\' . __NAMESPACE__ . '\\RestClient\\';
         $driver = $namespace . $restDriver;
         $parent = $namespace . 'DriverInterface';
 

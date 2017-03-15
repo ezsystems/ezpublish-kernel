@@ -50,6 +50,7 @@ class UserSession extends RestValue
      * @var bool
      */
     public $exists;
+
     /**
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param string $sessionName

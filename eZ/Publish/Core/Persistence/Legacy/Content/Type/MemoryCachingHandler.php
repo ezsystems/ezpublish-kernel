@@ -17,8 +17,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStr
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Exception;
 
-/**
- */
 class MemoryCachingHandler implements BaseContentTypeHandler
 {
     /**

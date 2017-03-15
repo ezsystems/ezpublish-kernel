@@ -41,7 +41,7 @@ class MultipleBooleanMapper extends FieldValueMapper
         $values = array();
 
         foreach ((array)$field->value as $value) {
-            $values[] = (boolean)$value;
+            $values[] = (bool)$value;
         }
 
         return $values;

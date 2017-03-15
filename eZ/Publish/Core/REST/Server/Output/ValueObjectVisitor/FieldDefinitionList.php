@@ -39,7 +39,7 @@ class FieldDefinitionList extends RestContentTypeBase
         $generator->startAttribute(
             'href',
             $this->router->generate(
-                'ezpublish_rest_loadContentType' . $urlTypeSuffix  . 'FieldDefinitionList',
+                'ezpublish_rest_loadContentType' . $urlTypeSuffix . 'FieldDefinitionList',
                 array(
                     'contentTypeId' => $contentType->id,
                 )

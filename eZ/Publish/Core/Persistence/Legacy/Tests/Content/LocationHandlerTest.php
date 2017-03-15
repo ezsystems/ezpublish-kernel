@@ -386,7 +386,7 @@ class LocationHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::changeMainLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::changeMainLocation
      */
     public function testChangeMainLocation()
     {
@@ -403,7 +403,7 @@ class LocationHandlerTest extends TestCase
     /**
      * Test for the removeSubtree() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::removeSubtree
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::removeSubtree
      */
     public function testRemoveSubtree()
     {
@@ -420,7 +420,7 @@ class LocationHandlerTest extends TestCase
     /**
      * Test for the copySubtree() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::copySubtree
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::copySubtree
      */
     public function testCopySubtree()
     {

@@ -144,7 +144,7 @@ class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInte
 
             // View parameter name.
             // We extract it + the value from the following segment (next element in $vpSegments array)
-            if ($vpSegments[$i]{0} === '(') {
+            if ($vpSegments[$i][0] === '(') {
                 $paramName = str_replace(array('(', ')'), '', $vpSegments[$i]);
                 // A value is present (e.g. /(foo)/bar)
                 if (isset($vpSegments[$i + 1])) {

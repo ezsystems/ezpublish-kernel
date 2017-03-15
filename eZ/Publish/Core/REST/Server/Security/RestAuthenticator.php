@@ -195,7 +195,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
 
         $wasAnonymous = $previousUser->getAPIUser()->id == $this->configResolver->getParameter('anonymous_user_id');
         // TODO: isEqualTo is not on the interface
-        return (!$wasAnonymous && !$user->isEqualTo($previousUser));
+        return !$wasAnonymous && !$user->isEqualTo($previousUser);
     }
 
     public function addLogoutHandler(LogoutHandlerInterface $handler)

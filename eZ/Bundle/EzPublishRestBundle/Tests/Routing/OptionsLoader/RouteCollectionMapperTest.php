@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * @covers eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper
+ * @covers \eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper
  */
 class RouteCollectionMapperTest extends PHPUnit_Framework_TestCase
 {

@@ -23,8 +23,6 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-/**
- */
 class Handler implements BaseContentTypeHandler
 {
     /**

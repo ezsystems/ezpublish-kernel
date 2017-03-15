@@ -37,7 +37,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
      * @param int|null $declaredPriority
      * @param int $expectedPriority
      *
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
      * @dataProvider addRouterProvider
      */
     public function testAddRouter($declaredPriority, $expectedPriority)
@@ -64,7 +64,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
      * @param int|null $declaredPriority
      * @param int $expectedPriority
      *
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
      * @dataProvider addRouterProvider
      */
     public function testAddRouterWithDefaultRouter($declaredPriority, $expectedPriority)

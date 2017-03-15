@@ -50,7 +50,7 @@ class FieldTypeProcessorRegistry
      */
     public function hasProcessor($fieldTypeIdentifier)
     {
-        return (isset($this->processors[$fieldTypeIdentifier]));
+        return isset($this->processors[$fieldTypeIdentifier]);
     }
 
     /**

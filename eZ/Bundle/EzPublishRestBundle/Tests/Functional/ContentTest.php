@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class ContentTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers POST /content/objects
+     * Covers POST /content/objects.
      *
      * @return string REST content ID
      */
@@ -62,7 +62,7 @@ XML;
 
     /**
      * @depends testCreateContent
-     * @covers PUBLISH /content/objects/<contentId>/versions/<versionNumber>
+     * Covers PUBLISH /content/objects/<contentId>/versions/<versionNumber>
      *
      * @return string REST content ID
      */
@@ -78,7 +78,7 @@ XML;
 
     /**
      * @depends testPublishContent
-     * @covers GET /content/objects?remoteId=<remoteId>
+     * Covers GET /content/objects?remoteId=<remoteId>
      */
     public function testRedirectContent($restContentHref)
     {
@@ -143,7 +143,7 @@ XML;
 
     /**
      * @depends testPublishContent
-     * @covers GET /content/objects/<contentId>/currentversion
+     * Covers GET /content/objects/<contentId>/currentversion
      * @covers \eZ\Publish\Core\REST\Server\Controller\Content::redirectCurrentVersion
      */
     public function testRedirectCurrentVersion($restContentHref)
@@ -159,7 +159,7 @@ XML;
 
     /**
      * @depends testCreateDraftFromVersion
-     * @covers GET /content/objects/<contentId>/versions/<versionNumber>
+     * Covers GET /content/objects/<contentId>/versions/<versionNumber>
      *
      * @param string $restContentVersionHref
      */
@@ -175,7 +175,7 @@ XML;
     }
 
     /**
-     * @covers COPY /content/objects/<contentId>
+     * Covers COPY /content/objects/<contentId>.
      * @depends testPublishContent
      *
      * @return string the copied content href
@@ -198,7 +198,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /content/objects/<versionNumber>
+     * Covers DELETE /content/objects/<versionNumber>.
      * @depends testCopyContent
      */
     public function testDeleteContent($restContentHref)
@@ -213,7 +213,7 @@ XML;
 
     /**
      * @depends testPublishContent
-     * @covers GET /content/objects/<contentId>/versions
+     * Covers GET /content/objects/<contentId>/versions
      */
     public function testLoadContentVersions($restContentHref)
     {
@@ -228,7 +228,7 @@ XML;
      * @depends testPublishContent
      *
      * @param string $restContentHref /content/objects/<contentId>
-     * @covers COPY /content/objects/<contentId>/currentversion
+     * Covers COPY /content/objects/<contentId>/currentversion
      *
      * @return string the ID of the created version (/content/objects/<contentId>/versions/<versionNumber>
      */
@@ -248,7 +248,7 @@ XML;
      * @depends testCreateDraftFromCurrentVersion
      *
      * @param string $restContentVersionHref /api/ezp/v2/content/objects/<contentId>/versions>/<versionNumber>
-     * @covers DELETE /api/ezp/v2/content/objects/<contentId>/versions>/<versionNumber>
+     * Covers DELETE /api/ezp/v2/content/objects/<contentId>/versions>/<versionNumber>
      */
     public function testDeleteContentVersion($restContentVersionHref)
     {
@@ -261,7 +261,7 @@ XML;
 
     /**
      * @depends testCreateDraftFromVersion
-     * @covers PATCH /content/objects/<contentId>/versions>/<versionNumber>
+     * Covers PATCH /content/objects/<contentId>/versions>/<versionNumber>
      *
      * @param string $restContentVersionHref /content/objects/<contentId>/versions>/<versionNumber>
      */
@@ -290,7 +290,7 @@ XML;
 
     /**
      * @depends testPublishContent
-     * @covers GET /content/objects/<contentId>/relations
+     * Covers GET /content/objects/<contentId>/relations
      */
     public function testRedirectCurrentVersionRelations($restContentHref)
     {
@@ -308,7 +308,7 @@ XML;
 
     /**
      * @depends testCreateDraftFromVersion
-     * @covers GET /content/objects/<contentId>/versions/<versionNumber>/relations
+     * Covers GET /content/objects/<contentId>/versions/<versionNumber>/relations
      */
     public function testLoadVersionRelations($restContentVersionHref)
     {
@@ -321,7 +321,7 @@ XML;
 
     /**
      * @depends testCreateDraftFromVersion
-     * @covers POST /content/objects/<contentId>/versions/<versionNumber>/relations/<relationId>
+     * Covers POST /content/objects/<contentId>/versions/<versionNumber>/relations/<relationId>
      *
      * @return string created relation HREF (/content/objects/<contentId>/versions/<versionNumber>/relations/<relationId>
      */
@@ -348,7 +348,7 @@ XML;
 
     /**
      * @depends testCreateRelation
-     * @covers GET /content/objects/<contentId>/versions/<versionNo>/relations/<relationId>
+     * Covers GET /content/objects/<contentId>/versions/<versionNo>/relations/<relationId>
      */
     public function testLoadVersionRelation($restContentRelationHref)
     {

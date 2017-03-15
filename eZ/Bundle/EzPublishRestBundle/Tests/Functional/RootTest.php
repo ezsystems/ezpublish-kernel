@@ -16,7 +16,7 @@ class RootTest extends RESTFunctionalTestCase
     use AssertXmlTagTrait;
 
     /**
-     * @covers GET /
+     * Covers GET /.
      */
     public function testLoadRootResource()
     {
@@ -30,7 +30,7 @@ class RootTest extends RESTFunctionalTestCase
 
     /**
      * @dataProvider getRandomUriSet
-     * @covers GET /<wrongUri>
+     * Covers GET /<wrongUri>
      */
     public function testCatchAll($uri)
     {
