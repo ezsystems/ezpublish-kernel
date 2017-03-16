@@ -117,17 +117,17 @@ class Pattern implements RequestParser
             switch (true) {
                 case preg_match('(^[^{]+)', $pattern, $match):
                     $pattern = substr($pattern, strlen($match[0]));
-                    $pcre   .= preg_quote($match[0]);
+                    $pcre .= preg_quote($match[0]);
                     break;
 
                 case preg_match('(^' . self::STANDARD_VARIABLE_REGEX . ')', $pattern, $match):
                     $pattern = substr($pattern, strlen($match[0]));
-                    $pcre   .= '(?P<' . $match[1] . '>[^/]+)';
+                    $pcre .= '(?P<' . $match[1] . '>[^/]+)';
                     break;
 
                 case preg_match('(^' . self::SLASHES_VARIABLE_REGEX . ')', $pattern, $match):
                     $pattern = substr($pattern, strlen($match[0]));
-                    $pcre   .= '(?P<' . $match[1] . '>.+)';
+                    $pcre .= '(?P<' . $match[1] . '>.+)';
                     break;
 
                 default:

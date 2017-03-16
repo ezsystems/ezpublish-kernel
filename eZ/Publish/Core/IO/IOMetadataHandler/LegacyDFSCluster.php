@@ -160,7 +160,7 @@ SQL
         $stmt->bindValue(1, md5($path));
         $stmt->execute();
 
-        return ($stmt->rowCount() == 1);
+        return $stmt->rowCount() == 1;
     }
 
     /**

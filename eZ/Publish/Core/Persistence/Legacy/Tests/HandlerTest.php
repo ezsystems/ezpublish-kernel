@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Handler;
 class HandlerTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      */
     public function testContentHandler()
     {
@@ -35,7 +35,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      */
     public function testContentHandlerTwice()
     {
@@ -48,7 +48,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
      */
     public function testContentTypeHandler()
     {
@@ -62,7 +62,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentLanguageHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentLanguageHandler
      */
     public function testContentLanguageHandler()
     {
@@ -76,7 +76,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
      */
     public function testContentTypeHandlerTwice()
     {
@@ -89,7 +89,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
      */
     public function testLocationHandler()
     {
@@ -107,7 +107,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
      */
     public function testLocationHandlerTwice()
     {
@@ -120,7 +120,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
      */
     public function testUserHandler()
     {
@@ -138,7 +138,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
      */
     public function testUserHandlerTwice()
     {
@@ -151,7 +151,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
      */
     public function testSectionHandler()
     {
@@ -169,7 +169,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
      */
     public function testSectionHandlerTwice()
     {
@@ -182,7 +182,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
      */
     public function testUrlAliasHandler()
     {
@@ -200,7 +200,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
      */
     public function testUrlAliasHandlerTwice()
     {
@@ -213,7 +213,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
      */
     public function testTransactionHandler()
     {
@@ -231,7 +231,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
      */
     public function testTransactionHandlerTwice()
     {

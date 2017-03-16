@@ -44,7 +44,7 @@ class TrashItem extends APITrashItem
      *
      * Override to add dynamic properties
      *
-     * @uses parent::getProperties()
+     * @uses \parent::getProperties()
      *
      * @param array $dynamicProperties
      *

@@ -10,8 +10,6 @@ namespace eZ\Publish\SPI\Persistence\Content;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
-/**
- */
 class Field extends ValueObject
 {
     /**

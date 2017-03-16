@@ -60,7 +60,7 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testGetOptionsException()
     {

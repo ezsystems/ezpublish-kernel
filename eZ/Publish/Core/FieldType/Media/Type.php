@@ -25,13 +25,13 @@ class Type extends BaseType
     /**
      * List of possible media type settings.
      */
-    const TYPE_FLASH = 'flash',
-          TYPE_QUICKTIME = 'quick_time',
-          TYPE_REALPLAYER = 'real_player',
-          TYPE_SILVERLIGHT = 'silverlight',
-          TYPE_WINDOWSMEDIA = 'windows_media_player',
-          TYPE_HTML5_VIDEO = 'html5_video',
-          TYPE_HTML5_AUDIO = 'html5_audio';
+    const TYPE_FLASH = 'flash';
+    const TYPE_QUICKTIME = 'quick_time';
+    const TYPE_REALPLAYER = 'real_player';
+    const TYPE_SILVERLIGHT = 'silverlight';
+    const TYPE_WINDOWSMEDIA = 'windows_media_player';
+    const TYPE_HTML5_VIDEO = 'html5_video';
+    const TYPE_HTML5_AUDIO = 'html5_audio';
 
     /**
      * Type constants for validation.

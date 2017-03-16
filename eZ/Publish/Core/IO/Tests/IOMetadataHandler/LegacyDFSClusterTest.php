@@ -19,7 +19,7 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
     /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
     private $handler;
 
-    /** @var  \Doctrine\DBAL\Connection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Doctrine\DBAL\Connection|\PHPUnit_Framework_MockObject_MockObject */
     private $dbalMock;
 
     /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit_Framework_MockObject_MockObject */

@@ -39,7 +39,7 @@ class Visibility extends CriterionVisitor
      */
     protected function getInternalValue(Criterion $criterion)
     {
-        return ($criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false);
+        return $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false;
     }
 
     /**

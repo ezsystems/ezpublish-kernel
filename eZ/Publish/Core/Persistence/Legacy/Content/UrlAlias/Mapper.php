@@ -50,7 +50,7 @@ class Mapper
         $urlAlias->languageCodes = $this->languageMaskGenerator->extractLanguageCodesFromMask($data['lang_mask']);
         $urlAlias->alwaysAvailable = $this->languageMaskGenerator->isAlwaysAvailable($data['lang_mask']);
         $urlAlias->isHistory = isset($data['is_path_history']) ? $data['is_path_history'] : !$data['is_original'];
-        $urlAlias->isCustom = (boolean)$data['is_alias'];
+        $urlAlias->isCustom = (bool)$data['is_alias'];
         $urlAlias->forward = $data['is_alias'] && $data['alias_redirects'];
         $urlAlias->destination = $destination;
         $urlAlias->type = $type;

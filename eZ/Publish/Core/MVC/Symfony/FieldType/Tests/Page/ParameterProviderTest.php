@@ -14,7 +14,7 @@ use PHPUnit_Framework_TestCase;
 class ParameterProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider::getViewParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider::getViewParameters
      */
     public function testGetViewParameters()
     {

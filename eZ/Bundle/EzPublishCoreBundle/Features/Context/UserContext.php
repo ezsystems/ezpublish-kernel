@@ -362,6 +362,7 @@ class UserContext implements Context
     {
         $this->ensureUserExists($username, $email, $password);
     }
+
     /**
      * @Given there is a User with name :username in :parentGroup group
      *
@@ -375,6 +376,7 @@ class UserContext implements Context
         $password = $username;
         $user = $this->ensureUserExists($username, $email, $password, $parentGroupName);
     }
+
     /**
      * @Given there is a User with name :username, email :email and password :password in :parentGroup group
      *
@@ -396,6 +398,7 @@ class UserContext implements Context
     {
         $this->ensureUserDoesntExist($username);
     }
+
     /**
      * @Given there isn't a User with name :username in :parentGroup group
      *

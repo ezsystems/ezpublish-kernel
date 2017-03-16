@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 class MapperTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::createLanguageFromCreateStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::createLanguageFromCreateStruct
      */
     public function testCreateLanguageFromCreateStruct()
     {
@@ -37,7 +37,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::extractLanguagesFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::extractLanguagesFromRows
      */
     public function testExtractLanguagesFromRows()
     {

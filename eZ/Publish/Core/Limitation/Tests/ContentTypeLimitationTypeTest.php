@@ -391,7 +391,7 @@ class ContentTypeLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump($v);// intentional, debug in case no exception above
+        var_dump($v); // intentional, debug in case no exception above
     }
 
     /**

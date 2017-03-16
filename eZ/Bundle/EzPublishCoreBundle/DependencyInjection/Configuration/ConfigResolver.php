@@ -36,11 +36,11 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
 {
     use ContainerAwareTrait;
 
-    const SCOPE_GLOBAL = 'global',
-          SCOPE_DEFAULT = 'default';
+    const SCOPE_GLOBAL = 'global';
+    const SCOPE_DEFAULT = 'default';
 
-    const UNDEFINED_STRATEGY_EXCEPTION = 1,
-          UNDEFINED_STRATEGY_NULL = 2;
+    const UNDEFINED_STRATEGY_EXCEPTION = 1;
+    const UNDEFINED_STRATEGY_NULL = 2;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess

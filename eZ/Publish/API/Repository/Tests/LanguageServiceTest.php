@@ -151,7 +151,7 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the loadLanguageById() method.
      *
-     * @covers eZ\Publish\API\Repository\LanguageService::loadLanguageById
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testLoadLanguageById()

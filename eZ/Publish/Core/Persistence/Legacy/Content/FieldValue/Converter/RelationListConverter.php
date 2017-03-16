@@ -133,11 +133,11 @@ class RelationListConverter implements Converter
         $root->appendChild($constraints);
 
         $type = $doc->createElement('type');
-        $type->setAttribute('value', 2);//Deprecated advance object relation list type, set since 4.x does
+        $type->setAttribute('value', 2); //Deprecated advance object relation list type, set since 4.x does
         $root->appendChild($type);
 
         $objectClass = $doc->createElement('object_class');
-        $objectClass->setAttribute('value', '');//Deprecated advance object relation class type, set since 4.x does
+        $objectClass->setAttribute('value', ''); //Deprecated advance object relation class type, set since 4.x does
         $root->appendChild($objectClass);
 
         $selectionType = $doc->createElement('selection_type');

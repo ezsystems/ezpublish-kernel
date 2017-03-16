@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class UserTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers GET /user/groups/root
+     * Covers GET /user/groups/root.
      */
     public function loadRootUserGroup()
     {
@@ -25,7 +25,7 @@ class UserTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers POST /user/groups/{groupPath}/subgroups
+     * Covers POST /user/groups/{groupPath}/subgroups.
      *
      * @return string the created user group href
      */
@@ -71,7 +71,7 @@ XML;
 
     /**
      * @param $userGroupId
-     * @covers GET /user/groups/{groupId}
+     * Covers GET /user/groups/{groupId}
      * @depends testCreateUserGroup
      */
     public function testLoadUserGroup($groupId)
@@ -84,7 +84,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /user/groups/{groupPath}
+     * Covers PATCH /user/groups/{groupPath}.
      * @depends testCreateUserGroup
      */
     public function testUpdateUserGroup($groupHref)
@@ -117,7 +117,7 @@ XML;
 
     /**
      * @depends testCreateUserGroup
-     * @covers POST /user/groups/{groupPath}/users
+     * Covers POST /user/groups/{groupPath}/users
      *
      * @return string The created user  href
      */
@@ -166,7 +166,7 @@ XML;
 
     /**
      * @param $userId
-     * @covers GET /user/users/{userId}
+     * Covers GET /user/users/{userId}
      * @depends testCreateUser
      */
     public function testLoadUser($userHref)
@@ -180,7 +180,7 @@ XML;
 
     /**
      * @depends testCreateUser
-     * @covers PATCH /user/users/{userId}
+     * Covers PATCH /user/users/{userId}
      */
     public function testUpdateUser($userHref)
     {
@@ -211,7 +211,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/users
+     * Covers GET /user/users.
      */
     public function testLoadUsers()
     {
@@ -224,7 +224,7 @@ XML;
 
     /**
      * @depends testCreateUser
-     * @covers GET /user/users?remoteId={userRemoteId}
+     * Covers GET /user/users?remoteId={userRemoteId}
      */
     public function testLoadUserByRemoteId()
     {
@@ -237,7 +237,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/groups
+     * Covers GET /user/groups.
      */
     public function testLoadUserGroups()
     {
@@ -250,7 +250,7 @@ XML;
 
     /**
      * @depends testCreateUserGroup
-     * @covers GET /user/groups?remoteId={groupRemoteId}
+     * Covers GET /user/groups?remoteId={groupRemoteId}
      */
     public function testLoadUserGroupByRemoteId($groupHref)
     {
@@ -263,7 +263,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/users/{userId}/drafts
+     * Covers GET /user/users/{userId}/drafts.
      * @depends testCreateUser
      */
     public function testLoadUserDrafts($userHref)
@@ -277,7 +277,7 @@ XML;
 
     /**
      * @depends testCreateGroup
-     * @covers GET /user/groups/{groupPath}/subgroups
+     * Covers GET /user/groups/{groupPath}/subgroups
      */
     public function testLoadSubUserGroups($groupHref)
     {
@@ -289,7 +289,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/users/{userId}/groups
+     * Covers GET /user/users/{userId}/groups.
      * @depends testCreateUser
      */
     public function testLoadUserGroupsOfUser($userHref)
@@ -302,7 +302,7 @@ XML;
     }
 
     /**
-     * @covers GET /user/groups/<groupPath>/users
+     * Covers GET /user/groups/<groupPath>/users.
      * @depends testCreateUserGroup
      */
     public function testLoadUsersFromGroup($groupHref)
@@ -315,7 +315,7 @@ XML;
     }
 
     /**
-     * @covers POST /user/users/{userId}/groups
+     * Covers POST /user/users/{userId}/groups.
      * @depends testCreateUser
      *
      * @return string $userHref
@@ -333,7 +333,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /user/users/{userId}/groups/{groupPath}
+     * Covers DELETE /user/users/{userId}/groups/{groupPath}.
      * @depends testAssignUserToUserGroup
      */
     public function testUnassignUserFromUserGroup($userHref)
@@ -347,7 +347,7 @@ XML;
     }
 
     /**
-     * @covers MOVE /user/groups/{groupPath}
+     * Covers MOVE /user/groups/{groupPath}.
      * @depends testCreateUserGroup
      */
     public function testMoveUserGroup($groupHref)
@@ -361,7 +361,7 @@ XML;
 
     /**
      * @depends testCreateUser
-     * @covers POST /user/sessions
+     * Covers POST /user/sessions
      *
      * @return string The created session href
      */
@@ -397,7 +397,7 @@ XML;
 
     /**
      * @depends testCreateSession
-     * @covers DELETE /user/sessions/{sessionId}
+     * Covers DELETE /user/sessions/{sessionId}
      */
     public function testDeleteSession($sessionHref)
     {
@@ -411,7 +411,7 @@ XML;
 
     /**
      * @depends testCreateUser
-     * @covers DELETE /users/user/{userId}
+     * Covers DELETE /user/users/{userId}
      */
     public function testDeleteUser($userHref)
     {
@@ -424,7 +424,7 @@ XML;
 
     /**
      * @depends testCreateUserGroup
-     * @covers testCreateUserGroup
+     * Covers DELETE /user/users/{userId}
      */
     public function testDeleteUserGroup($groupHref)
     {

@@ -100,7 +100,7 @@ class ContentHandlerTest extends TestCase
     protected $contentTypeHandlerMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
      */
     public function testCtor()
     {
@@ -125,7 +125,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::create
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::create
      *
      * @todo Current method way to complex to test, refactor!
      */
@@ -225,7 +225,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::publish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::publish
      */
     public function testPublishFirstVersion()
     {
@@ -297,7 +297,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::publish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::publish
      */
     public function testPublish()
     {
@@ -373,7 +373,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::createDraftFromVersion
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::createDraftFromVersion
      */
     public function testCreateDraftFromVersion()
     {
@@ -464,7 +464,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
      */
     public function testLoad()
     {
@@ -510,7 +510,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadContentInfoByRemoteId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadContentInfoByRemoteId
      */
     public function testLoadContentInfoByRemoteId()
     {
@@ -535,7 +535,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadErrorNotFound()
@@ -575,7 +575,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateContent
      */
     public function testUpdateContent()
     {
@@ -676,7 +676,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateMetadata
      */
     public function testUpdateMetadata()
     {
@@ -714,7 +714,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateMetadata
      */
     public function testUpdateMetadataUpdatesPathIdentificationString()
     {
@@ -781,7 +781,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadRelations
      */
     public function testLoadRelations()
     {
@@ -814,7 +814,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadReverseRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadReverseRelations
      */
     public function testLoadReverseRelations()
     {
@@ -890,7 +890,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::removeRelation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::removeRelation
      */
     public function testRemoveRelation()
     {
@@ -948,7 +948,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadDraftsForUser
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadDraftsForUser
      */
     public function testLoadDraftsForUser()
     {
@@ -1017,7 +1017,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Test for the deleteContent() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
      */
     public function testDeleteContentWithLocations()
     {
@@ -1044,7 +1044,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Test for the deleteContent() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
      */
     public function testDeleteContentWithoutLocations()
     {
@@ -1063,7 +1063,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteVersion
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteVersion
      */
     public function testDeleteVersion()
     {
@@ -1126,7 +1126,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
      */
     public function testCopySingleVersion()
     {
@@ -1190,7 +1190,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
      */
     public function testCopyAllVersions()
     {
@@ -1364,7 +1364,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCopyThrowsNotFoundExceptionVersionNotFound()
@@ -1381,7 +1381,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::setStatus
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::setStatus
      */
     public function testSetStatus()
     {

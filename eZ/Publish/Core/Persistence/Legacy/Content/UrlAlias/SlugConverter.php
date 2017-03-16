@@ -251,10 +251,10 @@ class SlugConverter
                 $text = preg_replace(
                     array(
                         '#[^a-zA-Z0-9_!.-]+#',
-                        '#^[.]+|[!.]+$#', # Remove dots at beginning/end
-                        "#\.\.+#", # Remove double dots
-                        "#[{$sepQ}]+#", # Turn multiple separators into one
-                        "#^[{$sepQ}]+|[{$sepQ}]+$#", # Strip separator from beginning/end
+                        '#^[.]+|[!.]+$#', // Remove dots at beginning/end
+                        "#\.\.+#", // Remove double dots
+                        "#[{$sepQ}]+#", // Turn multiple separators into one
+                        "#^[{$sepQ}]+|[{$sepQ}]+$#", // Strip separator from beginning/end
                     ),
                     array(
                         $sep,
@@ -283,9 +283,9 @@ class SlugConverter
                 $text = preg_replace(
                     array(
                         "#[ \\\\%\#&;/:=?\[\]()+]+#",
-                        '#^[.]+|[!.]+$#', # Remove dots at beginning/end
-                        "#\.\.+#", # Remove double dots
-                        "#[{$sepQ}]+#", # Turn multiple separators into one
+                        '#^[.]+|[!.]+$#', // Remove dots at beginning/end
+                        "#\.\.+#", // Remove double dots
+                        "#[{$sepQ}]+#", // Turn multiple separators into one
                         "#^[{$prepost}]+|[{$prepost}]+$#",
                     ),
                     array(

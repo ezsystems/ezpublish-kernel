@@ -171,7 +171,6 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalAnd(
                     [
-
                         new Criterion\ContentId($contentId),
                         new Criterion\LogicalNot(
                             new Criterion\LogicalNot(

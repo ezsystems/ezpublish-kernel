@@ -40,8 +40,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     private $repository;
 
-    /**
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -309,7 +307,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Create a user in new user group with editor rights limited to Media Library (/1/48/).
      *
-     * @uses createCustomUserVersion1()
+     * @uses ::createCustomUserVersion1()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */

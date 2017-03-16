@@ -126,7 +126,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinition
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinition
      */
     public function testGetZoneDefinition()
     {
@@ -134,7 +134,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
      */
     public function testGetZoneDefinitionByLayout()
     {
@@ -142,9 +142,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
      */
     public function testGetZoneDefinitionByLayoutInvalidLayout()
     {
@@ -161,7 +161,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getLayoutTemplateProvider
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
      */
     public function testGetLayoutTemplate($zoneLayout, $expectedTemplate)
     {
@@ -169,9 +169,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
      */
     public function testGetLayoutTemplateInvalidLayout()
     {
@@ -190,7 +190,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasZoneLayoutProvider
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasZoneLayout
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasZoneLayout
      *
      * @param string $layout
      * @param bool $expectedResult
@@ -201,7 +201,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getAvailableZoneLayouts
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getAvailableZoneLayouts
      */
     public function testGetAvailableZoneLayouts()
     {
@@ -209,7 +209,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinition
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinition
      */
     public function testGetBlockDefinition()
     {
@@ -217,7 +217,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
      */
     public function testGetBlockDefinitionByIdentifier()
     {
@@ -225,9 +225,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
      */
     public function testGetBlockDefinitionByIdentifierInvalidBlock()
     {
@@ -246,7 +246,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasBlockDefinitionProvider
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasBlockDefinition
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasBlockDefinition
      *
      * @param string $blockIdentifier
      * @param bool $expectedResult
@@ -267,8 +267,8 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::setStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::setStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
      */
     public function testGetStorageGateway()
     {
@@ -278,11 +278,11 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
      */
     public function testGetValidBlockItemsNoGateway()
     {
@@ -290,9 +290,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
      */
     public function testGetValidBlockItems()
     {
@@ -314,9 +314,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getLastValidBlockItem
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getLastValidBlockItem
      */
     public function testGetLastValidBlockItem()
     {
@@ -335,9 +335,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getWaitingBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getWaitingBlockItems
      */
     public function testGetWaitingBlockItems()
     {
@@ -359,9 +359,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getArchivedBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getArchivedBlockItems
      */
     public function testGetArchivedBlockItems()
     {

@@ -15,8 +15,8 @@ use PHPUnit_Framework_TestCase;
 class SymfonyEventConverterSlotTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot::receive
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot::__construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot::receive
      */
     public function testReceive()
     {
