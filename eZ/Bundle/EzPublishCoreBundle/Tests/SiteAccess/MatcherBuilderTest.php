@@ -25,9 +25,9 @@ class MatcherBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
-     * @covers eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder::buildMatcher
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder::buildMatcher
      */
     public function testBuildMatcherNoService()
     {
@@ -41,10 +41,10 @@ class MatcherBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      *
-     * @covers eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
      */
     public function testBuildMatcherServiceWrongInterface()
     {
@@ -59,8 +59,8 @@ class MatcherBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
      */
     public function testBuildMatcherService()
     {

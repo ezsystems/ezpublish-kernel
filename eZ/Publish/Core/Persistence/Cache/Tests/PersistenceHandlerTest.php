@@ -16,7 +16,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::__construct
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::__construct
      */
     public function testHandler()
     {
@@ -27,7 +27,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::contentHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::contentHandler
      */
     public function testContentHandler()
     {
@@ -40,7 +40,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::contentLanguageHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::contentLanguageHandler
      */
     public function testLanguageHandler()
     {
@@ -53,7 +53,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::contentTypeHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::contentTypeHandler
      */
     public function testContentTypeHandler()
     {
@@ -66,7 +66,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::locationHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::locationHandler
      */
     public function testContentLocationHandler()
     {
@@ -79,7 +79,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::trashHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::trashHandler
      */
     public function testTrashHandler()
     {
@@ -92,7 +92,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::objectStateHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::objectStateHandler
      */
     public function testObjectStateHandler()
     {
@@ -105,7 +105,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::sectionHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::sectionHandler
      */
     public function testSectionHandler()
     {
@@ -118,7 +118,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::userHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::userHandler
      */
     public function testUserHandler()
     {
@@ -131,7 +131,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::urlAliasHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::urlAliasHandler
      */
     public function testUrlAliasHandler()
     {
@@ -144,7 +144,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::urlWildcardHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::urlWildcardHandler
      */
     public function testUrlWildcardHandler()
     {
@@ -156,7 +156,7 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type.
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::transactionHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\Handler::transactionHandler
      */
     public function testTransactionHandler()
     {

@@ -260,7 +260,6 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     public static function providerForTestGetName()
     {
         return array(
-
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"

@@ -173,7 +173,7 @@ class FullText extends CriterionHandler
     /**
      * Get subquery to select relevant word IDs.
      *
-     * @uses getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
+     * @uses ::getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $string

@@ -253,12 +253,12 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         }
 
         // Compare loaded UrlAlias with requested path, prefixed with configured path prefix.
-        return (
+        return
             strcmp(
                 $loadedUrlAlias->path,
                 $pathPrefix . ($pathPrefix === '/' ? trim($requestedPath, '/') : rtrim($requestedPath, '/'))
             ) !== 0
-        );
+        ;
     }
 
     /**

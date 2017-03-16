@@ -308,7 +308,7 @@ class DomainMapper
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
         if ($spiLocation->id == 1) {
-            $legacyDateTime = $this->getDateTime(1030968000); //  first known commit of eZ Publish 3.x 
+            $legacyDateTime = $this->getDateTime(1030968000); //  first known commit of eZ Publish 3.x
             $contentInfo = new ContentInfo(
                 array(
                     'id' => 0,

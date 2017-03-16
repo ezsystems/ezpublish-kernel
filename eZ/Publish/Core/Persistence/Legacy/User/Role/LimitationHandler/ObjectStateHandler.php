@@ -35,7 +35,7 @@ class ObjectStateHandler extends LimitationHandler
                 $map = $this->getGroupMap($policy->limitations[Limitation::STATE]);
             }
             $policy->limitations += $map;
-            unset($policy->limitations[ Limitation::STATE ]);
+            unset($policy->limitations[Limitation::STATE]);
         }
     }
 

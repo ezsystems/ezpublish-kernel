@@ -246,7 +246,7 @@ abstract class LegacyStorage extends Gateway
     {
         $propertyMap = $this->getPropertyMapping();
 
-        return ($propertyMap[$columnName]['name']);
+        return $propertyMap[$columnName]['name'];
     }
 
     /**

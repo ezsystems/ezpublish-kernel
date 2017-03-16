@@ -239,7 +239,7 @@ class Handler implements SearchHandlerInterface
         $searchQuery->filter = $filter;
         $searchQuery->query = new Criterion\MatchAll();
         $searchQuery->offset = 0;
-        $searchQuery->limit = 2;// Because we optimize away the count query below
+        $searchQuery->limit = 2; // Because we optimize away the count query below
         $searchQuery->performCount = true;
         $searchQuery->sortClauses = null;
         $result = $this->findContent($searchQuery, $languageFilter);

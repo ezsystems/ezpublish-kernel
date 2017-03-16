@@ -40,7 +40,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     protected $languageHandlerMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::__construct
      */
     public function testConstruct()
     {
@@ -64,7 +64,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::beginTransaction
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::beginTransaction
      */
     public function testBeginTransaction()
     {
@@ -83,7 +83,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
      */
     public function testCommit()
     {
@@ -102,7 +102,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage test
@@ -125,7 +125,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
      */
     public function testRollback()
     {
@@ -144,7 +144,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage test

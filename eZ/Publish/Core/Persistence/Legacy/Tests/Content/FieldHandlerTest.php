@@ -122,7 +122,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
      */
     public function testCreateNewFields()
     {
@@ -143,7 +143,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
      */
     public function testCreateNewFieldsUpdatingStorageHandler()
     {
@@ -215,7 +215,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
      */
     public function testCreateNewFieldsForMainLanguage()
     {
@@ -236,7 +236,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
      */
     public function testCreateNewFieldsForMainLanguageUpdatingStorageHandler()
     {
@@ -307,7 +307,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createExistingFieldsInNewVersion
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createExistingFieldsInNewVersion
      */
     public function testCreateExistingFieldsInNewVersion()
     {
@@ -325,7 +325,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createExistingFieldsInNewVersion
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createExistingFieldsInNewVersion
      */
     public function testCreateExistingFieldsInNewVersionUpdatingStorageHandler()
     {
@@ -351,7 +351,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::loadExternalFieldData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::loadExternalFieldData
      */
     public function testLoadExternalFieldData()
     {
@@ -430,7 +430,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsWithNewLanguage()
     {
@@ -465,7 +465,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsWithNewLanguageUpdatingStorageHandler()
     {
@@ -561,7 +561,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsExistingLanguages()
     {
@@ -591,7 +591,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsExistingLanguagesUpdatingStorageHandler()
     {
@@ -672,7 +672,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsForInitialLanguage()
     {
@@ -697,7 +697,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsForInitialLanguageUpdatingStorageHandler()
     {
@@ -730,7 +730,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
      */
     public function testDeleteFields()
     {

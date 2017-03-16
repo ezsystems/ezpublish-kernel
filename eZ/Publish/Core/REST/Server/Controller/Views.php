@@ -26,6 +26,7 @@ class Views extends Controller
     {
         $this->searchService = $searchService;
     }
+
     /**
      * Creates and executes a content view.
      *

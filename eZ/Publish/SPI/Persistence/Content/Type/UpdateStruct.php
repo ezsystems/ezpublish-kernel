@@ -10,8 +10,6 @@ namespace eZ\Publish\SPI\Persistence\Content\Type;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
-/**
- */
 class UpdateStruct extends ValueObject
 {
     /**

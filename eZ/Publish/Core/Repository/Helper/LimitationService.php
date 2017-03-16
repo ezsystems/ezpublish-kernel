@@ -57,7 +57,7 @@ class LimitationService
     /**
      * Validates an array of Limitations.
      *
-     * @uses validateLimitation()
+     * @uses ::validateLimitation()
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
      *

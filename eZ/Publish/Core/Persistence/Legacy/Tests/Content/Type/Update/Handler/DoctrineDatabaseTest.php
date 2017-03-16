@@ -32,7 +32,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     protected $contentUpdaterMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::updateContentObjects
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::updateContentObjects
      */
     public function testUpdateContentObjects()
     {
@@ -64,7 +64,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::deleteOldType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::deleteOldType
      */
     public function testDeleteOldType()
     {
@@ -85,7 +85,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::publishNewType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::publishNewType
      */
     public function testPublishNewType()
     {

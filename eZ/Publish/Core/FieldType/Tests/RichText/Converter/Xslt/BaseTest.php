@@ -123,8 +123,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         if (isset($validator)) {
             // As assert below validated converted and output is the same, validate ouput here to get right line number.
             $errors = $validator->validate($outputDocument);
-            $this->assertTrue(
-                empty($errors),
+            $this->assertEmpty(
+                $errors,
                 'Conversion result did not validate against the configured schemas:' .
                 $this->formatValidationErrors($outputFile, $errors)
             );

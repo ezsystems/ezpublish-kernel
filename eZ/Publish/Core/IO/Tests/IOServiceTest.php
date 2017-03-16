@@ -50,6 +50,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
             array('prefix' => self::PREFIX)
         );
     }
+
     /**
      * Test creating new BinaryCreateStruct from uploaded file.
      *
@@ -59,7 +60,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
     {
         self::markTestSkipped('Test skipped as it seems to depend on php-cgi');
         $uploadTest = $this->getFileUploadTest();
-        $result = $uploadTest->run();// Fails because of unset cgi param and missing php-cgi exe
+        $result = $uploadTest->run(); // Fails because of unset cgi param and missing php-cgi exe
         // Params bellow makes the code execute but fails:
         //->run( null, array( 'cgi' => 'php' ) );
 

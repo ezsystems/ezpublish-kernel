@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\SPI\Persistence\Content\Section;
 
-/**
- */
 interface Handler
 {
     /**

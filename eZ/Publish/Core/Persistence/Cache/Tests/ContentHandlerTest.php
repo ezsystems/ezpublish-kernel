@@ -54,7 +54,7 @@ class ContentHandlerTest extends HandlerTest
 
     /**
      * @dataProvider providerForUnCachedMethods
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler
      */
     public function testUnCachedMethods($method, array $arguments)
     {
@@ -88,7 +88,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::load
      */
     public function testLoadCacheIsMiss()
     {
@@ -152,7 +152,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::load
      */
     public function testLoadHasCache()
     {
@@ -201,7 +201,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::loadContentInfo
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadContentInfo
      */
     public function testLoadContentInfoCacheIsMiss()
     {
@@ -255,7 +255,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::loadContentInfo
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadContentInfo
      */
     public function testLoadContentInfoHasCache()
     {
@@ -294,7 +294,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::setStatus
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::setStatus
      */
     public function testSetStatus()
     {
@@ -323,7 +323,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::setStatus
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::setStatus
      */
     public function testSetStatusPublished()
     {
@@ -358,7 +358,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::updateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::updateMetadata
      */
     public function testUpdateMetadata()
     {
@@ -399,7 +399,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::updateContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::updateContent
      */
     public function testUpdateContent()
     {
@@ -460,7 +460,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::deleteContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::deleteContent
      */
     public function testDeleteContent()
     {
@@ -543,7 +543,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::deleteVersion
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::deleteVersion
      */
     public function testDeleteVersion()
     {
@@ -590,7 +590,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::publish
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::publish
      */
     public function testPublish()
     {

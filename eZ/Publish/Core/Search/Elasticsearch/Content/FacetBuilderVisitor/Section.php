@@ -26,7 +26,7 @@ class Section extends FacetBuilderVisitor
      */
     public function canMap($name)
     {
-        return (substr($name, 0, 9) === 'section__');
+        return substr($name, 0, 9) === 'section__';
     }
 
     /**

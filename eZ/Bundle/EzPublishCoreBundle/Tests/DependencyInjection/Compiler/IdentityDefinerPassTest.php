@@ -34,7 +34,7 @@ class IdentityDefinerPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass::process
      */
     public function testSetIdentityDefiner()
     {

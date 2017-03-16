@@ -26,7 +26,7 @@ class ContentType extends FacetBuilderVisitor
      */
     public function canMap($name)
     {
-        return (substr($name, 0, 6) === 'type__');
+        return substr($name, 0, 6) === 'type__';
     }
 
     /**

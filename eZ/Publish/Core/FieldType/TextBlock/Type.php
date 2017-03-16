@@ -184,7 +184,7 @@ class Type extends FieldType
             if (isset($this->settingsSchema[$name])) {
                 switch ($name) {
                     case 'textRows':
-                        if (!is_integer($value)) {
+                        if (!is_int($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' value must be of integer type",
                                 null,

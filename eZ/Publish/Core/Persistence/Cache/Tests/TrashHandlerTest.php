@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trashed as SPITrashed;
 class TrashHandlerTest extends HandlerTest
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::loadTrashItem
+     * @covers \eZ\Publish\Core\Persistence\Cache\TrashHandler::loadTrashItem
      */
     public function testLoadTrashItem()
     {
@@ -51,7 +51,7 @@ class TrashHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::trashSubtree
+     * @covers \eZ\Publish\Core\Persistence\Cache\TrashHandler::trashSubtree
      */
     public function testTrashSubtree()
     {
@@ -98,7 +98,7 @@ class TrashHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::recover
+     * @covers \eZ\Publish\Core\Persistence\Cache\TrashHandler::recover
      */
     public function testRecover()
     {
@@ -141,7 +141,7 @@ class TrashHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::findTrashItems
+     * @covers \eZ\Publish\Core\Persistence\Cache\TrashHandler::findTrashItems
      */
     public function testFindTrashItems()
     {
@@ -172,7 +172,7 @@ class TrashHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::emptyTrash
+     * @covers \eZ\Publish\Core\Persistence\Cache\TrashHandler::emptyTrash
      */
     public function testEmptyTrash()
     {
@@ -198,7 +198,7 @@ class TrashHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::deleteTrashItem
+     * @covers \eZ\Publish\Core\Persistence\Cache\TrashHandler::deleteTrashItem
      */
     public function testDeleteTrashItem()
     {

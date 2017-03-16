@@ -25,7 +25,7 @@ class CacheTest extends TestCase
     protected $cache;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::store
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::store
      */
     public function testStore()
     {
@@ -52,7 +52,7 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::remove
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::remove
      */
     public function testRemove()
     {
@@ -76,7 +76,7 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
      */
     public function testGetById()
     {
@@ -93,8 +93,8 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetByIdFailure()
     {
@@ -107,7 +107,7 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
      */
     public function testGetByLocale()
     {
@@ -124,8 +124,8 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetByLocaleFailure()
     {
@@ -138,7 +138,7 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getAll
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getAll
      */
     public function testGetAll()
     {

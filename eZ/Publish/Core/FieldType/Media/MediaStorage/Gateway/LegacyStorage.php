@@ -35,20 +35,20 @@ class LegacyStorage extends BaseLegacyStorage
         $propertyMap['has_controller'] = array(
             'name' => 'hasController',
             'cast' => function ($val) {
-                    return (bool)$val;
-                },
+                return (bool)$val;
+            },
         );
         $propertyMap['is_autoplay'] = array(
             'name' => 'autoplay',
             'cast' => function ($val) {
-                    return (bool)$val;
-                },
+                return (bool)$val;
+            },
         );
         $propertyMap['is_loop'] = array(
             'name' => 'loop',
             'cast' => function ($val) {
-                    return (bool)$val;
-                },
+                return (bool)$val;
+            },
         );
         $propertyMap['width'] = array(
             'name' => 'width',

@@ -43,7 +43,7 @@ class StringLengthValidator extends Validator
             switch ($name) {
                 case 'minStringLength':
                 case 'maxStringLength':
-                    if ($value !== false && !is_integer($value) && !(null === $value)) {
+                    if ($value !== false && !is_int($value) && !(null === $value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,

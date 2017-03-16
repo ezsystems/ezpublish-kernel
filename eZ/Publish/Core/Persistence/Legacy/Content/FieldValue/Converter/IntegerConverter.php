@@ -28,7 +28,7 @@ class IntegerConverter implements Converter
      *
      * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\IntegerConverter
+     * @return static
      */
     public static function create()
     {

@@ -76,10 +76,10 @@ class ObjectStateGroupTest extends PHPUnit_Framework_TestCase
     {
         $objectStateGroup = new ObjectStateGroup();
         $value = isset($objectStateGroup->notDefined);
-        $this->assertEquals(false, $value);
+        $this->assertFalse($value);
 
         $value = isset($objectStateGroup->id);
-        $this->assertEquals(true, $value);
+        $this->assertTrue($value);
     }
 
     /**

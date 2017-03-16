@@ -970,17 +970,17 @@ class SearchServiceTest extends BaseTest
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct(2);// Home
+        $locationCreateStruct = $locationService->newLocationCreateStruct(2); // Home
 
         $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
         $createStruct->setField('name', 'Image gallery');
-        $createStruct->setField('image', 49);// Images folder
+        $createStruct->setField('image', 49); // Images folder
         $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
         $contentService->publishVersion($draft->getVersionInfo());
 
         $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
         $createStruct->setField('name', 'User gallery');
-        $createStruct->setField('image', 4);// User folder
+        $createStruct->setField('image', 4); // User folder
         $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
         $contentService->publishVersion($draft->getVersionInfo());
 
@@ -996,7 +996,7 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindRelationFieldContentInfoFiltered($queryData, $fixture)
     {
-        $this->getRepository(false);// To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
+        $this->getRepository(false); // To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
         $query = new Query($queryData);
         $this->assertQueryFixture($query, $fixture, null, true, true, false);
     }
@@ -1010,7 +1010,7 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindRelationFieldLocationsFiltered($queryData, $fixture)
     {
-        $this->getRepository(false);// To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
+        $this->getRepository(false); // To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
         $query = new LocationQuery($queryData);
         $this->assertQueryFixture($query, $fixture, null, true, false, false);
     }
