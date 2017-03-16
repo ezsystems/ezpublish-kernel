@@ -237,8 +237,8 @@ class DateAndTimeTest extends FieldTypeTest
         );
         if ($expectedResult->value !== null) {
             $this->assertLessThan(
-                $expectedResult->value->getTimestamp() + 20,
-                $actualResult->value->getTimestamp(),
+                $expectedResult->value->add(new DateInterval('PT20S')),
+                $actualResult->value,
                 'fromHash() method did not create expected result.'
             );
         }
@@ -249,33 +249,6 @@ class DateAndTimeTest extends FieldTypeTest
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
-     * For example:
-     *
-     * <code>
-     *  return array(
-     *      array(
-     *          null,
-     *          null
-     *      ),
-     *      array(
-     *          array(
-     *              'path' => 'some/file/here',
-     *              'fileName' => 'sindelfingen.jpg',
-     *              'fileSize' => 2342,
-     *              'downloadCount' => 0,
-     *              'mimeType' => 'image/jpeg',
-     *          ),
-     *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
-     *              'fileName' => 'sindelfingen.jpg',
-     *              'fileSize' => 2342,
-     *              'downloadCount' => 0,
-     *              'mimeType' => 'image/jpeg',
-     *          ) )
-     *      ),
-     *      // ...
-     *  );
-     * </code>
      *
      * @return array
      */
@@ -301,17 +274,72 @@ class DateAndTimeTest extends FieldTypeTest
                 ),
                 DateAndTimeValue::fromTimestamp($date->getTimeStamp()),
             ),
+        );
+    }
+
+    /**
+     * @param mixed $inputValue
+     * @param string $intervalSpec
+     *
+     * @dataProvider provideInputForTimeStringFromHash
+     */
+    public function testTimeStringFromHash($inputHash, $intervalSpec)
+    {
+        $this->assertIsValidHashValue($inputHash);
+
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $expectedResult = new DateAndTimeValue(new \DateTime());
+        $expectedResult->value->add(new DateInterval($intervalSpec));
+
+        $actualResult = $fieldType->fromHash($inputHash);
+
+        // Tests may run slowly. Allow 20 seconds margin of error.
+        $this->assertGreaterThanOrEqual(
+            $expectedResult,
+            $actualResult,
+            'fromHash() method did not create expected result.'
+        );
+        if ($expectedResult->value !== null) {
+            $this->assertLessThan(
+                $expectedResult->value->add(new DateInterval('PT20S')),
+                $actualResult->value,
+                'fromHash() method did not create expected result.'
+            );
+        }
+    }
+
+    /**
+     * Provide input to testTimeStringFromHash() method.
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. A valid
+     * timestring input to fromHash(), 2. An interval specification string,
+     * from which can be created a DateInterval which can be added to the
+     * current DateTime, to be compared with the expected return value from
+     * fromHash().
+     *
+     * @return array
+     */
+    public function provideInputForTimeStringFromHash()
+    {
+        return array(
             array(
                 array(
                     'timestring' => 'now',
                 ),
-                DateAndTimeValue::fromTimestamp(time()),
+                'P0Y',
             ),
             array(
                 array(
                     'timestring' => '+42 seconds',
                 ),
-                DateAndTimeValue::fromTimestamp(time() + 42),
+                'PT42S',
+            ),
+            array(
+                array(
+                    'timestring' => '+3 months 2 days 5 hours',
+                ),
+                'P3M2DT5H',
             ),
         );
     }
