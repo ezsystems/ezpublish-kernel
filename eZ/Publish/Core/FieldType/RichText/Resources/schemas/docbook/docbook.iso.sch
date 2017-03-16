@@ -246,6 +246,7 @@
     <s:rule context="db:link">
       <s:assert test="not(.//db:link)">link must not occur in the descendants of link</s:assert>
       <s:assert test="not(.//db:ezlink)">ezlink must not occur in the descendants of link</s:assert>
+      <s:assert test="not(contains(@*[name()='xlink:href'], 'javascript:') or contains(@*[name()='xlink:href'], 'vbscript:'))">using scripts in links is not allowed</s:assert>
     </s:rule>
   </s:pattern>
 </s:schema>
