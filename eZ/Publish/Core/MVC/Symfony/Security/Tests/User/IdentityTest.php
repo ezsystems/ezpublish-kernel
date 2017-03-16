@@ -13,9 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\Security\User\Identity;
 class IdentityTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::addInformation
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getInformation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::addInformation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getInformation
      */
     public function testAddInformation()
     {
@@ -41,9 +41,9 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::replaceInformation
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getInformation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::replaceInformation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getInformation
      */
     public function testReplaceInformation()
     {
@@ -69,9 +69,9 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::setInformation
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getInformation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::setInformation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getInformation
      */
     public function testSetInformation()
     {
@@ -91,9 +91,9 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::setInformation
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getHash
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::setInformation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::getHash
      */
     public function testGetHash()
     {

@@ -21,7 +21,7 @@ class TrashTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers GET /content/trash
+     * Covers GET /content/trash.
      */
     public function testLoadTrashItems()
     {
@@ -34,7 +34,7 @@ class TrashTest extends RESTFunctionalTestCase
 
     /**
      * @depends testCreateTrashItem
-     * @covers GET /content/trash/{trashItemId}
+     * Covers GET /content/trash/{trashItemId}
      */
     public function testLoadTrashItem($trashItemHref)
     {
@@ -46,7 +46,7 @@ class TrashTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers DELETE /content/trash/{trashItemId}
+     * Covers DELETE /content/trash/{trashItemId}.
      * @depends testCreateTrashItem
      */
     public function testDeleteTrashItem($trashItemId)
@@ -62,7 +62,7 @@ class TrashTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers MOVE /content/trash/{trashItemId}
+     * Covers MOVE /content/trash/{trashItemId}.
      * @depends testCreateTrashItem
      */
     public function testRestoreTrashItem($trashItemId)
@@ -78,7 +78,7 @@ class TrashTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers MOVE /content/trash/{trashItemId} Destination:/content/locations/{locationPath}
+     * Covers MOVE /content/trash/{trashItemId} Destination:/content/locations/{locationPath}.
      */
     public function testRestoreTrashItemWithDestination()
     {
@@ -94,7 +94,7 @@ class TrashTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers DELETE /content/trash
+     * Covers DELETE /content/trash.
      */
     public function testEmptyTrash()
     {

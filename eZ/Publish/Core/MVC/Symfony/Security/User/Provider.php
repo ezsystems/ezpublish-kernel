@@ -95,7 +95,7 @@ class Provider implements APIUserProviderInterface
      *
      * @param string $class
      *
-     * @return Boolean
+     * @return bool
      */
     public function supportsClass($class)
     {

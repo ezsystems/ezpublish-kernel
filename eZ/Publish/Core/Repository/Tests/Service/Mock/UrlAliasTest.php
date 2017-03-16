@@ -229,7 +229,7 @@ class UrlAliasTest extends BaseServiceMockTest
     /**
      * Test for the removeAliases() method.
      *
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
      */
     public function testRemoveAliasesWithRollback()
@@ -3231,7 +3231,7 @@ class UrlAliasTest extends BaseServiceMockTest
     /**
      * Test for the createUrlAlias() method.
      *
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
      */
     public function testCreateUrlAliasWithRollback()
@@ -3355,7 +3355,7 @@ class UrlAliasTest extends BaseServiceMockTest
     /**
      * Test for the createGlobalUrlAlias() method.
      *
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
      */
     public function testCreateGlobalUrlAliasWithRollback()

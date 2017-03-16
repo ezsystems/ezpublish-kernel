@@ -63,7 +63,7 @@ class Type extends FieldType
                 switch ($name) {
                     case 'minIntegerValue':
                     case 'maxIntegerValue':
-                        if ($value !== null && !is_integer($value)) {
+                        if ($value !== null && !is_int($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Validator parameter '%parameter%' value must be of integer type",
                                 null,

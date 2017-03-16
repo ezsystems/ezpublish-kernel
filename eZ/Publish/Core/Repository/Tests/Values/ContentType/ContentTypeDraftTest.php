@@ -12,9 +12,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use PHPUnit_Framework_TestCase;
 
-/**
- *
- */
 class ContentTypeDraftTest extends PHPUnit_Framework_TestCase
 {
     /**

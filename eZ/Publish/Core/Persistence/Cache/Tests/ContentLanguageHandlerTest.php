@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct as SPILanguageCreat
 class ContentLanguageHandlerTest extends HandlerTest
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::create
      */
     public function testCreate()
     {
@@ -67,7 +67,7 @@ class ContentLanguageHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::delete
      */
     public function testDelete()
     {
@@ -97,7 +97,7 @@ class ContentLanguageHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::load
      */
     public function testLoadCacheIsMiss()
     {
@@ -153,7 +153,7 @@ class ContentLanguageHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::load
      */
     public function testLoadHasCache()
     {
@@ -194,7 +194,7 @@ class ContentLanguageHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::loadAll
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::loadAll
      */
     public function testLoadAll()
     {
@@ -219,7 +219,7 @@ class ContentLanguageHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::loadByLanguageCode
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::loadByLanguageCode
      */
     public function testLoadByLanguageCode()
     {
@@ -251,7 +251,7 @@ class ContentLanguageHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::update
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler::update
      */
     public function testUpdate()
     {

@@ -82,7 +82,7 @@ class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
         }
 
         $where = count($this->where)
-            ? ' WHERE ' .  implode(' AND ', $this->where)
+            ? ' WHERE ' . implode(' AND ', $this->where)
             : '';
 
         return 'DELETE FROM ' . $this->table . $where;

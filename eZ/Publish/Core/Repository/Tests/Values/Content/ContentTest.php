@@ -11,9 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use PHPUnit_Framework_TestCase;
 
-/**
- *
- */
 class ContentTest extends PHPUnit_Framework_TestCase
 {
     /**

@@ -169,8 +169,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function assertIOUriExists($uri)
     {
-        $this->assertTrue(
-            file_exists(self::$tmpDir . '/' . $uri),
+        $this->assertFileExists(
+            self::$tmpDir . '/' . $uri,
             "Stored file uri $uri does not exist"
         );
     }
@@ -183,8 +183,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected function assertIOIdExists($id)
     {
         $path = $this->getPathFromId($id);
-        $this->assertTrue(
-            file_exists($path),
+        $this->assertFileExists(
+            $path,
             "Stored file $path does not exists"
         );
     }

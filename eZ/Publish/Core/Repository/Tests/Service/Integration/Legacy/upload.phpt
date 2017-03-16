@@ -23,16 +23,16 @@ Upload
 --FILE--
 <?php
 
-chdir( __DIR__ . '/../../../../../../../' );
+chdir(__DIR__ . '/../../../../../../../');
 
 require_once 'bootstrap.php';
 require_once 'PHPUnit/Autoload.php';
 
-$repository = \eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy\IOUploadPHPT::getRepository( array() );
+$repository = \eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy\IOUploadPHPT::getRepository(array());
 
-$binaryCreateStruct = $repository->getIOService()->newBinaryCreateStructFromUploadedFile( $_FILES['file'] );
+$binaryCreateStruct = $repository->getIOService()->newBinaryCreateStructFromUploadedFile($_FILES['file']);
 
-var_dump( $binaryCreateStruct instanceof \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct );
+var_dump($binaryCreateStruct instanceof \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct);
 
 ?>
 --EXPECT--

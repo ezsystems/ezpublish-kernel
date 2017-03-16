@@ -17,7 +17,7 @@ class LazyRepositoryFactoryTest extends \PHPUnit_Framework_TestCase
         $repositoryMock = $this->getMock('eZ\\Publish\\API\\Repository\\Repository');
         $factory = new LazyRepositoryFactory($repositoryMock);
         $lazyRepository = $factory->buildRepository();
-        $this->assertTrue(is_callable($lazyRepository));
+        $this->assertInternalType('callable', $lazyRepository);
 
         // Calling several times to ensure container is called only once.
         $this->assertSame($repositoryMock, $lazyRepository());

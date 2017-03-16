@@ -10,8 +10,6 @@ namespace eZ\Publish\SPI\Persistence\User;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
-/**
- */
 class RoleUpdateStruct extends ValueObject
 {
     /**

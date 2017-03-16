@@ -40,8 +40,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     private $repository;
 
-    /**
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -136,7 +134,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function isVersion4()
     {
-        return (isset($_ENV['backendVersion']) && '4' === $_ENV['backendVersion']);
+        return isset($_ENV['backendVersion']) && '4' === $_ENV['backendVersion'];
     }
 
     /**
@@ -309,7 +307,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Create a user in new user group with editor rights limited to Media Library (/1/48/).
      *
-     * @uses createCustomUserVersion1()
+     * @uses ::createCustomUserVersion1()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */

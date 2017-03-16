@@ -44,7 +44,7 @@ class Location extends APILocation
      *
      * Override to add dynamic properties
      *
-     * @uses parent::getProperties()
+     * @uses \parent::getProperties()
      *
      * @param array $dynamicProperties
      *

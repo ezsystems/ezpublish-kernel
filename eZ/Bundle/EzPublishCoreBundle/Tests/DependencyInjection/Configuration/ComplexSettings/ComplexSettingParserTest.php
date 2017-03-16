@@ -54,7 +54,6 @@ class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
                 array(true, array('$setting$')),
             ),
             array(
-
                 '$setting;scope$',
                 array(true, array('$setting;scope$')),
             ),

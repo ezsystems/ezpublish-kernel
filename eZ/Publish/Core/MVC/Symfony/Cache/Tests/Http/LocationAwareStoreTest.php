@@ -78,7 +78,7 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
 
         $path = $this->store->getPath("$prefix/en" . sha1('someContent'));
         $this->assertTrue(strpos($path, __DIR__ . "/$prefix") === 0);
-        $this->assertFalse(file_exists($lockFile));
+        $this->assertFileNotExists($lockFile);
     }
 
     /**

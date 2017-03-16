@@ -44,7 +44,7 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider convertToPOSIXProvider
      *
-     * @covers eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToPOSIX
+     * @covers \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToPOSIX
      *
      * @param $ezpLocale
      * @param $expected
@@ -75,7 +75,7 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider convertToEzProvider
      *
-     * @covers eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToEz
+     * @covers \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToEz
      *
      * @param $posixLocale
      * @param $expected

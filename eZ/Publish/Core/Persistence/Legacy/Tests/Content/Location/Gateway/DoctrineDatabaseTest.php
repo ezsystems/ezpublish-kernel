@@ -199,7 +199,6 @@ class DoctrineDatabaseTest extends TestCase
                 'path_identification_string' => 'solutions',
                 'is_hidden' => 1,
                 'is_invisible' => 1,
-
             )
         );
 
@@ -238,7 +237,6 @@ class DoctrineDatabaseTest extends TestCase
                 'path_identification_string' => 'solutions',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-
             )
         );
 
@@ -278,7 +276,6 @@ class DoctrineDatabaseTest extends TestCase
                 'path_identification_string' => 'solutions',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-
             )
         );
 
@@ -501,7 +498,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getMainNodeId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getMainNodeId
      * @depends testCreateLocation
      */
     public function testGetMainNodeId()
@@ -797,7 +794,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::updateLocationsContentVersionNo
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::updateLocationsContentVersionNo
      */
     public function testUpdateLocationsContentVersionNo()
     {

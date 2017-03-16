@@ -21,9 +21,9 @@ class Type extends FieldType
     /**
      * Default value types.
      */
-    const DEFAULT_EMPTY = 0,
-          DEFAULT_CURRENT_DATE = 1,
-          DEFAULT_CURRENT_DATE_ADJUSTED = 2;
+    const DEFAULT_EMPTY = 0;
+    const DEFAULT_CURRENT_DATE = 1;
+    const DEFAULT_CURRENT_DATE_ADJUSTED = 2;
 
     protected $settingsSchema = [
         'useSeconds' => [

@@ -539,7 +539,7 @@ class Repository implements RepositoryInterface
      *
      * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
      *
-     * @param Callable $event
+     * @param callable $event
      */
     public function commitEvent($event)
     {

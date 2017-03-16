@@ -111,6 +111,7 @@ class Legacy extends SetupFactory
 
         return $tmpFile;
     }
+
     /**
      * Returns a configured repository for testing.
      *

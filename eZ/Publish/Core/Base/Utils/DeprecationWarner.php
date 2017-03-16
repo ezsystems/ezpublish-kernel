@@ -12,6 +12,6 @@ class DeprecationWarner implements DeprecationWarnerInterface
 {
     public function log($message)
     {
-        trigger_error($message, E_USER_DEPRECATED);
+        @trigger_error($message, E_USER_DEPRECATED);
     }
 }

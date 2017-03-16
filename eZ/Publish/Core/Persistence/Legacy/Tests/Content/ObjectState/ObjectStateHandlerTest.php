@@ -586,7 +586,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         $result = $handler->setContentState(42, 2, 2);
 
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**

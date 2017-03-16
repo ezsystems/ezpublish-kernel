@@ -114,8 +114,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $validator = $this->getConversionValidator();
         if (isset($validator)) {
             $errors = $validator->validate($convertedDocument);
-            $this->assertTrue(
-                empty($errors),
+            $this->assertEmpty(
+                $errors,
                 'Conversion result did not validate against the configured schemas:' .
                 $this->formatValidationErrors($outputFile, $errors)
             );

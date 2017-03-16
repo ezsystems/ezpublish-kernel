@@ -78,8 +78,6 @@ abstract class NameSchemaBase extends BaseServiceTest
         );
     }
 
-    /**
-     */
     public function providerForTestResolve()
     {
         return array(

@@ -139,7 +139,7 @@ interface UserService
      *
      * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
      *
-     * @uses loadUser()
+     * @uses ::loadUser()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */

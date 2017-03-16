@@ -399,7 +399,7 @@ class ObjectStateServiceTest extends BaseTest
      * Creates a set of object state groups and returns an array of all
      * existing group identifiers after creation.
      *
-     * @return boolean[]
+     * @return bool[]
      */
     protected function createObjectStateGroups()
     {

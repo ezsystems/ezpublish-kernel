@@ -26,7 +26,7 @@ class FloatConverter implements Converter
      *
      * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return Float
+     * @return float
      */
     public static function create()
     {
