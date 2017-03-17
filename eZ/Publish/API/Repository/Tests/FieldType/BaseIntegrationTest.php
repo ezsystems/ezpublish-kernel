@@ -46,6 +46,12 @@ use PHPUnit_Framework_AssertionFailedError;
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
     /**
+     * Content version archive limit (default).
+     * Note: currently there is no way to retrieve this setting from the ContentService.
+     */
+    const VERSION_ARCHIVE_LIMIT = 5;
+
+    /**
      * Identifier of the custom field.
      *
      * @var string
@@ -1000,6 +1006,53 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $this->assertEquals(
             $expectedValue,
             $fieldType->fromHash($hash)
+        );
+    }
+
+    /**
+     * Test that exceeding default version archive limit has no effect on a published content.
+     */
+    public function testExceededVersionArchiveLimitHasNoEffectOnContent()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentDraft = $this->createContent($this->getValidCreationFieldData());
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+        // update and publish content to exceed version archive limit
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('data', $this->getValidUpdateFieldData());
+        for ($i = 0; $i < static::VERSION_ARCHIVE_LIMIT + 1; ++$i) {
+            $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+            $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+            $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+        }
+
+        $loadedContent = $contentService->loadContent(
+            $publishedContent->contentInfo->id,
+            ['eng-US']
+        );
+        $this->assertUpdatedFieldDataLoadedCorrect($loadedContent->getField('data'));
+    }
+
+    /**
+     * Test that deleting new draft does not affect data of published version.
+     */
+    public function testDeleteDraftOfPublishedContentDoesNotDeleteData()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $fieldType = $repository->getFieldTypeService()->getFieldType($this->getTypeName());
+
+        $contentDraft = $this->testCreateContent();
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+
+        $contentService->deleteVersion($contentDraft->versionInfo);
+        $loadedContent = $contentService->loadContent($publishedContent->contentInfo->id, ['eng-US']);
+
+        self::assertFalse(
+            $fieldType->isEmptyValue($loadedContent->getField('data')->value)
         );
     }
 }
