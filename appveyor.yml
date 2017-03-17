@@ -38,7 +38,7 @@ install:
     - IF %PHP%==1 echo memory_limit=512M >> php.ini
     - IF %PHP%==1 echo default_charset="utf-8" >> php.ini
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
-    - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/download/1.4.1/composer.phar
+    - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd c:\projects\ezpublish-kernel
     - composer update --no-progress --ansi
 
