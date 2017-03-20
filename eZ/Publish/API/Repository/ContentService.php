@@ -102,6 +102,16 @@ interface ContentService
     public function loadContentByContentInfo(ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true);
 
     /**
+     * Loads content items in a version for a set of given content info objects.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $contentInfoList
+     * @param array $languages A language filter for fields. If not given all languages are returned
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[] Traversable/Generator/Array of Content items
+     */
+    public function loadContentItemsByContentInfoList(array $contentInfoList, array $languages = null);
+
+    /**
      * Loads content in the version given by version info.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
