@@ -41,6 +41,18 @@ interface ContentService
     public function loadContentInfo($contentId);
 
     /**
+     * Loads content info objects by array of id's and in the prioritized language asked for.
+     *
+     * @param int[] $contentIds
+     * @param array $languages Prioritized languages to pick content info from, if
+     *                         - not injected by user or config, main language is returned
+     *                         - $languages does not match, and content is always available, main language is returned
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo[] Traversable/Generator/Array of ContentInfo objects
+     */
+    public function loadContentInfoList(array $contentIds, array $languages = null);
+
+    /**
      * Loads a content info object for the given remoteId.
      *
      * To load fields use loadContent
