@@ -23,12 +23,17 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function load($locationId)
     {
-        $cache = $this->cache->getItem('location', $locationId);
-        $location = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('location' => $locationId));
-            $cache->set($location = $this->persistenceHandler->locationHandler()->load($locationId))->save();
+        $cacheItem = $this->cache->getItem("ez-location-${locationId}");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $location = $this->persistenceHandler->locationHandler()->load($locationId);
+
+        $cacheItem->set($location);
+        $cacheItem->tag($this->getCacheTags($location));
+        $this->cache->save($cacheItem);
 
         return $location;
     }
@@ -38,15 +43,22 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadSubtreeIds($locationId)
     {
-        $cache = $this->cache->getItem('location', 'subtree', $locationId);
-        $locationIds = $cache->get();
-
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('location' => $locationId));
-            $cache->set(
-                $locationIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId)
-            )->save();
+        $cacheItem = $this->cache->getItem("ez-location-subtree-${locationId}");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $locationIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
+
+        $cacheItem->set($locationIds);
+        $cacheTags = ['location-' . $locationId, 'location-path-' . $locationId];
+        foreach ($locationIds as $locationId) {
+            $cacheTags[] = 'location-' . $locationId;
+            $cacheTags[] = 'location-path-' . $locationId;
+        }
+        $cacheItem->tag($cacheTags);
+        $this->cache->save($cacheItem);
 
         return $locationIds;
     }
@@ -57,27 +69,26 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     public function loadLocationsByContent($contentId, $rootLocationId = null)
     {
         if ($rootLocationId) {
-            $cache = $this->cache->getItem('content', 'locations', $contentId, 'root', $rootLocationId);
+            $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}-root-${rootLocationId}");
+            $cacheTags = ['content-' . $contentId, 'location-' . $rootLocationId, 'location-path-' . $rootLocationId];
         } else {
-            $cache = $this->cache->getItem('content', 'locations', $contentId);
+            $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}");
+            $cacheTags = ['content-' . $contentId];
         }
-        $locationIds = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId, 'root' => $rootLocationId));
-            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
 
-            $locationIds = array();
-            foreach ($locations as $location) {
-                $locationIds[] = $location->id;
-            }
-
-            $cache->set($locationIds)->save();
-        } else {
-            $locations = array();
-            foreach ($locationIds as $locationId) {
-                $locations[] = $this->load($locationId);
-            }
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'root' => $rootLocationId));
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
+
+        $cacheItem->set($locations);
+        foreach ($locations as $location) {
+            $cacheTags = $this->getCacheTags($location, $cacheTags);
+        }
+        $cacheItem->tag($cacheTags);
+        $this->cache->save($cacheItem);
 
         return $locations;
     }
@@ -87,24 +98,21 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadParentLocationsForDraftContent($contentId)
     {
-        $cache = $this->cache->getItem('content', 'locations', $contentId, 'parentLocationsForDraftContent');
-        $locationIds = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId));
-            $locations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
-
-            $locationIds = array();
-            foreach ($locations as $location) {
-                $locationIds[] = $location->id;
-            }
-
-            $cache->set($locationIds)->save();
-        } else {
-            $locations = array();
-            foreach ($locationIds as $locationId) {
-                $locations[] = $this->load($locationId);
-            }
+        $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}-parentForDraft");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('content' => $contentId));
+        $locations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
+
+        $cacheItem->set($locations);
+        $cacheTags = ['content-' . $contentId];
+        foreach ($locations as $location) {
+            $cacheTags = $this->getCacheTags($location, $cacheTags);
+        }
+        $cacheItem->tag($cacheTags);
+        $this->cache->save($cacheItem);
 
         return $locations;
     }
@@ -114,9 +122,19 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadByRemoteId($remoteId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $remoteId));
+        $cacheItem = $this->cache->getItem("ez-location-${remoteId}-by-remoteid");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-        return $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
+        $this->logger->logCall(__METHOD__, array('location' => $remoteId));
+        $location = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
+
+        $cacheItem->set($location);
+        $cacheItem->tag($this->getCacheTags($location));
+        $this->cache->save($cacheItem);
+
+        return $location;
     }
 
     /**
@@ -137,8 +155,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
         $return = $this->persistenceHandler->locationHandler()->move($sourceId, $destinationParentId);
 
-        $this->cache->clear('location');//TIMBER! (path[Identification]String)
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+        $this->cache->invalidateTags(['location-path-' . $sourceId]);
 
         return $return;
     }
@@ -160,7 +177,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->locationHandler()->hide($locationId);
 
-        $this->cache->clear('location');//TIMBER! (visibility)
+        $this->cache->invalidateTags(['location-path-data-' . $locationId]);
 
         return $return;
     }
@@ -173,7 +190,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->locationHandler()->unHide($locationId);
 
-        $this->cache->clear('location');//TIMBER! (visibility)
+        $this->cache->invalidateTags(['location-path-data-' . $locationId]);
 
         return $return;
     }
@@ -188,19 +205,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $return = $locationHandler->swap($locationId1, $locationId2);
 
-        $this->cache->clear('location', $locationId1);
-        $this->cache->clear('location', $locationId2);
-        $this->cache->clear('location', 'subtree');
-        $this->cache->clear('content', 'locations');
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup');
-
-        // This ensures that Content cache is updated for possible main Location change
-        $location1 = $this->load($locationId1);
-        $location2 = $this->load($locationId2);
-        $this->cache->clear('content', $location1->contentId);
-        $this->cache->clear('content', $location2->contentId);
-        $this->cache->clear('content', 'info', $location1->contentId);
-        $this->cache->clear('content', 'info', $location2->contentId);
+        $this->cache->invalidateTags(['location-data-' . $locationId1, 'location-data-' . $locationId2]);
 
         return $return;
     }
@@ -212,8 +217,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $this->logger->logCall(__METHOD__, array('location' => $locationId, 'struct' => $struct));
         $this->persistenceHandler->locationHandler()->update($struct, $locationId);
-        $this->cache->clear('location', $locationId);
-        $this->cache->clear('location', 'subtree');
+
+        $this->cache->invalidateTags(['location-data-' . $locationId]);
     }
 
     /**
@@ -224,13 +229,9 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall(__METHOD__, array('struct' => $locationStruct));
         $location = $this->persistenceHandler->locationHandler()->create($locationStruct);
 
-        $this->cache->getItem('location', $location->id)->set($location)->save();
-        $this->cache->clear('location', 'subtree');
-        $this->cache->clear('content', 'locations', $location->contentId);
-        $this->cache->clear('content', $location->contentId);
-        $this->cache->clear('content', 'info', $location->contentId);
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup', $location->contentId);
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup', 'inherited', $location->contentId);
+        // need to clear loadLocationsByContent and similar collections involving locations data
+        // also need to clear content info on main location changes
+        $this->cache->invalidateTags(['content-' . $locationStruct->contentId, 'role-assignment-group-list-' . $locationStruct->contentId]);
 
         return $location;
     }
@@ -243,9 +244,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->locationHandler()->removeSubtree($locationId);
 
-        $this->cache->clear('location');//TIMBER!
-        $this->cache->clear('content');//TIMBER!
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+        $this->cache->invalidateTags(['location-path-' . $locationId]);
 
         return $return;
     }
@@ -257,7 +256,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $this->logger->logCall(__METHOD__, array('location' => $locationId, 'section' => $sectionId));
         $this->persistenceHandler->locationHandler()->setSectionForSubtree($locationId, $sectionId);
-        $this->cache->clear('content');//TIMBER!
+
+        $this->cache->invalidateTags(['location-path-' . $locationId]);
     }
 
     /**
@@ -267,8 +267,28 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $this->logger->logCall(__METHOD__, array('location' => $locationId, 'content' => $contentId));
         $this->persistenceHandler->locationHandler()->changeMainLocation($contentId, $locationId);
-        $this->cache->clear('content', $contentId);
-        $this->cache->clear('content', 'info', $contentId);
-        $this->cache->clear('content', 'info', 'remoteId');
+
+        $this->cache->invalidateTags(['content-' . $contentId]);
+    }
+
+    /**
+     * Return relevant content and location tags so cache can be purged reliably.
+     *
+     * @param Location $location
+     * @param array $tags Optional, can be used to specify additional tags.
+     *
+     * @return array
+     */
+    private function getCacheTags(Location $location, $tags = [])
+    {
+        $tags[] = 'content-' . $location->contentId;
+        $tags[] = 'location-' . $location->id;
+        $tags[] = 'location-data-' . $location->id;
+        foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+            $tags[] = 'location-path-' . $pathId;
+            $tags[] = 'location-path-data-' . $pathId;
+        }
+
+        return $tags;
     }
 }

@@ -9,6 +9,9 @@
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * Test case to verify Integration tests are setup with the right instances.
@@ -16,17 +19,22 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 class EnvTest extends BaseTest
 {
     /**
-     * Verify Redis is setup if asked for.
+     * Verify Redis cache is setup if asked for, if not file system.
      */
-    public function testVerifyStashDriver()
+    public function testVerifyCacheDriver()
     {
-        /** @var \Stash\Pool $pool */
         $pool = $this->getSetupFactory()->getServiceContainer()->get('ezpublish.cache_pool');
 
+        $this->assertInstanceOf(TagAwareAdapter::class, $pool);
+
+        $reflectionPool = new \ReflectionProperty($pool, 'itemsAdapter');
+        $reflectionPool->setAccessible(true);
+        $innerPool = $reflectionPool->getValue($pool);
+
         if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
-            $this->assertInstanceOf('\Stash\Driver\Redis', $pool->getDriver());
+            $this->assertInstanceOf(RedisAdapter::class, $innerPool);
         } else {
-            $this->assertInstanceOf('\Stash\Driver\Ephemeral', $pool->getDriver());
+            $this->assertInstanceOf(FilesystemAdapter::class, $innerPool);
         }
     }
 }
