@@ -1,3 +1,8 @@
 services:
     logger:
         class: Psr\Log\NullLogger
+
+    # By default use in-memory cache for tests to avoid disk IO but still make sure we tests cache clearing works
+    ezpublish.cache_pool.driver:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter
+        arguments: [120, false]
