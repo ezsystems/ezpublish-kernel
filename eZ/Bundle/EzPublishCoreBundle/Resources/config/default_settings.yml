@@ -65,7 +65,7 @@ parameters:
     ezsettings.default.languages: []
     ezsettings.default.translation_siteaccesses: []
     ezsettings.default.related_siteaccesses: []
-    ezsettings.default.cache_pool_name: "default"       # The cache pool name to use for a siteaccess / siteaccess-group
+    ezsettings.default.cache_service_name: "cache.app"       # The cache pool serive name to use for a siteaccess / siteaccess-group
     ezsettings.default.var_dir: "var"                   # The root directory where all log files, cache files and other stored files are created
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"

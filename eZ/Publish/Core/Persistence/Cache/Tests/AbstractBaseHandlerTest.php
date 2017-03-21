@@ -19,15 +19,17 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Symfony\Component\Cache\CacheItem;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Abstract test case for spi cache impl.
  */
-abstract class HandlerTest extends PHPUnit_Framework_TestCase
+abstract class AbstractBaseHandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Stash\Interfaces\PoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheMock;
 
@@ -35,11 +37,6 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
      * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $persistenceHandlerMock;
-
-    /**
-     * @var \eZ\Publish\SPI\Persistence\TransactionHandler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $transactionHandlerMock;
 
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\Handler
@@ -52,27 +49,19 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @param array|null $persistenceFactoryMockMethod
+     * @var \Closure
      */
-    protected $persistenceFactoryMockMethods = array();
+    protected $cacheItemsClosure;
 
     /**
      * Setup the HandlerTest.
      */
-    protected function setUp()
+    final protected function setUp()
     {
         parent::setUp();
 
         $this->persistenceHandlerMock = $this->getMock('eZ\Publish\SPI\Persistence\Handler');
-
-        $this->cacheMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator',
-            array(),
-            array(),
-            '',
-            false
-        );
-
+        $this->cacheMock = $this->getMock(TagAwareAdapterInterface::class);
         $this->loggerMock = $this->getMock('eZ\\Publish\\Core\\Persistence\\Cache\\PersistenceLogger');
 
         $this->persistenceCacheHandler = new CacheHandler(
@@ -90,17 +79,46 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             $this->loggerMock,
             $this->cacheMock
         );
+
+        $this->cacheItemsClosure = \Closure::bind(
+            function ($key, $value, $isHit, $defaultLifetime = 0) {
+                $item = new CacheItem();
+                $item->key = $key;
+                $item->value = $value;
+                $item->isHit = $isHit;
+                $item->defaultLifetime = $defaultLifetime;
+
+                return $item;
+            },
+            null,
+            CacheItem::class
+        );
     }
 
     /**
      * Tear down test (properties).
      */
-    protected function tearDown()
+    final protected function tearDown()
     {
         unset($this->cacheMock);
         unset($this->persistenceHandlerMock);
         unset($this->persistenceCacheHandler);
         unset($this->loggerMock);
+        unset($this->cacheItemsClosure);
         parent::tearDown();
+    }
+
+    /**
+     * @param $key
+     * @param null $value If null the cache item will be assumed to be a cache miss here.
+     * @param int $defaultLifetime
+     *
+     * @return CacheItem
+     */
+    final protected function getCacheItem($key, $value = null, $defaultLifetime = 0)
+    {
+        $cacheItemsClosure = $this->cacheItemsClosure;
+
+        return $cacheItemsClosure($key, $value, (bool)$value, $defaultLifetime);
     }
 }
