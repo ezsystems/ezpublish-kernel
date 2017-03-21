@@ -8,63 +8,37 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\SPI\Persistence\TransactionHandler;
+
 /**
  * Test case for Persistence\Cache\TransactionHandler.
  */
-class TransactionHandlerTest extends HandlerTest
+class TransactionHandlerTest extends AbstractCacheHandlerTest
 {
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Cache\TransactionHandler::beginTransaction
-     */
-    public function testBeginTransaction()
+    public function getHandlerMethodName(): string
     {
-        $this->loggerMock
-            ->expects($this->once())
-            ->method('logCall');
-
-        $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('transactionHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('beginTransaction');
-
-        $handler = $this->persistenceCacheHandler->transactionHandler();
-        $handler->beginTransaction();
+        return 'transactionHandler';
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Cache\TransactionHandler::commit
-     */
-    public function testCommit()
+    public function getHandlerClassName(): string
     {
-        $this->loggerMock
-            ->expects($this->once())
-            ->method('logCall');
+        return TransactionHandler::class;
+    }
 
-        $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
+    public function providerForUnCachedMethods(): array
+    {
+        // string $method, array $arguments, array? $tags, string? $key
+        return [
+            ['beginTransaction', []],
+            ['commit', []],
+        ];
+    }
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('transactionHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('commit');
-
-        $handler = $this->persistenceCacheHandler->transactionHandler();
-        $handler->commit();
+    public function providerForCachedLoadMethods(): array
+    {
+        // string $method, array $arguments, string $key, mixed? $data
+        return [
+        ];
     }
 
     /**
