@@ -1877,6 +1877,11 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $content = $this->createContentVersion1();
 
+        // load first to make sure list gets updated also (cache)
+        $versionInfoList = $contentService->loadVersions($content->contentInfo);
+        $this->assertEquals(1, count($versionInfoList));
+        $this->assertEquals(1, $versionInfoList[0]->versionNo);
+
         // Create a new draft with versionNo = 2
         $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
         $contentService->publishVersion($draftedContentVersion->getVersionInfo());

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Cache\Tests;
 /**
  * Test case for Persistence\Cache\Handler.
  */
-class PersistenceHandlerTest extends HandlerTest
+class PersistenceHandlerTest extends AbstractBaseHandlerTest
 {
     /**
      * Test that instance is of correct type.

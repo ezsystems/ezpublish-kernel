@@ -10,6 +10,7 @@
  */
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 use eZ\Publish\Core\Base\Container\Compiler;
 use Symfony\Component\Config\Resource\FileResource;
@@ -22,13 +23,6 @@ $containerBuilder = new ContainerBuilder();
 
 // Track current file for changes
 $containerBuilder->addResource(new FileResource(__FILE__));
-
-// Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
-if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
-    $containerBuilder
-        ->register('ezpublish.cache_pool.driver', 'Stash\Driver\Redis')
-        ->addArgument(['servers' => [['server' => getenv('CACHE_HOST') ?: '127.0.0.1']]]);
-}
 
 $settingsPath = $installDir . '/eZ/Publish/Core/settings/';
 $loader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
@@ -50,6 +44,25 @@ $loader->load('search_engines/common.yml');
 $loader->load('settings.yml');
 $loader->load('utils.yml');
 $loader->load('tests/common.yml');
+
+// Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
+if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
+    /*
+     * Symfony\Component\Cache\Adapter\RedisAdapter
+     * @param \Redis|\RedisArray|\RedisCluster|\Predis\Client $redisClient
+     * public function __construct($redisClient, $namespace = '', $defaultLifetime = 0)
+     *
+     * $redis = new \Redis();
+     * $redis->connect('127.0.0.1', 6379, 2.5);
+     */
+    $containerBuilder
+        ->register('ezpublish.cache_pool.driver.redis', 'Redis')
+        ->addMethodCall('connect', [(getenv('CACHE_HOST') ?: '127.0.0.1'), 6379, 2.5]);
+
+    $containerBuilder
+        ->register('ezpublish.cache_pool.driver', 'Symfony\Component\Cache\Adapter\RedisAdapter')
+        ->setArguments([new Reference('ezpublish.cache_pool.driver.redis'), '', 120]);
+}
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
