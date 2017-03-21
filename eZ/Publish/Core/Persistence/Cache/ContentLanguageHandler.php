@@ -23,10 +23,8 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     public function create(CreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
-        $language = $this->persistenceHandler->contentLanguageHandler()->create($struct);
-        $this->cache->getItem('language', $language->id)->set($language)->save();
 
-        return $language;
+        return $this->persistenceHandler->contentLanguageHandler()->create($struct);
     }
 
     /**
@@ -37,7 +35,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
-        $this->cache->clear('language', $struct->id);
+        $this->cache->invalidateTags(['language-' . $struct->id]);
 
         return $return;
     }
@@ -47,12 +45,17 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function load($id)
     {
-        $cache = $this->cache->getItem('language', $id);
-        $language = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('language' => $id));
-            $cache->set($language = $this->persistenceHandler->contentLanguageHandler()->load($id))->save();
+        $cacheItem = $this->cache->getItem('ez-language-' . $id);
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('language' => $id));
+        $language = $this->persistenceHandler->contentLanguageHandler()->load($id);
+
+        $cacheItem->set($language);
+        $cacheItem->tag('language-' . $language->id);
+        $this->cache->save($cacheItem);
 
         return $language;
     }
@@ -62,9 +65,19 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function loadByLanguageCode($languageCode)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $languageCode));
+        $cacheItem = $this->cache->getItem('ez-language-' . $languageCode . '-by-code');
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-        return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+        $this->logger->logCall(__METHOD__, array('language' => $languageCode));
+        $language = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+
+        $cacheItem->set($language);
+        $cacheItem->tag('language-' . $language->id);
+        $this->cache->save($cacheItem);
+
+        return $language;
     }
 
     /**
@@ -85,7 +98,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
         $this->logger->logCall(__METHOD__, array('language' => $id));
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
-        $this->cache->clear('language', $id);
+        $this->cache->invalidateTags(['language-' . $id]);
 
         return $return;
     }

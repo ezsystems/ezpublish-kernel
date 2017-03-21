@@ -14,7 +14,7 @@ use eZ\Publish\Core\Persistence\Cache;
 /**
  * Test case for Persistence\Cache\Handler.
  */
-class PersistenceHandlerTest extends HandlerTest
+class PersistenceHandlerTest extends AbstractBaseHandlerTest
 {
     /**
      * Test that instance is of correct type.
