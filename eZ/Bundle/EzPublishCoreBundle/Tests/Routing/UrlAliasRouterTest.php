@@ -196,6 +196,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         $this->assertSame($locationId, $request->attributes->get('locationId'));
         $this->assertTrue($request->attributes->get('needsRedirect'));
         $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
+        $this->assertSame($locationId, $request->attributes->get('locationId'));
     }
 
     public function testMatchRequestLocationCaseRedirectWithRootRootLocation()
