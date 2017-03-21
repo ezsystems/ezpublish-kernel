@@ -225,6 +225,10 @@ class LegacyStorage extends Gateway
         $existingKeywordMap = array();
 
         foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            // filter out keywords that aren't the exact match (e.g. differ by case)
+            if (!in_array($row['keyword'], $keywordList)) {
+                continue;
+            }
             $existingKeywordMap[$row['keyword']] = $row['id'];
         }
 
