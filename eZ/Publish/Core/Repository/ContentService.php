@@ -271,7 +271,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned
+     * @param int $versionNo the version number. If not given the current version is returned from $contentInfo
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
@@ -281,6 +281,11 @@ class ContentService implements ContentServiceInterface
         // Change $useAlwaysAvailable to false to avoid contentInfo lookup if we know alwaysAvailable is disabled
         if ($useAlwaysAvailable && !$contentInfo->alwaysAvailable) {
             $useAlwaysAvailable = false;
+        }
+
+        // As we have content info we can avoid that current version is looked up using spi in loadContent() if not set
+        if ($versionNo === null) {
+            $versionNo = $contentInfo->currentVersionNo;
         }
 
         return $this->loadContent(
