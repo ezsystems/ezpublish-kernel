@@ -9,6 +9,10 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 
 class CacheFactoryTest extends TestCase
@@ -26,8 +30,8 @@ class CacheFactoryTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->configResolver = $this->getMock(ConfigResolverInterface::class);
+        $this->container = $this->getMock(ContainerInterface::class);
     }
 
     /**
@@ -36,9 +40,9 @@ class CacheFactoryTest extends TestCase
     public function providerGetService()
     {
         return array(
-            array('default', 'stash.default_cache'),
-            array('ez_site1', 'stash.ez_site1_cache'),
-            array('xyZ', 'stash.xyZ_cache'),
+            array('default', 'default'),
+            array('ez_site1', 'ez_site1'),
+            array('xyZ', 'xyZ'),
         );
     }
 
@@ -50,18 +54,18 @@ class CacheFactoryTest extends TestCase
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
-            ->with('cache_pool_name')
+            ->with('cache_service_name')
             ->will($this->returnValue($name));
 
         $this->container
             ->expects($this->once())
             ->method('get')
             ->with($expected)
-            ->will($this->returnValue(false));
+            ->will($this->returnValue($this->getMock(AdapterInterface::class)));
 
         $factory = new CacheFactory();
         $factory->setContainer($this->container);
 
-        $this->assertFalse($factory->getCachePool($this->configResolver));
+        $this->assertInstanceOf(TagAwareAdapter::class, $factory->getCachePool($this->configResolver));
     }
 }

@@ -1,6 +1,6 @@
 parameters:
-    ezpublish.cache_pool.class: Stash\Pool
-    ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+    ezpublish.cache_pool.class: Symfony\Component\Cache\Adapter\TagAwareAdapter
+    ezpublish.cache_pool.driver.class: Symfony\Component\Cache\Adapter\FilesystemAdapter
 
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
     ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
@@ -23,11 +23,11 @@ parameters:
 services:
     ezpublish.cache_pool:
         class: "%ezpublish.cache_pool.class%"
-        arguments: ["@?ezpublish.cache_pool.driver"]
+        arguments: ["@ezpublish.cache_pool.driver"]
 
-    ezpublish.cache_pool.spi.cache.decorator:
-        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
-        arguments: ["@ezpublish.cache_pool"]
+    ezpublish.cache_pool.driver:
+        class: "%ezpublish.cache_pool.driver.class%"
+        arguments: ["", 120]
 
     ezpublish.spi.persistence.cache.persistenceLogger:
         class: "%ezpublish.spi.persistence.cache.persistenceLogger.class%"
@@ -38,7 +38,7 @@ services:
         class: "%ezpublish.spi.persistence.cache.abstractHandler.class%"
         abstract:  true
         arguments:
-            - "@ezpublish.cache_pool.spi.cache.decorator"
+            - "@ezpublish.cache_pool"
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
 
