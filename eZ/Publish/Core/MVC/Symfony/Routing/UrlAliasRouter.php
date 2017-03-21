@@ -160,6 +160,10 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                             'semanticPathinfo' => $this->removePathPrefix($urlAlias->path, $pathPrefix),
                             'needsRedirect' => true,
                         );
+
+                        if ($urlAlias->destination instanceof Location) {
+                            $params += ['locationId' => $urlAlias->destination->id];
+                        }
                     }
 
                     if (isset($this->logger)) {
