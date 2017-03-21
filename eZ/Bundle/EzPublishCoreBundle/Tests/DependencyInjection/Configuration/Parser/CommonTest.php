@@ -116,7 +116,7 @@ class CommonTest extends AbstractParserTestCase
     {
         $this->load();
         $this->assertConfigResolverParameterValue('url_alias_router', true, 'ezdemo_site');
-        $this->assertConfigResolverParameterValue('cache_pool_name', 'default', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('cache_service_name', 'cache.app', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('var_dir', 'var', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('storage_dir', 'storage', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('binary_dir', 'original', 'ezdemo_site');
@@ -144,7 +144,7 @@ class CommonTest extends AbstractParserTestCase
             array(
                 'system' => array(
                     'ezdemo_site' => array(
-                        'cache_pool_name' => $cachePoolName,
+                        'cache_service_name' => $cachePoolName,
                         'var_dir' => $varDir,
                         'storage_dir' => $storageDir,
                         'binary_dir' => $binaryDir,
@@ -159,7 +159,7 @@ class CommonTest extends AbstractParserTestCase
             )
         );
 
-        $this->assertConfigResolverParameterValue('cache_pool_name', $cachePoolName, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('cache_service_name', $cachePoolName, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('var_dir', $varDir, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('storage_dir', $storageDir, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('binary_dir', $binaryDir, 'ezdemo_site');
