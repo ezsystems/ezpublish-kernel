@@ -33,9 +33,8 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('locationId' => $locationId));
         $return = $this->persistenceHandler->trashHandler()->trashSubtree($locationId);
-        $this->cache->clear('location');//TIMBER!
-        $this->cache->clear('content');//TIMBER!
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        $this->cache->invalidateTags(['location-' . $locationId, 'location-path-' . $locationId]);
 
         return $return;
     }
@@ -47,9 +46,8 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('id' => $trashedId, 'newParentId' => $newParentId));
         $return = $this->persistenceHandler->trashHandler()->recover($trashedId, $newParentId);
-        $this->cache->clear('location', 'subtree');
-        $this->cache->clear('content');//TIMBER!
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        $this->cache->invalidateTags(['location-' . $trashedId, 'location-path-' . $trashedId]);
 
         return $return;
     }
