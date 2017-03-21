@@ -156,6 +156,29 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($event->isPropagationStopped());
     }
 
+    public function testOnKernelRequestRedirectWithLocationId()
+    {
+        $queryParameters = array('some' => 'thing');
+        $cookieParameters = array('cookie' => 'value');
+        $request = Request::create('/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters);
+        $semanticPathinfo = '/foo/something';
+        $request->attributes->set('semanticPathinfo', $semanticPathinfo);
+        $request->attributes->set('needsRedirect', true);
+        $request->attributes->set('locationId', 123);
+        $request->attributes->set('siteaccess', new SiteAccess());
+
+        $event = new GetResponseEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $this->requestEventListener->onKernelRequestRedirect($event);
+        $this->assertTrue($event->hasResponse());
+        /** @var RedirectResponse $response */
+        $response = $event->getResponse();
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertSame("$semanticPathinfo?some=thing", $response->getTargetUrl());
+        $this->assertSame(301, $response->getStatusCode());
+        $this->assertEquals(123, $response->headers->get('X-Location-Id'));
+        $this->assertTrue($event->isPropagationStopped());
+    }
+
     public function testOnKernelRequestRedirectPrependSiteaccess()
     {
         $queryParameters = array('some' => 'thing');
