@@ -48,6 +48,35 @@
         </oneOrMore>
       </element>
     </define>
+    <define name="db.html.informaltable.model">
+      <optional>
+        <ref name="db.html.informaltable.info"/>
+      </optional>
+      <choice>
+        <zeroOrMore>
+          <ref name="db.html.col"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="db.html.colgroup"/>
+        </zeroOrMore>
+      </choice>
+      <optional>
+        <ref name="db.html.thead"/>
+      </optional>
+      <interleave>
+        <optional>
+          <ref name="db.html.tfoot"/>
+        </optional>
+        <choice>
+          <oneOrMore>
+            <ref name="db.html.tbody"/>
+          </oneOrMore>
+          <oneOrMore>
+            <ref name="db.html.tr"/>
+          </oneOrMore>
+        </choice>
+      </interleave>
+    </define>
     <define name="db.abbrev"><notAllowed/></define>
     <define name="db.abstract"><notAllowed/></define>
     <define name="db.accel"><notAllowed/></define>
