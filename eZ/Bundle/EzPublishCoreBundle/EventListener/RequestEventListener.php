@@ -126,7 +126,7 @@ class RequestEventListener implements EventSubscriberInterface
 
                 $headers = [];
                 if ($request->attributes->has('locationId')) {
-                    $headers[ 'X-Location-Id'] = $request->attributes->get('locationId');
+                    $headers['X-Location-Id'] = $request->attributes->get('locationId');
                 }
                 $event->setResponse(
                     new RedirectResponse(
