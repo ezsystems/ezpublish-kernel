@@ -29,11 +29,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        // The field type stores date value as a timestamp of the start of the day in the
-        // environment's timezone.
-        // We format this as Y-m-d and add Z to signify UTC (zero offset).
-        $dateTime = new DateTime();
-        $dateTime->setTimestamp($field->value->data['timestamp']);
+        $dateTime = new DateTime("@{$field->value->data['timestamp']}");
 
         return array(
             new Search\Field(
