@@ -14,8 +14,8 @@ use PHPUnit_Framework_TestCase;
 class ParameterProviderRegistryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::setParameterProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::hasParameterProvider
+     * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::setParameterProvider
+     * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::hasParameterProvider
      */
     public function testSetHasParameterProvider()
     {
@@ -29,9 +29,9 @@ class ParameterProviderRegistryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      *
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::getParameterProvider
+     * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::getParameterProvider
      */
     public function testGetParameterProviderFail()
     {
@@ -40,8 +40,8 @@ class ParameterProviderRegistryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::setParameterProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::getParameterProvider
+     * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::setParameterProvider
+     * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::getParameterProvider
      */
     public function testGetParameterProvider()
     {

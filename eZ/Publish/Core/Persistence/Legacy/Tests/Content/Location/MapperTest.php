@@ -78,7 +78,7 @@ class MapperTest extends TestCase
     );
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRow()
     {
@@ -95,7 +95,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationsFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationsFromRows
      */
     public function testCreateLocationsFromRows()
     {
@@ -120,7 +120,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateTrashedFromRow()
     {
@@ -140,7 +140,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRowWithPrefix()
     {
@@ -162,7 +162,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::getLocationCreateStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::getLocationCreateStruct
      */
     public function testGetLocationCreateStruct()
     {

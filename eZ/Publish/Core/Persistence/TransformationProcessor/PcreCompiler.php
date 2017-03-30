@@ -219,12 +219,12 @@ class PcreCompiler
     protected function compileTargetCharacter($char)
     {
         switch (true) {
-            case ($char === 'remove'):
+            case $char === 'remove':
                 return function ($matches) {
                     return '';
                 };
 
-            case ($char === 'keep'):
+            case $char === 'keep':
                 return function ($matches) {
                     return $matches[0];
                 };

@@ -30,7 +30,7 @@ class DoctrineDatabaseTest extends TestCase
     protected $gateway;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::__construct
      */
     public function testConstructor()
     {
@@ -47,7 +47,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataNonExistent()
     {
@@ -62,7 +62,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasData()
     {
@@ -105,7 +105,7 @@ class DoctrineDatabaseTest extends TestCase
      *
      * Test with fixture containing language mask with multiple languages.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataMultipleLanguages()
     {
@@ -192,7 +192,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
      * @dataProvider providerForTestLoadPathData
      */
     public function testLoadPathData($id, $pathData)
@@ -254,7 +254,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
      * @dataProvider providerForTestLoadPathDataMultipleLanguages
      */
     public function testLoadPathDataMultipleLanguages($id, $pathData)
@@ -294,8 +294,8 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::historize
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::historize
      * @dataProvider providerForTestCleanupAfterPublishHistorize
      */
     public function testCleanupAfterPublishHistorize($action, $languageId, $parentId, $textMD5)
@@ -339,8 +339,8 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeTranslation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeTranslation
      * @dataProvider providerForTestCleanupAfterPublishRemovesLanguage
      */
     public function testCleanupAfterPublishRemovesLanguage($action, $languageId, $parentId, $textMD5)
@@ -363,7 +363,7 @@ class DoctrineDatabaseTest extends TestCase
      *
      * @todo document
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::reparent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::reparent
      */
     public function testReparent()
     {
@@ -393,7 +393,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the remove() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
      */
     public function testRemove()
     {
@@ -413,7 +413,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the remove() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
      */
     public function testRemoveWithId()
     {
@@ -433,7 +433,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the removeCustomAlias() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
      */
     public function testRemoveCustomAlias()
     {
@@ -451,7 +451,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the removeByAction() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
      */
     public function testRemoveCustomAliasFails()
     {
@@ -467,7 +467,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the getNextId() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::getNextId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::getNextId
      */
     public function testGetNextId()
     {

@@ -53,7 +53,7 @@ class UserHandlerTest extends HandlerTest
 
     /**
      * @dataProvider providerForUnCachedMethods
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler
      */
     public function testUnCachedMethods($method, array $arguments)
     {
@@ -87,7 +87,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::create
      */
     public function testCreate()
     {
@@ -118,7 +118,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::update
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::update
      */
     public function testUpdate()
     {
@@ -149,7 +149,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::delete
      */
     public function testDelete()
     {
@@ -192,7 +192,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::loadRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::loadRole
      */
     public function testLoadRoleIsMiss()
     {
@@ -245,7 +245,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::loadRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::loadRole
      */
     public function testLoadRoleHasCache()
     {
@@ -281,7 +281,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsByGroupIdIsMiss()
     {
@@ -342,7 +342,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsByGroupIdHasCache()
     {
@@ -384,7 +384,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsByGroupIdInheritedIsMiss()
     {
@@ -441,7 +441,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsByGroupIdInheritedHasCache()
     {
@@ -483,7 +483,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::createRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::createRole
      */
     public function testCreateRole()
     {
@@ -525,7 +525,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::createRoleDraft
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::createRoleDraft
      */
     public function testCreateRoleDraft()
     {
@@ -568,7 +568,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::updateRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::updateRole
      */
     public function testUpdateRole()
     {
@@ -603,7 +603,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::updateRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::updateRole
      */
     public function testUpdateRoleDraft()
     {
@@ -638,7 +638,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::deleteRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::deleteRole
      */
     public function testDeleteRole()
     {
@@ -675,7 +675,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::deleteRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::deleteRole
      */
     public function testDeleteRoleDraft()
     {
@@ -816,7 +816,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::addPolicy
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::addPolicy
      */
     public function testAddPolicy()
     {
@@ -847,7 +847,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::addPolicyByRoleDraft
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::addPolicyByRoleDraft
      */
     public function testAddPolicyByRoleDraft()
     {
@@ -876,7 +876,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::updatePolicy
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::updatePolicy
      */
     public function testUpdatePolicy()
     {
@@ -907,7 +907,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::deletePolicy
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::deletePolicy
      */
     public function testDeletePolicy()
     {
@@ -938,7 +938,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::assignRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::assignRole
      */
     public function testAssignRole()
     {
@@ -981,7 +981,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::unassignRole
+     * @covers \eZ\Publish\Core\Persistence\Cache\UserHandler::unassignRole
      */
     public function testUnassignRole()
     {

@@ -26,7 +26,7 @@ class User extends FacetBuilderVisitor
      */
     public function canMap($name)
     {
-        return (substr($name, 0, 6) === 'user__');
+        return substr($name, 0, 6) === 'user__';
     }
 
     /**

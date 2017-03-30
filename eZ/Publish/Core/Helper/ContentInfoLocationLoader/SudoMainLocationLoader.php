@@ -28,7 +28,7 @@ class SudoMainLocationLoader implements ContentInfoLocationLoader
 
     public function loadLocation(ContentInfo $contentInfo)
     {
-        if (is_null($contentInfo->mainLocationId)) {
+        if (null === $contentInfo->mainLocationId) {
             throw new NotFoundException('main location of content', $contentInfo->id);
         }
 

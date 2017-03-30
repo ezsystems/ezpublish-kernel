@@ -75,7 +75,7 @@ class UserService implements UserServiceInterface
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'defaultUserPlacement' => 12,
-            'userClassID' => 4,// @todo Rename this settings to swap out "Class" for "Type"
+            'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
             'hashType' => User::PASSWORD_HASH_MD5_USER,
             'siteName' => 'ez.no',
@@ -528,7 +528,7 @@ class UserService implements UserServiceInterface
      *
      * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
      *
-     * @uses loadUser()
+     * @uses ::loadUser()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */

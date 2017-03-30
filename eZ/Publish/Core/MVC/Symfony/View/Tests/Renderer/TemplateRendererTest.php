@@ -36,6 +36,7 @@ class TemplateRendererTest extends PHPUnit_Framework_TestCase
             $this->eventDispatcherMock
         );
     }
+
     public function testRender()
     {
         $view = $this->createView();

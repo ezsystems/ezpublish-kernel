@@ -106,7 +106,7 @@ class PageController extends Controller
      *
      * This method can be used with ESI rendering strategy.
      *
-     * @uses self::viewBlock()
+     * @uses \self::viewBlock()
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
      *

@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\REST\Common;
 
-/**
- */
 abstract class Value
 {
 }

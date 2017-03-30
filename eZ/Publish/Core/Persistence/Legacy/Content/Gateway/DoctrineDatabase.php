@@ -719,10 +719,10 @@ class DoctrineDatabase extends Gateway
      */
     protected function isLanguageAlwaysAvailable(Content $content, $languageCode)
     {
-        return (
+        return
             $content->versionInfo->contentInfo->alwaysAvailable &&
             $content->versionInfo->contentInfo->mainLanguageCode === $languageCode
-        );
+        ;
     }
 
     /**
@@ -894,6 +894,7 @@ class DoctrineDatabase extends Gateway
 
         return $row;
     }
+
     /**
      * Loads info for content identified by $contentId.
      * Will basically return a hash containing all field values for ezcontentobject table plus some additional keys:

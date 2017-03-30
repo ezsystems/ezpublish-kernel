@@ -48,7 +48,7 @@ class PermissionsCriterionHandler
     /**
      * Adds content, read Permission criteria if needed and return false if no access at all.
      *
-     * @uses getPermissionsCriterion()
+     * @uses ::getPermissionsCriterion()
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *

@@ -223,8 +223,8 @@ class Handler implements BaseLocationHandler
         $locationMap = array(
             $children[0]['parent_node_id'] => array(
                 'id' => $destinationParentId,
-                'hidden' => (boolean)$destinationParentData['is_hidden'],
-                'invisible' => (boolean)$destinationParentData['is_invisible'],
+                'hidden' => (bool)$destinationParentData['is_hidden'],
+                'invisible' => (bool)$destinationParentData['is_invisible'],
                 'path_identification_string' => $destinationParentData['path_identification_string'],
             ),
         );

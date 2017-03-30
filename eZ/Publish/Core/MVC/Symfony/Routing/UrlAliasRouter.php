@@ -156,6 +156,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                         // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
                         $request->attributes->set('prependSiteaccessOnRedirect', false);
                     } elseif ($this->needsCaseRedirect($urlAlias, $requestedPath, $pathPrefix)) {
+                        if ($urlAlias->destination instanceof Location) {
+                            $request->attributes->set('locationId', $urlAlias->destination->id);
+                        }
                         $request->attributes->set('semanticPathinfo', $this->removePathPrefix($urlAlias->path, $pathPrefix));
                         $request->attributes->set('needsRedirect', true);
                     }
@@ -241,12 +244,12 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         }
 
         // Compare loaded UrlAlias with requested path, prefixed with configured path prefix.
-        return (
+        return
             strcmp(
                 $loadedUrlAlias->path,
                 $pathPrefix . ($pathPrefix === '/' ? trim($requestedPath, '/') : rtrim($requestedPath, '/'))
             ) !== 0
-        );
+        ;
     }
 
     /**

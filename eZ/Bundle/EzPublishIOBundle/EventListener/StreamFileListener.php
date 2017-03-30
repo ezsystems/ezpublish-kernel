@@ -85,6 +85,6 @@ class StreamFileListener implements EventSubscriberInterface
      */
     private function isIoUri($uri, $urlPrefix)
     {
-        return (strpos(ltrim($uri, '/'), $urlPrefix) === 0);
+        return strpos(ltrim($uri, '/'), $this->configResolver->getParameter('io.url_prefix')) === 0;
     }
 }

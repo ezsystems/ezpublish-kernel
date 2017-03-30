@@ -142,7 +142,7 @@ class PermissionResolver implements PermissionResolverInterface
             return $permissionSets;
         }
 
-        return false;// No policies matching $module and $function, or they contained limitations
+        return false; // No policies matching $module and $function, or they contained limitations
     }
 
     public function canUser($module, $function, ValueObject $object, array $targets = [])
@@ -212,7 +212,7 @@ class PermissionResolver implements PermissionResolverInterface
                      */
                     if ($accessVote !== LimitationType::ACCESS_GRANTED) {
                         $limitationsPass = false;
-                        break;// Break to next policy, all limitations must pass
+                        break; // Break to next policy, all limitations must pass
                     }
                 }
                 if ($limitationsPass) {
@@ -221,7 +221,7 @@ class PermissionResolver implements PermissionResolverInterface
             }
         }
 
-        return false;// None of the limitation sets wanted to let you in, sorry!
+        return false; // None of the limitation sets wanted to let you in, sorry!
     }
 
     /**

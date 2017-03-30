@@ -18,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 class LocationHandlerTest extends HandlerTest
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::load
      */
     public function testLoadCacheIsMiss()
     {
@@ -68,7 +68,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::load
      */
     public function testLoadHasCache()
     {
@@ -103,7 +103,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
      */
     public function testLoadLocationsByContentIsMiss()
     {
@@ -153,7 +153,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
      */
     public function testLoadLocationsByContentHasCache()
     {
@@ -211,7 +211,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadParentLocationsForDraftContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::loadParentLocationsForDraftContent
      */
     public function testLoadParentLocationsForDraftContentIsMiss()
     {
@@ -261,7 +261,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadParentLocationsForDraftContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::loadParentLocationsForDraftContent
      */
     public function testLoadParentLocationsForDraftContentHasCache()
     {
@@ -319,7 +319,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
      */
     public function testLoadLocationsByContentWithRootIsMiss()
     {
@@ -369,7 +369,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
      */
     public function testLoadLocationsByContentWithRootHasCache()
     {
@@ -427,7 +427,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadByRemoteId
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::loadByRemoteId
      */
     public function testLoadByRemoteId()
     {
@@ -453,7 +453,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::copySubtree
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::copySubtree
      */
     public function testCopySubtree()
     {
@@ -479,7 +479,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::move
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::move
      */
     public function testMove()
     {
@@ -513,7 +513,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::markSubtreeModified
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::markSubtreeModified
      */
     public function testMarkSubtreeModified()
     {
@@ -537,8 +537,9 @@ class LocationHandlerTest extends HandlerTest
         $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->markSubtreeModified(55);
     }
+
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::hide
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::hide
      */
     public function testHide()
     {
@@ -566,7 +567,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::unhide
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::unhide
      */
     public function testUnhide()
     {
@@ -594,7 +595,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::swap
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::swap
      */
     public function testSwap()
     {
@@ -694,7 +695,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::update
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::update
      */
     public function testUpdate()
     {
@@ -731,7 +732,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::create
      */
     public function testCreate()
     {
@@ -811,7 +812,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::removeSubtree
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::removeSubtree
      */
     public function testRemoveSubtree()
     {
@@ -851,7 +852,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::setSectionForSubtree
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::setSectionForSubtree
      */
     public function testSetSectionForSubtree()
     {
@@ -878,7 +879,7 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::changeMainLocation
+     * @covers \eZ\Publish\Core\Persistence\Cache\LocationHandler::changeMainLocation
      */
     public function testChangeMainLocation()
     {

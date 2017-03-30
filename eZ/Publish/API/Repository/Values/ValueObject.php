@@ -41,7 +41,7 @@ abstract class ValueObject
      *
      * Used by {@see attributes()}, override to add dynamic properties
      *
-     * @uses __isset()
+     * @uses ::__isset()
      *
      * @todo Make object traversable and reuse this function there (hence why this is not exposed)
      *
@@ -125,7 +125,7 @@ abstract class ValueObject
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException exception on all writes to undefined properties so typos are not silently accepted and
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException exception on readonly (protected) properties.
      *
-     * @uses __set()
+     * @uses ::__set()
      *
      * @param string $property Name of the property
      *
@@ -164,7 +164,7 @@ abstract class ValueObject
      *
      * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      *
-     * @uses __get()
+     * @uses ::__get()
      *
      * @param string $property
      *
@@ -182,7 +182,7 @@ abstract class ValueObject
      *
      * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      *
-     * @uses __isset()
+     * @uses ::__isset()
      *
      * @return array
      */
@@ -198,7 +198,7 @@ abstract class ValueObject
      *
      * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      *
-     * @uses __isset()
+     * @uses ::__isset()
      *
      * @param string $property
      *

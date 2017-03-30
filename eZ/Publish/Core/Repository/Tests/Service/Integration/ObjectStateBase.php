@@ -115,17 +115,17 @@ abstract class ObjectStateBase extends BaseServiceTest
     {
         $objectState = new ObjectState();
         $value = isset($objectState->notDefined);
-        $this->assertEquals(false, $value);
+        $this->assertFalse($value);
 
         $value = isset($objectState->id);
-        $this->assertEquals(true, $value);
+        $this->assertTrue($value);
 
         $objectStateGroup = new ObjectStateGroup();
         $value = isset($objectStateGroup->notDefined);
-        $this->assertEquals(false, $value);
+        $this->assertFalse($value);
 
         $value = isset($objectStateGroup->id);
-        $this->assertEquals(true, $value);
+        $this->assertTrue($value);
     }
 
     /**

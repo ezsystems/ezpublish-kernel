@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 class SectionHandlerTest extends HandlerTest
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::assign
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::assign
      */
     public function testAssign()
     {
@@ -51,7 +51,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::assignmentsCount
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::assignmentsCount
      */
     public function testAssignmentsCount()
     {
@@ -77,7 +77,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::policiesCount
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::policiesCount
      */
     public function testPoliciesCount()
     {
@@ -103,7 +103,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::countRoleAssignmentsUsingSection
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::countRoleAssignmentsUsingSection
      */
     public function testCountRoleAssignmentsUsingSection()
     {
@@ -129,7 +129,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::create
      */
     public function testCreate()
     {
@@ -180,7 +180,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::delete
      */
     public function testDelete()
     {
@@ -211,7 +211,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::load
      */
     public function testLoadCacheIsMiss()
     {
@@ -267,7 +267,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::load
      */
     public function testLoadHasCache()
     {
@@ -308,7 +308,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::loadAll
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::loadAll
      */
     public function testLoadAll()
     {
@@ -333,7 +333,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::loadByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::loadByIdentifier
      */
     public function testLoadByIdentifier()
     {
@@ -365,7 +365,7 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\SectionHandler::update
+     * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::update
      */
     public function testUpdate()
     {

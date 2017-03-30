@@ -988,7 +988,7 @@ class Repository implements RepositoryInterface
     /**
      * Enqueue an event to be triggered at commit or directly if no transaction has started.
      *
-     * @param Callable $event
+     * @param callable $event
      */
     public function commitEvent($event)
     {

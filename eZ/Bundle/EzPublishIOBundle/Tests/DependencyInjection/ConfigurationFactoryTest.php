@@ -81,6 +81,7 @@ abstract class ConfigurationFactoryTest extends AbstractContainerBuilderTestCase
 
         return $handlerServiceId;
     }
+
     /**
      * Returns an instance of the tested factory.
      *

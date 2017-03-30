@@ -69,7 +69,7 @@ class RoleAssignInput extends BaseParser
 
             $limitation = $parsingDispatcher->parse(
                 $data['limitation'],
-                'application/vnd.ez.api.internal.limitation.'  . $data['limitation']['_identifier']
+                'application/vnd.ez.api.internal.limitation.' . $data['limitation']['_identifier']
             );
         }
 

@@ -43,8 +43,6 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use DateTime;
 use Exception;
 
-/**
- */
 class ContentTypeService implements ContentTypeServiceInterface
 {
     /**
@@ -1612,7 +1610,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
     /**
      * Instantiates a field definition create struct.
-     
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue if given identifier is not a string
      *          or given fieldTypeIdentifier is not a string
      *
