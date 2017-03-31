@@ -135,8 +135,6 @@ class DateTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        $dateTime = new DateTime();
-
         return array(
             array(
                 null,
@@ -149,12 +147,12 @@ class DateTest extends FieldTypeTest
             array(
                 ($timestamp = 1346149200),
                 new DateValue(
-                    clone $dateTime->setTimestamp($timestamp)
+                    new DateTime("@{$timestamp}")
                 ),
             ),
             array(
-                DateValue::fromTimestamp(1372895999),
-                new DateValue($dateTime->setTimestamp(1372895999)->setTime(0, 0, 0)),
+                DateValue::fromTimestamp($timestamp = 1372895999),
+                new DateValue(new DateTime("@{$timestamp}")),
             ),
             array(
                 ($dateTime = new DateTime()),
@@ -263,7 +261,7 @@ class DateTest extends FieldTypeTest
                 array(
                     'timestamp' => ($timestamp = 1362614400),
                 ),
-                new DateValue(clone $dateTime->setTimestamp($timestamp)),
+                new DateValue(new DateTime("@{$timestamp}")),
             ),
             array(
                 array(

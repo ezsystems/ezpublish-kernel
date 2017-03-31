@@ -109,7 +109,9 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return DateValue::fromString('Wed, 21 Jul 2013 16:59:50');
+        // We may only create times from timestamps here, since storing will
+        // loose information about the timezone.
+        return DateValue::fromTimestamp(86400);
     }
 
     /**
@@ -119,7 +121,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getFieldName()
     {
-        return 'Wednesday 24 July 2013';
+        return 'Friday 02 January 1970';
     }
 
     /**
@@ -137,11 +139,10 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $dateTime = new DateTime('Wed, 21 Jul 2013 16:59:50');
-        $dateTime->setTime(0, 0, 0);
         $expectedData = array(
-            'date' => $dateTime,
+            'date' => new DateTime('@86400'),
         );
+
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -186,11 +187,11 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return DateValue::fromString('Wed, 21 Jul 2013 17:59:50');
+        return DateValue::fromTimestamp(86400);
     }
 
     /**
-     * Asserts the the field data was loaded correctly.
+     * Asserts the field data was loaded correctly.
      *
      * Asserts that the data provided by {@link getValidUpdateFieldData()}
      * was stored and loaded correctly.
@@ -204,10 +205,8 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $dateTime = new DateTime('Wed, 21 Jul 2013 17:59:50');
-        $dateTime->setTime(0, 0, 0);
         $expectedData = array(
-            'date' => $dateTime,
+            'date' => new DateTime('@86400'),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -276,13 +275,14 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        $dateTime = new DateTime();
+        $timestamp = 186401;
+        $dateTime = new DateTime("@{$timestamp}");
 
         return array(
             array(
-                DateValue::fromTimestamp($timestamp = 186401),
+                DateValue::fromTimestamp($timestamp),
                 array(
-                    'timestamp' => $dateTime->setTimestamp($timestamp)->setTime(0, 0, 0)->getTimestamp(),
+                    'timestamp' => $dateTime->setTime(0, 0, 0)->getTimestamp(),
                     'rfc850' => $dateTime->format(DateTime::RFC850),
                 ),
             ),
@@ -311,19 +311,22 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
+        $timestamp = 123456;
+
         $dateTime = new DateTime();
+        $dateTime->setTimestamp($timestamp)->setTime(0, 0, 0);
 
         return array(
             array(
                 array(
-                    'timestamp' => $dateTime->setTimestamp(123456)->setTime(0, 0, 0)->getTimestamp(),
+                    'timestamp' => $timestamp,
                     'rfc850' => ($rfc850 = $dateTime->format(DateTime::RFC850)),
                 ),
                 DateValue::fromString($rfc850),
             ),
             array(
                 array(
-                    'timestamp' => $dateTime->setTimestamp($timestamp = 123456)->setTime(0, 0, 0)->getTimestamp(),
+                    'timestamp' => $timestamp,
                     'rfc850' => null,
                 ),
                 DateValue::fromTimestamp($timestamp),
@@ -349,16 +352,12 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getValidSearchValueOne()
     {
-        $date = new DateTime('1970-01-02');
-
-        return $date->getTimestamp();
+        return 86400;
     }
 
     protected function getValidSearchValueTwo()
     {
-        $date = new DateTime('1970-01-03');
-
-        return $date->getTimestamp();
+        return 172800;
     }
 
     protected function getSearchTargetValueOne()
