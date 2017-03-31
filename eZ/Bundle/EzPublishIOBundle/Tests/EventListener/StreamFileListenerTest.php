@@ -35,11 +35,6 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
         $this->ioServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
 
         $this->configResolverMock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->configResolverMock
-            ->expects($this->any())
-            ->method('getParameter')
-            ->with('io.url_prefix')
-            ->will($this->returnValue($this->ioUriPrefix));
 
         $this->eventListener = new StreamFileListener($this->ioServiceMock, $this->configResolverMock);
     }
@@ -49,6 +44,26 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
         $request = $this->createRequest('/Not-an-image');
         $event = $this->createEvent($request);
 
+        $this->configureIoUrlPrefix('var/test/storage');
+        $this->ioServiceMock
+            ->expects($this->never())
+            ->method('loadBinaryFileByUri');
+
+        $this->eventListener->onKernelRequest($event);
+
+        self::assertNull($event->getResponse());
+    }
+
+    public function testDoesNotRespondToNoIoRequest()
+    {
+        $request = $this->createRequest('/Not-an-image', 'bar.fr');
+        $event = $this->createEvent($request);
+
+        $this->configureIoUrlPrefix('http://foo.com/var/test/storage');
+        $this->ioServiceMock
+            ->expects($this->never())
+            ->method('loadBinaryFileByUri');
+
         $this->eventListener->onKernelRequest($event);
 
         self::assertNull($event->getResponse());
@@ -57,6 +72,7 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
     public function testRespondsToIoUri()
     {
         $uri = '/var/test/storage/images/image.png';
+        $this->configureIoUrlPrefix(ltrim($uri, '/'));
         $request = $this->createRequest($uri);
 
         $event = $this->createEvent($request);
@@ -78,12 +94,48 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testRespondsToIoRequest()
+    {
+        $uri = '/var/test/storage/images/image.png';
+        $host = 'phoenix-rises.fm';
+        $urlPrefix = "http://$host/var/test/storage";
+        $this->configureIoUrlPrefix($urlPrefix);
+        $request = $this->createRequest($uri, $host);
+
+        $event = $this->createEvent($request);
+
+        $binaryFile = new BinaryFile(array('mtime' => new DateTime()));
+
+        $this->ioServiceMock
+            ->expects($this->once())
+            ->method('loadBinaryFileByUri')
+            ->with(sprintf('http://%s%s', $host, $uri))
+            ->will($this->returnValue($binaryFile));
+
+        $this->eventListener->onKernelRequest($event);
+
+        self::assertTrue($event->hasResponse());
+        self::assertEquals(
+            new BinaryStreamResponse($binaryFile, $this->ioServiceMock),
+            $event->getResponse()
+        );
+    }
+
+    private function configureIoUrlPrefix($urlPrefix)
+    {
+        $this->configResolverMock
+            ->expects($this->any())
+            ->method('getParameter')
+            ->with('io.url_prefix')
+            ->willReturn($urlPrefix);
+    }
+
     /**
      * @return Request
      */
-    protected function createRequest($semanticPath)
+    protected function createRequest($semanticPath, $host = 'localhost')
     {
-        $request = new Request();
+        $request = Request::create(sprintf('http://%s%s', $host, $semanticPath));
         $request->attributes->set('semanticPathinfo', $semanticPath);
 
         return $request;
