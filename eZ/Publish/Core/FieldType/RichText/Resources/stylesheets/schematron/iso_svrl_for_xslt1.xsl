@@ -169,6 +169,7 @@
 </xsl:param>
 <xsl:param name="allow-foreign" >false</xsl:param>
 <xsl:param name="generate-paths" >true</xsl:param>
+<xsl:param name="default-path-mode" >schematron-get-full-path</xsl:param>
 <xsl:param name="generate-fired-rule" >true</xsl:param>
 <xsl:param name="optimize"/>
 
@@ -248,6 +249,7 @@
   <xsl:param name="diagnostics" />
   <xsl:param name="id" />
   <xsl:param name="flag" />
+  <xsl:param name="mode" />
   <!-- "Linkable" parameters -->
   <xsl:param name="role"/>
   <xsl:param name="subject"/>
@@ -283,7 +285,15 @@
     <xsl:if test=" $generate-paths = 'true' or $generate-paths= 'yes' ">
       <!-- true/false is the new way -->
       <axsl:attribute name="location">
-        <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+        <!-- error output: use mode attribute defined for s:assert if not empty -->
+        <axsl:apply-templates select=".">
+          <xsl:attribute name="mode">
+            <xsl:choose>
+              <xsl:when test="$mode != ''"><xsl:value-of select="$mode"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="$default-path-mode"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </axsl:apply-templates>
       </axsl:attribute>
     </xsl:if>
 
@@ -316,6 +326,7 @@
   <!-- "Linkable" parameters -->
   <xsl:param name="role"/>
   <xsl:param name="subject"/>
+  <xsl:param name="mode"/>
   <!-- "Rich" parameters -->
   <xsl:param name="fpi" />
   <xsl:param name="icon" />
@@ -349,7 +360,15 @@
     <xsl:if test=" $generate-paths = 'yes' or $generate-paths = 'true' ">
       <!-- true/false is the new way -->
       <axsl:attribute name="location">
-        <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+        <!-- error output: use mode attribute defined for s:report if not empty -->
+        <axsl:apply-templates select=".">
+          <xsl:attribute name="mode">
+            <xsl:choose>
+              <xsl:when test="$mode != ''"><xsl:value-of select="$mode"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="$default-path-mode"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </axsl:apply-templates>
       </axsl:attribute>
     </xsl:if>
 
