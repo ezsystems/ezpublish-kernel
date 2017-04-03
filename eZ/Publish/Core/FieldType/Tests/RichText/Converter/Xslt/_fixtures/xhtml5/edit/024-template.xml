@@ -4,21 +4,23 @@
     <div data-ezelement="ezcontent">
       <table title="tableTitle">
         <caption>About factoids</caption>
-        <tr>
-          <th>
-            <h3 style="text-align:center;">Some facts about factoids</h3>
-          </th>
-        </tr>
-        <tr>
-          <td>
-            <p>A factoid is a questionable or spurious (unverified, false, or fabricated) statement presented as a fact, but without supporting evidence.</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Factoids may give rise to, or arise from, common misconceptions and urban legends.</p>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <th>
+              <h3 style="text-align:center;">Some facts about factoids</h3>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <p>A factoid is a questionable or spurious (unverified, false, or fabricated) statement presented as a fact, but without supporting evidence.</p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>Factoids may give rise to, or arise from, common misconceptions and urban legends.</p>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <span data-ezelement="ezconfig">

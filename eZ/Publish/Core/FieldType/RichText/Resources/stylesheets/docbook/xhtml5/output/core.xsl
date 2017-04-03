@@ -303,9 +303,25 @@
           <xsl:value-of select="./docbook:caption"/>
         </xsl:element>
       </xsl:if>
-      <xsl:for-each select="./docbook:tr | ./docbook:tbody/docbook:tr">
-        <xsl:apply-templates select="current()"/>
-      </xsl:for-each>
+      <xsl:if test="./docbook:thead">
+        <xsl:element name="thead" namespace="{$outputNamespace}">
+          <xsl:for-each select="./docbook:thead/docbook:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
+      <xsl:element name="tbody" namespace="{$outputNamespace}">
+        <xsl:for-each select="./docbook:tr | ./docbook:tbody/docbook:tr">
+          <xsl:apply-templates select="current()"/>
+        </xsl:for-each>
+      </xsl:element>
+      <xsl:if test="./docbook:tfoot">
+        <xsl:element name="tfoot" namespace="{$outputNamespace}">
+          <xsl:for-each select="./docbook:tfoot/docbook:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
     </xsl:element>
   </xsl:template>
 
