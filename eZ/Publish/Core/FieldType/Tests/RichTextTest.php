@@ -200,6 +200,37 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                     ),
                 ),
             ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+  <para><link xlink:href="javascript:alert(\'XSS\');">link</link></para>
+</section>',
+                array(
+                    new ValidationError(
+                        "Validation of XML content failed:\n" .
+                        '/section/para/link: using scripts in links is not allowed'
+                    ),
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+  <para><link xlink:href="vbscript:alert(\'XSS\');">link</link></para>
+</section>',
+                array(
+                    new ValidationError(
+                        "Validation of XML content failed:\n" .
+                        '/section/para/link: using scripts in links is not allowed'
+                    ),
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+  <para><link xlink:href="http://example.org">link</link></para>
+</section>',
+                array(),
+            ),
         );
     }
 
