@@ -27,6 +27,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -168,7 +169,8 @@ class SecurityListener implements EventSubscriberInterface
      *
      * @param BaseInteractiveLoginEvent $event
      *
-     * @throws \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
+     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
+     *         Contains an UnauthorizedSiteAccessException as the previous exception.
      */
     public function checkSiteAccessPermission(BaseInteractiveLoginEvent $event)
     {
@@ -181,7 +183,8 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         if (!$this->hasAccess($siteAccess, $originalUser->getUsername())) {
-            throw new UnauthorizedSiteAccessException($siteAccess, $originalUser->getUsername());
+            $siteAccessException = new UnauthorizedSiteAccessException($siteAccess, $originalUser->getUsername());
+            throw new AuthenticationException($siteAccessException->getMessage(), 0, $siteAccessException);
         }
     }
 
