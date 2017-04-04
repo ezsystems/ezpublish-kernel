@@ -173,7 +173,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
     public function testCheckSiteAccessPermissionDenied()
     {
