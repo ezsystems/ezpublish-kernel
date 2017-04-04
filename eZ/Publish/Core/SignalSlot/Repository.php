@@ -96,13 +96,6 @@ class Repository implements RepositoryInterface
     protected $contentTypeService;
 
     /**
-     * Instance of IO service.
-     *
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $ioService;
-
-    /**
      * Instance of object state service.
      *
      * @var \eZ\Publish\API\Repository\ObjectStateService
@@ -139,10 +132,38 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct(RepositoryInterface $repository, SignalDispatcher $signalDispatcher)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        RepositoryInterface $repository,
+        SignalDispatcher $signalDispatcher,
+        ContentService $contentService,
+        ContentTypeService $contentTypeService,
+        FieldTypeService $fieldTypeService,
+        RoleService $roleService,
+        ObjectStateService $objectStateService,
+        URLWildcardService $urlWildcardService,
+        URLAliasService $urlAliasService,
+        UserService $userService,
+        SearchService $searchService,
+        SectionService $sectionService,
+        TrashService $trashService,
+        LocationService $locationService,
+        LanguageService $languageService
+    ) {
         $this->signalDispatcher = $signalDispatcher;
+        $this->repository = $repository;
+        $this->contentService = $contentService;
+        $this->contentTypeService = $contentTypeService;
+        $this->fieldTypeService = $fieldTypeService;
+        $this->roleService = $roleService;
+        $this->objectStateService = $objectStateService;
+        $this->urlWildcardService = $urlWildcardService;
+        $this->urlAliasService = $urlAliasService;
+        $this->userService = $userService;
+        $this->searchService = $searchService;
+        $this->sectionService = $sectionService;
+        $this->trashService = $trashService;
+        $this->locationService = $locationService;
+        $this->languageService = $languageService;
     }
 
     /**
@@ -258,12 +279,6 @@ class Repository implements RepositoryInterface
      */
     public function getContentService()
     {
-        if ($this->contentService !== null) {
-            return $this->contentService;
-        }
-
-        $this->contentService = new ContentService($this->repository->getContentService(), $this->signalDispatcher);
-
         return $this->contentService;
     }
 
@@ -276,12 +291,6 @@ class Repository implements RepositoryInterface
      */
     public function getContentLanguageService()
     {
-        if ($this->languageService !== null) {
-            return $this->languageService;
-        }
-
-        $this->languageService = new LanguageService($this->repository->getContentLanguageService(), $this->signalDispatcher);
-
         return $this->languageService;
     }
 
@@ -295,12 +304,6 @@ class Repository implements RepositoryInterface
      */
     public function getContentTypeService()
     {
-        if ($this->contentTypeService !== null) {
-            return $this->contentTypeService;
-        }
-
-        $this->contentTypeService = new ContentTypeService($this->repository->getContentTypeService(), $this->signalDispatcher);
-
         return $this->contentTypeService;
     }
 
@@ -313,12 +316,6 @@ class Repository implements RepositoryInterface
      */
     public function getLocationService()
     {
-        if ($this->locationService !== null) {
-            return $this->locationService;
-        }
-
-        $this->locationService = new LocationService($this->repository->getLocationService(), $this->signalDispatcher);
-
         return $this->locationService;
     }
 
@@ -332,12 +329,6 @@ class Repository implements RepositoryInterface
      */
     public function getTrashService()
     {
-        if ($this->trashService !== null) {
-            return $this->trashService;
-        }
-
-        $this->trashService = new TrashService($this->repository->getTrashService(), $this->signalDispatcher);
-
         return $this->trashService;
     }
 
@@ -350,12 +341,6 @@ class Repository implements RepositoryInterface
      */
     public function getSectionService()
     {
-        if ($this->sectionService !== null) {
-            return $this->sectionService;
-        }
-
-        $this->sectionService = new SectionService($this->repository->getSectionService(), $this->signalDispatcher);
-
         return $this->sectionService;
     }
 
@@ -368,12 +353,6 @@ class Repository implements RepositoryInterface
      */
     public function getUserService()
     {
-        if ($this->userService !== null) {
-            return $this->userService;
-        }
-
-        $this->userService = new UserService($this->repository->getUserService(), $this->signalDispatcher);
-
         return $this->userService;
     }
 
@@ -384,12 +363,6 @@ class Repository implements RepositoryInterface
      */
     public function getURLAliasService()
     {
-        if ($this->urlAliasService !== null) {
-            return $this->urlAliasService;
-        }
-
-        $this->urlAliasService = new URLAliasService($this->repository->getURLAliasService(), $this->signalDispatcher);
-
         return $this->urlAliasService;
     }
 
@@ -400,12 +373,6 @@ class Repository implements RepositoryInterface
      */
     public function getURLWildcardService()
     {
-        if ($this->urlWildcardService !== null) {
-            return $this->urlWildcardService;
-        }
-
-        $this->urlWildcardService = new URLWildcardService($this->repository->getURLWildcardService(), $this->signalDispatcher);
-
         return $this->urlWildcardService;
     }
 
@@ -416,12 +383,6 @@ class Repository implements RepositoryInterface
      */
     public function getObjectStateService()
     {
-        if ($this->objectStateService !== null) {
-            return $this->objectStateService;
-        }
-
-        $this->objectStateService = new ObjectStateService($this->repository->getObjectStateService(), $this->signalDispatcher);
-
         return $this->objectStateService;
     }
 
@@ -432,12 +393,6 @@ class Repository implements RepositoryInterface
      */
     public function getRoleService()
     {
-        if ($this->roleService !== null) {
-            return $this->roleService;
-        }
-
-        $this->roleService = new RoleService($this->repository->getRoleService(), $this->signalDispatcher);
-
         return $this->roleService;
     }
 
@@ -448,12 +403,6 @@ class Repository implements RepositoryInterface
      */
     public function getSearchService()
     {
-        if ($this->searchService !== null) {
-            return $this->searchService;
-        }
-
-        $this->searchService = new SearchService($this->repository->getSearchService(), $this->signalDispatcher);
-
         return $this->searchService;
     }
 
@@ -464,12 +413,6 @@ class Repository implements RepositoryInterface
      */
     public function getFieldTypeService()
     {
-        if ($this->fieldTypeService !== null) {
-            return $this->fieldTypeService;
-        }
-
-        $this->fieldTypeService = new FieldTypeService($this->repository->getFieldTypeService(), $this->signalDispatcher);
-
         return $this->fieldTypeService;
     }
 
