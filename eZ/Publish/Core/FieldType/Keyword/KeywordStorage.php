@@ -64,16 +64,8 @@ class KeywordStorage extends GatewayBasedStorage
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        // If current version being asked to be deleted is not published, then don't delete keywords
-        // if there is some other version which is published (as keyword table is not versioned)
-        if ($versionInfo->status !== VersionInfo::STATUS_PUBLISHED &&
-            $versionInfo->contentInfo->isPublished
-        ) {
-            return false;
-        }
-
         foreach ($fieldIds as $fieldId) {
-            $this->gateway->deleteFieldData($fieldId);
+            $this->gateway->deleteFieldData($fieldId, $versionInfo->versionNo);
         }
 
         return true;

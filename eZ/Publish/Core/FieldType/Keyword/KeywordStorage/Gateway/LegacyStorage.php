@@ -44,14 +44,14 @@ class LegacyStorage extends Gateway
     public function storeFieldData(Field $field, $contentTypeId)
     {
         if (empty($field->value->externalData) && !empty($field->id)) {
-            $this->deleteFieldData($field->id);
+            $this->deleteFieldData($field->id, $field->versionNo);
 
             return;
         }
 
         $existingKeywordMap = $this->getExistingKeywords($field->value->externalData, $contentTypeId);
 
-        $this->deleteOldKeywordAssignments($field->id);
+        $this->deleteOldKeywordAssignments($field->id, $field->versionNo);
 
         $this->assignKeywords(
             $field->id,
@@ -61,7 +61,8 @@ class LegacyStorage extends Gateway
                     $existingKeywordMap
                 ),
                 $contentTypeId
-            ) + $existingKeywordMap
+            ) + $existingKeywordMap,
+            $field->versionNo
         );
 
         $this->deleteOrphanedKeywords();
@@ -74,7 +75,7 @@ class LegacyStorage extends Gateway
      */
     public function getFieldData(Field $field)
     {
-        $field->value->externalData = $this->getAssignedKeywords($field->id);
+        $field->value->externalData = $this->getAssignedKeywords($field->id, $field->versionNo);
     }
 
     /**
@@ -93,10 +94,11 @@ class LegacyStorage extends Gateway
      * Stores the keyword list from $field->value->externalData.
      *
      * @param mixed $fieldId
+     * @param int $versionNo
      */
-    public function deleteFieldData($fieldId)
+    public function deleteFieldData($fieldId, $versionNo)
     {
-        $this->deleteOldKeywordAssignments($fieldId);
+        $this->deleteOldKeywordAssignments($fieldId, $versionNo);
         $this->deleteOrphanedKeywords();
     }
 
@@ -104,10 +106,11 @@ class LegacyStorage extends Gateway
      * Returns a list of keywords assigned to $fieldId.
      *
      * @param mixed $fieldId
+     * @param int $versionNo
      *
      * @return string[]
      */
-    protected function getAssignedKeywords($fieldId)
+    protected function getAssignedKeywords($fieldId, $versionNo)
     {
         $dbHandler = $this->getConnection();
 
@@ -122,9 +125,15 @@ class LegacyStorage extends Gateway
                 )
             )
             ->where(
-                $query->expr->eq(
-                    $dbHandler->quoteColumn('objectattribute_id', 'ezkeyword_attribute_link'),
-                    $fieldId
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $dbHandler->quoteColumn('objectattribute_id', 'ezkeyword_attribute_link'),
+                        $fieldId
+                    ),
+                    $query->expr->eq(
+                        $dbHandler->quoteColumn('version', 'ezkeyword_attribute_link'),
+                        $versionNo
+                    )
                 )
             );
 
@@ -268,7 +277,7 @@ class LegacyStorage extends Gateway
         return $keywordIdMap;
     }
 
-    protected function deleteOldKeywordAssignments($fieldId)
+    protected function deleteOldKeywordAssignments($fieldId, $versionNo)
     {
         $dbHandler = $this->getConnection();
 
@@ -276,9 +285,15 @@ class LegacyStorage extends Gateway
         $deleteQuery->deleteFrom(
             $dbHandler->quoteTable('ezkeyword_attribute_link')
         )->where(
-            $deleteQuery->expr->eq(
-                $dbHandler->quoteColumn('objectattribute_id', 'ezkeyword_attribute_link'),
-                $deleteQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->eq(
+                    $dbHandler->quoteColumn('objectattribute_id', 'ezkeyword_attribute_link'),
+                    $deleteQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
+                ),
+                $deleteQuery->expr->eq(
+                    $dbHandler->quoteColumn('version', 'ezkeyword_attribute_link'),
+                    $deleteQuery->bindValue($versionNo, null, \PDO::PARAM_INT)
+                )
             )
         );
 
@@ -299,8 +314,9 @@ class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param mixed[] $keywordMap
+     * @param int $versionNo
      */
-    protected function assignKeywords($fieldId, $keywordMap)
+    protected function assignKeywords($fieldId, $keywordMap, $versionNo)
     {
         $dbHandler = $this->getConnection();
 
@@ -315,6 +331,9 @@ class LegacyStorage extends Gateway
         )->set(
             $dbHandler->quoteColumn('objectattribute_id'),
             $insertQuery->bindValue($fieldId)
+        )->set(
+            $dbHandler->quoteColumn('version'),
+            $insertQuery->bindValue($versionNo)
         );
 
         $statement = $insertQuery->prepare();

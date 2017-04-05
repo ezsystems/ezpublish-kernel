@@ -37,7 +37,7 @@ class DoctrineStorage extends Gateway
     public function storeFieldData(Field $field, $contentTypeId)
     {
         if (empty($field->value->externalData) && !empty($field->id)) {
-            $this->deleteFieldData($field->id);
+            $this->deleteFieldData($field->id, $field->versionNo);
 
             return;
         }
@@ -47,7 +47,7 @@ class DoctrineStorage extends Gateway
             $contentTypeId
         );
 
-        $this->deleteOldKeywordAssignments($field->id);
+        $this->deleteOldKeywordAssignments($field->id, $field->versionNo);
 
         $this->assignKeywords(
             $field->id,
@@ -57,7 +57,8 @@ class DoctrineStorage extends Gateway
                     $existingKeywordMap
                 ),
                 $contentTypeId
-            ) + $existingKeywordMap
+            ) + $existingKeywordMap,
+            $field->versionNo
         );
 
         $this->deleteOrphanedKeywords();
@@ -70,7 +71,7 @@ class DoctrineStorage extends Gateway
      */
     public function getFieldData(Field $field)
     {
-        $field->value->externalData = $this->getAssignedKeywords($field->id);
+        $field->value->externalData = $this->getAssignedKeywords($field->id, $field->versionNo);
     }
 
     /**
@@ -89,10 +90,11 @@ class DoctrineStorage extends Gateway
      * Deletes keyword data for the given $fieldId.
      *
      * @param int $fieldId
+     * @param int $versionNo
      */
-    public function deleteFieldData($fieldId)
+    public function deleteFieldData($fieldId, $versionNo)
     {
-        $this->deleteOldKeywordAssignments($fieldId);
+        $this->deleteOldKeywordAssignments($fieldId, $versionNo);
         $this->deleteOrphanedKeywords();
     }
 
@@ -100,10 +102,11 @@ class DoctrineStorage extends Gateway
      * Returns a list of keywords assigned to $fieldId.
      *
      * @param int $fieldId
+     * @param int $versionNo
      *
      * @return string[]
      */
-    protected function getAssignedKeywords($fieldId)
+    protected function getAssignedKeywords($fieldId, $versionNo)
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -119,12 +122,19 @@ class DoctrineStorage extends Gateway
                 )
             )
             ->where(
-                $query->expr()->eq(
-                    $this->connection->quoteIdentifier('attr.objectattribute_id'),
-                    ':fieldId'
+                $query->expr()->andX(
+                    $query->expr()->eq(
+                        $this->connection->quoteIdentifier('attr.objectattribute_id'),
+                        ':fieldId'
+                    ),
+                    $query->expr()->eq(
+                        $this->connection->quoteIdentifier('attr.version'),
+                        ':versionNo'
+                    )
                 )
             )
             ->setParameter(':fieldId', $fieldId)
+            ->setParameter(':versionNo', $versionNo)
         ;
 
         $statement = $query->execute();
@@ -266,18 +276,26 @@ class DoctrineStorage extends Gateway
         return $keywordIdMap;
     }
 
-    protected function deleteOldKeywordAssignments($fieldId)
+    protected function deleteOldKeywordAssignments($fieldId, $versionNo)
     {
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
             ->delete($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
             ->where(
-                $deleteQuery->expr()->eq(
-                    $this->connection->quoteIdentifier('objectattribute_id'),
-                    ':fieldId'
+                $deleteQuery->expr()->andX(
+                    $deleteQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('objectattribute_id'),
+                        ':fieldId'
+                    ),
+                    $deleteQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('version'),
+                        ':versionNo'
+                    )
                 )
             )
-            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT);
+            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT)
+        ;
 
         $deleteQuery->execute();
     }
@@ -295,8 +313,9 @@ class DoctrineStorage extends Gateway
      *
      * @param int $fieldId
      * @param int[] $keywordMap
+     * @param int $versionNo
      */
-    protected function assignKeywords($fieldId, array $keywordMap)
+    protected function assignKeywords($fieldId, array $keywordMap, $versionNo)
     {
         $insertQuery = $this->connection->createQueryBuilder();
         $insertQuery
@@ -305,6 +324,7 @@ class DoctrineStorage extends Gateway
                 [
                     $this->connection->quoteIdentifier('keyword_id') => ':keywordId',
                     $this->connection->quoteIdentifier('objectattribute_id') => ':fieldId',
+                    $this->connection->quoteIdentifier('version') => ':versionNo',
                 ]
             )
         ;
@@ -312,7 +332,9 @@ class DoctrineStorage extends Gateway
         foreach ($keywordMap as $keyword => $keywordId) {
             $insertQuery
                 ->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT)
-                ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT);
+                ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
+                ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT)
+            ;
             $insertQuery->execute();
         }
     }
