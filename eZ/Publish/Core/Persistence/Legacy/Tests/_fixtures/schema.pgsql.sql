@@ -471,7 +471,8 @@ DROP TABLE IF EXISTS ezkeyword_attribute_link;
 CREATE TABLE ezkeyword_attribute_link (
   id SERIAL,
   keyword_id integer DEFAULT 0 NOT NULL,
-  objectattribute_id integer DEFAULT 0 NOT NULL
+  objectattribute_id integer DEFAULT 0 NOT NULL,
+  version integer NOT NULL
 );
 
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
@@ -645,6 +646,7 @@ CREATE INDEX ezuservisit_co_visit_count ON ezuservisit USING btree (current_visi
 CREATE INDEX ezkeyword_keyword ON ezkeyword USING btree (keyword);
 
 CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword_attribute_link USING btree (keyword_id,objectattribute_id);
+CREATE INDEX ezkeyword_attr_link_oaid_ver ON ezkeyword_attribute_link USING btree (objectattribute_id, version);
 
 CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword_attribute_link USING btree (objectattribute_id);
 

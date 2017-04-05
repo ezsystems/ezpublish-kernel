@@ -519,10 +519,12 @@ CREATE INDEX ezkeyword_keyword ON ezkeyword (keyword);
 CREATE TABLE ezkeyword_attribute_link (
   id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   keyword_id integer NOT NULL DEFAULT 0,
-  objectattribute_id integer NOT NULL DEFAULT 0
+  objectattribute_id integer NOT NULL DEFAULT 0,
+  version integer NOT NULL
 );
 CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword_attribute_link (keyword_id,objectattribute_id);
 CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword_attribute_link (objectattribute_id);
+CREATE INDEX ezkeyword_attr_link_oaid_ver ON ezkeyword_attribute_link (objectattribute_id, version);
 
 CREATE TABLE ezgmaplocation (
   contentobject_attribute_id integer NOT NULL DEFAULT 0,

@@ -586,8 +586,10 @@ CREATE TABLE ezkeyword_attribute_link (
   id int(11) NOT NULL AUTO_INCREMENT,
   keyword_id int(11) NOT NULL DEFAULT 0,
   objectattribute_id int(11) NOT NULL DEFAULT 0,
+  version int(11) NOT NULL,
   PRIMARY KEY (id),
   KEY ezkeyword_attr_link_kid_oaid (keyword_id,objectattribute_id),
+  KEY ezkeyword_attr_link_oaid_ver (objectattribute_id, version),
   KEY ezkeyword_attr_link_oaid (objectattribute_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
