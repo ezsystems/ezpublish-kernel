@@ -14,7 +14,7 @@ namespace eZ\Publish\Core\Persistence\Cache\Tests;
 class TransactionHandlerTest extends HandlerTest
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TransactionHandler::beginTransaction
+     * @covers \eZ\Publish\Core\Persistence\Cache\TransactionHandler::beginTransaction
      */
     public function testBeginTransaction()
     {
@@ -41,7 +41,7 @@ class TransactionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TransactionHandler::commit
+     * @covers \eZ\Publish\Core\Persistence\Cache\TransactionHandler::commit
      */
     public function testCommit()
     {
@@ -68,7 +68,7 @@ class TransactionHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TransactionHandler::rollback
+     * @covers \eZ\Publish\Core\Persistence\Cache\TransactionHandler::rollback
      */
     public function testRollback()
     {

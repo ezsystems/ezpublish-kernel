@@ -44,7 +44,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     protected $removeFieldAction;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {
@@ -63,7 +63,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApplySingleVersionSingleTranslation()
     {
@@ -113,7 +113,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApplyMultipleVersionsSingleTranslation()
     {
@@ -186,7 +186,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApplyMultipleVersionsMultipleTranslations()
     {

@@ -30,7 +30,7 @@ class CoreVoter implements VoterInterface
      *
      * @param string $attribute An attribute
      *
-     * @return Boolean true if this Voter supports the attribute, false otherwise
+     * @return bool true if this Voter supports the attribute, false otherwise
      */
     public function supportsAttribute($attribute)
     {

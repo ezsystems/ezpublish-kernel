@@ -5503,8 +5503,6 @@ class ContentTest extends BaseServiceMockTest
         $contentService->copyContent($contentInfoMock, $locationCreateStruct, null);
     }
 
-    /**
-     */
     protected function mockGetDefaultObjectStates()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $objectStateHandlerMock */
@@ -5545,8 +5543,6 @@ class ContentTest extends BaseServiceMockTest
             );
     }
 
-    /**
-     */
     protected function mockSetDefaultObjectStates()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $objectStateHandlerMock */

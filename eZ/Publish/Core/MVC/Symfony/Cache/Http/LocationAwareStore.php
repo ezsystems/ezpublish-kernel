@@ -21,8 +21,8 @@ use Symfony\Component\Filesystem\Exception\IOException;
  */
 class LocationAwareStore extends Store implements ContentPurger
 {
-    const LOCATION_CACHE_DIR = 'ezlocation',
-          LOCATION_STALE_CACHE_DIR = 'ezlocation_stale';
+    const LOCATION_CACHE_DIR = 'ezlocation';
+    const LOCATION_STALE_CACHE_DIR = 'ezlocation_stale';
 
     /**
      * @var \Symfony\Component\Filesystem\Filesystem

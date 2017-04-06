@@ -46,7 +46,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     protected $updateHandlerMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::__construct
      */
     public function testCtor()
     {
@@ -70,7 +70,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createGroup
      */
     public function testCreateGroup()
     {
@@ -114,7 +114,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -156,7 +156,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
      */
     public function testDeleteGroupSuccess()
     {
@@ -174,9 +174,9 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
-     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
-     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
+     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
      * @expectedExceptionMessage Group with ID "23" is not empty.
      */
     public function testDeleteGroupFailure()
@@ -194,7 +194,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroup
      */
     public function testLoadGroup()
     {
@@ -220,7 +220,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroupByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroupByIdentifier
      */
     public function testLoadGroupByIdentifier()
     {
@@ -246,7 +246,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadAllGroups
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadAllGroups
      */
     public function testLoadAllGroups()
     {
@@ -271,7 +271,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadContentTypes
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadContentTypes
      */
     public function testLoadContentTypes()
     {
@@ -297,8 +297,8 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoad()
     {
@@ -332,8 +332,8 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      * @expectedException \eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound
      */
     public function testLoadNotFound()
@@ -362,8 +362,8 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoadDefaultVersion()
     {
@@ -396,8 +396,8 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadByIdentifier
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoadByIdentifier()
     {
@@ -430,8 +430,8 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadByRemoteId
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadByRemoteId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoadByRemoteId()
     {
@@ -464,7 +464,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::create
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::create
      */
     public function testCreate()
     {
@@ -544,7 +544,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::update
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::update
      */
     public function testUpdate()
     {
@@ -581,7 +581,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
      */
     public function testDeleteSuccess()
     {
@@ -637,7 +637,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createDraft
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createDraft
      */
     public function testCreateVersion()
     {
@@ -693,7 +693,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::copy
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::copy
      */
     public function testCopy()
     {
@@ -789,7 +789,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::link
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::link
      */
     public function testLink()
     {
@@ -811,7 +811,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
      */
     public function testUnlinkSuccess()
     {
@@ -840,9 +840,9 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
-     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
-     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
+     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
      * @expectedExceptionMessage Type with ID "23" in status "1" cannot be unlinked from its last group.
      */
     public function testUnlinkFailure()
@@ -864,7 +864,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getFieldDefinition
      */
     public function testGetFieldDefinition()
     {
@@ -899,7 +899,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::addFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::addFieldDefinition
      */
     public function testAddFieldDefinition()
     {
@@ -945,7 +945,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getContentCount
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getContentCount
      */
     public function testGetContentCount()
     {
@@ -967,7 +967,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::removeFieldDefinition
      */
     public function testRemoveFieldDefinition()
     {
@@ -987,7 +987,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateFieldDefinition
      */
     public function testUpdateFieldDefinition()
     {
@@ -1025,7 +1025,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
      */
     public function testPublish()
     {
@@ -1066,7 +1066,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
      */
     public function testPublishNoOldType()
     {

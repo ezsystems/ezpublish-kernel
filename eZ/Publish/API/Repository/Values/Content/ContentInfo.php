@@ -18,11 +18,11 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $name the computed name (via name schema) in the main language of the Content object
  * @property-read mixed $sectionId the section to which the Content object is assigned
  * @property-read int $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).
- * @property-read boolean $published true if there exists a published version false otherwise
+ * @property-read bool $published true if there exists a published version false otherwise
  * @property-read mixed $ownerId the user id of the owner of the Content object
  * @property-read \DateTime $modificationDate Content object modification date
  * @property-read \DateTime $publishedDate date of the first publish
- * @property-read boolean $alwaysAvailable Indicates if the Content object is shown in the mainlanguage if its not present in an other requested language
+ * @property-read bool $alwaysAvailable Indicates if the Content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the Content object
  * @property-read string $mainLanguageCode The main language code of the Content object. If the available flag is set to true the Content is shown in this language if the requested language does not exist.
  * @property-read mixed $mainLocationId Identifier of the main location.

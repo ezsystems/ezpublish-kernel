@@ -125,9 +125,11 @@ services:
     ezpublish.signalslot.signal_dispatcher:
         class: "%ezpublish.signalslot.signal_dispatcher.class%"
         factory: ["@ezpublish.signalslot.signal_dispatcher.factory", buildSignalDispatcher]
+        lazy: true
 
     ezpublish.signalslot.signal_dispatcher.factory:
         class: "%ezpublish.signalslot.signal_dispatcher.factory.class%"
         arguments:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "legacy"
+        lazy: true

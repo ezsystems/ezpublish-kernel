@@ -62,6 +62,7 @@ abstract class BaseContentServiceTest extends BaseTest
 
         return $content;
     }
+
     /**
      * Creates a fresh clean content draft.
      *

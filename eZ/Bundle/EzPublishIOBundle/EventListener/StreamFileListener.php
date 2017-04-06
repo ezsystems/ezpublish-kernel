@@ -51,9 +51,15 @@ class StreamFileListener implements EventSubscriberInterface
             return;
         }
 
-        $uri = $event->getRequest()->attributes->get('semanticPathinfo');
+        $request = $event->getRequest();
+        $urlPrefix = $this->configResolver->getParameter('io.url_prefix');
+        if (strpos($urlPrefix, '://') !== false) {
+            $uri = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        } else {
+            $uri = $request->attributes->get('semanticPathinfo');
+        }
 
-        if (!$this->isIoUri($uri)) {
+        if (!$this->isIoUri($uri, $urlPrefix)) {
             return;
         }
 
@@ -77,8 +83,8 @@ class StreamFileListener implements EventSubscriberInterface
      *
      * @return bool
      */
-    private function isIoUri($uri)
+    private function isIoUri($uri, $urlPrefix)
     {
-        return (strpos(ltrim($uri, '/'), $this->configResolver->getParameter('io.url_prefix')) === 0);
+        return strpos(ltrim($uri, '/'), $this->configResolver->getParameter('io.url_prefix')) === 0;
     }
 }

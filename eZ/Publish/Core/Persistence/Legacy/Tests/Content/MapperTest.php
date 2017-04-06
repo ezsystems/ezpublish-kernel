@@ -35,7 +35,7 @@ class MapperTest extends LanguageAwareTestCase
     protected $valueConverterRegistryMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::__construct
      */
     public function testCtor()
     {
@@ -81,7 +81,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionInfoForContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionInfoForContent
      */
     public function testCreateVersionInfoForContent()
     {
@@ -141,8 +141,8 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::convertToStorageValue
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::convertToStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function testConvertToStorageValue()
     {
@@ -176,10 +176,10 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function testExtractContentFromRows()
     {
@@ -226,7 +226,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
      */
     public function testExtractContentFromRowsMultipleVersions()
     {
@@ -276,7 +276,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      */
     public function testCreateCreateStructFromContent()
     {
@@ -303,7 +303,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentBasicProperties($data)
@@ -324,7 +324,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentParentLocationsEmpty($data)
@@ -336,7 +336,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentFieldCount($data)
@@ -348,7 +348,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentFieldsNoId($data)
@@ -373,7 +373,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
      * @dataProvider extractContentInfoFromRowProvider
      *
      * @param array $fixtures
@@ -412,7 +412,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createRelationFromCreateStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createRelationFromCreateStruct
      */
     public function testCreateRelationFromCreateStruct()
     {

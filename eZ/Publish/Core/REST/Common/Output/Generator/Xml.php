@@ -261,6 +261,6 @@ class Xml extends Generator
      */
     public function serializeBool($boolValue)
     {
-        return ($boolValue ? 'true' : 'false');
+        return $boolValue ? 'true' : 'false';
     }
 }

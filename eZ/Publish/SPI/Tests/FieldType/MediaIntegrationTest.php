@@ -181,8 +181,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull($field->value->externalData);
 
-        $this->assertTrue(
-            file_exists($path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id']),
+        $this->assertFileExists(
+            $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'],
             "Stored file $path does not exists"
         );
 
@@ -242,8 +242,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull($field->value->externalData);
 
-        $this->assertTrue(
-            file_exists($path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id']),
+        $this->assertFileExists(
+            $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'],
             "Stored file $path does not exists"
         );
 

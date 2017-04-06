@@ -9,8 +9,23 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\Core\SignalSlot\Repository;
+use eZ\Publish\Core\Repository\Repository as InnerRepository;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\SignalSlot\ContentService;
+use eZ\Publish\Core\SignalSlot\ContentTypeService;
+use eZ\Publish\Core\SignalSlot\FieldTypeService;
+use eZ\Publish\Core\SignalSlot\RoleService;
+use eZ\Publish\Core\SignalSlot\ObjectStateService;
+use eZ\Publish\Core\SignalSlot\URLWildcardService;
+use eZ\Publish\Core\SignalSlot\URLAliasService;
+use eZ\Publish\Core\SignalSlot\UserService;
+use eZ\Publish\Core\SignalSlot\SearchService;
+use eZ\Publish\Core\SignalSlot\SectionService;
+use eZ\Publish\Core\SignalSlot\TrashService;
+use eZ\Publish\Core\SignalSlot\LocationService;
+use eZ\Publish\Core\SignalSlot\LanguageService;
+use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use PHPUnit_Framework_TestCase;
 
 class RepositoryTest extends PHPUnit_Framework_TestCase
@@ -20,22 +35,22 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
      */
     public function testServiceMethod($method, $class)
     {
-        $innerRepositoryMock = $this->getMockBuilder('eZ\\Publish\Core\\Repository\\Repository')->disableOriginalConstructor()->getMock();
-        $signalDispatcherMock = $this->getMock('eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher');
+        $innerRepositoryMock = $this->getMockBuilder(InnerRepository::class)->disableOriginalConstructor()->getMock();
+        $signalDispatcherMock = $this->getMock(SignalDispatcher::class);
 
-        $contentServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\ContentService')->disableOriginalConstructor()->getMock();
-        $contentTypeServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\ContentTypeService')->disableOriginalConstructor()->getMock();
-        $fieldTypeServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\FieldTypeService')->disableOriginalConstructor()->getMock();
-        $roleServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\RoleService')->disableOriginalConstructor()->getMock();
-        $objectStateServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\ObjectStateService')->disableOriginalConstructor()->getMock();
-        $urlWildcardServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\URLWildcardService')->disableOriginalConstructor()->getMock();
-        $urlAliasServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\URLAliasService')->disableOriginalConstructor()->getMock();
-        $userServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\UserService')->disableOriginalConstructor()->getMock();
-        $searchServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\SearchService')->disableOriginalConstructor()->getMock();
-        $sectionServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\SectionService')->disableOriginalConstructor()->getMock();
-        $trashServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\TrashService')->disableOriginalConstructor()->getMock();
-        $locationServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\LocationService')->disableOriginalConstructor()->getMock();
-        $languageServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\LanguageService')->disableOriginalConstructor()->getMock();
+        $contentServiceMock = $this->getMockBuilder(ContentService::class)->disableOriginalConstructor()->getMock();
+        $contentTypeServiceMock = $this->getMockBuilder(ContentTypeService::class)->disableOriginalConstructor()->getMock();
+        $fieldTypeServiceMock = $this->getMockBuilder(FieldTypeService::class)->disableOriginalConstructor()->getMock();
+        $roleServiceMock = $this->getMockBuilder(RoleService::class)->disableOriginalConstructor()->getMock();
+        $objectStateServiceMock = $this->getMockBuilder(ObjectStateService::class)->disableOriginalConstructor()->getMock();
+        $urlWildcardServiceMock = $this->getMockBuilder(URLWildcardService::class)->disableOriginalConstructor()->getMock();
+        $urlAliasServiceMock = $this->getMockBuilder(URLAliasService::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this->getMockBuilder(UserService::class)->disableOriginalConstructor()->getMock();
+        $searchServiceMock = $this->getMockBuilder(SearchService::class)->disableOriginalConstructor()->getMock();
+        $sectionServiceMock = $this->getMockBuilder(SectionService::class)->disableOriginalConstructor()->getMock();
+        $trashServiceMock = $this->getMockBuilder(TrashService::class)->disableOriginalConstructor()->getMock();
+        $locationServiceMock = $this->getMockBuilder(LocationService::class)->disableOriginalConstructor()->getMock();
+        $languageServiceMock = $this->getMockBuilder(LanguageService::class)->disableOriginalConstructor()->getMock();
 
         $repository = new Repository(
             $innerRepositoryMock,
@@ -63,60 +78,21 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
 
     public function serviceMethods()
     {
-        return array(
-            array(
-                'getContentService',
-                '\eZ\Publish\Core\SignalSlot\ContentService',
-            ),
-            array(
-                'getContentLanguageService',
-                '\eZ\Publish\Core\SignalSlot\LanguageService',
-            ),
-            array(
-                'getContentTypeService',
-                '\eZ\Publish\Core\SignalSlot\ContentTypeService',
-            ),
-            array(
-                'getLocationService',
-                '\eZ\Publish\Core\SignalSlot\LocationService',
-            ),
-            array(
-                'getTrashService',
-                '\eZ\Publish\Core\SignalSlot\TrashService',
-            ),
-            array(
-                'getSectionService',
-                '\eZ\Publish\Core\SignalSlot\SectionService',
-            ),
-            array(
-                'getUserService',
-                '\eZ\Publish\Core\SignalSlot\UserService',
-            ),
-            array(
-                'getURLAliasService',
-                '\eZ\Publish\Core\SignalSlot\URLAliasService',
-            ),
-            array(
-                'getURLWildcardService',
-                '\eZ\Publish\Core\SignalSlot\URLWildcardService',
-            ),
-            array(
-                'getObjectStateService',
-                '\eZ\Publish\Core\SignalSlot\ObjectStateService',
-            ),
-            array(
-                'getRoleService',
-                '\eZ\Publish\Core\SignalSlot\RoleService',
-            ),
-            array(
-                'getSearchService',
-                '\eZ\Publish\Core\SignalSlot\SearchService',
-            ),
-            array(
-                'getFieldTypeService',
-                '\eZ\Publish\Core\SignalSlot\FieldTypeService',
-            ),
-        );
+        return [
+            ['getContentService', ContentService::class],
+            ['getContentLanguageService', LanguageService::class],
+            ['getContentTypeService', ContentTypeService::class],
+            ['getLocationService', LocationService::class],
+            ['getTrashService', TrashService::class],
+            ['getSectionService', SectionService::class],
+            ['getUserService', UserService::class],
+            ['getURLAliasService', URLAliasService::class],
+            ['getURLWildcardService', URLWildcardService::class],
+            ['getObjectStateService', ObjectStateService::class],
+            ['getRoleService', RoleService::class],
+            ['getSearchService', SearchService::class],
+            ['getFieldTypeService', FieldTypeService::class],
+        ];
     }
 
     /**
@@ -124,29 +100,29 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
      */
     public function testAggregation($method, $parameters, $return)
     {
-        $innerRepositoryMock = $this->getMockBuilder('eZ\\Publish\Core\\Repository\\Repository')->disableOriginalConstructor()->getMock();
-        $signalDispatcherMock = $this->getMock('eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher');
+        $innerRepositoryMock = $this->getMockBuilder(InnerRepository::class)->disableOriginalConstructor()->getMock();
+        $signalDispatcherMock = $this->getMock(SignalDispatcher::class);
 
-        $contentServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\ContentService')->disableOriginalConstructor()->getMock();
-        $contentTypeServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\ContentTypeService')->disableOriginalConstructor()->getMock();
-        $fieldTypeServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\FieldTypeService')->disableOriginalConstructor()->getMock();
-        $roleServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\RoleService')->disableOriginalConstructor()->getMock();
-        $objectStateServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\ObjectStateService')->disableOriginalConstructor()->getMock();
-        $urlWildcardServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\URLWildcardService')->disableOriginalConstructor()->getMock();
-        $urlAliasServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\URLAliasService')->disableOriginalConstructor()->getMock();
-        $userServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\UserService')->disableOriginalConstructor()->getMock();
-        $searchServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\SearchService')->disableOriginalConstructor()->getMock();
-        $sectionServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\SectionService')->disableOriginalConstructor()->getMock();
-        $trashServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\TrashService')->disableOriginalConstructor()->getMock();
-        $locationServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\LocationService')->disableOriginalConstructor()->getMock();
-        $languageServiceMock = $this->getMockBuilder('eZ\\Publish\\Core\\SignalSlot\\LanguageService')->disableOriginalConstructor()->getMock();
+        $contentServiceMock = $this->getMockBuilder(ContentService::class)->disableOriginalConstructor()->getMock();
+        $contentTypeServiceMock = $this->getMockBuilder(ContentTypeService::class)->disableOriginalConstructor()->getMock();
+        $fieldTypeServiceMock = $this->getMockBuilder(FieldTypeService::class)->disableOriginalConstructor()->getMock();
+        $roleServiceMock = $this->getMockBuilder(RoleService::class)->disableOriginalConstructor()->getMock();
+        $objectStateServiceMock = $this->getMockBuilder(ObjectStateService::class)->disableOriginalConstructor()->getMock();
+        $urlWildcardServiceMock = $this->getMockBuilder(URLWildcardService::class)->disableOriginalConstructor()->getMock();
+        $urlAliasServiceMock = $this->getMockBuilder(URLAliasService::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this->getMockBuilder(UserService::class)->disableOriginalConstructor()->getMock();
+        $searchServiceMock = $this->getMockBuilder(SearchService::class)->disableOriginalConstructor()->getMock();
+        $sectionServiceMock = $this->getMockBuilder(SectionService::class)->disableOriginalConstructor()->getMock();
+        $trashServiceMock = $this->getMockBuilder(TrashService::class)->disableOriginalConstructor()->getMock();
+        $locationServiceMock = $this->getMockBuilder(LocationService::class)->disableOriginalConstructor()->getMock();
+        $languageServiceMock = $this->getMockBuilder(LanguageService::class)->disableOriginalConstructor()->getMock();
 
         $innerRepositoryMock->expects($this->once())
             ->method($method)
             ->will(
-                $this->returnValueMap(
-                    array(array_merge($parameters, array($return)))
-                )
+                $this->returnValueMap([
+                    array_merge($parameters, [$return]),
+                ])
             );
 
         $repository = new Repository(
@@ -167,7 +143,7 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
             $languageServiceMock
         );
 
-        $result = call_user_func_array(array($repository, $method), $parameters);
+        $result = call_user_func_array([$repository, $method], $parameters);
         $this->assertTrue($result === $return);
     }
 
@@ -177,47 +153,47 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
         $dt = new \DateTime();
         $dt->setTimestamp($ts);
 
-        return array(
-            array(
+        return [
+            [
                 'getCurrentUser',
-                array(),
+                [],
                 new User(),
-            ),
-            array(
+            ],
+            [
                 'setCurrentUser',
-                array(new User()),
+                [new User()],
                 null,
-            ),
-            array(
+            ],
+            [
                 'hasAccess',
-                array('module', 'function', new User()),
-                array('limitations'),
-            ),
-            array(
+                ['module', 'function', new User()],
+                ['limitations'],
+            ],
+            [
                 'canUser',
-                array('module', 'function', new User(), new Location()),
+                ['module', 'function', new User(), new Location()],
                 false,
-            ),
-            array(
+            ],
+            [
                 'beginTransaction',
-                array(),
+                [],
                 true,
-            ),
-            array(
+            ],
+            [
                 'commit',
-                array(),
+                [],
                 true,
-            ),
-            array(
+            ],
+            [
                 'rollback',
-                array(),
+                [],
                 true,
-            ),
-            array(
+            ],
+            [
                 'createDateTime',
-                array($ts),
+                [$ts],
                 $dt,
-            ),
-        );
+            ],
+        ];
     }
 }

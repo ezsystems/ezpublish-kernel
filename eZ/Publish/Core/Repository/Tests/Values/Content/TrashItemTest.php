@@ -13,9 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use PHPUnit_Framework_TestCase;
 
-/**
- *
- */
 class TrashItemTest extends PHPUnit_Framework_TestCase
 {
     use ValueObjectTestTrait;

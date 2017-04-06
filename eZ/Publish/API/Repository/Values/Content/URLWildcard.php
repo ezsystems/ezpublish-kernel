@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id A unique identifier for the alias
  * @property-read string $sourceUrl The source url with wildcards
  * @property-read string $destinationUrl The destination URL with placeholders
- * @property-read boolean $forward indicates if the url is redirected or not
+ * @property-read bool $forward indicates if the url is redirected or not
  */
 class URLWildcard extends ValueObject
 {

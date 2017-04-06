@@ -261,7 +261,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($time, $fieldDef->defaultValue->data['timestamp']);
-        self::assertEquals($time + 1, $dateTimeFromString->getTimestamp());
+        self::assertEquals($time + 1, $dateTimeFromString->getTimestamp(), 'Time does not match within 1s delta', 1);
     }
 
     /**

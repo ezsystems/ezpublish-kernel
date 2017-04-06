@@ -20,7 +20,7 @@ class UrlWildcardMapperTest extends TestCase
     /**
      * Test for the createUrlWildcard() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::createUrlWildcard
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::createUrlWildcard
      */
     public function testCreateUrlWildcard()
     {
@@ -48,7 +48,7 @@ class UrlWildcardMapperTest extends TestCase
     /**
      * Test for the extractUrlWildcardFromRow() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
      */
     public function testExtractUrlWildcardFromRow()
     {
@@ -78,7 +78,7 @@ class UrlWildcardMapperTest extends TestCase
     /**
      * Test for the extractUrlWildcardFromRow() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
      */
     public function testExtractUrlWildcardsFromRows()
     {

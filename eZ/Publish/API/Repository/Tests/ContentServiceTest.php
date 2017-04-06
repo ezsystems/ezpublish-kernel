@@ -3038,7 +3038,6 @@ class ContentServiceTest extends BaseContentServiceTest
             $versions[1]->creationDate->getTimestamp(),
             'Creation time did not match within delta of 2 seconds',
             2
-
         );
         $this->assertEquals(
             $versions[0]->modificationDate->getTimestamp(),
@@ -4824,8 +4823,6 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(2, count($locations));
     }
 
-    /**
-     */
     public function testURLAliasesCreatedForNewContent()
     {
         $repository = $this->getRepository();
@@ -4863,8 +4860,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
-    /**
-     */
     public function testURLAliasesCreatedForUpdatedContent()
     {
         $repository = $this->getRepository();
@@ -4938,8 +4933,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
-    /**
-     */
     public function testCustomURLAliasesNotHistorizedOnUpdatedContent()
     {
         $repository = $this->getRepository();

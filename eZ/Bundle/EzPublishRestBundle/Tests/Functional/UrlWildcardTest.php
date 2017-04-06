@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class UrlWildcardTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers GET /content/urlwildcards
+     * Covers GET /content/urlwildcards.
      */
     public function testListURLWildcards()
     {
@@ -26,7 +26,7 @@ class UrlWildcardTest extends RESTFunctionalTestCase
 
     /**
      * @returns string The created URL wildcard href
-     * @covers POST /content/urlwildcards
+     * Covers POST /content/urlwildcards
      */
     public function testCreateUrlWildcard()
     {
@@ -56,7 +56,7 @@ XML;
 
     /**
      * @param $urlWildcardHref
-     * @covers GET /content/urlwildcards/{urlWildcardId}
+     * Covers GET /content/urlwildcards/{urlWildcardId}
      * @depends testCreateUrlWildcard
      */
     public function testLoadUrlWildcard($urlWildcardHref)

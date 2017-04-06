@@ -14,8 +14,8 @@ use PHPUnit_Framework_TestCase;
 class SignalEventTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Event\SignalEvent::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Event\SignalEvent::getSignal
+     * @covers \eZ\Publish\Core\MVC\Symfony\Event\SignalEvent::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\Event\SignalEvent::getSignal
      */
     public function testGetSignal()
     {

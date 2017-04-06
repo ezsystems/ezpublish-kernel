@@ -80,10 +80,10 @@ class ObjectStateTest extends PHPUnit_Framework_TestCase
     {
         $objectState = new ObjectState();
         $value = isset($objectState->notDefined);
-        $this->assertEquals(false, $value);
+        $this->assertFalse($value);
 
         $value = isset($objectState->id);
-        $this->assertEquals(true, $value);
+        $this->assertTrue($value);
     }
 
     /**

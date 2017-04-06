@@ -297,7 +297,7 @@ class Type extends FieldType
             }
         }
 
-        return ($result % 11 === 0);
+        return $result % 11 === 0;
     }
 
     /**

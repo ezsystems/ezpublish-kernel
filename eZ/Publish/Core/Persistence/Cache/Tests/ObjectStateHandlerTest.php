@@ -18,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct as SPIInputStruct
 class ObjectStateHandlerTest extends HandlerTest
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ObjectStateHandler::createGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler::createGroup
      */
     public function testCreateGroup()
     {
@@ -78,7 +78,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ObjectStateHandler::loadGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler::loadGroup
      */
     public function testLoadGroup()
     {
@@ -134,7 +134,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ObjectStateHandler::loadGroup
+     * @covers \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler::loadGroup
      * @depends testLoadGroup
      */
     public function testLoadGroupHasCache()
@@ -164,7 +164,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadGroupByIdentifier
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadGroupByIdentifier
      */
     public function testLoadGroupByIdentifier()
     {
@@ -212,7 +212,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
      */
     public function testLoadAllGroups($offset = 0, $limit = -1)
     {
@@ -298,7 +298,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
      */
     public function testLoadAllGroupsCached($offset = 0, $limit = -1)
     {
@@ -354,7 +354,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
      */
     public function testLoadAllGroupsWithOffsetLimit()
     {
@@ -362,7 +362,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadAllGroups
      */
     public function testLoadAllGroupsCachedWithOffsetLimit()
     {
@@ -370,7 +370,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadObjectStates
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadObjectStates
      */
     public function testLoadObjectStates()
     {
@@ -450,7 +450,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadObjectStates
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::loadObjectStates
      */
     public function testLoadObjectStatesCached()
     {
@@ -526,7 +526,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::updateGroup
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -567,7 +567,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::deleteGroup
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::deleteGroup
      */
     public function testDeleteGroup()
     {
@@ -603,7 +603,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::create
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::create
      */
     public function testCreate()
     {

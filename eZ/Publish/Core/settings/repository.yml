@@ -4,54 +4,40 @@ services:
         alias: ezpublish.signalslot.repository
 
     ezpublish.api.service.content:
-        class: eZ\Publish\API\Repository\ContentService
-        factory: ["@ezpublish.api.repository", getContentService]
+        alias: ezpublish.signalslot.service.content
 
     ezpublish.api.service.content_type:
-        class: eZ\Publish\API\Repository\ContentTypeService
-        factory: ["@ezpublish.api.repository", getContentTypeService]
+        alias: ezpublish.signalslot.service.content_type
 
     ezpublish.api.service.field_type:
-        class: eZ\Publish\API\Repository\FieldTypeService
-        factory: ["@ezpublish.api.repository", getFieldTypeService]
+        alias: ezpublish.signalslot.service.field_type
 
     ezpublish.api.service.role:
-        class: eZ\Publish\API\Repository\RoleService
-        factory: ["@ezpublish.api.repository", getRoleService]
+        alias: ezpublish.signalslot.service.role
 
     ezpublish.api.service.object_state:
-        class: eZ\Publish\API\Repository\ObjectStateService
-        factory: ["@ezpublish.api.repository", getObjectStateService]
+        alias: ezpublish.signalslot.service.object_state
 
     ezpublish.api.service.url_wildcard:
-        class: eZ\Publish\API\Repository\URLWildcardService
-        factory: ["@ezpublish.api.repository", getURLWildcardService]
+        alias: ezpublish.signalslot.service.url_wildcard
 
     ezpublish.api.service.url_alias:
-        class: eZ\Publish\API\Repository\URLAliasService
-        factory: ["@ezpublish.api.repository", getURLAliasService]
+        alias: ezpublish.signalslot.service.url_alias
 
     ezpublish.api.service.user:
-        class: eZ\Publish\API\Repository\UserService
-        factory: ["@ezpublish.api.repository", getUserService]
+        alias: ezpublish.signalslot.service.user
 
     ezpublish.api.service.search:
-        class: eZ\Publish\API\Repository\SearchService
-        factory: ["@ezpublish.api.repository", getSearchService]
+        alias: ezpublish.signalslot.service.search
 
     ezpublish.api.service.section:
-        class: eZ\Publish\API\Repository\SectionService
-        factory: ["@ezpublish.api.repository", getSectionService]
+        alias: ezpublish.signalslot.service.section
 
     ezpublish.api.service.trash:
-        class: eZ\Publish\API\Repository\TrashService
-        factory: ["@ezpublish.api.repository", getTrashService]
+        alias: ezpublish.signalslot.service.trash
 
     ezpublish.api.service.location:
-        class: eZ\Publish\API\Repository\LocationService
-        factory: ["@ezpublish.api.repository", getLocationService]
+        alias: ezpublish.signalslot.service.location
 
     ezpublish.api.service.language:
-        class: eZ\Publish\API\Repository\LanguageService
-        factory: ["@ezpublish.api.repository", getLanguageService]
-
+        alias: ezpublish.signalslot.service.language

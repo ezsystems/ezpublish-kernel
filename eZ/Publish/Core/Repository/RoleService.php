@@ -1391,7 +1391,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Validates Policies and Limitations in Role create struct.
      *
-     * @uses validatePolicy()
+     * @uses ::validatePolicy()
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *

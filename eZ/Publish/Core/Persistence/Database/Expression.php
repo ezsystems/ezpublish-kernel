@@ -437,6 +437,7 @@ interface Expression
     public function now();
 
     // string functions
+
     /**
      * Returns part of a string.
      *

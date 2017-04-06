@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class UrlAliasTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers nothing. Creates a folder for other tests.
+     * Covers nothing. Creates a folder for other tests.
      *
      * @return string The folder's main location href
      */
@@ -26,7 +26,7 @@ class UrlAliasTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers GET /content/urlaliases
+     * Covers GET /content/urlaliases.
      */
     public function testListGlobalURLAliases()
     {
@@ -39,7 +39,7 @@ class UrlAliasTest extends RESTFunctionalTestCase
 
     /**
      * @depends testCreateFolder
-     * @covers POST /content/urlaliases
+     * Covers POST /content/urlaliases
      * @returns string The created url alias href
      */
     public function testCreateUrlAlias($locationHref)
@@ -76,7 +76,7 @@ XML;
     }
 
     /**
-     * @covers POST /content/urlaliases
+     * Covers POST /content/urlaliases.
      * @returns string The created url alias href
      */
     public function testCreateGlobalUrlAlias()
@@ -114,7 +114,7 @@ XML;
 
     /**
      * @depends testCreateUrlAlias
-     * @covers GET /content/urlaliases/{urlAliasId}
+     * Covers GET /content/urlaliases/{urlAliasId}
      */
     public function testLoadURLAlias($urlAliasHref)
     {
@@ -132,7 +132,7 @@ XML;
 
     /**
      * @depends testCreateUrlAlias
-     * @covers DELETE /content/urlaliases/{urlAliasId}
+     * Covers DELETE /content/urlaliases/{urlAliasId}
      */
     public function testDeleteURLAlias($urlAliasHref)
     {
@@ -151,7 +151,7 @@ XML;
 
     /**
      * @depends testCreateFolder
-     * @covers GET /content/locations/{locationPath}/urlaliases
+     * Covers GET /content/locations/{locationPath}/urlaliases
      */
     public function testListLocationURLAliases($contentLocationHref)
     {

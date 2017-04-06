@@ -160,6 +160,10 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                             'semanticPathinfo' => $this->removePathPrefix($urlAlias->path, $pathPrefix),
                             'needsRedirect' => true,
                         );
+
+                        if ($urlAlias->destination instanceof Location) {
+                            $params += ['locationId' => $urlAlias->destination->id];
+                        }
                     }
 
                     if (isset($this->logger)) {
@@ -253,12 +257,12 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         }
 
         // Compare loaded UrlAlias with requested path, prefixed with configured path prefix.
-        return (
+        return
             strcmp(
                 $loadedUrlAlias->path,
                 $pathPrefix . ($pathPrefix === '/' ? trim($requestedPath, '/') : rtrim($requestedPath, '/'))
             ) !== 0
-        );
+        ;
     }
 
     /**

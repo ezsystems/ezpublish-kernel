@@ -131,6 +131,19 @@ class Repository implements RepositoryInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\SignalSlot\ContentService $contentService
+     * @param \eZ\Publish\Core\SignalSlot\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\SignalSlot\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\Core\SignalSlot\RoleService $roleService
+     * @param \eZ\Publish\Core\SignalSlot\ObjectStateService $objectStateService
+     * @param \eZ\Publish\Core\SignalSlot\URLWildcardService $urlWildcardService
+     * @param \eZ\Publish\Core\SignalSlot\URLAliasService $urlAliasService
+     * @param \eZ\Publish\Core\SignalSlot\UserService $userService
+     * @param \eZ\Publish\Core\SignalSlot\SearchService $searchService
+     * @param \eZ\Publish\Core\SignalSlot\SectionService $sectionService
+     * @param \eZ\Publish\Core\SignalSlot\TrashService $trashService
+     * @param \eZ\Publish\Core\SignalSlot\LocationService $locationService
+     * @param \eZ\Publish\Core\SignalSlot\LanguageService $languageService
      */
     public function __construct(
         RepositoryInterface $repository,
@@ -482,7 +495,7 @@ class Repository implements RepositoryInterface
      *
      * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
      *
-     * @param Callable $event
+     * @param callable $event
      */
     public function commitEvent($event)
     {

@@ -22,7 +22,7 @@ class Mapper
      */
     public function mapRoute(Route $route)
     {
-        $optionsRoute = clone($route);
+        $optionsRoute = clone $route;
         $optionsRoute->setMethods(array('OPTIONS'));
         $optionsRoute->setDefault(
             '_controller',
@@ -47,7 +47,7 @@ class Mapper
      */
     public function mergeMethodsDefault(Route $optionsRoute, Route $restRoute)
     {
-        $mergedRoute = clone($optionsRoute);
+        $mergedRoute = clone $optionsRoute;
         $mergedRoute->setDefault(
             'allowedMethods',
             implode(

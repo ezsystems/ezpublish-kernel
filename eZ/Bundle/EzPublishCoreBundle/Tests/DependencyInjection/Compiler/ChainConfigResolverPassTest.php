@@ -37,7 +37,7 @@ class ChainConfigResolverPassTest extends AbstractCompilerPassTestCase
      * @param int|null $declaredPriority
      * @param int $expectedPriority
      *
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass::process
      * @dataProvider addResolverProvider
      */
     public function testAddResolver($declaredPriority, $expectedPriority)

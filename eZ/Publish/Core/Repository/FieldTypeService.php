@@ -74,7 +74,7 @@ class FieldTypeService implements FieldTypeServiceInterface
             return $this->fieldTypes[$identifier];
         }
 
-        return ($this->fieldTypes[$identifier] = new FieldType($this->fieldTypeRegistry->getFieldType($identifier)));
+        return $this->fieldTypes[$identifier] = new FieldType($this->fieldTypeRegistry->getFieldType($identifier));
     }
 
     /**

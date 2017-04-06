@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class SectionTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers GET /content/sections
+     * Covers GET /content/sections.
      */
     public function testListSections()
     {
@@ -25,7 +25,7 @@ class SectionTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers POST /content/sections
+     * Covers POST /content/sections.
      *
      * @return string The created section href
      */
@@ -53,7 +53,7 @@ XML;
     /**
      * @param $sectionHref
      * @depends testCreateSection
-     * @covers PATCH /content/sections/{sectionId}
+     * Covers PATCH /content/sections/{sectionId}
      */
     public function testUpdateSection($sectionHref)
     {
@@ -71,7 +71,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/sections/{sectionId}
+     * Covers GET /content/sections/{sectionId}.
      * @depends testCreateSection
      */
     public function testLoadSection($sectionHref)
@@ -85,7 +85,7 @@ XML;
 
     /**
      * @depends testCreateSection
-     * @covers GET /content/sections?identifier={sectionIdentifier}
+     * Covers GET /content/sections?identifier={sectionIdentifier}
      */
     public function testLoadSectionByIdentifier($sectionHref)
     {
@@ -98,7 +98,7 @@ XML;
 
     /**
      * @depends testCreateSection
-     * @covers DELETE /content/sections/{sectionId}
+     * Covers DELETE /content/sections/{sectionId}
      */
     public function testDeleteSection($sectionHref)
     {
