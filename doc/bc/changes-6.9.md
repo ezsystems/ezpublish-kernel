@@ -10,3 +10,5 @@ Changes affecting version compatibility with former or future versions.
   How it might affect your code: Make sure you always type hint against the interfaces for our `API` and never `Core` implementation classes to avoid this causing issues.
 
 ## Deprecations
+
+## Removed features
