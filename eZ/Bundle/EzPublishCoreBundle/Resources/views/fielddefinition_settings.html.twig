@@ -82,12 +82,12 @@
     {% else %}
         {% set interval = settings.dateInterval %}
         {% set defaultValue = 'Current datetime adjusted by ' %}
-        {% set defaultValue = interval.y ? defaultValue ~ interval.y ~ ' year(s)' : defaultValue %}
-        {% set defaultValue = interval.m ? defaultValue ~ interval.m ~ ' month(s)' : defaultValue %}
-        {% set defaultValue = interval.d ? defaultValue ~ interval.d ~ ' day(s)' : defaultValue %}
-        {% set defaultValue = interval.h ? defaultValue ~ interval.h ~ ' hour(s)' : defaultValue %}
-        {% set defaultValue = interval.i ? defaultValue ~ interval.i ~ ' minute(s)' : defaultValue %}
-        {% set defaultValue = interval.s and settings.useSeconds ? defaultValue ~ interval.s ~ ' second(s)' : defaultValue %}
+        {% set defaultValue = interval.y ? defaultValue ~ ' ' ~ interval.y ~ ' year(s)' : defaultValue %}
+        {% set defaultValue = interval.m ? defaultValue ~ ' ' ~  interval.m ~ ' month(s)' : defaultValue %}
+        {% set defaultValue = interval.d ? defaultValue ~ ' ' ~ interval.d ~ ' day(s)' : defaultValue %}
+        {% set defaultValue = interval.h ? defaultValue ~ ' ' ~ interval.h ~ ' hour(s)' : defaultValue %}
+        {% set defaultValue = interval.i ? defaultValue ~ ' ' ~ interval.i ~ ' minute(s)' : defaultValue %}
+        {% set defaultValue = interval.s and settings.useSeconds ? defaultValue ~ ' ' ~ interval.s ~ ' second(s)' : defaultValue %}
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting use-seconds">
