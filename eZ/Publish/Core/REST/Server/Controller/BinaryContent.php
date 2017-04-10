@@ -43,12 +43,16 @@ class BinaryContent extends RestController
     public function getImageVariation($imageId, $variationIdentifier)
     {
         $idArray = explode('-', $imageId);
-        if (count($idArray) != 2) {
+        $versionNumber = null;
+        if (count($idArray) == 2) {
+            list($contentId, $fieldId) = $idArray;
+        } elseif (count($idArray) == 3) {
+            list($contentId, $fieldId, $versionNumber) = $idArray;
+        } else {
             throw new Exceptions\NotFoundException("Invalid image ID {$imageId}");
         }
-        list($contentId, $fieldId) = $idArray;
 
-        $content = $this->repository->getContentService()->loadContent($contentId);
+        $content = $this->repository->getContentService()->loadContent($contentId, null, $versionNumber);
 
         $fieldFound = false;
         /** @var $field \eZ\Publish\API\Repository\Values\Content\Field */
@@ -68,7 +72,7 @@ class BinaryContent extends RestController
             throw new Exceptions\NotFoundException("Image file {$field->value->id} doesn't exist");
         }
 
-        $versionInfo = $this->repository->getContentService()->loadVersionInfo($content->contentInfo);
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo($content->contentInfo, $versionNumber);
 
         try {
             $variation = $this->imageVariationHandler->getVariation($field, $versionInfo, $variationIdentifier);

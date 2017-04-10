@@ -213,13 +213,14 @@ ezpublish_rest_createDraftFromCurrentVersion:
 # Binary content
 
 ezpublish_rest_binaryContent_getImageVariation:
-    path: /content/binary/images/{imageId}/variations/{variationIdentifier}
+    path: /content/binary/images/{imageId}/variations/{variationIdentifier}/{contentVersion}
     defaults:
         _controller: ezpublish_rest.controller.binary_content:getImageVariation
+        contentVersion: 0
     methods: [GET]
     requirements:
-        imageId: \d+-\d+
-
+        imageId: \d+-\d+(-\d+)?
+        contentVersion: \d
 
 # Views
 
