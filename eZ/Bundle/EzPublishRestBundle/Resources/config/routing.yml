@@ -219,7 +219,6 @@ ezpublish_rest_binaryContent_getImageVariation:
     methods: [GET]
     requirements:
         imageId: \d+-\d+(-\d+)?
-        contentVersion: \d
 
 # Views
 

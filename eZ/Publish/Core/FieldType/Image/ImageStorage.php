@@ -183,7 +183,7 @@ class ImageStorage extends GatewayBasedStorage
      *
      * @return string
      */
-    private function buildImageId(VersionInfo $versionInfo, Field $field): string
+    private function buildImageId(VersionInfo $versionInfo, Field $field)
     {
         return sprintf(
             '%s-%s-%s',
