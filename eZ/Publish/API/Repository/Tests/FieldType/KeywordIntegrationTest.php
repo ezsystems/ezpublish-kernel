@@ -508,4 +508,27 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             'Field value is not empty: ' . var_export($fieldValue, true)
         );
     }
+
+    /**
+     * Test that Keyword Ext. Storage respects content version numbers.
+     */
+    public function testKeywordsAreVersioned()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $contentDraft = $this->createContent('foo');
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('data', 'bar');
+        $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $version01 = $contentService->loadContent($publishedContent->id, null, 1);
+        $version02 = $contentService->loadContent($publishedContent->id, null, 2);
+        $this->assertEquals('foo', $version01->getField('data')->value);
+        $this->assertEquals('bar', $version02->getField('data')->value);
+    }
 }
