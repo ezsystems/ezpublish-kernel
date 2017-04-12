@@ -223,7 +223,7 @@ EOT;
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
         $storageDef->dataInt1 = (isset($fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'])
-            ? round($fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] / 1024 / 1024)
+            ? $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize']
             : 0);
     }
 
@@ -240,7 +240,7 @@ EOT;
                 'validators' => array(
                     'FileSizeValidator' => array(
                         'maxFileSize' => ($storageDef->dataInt1 != 0
-                            ? (int)$storageDef->dataInt1 * 1024 * 1024
+                            ? $storageDef->dataInt1
                             : null),
                     ),
                 ),
