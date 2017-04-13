@@ -524,7 +524,7 @@ class ImageTest extends FieldTypeTest
                 array(
                     'validatorConfiguration' => array(
                         'FileSizeValidator' => array(
-                            'maxFileSize' => 1,
+                            'maxFileSize' => 1048576,
                         ),
                     ),
                 ),
@@ -613,7 +613,7 @@ class ImageTest extends FieldTypeTest
                 array(
                     'validatorConfiguration' => array(
                         'FileSizeValidator' => array(
-                            'maxFileSize' => 0.01,
+                            'maxFileSize' => 51200,
                         ),
                     ),
                 ),
@@ -631,7 +631,7 @@ class ImageTest extends FieldTypeTest
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
                         array(
-                            '%size%' => 0.01,
+                            '%size%' => 51200,
                         ),
                         'fileSize'
                     ),
@@ -643,7 +643,7 @@ class ImageTest extends FieldTypeTest
                 array(
                     'validatorConfiguration' => array(
                         'FileSizeValidator' => array(
-                            'maxFileSize' => 1,
+                            'maxFileSize' => 1048576,
                         ),
                     ),
                 ),
@@ -666,7 +666,7 @@ class ImageTest extends FieldTypeTest
                 array(
                     'validatorConfiguration' => array(
                         'FileSizeValidator' => array(
-                            'maxFileSize' => 0.01,
+                            'maxFileSize' => 1,
                         ),
                     ),
                 ),
@@ -685,7 +685,7 @@ class ImageTest extends FieldTypeTest
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
                         array(
-                            '%size%' => 0.01,
+                            '%size%' => 1,
                         ),
                         'fileSize'
                     ),
@@ -697,7 +697,7 @@ class ImageTest extends FieldTypeTest
                 array(
                     'validatorConfiguration' => array(
                         'FileSizeValidator' => array(
-                            'maxFileSize' => 1,
+                            'maxFileSize' => 1048576,
                         ),
                     ),
                 ),
@@ -722,7 +722,7 @@ class ImageTest extends FieldTypeTest
                 array(
                     'validatorConfiguration' => array(
                         'FileSizeValidator' => array(
-                            'maxFileSize' => 1,
+                            'maxFileSize' => 1048576,
                         ),
                     ),
                 ),

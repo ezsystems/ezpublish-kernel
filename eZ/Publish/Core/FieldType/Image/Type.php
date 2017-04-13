@@ -171,8 +171,7 @@ class Type extends FieldType
                         break;
                     }
 
-                    // Database stores maxFileSize in MB
-                    if (($parameters['maxFileSize'] * 1024 * 1024) < $fieldValue->fileSize) {
+                    if (($parameters['maxFileSize']) < $fieldValue->fileSize) {
                         $errors[] = new ValidationError(
                             'The file size cannot exceed %size% byte.',
                             'The file size cannot exceed %size% bytes.',
