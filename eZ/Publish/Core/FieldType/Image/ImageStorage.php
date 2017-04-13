@@ -94,7 +94,7 @@ class ImageStorage extends GatewayBasedStorage
                 );
             }
 
-            $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
+            $field->value->externalData['imageId'] = $this->buildImageId($versionInfo, $field);
             $field->value->externalData['uri'] = $binaryFile->uri;
             $field->value->externalData['id'] = $binaryFile->id;
             $field->value->externalData['mime'] = $this->IOService->getMimeType($binaryFile->id);
@@ -131,7 +131,7 @@ class ImageStorage extends GatewayBasedStorage
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         if ($field->value->data !== null) {
-            $field->value->data['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
+            $field->value->data['imageId'] = $this->buildImageId($versionInfo, $field);
             $binaryFile = $this->IOService->loadBinaryFile($field->value->data['id']);
             $field->value->data['id'] = $binaryFile->id;
             $field->value->data['fileSize'] = $binaryFile->size;
@@ -175,5 +175,19 @@ class ImageStorage extends GatewayBasedStorage
     {
         // @todo: Correct?
         return null;
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
+     * @return string
+     */
+    private function buildImageId(VersionInfo $versionInfo, Field $field)
+    {
+        return sprintf(
+            '%s-%s-%s',
+            $versionInfo->contentInfo->id, $field->id, $versionInfo->versionNo
+        );
     }
 }
