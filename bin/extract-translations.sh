@@ -3,7 +3,7 @@ echo 'Translation extraction';
 cd ../../..;
 # Extract string for default locale
 echo '# Extract Kernel : EzPublishCoreBundle';
-./app/console translation:extract en -v \
+./bin/console translation:extract en -v \
   --dir=./vendor/ezsystems/ezpublish-kernel/eZ \
   --exclude-dir=Bundle/PlatformBehatBundle \
   --exclude-dir=Tests \
