@@ -20,6 +20,11 @@ use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 class BinaryContent extends RestController
 {
     /**
+     * @var \eZ\Publish\SPI\Variation\VariationHandler
+     */
+    protected $imageVariationHandler;
+
+    /**
      * Construct controller.
      *
      * @param \eZ\Publish\SPI\Variation\VariationHandler $imageVariationHandler
@@ -33,7 +38,10 @@ class BinaryContent extends RestController
      * Returns data about the image variation $variationIdentifier of image field $fieldId.
      * Will generate the alias if it hasn't been generated yet.
      *
-     * @param mixed  $imageId
+     * @param mixed  $imageId A custom ID that identifies the image field.
+     *                        Until v6.9, the format is {contentId}-{fieldId}.
+     *                        since v6.9, the format is {contentId}-{fieldId}-{versionNumber}.
+     *                        If the version number isn't specified, the default one is used.
      * @param string $variationIdentifier
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
@@ -42,13 +50,8 @@ class BinaryContent extends RestController
      */
     public function getImageVariation($imageId, $variationIdentifier)
     {
-        $idArray = explode('-', $imageId);
-        if (count($idArray) != 2) {
-            throw new Exceptions\NotFoundException("Invalid image ID {$imageId}");
-        }
-        list($contentId, $fieldId) = $idArray;
-
-        $content = $this->repository->getContentService()->loadContent($contentId);
+        list($contentId, $fieldId, $versionNumber) = $this->parseImageId($imageId);
+        $content = $this->repository->getContentService()->loadContent($contentId, null, $versionNumber);
 
         $fieldFound = false;
         /** @var $field \eZ\Publish\API\Repository\Values\Content\Field */
@@ -68,26 +71,42 @@ class BinaryContent extends RestController
             throw new Exceptions\NotFoundException("Image file {$field->value->id} doesn't exist");
         }
 
-        $versionInfo = $this->repository->getContentService()->loadVersionInfo($content->contentInfo);
-
         try {
-            $variation = $this->imageVariationHandler->getVariation($field, $versionInfo, $variationIdentifier);
+            $variation = $this->imageVariationHandler->getVariation($field, $content->getVersionInfo(), $variationIdentifier);
 
-            if ($content->contentInfo->mainLocationId === null) {
+            if ($content->contentInfo->mainLocationId === null || $versionNumber !== $content->contentInfo->currentVersionNo) {
                 return $variation;
-            } else {
-                return new CachedValue(
-                    $variation,
-                    array('locationId' => $content->contentInfo->mainLocationId)
-                );
             }
+
+            return new CachedValue(
+                $variation,
+                array('locationId' => $content->contentInfo->mainLocationId)
+            );
         } catch (InvalidVariationException $e) {
             throw new Exceptions\NotFoundException("Invalid image variation $variationIdentifier");
         }
     }
 
     /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
+     * Parses an imageId string into contentId, fieldId and versionNumber.
+     *
+     * @param string $imageId Either {contentId}-{fieldId} or {contentId}-{fieldId}-{versionNumber}
+     *
+     * @return array An array with 3 keys: contentId, fieldId and versionNumber.
+     *               If the versionNumber wasn't set, it is returned as null.
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException If the imageId format is invalid
      */
-    protected $imageVariationHandler;
+    private function parseImageId($imageId)
+    {
+        $idArray = explode('-', $imageId);
+
+        if (count($idArray) == 2) {
+            return array_merge($idArray, [null]);
+        } elseif (count($idArray) == 3) {
+            return $idArray;
+        }
+
+        throw new Exceptions\NotFoundException("Invalid image ID {$imageId}");
+    }
 }
