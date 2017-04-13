@@ -218,8 +218,7 @@ ezpublish_rest_binaryContent_getImageVariation:
         _controller: ezpublish_rest.controller.binary_content:getImageVariation
     methods: [GET]
     requirements:
-        imageId: \d+-\d+
-
+        imageId: \d+-\d+(-\d+)?
 
 # Views
 
