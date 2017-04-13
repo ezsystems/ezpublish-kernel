@@ -50,7 +50,7 @@ matrix:
       env: SOLR_VERSION="6.4.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
 # 7.1
     - php: 7.1
-      env: TEST_CONFIG="phpunit.xml"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="^3.2.0"
     - php: 7.1
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # hhvm - disabled, no need to enable before travis has newer versions avaiable
