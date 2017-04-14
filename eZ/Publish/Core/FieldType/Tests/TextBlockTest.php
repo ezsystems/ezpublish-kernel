@@ -207,7 +207,7 @@ class TextBlockTest extends FieldTypeTest
         return array(
             array(
                 new TextBlockValue(),
-                '',
+                null,
             ),
             array(
                 new TextBlockValue('sindelfingen'),
