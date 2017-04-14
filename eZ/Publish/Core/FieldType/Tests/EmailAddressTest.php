@@ -204,7 +204,7 @@ class EmailAddressTest extends FieldTypeTest
         return array(
             array(
                 new EmailAddressValue(),
-                '',
+                null,
             ),
             array(
                 new EmailAddressValue('spam_mail@ex-something.no'),
