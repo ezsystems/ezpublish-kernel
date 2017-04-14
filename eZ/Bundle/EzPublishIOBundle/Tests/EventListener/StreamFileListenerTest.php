@@ -88,9 +88,14 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
         $this->eventListener->onKernelRequest($event);
 
         self::assertTrue($event->hasResponse());
+        $expectedResponse = new BinaryStreamResponse($binaryFile, $this->ioServiceMock);
+        $response = $event->getResponse();
+        // since symfony/symfony v3.2.7 Response sets Date header if not explicitly set
+        // @see https://github.com/symfony/symfony/commit/e3d90db74773406fb8fdf07f36cb8ced4d187f62
+        $expectedResponse->setDate($response->getDate());
         self::assertEquals(
-            new BinaryStreamResponse($binaryFile, $this->ioServiceMock),
-            $event->getResponse()
+            $expectedResponse,
+            $response
         );
     }
 
@@ -115,9 +120,14 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
         $this->eventListener->onKernelRequest($event);
 
         self::assertTrue($event->hasResponse());
+        $expectedResponse = new BinaryStreamResponse($binaryFile, $this->ioServiceMock);
+        $response = $event->getResponse();
+        // since symfony/symfony v3.2.7 Response sets Date header if not explicitly set
+        // @see https://github.com/symfony/symfony/commit/e3d90db74773406fb8fdf07f36cb8ced4d187f62
+        $expectedResponse->setDate($response->getDate());
         self::assertEquals(
-            new BinaryStreamResponse($binaryFile, $this->ioServiceMock),
-            $event->getResponse()
+            $expectedResponse,
+            $response
         );
     }
 
