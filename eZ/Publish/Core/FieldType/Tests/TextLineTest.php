@@ -230,8 +230,8 @@ class TextLineTest extends FieldTypeTest
                 null,
             ),
             array(
-                new TextLineValue(),
-                '',
+                new TextLineValue(''),
+                null,
             ),
             array(
                 new TextLineValue('sindelfingen'),
