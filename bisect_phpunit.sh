@@ -1,4 +1,7 @@
 #!/bin/bash
+# dumb pull request, DO NOT MERGE
+# take two, again DO NOT MERGE
+# take three, again DO NOT MERGE...
 
 # Execute phpunit with arguments (use case: directory filter), but stop on first failure / error
 phpunit --colors --stop-on-failure --stop-on-error  $@
