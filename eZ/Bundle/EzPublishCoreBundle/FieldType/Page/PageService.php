@@ -34,4 +34,23 @@ class PageService extends BasePageService
 
         return $contentInfoObjects;
     }
+
+    /**
+     * Returns valid block items as content objects.
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    public function getValidBlockItemsAsContent( Block $block )
+    {
+        $contentService = $this->repository->getContentService();
+        $contentObjects = array();
+        foreach ( $this->getValidBlockItems( $block ) as $item )
+        {
+            $contentObjects[] = $contentService->loadContent( $item->contentId );
+        }
+
+        return $contentObjects;
+    }
 }

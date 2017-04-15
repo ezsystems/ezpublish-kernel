@@ -48,4 +48,39 @@ class PageServiceTest extends BaseTest
 
         $this->assertSame($expectedResult, $this->pageService->getValidBlockItemsAsContentInfo($block));
     }
+
+    /**
+     * @covers \eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService::getValidBlockItemsAsContent
+     */
+    public function testGetValidBlockItemsAsContent()
+    {
+        $this->pageService->setStorageGateway( $this->storageGateway );
+        $this->pageService->setRepository( $this->repository );
+        $block = $this->buildBlock();
+
+        $contentId1 = 1;
+        $contentId2 = 60;
+        $items = array(
+            new Item( array( 'contentId' => $contentId1 ) ),
+            new Item( array( 'contentId' => $contentId2 ) )
+        );
+
+        $content1 = $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $content2 = $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $expectedResult = array( $content1, $content2 );
+
+        $this->storageGateway
+            ->expects( $this->once() )
+            ->method( 'getValidBlockItems' )
+            ->with( $block )
+            ->will( $this->returnValue( $items ) );
+
+        $this->contentService
+            ->expects( $this->exactly( count( $items ) ) )
+            ->method( 'loadContent' )
+            ->with( $this->logicalOr( $contentId1, $contentId2 ) )
+            ->will( $this->onConsecutiveCalls( $content1, $content2 ) );
+
+        $this->assertSame( $expectedResult, $this->pageService->getValidBlockItemsAsContent( $block ) );
+    }
 }
