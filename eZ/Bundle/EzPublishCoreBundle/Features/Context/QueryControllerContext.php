@@ -127,7 +127,7 @@ class QueryControllerContext extends RawMinkContext implements Context
         $fs = new Filesystem();
         $fs->mkdir(dirname($phpFilePath));
         $fs->dumpFile($phpFilePath, $phpFileContents);
-        shell_exec('php app/console --env=behat cache:clear');
+        shell_exec('php bin/console --env=behat cache:clear');
     }
 
     /**
