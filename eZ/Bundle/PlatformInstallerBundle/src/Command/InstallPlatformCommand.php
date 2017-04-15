@@ -247,7 +247,7 @@ class InstallPlatformCommand extends Command
         $php = escapeshellarg($phpPath) . ($phpArgs ? ' ' . $phpArgs : '');
 
         // Make sure to pass along relevant global Symfony options to console command
-        $console = escapeshellarg('app/console');
+        $console = escapeshellarg('bin/console');
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
             $console .= ' -' . str_repeat('v', $output->getVerbosity() - 1);
         }
