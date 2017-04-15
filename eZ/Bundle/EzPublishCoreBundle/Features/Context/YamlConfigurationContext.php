@@ -30,7 +30,7 @@ class YamlConfigurationContext implements Context
 
         $this->addImportToPlatformYaml($destinationFileName);
 
-        shell_exec('php app/console --env=behat cache:clear');
+        shell_exec('php bin/console --env=behat cache:clear');
     }
 
     private function addImportToPlatformYaml($importedFileName)
