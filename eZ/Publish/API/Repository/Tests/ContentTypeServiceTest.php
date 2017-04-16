@@ -2797,6 +2797,71 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the EZP-23288 - Allow to set modifier of Content Versions and ContentTypes
+     * 
+     */
+    public function testAllowModifiderContentType()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $userService = $repository->getUserService();
+
+        //Login as admin
+        $adminUser = $userService->loadUser( 14 );
+        $repository->setCurrentUser( $adminUser );
+
+        // ContentType Identifier
+        $identifier = 'new_contentType';
+        $language = 'eng-GB';
+
+        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct( $identifier );
+        $contentTypeCreateStruct->names = array( $language => 'New Type' );
+        $contentTypeCreateStruct->mainLanguageCode = $language;
+
+        $nameFieldDefinitionCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct( 'name', 'ezstring' );
+        $nameFieldDefinitionCreateStruct->names = array( $language => 'Name' );
+        $nameFieldDefinitionCreateStruct->position = 10;
+
+        $contentTypeCreateStruct->addFieldDefinition( $nameFieldDefinitionCreateStruct );
+
+        $contentTypeService->publishContentTypeDraft(
+                $contentTypeService->createContentType(
+                        $contentTypeCreateStruct, array( $contentTypeService->loadContentTypeGroup( 1 ) )
+                )
+        );
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( $identifier );
+        $this->assertEquals( 14, $contentType->creatorId );
+        $this->assertEquals( 14, $contentType->modifierId );
+
+        // Create a new user that belongs to the Administrator users group
+        $newUserCreateStruct = $userService->newUserCreateStruct( 'admin2', 'admin2@ez.no', "admin2", $language );
+        $newUserCreateStruct->setField( 'first_name', 'Admin2', $language );
+        $newUserCreateStruct->setField( 'last_name', 'Admin2', $language );
+
+        // Load the Admin Group
+        $userAdminGroup = $userService->loadUserGroup( '12' );
+        
+        $userAdmin2 = $userService->createUser( $newUserCreateStruct, array ( $userAdminGroup ) );
+
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft( $contentType, $userAdmin2 );
+
+        $newFieldDefinition = $contentTypeDraft->getFieldDefinition( 'name' );
+
+        $newFieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $newFieldDefinitionUpdateStruct->defaultValue = "EZP-23288";
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $newFieldDefinition,
+            $newFieldDefinitionUpdateStruct
+        );
+
+        $newContentType = $contentTypeService->loadContentTypeByIdentifier($identifier);
+        $this->assertEquals( $contentType->creatorId, $newContentType->creatorId );
+        $this->assertEquals( $userAdmin2->id, $newContentType->modifierId );
+    }
+
+    /**
      * Test for the createContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
