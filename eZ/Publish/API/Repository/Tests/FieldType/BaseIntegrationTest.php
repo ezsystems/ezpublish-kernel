@@ -738,6 +738,40 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * Tests updating the content without changing the field's value
+     * @depends testLoadFieldType
+     */
+    public function testUpdateFieldNoChange()
+    {
+        $content = $this->testPublishContent();
+
+        $repository     = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $draft = $contentService->createContentDraft( $content->contentInfo );
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+
+        $content = $contentService->updateContent( $draft->versionInfo, $updateStruct );
+
+        // testUpdateContentFieldStillAvailable
+        foreach ( $content->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                break;
+            }
+        }
+
+        if ( !isset( $field ) )
+        {
+            $this->fail( "Custom field not found." );
+        }
+
+        $this->assertFieldDataLoadedCorrect( $field );
+    }
+
+    /**
      * @depends testUpdateField
      */
     public function testUpdateTypeFieldStillAvailable($content)
