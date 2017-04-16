@@ -81,6 +81,11 @@ class Parser
      */
     public function parse($file)
     {
+        if ( !is_file( $file ) )
+        {
+            return array();
+        }
+
         return $this->parseString(
             file_get_contents($file)
         );
