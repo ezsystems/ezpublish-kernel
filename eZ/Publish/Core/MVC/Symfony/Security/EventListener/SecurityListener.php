@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\EventListener;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
@@ -211,6 +212,15 @@ class SecurityListener implements EventSubscriberInterface
         $token = $this->tokenStorage->getToken();
         if ($token === null) {
             return;
+        }
+
+        try
+        {
+            $this->repository->getUserService()->loadUser( $this->repository->getCurrentUser()->contentInfo->id );
+        }
+        catch ( NotFoundException $e )
+        {
+            $this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 10 ) );
         }
 
         if (
