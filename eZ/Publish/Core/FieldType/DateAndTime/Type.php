@@ -86,6 +86,26 @@ class Type extends FieldType
     }
 
     /**
+     * Returns if the given $value is considered empty by the field type
+     *
+     * Reimplemented from FieldType to let zero timestamps be considered
+     * empty, because empty DateAndTimes are stored and reloaded as zero.
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $value
+     *
+     * @return boolean
+     */
+    public function isEmptyValue( SPIValue $value )
+    {
+        if ( $value->value instanceof DateTime && $value->value->getTimestamp() === 0 )
+        {
+            return true;
+        }
+
+        return parent::isEmptyValue( $value );
+    }
+
+    /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
      * @param string|int|DateTime|\eZ\Publish\Core\FieldType\DateAndTime\Value $inputValue
