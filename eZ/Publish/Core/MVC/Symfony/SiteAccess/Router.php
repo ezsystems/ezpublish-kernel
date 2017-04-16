@@ -14,6 +14,7 @@ use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\CompoundInterface;
 use InvalidArgumentException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI as MapURIMatcher;
 
 class Router implements SiteAccessRouterInterface, SiteAccessAware
 {
@@ -242,6 +243,22 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
             $siteAccess = new $siteAccessClass();
             $siteAccess->name = $siteAccessName;
             $siteAccess->matcher = $reverseMatcher;
+            $siteAccess->matchingType = $reverseMatcher->getName();
+
+            return $siteAccess;
+        }
+
+        $matchingClasses = array_keys( $this->siteAccessesConfiguration );
+        if ( ( sizeof( $matchingClasses ) == 1 ) && ( $matchingClasses[0] == 'Map\URI' ) )
+        {
+            $siteAccessClass = $this->siteAccessClass;
+            /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
+            $siteAccess       = new $siteAccessClass();
+            $siteAccess->name = $this->defaultSiteAccess;
+            $matcher          = new MapURIMatcher( array( null => $this->defaultSiteAccess ) );
+            $matcher->setRequest( $request );
+            $siteAccess->matcher      = $matcher;
+            $reverseMatcher           = $matcher->reverseMatch( $this->defaultSiteAccess );
             $siteAccess->matchingType = $reverseMatcher->getName();
 
             return $siteAccess;
