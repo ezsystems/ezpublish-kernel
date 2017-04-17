@@ -129,6 +129,17 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
             return $this->alreadyMatched[$viewType][$view];
         }
 
+        usort(
+            $this->matchConfig[$viewType],
+            function ($configHash1, $configHash2) {
+                if ($configHash1['priority'] == $configHash2['priority']) {
+                    return 0;
+                }
+
+                return ($configHash1['priority'] > $configHash2['priority']) ? -1 : 1;
+            }
+        );
+
         foreach ($this->matchConfig[$viewType] as $configHash) {
             $hasMatched = true;
             $matcher = null;
