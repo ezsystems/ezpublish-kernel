@@ -1,6 +1,6 @@
 {% set content_name=ez_content_name(content) %}
 
-{% if location is defined %}
+{% if location is not null %}
     <h3><a href="{{ path(location) }}">{{ content_name }}</a></h3>
 {% else %}
     <h3><a href="{{ path( "ez_urlalias", {"contentId": content.id} ) }}">{{ content_name }}</a></h3>
