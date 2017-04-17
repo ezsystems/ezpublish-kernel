@@ -7850,8 +7850,9 @@ Location XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:element name="Location" type="vnd.ez.api.Location" />
-      <xsd:element name="LocationList" type="vnd.ez.api.LocationList" />
+      <xsd:element name="ParentLocation" type="vnd.ez.api.LocationRef" />
+      <xsd:element name="Children" type="vnd.ez.api.LocationListRef" />
+      <xsd:element name="ContentInfo" type="vnd.ez.api.ContentInfo" />
     </xsd:schema>
 
 
