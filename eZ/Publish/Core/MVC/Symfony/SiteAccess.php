@@ -46,6 +46,6 @@ class SiteAccess extends ValueObject
 
     public function __toString()
     {
-        return "$this->name (matched by '$this->matchingType')";
+        return $this->name;
     }
 }
