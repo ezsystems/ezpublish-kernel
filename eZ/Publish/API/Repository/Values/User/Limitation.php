@@ -50,4 +50,13 @@ abstract class Limitation extends ValueObject
      * @var mixed[]
      */
     public $limitationValues = array();
+
+    /**
+     * A hash of human readable limitations, using IDs or identifiers as keys.
+     *
+     * @readonly
+     *
+     * @return mixed[]
+     */
+    abstract public function limitationValuesAsText();
 }

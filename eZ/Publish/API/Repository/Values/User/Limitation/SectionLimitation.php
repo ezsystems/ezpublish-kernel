@@ -21,4 +21,16 @@ class SectionLimitation extends RoleLimitation
     {
         return Limitation::SECTION;
     }
+
+    /**
+     * A hash of human readable limitations, using IDs or identifiers as keys.
+     *
+     * @readonly
+     *
+     * @return mixed[]
+     */
+    public function limitationValuesAsText()
+    {
+        return $this->limitationValues; // TODO: load section names
+    }
 }

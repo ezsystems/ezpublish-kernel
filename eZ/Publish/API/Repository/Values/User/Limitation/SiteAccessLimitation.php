@@ -21,4 +21,16 @@ class SiteAccessLimitation extends Limitation
     {
         return Limitation::SITEACCESS;
     }
+
+    /**
+     * A hash of human readable limitations, using IDs or identifiers as keys.
+     *
+     * @readonly
+     *
+     * @return mixed[]
+     */
+    public function limitationValuesAsText()
+    {
+        return $this->limitationValues; // TODO: load site access names
+    }
 }

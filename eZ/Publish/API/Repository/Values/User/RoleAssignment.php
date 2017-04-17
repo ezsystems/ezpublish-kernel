@@ -38,4 +38,11 @@ abstract class RoleAssignment extends ValueObject
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     abstract public function getRole();
+
+    /**
+     * Returns the type of role assignment: user or usergroup.
+     *
+     * @return string
+     */
+    abstract public function getType();
 }
