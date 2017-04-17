@@ -72,8 +72,9 @@ class BinaryStreamResponse extends Response
      */
     public function setFile($file, $contentDisposition = null, $autoLastModified = true)
     {
-        $this->file = $file;
-
+        if (!$file instanceof BinaryFile) {
+            return $this;
+        }
         if ($autoLastModified) {
             $this->setAutoLastModified();
         }
