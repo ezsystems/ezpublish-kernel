@@ -40,7 +40,7 @@ install:
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
     - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd c:\projects\ezpublish-kernel
-    - composer update --no-progress --ansi
+    - composer install --no-suggest --no-progress --ansi
 
 test_script:
     - cd c:\projects\ezpublish-kernel
