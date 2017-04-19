@@ -85,7 +85,10 @@ class InstallPlatformCommand extends Command
         $type = $input->getArgument('type');
         $installer = $this->getInstaller($type);
         if ($installer === false) {
-            $output->writeln("Unknown install type '$type'");
+            $output->writeln(
+                "Unknown install type '$type', available options in currently installed eZ Platform package: " .
+                implode(', ', array_keys($this->installers))
+            );
             exit(self::EXIT_UNKNOWN_INSTALL_TYPE);
         }
 
@@ -110,7 +113,7 @@ class InstallPlatformCommand extends Command
     {
         $parametersFile = 'app/config/parameters.yml';
         if (!is_file($parametersFile)) {
-            $this->output->writeln("Required configuration file $parametersFile not found");
+            $this->output->writeln("Required configuration file '$parametersFile' not found");
             exit(self::EXIT_PARAMETERS_NOT_FOUND);
         }
     }
@@ -146,9 +149,9 @@ class InstallPlatformCommand extends Command
                 exit(self::EXIT_DATABASE_NOT_FOUND_ERROR);
             }
         } catch (ConnectionException $e) {
-            $this->output->writeln('An error occured connecting to the database:');
+            $this->output->writeln('An error occurred connecting to the database:');
             $this->output->writeln($e->getMessage());
-            $this->output->writeln('Please check the database configuration in parameters.yml');
+            $this->output->writeln("Please check the database configuration in 'app/config/parameters.yml'");
             exit(self::EXIT_GENERAL_DATABASE_ERROR);
         }
     }
@@ -156,7 +159,12 @@ class InstallPlatformCommand extends Command
     private function cacheClear(OutputInterface $output)
     {
         if (!is_writable($this->cacheDir)) {
-            throw new \RuntimeException(sprintf('Unable to write in the "%s" directory', $this->cacheDir));
+            throw new \RuntimeException(
+                sprintf(
+                    'Unable to write in the "%s" directory, check install doc on disk permissions before you continue.',
+                    $this->cacheDir
+                )
+            );
         }
 
         $output->writeln(sprintf('Clearing cache for directory <info>%s</info>', $this->cacheDir));
@@ -208,7 +216,7 @@ class InstallPlatformCommand extends Command
     /**
      * Executes a Symfony command in separate process.
      *
-     * Typically usefull when configuration has changed, our you are outside of Symfony context (Composer commands).
+     * Typically useful when configuration has changed, or you are outside of Symfony context (Composer commands).
      *
      * Based on {@see \Sensio\Bundle\DistributionBundle\Composer\ScriptHandler::executeCommand}.
      *
