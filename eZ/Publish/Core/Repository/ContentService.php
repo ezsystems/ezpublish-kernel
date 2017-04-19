@@ -649,6 +649,7 @@ class ContentService implements ContentServiceInterface
                 'alwaysAvailable' => $contentCreateStruct->alwaysAvailable,
                 'remoteId' => $contentCreateStruct->remoteId,
                 'modified' => isset($contentCreateStruct->modificationDate) ? $contentCreateStruct->modificationDate->getTimestamp() : time(),
+                'published' => isset($contentCreateStruct->publishedDate) ? $contentCreateStruct->publishedDate->getTimestamp() : null,
                 'initialLanguageId' => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
                     $contentCreateStruct->mainLanguageCode
                 )->id,
@@ -1481,7 +1482,7 @@ class ContentService implements ContentServiceInterface
         }
 
         $currentTime = time();
-        if ($publicationDate === null && $versionInfo->versionNo === 1) {
+        if ($publicationDate === null && $versionInfo->versionNo === 1 && !$versionInfo->getContentInfo()->publishedDate->getTimestamp()) {
             $publicationDate = $currentTime;
         }
 

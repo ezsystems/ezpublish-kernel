@@ -156,10 +156,11 @@ class DoctrineDatabase extends Gateway
             $q->bindValue($struct->remoteId, null, \PDO::PARAM_STR)
         )->set(
             $this->dbHandler->quoteColumn('modified'),
-            $q->bindValue(0, null, \PDO::PARAM_INT)
+            $q->bindValue($struct->modified ?: 0, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('published'),
-            $q->bindValue(0, null, \PDO::PARAM_INT)
+            // @todo Schema can be changed to allow null so 0 does not have special meaning, however that would need API changes.
+            $q->bindValue($struct->published ?: 0, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('status'),
             $q->bindValue(ContentInfo::STATUS_DRAFT, null, \PDO::PARAM_INT)

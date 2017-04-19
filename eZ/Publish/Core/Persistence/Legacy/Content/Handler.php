@@ -593,8 +593,9 @@ class Handler implements BaseContentHandler
 
         // Copy content in given version or current version
         $createStruct = $this->mapper->createCreateStructFromContent(
-            $this->load($contentId, $currentVersionNo)
+            $content = $this->load($contentId, $currentVersionNo)
         );
+        $createStruct->published = $content->versionInfo->contentInfo->publicationDate;
         $content = $this->internalCreate($createStruct, $currentVersionNo);
 
         // If version was not passed also copy other versions
