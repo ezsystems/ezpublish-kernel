@@ -272,7 +272,7 @@ class LegacyStorage extends Gateway
         $selectQuery = $connection->createSelectQuery();
         $selectQuery->select(
             $selectQuery->expr->count(
-                $connection->quoteColumn('id', 'ezcontentobject_attribute')
+                'DISTINCT' . $connection->quoteColumn('id', 'ezcontentobject_attribute')
             )
         )->from(
             $connection->quoteTable('ezcontentobject_attribute')
@@ -302,7 +302,7 @@ class LegacyStorage extends Gateway
         $statement = $selectQuery->prepare();
         $statement->execute();
 
-        return (int)$statement->fetchColumn() === 0;
+        return (int)$statement->fetchColumn() <= 1;
     }
 
     public function extractFilesFromXml($xml)
