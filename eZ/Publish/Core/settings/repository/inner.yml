@@ -114,12 +114,3 @@ services:
         class: "%ezpublish.field_type_nameable_collection.factory.class%"
         calls:
             - [setContainer, ["@service_container"]]
-
-    ezpublish.api.repository.factory:
-        class: "%ezpublish.api.repository.factory.class%"
-        arguments:
-            - "%ezpublish.api.inner_repository.class%"
-            - "@ezpublish.field_type_collection.factory"
-            - "@ezpublish.field_type_nameable_collection.factory"
-        calls:
-            - [setContainer, ["@service_container"]]
