@@ -12,6 +12,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use Exception;
 use DateTime;
+use DateTimeZone;
 
 /**
  * Value for DateAndTime field type.
@@ -52,7 +53,10 @@ class Value extends BaseValue
     public static function fromString($dateString)
     {
         try {
-            return new static(new DateTime($dateString));
+            $datetime = new DateTime($dateString);
+            $datetime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
+            return new static($datetime);
         } catch (Exception $e) {
             throw new InvalidArgumentValue('$dateString', $dateString, __CLASS__, $e);
         }
@@ -68,7 +72,10 @@ class Value extends BaseValue
     public static function fromTimestamp($timestamp)
     {
         try {
-            return new static(new DateTime("@{$timestamp}"));
+            $datetime = new DateTime("@{$timestamp}");
+            $datetime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
+            return new static($datetime);
         } catch (Exception $e) {
             throw new InvalidArgumentValue('$timestamp', $timestamp, __CLASS__, $e);
         }
