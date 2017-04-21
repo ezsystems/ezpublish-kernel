@@ -1,3 +1,6 @@
+imports:
+    - {resource: 'database.yml'}
+
 parameters:
     ezplatform.installer.db_based_installer.class: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
     ezplatform.installer.clean_installer.class: EzSystems\PlatformInstallerBundle\Installer\CleanInstaller

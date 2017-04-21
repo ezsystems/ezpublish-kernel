@@ -1,0 +1,8 @@
+services:
+    ezplatform.installer.database.connection.factory:
+        class: EzSystems\PlatformInstallerBundle\Database\ConnectionFactory
+        arguments: ["@ezpublish.persistence.connection"]
+
+    ezplatform.installer.database.connection:
+        class: Doctrine\DBAL\Connection
+        factory: ["@ezplatform.installer.database.connection.factory", createConnection]
