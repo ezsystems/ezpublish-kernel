@@ -11,3 +11,8 @@ services:
         class: EzSystems\PlatformInstallerBundle\Database\Platform\MySQLPlatform
         tags:
             - { name: ezplatform.installer.database, driver: pdo_mysql }
+
+    ezplatform.installer.database.dbms.pgsql:
+        class: EzSystems\PlatformInstallerBundle\Database\Platform\PostgreSQLPlatform
+        tags:
+            - { name: ezplatform.installer.database, driver: pdo_pgsql }
