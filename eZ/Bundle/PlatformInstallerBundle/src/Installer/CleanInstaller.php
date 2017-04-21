@@ -22,8 +22,9 @@ class CleanInstaller extends DbBasedInstaller implements Installer
 
     public function importData()
     {
+        $databasePlatform = $this->db->getDatabasePlatform()->getName();
         $this->runQueriesFromFile(
-            'vendor/ezsystems/ezpublish-kernel/data/cleandata.sql'
+            realpath(dirname(__DIR__) . "/../../../../data/$databasePlatform/cleandata.sql")
         );
     }
 
