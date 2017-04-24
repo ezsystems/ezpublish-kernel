@@ -8,8 +8,10 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\User;
 
 class UserWrappedTest extends PHPUnit_Framework_TestCase
@@ -127,7 +129,7 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
 
     public function testIsEqualTo()
     {
-        $originalUser = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User');
+        $originalUser = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\Tests\UserEquatableInterface');
         $user = new UserWrapped($originalUser, $this->apiUser);
         $otherUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
         $originalUser
@@ -137,4 +139,11 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->assertFalse($user->isEqualTo($otherUser));
     }
+}
+
+/**
+ * @internal For use with tests only
+ */
+interface UserEquatableInterface extends UserInterface, EquatableInterface
+{
 }

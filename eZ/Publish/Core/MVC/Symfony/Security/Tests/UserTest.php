@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 
@@ -28,8 +29,14 @@ class UserTest extends PHPUnit_Framework_TestCase
                     ),
                 )
             )
+            ->setMethods(['getUserId'])
             ->getMockForAbstractClass();
+
         $roles = array('ROLE_USER');
+        $apiUser
+            ->expects($this->once())
+            ->method('getUserId')
+            ->will($this->returnValue(42));
 
         $user = new User($apiUser, $roles);
         $this->assertSame($apiUser, $user->getAPIUser());
@@ -48,9 +55,8 @@ class UserTest extends PHPUnit_Framework_TestCase
         $userId = 123;
         $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $apiUser
-            ->expects($this->any())
-            ->method('__get')
-            ->with('id')
+            ->expects($this->once())
+            ->method('getUserId')
             ->will($this->returnValue($userId));
         $roles = array('ROLE_USER');
 
@@ -58,9 +64,8 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $apiUser2 = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $apiUser2
-            ->expects($this->any())
-            ->method('__get')
-            ->with('id')
+            ->expects($this->once())
+            ->method('getUserId')
             ->will($this->returnValue($userId));
         $user2 = new User($apiUser2, array());
 
@@ -71,9 +76,8 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $apiUser
-            ->expects($this->any())
-            ->method('__get')
-            ->with('id')
+            ->expects($this->once())
+            ->method('getUserId')
             ->will($this->returnValue(123));
         $roles = array('ROLE_USER');
 
@@ -81,9 +85,8 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $apiUser2 = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $apiUser2
-            ->expects($this->any())
-            ->method('__get')
-            ->with('id')
+            ->expects($this->once())
+            ->method('getUserId')
             ->will($this->returnValue(456));
         $user2 = new User($apiUser2, array());
 
@@ -93,7 +96,11 @@ class UserTest extends PHPUnit_Framework_TestCase
     public function testIsEqualToNotSameUserType()
     {
         $user = new User();
-        $user2 = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $user2 = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\ReferenceUserInterface');
+        $user2
+            ->expects($this->once())
+            ->method('getAPIUserReference')
+            ->willReturn(new UserReference(456));
         $this->assertFalse($user->isEqualTo($user2));
     }
 
