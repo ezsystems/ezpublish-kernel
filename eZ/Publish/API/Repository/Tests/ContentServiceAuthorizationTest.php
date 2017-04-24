@@ -627,6 +627,39 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the loadContent() method on a draft.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     */
+    public function testLoadContentThrowsUnauthorizedExceptionOnDrafts()
+    {
+        /** @var $repository \eZ\Publish\API\Repository\Repository */
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Set new editor as a content owner
+        $repository->setCurrentUser( $user );
+
+        // Create draft with this user
+        $draft = $this->createContentDraftVersion1( 2, 'folder' );
+
+        // Load anonymous user
+        $userService = $repository->getUserService();
+        $user = $userService->loadAnonymousUser();
+        $repository->setCurrentUser( $user );
+
+        // Try to load the draft with anonymous user to make sure access won't be allowed by throwing an exception
+        $contentService = $repository->getContentService();
+        $contentService->loadContent( $draft->id );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadContentByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
