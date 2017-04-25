@@ -1,6 +1,6 @@
 # IO migration
 
-> Added in 6.8
+> Added in 6.10
 
 **NB: This feature is experimental, for the time being. Use with caution!**
 
