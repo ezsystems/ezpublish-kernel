@@ -76,7 +76,7 @@ class PreviewLocationProvider
                     'status' => Location::STATUS_DRAFT,
                     'parentLocationId' => $parentLocations[0]->id,
                     'depth' => $parentLocations[0]->depth + 1,
-                    'pathString' => $parentLocations[0]->pathString . '/x',
+                    'pathString' => $parentLocations[0]->pathString . 'x/',
                 )
             );
         }
