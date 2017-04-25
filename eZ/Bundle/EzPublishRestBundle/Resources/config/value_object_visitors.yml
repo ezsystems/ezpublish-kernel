@@ -174,6 +174,7 @@ services:
         arguments: [ "%kernel.debug%", "@translator" ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\NotFoundException }
+            - { name: ezpublish_rest.output.value_object_visitor, type: Symfony\Component\HttpKernel\Exception\NotFoundHttpException }
 
     ezpublish_rest.output.value_object_visitor.UnauthorizedException:
         parent: ezpublish_rest.output.value_object_visitor.base
@@ -181,6 +182,7 @@ services:
         arguments: [ "%kernel.debug%", "@translator" ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\UnauthorizedException }
+            - { name: ezpublish_rest.output.value_object_visitor, type: Symfony\Component\Security\Core\Exception\AccessDeniedException }
 
     ezpublish_rest.output.value_object_visitor.BadStateException:
         parent: ezpublish_rest.output.value_object_visitor.base
@@ -188,6 +190,7 @@ services:
         arguments: [ "%kernel.debug%", "@translator" ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\BadStateException }
+            - { name: ezpublish_rest.output.value_object_visitor, type: Symfony\Component\HttpKernel\Exception\BadRequestHttpException }
 
     ezpublish_rest.output.value_object_visitor.BadRequestException:
         parent: ezpublish_rest.output.value_object_visitor.base
@@ -196,6 +199,7 @@ services:
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Exceptions\BadRequestException }
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Common\Exceptions\Parser }
+            - { name: ezpublish_rest.output.value_object_visitor, type: Symfony\Component\HttpKernel\Exception\BadRequestHttpException }
 
     ezpublish_rest.output.value_object_visitor.ContentFieldValidationException:
         parent: ezpublish_rest.output.value_object_visitor.BadRequestException
