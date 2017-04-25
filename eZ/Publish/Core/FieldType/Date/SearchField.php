@@ -29,7 +29,8 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        $dateTime = new DateTime("@{$field->value->data['timestamp']}");
+        $timestamp = (int)$field->value->data['timestamp'];
+        $dateTime = new DateTime("@{$timestamp}");
 
         return array(
             new Search\Field(
