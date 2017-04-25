@@ -106,7 +106,7 @@ class ContentViewBuilder implements ViewBuilder
                 throw new InvalidArgumentException('Content', 'No content could be loaded from parameters');
             }
 
-            $content = $view->isEmbed() ? $this->loadContent($contentId) : $this->loadEmbeddedContent($contentId, $location);
+            $content = $view->isEmbed() ? $this->loadEmbeddedContent($contentId, $location) : $this->loadContent($contentId);
         }
 
         $view->setContent($content);
