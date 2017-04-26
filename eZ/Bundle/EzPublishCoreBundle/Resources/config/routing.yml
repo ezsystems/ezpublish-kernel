@@ -41,7 +41,7 @@ services:
         abstract: true
         calls:
             - [setRequestContext, ["@router.request_context"]]
-            - [setSiteAccess, ["@?ezpublish.siteaccess="]]
+            - [setSiteAccess, ["@?ezpublish.siteaccess"]]
             - [setSiteAccessRouter, ["@ezpublish.siteaccess_router"]]
             - [setLogger, ["@?logger"]]
 
