@@ -678,7 +678,7 @@ services:
         arguments:
             - "@ezpublish_rest.parser_tools"
             - "@ezpublish.api.service.content"
-            - "@ezpublish_rest.input.parser.versioninfo"
+            - "@ezpublish_rest.input.parser.VersionInfo"
             - "@ezpublish_rest.field_type_parser"
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Content }
