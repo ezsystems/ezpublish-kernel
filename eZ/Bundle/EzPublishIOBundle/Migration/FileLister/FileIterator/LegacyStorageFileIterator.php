@@ -50,7 +50,7 @@ final class LegacyStorageFileIterator implements FileIteratorInterface
 
     public function valid()
     {
-        return ($this->cursor < $this->count());
+        return $this->cursor < $this->count();
     }
 
     public function rewind()
