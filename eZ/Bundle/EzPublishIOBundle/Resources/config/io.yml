@@ -79,7 +79,7 @@ services:
     ezpublish.core.io.stream_file_listener:
         class: "%ezpublish.core.io.stream_file_listener.class%"
         arguments:
-            - "@ezpublish.fieldtype.ezimage.io_service"
+            - "@ezpublish.fieldType.ezimage.io_service"
             - "@ezpublish.config.resolver"
         tags:
             - { name: kernel.event_subscriber }
