@@ -16,7 +16,7 @@ use Twig_Template;
  * Wraps the display method to:
  * - Inject debug info into template to be able to see in the markup which one is used
  */
-abstract class DebugTemplate extends Twig_Template
+class DebugTemplate extends Twig_Template
 {
     public function display(array $context, array $blocks = array())
     {
@@ -59,5 +59,37 @@ abstract class DebugTemplate extends Twig_Template
         } else {
             echo $templateResult;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateName()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSource()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doDisplay(array $context, array $blocks = array())
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDebugInfo()
+    {
+        return array();
     }
 }
