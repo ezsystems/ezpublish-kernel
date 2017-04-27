@@ -210,8 +210,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $apiUser
             ->expects($this->any())
-            ->method('__get')
-            ->with('id')
+            ->method('getUserId')
             ->will($this->returnValue($userId));
 
         return new EzUser($apiUser);
