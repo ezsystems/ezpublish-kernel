@@ -154,10 +154,6 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        if (count($query->facetBuilders)) {
-            throw new NotImplementedException('Facets are not supported by the legacy search engine.');
-        }
-
         // The legacy search does not know about scores, so that we just
         // combine the query with the filter
         $filter = new Criterion\LogicalAnd(array($query->query, $query->filter));
@@ -271,10 +267,6 @@ class Handler implements SearchHandlerInterface
         $start = microtime(true);
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
-
-        if (count($query->facetBuilders)) {
-            throw new NotImplementedException('Facets are not supported by the legacy search engine.');
-        }
 
         // The legacy search does not know about scores, so we just
         // combine the query with the filter
