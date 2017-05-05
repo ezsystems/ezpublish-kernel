@@ -538,7 +538,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideDataForGetName
      *
-     * @param SPIValue $spiValue
+     * @param SPIValue $value
      * @param string $expected
      */
     public function testGetName(SPIValue $value, $expected)
