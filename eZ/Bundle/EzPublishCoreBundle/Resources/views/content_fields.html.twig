@@ -351,11 +351,12 @@
     {% endif %}
 
     {% if hasContent and showMap %}
+    {% set apiKey = ezpublish.configResolver.hasParameter('api_keys.google_maps') ? ezpublish.configResolver.getParameter('api_keys.google_maps'): "" %}
         <script>
             if (typeof(window.ezgmaplocationMapsScriptLoaded) == 'undefined') {
                 (function (win, doc) {
                     var myScript = document.createElement('script');
-                    myScript.src = '//maps.googleapis.com/maps/api/js?key={{ ezpublish.configResolver.parameter('api_keys.google_maps') }}';
+                    myScript.src = '//maps.googleapis.com/maps/api/js{% if apiKey %}?key={{ apiKey }}{% endif %}';
                     win.ezgmaplocationMapsScriptLoaded = true;
                     doc.body.appendChild(myScript);
                 })(window, document)
