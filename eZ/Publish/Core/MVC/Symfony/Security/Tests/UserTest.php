@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Security\ReferenceUserInterface;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
@@ -96,7 +97,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     public function testIsEqualToNotSameUserType()
     {
         $user = new User();
-        $user2 = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\ReferenceUserInterface');
+        $user2 = $this->getMock(ReferenceUserInterface::class);
         $user2
             ->expects($this->once())
             ->method('getAPIUserReference')

@@ -129,7 +129,7 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
 
     public function testIsEqualTo()
     {
-        $originalUser = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\Tests\UserEquatableInterface');
+        $originalUser = $this->getMock(UserEquatableInterface::class);
         $user = new UserWrapped($originalUser, $this->apiUser);
         $otherUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
         $originalUser
