@@ -22,6 +22,8 @@ interface UserInterface extends AdvancedUserInterface
     public function getAPIUser();
 
     /**
+     * @deprecated Will be replaced by {@link ReferenceUserInterface::getAPIUser()}, adding LogicException to signature.
+     *
      * @param \eZ\Publish\API\Repository\Values\User\User $apiUser
      */
     public function setAPIUser(APIUser $apiUser);
