@@ -155,6 +155,25 @@ The `$name` püroperty in the `$builder` must be documented that it shall
 contain a user provided name or identifier which is not cared about by
 the API implementation.
 
+**Implementation Note**
+
+To be able to correlate the facet return value from the search backend with the
+correct `FacetBuilder` we should generate a unique ID for each `FacetBuilder`
+instance before executing the query and make the search engine return this ID
+together with the facet return value.
+
+On way to generate such an ID could be as simple as:
+
+    foreach ($query->facets as $facetBuilder) {
+        $facetBuilderMap[md5(serialize($facetBuilder))] = $facetBuilder;
+    }
+
+Instead of `serialize()` we might want to use `spl_object_hash()` or something
+similar. This also tells apart multiple facet builders of the same base type
+with different values (Different
+[`UserFacetBuilder`](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/API/Repository/Values/Content/Query/FacetBuilder/UserFacetBuilder.php)
+instances, for example).
+
 ### Build Facet Filters
 
 The `FacetBuilder` classes should retrieve a `limit()` method which
@@ -263,7 +282,7 @@ We should only store the actual IDs in the search backends, not the
 identifier. If a criterion is missing to query that ID we should just
 implement this (`SectionIdCriterion`). The queries are supposed to be
 more performant this way and it spares us re-indexing of the search
-index.
+index if identifiers change.
 
 ### Additional Facets
 
