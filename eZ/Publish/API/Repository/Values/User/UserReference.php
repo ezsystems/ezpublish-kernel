@@ -16,7 +16,7 @@ interface UserReference
     /**
      * The User id of the User this reference represent.
      *
-     * @return mixed
+     * @return int|string
      */
     public function getUserId();
 }

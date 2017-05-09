@@ -16,19 +16,19 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
  * This class represents a location in the repository.
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
- * @property-read mixed $contentId calls getContentInfo()->id
- * @property-read mixed $id the id of the location
- * @property-read int $priority Position of the Location among its siblings when sorted using priority
- * @property-read bool $hidden Indicates that the Location is explicitly marked as hidden.
- * @property-read bool $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
- * @property-read string $remoteId a global unique id of the content object
- * @property-read mixed $parentLocationId the id of the parent location
- * @property-read string $pathString the path to this location e.g. /1/2/4/23 where 23 is current id.
- * @property-read array $path Same as $pathString but as array, e.g. [ 1, 2, 4, 23 ]
- * @property-read int $depth Depth location has in the location tree
+ * @property-read int|string $contentId calls getContentInfo()->id
+ * @property-read int|string $id the id of the location
+ * @property-read int|string|null $priority Position of the Location among its siblings when sorted using priority
+ * @property-read bool|null $hidden Indicates that the Location is explicitly marked as hidden.
+ * @property-read bool|null $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
+ * @property-read string|null $remoteId a global unique id of the content object
+ * @property-read int|string|null $parentLocationId the id of the parent location
+ * @property-read string|null $pathString the path to this location e.g. /1/2/4/23 where 23 is current id.
+ * @property-read int[]|string[]|null $path Same as $pathString but as array, e.g. [ 1, 2, 4, 23 ]
+ * @property-read int|string|null $depth Depth location has in the location tree
  *
- * @property-read int $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
- * @property-read int $sortOrder Specifies whether the sort order should be ascending or descending. Valid values are {@link Location::SORT_ORDER_*}
+ * @property-read int|string|null $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
+ * @property-read int|string|null $sortOrder Specifies whether the sort order should be ascending or descending. Valid values are {@link Location::SORT_ORDER_*}
  */
 abstract class Location extends ValueObject
 {
@@ -89,7 +89,7 @@ abstract class Location extends ValueObject
     /**
      * Location ID.
      *
-     * @var mixed Location ID.
+     * @var int|string Location ID.
      */
     protected $id;
 
@@ -99,7 +99,7 @@ abstract class Location extends ValueObject
      * a location gets the status DRAFT on newly created content which is not published. When content is published the
      * location gets the status STATUS_PUBLISHED
      *
-     * @var int
+     * @var int|string
      */
     public $status = self::STATUS_PUBLISHED;
 
@@ -109,7 +109,7 @@ abstract class Location extends ValueObject
      * Position of the Location among its siblings when sorted using priority
      * sort order.
      *
-     * @var int
+     * @var int|string
      */
     protected $priority;
 
@@ -133,7 +133,7 @@ abstract class Location extends ValueObject
      *
      * A universally unique identifier.
      *
-     * @var mixed
+     * @var string
      */
     protected $remoteId;
 
@@ -157,7 +157,7 @@ abstract class Location extends ValueObject
     /**
      * Parent ID.
      *
-     * @var mixed Location ID.
+     * @var int|string Location ID.
      */
     protected $parentLocationId;
 
@@ -171,7 +171,7 @@ abstract class Location extends ValueObject
     /**
      * Depth location has in the location tree.
      *
-     * @var int
+     * @var int|string
      */
     protected $depth;
 
@@ -180,7 +180,7 @@ abstract class Location extends ValueObject
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
-     * @var mixed
+     * @var int|string
      */
     protected $sortField;
 
@@ -189,7 +189,7 @@ abstract class Location extends ValueObject
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
-     * @var mixed
+     * @var int|string
      */
     protected $sortOrder;
 
