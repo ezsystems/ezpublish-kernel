@@ -287,9 +287,9 @@ class SearchEngineIndexingTest extends BaseTest
         $this->assertEquals(0, $result->totalCount);
     }
 
-   /*
-    * Test that a newly created user is available for search.
-    */
+    /**
+     * Test that a newly created user is available for search.
+     */
     public function testCreateUser()
     {
         $repository = $this->getRepository();
@@ -845,6 +845,30 @@ class SearchEngineIndexingTest extends BaseTest
             ["it's", "it's", [LegacyElasticsearch::class]],
             ['with_underscore', 'with_underscore'],
         ];
+    }
+
+    /**
+     * Test FullText search on user first name and last name.
+     *
+     * @see https://jira.ez.no/browse/EZP-27250
+     */
+    public function testUserFullTextSearch()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $user = $this->createUser('TestUser', 'Jon', 'Snow');
+
+        $criterion = new Criterion\LogicalAnd(
+            [
+                new Criterion\FullText('Jon Snow'),
+                new Criterion\ContentTypeIdentifier('user'),
+            ]
+        );
+        $query = new Query(['filter' => $criterion]);
+        $this->refreshSearch($repository);
+        $results = $searchService->findContent($query);
+        self::assertEquals(1, $results->totalCount);
+        self::assertEquals($user->id, $results->searchHits[0]->valueObject->id);
     }
 
     /**
