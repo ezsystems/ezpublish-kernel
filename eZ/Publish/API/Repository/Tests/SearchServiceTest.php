@@ -17,13 +17,12 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Test case for operations in the SearchService using in memory storage.
+ * Test case for operations in the SearchService.
  *
  * @see eZ\Publish\API\Repository\SearchService
  * @group integration
@@ -31,6 +30,10 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
  */
 class SearchServiceTest extends BaseTest
 {
+    const QUERY_CLASS = Query::class;
+
+    use Common\FacetedSearchProvider;
+
     public function getFilterContentSearches()
     {
         $fixtureDir = $this->getFixtureDir();
@@ -2487,252 +2490,14 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture($query, $fixture, $closure);
     }
 
-    public function getFacettedSearches()
-    {
-        $fixtureDir = $this->getFixtureDir();
-
-        return array(
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
-                                    'name' => 'type',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetContentType.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
-                                    'name' => 'type',
-                                    'minCount' => 3,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetContentTypeMinCount.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
-                                    'name' => 'type',
-                                    'limit' => 5,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetContentTypeMinLimit.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\SectionFacetBuilder(
-                                array(
-                                    'name' => 'section',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetSection.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\UserFacetBuilder(
-                                array(
-                                    'name' => 'creator',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetUser.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\TermFacetBuilder(),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetTerm.php',
-            ),
-            /* @todo: It needs to be defined how this one is supposed to work.
-            array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\CriterionFacetBuilder()
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . '/FacetCriterion.php',
-            ), // */
-            /* @todo: Add sane ranges here:
-            array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\DateRangeFacetBuilder( array() )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . '/FacetDateRange.php',
-            ), // */
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldSimple.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                    'regex' => '(a|b|c)',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexp.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                    'regex' => '(a|b|c)',
-                                    'sort' => FacetBuilder\FieldFacetBuilder::TERM_DESC,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexpSortTerm.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                    'regex' => '(a|b|c)',
-                                    'sort' => FacetBuilder\FieldFacetBuilder::COUNT_DESC,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexpSortCount.php',
-            ),
-            /* @todo: Add sane ranges here:
-            array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldRangeFacetBuilder( array(
-                                'fieldPath' => 'product/price',
-                            ) )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexpSortCount.php',
-            ), // */
-        );
-    }
-
     /**
      * Test for the findContent() method.
      *
-     * @dataProvider getFacettedSearches
+     * @dataProvider getFacetedSearches
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFindFacettedContent(Query $query, $fixture)
+    public function testFindFacetedContent(Query $query, $fixture)
     {
         $this->assertQueryFixture($query, $fixture);
     }
@@ -2740,10 +2505,10 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContentInfo() method.
      *
-     * @dataProvider getFacettedSearches
+     * @dataProvider getFacetedSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      */
-    public function testFindFacettedContentInfo(Query $query, $fixture)
+    public function testFindFacetedContentInfo(Query $query, $fixture)
     {
         $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure(), true);
     }
@@ -4601,7 +4366,7 @@ class SearchServiceTest extends BaseTest
                 );
                 $this->markTestIncomplete("No fixture available. Result recorded at $record. Result: \n" . $this->printResult($result));
             } else {
-                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate it.");
+                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate:\n " . $fixture);
             }
         }
 
