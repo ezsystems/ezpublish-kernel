@@ -83,6 +83,11 @@ class BinaryBaseStorage extends GatewayBasedStorage
                 $binaryFile->uri;
         }
 
+        // copy from another field
+        if (!isset($field->value->externalData['mimeType']) && isset($field->value->externalData['id'])) {
+            $field->value->externalData['mimeType'] = $this->IOService->getMimeType($field->value->externalData['id']);
+        }
+
         $this->removeOldFile($field->id, $versionInfo->versionNo, $context);
 
         $this->getGateway($context)->storeFileReference($versionInfo, $field);
