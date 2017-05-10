@@ -27,8 +27,7 @@ class StringMapper extends FieldValueMapper
     public function canMap(Field $field)
     {
         return
-            $field->type instanceof FieldType\StringField ||
-            $field->type instanceof FieldType\TextField;
+            $field->type instanceof FieldType\StringField;
     }
 
     /**
