@@ -27,6 +27,7 @@ class MultipleStringMapper extends StringMapper
     {
         return
             $field->type instanceof FieldType\MultipleStringField ||
+            $field->type instanceof FieldType\TextField ||
             $field->type instanceof FieldType\FullTextField;
     }
 
