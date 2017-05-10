@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  * This class holds version information data. It also contains the corresponding {@link Content} to
  * which the version belongs to.
  *
- * @property-read array $names returns an array with language code keys and name values
+ * @property-read string[] $names returns an array with language code keys and name values
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $id the internal id of the version
  * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
@@ -23,14 +23,14 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  * @property-read int $creatorId the user id of the user which created this version
  * @property-read int $status the status of this version. One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
  * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
- * @property-read array $languageCodes a collection of all languages which exist in this version.
+ * @property-read string[] $languageCodes a collection of all languages which exist in this version.
  *
  * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class VersionInfo extends APIVersionInfo
 {
     /**
-     * @var array
+     * @var string[]
      */
     protected $names;
 

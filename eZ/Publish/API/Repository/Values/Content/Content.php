@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for getVersionInfo()->getContentInfo()
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->contentInfo->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields, calls getFields()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields access fields, calls getFields()
  */
 abstract class Content extends ValueObject
 {
@@ -37,7 +37,7 @@ abstract class Content extends ValueObject
      * @param string $fieldDefIdentifier
      * @param string $languageCode
      *
-     * @return mixed a primitive type or a field type Value object depending on the field type.
+     * @return \eZ\Publish\SPI\FieldType\Value|null a primitive type or a field type Value object depending on the field type.
      */
     abstract public function getFieldValue($fieldDefIdentifier, $languageCode = null);
 
