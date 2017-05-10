@@ -9,6 +9,10 @@ parameters:
     ezpublish.search.legacy.slot.recover.class: eZ\Publish\Core\Search\Common\Slot\Recover
     ezpublish.search.legacy.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
     ezpublish.search.legacy.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
+    ezpublish.search.legacy.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
+    ezpublish.search.legacy.slot.delete_user.class: eZ\Publish\Core\Search\Common\Slot\DeleteUser
+    ezpublish.search.legacy.slot.create_user_group.class: eZ\Publish\Core\Search\Common\Slot\CreateUserGroup
+    ezpublish.search.legacy.slot.delete_user_group.class: eZ\Publish\Core\Search\Common\Slot\DeleteUserGroup
 
 services:
     ezpublish.search.legacy.slot:
@@ -72,3 +76,27 @@ services:
         class: "%ezpublish.search.legacy.slot.assign_section.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: SectionService\AssignSectionSignal}
+
+    ezpublish.search.legacy.slot.create_user:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.create_user.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: UserService\CreateUserSignal}
+
+    ezpublish.search.legacy.slot.delete_user:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.delete_user.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: UserService\DeleteUserSignal}
+
+    ezpublish.search.legacy.slot.create_user_group:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.create_user_group.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: UserService\CreateUserGroupSignal}
+
+    ezpublish.search.legacy.slot.delete_user_group:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.delete_user_group.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: UserService\DeleteUserGroupSignal}

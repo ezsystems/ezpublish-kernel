@@ -376,6 +376,40 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Create a user using given data.
+     *
+     * @param string $login
+     * @param string $firstName
+     * @param string $lastName
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createUser($login, $firstName, $lastName)
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+        $userGroup = $userService->loadUserGroup(13);
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            $login,
+            "{$login}@example.com",
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField('first_name', $firstName);
+        $userCreate->setField('last_name', $lastName);
+
+        // Create a new user instance.
+        $user = $userService->createUser($userCreate, array($userGroup));
+
+        return $user;
+    }
+
+    /**
      * Only for internal use.
      *
      * Creates a \DateTime object for $timestamp in the current time zone
