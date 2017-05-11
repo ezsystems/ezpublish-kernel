@@ -82,7 +82,7 @@ class ISBNConverter implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'isISBN13' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
+                'isISBN13' => !empty($storageDef->dataInt1),
             )
         );
 
