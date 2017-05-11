@@ -72,7 +72,7 @@ abstract class User extends Content implements UserReference
     /**
      * The User id of the User.
      *
-     * @return mixed
+     * @return int|string
      */
     public function getUserId()
     {

@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $versionInfo->contentInfo->contentType
- * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
+ * @property-read int|string $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields Access fields, calls getFields()
  *
@@ -59,16 +59,7 @@ class Content extends APIContent
     }
 
     /**
-     * Returns a field value for the given value
-     * $version->fields[$fieldDefId][$languageCode] is an equivalent call
-     * if no language is given on a translatable field this method returns
-     * the value of the initial language of the version if present, otherwise null.
-     * On non translatable fields this method ignores the languageCode parameter.
-     *
-     * @param string $fieldDefIdentifier
-     * @param string $languageCode
-     *
-     * @return mixed a primitive type or a field type Value object depending on the field type.
+     * {@inheritdoc}
      */
     public function getFieldValue($fieldDefIdentifier, $languageCode = null)
     {

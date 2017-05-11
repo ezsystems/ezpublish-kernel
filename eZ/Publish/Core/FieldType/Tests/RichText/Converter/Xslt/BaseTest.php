@@ -109,13 +109,22 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $convertedDocumentNormalized = new DOMDocument();
         $convertedDocumentNormalized->loadXML($convertedDocument->saveXML());
 
-        $this->assertEquals($outputDocument, $convertedDocumentNormalized);
+        $this->assertEquals(
+            $outputDocument,
+            $convertedDocumentNormalized,
+            sprintf(
+                "Failed asserting that two DOM documents are equal.\nInput file: %s\nOutput file %s",
+                $inputFile,
+                $outputFile
+            )
+        );
 
         $validator = $this->getConversionValidator();
         if (isset($validator)) {
-            $errors = $validator->validate($convertedDocument);
-            $this->assertEmpty(
-                $errors,
+            // As assert below validated converted and output is the same, validate ouput here to get right line number.
+            $errors = $validator->validate($outputDocument);
+            $this->assertTrue(
+                empty($errors),
                 'Conversion result did not validate against the configured schemas:' .
                 $this->formatValidationErrors($outputFile, $errors)
             );

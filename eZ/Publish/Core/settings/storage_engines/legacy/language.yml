@@ -36,13 +36,13 @@ services:
 
     ezpublish.spi.persistence.legacy.language.handler.caching:
         class: "%ezpublish.spi.persistence.legacy.language.handler.caching.class%"
+        lazy: true
         arguments:
             - "@ezpublish.spi.persistence.legacy.language.handler.inner"
             - "@ezpublish.persistence.legacy.language.cache"
 
     ezpublish.spi.persistence.legacy.language.handler:
         alias: ezpublish.spi.persistence.legacy.language.handler.caching
-        lazy: true
 
     ezpublish.persistence.legacy.language.mask_generator:
         class: "%ezpublish.persistence.legacy.language.mask_generator.class%"

@@ -72,9 +72,9 @@ services:
 
     ezpublish.spi.persistence.legacy.content_type.handler.caching:
         class: "%ezpublish.spi.persistence.legacy.content_type.handler.caching.class%"
+        lazy: true
         arguments:
             - "@ezpublish.spi.persistence.legacy.content_type.handler.inner"
 
     ezpublish.spi.persistence.legacy.content_type.handler:
         alias: ezpublish.spi.persistence.legacy.content_type.handler.caching
-        lazy: true

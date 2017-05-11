@@ -274,7 +274,6 @@
 {% endblock %}
 
 {# @todo:
- # - include Gmaps JS only once if the field is used several times in the page
  # - add translate filter
  #}
 {% block ezgmaplocation_field %}
@@ -287,8 +286,11 @@
  # - boolean draggable whether to enable or not draggable map (useful on mobile / responsive layout), default is true
  # - string|false width the width of the rendered map with its unit (ie "500px" or "50em"),
  #                      set to false to not set any width style inline, default is 500px
- # - string|boolean height the height of the rendered map with its unit (ie "200px" or "20em"),
+ # - string|false height the height of the rendered map with its unit (ie "200px" or "20em"),
  #                         set to false to not set any height style inline, default is 200px
+ # - boolean scrollWheel If false, disables scrollwheel zooming on the map. Enabled by default.
+ #
+ # For further reading: https://developers.google.com/maps/documentation/javascript/reference
  #}
 {% spaceless %}
 <div {{ block( 'field_attributes' ) }}>
@@ -299,6 +301,7 @@
     {% set defaultZoom = 13 %}
     {% set defaultMapType = 'ROADMAP' %}
     {% set defaultDraggable = 'true' %}
+    {% set defaultScrollWheel = 'true' %}
 
     {% set hasContent = field.value is not null %}
     {% set latitude = field.value.latitude|default( 0 ) %}
@@ -308,6 +311,7 @@
 
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
     {% set mapType = parameters.mapType|default( defaultMapType ) %}
+    {% set scrollWheel = parameters.scrollWheel|default( defaultScrollWheel ) %}
 
     {% set mapWidth, mapHeight = defaultWidth, defaultHeight %}
     {% if parameters.width is defined %}
@@ -347,7 +351,17 @@
     {% endif %}
 
     {% if hasContent and showMap %}
-        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    {% set apiKey = ezpublish.configResolver.hasParameter('api_keys.google_maps') ? ezpublish.configResolver.getParameter('api_keys.google_maps'): "" %}
+        <script>
+            if (typeof(window.ezgmaplocationMapsScriptLoaded) == 'undefined') {
+                (function (win, doc) {
+                    var myScript = document.createElement('script');
+                    myScript.src = '//maps.googleapis.com/maps/api/js{% if apiKey %}?key={{ apiKey }}{% endif %}';
+                    win.ezgmaplocationMapsScriptLoaded = true;
+                    doc.body.appendChild(myScript);
+                })(window, document)
+            }
+        </script>
         <script type="text/javascript">
         (function(win, doc) {
             var mapView = function (mapId, latitude, longitude) {
@@ -361,6 +375,7 @@
                         center: startPoint,
                         zoom: zoom,
                         draggable: draggable,
+                        scrollwheel: {{ scrollWheel }},
                         mapTypeId: google.maps.MapTypeId.{{ mapType }}
                     }),
                     position: startPoint

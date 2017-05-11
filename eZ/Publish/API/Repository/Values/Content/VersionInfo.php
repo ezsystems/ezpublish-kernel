@@ -15,14 +15,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * which the version belongs to.
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
- * @property-read mixed $id the internal id of the version
- * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
+ * @property-read int|string $id the internal id of the version
+ * @property-read int|string $versionNo the version number of this version (which only increments in scope of a single Content object)
  * @property-read \DateTime $modificationDate the last modified date of this version
  * @property-read \DateTime $creationDate the creation date of this version
- * @property-read mixed $creatorId the user id of the user which created this version
- * @property-read int $status the status of this version. One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+ * @property-read int|string $creatorId the user id of the user which created this version
+ * @property-read int|string $status the status of this version. One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
  * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
- * @property-read array $languageCodes a collection of all languages which exist in this version.
+ * @property-read string[] $languageCodes a collection of all languages which exist in this version.
  */
 abstract class VersionInfo extends ValueObject
 {
@@ -33,7 +33,7 @@ abstract class VersionInfo extends ValueObject
     /**
      * Version ID.
      *
-     * @var mixed
+     * @var int|string
      */
     protected $id;
 
@@ -43,7 +43,7 @@ abstract class VersionInfo extends ValueObject
      * In contrast to {@link $id}, this is the version number, which only
      * increments in scope of a single Content object.
      *
-     * @var int
+     * @var int|string
      */
     protected $versionNo;
 
@@ -83,7 +83,7 @@ abstract class VersionInfo extends ValueObject
      *
      * Creator of the version, in the search API this is referred to as the modifier of the published content.
      *
-     * @var mixed
+     * @var int|string
      */
     protected $creatorId;
 
@@ -95,7 +95,7 @@ abstract class VersionInfo extends ValueObject
     /**
      * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED.
      *
-     * @var int Constant.
+     * @var int|string Constant.
      */
     protected $status;
 

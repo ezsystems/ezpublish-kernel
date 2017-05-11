@@ -1,6 +1,6 @@
 parameters:
     # Kernel related params
-    webroot_dir: %kernel.root_dir%/../web
+    webroot_dir: "%kernel.root_dir%/../web"
 
     ###
     # ezsettings namespace, default scope
@@ -70,6 +70,7 @@ parameters:
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"
     ezsettings.default.anonymous_user_id: 10            # The ID of the user to be used for everyone who is not logged in
+    ezsettings.default.api_keys: { google_maps: ~ }     # Google Maps APIs v3 key (https://developers.google.com/maps/documentation/javascript/get-api-key)
 
     # IO
     ezsettings.default.io.metadata_handler: "default"
@@ -94,12 +95,12 @@ parameters:
     # Built-in stylesheets are treated as custom for the sake of extensibility.
     ezsettings.default.fieldtypes.ezrichtext.output_custom_xsl:
         -
-            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl
+            path: "%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl"
             priority: 0
 
     ezsettings.default.fieldtypes.ezrichtext.edit_custom_xsl:
         -
-            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl
+            path: "%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl"
             priority: 0
 
     ezsettings.default.fieldtypes.ezrichtext.input_custom_xsl: []

@@ -15,13 +15,13 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
  *
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups calls getContentTypeGroups
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
- * @property-read mixed $id the id of the content type
+ * @property-read int|string $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
  * @property-read \DateTime $creationDate the date of the creation of this content type
  * @property-read \DateTime $modificationDate the date of the last modification of this content type
- * @property-read mixed $creatorId the user id of the creator of this content type
- * @property-read mixed $modifierId the user id of the user which has last modified this content type
+ * @property-read int|string $creatorId the user id of the creator of this content type
+ * @property-read int|string $modifierId the user id of the user which has last modified this content type
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.

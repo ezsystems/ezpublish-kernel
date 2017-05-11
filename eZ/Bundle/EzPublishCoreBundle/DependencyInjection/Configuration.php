@@ -25,11 +25,20 @@ class Configuration extends SiteAccessConfiguration
      * @var Configuration\Suggestion\Collector\SuggestionCollectorInterface
      */
     private $suggestionCollector;
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[]
+     */
+    private $siteAccessConfigurationFilters;
 
     public function __construct(ParserInterface $mainConfigParser, SuggestionCollectorInterface $suggestionCollector)
     {
         $this->suggestionCollector = $suggestionCollector;
         $this->mainConfigParser = $mainConfigParser;
+    }
+
+    public function setSiteAccessConfigurationFilters(array $filters)
+    {
+        $this->siteAccessConfigurationFilters = $filters;
     }
 
     /**
@@ -267,6 +276,17 @@ class Configuration extends SiteAccessConfiguration
                                 ->prototype('variable')->end()
                             ->end()
                         ->end()
+                    ->end()
+                    ->beforeNormalization()
+                        ->always()->then(function ($v) {
+                            if (isset($this->siteAccessConfigurationFilters)) {
+                                foreach ($this->siteAccessConfigurationFilters as $filter) {
+                                    $v = $filter->filter($v);
+                                }
+                            }
+
+                            return $v;
+                        })
                     ->end()
                 ->end()
                 ->arrayNode('locale_conversion')

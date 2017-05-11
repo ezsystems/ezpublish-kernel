@@ -1,6 +1,4 @@
 parameters:
-    # Redefining the default router class to implement the RequestMatcherInterface
-    router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
     ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_']
     # characters that may require encoding in the urlalias generator
     ezpublish.urlalias_generator.charmap:
@@ -43,7 +41,7 @@ services:
         abstract: true
         calls:
             - [setRequestContext, ["@router.request_context"]]
-            - [setSiteAccess, ["@?ezpublish.siteaccess="]]
+            - [setSiteAccess, ["@?ezpublish.siteaccess"]]
             - [setSiteAccessRouter, ["@ezpublish.siteaccess_router"]]
             - [setLogger, ["@?logger"]]
 

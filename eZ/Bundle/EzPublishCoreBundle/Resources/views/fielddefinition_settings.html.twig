@@ -31,12 +31,7 @@
 </ul>
 {% endblock %}
 
-{% block ezrichtext_settings %}
-    <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
-        {% set rows = settings.numRows %}
-        {{ block( 'settings_preferredrows' ) }}
-    </ul>
-{% endblock %}
+{% block ezrichtext_settings %}{% endblock %}
 
 {% block ezcountry_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">

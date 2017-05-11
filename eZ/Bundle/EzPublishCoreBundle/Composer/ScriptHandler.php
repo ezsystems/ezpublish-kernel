@@ -44,7 +44,12 @@ class ScriptHandler extends DistributionBundleScriptHandler
     public static function dumpAssets(Event $event)
     {
         $options = self::getOptions($event);
-        $appDir = $options['symfony-app-dir'];
+        $consoleDir = static::getConsoleDir($event, 'install assets');
+
+        if (null === $consoleDir) {
+            return;
+        }
+
         $webDir = $options['symfony-web-dir'];
         $command = 'assetic:dump';
 
@@ -60,8 +65,8 @@ class ScriptHandler extends DistributionBundleScriptHandler
             $command .= ' --env=' . escapeshellarg($options['ezpublish-asset-dump-env']);
         }
 
-        if (!is_dir($appDir)) {
-            echo 'The symfony-app-dir (' . $appDir . ') specified in composer.json was not found in ' . getcwd() . ', can not install assets.' . PHP_EOL;
+        if (!is_dir($consoleDir)) {
+            echo 'The symfony console directory (' . $consoleDir . ') specified in composer.json was not found in ' . getcwd() . ', can not install assets.' . PHP_EOL;
 
             return;
         }
@@ -72,7 +77,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
             return;
         }
 
-        static::executeCommand($event, $appDir, $command . ' ' . escapeshellarg($webDir));
+        static::executeCommand($event, $consoleDir, $command . ' ' . escapeshellarg($webDir));
     }
 
     /**
@@ -81,13 +86,14 @@ class ScriptHandler extends DistributionBundleScriptHandler
      * Typically to use this instead on composer update as dump command uses prod environment where cache is not cleared,
      * causing it to sometimes crash when cache needs to be cleared.
      *
-     * @deprecated Will be made private in the future for use by dumpAssets.
+     * @deprecated In 7.0 will either be made private for use by dumpAssets, or removed.
      * @param $event Event A instance
      */
     public static function dumpAssetsHelpText(Event $event)
     {
+        $consoleDir = static::getConsoleDir($event, 'get console dir for asset dump text');
         $event->getIO()->write('<info>To dump eZ Publish production assets, which is needed for production environment, execute the following:</info>');
-        $event->getIO()->write('    php app/console assetic:dump --env=prod web');
+        $event->getIO()->write("    php ${consoleDir}/console assetic:dump --env=prod web");
         $event->getIO()->write('');
     }
 
@@ -98,7 +104,8 @@ class ScriptHandler extends DistributionBundleScriptHandler
      */
     public static function installWelcomeText(Event $event)
     {
-        $event->getIO()->write(<<<'EOT'
+        $consoleDir = static::getConsoleDir($event, 'get console dir for welcome text');
+        $event->getIO()->write(<<<EOT
 
       ________      ____    ___             __       ___         
      /\_____  \    /\  _`\ /\_ \           /\ \__  /'___\ 
@@ -114,14 +121,20 @@ class ScriptHandler extends DistributionBundleScriptHandler
 <options=bold>Quick Install:</>
 (Assuming the CLI user you execute commands with below is same that extracted/installed the software)
 <comment>    $  export SYMFONY_ENV="prod"</comment>
-<comment>    $  php app/console ezplatform:install <type></comment>
-<comment>    $  php app/console assetic:dump</comment>
-<comment>    $  php app/console server:run</comment>
+<comment>    $  php ${consoleDir}/console ezplatform:install <type></comment>
+<comment>    $  php ${consoleDir}/console assetic:dump</comment>
+<comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
 - "ezplatform:install" has different installer <type>s depending on your install, see <fg=green>INSTALL.md</> or <fg=green>README.md</> for which one to use.
 - For development use you can enable full debugging by setting SYMFONY_ENV to "dev".
 - Last command will give you url to frontend of installation, add "/ez" to reach backend.
+
+Performance tips:
+- Use PHP 7.0 (or better yet PHP 7.1), and make sure opcache is enabled.
+- Dump autoload class map, even in development: <fg=green>composer dump-autoload --optimize</>
+- Follow full install instructions below to setup nginx (or Apache).
+- Further reading: https://doc.ez.no/display/DEVELOPER/Performance
 
 For full install instructions, including setting up directory permissions, see install instructions in <fg=green>INSTALL.md</>
 or <fg=green>README.md</>.

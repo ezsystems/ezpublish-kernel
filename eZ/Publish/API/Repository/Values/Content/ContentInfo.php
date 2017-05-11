@@ -13,33 +13,33 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class provides all version independent information of the Content object.
  *
- * @property-read mixed $id The unique id of the Content object
- * @property-read mixed $contentTypeId The unique id of the Content Type object the Content object is an instance of
+ * @property-read int|string $id The unique id of the Content object
+ * @property-read int|string $contentTypeId The unique id of the Content Type object the Content object is an instance of
  * @property-read string $name the computed name (via name schema) in the main language of the Content object
- * @property-read mixed $sectionId the section to which the Content object is assigned
- * @property-read int $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).
+ * @property-read int|string $sectionId the section to which the Content object is assigned
+ * @property-read int|string $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).
  * @property-read bool $published true if there exists a published version false otherwise
- * @property-read mixed $ownerId the user id of the owner of the Content object
+ * @property-read int|string $ownerId the user id of the owner of the Content object
  * @property-read \DateTime $modificationDate Content object modification date
  * @property-read \DateTime $publishedDate date of the first publish
  * @property-read bool $alwaysAvailable Indicates if the Content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the Content object
  * @property-read string $mainLanguageCode The main language code of the Content object. If the available flag is set to true the Content is shown in this language if the requested language does not exist.
- * @property-read mixed $mainLocationId Identifier of the main location.
+ * @property-read int|string|null $mainLocationId Identifier of the main location. null when not published
  */
 class ContentInfo extends ValueObject
 {
     /**
      * The unique id of the Content object.
      *
-     * @var mixed
+     * @var int|string
      */
     protected $id;
 
     /**
      * The Content Type id of the Content object.
      *
-     * @var mixed
+     * @var int|string
      */
     protected $contentTypeId;
 
@@ -55,7 +55,7 @@ class ContentInfo extends ValueObject
     /**
      * The section to which the Content object is assigned.
      *
-     * @var mixed
+     * @var int|string
      */
     protected $sectionId;
 
@@ -63,7 +63,7 @@ class ContentInfo extends ValueObject
      * Current Version number is the version number of the published version or the version number of
      * a newly created draft (which is 1).
      *
-     * @var int
+     * @var int|string
      */
     protected $currentVersionNo;
 
@@ -77,7 +77,7 @@ class ContentInfo extends ValueObject
     /**
      * The owner of the Content object.
      *
-     * @var mixed
+     * @var int|string
      */
     protected $ownerId;
 
@@ -122,7 +122,7 @@ class ContentInfo extends ValueObject
      * If the Content object has multiple locations,
      * $mainLocationId will point to the main one.
      *
-     * @var mixed
+     * @var int|string|null
      */
     protected $mainLocationId;
 }
