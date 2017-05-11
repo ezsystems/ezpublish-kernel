@@ -30,7 +30,7 @@ class ISBNTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider data_toFieldDefinition
+     * @dataProvider providerForTestToFieldDefinition
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ISBNConverter::toFieldDefinition
      */
@@ -48,7 +48,7 @@ class ISBNTest extends PHPUnit_Framework_TestCase
         self::assertSame($excpectedIsbn13Value, $fieldSettings['isISBN13']);
     }
 
-    public function data_toFieldDefinition()
+    public function providerForTestToFieldDefinition()
     {
         return [
             [1, true],
