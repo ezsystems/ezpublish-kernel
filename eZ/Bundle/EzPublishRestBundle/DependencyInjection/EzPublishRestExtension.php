@@ -50,5 +50,13 @@ class EzPublishRestExtension extends Extension implements PrependExtensionInterf
             $container->prependExtensionConfig('nelmio_cors', $config);
             $container->addResource(new FileResource($file));
         }
+
+        $this->prependRouterConfiguration($container);
+    }
+
+    private function prependRouterConfiguration(ContainerBuilder $container)
+    {
+        $config = ['router' => ['default_router' => ['non_siteaccess_aware_routes' => ['ezpublish_rest_']]]];
+        $container->prependExtensionConfig('ezpublish', $config);
     }
 }
