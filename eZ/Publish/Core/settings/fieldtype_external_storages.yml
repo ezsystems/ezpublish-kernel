@@ -33,6 +33,7 @@ services:
 
     ezpublish.fieldType.ezkeyword.externalStorage:
         class: "%ezpublish.fieldType.ezkeyword.externalStorage.class%"
+        arguments: ["@ezpublish.fieldType.ezkeyword.storage_gateway"]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezkeyword}
 

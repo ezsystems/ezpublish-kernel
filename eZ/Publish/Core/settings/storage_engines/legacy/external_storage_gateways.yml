@@ -27,8 +27,7 @@ services:
 
     ezpublish.fieldType.ezkeyword.storage_gateway:
         class: "%ezpublish.fieldType.ezkeyword.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezkeyword, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezmedia.storage_gateway:
         class: "%ezpublish.fieldType.ezmedia.storage_gateway.class%"
