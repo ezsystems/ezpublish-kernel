@@ -24,7 +24,7 @@ class ISBNConverter implements Converter
      *
      * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return ISBN
+     * @return ISBNConverter
      */
     public static function create()
     {
@@ -82,7 +82,7 @@ class ISBNConverter implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'isISBN13' => !empty($storageDef->dataInt1),
+                'isISBN13' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
             )
         );
 
