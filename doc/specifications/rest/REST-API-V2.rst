@@ -121,7 +121,33 @@ In this document, for the sake of readability, no prefix is used in the URIs. In
 prefixes all REST hrefs.
 
 Remember that URIs to REST resources should never be generated manually, but obtained from earlier REST
- calls.
+calls.
+
+Alias URIs
+----------
+
+By default entity URIs are constructed using a (server local) URL template and
+the database ID of the referenced entity. While this mechanism might be subject
+to change (e.g. to support multi-server/-domain setups with interlinking)
+users are requesting more intuitive ways to identify entities to reference
+entities while creating/updating related entities. Alias URIs help to achieve
+this by providing more human readable resource identifiers. These URIs only
+support GET/HEAD operations and will return a redirect to the cannonical entity
+URL. However, when using them as a reference in a POST/PUT/PATCH request, the
+server will accept them and automatically reference the correct entity.
+
+A request/response cycle for an alias URI is supposed to be executed as follows:
+
+:Resource: /content/types/_by_identifier/article
+:Method: GET
+:Response:
+
+.. code:: http
+
+        HTTP/1.1 308 Permanent Redirect
+        Location: /content/types/23
+
+Therefore, referencing the content type with ID 23 is valid using the URI ``/content/types/_by_identifier/article``.
 
 OPTIONS requests
 ----------------
@@ -274,6 +300,14 @@ Resource                                                          POST          
 /content/urlwildcards/<ID>                                        .                   get url wildcard        .                            delete url wc.
 ================================================================= =================== ======================= ============================ ================ ==============
 
+the following alias URIs are supported:
+
+=============================================================== ===============================
+Alias URI                                                       Target
+--------------------------------------------------------------- -------------------------------
+/content/objects/_by_remote_id/<remote-ID>                      /content/objects/<ID>
+/content/objectstategroups/_by_identifier/<identifier>          /content/objectstategroups/<ID>
+=============================================================== ===============================
 
 Specification
 -------------
@@ -3293,6 +3327,15 @@ Resource                                           POST                GET      
 /content/types/<ID>/draft/fieldDefinitions/<ID>    .                   load field def.     update field definition delete field definition
 ================================================== =================== =================== ======================= =======================
 
+the following alias URIs are supported:
+
+=============================================================== ===============================
+Alias URI                                                       Target
+--------------------------------------------------------------- -------------------------------
+/content/typegroups/_by_identifier/<identifier>                 /content/typegroups/<ID>
+/content/types/_by_identifier/<identifier>                      /content/types/<ID>
+=============================================================== ===============================
+
 Specification
 -------------
 
@@ -4304,6 +4347,15 @@ Resource                                      POST                  GET         
 /user/sessions                                create session        .                       .                     .                             .             .
 /user/sessions/<sessionID>                    .                     .                       .                     delete session                .             .
 ============================================= ===================== ======================= ===================== ============================= ============= =====================
+
+the following alias URIs are supported:
+
+=============================================================== ===============================
+Alias URI                                                       Target
+--------------------------------------------------------------- -------------------------------
+/user/users/_by_login/<login>                                   /user/users/<ID>
+/user/users/_by_email/<email>                                   /user/users/<ID>
+=============================================================== ===============================
 
 
 Managing Users and Groups
