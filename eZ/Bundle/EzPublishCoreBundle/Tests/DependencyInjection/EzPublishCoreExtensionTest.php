@@ -369,7 +369,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
+                    'list' => ['content', 'metadata'],
                     'default' => 'content',
                 ),
                 'options' => [
@@ -409,7 +409,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
+                    'list' => ['content', 'metadata'],
                     'default' => 'content',
                 ),
                 'options' => [
@@ -449,7 +449,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
+                    'list' => ['content', 'metadata'],
                     'default' => 'content',
                 ),
                 'options' => [
@@ -499,7 +499,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
+                    'list' => ['content', 'metadata'],
                     'default' => 'content',
                 ),
                 'options' => [
@@ -518,7 +518,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
+                    'list' => ['content', 'metadata'],
                     'default' => 'content',
                 ),
                 'options' => [
@@ -556,7 +556,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
+                    'list' => ['content', 'metadata'],
                     'default' => 'content',
                 ),
                 'options' => [
