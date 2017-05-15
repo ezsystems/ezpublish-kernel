@@ -22,8 +22,7 @@ services:
 
     ezpublish.fieldType.ezbinaryfile.storage_gateway:
         class: "%ezpublish.fieldType.ezbinaryfile.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezbinaryfile, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezkeyword.storage_gateway:
         class: "%ezpublish.fieldType.ezkeyword.storage_gateway.class%"
@@ -31,8 +30,7 @@ services:
 
     ezpublish.fieldType.ezmedia.storage_gateway:
         class: "%ezpublish.fieldType.ezmedia.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezmedia, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezrichtext.storage_gateway:
         class: "%ezpublish.fieldType.ezrichtext.storage_gateway.class%"
