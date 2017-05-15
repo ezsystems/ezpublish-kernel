@@ -97,6 +97,16 @@ However in this specification only the standard schemas and media types are defi
 If there is only one media type defined for xml or json, it is also possible to specify
 application/xml or application/json.
 
+Simplified JSON Media Types
+---------------------------
+
+While the standard media types allow you to perform arbitrary actions on the
+content repository, they are sometimes not as easy to use for standard actions.
+For this reason, there are alternative media types available to interact with
+certain ressources. The structure of these follows the general rules defined
+for JSON media types above, but there is no equivalent in XML. See the
+dedicated entity operation for support of a simplified type.
+
 URIs
 ----
 
@@ -475,6 +485,7 @@ Creating Content
          :application/vnd.ez.api.ContentInfo+xml:  if set all informations for the content object (excluding the current version) are returned in xml format (see Content_)
          :application/vnd.ez.api.ContentInfo+json:  if set all informations for the content object (excluding the current version) are returned in json format (see Content_)
     :Content-Type:
+         :application/vnd.ez.api.simplified.ContentCreate+json: the SimplifiedContentCreate_ schema encoded in json
          :application/vnd.ez.api.ContentCreate+json: the ContentCreate_ schema encoded in json
          :application/vnd.ez.api.ContentCreate+xml: the ContentCreate_ schema encoded in xml
 :Response:
@@ -7075,6 +7086,37 @@ ContentCreate XML Schema
       </xsd:complexType>
       <xsd:element name="ContentCreate" type="contentCreateType"></xsd:element>
     </xsd:schema>
+
+
+.. _SimplifiedContentCreate:
+
+Simplified ContentCreate Example
+--------------------------------
+
+.. code:: json
+
+    {
+        "ContentCreate": {
+            "ContentType": "/content/types/_by_identified/article",
+            "LocationCreate": {
+                "_parentUrlAliasPath": "/content/urlaliases/_by_path/places-tastes/tastes/"
+            },
+            "ContentSection": "/content/section/_by_identifier/places",
+            "Owner": "/user/users/_by_login/jessica",
+            "alwaysAvailable": "false",
+            "modificationDate": "2017-03-02T12:00:00",
+            "remoteId": "remote123456",
+            "fields": {
+                "en-US": {
+                    "title": "This is a title",
+                    "intro": {
+                        "xhtml5edit": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<section xmlns=\"http://ez.no/namespaces/ezpublish5/xhtml5/edit\"><p>Article intro.</p></section>\n",
+                        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<section xmlns=\"http://docbook.org/ns/docbook\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ezxhtml=\"http://ez.no/xmlns/ezpublish/docbook/xhtml\" xmlns:ezcustom=\"http://ez.no/xmlns/ezpublish/docbook/custom\" version=\"5.0-variant ezpublish-1.0\"><para>Article intro.</para></section>\n"
+                    },
+                }
+            }
+        }
+    }
 
 .. _ContentUpdate:
 
