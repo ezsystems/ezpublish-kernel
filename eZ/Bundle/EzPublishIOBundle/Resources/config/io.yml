@@ -42,6 +42,7 @@ services:
             - "%ezsettings.default.binary_dir%"
         tags:
             - { name: "ezpublish.core.io.migration.file_lister", identifier: "binary_file" }
+        lazy: true
 
     ezpublish.core.io.migration.file_lister.media_file_lister:
         class: "%ezpublish.core.io.migration.file_lister.media_file_lister.class%"
@@ -51,6 +52,7 @@ services:
             - "%ezsettings.default.binary_dir%"
         tags:
             - { name: "ezpublish.core.io.migration.file_lister", identifier: "media_file" }
+        lazy: true
 
     ezpublish.core.io.migration.file_lister.image_file_lister:
         class: "%ezpublish.core.io.migration.file_lister.image_file_lister.class%"
@@ -62,6 +64,7 @@ services:
             - "%ezsettings.default.image.published_images_dir%"
         tags:
             - { name: "ezpublish.core.io.migration.file_lister", identifier: "image_file" }
+        lazy: true
 
     ezpublish.core.io.migration.file_lister.file_iterator.binary_file_iterator:
         class: "%ezpublish.core.io.migration.file_lister.file_iterator.binary_file_iterator.class%"

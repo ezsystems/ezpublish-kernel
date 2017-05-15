@@ -14,7 +14,7 @@ use Iterator;
 use LimitIterator;
 use Psr\Log\LoggerInterface;
 
-final class BinaryFileLister extends MigrationHandler implements FileListerInterface
+class BinaryFileLister extends MigrationHandler implements FileListerInterface
 {
     /** @var \eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileIteratorInterface */
     private $fileList;
