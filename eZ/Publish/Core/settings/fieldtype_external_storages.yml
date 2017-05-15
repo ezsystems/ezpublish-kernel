@@ -62,6 +62,7 @@ services:
 
     ezpublish.fieldType.ezgmaplocation.externalStorage:
         class: "%ezpublish.fieldType.ezgmaplocation.externalStorage.class%"
+        arguments: ["@ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway"]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezgmaplocation}
 

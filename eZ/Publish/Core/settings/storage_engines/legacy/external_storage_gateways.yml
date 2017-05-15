@@ -56,8 +56,7 @@ services:
 
     ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
         class: "%ezpublish.fieldType.ezgmaplocation.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezuser.storage_gateway:
         class: "%ezpublish.fieldType.ezuser.storage_gateway.class%"
