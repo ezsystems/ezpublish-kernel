@@ -22,7 +22,7 @@ services:
     ezpublish.fieldType.ezimage.externalStorage:
         class: "%ezpublish.fieldType.ezimage.externalStorage.class%"
         arguments:
-            - []
+            - "@ezpublish.fieldType.ezimage.storage_gateway"
             - "@ezpublish.fieldType.ezimage.io_service"
             - "@ezpublish.fieldType.ezimage.pathGenerator"
             - "@ezpublish.fieldType.metadataHandler.imagesize"

@@ -85,8 +85,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\ImageConverter($this->ioService, $urlRedecorator),
             new FieldType\Image\ImageStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage($urlRedecorator),
+                new FieldType\Image\ImageStorage\Gateway\LegacyStorage(
+                    $urlRedecorator,
+                    $this->getDatabaseHandler()
                 ),
                 $this->ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),

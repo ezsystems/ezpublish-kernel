@@ -9,8 +9,11 @@
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 
+/**
+ * Image Field Type external storage gateway.
+ */
 abstract class Gateway extends StorageGateway
 {
     /**
