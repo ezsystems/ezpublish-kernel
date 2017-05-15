@@ -124,9 +124,9 @@ abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTe
 
                 foreach (array_keys($templates) as $name) {
                     echo "Template: $name\n";
-                    $source = $loader->getSource($name);
+                    $source = $loader->getSourceContext($name);
                     echo $twig->compile(
-                        $twig->parse($twig->tokenize($source, $name))
+                        $twig->parse($twig->tokenize($source))
                     );
                 }
             }
