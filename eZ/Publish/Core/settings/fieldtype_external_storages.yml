@@ -68,6 +68,7 @@ services:
 
     ezpublish.fieldType.ezuser.externalStorage:
         class: "%ezpublish.fieldType.ezuser.externalStorage.class%"
+        arguments: ["@ezpublish.fieldType.ezuser.storage_gateway"]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}
 

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\User;
 
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
@@ -16,17 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
  * Description of UserStorage.
  *
  * Methods in this interface are called by storage engine.
- *
- * $context array passed to most methods provides some context for the field handler about the
- * currently used storage engine.
- * The array should at least define 2 keys :
- *   - identifier (connection identifier)
- *   - connection (the connection handler)
- * For example, using Legacy storage engine, $context will be:
- *   - identifier = 'LegacyStorage'
- *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
- *                  to be used accordingly to
- *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
+ * Proper Gateway and its Connection is injected via Dependency Injection.
  *
  * The User storage handles the following attributes, following the user field
  * type in eZ Publish 4:
@@ -40,6 +30,13 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class UserStorage extends GatewayBasedStorage
 {
     /**
+     * Field Type External Storage Gateway.
+     *
+     * @var \eZ\Publish\Core\FieldType\User\UserStorage\Gateway
+     */
+    protected $gateway;
+
+    /**
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *
      * Stores value for $field in an external data source.
@@ -52,32 +49,14 @@ class UserStorage extends GatewayBasedStorage
      * database back end on create, before the external data source may be
      * called from storing).
      *
-     * The context array provides some context for the field handler about the
-     * currently used storage engine.
-     * The array should at least define 2 keys :
-     *   - identifier (connection identifier)
-     *   - connection (the connection handler)
-     * For example, using Legacy storage engine, $context will be:
-     *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
-     *                  to be used accordingly to
-     * The context array provides some context for the field handler about the
-     * currently used storage engine.
-     * The array should at least define 2 keys :
-     *   - identifier (connection identifier)
-     *   - connection (the connection handler)
-     * For example, using Legacy storage engine, $context will be:
-     *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
-     *                  to be used accordingly to
-     *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
+     * Database connection handler is injected into the Gateway via Dependency Injection.
      *
      * This method might return true if $field needs to be updated after storage done here (to store a PK for instance).
      * In any other case, this method must not return anything (null).
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
-     *
      * @return null|true
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
@@ -91,13 +70,13 @@ class UserStorage extends GatewayBasedStorage
      * This value holds the data as a {@link eZ\Publish\Core\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\FieldType\TextLine\Value} object).
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway($context);
-        $field->value->externalData = $gateway->getFieldData($field->id);
+        $field->value->externalData = $this->gateway->getFieldData($field->id);
     }
 
     /**

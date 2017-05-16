@@ -60,5 +60,4 @@ services:
 
     ezpublish.fieldType.ezuser.storage_gateway:
         class: "%ezpublish.fieldType.ezuser.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezuser, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
