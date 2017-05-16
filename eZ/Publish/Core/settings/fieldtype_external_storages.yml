@@ -57,6 +57,7 @@ services:
 
     ezpublish.fieldType.ezrichtext.externalStorage:
         class: "%ezpublish.fieldType.ezrichtext.externalStorage.class%"
+        arguments: ["@ezpublish.fieldType.ezrichtext.storage_gateway"]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezrichtext}
 

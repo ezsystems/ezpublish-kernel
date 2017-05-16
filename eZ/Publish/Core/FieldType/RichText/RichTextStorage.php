@@ -8,7 +8,8 @@
  */
 namespace eZ\Publish\Core\FieldType\RichText;
 
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -24,12 +25,17 @@ class RichTextStorage extends GatewayBasedStorage
     protected $logger;
 
     /**
-     * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
+     * @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway
+     */
+    protected $gateway;
+
+    /**
+     * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(array $gateways = array(), LoggerInterface $logger = null)
+    public function __construct(StorageGateway $gateway, LoggerInterface $logger = null)
     {
-        parent::__construct($gateways);
+        parent::__construct($gateway);
         $this->logger = $logger;
     }
 
@@ -38,8 +44,6 @@ class RichTextStorage extends GatewayBasedStorage
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway $gateway */
-        $gateway = $this->getGateway($context);
         $document = new DOMDocument();
         $document->loadXML($field->value->data);
 
@@ -77,8 +81,8 @@ class RichTextStorage extends GatewayBasedStorage
             }
         }
 
-        $urlIdMap = $gateway->getUrlIdMap(array_keys($urlSet));
-        $contentIds = $gateway->getContentIds(array_keys($remoteIdSet));
+        $urlIdMap = $this->gateway->getUrlIdMap(array_keys($urlSet));
+        $contentIds = $this->gateway->getContentIds(array_keys($remoteIdSet));
         $urlLinkSet = array();
 
         foreach ($links as $index => $link) {
@@ -87,11 +91,11 @@ class RichTextStorage extends GatewayBasedStorage
             if (empty($scheme)) {
                 // Insert the same URL only once
                 if (!isset($urlIdMap[$url])) {
-                    $urlIdMap[$url] = $gateway->insertUrl($url);
+                    $urlIdMap[$url] = $this->gateway->insertUrl($url);
                 }
                 // Link the same URL only once
                 if (!isset($urlLinkSet[$url])) {
-                    $gateway->linkUrl(
+                    $this->gateway->linkUrl(
                         $urlIdMap[$url],
                         $field->id,
                         $versionInfo->versionNo
@@ -123,8 +127,6 @@ class RichTextStorage extends GatewayBasedStorage
      */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway $gateway */
-        $gateway = $this->getGateway($context);
         $document = new DOMDocument();
         $document->loadXML($field->value->data);
 
@@ -155,7 +157,7 @@ class RichTextStorage extends GatewayBasedStorage
             }
         }
 
-        $idUrlMap = $gateway->getIdUrlMap(array_keys($urlIdSet));
+        $idUrlMap = $this->gateway->getIdUrlMap(array_keys($urlIdSet));
 
         foreach ($links as $index => $link) {
             list(, $urlId, $fragment) = $urlInfo[$index];
@@ -178,11 +180,8 @@ class RichTextStorage extends GatewayBasedStorage
 
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway $gateway */
-        $gateway = $this->getGateway($context);
-
         foreach ($fieldIds as $fieldId) {
-            $gateway->unlinkUrl($fieldId, $versionInfo->versionNo);
+            $this->gateway->unlinkUrl($fieldId, $versionInfo->versionNo);
         }
     }
 

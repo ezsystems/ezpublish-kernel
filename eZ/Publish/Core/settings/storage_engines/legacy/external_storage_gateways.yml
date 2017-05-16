@@ -34,9 +34,9 @@ services:
 
     ezpublish.fieldType.ezrichtext.storage_gateway:
         class: "%ezpublish.fieldType.ezrichtext.storage_gateway.class%"
-        arguments: ["@ezpublish.fieldType.ezurl.storage_gateway"]
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezrichtext, identifier: LegacyStorage}
+        arguments:
+            - "@ezpublish.fieldType.ezurl.storage_gateway"
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
 
     ezpublish.fieldType.ezurl.storage_gateway:
         class: "%ezpublish.fieldType.ezurl.storage_gateway.class%"

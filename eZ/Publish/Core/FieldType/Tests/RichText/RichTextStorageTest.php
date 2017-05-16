@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText;
 
+use eZ\Publish\Core\FieldType\RichText\RichTextStorage;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -93,12 +95,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $value = new FieldValue(array('data' => $xmlString));
         $field = new Field(array('value' => $value));
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
+        $storage = $this->getPartlyMockedStorage($gateway);
         $storage->getFieldData(
             $versionInfo,
             $field,
@@ -231,12 +228,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
                 ->with($id, 42, 24);
         }
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
+        $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData(
             $versionInfo,
             $field,
@@ -313,13 +305,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $value = new FieldValue(array('data' => $xmlString));
         $field = new Field(array('value' => $value));
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $storage->storeFieldData(
             $versionInfo,
             $field,
@@ -332,13 +318,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $versionInfo = new VersionInfo(array('versionNo' => 42));
         $fieldIds = array(12, 23);
         $gateway = $this->getGatewayMock();
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $gateway
             ->expects($this->at(0))
             ->method('unlinkUrl')
@@ -357,19 +337,18 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $methods
-     *
+     * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
      * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartlyMockedStorage(array $methods)
+    protected function getPartlyMockedStorage(StorageGateway $gateway)
     {
         return $this->getMock(
-            'eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage',
-            $methods,
-            array(
-                array(),
+            RichTextStorage::class,
+            null,
+            [
+                $gateway,
                 $this->getLoggerMock(),
-            )
+            ]
         );
     }
 
@@ -412,7 +391,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
     {
         if (!isset($this->gatewayMock)) {
             $this->gatewayMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage\\Gateway')
+                ->getMockBuilder(RichTextStorage\Gateway::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         }

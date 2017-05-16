@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\RichText\RichTextStorage;
 
-use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway as UrlGateway;
 
 /**
