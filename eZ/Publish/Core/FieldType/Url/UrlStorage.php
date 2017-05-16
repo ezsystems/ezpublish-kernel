@@ -8,7 +8,8 @@
  */
 namespace eZ\Publish\Core\FieldType\Url;
 
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use Psr\Log\LoggerInterface;
@@ -24,39 +25,46 @@ class UrlStorage extends GatewayBasedStorage
     protected $logger;
 
     /**
+     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway
+     */
+    protected $gateway;
+
+    /**
      * Construct from gateways.
      *
-     * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
+     * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(array $gateways, LoggerInterface $logger = null)
+    public function __construct(StorageGateway $gateway, LoggerInterface $logger = null)
     {
-        parent::__construct($gateways);
+        parent::__construct($gateway);
         $this->logger = $logger;
     }
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param array $context
+     * @return bool|mixed
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
-        $gateway = $this->getGateway($context);
         $url = $field->value->externalData;
 
         if (empty($url)) {
             return false;
         }
 
-        $map = $gateway->getUrlIdMap(array($url));
+        $map = $this->gateway->getUrlIdMap(array($url));
 
         if (isset($map[$url])) {
             $urlId = $map[$url];
         } else {
-            $urlId = $gateway->insertUrl($url);
+            $urlId = $this->gateway->insertUrl($url);
         }
 
-        $gateway->linkUrl($urlId, $field->id, $versionInfo->versionNo);
+        $this->gateway->linkUrl($urlId, $field->id, $versionInfo->versionNo);
 
         $field->value->data['urlId'] = $urlId;
 
@@ -83,9 +91,7 @@ class UrlStorage extends GatewayBasedStorage
             return;
         }
 
-        /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
-        $gateway = $this->getGateway($context);
-        $map = $gateway->getIdUrlMap(array($id));
+        $map = $this->gateway->getIdUrlMap(array($id));
 
         // URL id is not in the DB
         if (!isset($map[$id]) && isset($this->logger)) {
@@ -99,7 +105,7 @@ class UrlStorage extends GatewayBasedStorage
      * Deletes field data for all $fieldIds in the version identified by
      * $versionInfo.
      *
-     * @param VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param array $fieldIds
      * @param array $context
      *
@@ -107,11 +113,8 @@ class UrlStorage extends GatewayBasedStorage
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
-        $gateway = $this->getGateway($context);
-
         foreach ($fieldIds as $fieldId) {
-            $gateway->unlinkUrl($fieldId, $versionInfo->versionNo);
+            $this->gateway->unlinkUrl($fieldId, $versionInfo->versionNo);
         }
     }
 

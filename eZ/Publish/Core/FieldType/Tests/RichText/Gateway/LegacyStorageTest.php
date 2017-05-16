@@ -52,8 +52,7 @@ class LegacyStorageTest extends TestCase
     {
         if (!isset($this->storageGateway)) {
             $dbHandler = $this->getDatabaseHandler();
-            $urlGateway = new UrlStorageLegacyGateway();
-            $urlGateway->setConnection($dbHandler);
+            $urlGateway = new UrlStorageLegacyGateway($dbHandler);
             $this->storageGateway = new LegacyStorage($urlGateway, $dbHandler);
         }
 

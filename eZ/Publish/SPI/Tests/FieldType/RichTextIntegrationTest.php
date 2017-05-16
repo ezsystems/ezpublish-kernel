@@ -67,8 +67,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $urlGateway = new UrlGateway();
-        $urlGateway->setConnection($this->getDatabaseHandler());
+        $urlGateway = new UrlGateway($this->getDatabaseHandler());
 
         return $this->getHandler(
             'ezrichtext',
