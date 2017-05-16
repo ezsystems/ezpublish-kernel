@@ -65,4 +65,13 @@ interface PermissionResolver
      * @return bool
      */
     public function canUser($module, $function, ValueObject $object, array $targets = []);
+
+    /**
+     * Returns PermissionInfo for the given $object.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
+     *
+     * @return \eZ\Publish\API\Repository\Values\PermissionInfo
+     */
+    public function getPermissionInfo(ValueObject $object);
 }
