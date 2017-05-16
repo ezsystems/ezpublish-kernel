@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Page\PageStorage;
 
-use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
 /**

@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\Page\PageStorage;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
@@ -55,7 +56,10 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $this->zoneDefinition = $this->getZoneDefinition();
         $this->blockDefinition = $this->getBlockDefinition();
 
-        $this->storageGateway = $this->getMockForAbstractClass('eZ\\Publish\\Core\\FieldType\\Page\\PageStorage\\Gateway');
+        $this->storageGateway = $this
+            ->getMockBuilder(PageStorage\Gateway::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
         $pageServiceClass = static::PAGESERVICE_CLASS;
         $this->pageService = new $pageServiceClass(
