@@ -316,8 +316,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'blabla',
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -333,8 +333,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'lalala',
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -369,8 +369,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -409,8 +409,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -449,8 +449,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -499,8 +499,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -518,8 +518,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -556,8 +556,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
