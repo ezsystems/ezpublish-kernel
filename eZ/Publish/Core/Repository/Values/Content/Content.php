@@ -59,16 +59,7 @@ class Content extends APIContent
     }
 
     /**
-     * Returns a field value for the given value
-     * $version->fields[$fieldDefId][$languageCode] is an equivalent call
-     * if no language is given on a translatable field this method returns
-     * the value of the initial language of the version if present, otherwise null.
-     * On non translatable fields this method ignores the languageCode parameter.
-     *
-     * @param string $fieldDefIdentifier
-     * @param string $languageCode
-     *
-     * @return mixed a primitive type or a field type Value object depending on the field type.
+     * {@inheritdoc}
      */
     public function getFieldValue($fieldDefIdentifier, $languageCode = null)
     {

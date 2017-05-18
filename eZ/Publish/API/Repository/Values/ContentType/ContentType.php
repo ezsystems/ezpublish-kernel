@@ -198,7 +198,7 @@ abstract class ContentType extends ValueObject
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
-     * @var mixed
+     * @var int
      */
     protected $defaultSortField;
 
@@ -207,7 +207,7 @@ abstract class ContentType extends ValueObject
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
-     * @var mixed
+     * @var int
      */
     protected $defaultSortOrder;
 

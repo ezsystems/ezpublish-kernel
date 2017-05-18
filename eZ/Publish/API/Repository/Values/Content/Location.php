@@ -133,7 +133,7 @@ abstract class Location extends ValueObject
      *
      * A universally unique identifier.
      *
-     * @var mixed
+     * @var string
      */
     protected $remoteId;
 
@@ -180,7 +180,7 @@ abstract class Location extends ValueObject
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
-     * @var mixed
+     * @var int
      */
     protected $sortField;
 
@@ -189,7 +189,7 @@ abstract class Location extends ValueObject
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
-     * @var mixed
+     * @var int
      */
     protected $sortOrder;
 
