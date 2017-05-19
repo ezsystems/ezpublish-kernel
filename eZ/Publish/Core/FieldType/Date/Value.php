@@ -78,6 +78,7 @@ class Value extends BaseValue
         try {
             // [EZP-27281] Avoid error if timestamp is NULL
             $intTimestamp = (int) $timestamp;
+            
             return new static(new DateTime("@{$intTimestamp}"));
         } catch (Exception $e) {
             throw new InvalidArgumentValue('$timestamp', $timestamp, __CLASS__, $e);
