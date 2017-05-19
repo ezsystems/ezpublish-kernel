@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -93,45 +94,27 @@ EOT
 
     protected function executeList(OutputInterface $output, $totalCount)
     {
-        $output->writeln('The following relations will be removed: ');
-        $output->writeln("ID\tFCO_ID\tFCO_V\tTCO_ID\tRT");
-
-        $passSize = 1000;
-        $passCount = ceil($totalCount / $passSize);
-        for ($pass = 0; $pass <= $passCount; ++$pass) {
-            $relations = $this->getCorruptedRelations($pass * $passSize, $passSize);
-            foreach ($relations as $relation) {
-                $output->writeln(vsprintf("%s\t%s\t%s\t%s\t%s", $relation));
-            }
-            $relations = null;
-        }
+        $table = new Table($output);
+        $table->setHeaders([
+            'ID',
+            'FROM_CONTENTOBEJCT_ID',
+            'FROM_CONTENTOBJECT_VERSION',
+            'TO_CONTENTOBJECT_ID',
+            'RELATION_TYPE',
+        ]);
+        $table->addRows($this->getCorruptedRelations());
+        $table->render();
     }
 
-    protected function getCorruptedRelations($offset, $limit)
+    protected function getCorruptedRelations()
     {
-        /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $connection */
-        $connection = $this->getContainer()->get('ezpublish.connection');
+        $sql = 'SELECT id, from_contentobject_id, from_contentobject_version, to_contentobject_id,'
+                    . 'relation_type FROM ezcontentobject_link WHERE relation_type = 0';
 
-        $query = $connection->createSelectQuery();
-        $query
-            ->select(
-                $connection->quoteColumn('id'),
-                $connection->quoteColumn('from_contentobject_id'),
-                $connection->quoteColumn('from_contentobject_version'),
-                $connection->quoteColumn('to_contentobject_id'),
-                $connection->quoteColumn('relation_type')
-            )
-            ->from('ezcontentobject_link')
-            ->where(
-                $query->expr->eq(
-                    $connection->quoteColumn('relation_type'),
-                    $query->bindValue('0')
-                )
-            )
-            ->orderBy('id', 'ASC')
-            ->limit($limit, $offset);
+        /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $conn */
+        $conn = $this->getContainer()->get('ezpublish.connection');
 
-        $stmt = $query->prepare();
+        $stmt = $conn->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_NUM);
