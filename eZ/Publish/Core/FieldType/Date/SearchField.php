@@ -29,6 +29,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
+        // [EZP-27281] Avoid error if timestamp is NULL
         $timestamp = (int)$field->value->data['timestamp'];
         $dateTime = new DateTime("@{$timestamp}");
 
