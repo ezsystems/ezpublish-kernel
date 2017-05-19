@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use eZ\Publish\Core\Persistence\Legacy\Handler as LegacyStorageEngine;
 use RuntimeException;
 
 class CleanUpRelationTypeEqZeroCommand extends ContainerAwareCommand
@@ -53,6 +54,8 @@ EOT
             );
         }
 
+        $this->checkStorage();
+
         $totalCount = $this->getTotalCount();
         $output->writeln('Found total relations to delete: ' . $totalCount);
         if ($totalCount == 0) {
@@ -74,6 +77,20 @@ EOT
         }
 
         $output->writeln('');
+    }
+
+    /**
+     * Checks that configured storage engine is Legacy Storage Engine.
+     */
+    protected function checkStorage()
+    {
+        $storageEngine = $this->getContainer()->get('ezpublish.api.storage_engine');
+
+        if (!$storageEngine instanceof LegacyStorageEngine) {
+            throw new RuntimeException(
+                'Expected to find Legacy Storage Engine but found something else.'
+            );
+        }
     }
 
     protected function confirmExecution(InputInterface $input, OutputInterface $output)
