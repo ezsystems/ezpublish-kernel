@@ -13,7 +13,7 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
-use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage as UrlGateway;
 
 /**
  * Integration test for legacy storage field types.
@@ -67,7 +67,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $urlGateway = new UrlGateway($this->getDatabaseHandler());
+        $urlGateway = new UrlGateway($this->getDatabaseHandler()->getConnection());
 
         return $this->getHandler(
             'ezrichtext',
