@@ -169,8 +169,7 @@ class SecurityListener implements EventSubscriberInterface
      *
      * @param BaseInteractiveLoginEvent $event
      *
-     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
-     *         Contains an UnauthorizedSiteAccessException as the previous exception.
+     * @throws \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
      */
     public function checkSiteAccessPermission(BaseInteractiveLoginEvent $event)
     {
@@ -183,8 +182,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         if (!$this->hasAccess($siteAccess, $originalUser->getUsername())) {
-            $siteAccessException = new UnauthorizedSiteAccessException($siteAccess, $originalUser->getUsername());
-            throw new AuthenticationException($siteAccessException->getMessage(), 0, $siteAccessException);
+            throw new UnauthorizedSiteAccessException($siteAccess, $originalUser->getUsername());
         }
     }
 
