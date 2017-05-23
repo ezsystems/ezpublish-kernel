@@ -12,7 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConv
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
+use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage as UrlGateway;
 
 /**
@@ -74,9 +74,9 @@ class RichTextIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new RichTextConverter(),
             new FieldType\RichText\RichTextStorage(
-                new LegacyStorage(
+                new DoctrineStorage(
                     $urlGateway,
-                    $this->getDatabaseHandler()
+                    $this->getDatabaseHandler()->getConnection()
                 )
             )
         );
