@@ -54,6 +54,9 @@
         <testsuite name="eZ\Publish\API\Repository\Tests\Regression">
             <directory>eZ/Publish/API/Repository/Tests/Regression/</directory>
         </testsuite>
+        <testsuite name="eZ\Publish\Core\FieldType\Tests\Integration">
+            <directory>eZ/Publish/Core/FieldType/Tests/Integration</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>
