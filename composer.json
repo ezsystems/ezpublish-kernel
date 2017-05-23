@@ -16,7 +16,6 @@
         "ext-PDO": "*",
         "ext-SPL": "*",
         "ext-xsl": "*",
-        "zetacomponents/mail": "~1.8",
         "symfony/symfony": "^3.3",
         "symfony-cmf/routing": "~1.1",
         "qafoo/rmf": "1.0.*",
