@@ -36,7 +36,6 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use ezcMailTools;
 use Exception;
 
 /**
@@ -374,7 +373,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
         }
 
-        if (!ezcMailTools::validateEmailAddress($userCreateStruct->email)) {
+        if (!preg_match('/^.+@.+\..+$/', $userCreateStruct->email)) {
             throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
         }
 
@@ -685,7 +684,7 @@ class UserService implements UserServiceInterface
                 throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
             }
 
-            if (!ezcMailTools::validateEmailAddress($userUpdateStruct->email)) {
+            if (!preg_match('/^.+@.+\..+$/', $userUpdateStruct->email)) {
                 throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
             }
         }
