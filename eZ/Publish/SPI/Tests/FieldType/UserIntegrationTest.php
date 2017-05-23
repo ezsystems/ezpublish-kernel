@@ -62,7 +62,9 @@ class UserIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\NullConverter(),
             new FieldType\User\UserStorage(
-                new FieldType\User\UserStorage\Gateway\LegacyStorage($this->getDatabaseHandler())
+                new FieldType\User\UserStorage\Gateway\DoctrineStorage(
+                    $this->getDatabaseHandler()->getConnection()
+                )
             )
         );
     }
