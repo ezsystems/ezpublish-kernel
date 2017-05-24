@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 class SectionFacet extends Facet
 {
     /**
-     * An array with sectionIdentifier as key and count of matching content objects as value.
+     * An array with sectionId as key and count of matching content objects as value.
      *
      * @var array
      */
