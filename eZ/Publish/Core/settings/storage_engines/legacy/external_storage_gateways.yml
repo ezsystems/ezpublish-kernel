@@ -3,7 +3,7 @@ parameters:
 
     ezpublish.fieldType.ezbinaryfile.storage_gateway.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezgmaplocation.storage_gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\DoctrineStorage
-    ezpublish.fieldType.ezimage.storage_gateway.class: eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\LegacyStorage
+    ezpublish.fieldType.ezimage.storage_gateway.class: eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezkeyword.storage_gateway.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezrichtext.storage_gateway.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage
@@ -50,7 +50,7 @@ services:
         class: "%ezpublish.fieldType.ezimage.storage_gateway.class%"
         arguments:
             - "@ezpublish.core.io.image_fieldtype.legacy_url_redecorator"
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.api.storage_engine.legacy.connection"
 
     ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
         class: "%ezpublish.fieldType.ezgmaplocation.storage_gateway.class%"
