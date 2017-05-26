@@ -110,7 +110,7 @@ class DomainMapper
         return new Content(
             array(
                 'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldLanguages, $fieldAlwaysAvailableLanguage),
-                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo),
+                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $fieldLanguages ?: []),
             )
         );
     }
@@ -186,10 +186,11 @@ class DomainMapper
      * Builds a VersionInfo domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $spiVersionInfo
+     * @param array $prioritizedLanguages
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\VersionInfo
      */
-    public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo)
+    public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo, array $prioritizedLanguages = [])
     {
         // Map SPI statuses to API
         switch ($spiVersionInfo->status) {
@@ -206,6 +207,15 @@ class DomainMapper
                 $status = APIVersionInfo::STATUS_DRAFT;
         }
 
+        // Find prioritised language among names
+        $prioritizedNameLanguageCode = null;
+        foreach ($prioritizedLanguages as $prioritizedLanguage) {
+            if (isset($spiVersionInfo->names[$prioritizedLanguage])) {
+                $prioritizedNameLanguageCode = $prioritizedLanguage;
+                break;
+            }
+        }
+
         return new VersionInfo(
             array(
                 'id' => $spiVersionInfo->id,
@@ -218,6 +228,7 @@ class DomainMapper
                 'languageCodes' => $spiVersionInfo->languageCodes,
                 'names' => $spiVersionInfo->names,
                 'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
+                'prioritizedNameLanguageCode' => $prioritizedNameLanguageCode,
             )
         );
     }
