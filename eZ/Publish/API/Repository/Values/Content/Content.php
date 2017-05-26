@@ -28,11 +28,15 @@ abstract class Content extends ValueObject
     abstract public function getVersionInfo();
 
     /**
-     * Returns a field value for the given value
-     * $version->fields[$fieldDefId][$languageCode] is an equivalent call
-     * if no language is given on a translatable field this method returns
-     * the value of the initial language of the version if present, otherwise null.
-     * On non translatable fields this method ignores the languageCode parameter.
+     * Returns a field value for the given value.
+     *
+     * - If $languageCode is defined,
+     *      return if available, otherwise null
+     * - If not pick using the following languages codes when applicable:
+     *      1. Prioritized languages (if provided to api on object retrieval)
+     *      2. Main language
+     *
+     * On non translatable fields this method ignores the languageCode parameter, and return main language field value.
      *
      * @param string $fieldDefIdentifier
      * @param string $languageCode
@@ -51,7 +55,9 @@ abstract class Content extends ValueObject
     /**
      * This method returns the fields for a given language and non translatable fields.
      *
-     * If note set the initialLanguage of the content version is used.
+     * - If $languageCode is defined, return if available
+     * - If not pick using prioritized languages (if provided to api on object retrieval)
+     * - Otherwise return in main language
      *
      * @param string $languageCode
      *
@@ -62,7 +68,13 @@ abstract class Content extends ValueObject
     /**
      * This method returns the field for a given field definition identifier and language.
      *
-     * If not set the initialLanguage of the content version is used.
+     * - If $languageCode is defined,
+     *      return if available, otherwise null
+     * - If not pick using the following languages codes when applicable:
+     *      1. Prioritized languages (if provided to api on object retrieval)
+     *      2. Main language
+     *
+     * On non translatable fields this method ignores the languageCode parameter, and return main language field.
      *
      * @param string $fieldDefIdentifier
      * @param string|null $languageCode

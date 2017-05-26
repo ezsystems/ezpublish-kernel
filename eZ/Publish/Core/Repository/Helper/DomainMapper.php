@@ -107,10 +107,23 @@ class DomainMapper
             );
         }
 
+        $prioritizedFieldLanguageCode = null;
+        $prioritizedLanguages = $fieldLanguages ?: [];
+        if (!empty($prioritizedLanguages)) {
+            $availableFieldLanguageMap = array_fill_keys($spiContent->versionInfo->languageCodes, true);
+            foreach ($prioritizedLanguages as $prioritizedLanguage) {
+                if (isset($availableFieldLanguageMap[$prioritizedLanguage])) {
+                    $prioritizedFieldLanguageCode = $prioritizedLanguage;
+                    break;
+                }
+            }
+        }
+
         return new Content(
             array(
                 'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldLanguages, $fieldAlwaysAvailableLanguage),
-                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $fieldLanguages ?: []),
+                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
+                'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             )
         );
     }
@@ -122,7 +135,8 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
      * @param ContentType|SPIType $contentType
-     * @param array|null $languages Language codes to filter fields on
+     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
      * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $languages
      *
      * @return array
