@@ -321,7 +321,7 @@ class FieldHandler
         $fieldsToCopy = array();
         $nonTranslatableCopiesUpdateSet = array();
         $mainLanguageCode = $content->versionInfo->contentInfo->mainLanguageCode;
-        $languageCodes = $existingLanguageCodes = $this->getLanguageCodes($content->versionInfo->languageIds);
+        $languageCodes = $existingLanguageCodes = array_fill_keys($content->versionInfo->languageCodes, true);
         $contentFieldMap = $this->getFieldMap($content->fields);
         $updateFieldMap = $this->getFieldMap($updateStruct->fields, $languageCodes);
         $initialLanguageCode = $this->languageHandler->load($updateStruct->initialLanguageId)->languageCode;
@@ -409,23 +409,6 @@ class FieldHandler
                 $this->mapper->convertToStorageValue($field)
             );
         }
-    }
-
-    /**
-     * For given $languageIds returns array with language codes as keys.
-     *
-     * @param array $languageIds
-     *
-     * @return array
-     */
-    protected function getLanguageCodes(array $languageIds)
-    {
-        $languageCodes = array();
-        foreach ($languageIds as $languageId) {
-            $languageCodes[$this->languageHandler->load($languageId)->languageCode] = true;
-        }
-
-        return $languageCodes;
     }
 
     /**
