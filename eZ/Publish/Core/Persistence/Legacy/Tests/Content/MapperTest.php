@@ -103,7 +103,7 @@ class MapperTest extends LanguageAwareTestCase
                 'creatorId' => 14,
                 'status' => 0,
                 'initialLanguageCode' => 'eng-GB',
-                'languageIds' => array(4),
+                'languageCodes' => ['eng-GB'],
             ),
             $versionInfo
         );
@@ -127,7 +127,7 @@ class MapperTest extends LanguageAwareTestCase
             array(
                 'versionNo' => 1,
                 'initialLanguageCode' => 'eng-GB',
-                'languageIds' => array(4),
+                'languageCodes' => ['eng-GB'],
             )
         );
 

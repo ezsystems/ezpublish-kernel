@@ -26,24 +26,8 @@ class DomainMapperTest extends BaseServiceMockTest
      */
     public function testBuildVersionInfo(SPIVersionInfo $spiVersionInfo, array $languages, array $expected)
     {
-        $i = 0;
         $languageHandlerMock = $this->getLanguageHandlerMock();
-        foreach ($languages as $languageId => $languageCode) {
-            $languageHandlerMock->expects($this->at($i++))
-                ->method('load')
-                ->with($languageId)
-                ->will(
-                    $this->returnValue(
-                        new SPILanguage(
-                            array('id' => $languageId, 'languageCode' => $languageCode)
-                        )
-                    )
-                );
-        }
-
-        if (empty($languages)) {
-            $languageHandlerMock->expects($this->never())->method('load');
-        }
+        $languageHandlerMock->expects($this->never())->method('load');
 
         $versionInfo = $this->getDomainMapper()->buildVersionInfoDomainObject($spiVersionInfo);
         $this->assertInstanceOf('eZ\\Publish\\Core\\Repository\\Values\\Content\\VersionInfo', $versionInfo);
@@ -95,7 +79,7 @@ class DomainMapperTest extends BaseServiceMockTest
                     array(
                         'status' => SPIVersionInfo::STATUS_ARCHIVED,
                         'contentInfo' => new SPIContentInfo(),
-                        'languageIds' => array(1, 3, 5),
+                        'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
                     )
                 ),
                 array(1 => 'eng-GB', 3 => 'nor-NB', 5 => 'fre-FR'),
