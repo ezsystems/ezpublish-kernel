@@ -38,6 +38,10 @@ class GeoLocationMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
+        if (!isset($field->value['latitude'], $field->value['longitude'])) {
+            return null;
+        }
+
         return [
             'lat' => $field->value['latitude'],
             'lon' => $field->value['longitude'],
