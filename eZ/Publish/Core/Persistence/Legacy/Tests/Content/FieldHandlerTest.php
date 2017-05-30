@@ -773,7 +773,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $content = new Content();
         $content->versionInfo = new VersionInfo();
         $content->versionInfo->versionNo = 1;
-        $content->versionInfo->languageIds = array(2, 4);
+        $content->versionInfo->languageCodes = ['eng-US', 'eng-GB'];
         $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->id = 42;
         $content->versionInfo->contentInfo->contentTypeId = 1;
@@ -811,7 +811,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $content = new Content();
         $content->versionInfo = new VersionInfo();
         $content->versionInfo->versionNo = 1;
-        $content->versionInfo->languageIds = array(2, 4);
+        $content->versionInfo->languageCodes = ['eng-US', 'eng-GB'];
         $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->id = 42;
         $content->versionInfo->contentInfo->contentTypeId = 1;
@@ -831,7 +831,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $content = new Content();
         $content->versionInfo = new VersionInfo();
         $content->versionInfo->versionNo = 1;
-        $content->versionInfo->languageIds = array(4);
+        $content->versionInfo->languageCodes = ['eng-GB'];
         $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->id = 42;
         $content->versionInfo->contentInfo->contentTypeId = 1;

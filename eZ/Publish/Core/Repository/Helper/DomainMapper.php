@@ -191,11 +191,6 @@ class DomainMapper
      */
     public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo)
     {
-        $languageCodes = array();
-        foreach ($spiVersionInfo->languageIds as $languageId) {
-            $languageCodes[] = $this->contentLanguageHandler->load($languageId)->languageCode;
-        }
-
         // Map SPI statuses to API
         switch ($spiVersionInfo->status) {
             case SPIVersionInfo::STATUS_ARCHIVED:
@@ -220,7 +215,7 @@ class DomainMapper
                 'creationDate' => $this->getDateTime($spiVersionInfo->creationDate),
                 'status' => $status,
                 'initialLanguageCode' => $spiVersionInfo->initialLanguageCode,
-                'languageCodes' => $languageCodes,
+                'languageCodes' => $spiVersionInfo->languageCodes,
                 'names' => $spiVersionInfo->names,
                 'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
             )

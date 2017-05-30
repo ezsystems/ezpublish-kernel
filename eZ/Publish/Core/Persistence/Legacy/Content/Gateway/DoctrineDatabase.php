@@ -325,17 +325,17 @@ class DoctrineDatabase extends Gateway
             );
         }
         if ($prePublishVersionInfo !== null) {
-            $mask = 0;
-
-            if (isset($struct->alwaysAvailable)) {
-                $mask |= $struct->alwaysAvailable ? 1 : 0;
-            } else {
-                $mask |= $prePublishVersionInfo->contentInfo->alwaysAvailable ? 1 : 0;
+            $languages = [];
+            foreach ($prePublishVersionInfo->languageCodes as $languageCodes) {
+                if (!isset($languages[$languageCodes])) {
+                    $languages[$languageCodes] = true;
+                }
             }
 
-            foreach ($prePublishVersionInfo->languageIds as $languageId) {
-                $mask |= $languageId;
-            }
+            $languages['always-available'] = isset($struct->alwaysAvailable) ? $struct->alwaysAvailable :
+                $prePublishVersionInfo->contentInfo->alwaysAvailable;
+
+            $mask = $this->languageMaskGenerator->generateLanguageMask($languages);
 
             $q->set(
                 $this->dbHandler->quoteColumn('language_mask'),

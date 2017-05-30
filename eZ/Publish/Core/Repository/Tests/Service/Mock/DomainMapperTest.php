@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Helper\DomainMapper;
-use eZ\Publish\SPI\Persistence\Content\Language as SPILanguage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 
@@ -26,24 +25,8 @@ class DomainMapperTest extends BaseServiceMockTest
      */
     public function testBuildVersionInfo(SPIVersionInfo $spiVersionInfo, array $languages, array $expected)
     {
-        $i = 0;
         $languageHandlerMock = $this->getLanguageHandlerMock();
-        foreach ($languages as $languageId => $languageCode) {
-            $languageHandlerMock->expects($this->at($i++))
-                ->method('load')
-                ->with($languageId)
-                ->will(
-                    $this->returnValue(
-                        new SPILanguage(
-                            array('id' => $languageId, 'languageCode' => $languageCode)
-                        )
-                    )
-                );
-        }
-
-        if (empty($languages)) {
-            $languageHandlerMock->expects($this->never())->method('load');
-        }
+        $languageHandlerMock->expects($this->never())->method('load');
 
         $versionInfo = $this->getDomainMapper()->buildVersionInfoDomainObject($spiVersionInfo);
         $this->assertInstanceOf('eZ\\Publish\\Core\\Repository\\Values\\Content\\VersionInfo', $versionInfo);
@@ -95,7 +78,7 @@ class DomainMapperTest extends BaseServiceMockTest
                     array(
                         'status' => SPIVersionInfo::STATUS_ARCHIVED,
                         'contentInfo' => new SPIContentInfo(),
-                        'languageIds' => array(1, 3, 5),
+                        'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
                     )
                 ),
                 array(1 => 'eng-GB', 3 => 'nor-NB', 5 => 'fre-FR'),
