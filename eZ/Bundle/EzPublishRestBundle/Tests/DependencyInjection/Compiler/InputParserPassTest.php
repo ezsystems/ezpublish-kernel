@@ -24,7 +24,7 @@ class InputParserPassTest extends PHPUnit_Framework_TestCase
         $containerBuilder->addDefinitions(
             array(
                 'ezpublish_rest.input.parsing_dispatcher' => new Definition(),
-                'ezpublish_rest.input.parser.UnitTest' => $visitorDefinition,
+                'ezpublish_rest.input.parser.unit_test' => $visitorDefinition,
             )
         );
 
@@ -38,6 +38,6 @@ class InputParserPassTest extends PHPUnit_Framework_TestCase
         self::assertEquals('addParser', $dispatcherMethodCalls[0][0], "Failed asserting that called method is 'addParser'");
         self::assertInstanceOf('Symfony\\Component\\DependencyInjection\\Reference', $dispatcherMethodCalls[0][1][1], 'Failed asserting that method call is to a Reference object');
 
-        self::assertEquals('ezpublish_rest.input.parser.unittest', $dispatcherMethodCalls[0][1][1]->__toString(), "Failed asserting that Referenced service is 'ezpublish_rest.input.parser.UnitTest'");
+        self::assertEquals('ezpublish_rest.input.parser.unit_test', $dispatcherMethodCalls[0][1][1]->__toString(), "Failed asserting that Referenced service is 'ezpublish_rest.input.parser.unit_test'");
     }
 }
