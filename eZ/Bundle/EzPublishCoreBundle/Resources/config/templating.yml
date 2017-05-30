@@ -37,7 +37,9 @@ parameters:
     ezpublish.view.template_renderer.class: eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
     ezpublish.view.builder_parameter_collector.request_attributes.class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParametersFilter\RequestAttributes
     ezpublish.view_builder.block.class: eZ\Publish\Core\MVC\Symfony\View\Builder\BlockViewBuilder
+    ezpublish.view.block.class: eZ\Publish\Core\MVC\Symfony\View\BlockView
     ezpublish.view_builder.content.class: eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder
+    ezpublish.view.content.class: eZ\Publish\Core\MVC\Symfony\View\ContentView
     ezpublish.view_builder.registry.class: eZ\Publish\Core\MVC\Symfony\View\Builder\Registry\ControllerMatch
     ezpublish.view.configurator.class: eZ\Publish\Core\MVC\Symfony\View\Configurator\ViewProvider
     ezpublish.view_provider.registry.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Registry
@@ -224,6 +226,7 @@ services:
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
             - "@ezpublish.content_info_location_loader.main"
+            - "%ezpublish.view.content.class%"
 
     ezpublish.view_builder.block:
         class: "%ezpublish.view_builder.block.class%"
@@ -231,6 +234,7 @@ services:
             - "@ezpublish.fieldType.ezpage.pageService"
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
+            - "%ezpublish.view.block.class%"
 
     ezpublish.view.builder_parameter_collector.request_attributes:
         class: "%ezpublish.view.builder_parameter_collector.request_attributes.class%"

@@ -11,6 +11,7 @@ use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Builds BlockView objects.
@@ -25,16 +26,42 @@ class BlockViewBuilder implements ViewBuilder
 
     /** @var ParametersInjector */
     private $viewParametersInjector;
+    /**
+     * @var string
+     */
+    private $viewClassFullName;
 
     public function __construct(
         PageService $pageService,
         Configurator $viewConfigurator,
-        ParametersInjector $viewParametersInjector
+        ParametersInjector $viewParametersInjector,
+        $viewClassFullName = null
     ) {
         $this->pageService = $pageService;
         $this->viewConfigurator = $viewConfigurator;
         $this->viewParametersInjector = $viewParametersInjector;
+        $this->viewClassFullName = BlockView::class;
+        if($viewClassFullName)
+        {
+            $viewReflectCLass = new \ReflectionClass($viewClassFullName);
+            $view2 = $viewReflectCLass->newInstanceWithoutConstructor();
+            if(!($view2 instanceof BlockView))
+            {
+                throw new InvalidArgumentException('viewClassFullName', "View class does not extend: "
+                    . BlockView::class);
+            }
+            $this->viewClassFullName = $viewClassFullName;
+        }
     }
+
+    /**
+     * @return string
+     */
+    public function getViewClassFullName()
+    {
+        return $this->viewClassFullName;
+    }
+
 
     public function matches($argument)
     {
@@ -43,7 +70,9 @@ class BlockViewBuilder implements ViewBuilder
 
     public function buildView(array $parameters)
     {
-        $view = new BlockView();
+        $viewClassFullName = $this->getViewClassFullName();
+        /** @var \eZ\Publish\Core\MVC\Symfony\View\BlockView $view */
+        $view = new $viewClassFullName();
 
         if (isset($parameters['id'])) {
             $view->setBlock(
