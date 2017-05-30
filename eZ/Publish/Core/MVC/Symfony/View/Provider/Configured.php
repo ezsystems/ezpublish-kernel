@@ -32,6 +32,11 @@ class Configured implements ViewProvider
         $this->matcherFactory = $matcherFactory;
     }
 
+    /**
+     * @param View $view
+     *
+     * @return ContentView|null
+     */
     public function getView(View $view)
     {
         if (($configHash = $this->matcherFactory->match($view)) === null) {

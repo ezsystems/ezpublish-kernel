@@ -7,7 +7,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 interface ViewProvider
 {
     /**
-     * @return View
+     * @return View|null
      */
     public function getView(View $view);
 }
