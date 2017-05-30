@@ -22,3 +22,9 @@ CREATE TABLE ezdfsfile (
   KEY `ezdfsfile_expired_name` (`expired`,`name`(250))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- NB!: If you plan to run togheter with legacy bridge, make sure to also add ezdfsfile_cache table, see:
+-- https://github.com/ezsystems/ezpublish-legacy/blob/master/kernel/sql/mysql/cluster_dfs_schema.sql#L18
+--
