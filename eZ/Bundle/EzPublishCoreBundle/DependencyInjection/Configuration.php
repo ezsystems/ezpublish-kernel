@@ -126,7 +126,7 @@ class Configuration extends SiteAccessConfiguration
                                     }
 
                                     if (!isset($v['fields_groups']['list'])) {
-                                        $v['fields_groups']['list'] = ['content'];
+                                        $v['fields_groups']['list'] = ['content', 'metadata'];
                                     }
 
                                     if (!isset($v['fields_groups']['default'])) {
