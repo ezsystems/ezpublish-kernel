@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageValueDescriptionBase;
 
 /**
  * This class represents a content type group value.
@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $creatorId the user id of the creator of this content type group
  * @property-read mixed $modifierId the user id of the user which has last modified this content type group
  */
-abstract class ContentTypeGroup extends ValueObject
+abstract class ContentTypeGroup extends MultiLanguageValueDescriptionBase
 {
     /**
      * Primary key.

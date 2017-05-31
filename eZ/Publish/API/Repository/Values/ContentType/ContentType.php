@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageValueDescriptionBase;
 
 /**
  * this class represents a content type value.
@@ -32,7 +32,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
-abstract class ContentType extends ValueObject
+abstract class ContentType extends MultiLanguageValueDescriptionBase
 {
     /**
      * @var int Status constant for defined (aka "published") Type
@@ -62,49 +62,6 @@ abstract class ContentType extends ValueObject
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
     protected $status;
-
-    /**
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getNames();
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
-     */
-    abstract public function getName($languageCode);
-
-    /**
-     * This method returns the human readable description of the content type.
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getDescriptions();
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
-     */
-    abstract public function getDescription($languageCode);
 
     /**
      * String identifier of a content type.
