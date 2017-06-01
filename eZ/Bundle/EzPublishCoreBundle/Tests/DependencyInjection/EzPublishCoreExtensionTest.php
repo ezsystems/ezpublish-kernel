@@ -316,8 +316,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'blabla',
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -333,8 +333,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'lalala',
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -349,6 +349,144 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $repositoryConfig['search']['config'] = array();
         }
         $this->assertSame($repositories, $this->container->getParameter('ezpublish.repositories'));
+    }
+
+    /**
+     * @dataProvider repositoriesConfigurationFieldGroupsProvider
+     */
+    public function testRepositoriesConfigurationFieldGroups($repositories, $expectedRepositories)
+    {
+        $this->load(['repositories' => $repositories]);
+        $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
+
+        $repositoriesPar = $this->container->getParameter('ezpublish.repositories');
+        $this->assertEquals(count($repositories), count($repositoriesPar));
+
+        foreach ($repositoriesPar as $key => $repo) {
+            $this->assertArrayHasKey($key, $expectedRepositories);
+            $this->assertArrayHasKey('fields_groups', $repo);
+            $this->assertEquals($expectedRepositories[$key]['fields_groups'], $repo['fields_groups'], 'Invalid fields groups element', 0.0, 10, true);
+        }
+    }
+
+    public function repositoriesConfigurationFieldGroupsProvider()
+    {
+        return [
+            //empty config
+            [
+                ['main' => null],
+                ['main' => [
+                        'fields_groups' => [
+                            'list' => ['content', 'metadata'],
+                            'default' => '%ezsettings.default.content.field_groups.default%',
+                        ],
+                    ],
+                ],
+            ],
+            //single item with custom fields
+            [
+                ['foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                ],
+                ['foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                ],
+            ],
+            //mixed item with custom config and empty item
+            [
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'anotherone' => null,
+                ],
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'anotherone' => [
+                        'fields_groups' => [
+                            'list' => ['content', 'metadata'],
+                            'default' => '%ezsettings.default.content.field_groups.default%',
+                        ],
+                    ],
+                ],
+            ],
+            //items with only one field configured
+            [
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'default' => 'metadata',
+                        ],
+                    ],
+                ],
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                            'default' => '%ezsettings.default.content.field_groups.default%',
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'list' => ['content', 'metadata'],
+                            'default' => 'metadata',
+                        ],
+                    ],
+                ],
+            ],
+            //two different repositories
+            [
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'list' => ['lorem', 'ipsum'],
+                            'default' => 'lorem',
+                        ],
+                    ],
+                ],
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'list' => ['lorem', 'ipsum'],
+                            'default' => 'lorem',
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function testRepositoriesConfigurationEmpty()
@@ -369,8 +507,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -409,8 +547,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -449,8 +587,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -499,8 +637,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -518,8 +656,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,
@@ -556,8 +694,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'config' => array(),
                 ),
                 'fields_groups' => array(
-                    'list' => ['content'],
-                    'default' => 'content',
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
                 ),
                 'options' => [
                     'default_version_archive_limit' => 5,

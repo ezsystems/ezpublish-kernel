@@ -638,6 +638,20 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * Test that publishing (and thus indexing) content with an empty field value does not fail.
+     *
+     * @depends testCreateContentWithEmptyFieldValue
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $contentDraft
+     */
+    public function testPublishContentWithEmptyFieldValue(Content $contentDraft)
+    {
+        $this->getRepository(false)->getContentService()->publishVersion(
+            $contentDraft->versionInfo
+        );
+    }
+
+    /**
      * @depends testCreateContentWithEmptyFieldValue
      */
     public function testCreatedEmptyFieldValue($content)

@@ -29,12 +29,17 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        $dateTime = new DateTime("@{$field->value->data['timestamp']}");
+        if ($field->value->data !== null) {
+            $dateTime = new DateTime("@{$field->value->data['timestamp']}");
+            $value = $dateTime->format('Y-m-d\\Z');
+        } else {
+            $value = null;
+        }
 
         return array(
             new Search\Field(
                 'value',
-                $dateTime->format('Y-m-d\\Z'),
+                $value,
                 new Search\FieldType\DateField()
             ),
         );

@@ -92,6 +92,7 @@ class SessionController extends Controller
             // Already logged in with another user, this will be converted to HTTP status 409
             return new Values\Conflict();
         } catch (AuthenticationException $e) {
+            $this->authenticator->logout($request);
             throw new UnauthorizedException('Invalid login or password', $request->getPathInfo());
         } catch (AccessDeniedException $e) {
             $this->authenticator->logout($request);

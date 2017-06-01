@@ -126,11 +126,7 @@ class Configuration extends SiteAccessConfiguration
                                     }
 
                                     if (!isset($v['fields_groups']['list'])) {
-                                        $v['fields_groups']['list'] = ['content'];
-                                    }
-
-                                    if (!isset($v['fields_groups']['default'])) {
-                                        $v['fields_groups']['default'] = 'content';
+                                        $v['fields_groups']['list'] = [];
                                     }
 
                                     if (!isset($v['options'])) {
@@ -180,7 +176,7 @@ class Configuration extends SiteAccessConfiguration
                                 ->info('Definitions of fields groups.')
                                 ->children()
                                     ->arrayNode('list')->prototype('scalar')->end()->end()
-                                    ->scalarNode('default')->defaultValue('content')->end()
+                                    ->scalarNode('default')->defaultValue('%ezsettings.default.content.field_groups.default%')->end()
                                 ->end()
                             ->end()
                             ->arrayNode('options')
