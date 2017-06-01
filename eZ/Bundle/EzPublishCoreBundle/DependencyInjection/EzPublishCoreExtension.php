@@ -196,6 +196,12 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
             $config['repositories'] = array();
         }
 
+        foreach ($config['repositories'] as $name => &$repository) {
+            if (empty($repository['fields_groups']['list'])) {
+                $repository['fields_groups']['list'] = $container->getParameter('ezsettings.default.content.field_groups.list');
+            }
+        }
+
         $container->setParameter('ezpublish.repositories', $config['repositories']);
     }
 
