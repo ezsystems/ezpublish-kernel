@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\SPI\Variation\VariationHandler;
+use InvalidArgumentException;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
