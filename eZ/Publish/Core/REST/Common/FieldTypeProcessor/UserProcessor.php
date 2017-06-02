@@ -12,11 +12,19 @@ use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 class UserProcessor extends FieldTypeProcessor
 {
+    public function preProcessValueHash($incomingValueHash)
+    {
+        // For BC with usage in Platform UI 1.x
+        if (isset($incomingValueHash['password'])) {
+            $incomingValueHash['passwordHash'] = $incomingValueHash['password'];
+            unset($incomingValueHash['password']);
+        }
+        return $incomingValueHash;
+    }
+
     public function postProcessValueHash($outgoingValueHash)
     {
-        unset($outgoingValueHash['passwordHash']);
-        unset($outgoingValueHash['passwordHashType']);
-
+        unset($outgoingValueHash['passwordHash'], $outgoingValueHash['passwordHashType']);
         return $outgoingValueHash;
     }
 }
