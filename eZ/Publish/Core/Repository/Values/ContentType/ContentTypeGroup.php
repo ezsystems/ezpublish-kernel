@@ -9,7 +9,9 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
-use eZ\Publish\Core\Repository\Values\MultiLanguageValueTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents a content type group value.
@@ -28,5 +30,7 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageValueTrait;
  */
 class ContentTypeGroup extends APIContentTypeGroup
 {
-    use MultiLanguageValueTrait;
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
 }

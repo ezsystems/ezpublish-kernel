@@ -138,13 +138,6 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
     protected $isContainer;
 
     /**
-     * Main language.
-     *
-     * @var string
-     */
-    protected $mainLanguageCode;
-
-    /**
      * If an instance of a content type is created the always available flag is set
      * by default to this value.
      *

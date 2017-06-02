@@ -9,7 +9,9 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
-use eZ\Publish\Core\Repository\Values\MultiLanguageValueTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents a field definition.
@@ -33,7 +35,9 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageValueTrait;
  */
 class FieldDefinition extends APIFieldDefinition
 {
-    use MultiLanguageValueTrait;
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
 
     /**
      * Holds collection of settings for the field definition supported by the field type.
