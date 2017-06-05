@@ -7,7 +7,10 @@
 
 {% block ezstring_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
-    {% set defaultValue = fielddefinition.defaultValue.text %}
+    {% set defaultValue = null %}
+    {% if fielddefinition.defaultValue.text is not same as('') %}
+        {% set defaultValue = fielddefinition.defaultValue.text %}
+    {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting max-length">
         <div class="ez-fielddefinition-setting-name">Max string length:</div>
@@ -38,10 +41,12 @@
 
 {% block ezcountry_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
-    {% set defaultValue = '' %}
-    {% for country in fielddefinition.defaultValue.countries %}
-        {% set defaultValue = defaultValue ~ country.Name ~ ( not loop.last ? ', ' : '' ) %}
-    {% endfor %}
+    {% set defaultValue = null %}
+    {% if fielddefinition.defaultValue.countries %}
+        {% for country in fielddefinition.defaultValue.countries %}
+            {% set defaultValue = defaultValue ~ country.Name ~ ( not loop.last ? ', ' : '' ) %}
+        {% endfor %}
+    {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     {% set isMultiple = settings.isMultiple %}
     {{ block( 'settings_allowmultiple' ) }}
@@ -271,7 +276,10 @@
 
 {% block ezisbn_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
-    {% set defaultValue = '' %}
+    {% set defaultValue = null %}
+    {% if fielddefinition.defaultValue.isbn %}
+        {% set defaultValue = fielddefinition.defaultValue.isbn %}
+    {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     {% set isISBN13 = settings.isISBN13 %}
     {{ block( 'settings_allowisbn13' ) }}
@@ -332,7 +340,7 @@
     <li class="ez-fielddefinition-setting default-value">
         <div class="ez-fielddefinition-setting-name">Default value:</div>
         <div class="ez-fielddefinition-setting-value">
-        {% if defaultValue %}
+        {% if defaultValue is not null %}
             {{ defaultValue }}
         {% else %}
             <em>No default value</em>
