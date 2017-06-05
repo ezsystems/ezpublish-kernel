@@ -6,17 +6,19 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents a draft of a content type.
  */
 class ContentTypeDraft extends APIContentTypeDraft
 {
+    use MultiLanguageTrait;
+
     /**
      * ContentType encapsulated in the draft.
      *
@@ -31,6 +33,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function __construct(Values\ContentType\ContentType $innerContentType)
     {
+        parent::__construct([]);
         $this->innerContentType = $innerContentType;
     }
 
