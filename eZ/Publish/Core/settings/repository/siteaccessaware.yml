@@ -1,0 +1,141 @@
+parameters:
+    ezpublish.siteaccessaware.repository.class: eZ\Publish\Core\Repository\SiteAccessAware\Repository
+    ezpublish.siteaccessaware.service.content.class: eZ\Publish\Core\Repository\SiteAccessAware\ContentService
+    ezpublish.siteaccessaware.service.content_type.class: eZ\Publish\Core\Repository\SiteAccessAware\ContentTypeService
+    ezpublish.siteaccessaware.service.field_type.class: eZ\Publish\Core\Repository\SiteAccessAware\FieldTypeService
+    ezpublish.siteaccessaware.service.role.class: eZ\Publish\Core\Repository\SiteAccessAware\RoleService
+    ezpublish.siteaccessaware.service.object_state.class: eZ\Publish\Core\Repository\SiteAccessAware\ObjectStateService
+    ezpublish.siteaccessaware.service.url_wildcard.class: eZ\Publish\Core\Repository\SiteAccessAware\URLWildcardService
+    ezpublish.siteaccessaware.service.url_alias.class: eZ\Publish\Core\Repository\SiteAccessAware\URLAliasService
+    ezpublish.siteaccessaware.service.user.class: eZ\Publish\Core\Repository\SiteAccessAware\UserService
+    ezpublish.siteaccessaware.service.search.class: eZ\Publish\Core\Repository\SiteAccessAware\SearchService
+    ezpublish.siteaccessaware.service.section.class: eZ\Publish\Core\Repository\SiteAccessAware\SectionService
+    ezpublish.siteaccessaware.service.trash.class: eZ\Publish\Core\Repository\SiteAccessAware\TrashService
+    ezpublish.siteaccessaware.service.location.class: eZ\Publish\Core\Repository\SiteAccessAware\LocationService
+    ezpublish.siteaccessaware.service.language.class: eZ\Publish\Core\Repository\SiteAccessAware\LanguageService
+
+    # Helpers
+    ezpublish.siteaccessaware.helper.domain_mapper.class: eZ\Publish\Core\Repository\SiteAccessAware\Helper\DomainMapper
+    ezpublish.siteaccessaware.helper.language_resolver.class: eZ\Publish\Core\Repository\SiteAccessAware\Helper\LanguageResolver
+
+services:
+    ezpublish.siteaccessaware.repository:
+        class: "%ezpublish.siteaccessaware.repository.class%"
+        arguments:
+            - "@ezpublish.api.inner_repository"
+            - "@ezpublish.siteaccessaware.service.content"
+            - "@ezpublish.siteaccessaware.service.content_type"
+            - "@ezpublish.siteaccessaware.service.field_type"
+            - "@ezpublish.siteaccessaware.service.role"
+            - "@ezpublish.siteaccessaware.service.object_state"
+            - "@ezpublish.siteaccessaware.service.url_wildcard"
+            - "@ezpublish.siteaccessaware.service.url_alias"
+            - "@ezpublish.siteaccessaware.service.user"
+            - "@ezpublish.siteaccessaware.service.search"
+            - "@ezpublish.siteaccessaware.service.section"
+            - "@ezpublish.siteaccessaware.service.trash"
+            - "@ezpublish.siteaccessaware.service.location"
+            - "@ezpublish.siteaccessaware.service.language"
+
+    ezpublish.siteaccessaware.service.content:
+        class: "%ezpublish.siteaccessaware.service.content.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.content"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.content_type:
+        class: "%ezpublish.siteaccessaware.service.content_type.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.content_type"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.field_type:
+        class: "%ezpublish.siteaccessaware.service.field_type.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.field_type"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.role:
+        class: "%ezpublish.siteaccessaware.service.role.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.role"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.object_state:
+        class: "%ezpublish.siteaccessaware.service.object_state.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.object_state"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.url_wildcard:
+        class: "%ezpublish.siteaccessaware.service.url_wildcard.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.url_wildcard"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.url_alias:
+        class: "%ezpublish.siteaccessaware.service.url_alias.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.url_alias"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.user:
+        class: "%ezpublish.siteaccessaware.service.user.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.user"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.search:
+        class: "%ezpublish.siteaccessaware.service.search.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.search"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.section:
+        class: "%ezpublish.siteaccessaware.service.section.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.section"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.trash:
+        class: "%ezpublish.siteaccessaware.service.trash.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.trash"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.location:
+        class: "%ezpublish.siteaccessaware.service.location.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.location"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    ezpublish.siteaccessaware.service.language:
+        class: "%ezpublish.siteaccessaware.service.language.class%"
+        arguments:
+            - "@ezpublish.signalslot.service.language"
+            - "@ezpublish.siteaccessaware.helper.language_resolver"
+            - '@ezpublish.siteaccessaware.helper.domain_mapper'
+
+    # Helpers
+    ezpublish.siteaccessaware.helper.language_resolver:
+        class: "%ezpublish.siteaccessaware.helper.language_resolver.class%"
+        arguments:
+            - "$languages$"
+
+    ezpublish.siteaccessaware.helper.domain_mapper:
+        class: "%ezpublish.siteaccessaware.helper.domain_mapper.class%"
+        arguments:
+            - "@ezpublish.spi.persistence.cache.contentHandler"
+            - "@ezpublish.spi.persistence.cache.contentLanguageHandler"
