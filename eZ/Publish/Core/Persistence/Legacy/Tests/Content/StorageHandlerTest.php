@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
+use eZ\Publish\Core\Persistence\Content\StorageRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -22,7 +23,7 @@ class StorageHandlerTest extends TestCase
     /**
      * StorageRegistry mock.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Content\StorageRegistry
      */
     protected $storageRegistryMock;
 
@@ -190,13 +191,13 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns a StorageRegistry mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     * @return \eZ\Publish\Core\Persistence\Content\StorageRegistry
      */
     protected function getStorageRegistryMock()
     {
         if (!isset($this->storageRegistryMock)) {
             $this->storageRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageRegistry',
+                StorageRegistry::class,
                 array(),
                 array(array())
             );

@@ -43,7 +43,6 @@ services:
         arguments:
             - "@ezpublish.persistence.legacy.content.gateway"
             - "@ezpublish.persistence.legacy.content.mapper"
-            - "@ezpublish.persistence.legacy.external_storage_handler"
             - "@ezpublish.spi.persistence.legacy.language.handler"
             - "@ezpublish.persistence.field_type_registry"
         lazy: true

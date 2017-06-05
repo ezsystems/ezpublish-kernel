@@ -14,8 +14,8 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\SPI\Persistence\Content\StorageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -55,7 +55,7 @@ class AddField extends Action
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $converter
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\StorageHandler $storageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct(

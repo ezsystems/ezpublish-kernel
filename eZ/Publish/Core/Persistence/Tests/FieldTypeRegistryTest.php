@@ -10,6 +10,10 @@ namespace eZ\Publish\Core\Persistence\Tests;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
+use eZ\Publish\SPI\Persistence\Content\StorageHandler;
+use eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry;
+use eZ\Publish\SPI\Persistence\FieldType;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 
 /**
  * Test case for FieldTypeRegistry.
@@ -22,12 +26,16 @@ class FieldTypeRegistryTest extends TestCase
     public function testConstructor()
     {
         $fieldType = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array('some-type' => $fieldType));
+        $registry = new FieldTypeRegistry(
+            ['some-type' => $fieldType],
+            $this->getStorageHandlerRegistryMock(),
+            $this->getStorageHandlerMock()
+        );
 
         $this->assertAttributeSame(
-            array(
+            [
                 'some-type' => $fieldType,
-            ),
+            ],
             'coreFieldTypeMap',
             $registry
         );
@@ -39,11 +47,15 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldTypeInstance()
     {
         $instance = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array('some-type' => $instance));
+        $registry = new FieldTypeRegistry(
+            ['some-type' => $instance],
+            $this->getStorageHandlerRegistryMock(),
+            $this->getStorageHandlerMock()
+        );
 
         $result = $registry->getFieldType('some-type');
 
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\FieldType', $result);
+        $this->assertInstanceOf(FieldType::class, $result);
         $this->assertAttributeSame(
             $instance,
             'internalFieldType',
@@ -60,11 +72,15 @@ class FieldTypeRegistryTest extends TestCase
         $closure = function () use ($instance) {
             return $instance;
         };
-        $registry = new FieldTypeRegistry(array('some-type' => $closure));
+        $registry = new FieldTypeRegistry(
+            ['some-type' => $closure],
+            $this->getStorageHandlerRegistryMock(),
+            $this->getStorageHandlerMock()
+        );
 
         $result = $registry->getFieldType('some-type');
 
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\FieldType', $result);
+        $this->assertInstanceOf(FieldType::class, $result);
         $this->assertAttributeSame(
             $instance,
             'internalFieldType',
@@ -80,7 +96,11 @@ class FieldTypeRegistryTest extends TestCase
      */
     public function testGetNotFound()
     {
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry(
+            [],
+            $this->getStorageHandlerRegistryMock(),
+            $this->getStorageHandlerMock()
+        );
         $registry->getFieldType('not-found');
     }
 
@@ -92,7 +112,11 @@ class FieldTypeRegistryTest extends TestCase
      */
     public function testGetNotFoundBCException()
     {
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry(
+            [],
+            $this->getStorageHandlerRegistryMock(),
+            $this->getStorageHandlerMock()
+        );
         $registry->getFieldType('not-found');
     }
 
@@ -103,7 +127,11 @@ class FieldTypeRegistryTest extends TestCase
      */
     public function testGetNotCallableOrInstance()
     {
-        $registry = new FieldTypeRegistry(array('some-type' => new \DateTime()));
+        $registry = new FieldTypeRegistry(
+            ['some-type' => new \DateTime()],
+            $this->getStorageHandlerRegistryMock(),
+            $this->getStorageHandlerMock()
+        );
         $registry->getFieldType('some-type');
     }
 
@@ -113,7 +141,11 @@ class FieldTypeRegistryTest extends TestCase
     public function testRegister()
     {
         $fieldType = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry(
+            [],
+            $this->getStorageHandlerRegistryMock(),
+            $this->getStorageHandlerMock()
+        );
         $registry->register('some-type', $fieldType);
 
         $this->assertAttributeSame(
@@ -128,12 +160,32 @@ class FieldTypeRegistryTest extends TestCase
     /**
      * Returns a mock for persistence field type.
      *
-     * @return \eZ\Publish\SPI\Persistence\FieldType
+     * @return \eZ\Publish\SPI\Persistence\FieldType|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFieldTypeMock()
     {
         return $this->getMock(
-            'eZ\\Publish\\SPI\\FieldType\\FieldType'
+            SPIFieldType::class
         );
+    }
+
+    /**
+     * Returns a mock for persistence storage handler registry.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\StorageHandlerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStorageHandlerRegistryMock()
+    {
+        return $this->getMock(StorageHandlerRegistry::class);
+    }
+
+    /**
+     * Returns a mock for persistence storage handler.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\StorageHandler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStorageHandlerMock()
+    {
+        return $this->getMock(StorageHandler::class);
     }
 }

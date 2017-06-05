@@ -20,6 +20,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition('ezpublish.persistence.external_storage_registry.factory', new Definition());
+        $this->setDefinition('ezpublish.persistence.field_type_registry', new Definition());
     }
 
     protected function registerCompilerPass(ContainerBuilder $container)

@@ -1,27 +1,24 @@
 <?php
 
 /**
- * File containing the Storage Handler class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Persistence\Legacy\Content;
+namespace eZ\Publish\Core\Persistence\Doctrine\Content;
 
 use eZ\Publish\Core\Persistence\Content\StorageRegistry;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\StorageHandler as SPIStorageHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
-/**
- * Handler for external storages.
- */
 class StorageHandler implements SPIStorageHandler
 {
     /**
      * Storage registry.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Content\StorageRegistry
      */
     protected $storageRegistry;
 
@@ -35,7 +32,7 @@ class StorageHandler implements SPIStorageHandler
     /**
      * Creates a new storage handler.
      *
-     * @param StorageRegistry $storageRegistry
+     * @param \eZ\Publish\Core\Persistence\Content\StorageRegistry $storageRegistry
      * @param array $context
      */
     public function __construct(StorageRegistry $storageRegistry, array $context)
@@ -64,13 +61,13 @@ class StorageHandler implements SPIStorageHandler
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
+     * @return mixed
      */
     public function copyFieldData(VersionInfo $versionInfo, Field $field, Field $originalField)
     {
-        return $this->storageRegistry->getStorage($field->type)->copyLegacyField(
+        return $this->storageRegistry->getStorage($field->type)->storeFieldData(
             $versionInfo,
             $field,
-            $originalField,
             $this->context
         );
     }
