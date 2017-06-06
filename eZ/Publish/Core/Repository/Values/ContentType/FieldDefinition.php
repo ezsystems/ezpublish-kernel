@@ -30,6 +30,7 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
  * @property-read bool $isSearchable indicates if the field is searchable
  * @property-read bool $isInfoCollector indicates if this field is used for information collection
  * @property-read mixed $defaultValue the default value of the field
+ * @property-read string $mainLanguageCode main language code inherited from the content type
  *
  * @internal Meant for internal use by Repository, type hint against API object instead.
  */
