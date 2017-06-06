@@ -8,7 +8,9 @@
  */
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\MultiLanguageValueDescriptionBase;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
 
 /**
  * This class represents a field definition.
@@ -26,7 +28,7 @@ use eZ\Publish\API\Repository\Values\MultiLanguageValueDescriptionBase;
  * @property-read bool $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
  */
-abstract class FieldDefinition extends MultiLanguageValueDescriptionBase
+abstract class FieldDefinition extends ValueObject implements MultiLanguageName, MultiLanguageDescription
 {
     /**
      * the unique id of this field definition.

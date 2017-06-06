@@ -6,9 +6,11 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 
@@ -29,9 +31,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer Determines if the type is allowed to have children
+ * @property-read bool $isContainer Determines if the type is allowed to have children
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
- * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
+ * @property-read bool $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
  *
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
@@ -41,27 +43,16 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
  */
 class ContentType extends APIContentType
 {
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
+
     /**
      * Content type service to fetch additional information from.
      *
      * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     protected $contentTypeService;
-
-    /**
-     * Contains the human readable name in all provided languages of the
-     * content type.
-     *
-     * @var string[]
-     */
-    protected $names;
-
-    /**
-     * Contains the human readable description of the content type.
-     *
-     * @var string[]
-     */
-    protected $descriptions;
 
     /**
      * Carries the URL for the list of FieldDefinitions for the type.
@@ -84,42 +75,7 @@ class ContentType extends APIContentType
     public function __construct(ContentTypeService $contentTypeService, array $data = array())
     {
         $this->contentTypeService = $contentTypeService;
-
-        foreach ($data as $propertyName => $propertyValue) {
-            $this->$propertyName = $propertyValue;
-        }
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getNames()
-    {
-        return $this->names;
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getName($languageCode = null)
-    {
-        return $this->names[$languageCode];
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getDescriptions()
-    {
-        return $this->descriptions;
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getDescription($languageCode = null)
-    {
-        return $this->descriptions[$languageCode];
+        parent::__construct($data);
     }
 
     /**

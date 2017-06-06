@@ -9,7 +9,9 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
-use eZ\Publish\Core\Repository\Values\MultiLanguageValueTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * this class represents a content type value.
@@ -37,41 +39,42 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageValueTrait;
  */
 class ContentType extends APIContentType
 {
-    use MultiLanguageValueTrait;
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
 
     /**
      * Holds the collection of contenttypegroups the contenttype is assigned to.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
-    protected $contentTypeGroups;
+    protected $contentTypeGroups = [];
 
     /**
      * Contains the content type field definitions from this type.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    protected $fieldDefinitions;
+    protected $fieldDefinitions = [];
 
     /**
      * Field definitions indexed by identifier.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    protected $fieldDefinitionsByIdentifier;
+    protected $fieldDefinitionsByIdentifier = [];
 
     /**
      * Field definitions indexed by id.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    protected $fieldDefinitionsById;
+    protected $fieldDefinitionsById = [];
 
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
-        foreach ($data as $propertyName => $propertyValue) {
-            $this->$propertyName = $propertyValue;
-        }
+        parent::__construct($data);
+        // fieldDefinitions property comes from $data and is set in the ValueObject constructor
         foreach ($this->fieldDefinitions as $fieldDefinition) {
             $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
             $this->fieldDefinitionsById[$fieldDefinition->id] = $fieldDefinition;

@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents a draft of a content type.
@@ -17,6 +18,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
  */
 class ContentTypeDraft extends APIContentTypeDraft
 {
+    use MultiLanguageTrait;
+
     /**
      * Function where list of properties are returned.
      *

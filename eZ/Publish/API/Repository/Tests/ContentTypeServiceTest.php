@@ -2421,6 +2421,39 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test that multi-language logic respects prioritized language list.
+     *
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[]|null $languageCodes
+     */
+    public function testLoadContentTypeWithPrioritizedLanguagesList($languageCodes)
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $this->createContentTypeDraft();
+        $contentTypeService->publishContentTypeDraft($contentType);
+        $contentType = $contentTypeService->loadContentType($contentType->id, $languageCodes);
+
+        /** @var \eZ\Publish\Core\FieldType\TextLine\Value $nameValue */
+        self::assertEquals($contentType->getName($languageCodes[0]), $contentType->getName());
+        self::assertEquals($contentType->getDescription($languageCodes[0]), $contentType->getDescription());
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrioritizedLanguageList()
+    {
+        return [
+            [['eng-US']],
+            [['ger-DE']],
+            [['eng-US', 'ger-DE']],
+            [['ger-DE', 'eng-US']],
+        ];
+    }
+
+    /**
      * Test for the loadContentType() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()

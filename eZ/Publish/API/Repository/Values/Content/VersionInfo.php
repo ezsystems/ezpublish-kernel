@@ -8,7 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\MultiLanguageValueNameBase;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
 
 /**
  * This class holds version information data. It also contains the corresponding {@link Content} to
@@ -24,7 +25,7 @@ use eZ\Publish\API\Repository\Values\MultiLanguageValueNameBase;
  * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
  * @property-read string[] $languageCodes a collection of all languages which exist in this version.
  */
-abstract class VersionInfo extends MultiLanguageValueNameBase
+abstract class VersionInfo extends ValueObject implements MultiLanguageName
 {
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;

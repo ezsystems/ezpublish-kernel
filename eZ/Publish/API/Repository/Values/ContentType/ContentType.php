@@ -8,7 +8,9 @@
  */
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\MultiLanguageValueDescriptionBase;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
 
 /**
  * this class represents a content type value.
@@ -32,7 +34,7 @@ use eZ\Publish\API\Repository\Values\MultiLanguageValueDescriptionBase;
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
-abstract class ContentType extends MultiLanguageValueDescriptionBase
+abstract class ContentType extends ValueObject implements MultiLanguageName, MultiLanguageDescription
 {
     /**
      * @var int Status constant for defined (aka "published") Type
@@ -134,13 +136,6 @@ abstract class ContentType extends MultiLanguageValueDescriptionBase
      * @var bool
      */
     protected $isContainer;
-
-    /**
-     * Main language.
-     *
-     * @var string
-     */
-    protected $mainLanguageCode;
 
     /**
      * If an instance of a content type is created the always available flag is set
