@@ -1302,6 +1302,14 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $updateStruct = $data['updateStruct'];
         $updatedType = $data['updatedType'];
 
+        // update mainLanguageCode of field definitions
+        foreach ($originalType->fieldDefinitions as $fieldDefinition) {
+            $reflection = new \ReflectionClass($fieldDefinition);
+            $reflectionProperty = $reflection->getProperty('mainLanguageCode');
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setValue($fieldDefinition, $updateStruct->mainLanguageCode);
+        }
+
         $expectedValues = array(
             'id' => $originalType->id,
             'names' => $updateStruct->names,
@@ -2424,9 +2432,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test that multi-language logic respects prioritized language list.
      *
      * @dataProvider getPrioritizedLanguageList
-     * @param string[]|null $languageCodes
+     * @param string[] $languageCodes
      */
-    public function testLoadContentTypeWithPrioritizedLanguagesList($languageCodes)
+    public function testLoadContentTypeWithPrioritizedLanguagesList(array $languageCodes)
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
@@ -2435,9 +2443,27 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService->publishContentTypeDraft($contentType);
         $contentType = $contentTypeService->loadContentType($contentType->id, $languageCodes);
 
+        $language = isset($languageCodes[0]) ? $languageCodes[0] : 'eng-US';
         /** @var \eZ\Publish\Core\FieldType\TextLine\Value $nameValue */
-        self::assertEquals($contentType->getName($languageCodes[0]), $contentType->getName());
-        self::assertEquals($contentType->getDescription($languageCodes[0]), $contentType->getDescription());
+        self::assertEquals(
+            $contentType->getName($language),
+            $contentType->getName()
+        );
+        self::assertEquals(
+            $contentType->getDescription($language),
+            $contentType->getDescription()
+        );
+
+        foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
+            self::assertEquals(
+                $fieldDefinition->getName($language),
+                $fieldDefinition->getName()
+            );
+            self::assertEquals(
+                $fieldDefinition->getDescription($language),
+                $fieldDefinition->getDescription()
+            );
+        }
     }
 
     /**
@@ -2446,6 +2472,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     public function getPrioritizedLanguageList()
     {
         return [
+            [[]],
             [['eng-US']],
             [['ger-DE']],
             [['eng-US', 'ger-DE']],
