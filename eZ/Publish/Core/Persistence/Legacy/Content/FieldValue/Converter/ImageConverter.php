@@ -126,6 +126,8 @@ class ImageConverter implements Converter
 </ezimage>
 EOT;
 
+        if (!isset($imageData['uri'])) return null;
+
         return sprintf(
             $xml,
             // <ezimage>
