@@ -113,6 +113,10 @@ class ImageStorage extends GatewayBasedStorage
                 return false;
             }
 
+            if (!isset($field->value->data['id'])) {
+                return false;
+            }
+
             $this->IOService->loadBinaryFile($field->value->data['id']);
 
             $field->value->data = array_merge(
@@ -121,8 +125,6 @@ class ImageStorage extends GatewayBasedStorage
             );
             $field->value->externalData = null;
         }
-
-        if(!isset($field->value->data['id'])){return false;}
 
         $this->getGateway($context)->storeImageReference($field->value->data['uri'], $field->id);
 
