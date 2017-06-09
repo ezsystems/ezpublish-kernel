@@ -492,7 +492,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateGroup->id
         );
 
-        return $this->buildDomainObjectStateObject($spiObjectState);
+        return $this->buildDomainObjectStateObject($spiObjectState, $objectStateGroup);
     }
 
     /**
