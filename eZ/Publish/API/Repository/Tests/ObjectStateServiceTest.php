@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
  *
- * @see eZ\Publish\API\Repository\ObjectStateService
+ * @see \eZ\Publish\API\Repository\ObjectStateService
  * @group object-state
  */
 class ObjectStateServiceTest extends BaseTest
@@ -229,11 +229,11 @@ class ObjectStateServiceTest extends BaseTest
         $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
         $objectStateGroupCreate->names = array(
             'eng-US' => 'Publishing',
-            'eng-GB' => 'Sindelfingen',
+            'ger-DE' => 'Sindelfingen',
         );
         $objectStateGroupCreate->descriptions = array(
             'eng-US' => 'Put something online',
-            'eng-GB' => 'Put something ton Sindelfingen.',
+            'ger-DE' => 'Put something ton Sindelfingen.',
         );
 
         $createdObjectStateGroup = $objectStateService->createObjectStateGroup(
@@ -260,19 +260,19 @@ class ObjectStateServiceTest extends BaseTest
     public function testCreateObjectStateGroupStructValues(ObjectStateGroup $createdObjectStateGroup)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'publishing',
                 'defaultLanguageCode' => 'eng-US',
-                'languageCodes' => array('eng-US', 'eng-GB'),
-                'names' => array(
+                'languageCodes' => ['eng-US', 'ger-DE'],
+                'names' => [
                     'eng-US' => 'Publishing',
-                    'eng-GB' => 'Sindelfingen',
-                ),
-                'descriptions' => array(
+                    'ger-DE' => 'Sindelfingen',
+                ],
+                'descriptions' => [
                     'eng-US' => 'Put something online',
-                    'eng-GB' => 'Put something ton Sindelfingen.',
-                ),
-            ),
+                    'ger-DE' => 'Put something ton Sindelfingen.',
+                ],
+            ],
             $createdObjectStateGroup
         );
         $this->assertNotNull($createdObjectStateGroup->id);
@@ -415,19 +415,25 @@ class ObjectStateServiceTest extends BaseTest
         $repository = $this->getRepository();
         $objectStateService = $repository->getObjectStateService();
 
-        $identifiersToCreate = array(
+        $identifiersToCreate = [
             'first',
             'second',
             'third',
-        );
+        ];
 
-        $createdStateGroups = array();
+        $createdStateGroups = [];
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('dummy');
 
         $groupCreateStruct->defaultLanguageCode = 'eng-US';
-        $groupCreateStruct->names = array('eng-US' => 'Foo');
-        $groupCreateStruct->descriptions = array('eng-US' => 'Foo Bar');
+        $groupCreateStruct->names = [
+            'eng-US' => 'Foo',
+            'ger-DE' => 'GerFoo',
+        ];
+        $groupCreateStruct->descriptions = [
+            'eng-US' => 'Foo Bar',
+            'ger-DE' => 'GerBar',
+        ];
 
         foreach ($identifiersToCreate as $identifier) {
             $groupCreateStruct->identifier = $identifier;
@@ -777,11 +783,13 @@ class ObjectStateServiceTest extends BaseTest
         );
         $objectStateCreateStruct->priority = 23;
         $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
-        $objectStateCreateStruct->names = array(
+        $objectStateCreateStruct->names = [
             'eng-US' => 'Locked and Unlocked',
-        );
+            'ger-DE' => 'geschlossen und ungeschlossen',
+        ];
         $objectStateCreateStruct->descriptions = array(
             'eng-US' => 'A state between locked and unlocked.',
+            'ger-DE' => 'ein Zustand zwischen geschlossen und ungeschlossen.',
         );
 
         // Creates a new object state in the $loadObjectStateGroup with the
@@ -792,18 +800,15 @@ class ObjectStateServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
-            $createdObjectState
-        );
+        $this->assertInstanceOf(ObjectState::class, $createdObjectState);
         // Object sequences are renumbered
         $objectStateCreateStruct->priority = 2;
 
-        return array(
+        return [
             $loadedObjectStateGroup,
             $objectStateCreateStruct,
             $createdObjectState,
-        );
+        ];
     }
 
     /**
