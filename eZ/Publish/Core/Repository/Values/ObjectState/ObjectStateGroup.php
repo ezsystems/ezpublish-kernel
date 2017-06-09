@@ -9,9 +9,6 @@
 namespace eZ\Publish\Core\Repository\Values\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup;
-use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
-use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
-use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents an object state group value.
@@ -25,7 +22,76 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
  */
 class ObjectStateGroup extends APIObjectStateGroup
 {
-    use MultiLanguageTrait;
-    use MultiLanguageNameTrait;
-    use MultiLanguageDescriptionTrait;
+    /**
+     * Holds the collection of names with languageCode keys.
+     *
+     * @var string[]
+     */
+    protected $names = [];
+
+    /**
+     * Holds the collection of descriptions with languageCode keys.
+     *
+     * @var string[]
+     */
+    protected $descriptions = [];
+
+    /**
+     * Prioritized languages provided by user when retrieving object using API.
+     *
+     * @var string[]
+     */
+    protected $prioritizedLanguages = [];
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function getNames()
+    {
+        return $this->names;
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function getName($languageCode = null)
+    {
+        if (!empty($languageCode)) {
+            return isset($this->names[$languageCode]) ? $this->names[$languageCode] : null;
+        }
+
+        foreach ($this->prioritizedLanguages as $prioritizedLanguageCode) {
+            if (isset($this->names[$prioritizedLanguageCode])) {
+                return $this->names[$prioritizedLanguageCode];
+            }
+        }
+
+        return $this->names[$this->defaultLanguageCode];
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function getDescriptions()
+    {
+        return $this->descriptions;
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function getDescription($languageCode = null)
+    {
+        if (!empty($languageCode)) {
+            return isset($this->descriptions[$languageCode]) ? $this->descriptions[$languageCode] : null;
+        }
+
+        foreach ($this->prioritizedLanguages as $prioritizedLanguageCode) {
+            if (isset($this->descriptions[$prioritizedLanguageCode])) {
+                return $this->descriptions[$prioritizedLanguageCode];
+            }
+        }
+
+        return $this->descriptions[$this->defaultLanguageCode];
+    }
 }

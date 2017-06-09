@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\Core\REST\Common\RequestParser;
@@ -103,15 +102,9 @@ class ObjectStateService implements APIObjectStateService, Sessionable
     }
 
     /**
-     * Loads a object state group.
-     *
-     * @param mixed $objectStateGroupId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * {@inheritdoc}
      */
-    public function loadObjectStateGroup($objectStateGroupId)
+    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = [])
     {
         $response = $this->client->request(
             'GET',
@@ -125,16 +118,9 @@ class ObjectStateService implements APIObjectStateService, Sessionable
     }
 
     /**
-     * Loads all object state groups.
-     *
-     * @param int $offset
-     * @param int $limit
-     *
-     * @todo Implement offset & limit
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
+     * {@inheritdoc}
      */
-    public function loadObjectStateGroups($offset = 0, $limit = -1)
+    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = [])
     {
         $response = $this->client->request(
             'GET',
@@ -148,13 +134,9 @@ class ObjectStateService implements APIObjectStateService, Sessionable
     }
 
     /**
-     * This method returns the ordered list of object states of a group.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
+     * {@inheritdoc}
      */
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup)
+    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = [])
     {
         $values = $this->requestParser->parse('objectstategroup', $objectStateGroup->id);
         $response = $this->client->request(
@@ -251,15 +233,9 @@ class ObjectStateService implements APIObjectStateService, Sessionable
     }
 
     /**
-     * Loads an object state.
-     *
-     * @param mixed $stateId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     * {@inheritdoc}
      */
-    public function loadObjectState($stateId)
+    public function loadObjectState($stateId, array $prioritizedLanguages = [])
     {
         $response = $this->client->request(
             'GET',
