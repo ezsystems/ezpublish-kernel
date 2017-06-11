@@ -4,9 +4,6 @@ parameters:
     ezpublish.security.voter.value_object.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter
     ezpublish.security.controller.class: eZ\Publish\Core\MVC\Symfony\Controller\SecurityController
     ezpublish.security.login_listener.class: eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
-    ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
-    ezpublish.user.hash_generator.class: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
-    ezpublish.user.identity_definer.role_id.class: eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider\RoleContextProvider
 
 services:
     ezpublish.security.user_provider:
@@ -42,19 +39,3 @@ services:
             - "%fragment.path%"
         tags:
             - { name: kernel.event_subscriber }
-
-    ezpublish.user.identity:
-        class: "%ezpublish.user.identity.class%"
-
-    ezpublish.user.hash_generator:
-        class: "%ezpublish.user.hash_generator.class%"
-        calls:
-            - [setIdentity, ["@ezpublish.user.identity"]]
-        tags:
-            - { name: fos_http_cache.user_context_provider }
-
-    ezpublish.user.identity_definer.role_id:
-        class: "%ezpublish.user.identity_definer.role_id.class%"
-        arguments: ["@ezpublish.api.repository"]
-        tags:
-            - { name: fos_http_cache.user_context_provider }

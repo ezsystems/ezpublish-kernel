@@ -1,16 +1,5 @@
 parameters:
     ezpublish.cache_pool.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
-    ezpublish.http_cache.purger.instant.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\InstantCachePurger
-    ezpublish.http_cache.purge_client.local.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient
-    ezpublish.http_cache.store.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore
-    ezpublish.http_cache.store.root: "%kernel.cache_dir%/http_cache"
-    ezpublish.http_cache.cache_manager.class: FOS\HttpCacheBundle\CacheManager
-    ezpublish.http_cache.proxy_client.varnish.factory.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\VarnishProxyClientFactory
-    ezpublish.http_cache.purge_client.fos.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient
-    ezpublish.http_cache.event_dispatcher.class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
-    ezpublish.http_cache.content.base_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\AssignedLocationsListener
-    ezpublish.http_cache.content.parent_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\ParentLocationsListener
-    ezpublish.cache_clear.content.related_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\RelatedLocationsListener
 
 services:
     # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined
@@ -24,66 +13,6 @@ services:
         class: "%ezpublish.cache_pool.factory.class%"
         calls:
             - [setContainer, ["@service_container"]]
-
-    ezpublish.http_cache.purger.instant:
-        class: "%ezpublish.http_cache.purger.instant.class%"
-        arguments:
-            - '@ezpublish.http_cache.purge_client'
-            - '@ezpublish.api.service.inner_content'
-            - '@ezpublish.http_cache.event_dispatcher'
-            - '@ezpublish.api.repository'
-        tags:
-            - { name: kernel.cache_clearer }
-
-    ezpublish.http_cache.purger:
-        alias: ezpublish.http_cache.purger.instant
-
-    ezpublish.http_cache.purge_client.local:
-        class: "%ezpublish.http_cache.purge_client.local.class%"
-        arguments: ["@ezpublish.http_cache.store"]
-
-    ezpublish.http_cache.store:
-        class: "%ezpublish.http_cache.store.class%"
-        arguments: ["%ezpublish.http_cache.store.root%"]
-
-    # Duplicate fos_http_cache.cache_manager not to interfere with it.
-    # Service will be modified at compile time, to enforce injection of Varnish proxy client.
-    ezpublish.http_cache.cache_manager:
-        parent: fos_http_cache.cache_manager
-        class: "%ezpublish.http_cache.cache_manager.class%"
-
-    ezpublish.http_cache.proxy_client.varnish.factory:
-        class: "%ezpublish.http_cache.proxy_client.varnish.factory.class%"
-        arguments: ["@ezpublish.config.resolver", "@ezpublish.config.dynamic_setting.parser", "%fos_http_cache.proxy_client.varnish.class%"]
-
-    ezpublish.http_cache.purge_client.fos:
-        class: "%ezpublish.http_cache.purge_client.fos.class%"
-        arguments: ["@ezpublish.http_cache.cache_manager"]
-
-    ezpublish.http_cache.purge_client:
-        alias: ezpublish.http_cache.purge_client.local
-
-    ezpublish.http_cache.event_dispatcher:
-        class: "%ezpublish.http_cache.event_dispatcher.class%"
-        arguments: ["@service_container"]
-
-    ezpublish.cache_clear.content.base_locations_listener:
-        class: "%ezpublish.http_cache.content.base_locations_listener.class%"
-        arguments: ["@ezpublish.api.service.location"]
-        tags:
-            - { name: ezpublish.http_cache.event_subscriber }
-
-    ezpublish.cache_clear.content.parent_locations_listener:
-        class: "%ezpublish.http_cache.content.parent_locations_listener.class%"
-        arguments: ["@ezpublish.api.service.location"]
-        tags:
-            - { name: ezpublish.http_cache.event_subscriber }
-
-    ezpublish.cache_clear.content.related_locations_listener:
-        class: "%ezpublish.cache_clear.content.related_locations_listener.class%"
-        arguments: ["@ezpublish.api.repository"]
-        tags:
-            - { name: ezpublish.http_cache.event_subscriber }
 
     ezpublish.cache_warmer.config_resolver_cleanup:
         class: eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ConfigResolverCleanup

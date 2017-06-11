@@ -1,9 +1,0 @@
-proxy_client:
-    default: varnish
-    varnish:
-        servers: [$http_cache.purge_servers$]
-
-user_context:
-    enabled: true
-    hash_cache_ttl: 600
-    user_hash_header: X-User-Hash
