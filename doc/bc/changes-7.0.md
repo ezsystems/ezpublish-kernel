@@ -33,3 +33,6 @@ and in some cases changes features._
 
 
 ## Removed features
+
+* eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
+  Has been deprecated for a while in favour of lazy services by Symfony.

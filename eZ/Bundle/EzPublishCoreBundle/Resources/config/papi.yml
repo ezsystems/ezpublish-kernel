@@ -3,7 +3,6 @@ parameters:
 
     # API
     ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
-    ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
     ezpublish.api.search_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
     ezpublish.api.search_engine.indexer.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineIndexerFactory
@@ -34,17 +33,6 @@ services:
             - "%ezpublish.api.role.policy_map%"
         calls:
             - [setContainer, ["@service_container"]]
-
-    # Deprecated
-    ezpublish.api.repository.lazy_factory:
-        class: "%ezpublish.api.repository.lazy_factory.class%"
-        arguments: ["@ezpublish.api.repository"]
-
-    # Deprecated
-    # Use ezpublish.api.repository lazy service instead
-    ezpublish.api.repository.lazy:
-        class: Closure
-        factory: ["@ezpublish.api.repository.lazy_factory", buildRepository]
 
     ezpublish.api.storage_engine.factory:
         class: "%ezpublish.api.storage_engine.factory.class%"
