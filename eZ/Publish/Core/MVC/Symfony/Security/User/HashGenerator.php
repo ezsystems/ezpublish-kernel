@@ -18,6 +18,7 @@ use FOS\HttpCache\UserContext\UserContext;
  * User hash generator.
  *
  * @deprecated since 5.4. Will be removed in 6.0. Use FOSHttpCacheBundle user context feature instead.
+ * @todo Remove with related classes.
  */
 class HashGenerator implements HashGeneratorInterface, IdentityAware, ContextProviderInterface
 {

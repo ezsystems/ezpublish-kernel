@@ -14,7 +14,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPa
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\HttpCachePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ImaginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
@@ -77,7 +76,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new FragmentPass());
         $container->addCompilerPass(new StorageConnectionPass());
         $container->addCompilerPass(new ImaginePass());
-        $container->addCompilerPass(new HttpCachePass());
         $container->addCompilerPass(new ComplexSettingsPass(new ComplexSettingParser()));
         $container->addCompilerPass(new ConfigResolverParameterPass(new DynamicSettingParser()));
         $container->addCompilerPass(new AsseticPass());
