@@ -69,3 +69,11 @@ and in some cases changes features._
     - ezpublish.cache_clear.content.parent_locations_listener
     - ezpublish.cache_clear.content.related_locations_listener
     - ezpublish.http_cache.signalslot.*
+
+ * User identify / hash generation duplicated by FosHttpCache features
+  - Classes
+    - eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
+    - eZ\Publish\Core\MVC\Symfony\Security\User\Identity
+  - Services
+    - ezpublish.user.identity
+    - ezpublish.user.hash_generator

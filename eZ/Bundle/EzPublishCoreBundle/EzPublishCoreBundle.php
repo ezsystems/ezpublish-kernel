@@ -14,7 +14,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPa
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ImaginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterSearchEngineIndexerPass;
@@ -69,7 +68,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new LocationViewPass());
         $container->addCompilerPass(new BlockViewPass());
         $container->addCompilerPass(new SignalSlotPass());
-        $container->addCompilerPass(new IdentityDefinerPass());
         $container->addCompilerPass(new RouterPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new RichTextHtml5ConverterPass());
