@@ -81,7 +81,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     protected $innerContentType;
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -89,7 +89,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getName($languageCode = null)
     {
@@ -97,7 +97,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescriptions()
     {
@@ -105,7 +105,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescription($languageCode = null)
     {

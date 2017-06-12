@@ -116,7 +116,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = [])
     {
@@ -132,7 +132,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = [])
     {
@@ -158,7 +158,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function loadContentTypeGroups(array $prioritizedLanguages = [])
     {
@@ -469,7 +469,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function loadContentType($contentTypeId, array $prioritizedLanguages = [])
     {
@@ -554,7 +554,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = [])
     {
@@ -571,7 +571,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = [])
     {
@@ -588,7 +588,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
     {

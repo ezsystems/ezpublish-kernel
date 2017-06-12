@@ -68,7 +68,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -76,7 +76,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getName($languageCode = null)
     {
@@ -84,7 +84,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescriptions()
     {
@@ -92,7 +92,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescription($languageCode = null)
     {

@@ -21,7 +21,7 @@ trait MultiLanguageNameTrait
     protected $names = [];
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -29,7 +29,7 @@ trait MultiLanguageNameTrait
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getName($languageCode = null)
     {

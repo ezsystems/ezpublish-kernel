@@ -26,7 +26,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     protected $descriptions;
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -34,7 +34,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getName($languageCode = null)
     {
@@ -43,7 +43,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescriptions()
     {
@@ -51,7 +51,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescription($languageCode = null)
     {

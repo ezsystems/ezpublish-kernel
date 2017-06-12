@@ -21,7 +21,7 @@ trait MultiLanguageDescriptionTrait
     protected $descriptions = [];
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescriptions()
     {
@@ -29,7 +29,7 @@ trait MultiLanguageDescriptionTrait
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getDescription($languageCode = null)
     {

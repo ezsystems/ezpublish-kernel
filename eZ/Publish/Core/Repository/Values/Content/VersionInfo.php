@@ -51,7 +51,7 @@ class VersionInfo extends APIVersionInfo
     protected $prioritizedNameLanguageCode;
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getContentInfo()
     {
@@ -59,7 +59,7 @@ class VersionInfo extends APIVersionInfo
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -67,7 +67,7 @@ class VersionInfo extends APIVersionInfo
     }
 
     /**
-     * {@inheritdoc}.
+     * {@inheritdoc}
      */
     public function getName($languageCode = null)
     {
