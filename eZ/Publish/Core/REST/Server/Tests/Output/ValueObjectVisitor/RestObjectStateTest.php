@@ -33,7 +33,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
                     'id' => 42,
                     'identifier' => 'test-state',
                     'priority' => '0',
-                    'defaultLanguageCode' => 'eng-GB',
+                    'mainLanguageCode' => 'eng-GB',
                     'languageCodes' => array('eng-GB', 'eng-US'),
                     'names' => array(
                         'eng-GB' => 'State name EN',

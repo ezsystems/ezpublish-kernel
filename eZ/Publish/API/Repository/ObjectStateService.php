@@ -39,31 +39,34 @@ interface ObjectStateService
      * Loads a object state group.
      *
      * @param mixed $objectStateGroupId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function loadObjectStateGroup($objectStateGroupId);
+    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = []);
 
     /**
      * Loads all object state groups.
      *
      * @param int $offset
      * @param int $limit
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
-    public function loadObjectStateGroups($offset = 0, $limit = -1);
+    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = []);
 
     /**
      * This method returns the ordered list of object states of a group.
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup);
+    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = []);
 
     /**
      * Updates an object state group.
@@ -107,12 +110,13 @@ interface ObjectStateService
      * Loads an object state.
      *
      * @param mixed $stateId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function loadObjectState($stateId);
+    public function loadObjectState($stateId, array $prioritizedLanguages = []);
 
     /**
      * Updates an object state.

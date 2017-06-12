@@ -115,36 +115,28 @@ class ObjectStateService implements ObjectStateServiceInterface
     }
 
     /**
-     * Loads a object state group.
-     *
-     * @param mixed $objectStateGroupId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * {@inheritdoc}
      */
-    public function loadObjectStateGroup($objectStateGroupId)
+    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = [])
     {
         $spiObjectStateGroup = $this->objectStateHandler->loadGroup($objectStateGroupId);
 
-        return $this->buildDomainObjectStateGroupObject($spiObjectStateGroup);
+        return $this->buildDomainObjectStateGroupObject($spiObjectStateGroup, $prioritizedLanguages);
     }
 
     /**
-     * Loads all object state groups.
-     *
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
+     * {@inheritdoc}
      */
-    public function loadObjectStateGroups($offset = 0, $limit = -1)
+    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = [])
     {
         $spiObjectStateGroups = $this->objectStateHandler->loadAllGroups($offset, $limit);
 
         $objectStateGroups = array();
         foreach ($spiObjectStateGroups as $spiObjectStateGroup) {
-            $objectStateGroups[] = $this->buildDomainObjectStateGroupObject($spiObjectStateGroup);
+            $objectStateGroups[] = $this->buildDomainObjectStateGroupObject(
+                $spiObjectStateGroup,
+                $prioritizedLanguages
+            );
         }
 
         return $objectStateGroups;
@@ -154,16 +146,23 @@ class ObjectStateService implements ObjectStateServiceInterface
      * This method returns the ordered list of object states of a group.
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function loadObjectStates(APIObjectStateGroup $objectStateGroup)
-    {
+    public function loadObjectStates(
+        APIObjectStateGroup $objectStateGroup,
+        array $prioritizedLanguages = []
+    ) {
         $spiObjectStates = $this->objectStateHandler->loadObjectStates($objectStateGroup->id);
 
         $objectStates = array();
         foreach ($spiObjectStates as $spiObjectState) {
-            $objectStates[] = $this->buildDomainObjectStateObject($spiObjectState, $objectStateGroup);
+            $objectStates[] = $this->buildDomainObjectStateObject(
+                $spiObjectState,
+                $objectStateGroup,
+                $prioritizedLanguages
+            );
         }
 
         return $objectStates;
@@ -312,19 +311,13 @@ class ObjectStateService implements ObjectStateServiceInterface
     }
 
     /**
-     * Loads an object state.
-     *
-     * @param mixed $stateId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     * {@inheritdoc}
      */
-    public function loadObjectState($stateId)
+    public function loadObjectState($stateId, array $prioritizedLanguages = [])
     {
         $spiObjectState = $this->objectStateHandler->load($stateId);
 
-        return $this->buildDomainObjectStateObject($spiObjectState);
+        return $this->buildDomainObjectStateObject($spiObjectState, null, $prioritizedLanguages);
     }
 
     /**
@@ -499,7 +492,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateGroup->id
         );
 
-        return $this->buildDomainObjectStateObject($spiObjectState);
+        return $this->buildDomainObjectStateObject($spiObjectState, $objectStateGroup);
     }
 
     /**
@@ -571,24 +564,29 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $spiObjectState
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    protected function buildDomainObjectStateObject(SPIObjectState $spiObjectState, APIObjectStateGroup $objectStateGroup = null)
-    {
+    protected function buildDomainObjectStateObject(
+        SPIObjectState $spiObjectState,
+        APIObjectStateGroup $objectStateGroup = null,
+        array $prioritizedLanguages = []
+    ) {
         $objectStateGroup = $objectStateGroup ?: $this->loadObjectStateGroup($spiObjectState->groupId);
 
         return new ObjectState(
-            array(
+            [
                 'id' => $spiObjectState->id,
                 'identifier' => $spiObjectState->identifier,
                 'priority' => $spiObjectState->priority,
-                'defaultLanguageCode' => $spiObjectState->defaultLanguage,
+                'mainLanguageCode' => $spiObjectState->defaultLanguage,
                 'languageCodes' => $spiObjectState->languageCodes,
                 'names' => $spiObjectState->name,
                 'descriptions' => $spiObjectState->description,
                 'objectStateGroup' => $objectStateGroup,
-            )
+                'prioritizedLanguages' => $prioritizedLanguages,
+            ]
         );
     }
 
@@ -596,20 +594,24 @@ class ObjectStateService implements ObjectStateServiceInterface
      * Converts the object state group SPI value object to API value object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $spiObjectStateGroup
+     * @param array $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    protected function buildDomainObjectStateGroupObject(SPIObjectStateGroup $spiObjectStateGroup)
-    {
+    protected function buildDomainObjectStateGroupObject(
+        SPIObjectStateGroup $spiObjectStateGroup,
+        array $prioritizedLanguages = []
+    ) {
         return new ObjectStateGroup(
-            array(
+            [
                 'id' => $spiObjectStateGroup->id,
                 'identifier' => $spiObjectStateGroup->identifier,
-                'defaultLanguageCode' => $spiObjectStateGroup->defaultLanguage,
+                'mainLanguageCode' => $spiObjectStateGroup->defaultLanguage,
                 'languageCodes' => $spiObjectStateGroup->languageCodes,
                 'names' => $spiObjectStateGroup->name,
                 'descriptions' => $spiObjectStateGroup->description,
-            )
+                'prioritizedLanguages' => $prioritizedLanguages,
+            ]
         );
     }
 

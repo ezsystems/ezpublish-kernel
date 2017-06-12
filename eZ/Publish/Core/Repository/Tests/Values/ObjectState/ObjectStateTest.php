@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\ObjectState;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
+use eZ\Publish\Core\Repository\Tests\Values\MultiLanguageTestTrait;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 use PHPUnit_Framework_TestCase;
 
@@ -18,6 +19,7 @@ use PHPUnit_Framework_TestCase;
 class ObjectStateTest extends PHPUnit_Framework_TestCase
 {
     use ValueObjectTestTrait;
+    use MultiLanguageTestTrait;
 
     /**
      * Test a new class and default values on properties.
@@ -33,13 +35,43 @@ class ObjectStateTest extends PHPUnit_Framework_TestCase
                 'id' => null,
                 'identifier' => null,
                 'priority' => null,
-                'defaultLanguageCode' => null,
+                'mainLanguageCode' => null,
                 'languageCodes' => null,
                 'names' => [],
                 'descriptions' => [],
             ],
             $objectState
         );
+    }
+
+    /**
+     * Test a new class with unified multi language logic properties.
+     *
+     * @return \eZ\Publish\Core\Repository\Values\ObjectState\ObjectState
+     */
+    public function testNewClassWithMultiLanguageProperties()
+    {
+        $properties = [
+            'names' => [
+                'eng-US' => 'Name',
+                'pol-PL' => 'Nazwa',
+            ],
+            'descriptions' => [
+                'eng-US' => 'Description',
+                'pol-PL' => 'Opis',
+            ],
+            'mainLanguageCode' => 'eng-US',
+            'prioritizedLanguages' => ['pol-PL', 'eng-US'],
+        ];
+
+        $objectState = new ObjectState($properties);
+        $this->assertPropertiesCorrect($properties, $objectState);
+
+        // BC test:
+        self::assertTrue(isset($objectState->defaultLanguageCode));
+        self::assertSame('eng-US', $objectState->defaultLanguageCode);
+
+        return $objectState;
     }
 
     /**
