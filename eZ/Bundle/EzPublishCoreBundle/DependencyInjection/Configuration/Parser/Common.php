@@ -67,9 +67,11 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             ->end()
             ->arrayNode('api_keys')
                 ->info('Collection of API keys')
+                ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('google_maps')
                         ->info('Google Maps API Key, required as of Google Maps v3 to make sure maps show up correctly.')
+                        ->defaultNull()
                     ->end()
                 ->end()
             ->end()
@@ -167,9 +169,10 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         if (isset($scopeSettings['binary_dir'])) {
             $contextualizer->setContextualParameter('binary_dir', $currentScope, $scopeSettings['binary_dir']);
         }
-        if (isset($scopeSettings['api_keys']['google_maps'])) {
-            $contextualizer->setContextualParameter('api_keys', $currentScope, $scopeSettings['api_keys']);
-            $contextualizer->setContextualParameter('api_keys.google_maps', $currentScope, $scopeSettings['api_keys']['google_maps']);
+
+        $contextualizer->setContextualParameter('api_keys', $currentScope, $scopeSettings['api_keys']);
+        foreach ($scopeSettings['api_keys'] as $key => $value) {
+            $contextualizer->setContextualParameter('api_keys.' . $key, $currentScope, $value);
         }
 
         // session_name setting is deprecated in favor of session.name
