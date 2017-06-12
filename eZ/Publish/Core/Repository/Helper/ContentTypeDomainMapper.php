@@ -84,7 +84,11 @@ class ContentTypeDomainMapper
 
         $fieldDefinitions = array();
         foreach ($spiContentType->fieldDefinitions as $spiFieldDefinition) {
-            $fieldDefinitions[] = $this->buildFieldDefinitionDomainObject($spiFieldDefinition, $prioritizedLanguages);
+            $fieldDefinitions[] = $this->buildFieldDefinitionDomainObject(
+                $spiFieldDefinition,
+                $mainLanguageCode,
+                $prioritizedLanguages
+            );
         }
 
         return new ContentType(
@@ -221,11 +225,12 @@ class ContentTypeDomainMapper
      * Builds a FieldDefinition domain object from value object returned by persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $spiFieldDefinition
+     * @param string $mainLanguageCode
      * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
-    public function buildFieldDefinitionDomainObject(SPIFieldDefinition $spiFieldDefinition, array $prioritizedLanguages = [])
+    public function buildFieldDefinitionDomainObject(SPIFieldDefinition $spiFieldDefinition, $mainLanguageCode, array $prioritizedLanguages = [])
     {
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->fieldTypeRegistry->getFieldType($spiFieldDefinition->fieldType);
@@ -246,6 +251,7 @@ class ContentTypeDomainMapper
                 'fieldSettings' => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
                 'validatorConfiguration' => (array)$spiFieldDefinition->fieldTypeConstraints->validators,
                 'prioritizedLanguages' => $prioritizedLanguages,
+                'mainLanguageCode' => $mainLanguageCode,
             )
         );
 
