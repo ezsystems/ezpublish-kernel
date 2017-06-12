@@ -52,7 +52,7 @@ class ObjectState extends BaseParser
                 'id' => $data['_href'],
                 'identifier' => $data['identifier'],
                 'priority' => (int)$data['priority'],
-                'defaultLanguageCode' => $data['defaultLanguageCode'],
+                'mainLanguageCode' => $data['defaultLanguageCode'],
                 'languageCodes' => explode(',', $data['languageCodes']),
                 'names' => $names,
                 'descriptions' => $descriptions,
