@@ -169,6 +169,25 @@ class CommonTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('anonymous_user_id', $anonymousUserId, 'ezdemo_site');
     }
 
+    public function testApiKeysSettings()
+    {
+        $key = 'my_key';
+        $this->load(
+            array(
+                'system' => array(
+                    'ezdemo_group' => array(
+                        'api_keys' => array(
+                            'google_maps' => $key,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $this->assertConfigResolverParameterValue('api_keys', ['google_maps' => $key], 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('api_keys.google_maps', $key, 'ezdemo_site');
+    }
+
     public function testUserSettings()
     {
         $layout = 'somelayout.html.twig';
