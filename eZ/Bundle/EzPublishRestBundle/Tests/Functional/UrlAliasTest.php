@@ -19,7 +19,7 @@ class UrlAliasTest extends RESTFunctionalTestCase
      */
     public function testCreateFolder()
     {
-        $folderArray = $this->createFolder(__METHOD__, '/api/ezp/v2/content/locations/1/2');
+        $folderArray = $this->createFolder('UrlAliasTest_testCreateFolder', '/api/ezp/v2/content/locations/1/2');
         $folderLocations = $this->getContentLocations($folderArray['_href']);
 
         return $folderLocations['LocationList']['Location'][0]['_href'];
