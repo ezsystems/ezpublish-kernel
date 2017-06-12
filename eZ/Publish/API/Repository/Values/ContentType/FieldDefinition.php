@@ -27,7 +27,6 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
  * @property-read bool $isSearchable indicates if the field is searchable
  * @property-read bool $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
- * @property-read string $mainLanguageCode main language code inherited from the content type
  */
 abstract class FieldDefinition extends ValueObject implements MultiLanguageName, MultiLanguageDescription
 {

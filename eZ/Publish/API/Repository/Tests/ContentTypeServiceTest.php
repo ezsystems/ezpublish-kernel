@@ -1241,7 +1241,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
      */
     public function testUpdateContentTypeDraft()
     {
@@ -1258,7 +1257,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeUpdate->urlAliasSchema = 'url@alias|scheme';
         $typeUpdate->nameSchema = '@name@scheme@';
         $typeUpdate->isContainer = true;
-        $typeUpdate->mainLanguageCode = 'ger-DE';
+        $typeUpdate->mainLanguageCode = 'eng-US';
         $typeUpdate->defaultAlwaysAvailable = false;
         $typeUpdate->modifierId = $modifierId;
         $typeUpdate->modificationDate = $this->createDateTime();
@@ -1301,14 +1300,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $originalType = $data['originalType'];
         $updateStruct = $data['updateStruct'];
         $updatedType = $data['updatedType'];
-
-        // update mainLanguageCode of field definitions
-        foreach ($originalType->fieldDefinitions as $fieldDefinition) {
-            $reflection = new \ReflectionClass($fieldDefinition);
-            $reflectionProperty = $reflection->getProperty('mainLanguageCode');
-            $reflectionProperty->setAccessible(true);
-            $reflectionProperty->setValue($fieldDefinition, $updateStruct->mainLanguageCode);
-        }
 
         $expectedValues = array(
             'id' => $originalType->id,

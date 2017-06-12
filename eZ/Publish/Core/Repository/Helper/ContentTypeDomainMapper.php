@@ -225,6 +225,7 @@ class ContentTypeDomainMapper
      * Builds a FieldDefinition domain object from value object returned by persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $spiFieldDefinition
+     * @param string $mainLanguageCode
      * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
