@@ -168,7 +168,7 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             $contextualizer->setContextualParameter('binary_dir', $currentScope, $scopeSettings['binary_dir']);
         }
         if (isset($scopeSettings['api_keys']['google_maps'])) {
-            $contextualizer->setContextualParameter('api_keys', $currentScope, ['google_maps' => $scopeSettings['api_keys']['google_maps']]);
+            $contextualizer->setContextualParameter('api_keys', $currentScope, $scopeSettings['api_keys']);
             $contextualizer->setContextualParameter('api_keys.google_maps', $currentScope, $scopeSettings['api_keys']['google_maps']);
         }
 
