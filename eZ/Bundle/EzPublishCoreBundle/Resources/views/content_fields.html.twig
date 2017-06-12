@@ -311,7 +311,6 @@
 
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
     {% set mapType = parameters.mapType|default( defaultMapType ) %}
-    {% set scrollWheel = parameters.scrollWheel|default( defaultScrollWheel ) %}
 
     {% set mapWidth, mapHeight = defaultWidth, defaultHeight %}
     {% if parameters.width is defined %}
@@ -335,6 +334,11 @@
     {% set draggable = defaultDraggable %}
     {% if parameters.draggable is defined and not parameters.draggable %}
         {% set draggable = 'false' %}
+    {% endif %}
+
+    {% set scrollWheel = defaultScrollWheel %}
+    {% if parameters.scrollWheel is defined and not parameters.scrollWheel %}
+        {% set scrollWheel = 'false' %}
     {% endif %}
 
     {% if showInfo %}
