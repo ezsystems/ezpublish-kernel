@@ -41,6 +41,7 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    # @todo Move to ezplatform-http-cache to drop FOSHttpCache dependency compactly from kernel?
     ezpublish.user.identity_definer.role_id:
         class: "%ezpublish.user.identity_definer.role_id.class%"
         arguments: ["@ezpublish.api.repository"]

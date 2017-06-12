@@ -23,6 +23,11 @@ use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
 use FOS\HttpCache\UserContext\UserContext;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class RoleContextProviderTest.
+ *
+ * @todo Move to ezplatform-http-cache to drop FOSHttpCache dependency compactly from kernel?
+ */
 class RoleContextProviderTest extends TestCase
 {
     /**

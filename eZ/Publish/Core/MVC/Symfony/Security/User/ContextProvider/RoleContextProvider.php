@@ -10,13 +10,15 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
-use FOS\HttpCache\UserContext\ContextProviderInterface;
+use FOS\HttpCache\UserContext\ContextProvider;
 use FOS\HttpCache\UserContext\UserContext;
 
 /**
  * Identity definer based on current user role ids and role limitations.
+ *
+ * @todo Move to ezplatform-http-cache to drop FOSHttpCache dependency compactly from kernel?
  */
-class RoleContextProvider implements ContextProviderInterface
+class RoleContextProvider implements ContextProvider
 {
     /**
      * @var \eZ\Publish\Core\Repository\Repository
