@@ -30,7 +30,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
             array(
                 'id' => 42,
                 'identifier' => 'test-group',
-                'defaultLanguageCode' => 'eng-GB',
+                'mainLanguageCode' => 'eng-GB',
                 'languageCodes' => array('eng-GB', 'eng-US'),
                 'names' => array(
                     'eng-GB' => 'Group name EN',
