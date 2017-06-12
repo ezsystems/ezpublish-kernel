@@ -418,7 +418,7 @@ XML;
      */
     public function testAssignRoleToUserWithLimitation(array $limitation)
     {
-        $roleHref = $this->createAndPublishRole(__METHOD__ . '_' . $limitation['identifier']);
+        $roleHref = $this->createAndPublishRole('testAssignRoleToUserWithLimitation_' . $limitation['identifier']);
 
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
