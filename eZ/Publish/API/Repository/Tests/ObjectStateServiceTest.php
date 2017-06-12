@@ -262,7 +262,7 @@ class ObjectStateServiceTest extends BaseTest
         $this->assertPropertiesCorrect(
             [
                 'identifier' => 'publishing',
-                'defaultLanguageCode' => 'eng-US',
+                'mainLanguageCode' => 'eng-US',
                 'languageCodes' => ['eng-US', 'ger-DE'],
                 'names' => [
                     'eng-US' => 'Publishing',
@@ -341,7 +341,7 @@ class ObjectStateServiceTest extends BaseTest
             [
                 'id' => 2,
                 'identifier' => 'ez_lock',
-                'defaultLanguageCode' => 'eng-US',
+                'mainLanguageCode' => 'eng-US',
                 'languageCodes' => ['eng-US'],
                 'names' => ['eng-US' => 'Lock'],
                 'descriptions' => ['eng-US' => ''],
@@ -672,7 +672,7 @@ class ObjectStateServiceTest extends BaseTest
             [
                 'id' => 2,
                 'identifier' => 'ez_lock',
-                'defaultLanguageCode' => 'eng-GB',
+                'mainLanguageCode' => 'eng-GB',
                 'languageCodes' => ['eng-GB'],
                 'names' => ['eng-GB' => 'Test'],
                 // descriptions array should have an empty value for eng-GB
@@ -849,7 +849,7 @@ class ObjectStateServiceTest extends BaseTest
             [
                 'identifier' => 'test',
                 'priority' => 0,
-                'defaultLanguageCode' => 'eng-GB',
+                'mainLanguageCode' => 'eng-GB',
                 'languageCodes' => ['eng-GB'],
                 'names' => ['eng-GB' => 'Test'],
                 'descriptions' => ['eng-GB' => 'Test description'],
@@ -983,7 +983,7 @@ class ObjectStateServiceTest extends BaseTest
                 'id' => 2,
                 'identifier' => 'locked',
                 'priority' => 1,
-                'defaultLanguageCode' => 'eng-US',
+                'mainLanguageCode' => 'eng-US',
                 'languageCodes' => array(0 => 'eng-US'),
                 'names' => array('eng-US' => 'Locked'),
                 'descriptions' => array('eng-US' => ''),
@@ -1281,7 +1281,7 @@ class ObjectStateServiceTest extends BaseTest
                 'id' => 1,
                 'identifier' => 'test',
                 'priority' => 0,
-                'defaultLanguageCode' => 'eng-US',
+                'mainLanguageCode' => 'eng-US',
                 'languageCodes' => ['eng-US'],
                 'names' => ['eng-US' => 'Test'],
                 // Original value of empty description for eng-US should be kept
@@ -1360,7 +1360,7 @@ class ObjectStateServiceTest extends BaseTest
                 'id' => $loadedObjectState->id,
                 'identifier' => $updateStateStruct->identifier,
                 'priority' => $loadedObjectState->priority,
-                'defaultLanguageCode' => $updateStateStruct->defaultLanguageCode,
+                'mainLanguageCode' => $updateStateStruct->defaultLanguageCode,
                 'languageCodes' => array('eng-US', 'ger-DE'),
                 'names' => $updateStateStruct->names,
                 'descriptions' => $updateStateStruct->descriptions,
