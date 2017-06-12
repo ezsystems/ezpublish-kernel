@@ -9,89 +9,58 @@
 namespace eZ\Publish\Core\Repository\Values\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup;
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents an object state group value.
  *
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
- * @property-read string $defaultLanguageCode, the default language code of the object state group names and description used for fallback.
+ * @property-read string $mainLanguageCode the default language of the object state group names and description used for fallback.
+ * @property-read string $defaultLanguageCode deprecated, use $mainLanguageCode
  * @property-read string[] $languageCodes the available languages
  *
  * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class ObjectStateGroup extends APIObjectStateGroup
 {
-    /**
-     * Holds the collection of names with languageCode keys.
-     *
-     * @var string[]
-     */
-    protected $names = [];
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
 
     /**
-     * Holds the collection of descriptions with languageCode keys.
+     * Magic getter for BC reasons.
      *
-     * @var string[]
+     * @param string $property
+     * @return mixed
      */
-    protected $descriptions = [];
-
-    /**
-     * Prioritized languages provided by user when retrieving object using API.
-     *
-     * @var string[]
-     */
-    protected $prioritizedLanguages = [];
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getNames()
+    public function __get($property)
     {
-        return $this->names;
+        if ($property === 'defaultLanguageCode') {
+            @trigger_error(
+                __CLASS__ . '::$defaultLanguageCode is deprecated. Use mainLanguageCode',
+                E_USER_DEPRECATED
+            );
+
+            return $this->mainLanguageCode;
+        }
+
+        return parent::__get($property);
     }
 
-    /**
-     * {@inheritdoc}.
-     */
-    public function getName($languageCode = null)
+    public function __isset($property)
     {
-        if (!empty($languageCode)) {
-            return isset($this->names[$languageCode]) ? $this->names[$languageCode] : null;
+        if ($property === 'defaultLanguageCode') {
+            @trigger_error(
+                __CLASS__ . '::$defaultLanguageCode is deprecated. Use mainLanguageCode',
+                E_USER_DEPRECATED
+            );
+
+            return true;
         }
 
-        foreach ($this->prioritizedLanguages as $prioritizedLanguageCode) {
-            if (isset($this->names[$prioritizedLanguageCode])) {
-                return $this->names[$prioritizedLanguageCode];
-            }
-        }
-
-        return $this->names[$this->defaultLanguageCode];
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getDescriptions()
-    {
-        return $this->descriptions;
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getDescription($languageCode = null)
-    {
-        if (!empty($languageCode)) {
-            return isset($this->descriptions[$languageCode]) ? $this->descriptions[$languageCode] : null;
-        }
-
-        foreach ($this->prioritizedLanguages as $prioritizedLanguageCode) {
-            if (isset($this->descriptions[$prioritizedLanguageCode])) {
-                return $this->descriptions[$prioritizedLanguageCode];
-            }
-        }
-
-        return $this->descriptions[$this->defaultLanguageCode];
+        return parent::__isset($property);
     }
 }

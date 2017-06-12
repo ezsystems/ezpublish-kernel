@@ -580,7 +580,7 @@ class ObjectStateService implements ObjectStateServiceInterface
                 'id' => $spiObjectState->id,
                 'identifier' => $spiObjectState->identifier,
                 'priority' => $spiObjectState->priority,
-                'defaultLanguageCode' => $spiObjectState->defaultLanguage,
+                'mainLanguageCode' => $spiObjectState->defaultLanguage,
                 'languageCodes' => $spiObjectState->languageCodes,
                 'names' => $spiObjectState->name,
                 'descriptions' => $spiObjectState->description,
@@ -606,7 +606,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             [
                 'id' => $spiObjectStateGroup->id,
                 'identifier' => $spiObjectStateGroup->identifier,
-                'defaultLanguageCode' => $spiObjectStateGroup->defaultLanguage,
+                'mainLanguageCode' => $spiObjectStateGroup->defaultLanguage,
                 'languageCodes' => $spiObjectStateGroup->languageCodes,
                 'names' => $spiObjectStateGroup->name,
                 'descriptions' => $spiObjectStateGroup->description,
