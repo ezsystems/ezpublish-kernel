@@ -677,7 +677,7 @@ function generateObjectStateGroupFixture(array $fixture)
         $groups[$data['id']] = array(
             'id'                  => $data['id'],
             'identifier'          => $data['identifier'],
-            'defaultLanguageCode' => $languageCodes[$data['default_language_id']],
+            'mainLanguageCode' => $languageCodes[$data['default_language_id']],
             'names'               => array(),
             'descriptions'        => array(),
         );
@@ -715,7 +715,7 @@ function generateObjectStateFixture(array $fixture)
             'id'                  => $data['id'],
             'identifier'          => $data['identifier'],
             'priority'            => (int)$data['priority'],
-            'defaultLanguageCode' => $languageCodes[$data['default_language_id']],
+            'mainLanguageCode' => $languageCodes[$data['default_language_id']],
             'languageCodes'       => resolveLanguageMask($languageCodes, $data['language_mask']),
             'stateGroup'          => '$scopeValues["groups"][' . valueToString($data['group_id']) . ']',
             'names'               => array(),

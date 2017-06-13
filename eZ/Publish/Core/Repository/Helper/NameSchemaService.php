@@ -237,7 +237,9 @@ class NameSchemaService
                     foreach ($contentType->fieldDefinitions as $spiFieldDefinition) {
                         if ($spiFieldDefinition->identifier === $fieldDefinitionIdentifier) {
                             $fieldDefinition = $this->contentTypeDomainMapper->buildFieldDefinitionDomainObject(
-                                $spiFieldDefinition
+                                $spiFieldDefinition,
+                                // This is probably not main language, but as we don't expose it, it's ok for now.
+                                $languageCode
                             );
                             break;
                         }

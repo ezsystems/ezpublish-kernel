@@ -64,23 +64,31 @@ class ContentTypeDomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $spiContentType
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group[] $spiContentTypeGroups
+     * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function buildContentTypeDomainObject(SPIContentType $spiContentType, array $spiContentTypeGroups)
-    {
+    public function buildContentTypeDomainObject(
+        SPIContentType $spiContentType,
+        array $spiContentTypeGroups,
+        array $prioritizedLanguages = []
+    ) {
         $mainLanguageCode = $this->contentLanguageHandler->load(
             $spiContentType->initialLanguageId
         )->languageCode;
 
         $contentTypeGroups = array();
         foreach ($spiContentTypeGroups as $spiContentTypeGroup) {
-            $contentTypeGroups[] = $this->buildContentTypeGroupDomainObject($spiContentTypeGroup);
+            $contentTypeGroups[] = $this->buildContentTypeGroupDomainObject($spiContentTypeGroup, $prioritizedLanguages);
         }
 
         $fieldDefinitions = array();
         foreach ($spiContentType->fieldDefinitions as $spiFieldDefinition) {
-            $fieldDefinitions[] = $this->buildFieldDefinitionDomainObject($spiFieldDefinition);
+            $fieldDefinitions[] = $this->buildFieldDefinitionDomainObject(
+                $spiFieldDefinition,
+                $mainLanguageCode,
+                $prioritizedLanguages
+            );
         }
 
         return new ContentType(
@@ -104,6 +112,7 @@ class ContentTypeDomainMapper
                 'defaultAlwaysAvailable' => $spiContentType->defaultAlwaysAvailable,
                 'defaultSortField' => $spiContentType->sortField,
                 'defaultSortOrder' => $spiContentType->sortOrder,
+                'prioritizedLanguages' => $prioritizedLanguages,
             )
         );
     }
@@ -191,10 +200,11 @@ class ContentTypeDomainMapper
      * Builds a ContentTypeGroup domain object from value object returned by persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $spiGroup
+     * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function buildContentTypeGroupDomainObject(SPIContentTypeGroup $spiGroup)
+    public function buildContentTypeGroupDomainObject(SPIContentTypeGroup $spiGroup, array $prioritizedLanguages = [])
     {
         return new ContentTypeGroup(
             array(
@@ -206,6 +216,7 @@ class ContentTypeDomainMapper
                 'modifierId' => $spiGroup->modifierId,
                 'names' => $spiGroup->name,
                 'descriptions' => $spiGroup->description,
+                'prioritizedLanguages' => $prioritizedLanguages,
             )
         );
     }
@@ -214,10 +225,12 @@ class ContentTypeDomainMapper
      * Builds a FieldDefinition domain object from value object returned by persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $spiFieldDefinition
+     * @param string $mainLanguageCode
+     * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
-    public function buildFieldDefinitionDomainObject(SPIFieldDefinition $spiFieldDefinition)
+    public function buildFieldDefinitionDomainObject(SPIFieldDefinition $spiFieldDefinition, $mainLanguageCode, array $prioritizedLanguages = [])
     {
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->fieldTypeRegistry->getFieldType($spiFieldDefinition->fieldType);
@@ -237,6 +250,8 @@ class ContentTypeDomainMapper
                 'isSearchable' => !$fieldType->isSearchable() ? false : $spiFieldDefinition->isSearchable,
                 'fieldSettings' => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
                 'validatorConfiguration' => (array)$spiFieldDefinition->fieldTypeConstraints->validators,
+                'prioritizedLanguages' => $prioritizedLanguages,
+                'mainLanguageCode' => $mainLanguageCode,
             )
         );
 

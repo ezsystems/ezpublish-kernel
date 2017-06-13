@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents a draft of a content type.
@@ -17,6 +18,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
  */
 class ContentTypeDraft extends APIContentTypeDraft
 {
+    use MultiLanguageTrait;
+
     /**
      * Function where list of properties are returned.
      *
@@ -78,15 +81,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     protected $innerContentType;
 
     /**
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -94,26 +89,15 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
+     * {@inheritdoc}
      */
-    public function getName($languageCode)
+    public function getName($languageCode = null)
     {
         return $this->innerContentType->getName($languageCode);
     }
 
     /**
-     * This method returns the human readable description of the content type.
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getDescriptions()
     {
@@ -121,13 +105,9 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
+     * {@inheritdoc}
      */
-    public function getDescription($languageCode)
+    public function getDescription($languageCode = null)
     {
         return $this->innerContentType->getDescription($languageCode);
     }

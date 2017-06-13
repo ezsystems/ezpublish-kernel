@@ -9,6 +9,9 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents a content type group value.
@@ -27,84 +30,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentT
  */
 class ContentTypeGroup extends APIContentTypeGroup
 {
-    /**
-     * @var string[]
-     */
-    protected $names;
-
-    /**
-     * @var string[]
-     */
-    protected $descriptions;
-
-    /**
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @since 5.0
-     *
-     * @return string[]
-     */
-    public function getNames()
-    {
-        return $this->names;
-    }
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @since 5.0
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
-     */
-    public function getName($languageCode)
-    {
-        if (array_key_exists($languageCode, $this->names)) {
-            return $this->names[$languageCode];
-        }
-
-        return null;
-    }
-
-    /**
-     * This method returns the human readable description of the content type.
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @since 5.0
-     *
-     * @return string[]
-     */
-    public function getDescriptions()
-    {
-        return $this->descriptions;
-    }
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @since 5.0
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
-     */
-    public function getDescription($languageCode)
-    {
-        if (array_key_exists($languageCode, $this->descriptions)) {
-            return $this->descriptions[$languageCode];
-        }
-
-        return null;
-    }
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
 }

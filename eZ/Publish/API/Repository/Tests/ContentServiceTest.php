@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -2885,6 +2886,45 @@ class ContentServiceTest extends BaseContentServiceTest
             2
         );
         /* END: Use Case */
+    }
+
+    /**
+     * Test that retrieval of translated name field respects prioritized language list.
+     *
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[]|null $languageCodes
+     */
+    public function testLoadContentWithPrioritizedLanguagesList($languageCodes)
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion2();
+
+        $content = $contentService->loadContent($content->id, $languageCodes);
+
+        $expectedName = $content->getVersionInfo()->getName(
+            isset($languageCodes[0]) ? $languageCodes[0] : null
+        );
+        $nameValue = $content->getFieldValue('name');
+        $name = $content->getVersionInfo()->getName();
+        /** @var \eZ\Publish\Core\FieldType\TextLine\Value $nameValue */
+        self::assertEquals($expectedName, $nameValue->text);
+        self::assertEquals($expectedName, $name);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrioritizedLanguageList()
+    {
+        return [
+            [['eng-US']],
+            [['eng-GB']],
+            [['eng-GB', 'eng-US']],
+            [['eng-US', 'eng-GB']],
+        ];
     }
 
     /**

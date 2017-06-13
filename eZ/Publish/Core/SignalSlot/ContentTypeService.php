@@ -94,41 +94,27 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Get a Content Type Group object by id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     *
-     * @param mixed $contentTypeGroupId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * {@inheritdoc}
      */
-    public function loadContentTypeGroup($contentTypeGroupId)
+    public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = [])
     {
-        return $this->service->loadContentTypeGroup($contentTypeGroupId);
+        return $this->service->loadContentTypeGroup($contentTypeGroupId, $prioritizedLanguages);
     }
 
     /**
-     * Get a Content Type Group object by identifier.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     *
-     * @param string $contentTypeGroupIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * {@inheritdoc}
      */
-    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier)
+    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = [])
     {
-        return $this->service->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
+        return $this->service->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, $prioritizedLanguages);
     }
 
     /**
-     * Get all Content Type Groups.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
+     * {@inheritdoc}
      */
-    public function loadContentTypeGroups()
+    public function loadContentTypeGroups(array $prioritizedLanguages = [])
     {
-        return $this->service->loadContentTypeGroups();
+        return $this->service->loadContentTypeGroups($prioritizedLanguages);
     }
 
     /**
@@ -212,45 +198,27 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Get a Content Type object by id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
-     *
-     * @param mixed $contentTypeId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * {@inheritdoc}
      */
-    public function loadContentType($contentTypeId)
+    public function loadContentType($contentTypeId, array $prioritizedLanguages = [])
     {
-        return $this->service->loadContentType($contentTypeId);
+        return $this->service->loadContentType($contentTypeId, $prioritizedLanguages);
     }
 
     /**
-     * Get a Content Type object by identifier.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content type with the given identifier and status DEFINED can not be found
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * {@inheritdoc}
      */
-    public function loadContentTypeByIdentifier($identifier)
+    public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = [])
     {
-        return $this->service->loadContentTypeByIdentifier($identifier);
+        return $this->service->loadContentTypeByIdentifier($identifier, $prioritizedLanguages);
     }
 
     /**
-     * Get a Content Type object by id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content type with the given remote id and status DEFINED can not be found
-     *
-     * @param string $remoteId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * {@inheritdoc}
      */
-    public function loadContentTypeByRemoteId($remoteId)
+    public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = [])
     {
-        return $this->service->loadContentTypeByRemoteId($remoteId);
+        return $this->service->loadContentTypeByRemoteId($remoteId, $prioritizedLanguages);
     }
 
     /**
@@ -268,15 +236,11 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Get Content Type objects which belong to the given content type group.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] Which have status DEFINED
+     * {@inheritdoc}
      */
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup)
+    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
     {
-        return $this->service->loadContentTypes($contentTypeGroup);
+        return $this->service->loadContentTypes($contentTypeGroup, $prioritizedLanguages);
     }
 
     /**

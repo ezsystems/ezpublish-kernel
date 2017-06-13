@@ -9,6 +9,9 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * this class represents a content type value.
@@ -36,120 +39,46 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
  */
 class ContentType extends APIContentType
 {
-    /**
-     * Holds the collection of names with languageCode keys.
-     *
-     * @var string[]
-     */
-    protected $names;
-
-    /**
-     * Holds the collection of descriptions with languageCode keys.
-     *
-     * @var string[]
-     */
-    protected $descriptions;
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
 
     /**
      * Holds the collection of contenttypegroups the contenttype is assigned to.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
-    protected $contentTypeGroups;
+    protected $contentTypeGroups = [];
 
     /**
      * Contains the content type field definitions from this type.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    protected $fieldDefinitions;
+    protected $fieldDefinitions = [];
 
     /**
      * Field definitions indexed by identifier.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    protected $fieldDefinitionsByIdentifier;
+    protected $fieldDefinitionsByIdentifier = [];
 
     /**
      * Field definitions indexed by id.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    protected $fieldDefinitionsById;
+    protected $fieldDefinitionsById = [];
 
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
-        foreach ($data as $propertyName => $propertyValue) {
-            $this->$propertyName = $propertyValue;
-        }
+        parent::__construct($data);
+        // fieldDefinitions property comes from $data and is set in the ValueObject constructor
         foreach ($this->fieldDefinitions as $fieldDefinition) {
             $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
             $this->fieldDefinitionsById[$fieldDefinition->id] = $fieldDefinition;
         }
-    }
-
-    /**
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    public function getNames()
-    {
-        return $this->names;
-    }
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
-     */
-    public function getName($languageCode)
-    {
-        if (isset($this->names[$languageCode])) {
-            return $this->names[$languageCode];
-        }
-
-        return null;
-    }
-
-    /**
-     * This method returns the human readable description of the content type.
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    public function getDescriptions()
-    {
-        return $this->descriptions;
-    }
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
-     */
-    public function getDescription($languageCode)
-    {
-        if (isset($this->descriptions[$languageCode])) {
-            return $this->descriptions[$languageCode];
-        }
-
-        return null;
     }
 
     /**
