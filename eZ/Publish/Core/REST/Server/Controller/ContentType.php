@@ -211,11 +211,13 @@ class ContentType extends RestController
     {
         if ($request->query->has('identifier')) {
             $contentType = $this->loadContentTypeByIdentifier($request);
+
             return $this->createContentTypeRedirect($contentType->id);
         }
 
         if ($request->query->has('remoteId')) {
             $contentType = $this->loadContentTypeByRemoteId($request);
+
             return $this->createContentTypeRedirect($contentType->id);
         }
 
