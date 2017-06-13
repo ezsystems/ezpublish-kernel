@@ -364,28 +364,32 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Root media-type="application/vnd.ez.api.Root+xml">
-        <content media-type="" href="/api/ezp/v2/content/objects"/>
-        <contentByRemoteId media-type="" href="/api/ezp/v2/content/objects{?remoteId}"/>
-        <contentTypes media-type="application/vnd.ez.api.ContentTypeInfoList+xml" href="/api/ezp/v2/content/types"/>
-        <contentTypeByIdentifier media-type="" href="/api/ezp/v2/content/types{?identifier}"/>
-        <contentTypeGroups media-type="application/vnd.ez.api.ContentTypeGroupList+xml" href="/api/ezp/v2/content/typegroups"/>
-        <contentTypeGroupByIdentifier media-type="" href="/api/ezp/v2/content/typegroups{?identifier}"/>
-        <users media-type="application/vnd.ez.api.UserRefList+xml" href="/api/ezp/v2/user/users"/>
-        <roles media-type="application/vnd.ez.api.RoleList+xml" href="/api/ezp/v2/user/roles"/>
-        <rootLocation media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations/1/2"/>
-        <rootUserGroup media-type="application/vnd.ez.api.UserGroup+xml" href="/api/ezp/v2/user/groups/1/5"/>
-        <rootMediaFolder media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations/1/43"/>
-        <locationByRemoteId media-type="" href="/api/ezp/v2/content/locations{?remoteId}"/>
-        <locationByPath media-type="" href="/api/ezp/v2/content/locations{?locationPath}"/>
-        <trash media-type="application/vnd.ez.api.Trash+xml" href="/api/ezp/v2/content/trash"/>
-        <sections media-type="application/vnd.ez.api.SectionList+xml" href="/api/ezp/v2/content/sections"/>
-        <views media-type="application/vnd.ez.api.RefList+xml" href="/api/ezp/v2/views"/>
-        <objectStateGroups media-type="application/vnd.ez.api.ObjectStateGroupList+xml" href="/api/ezp/v2/content/objectstategroups"/>
-        <objectStates media-type="application/vnd.ez.api.ObjectStateList+xml" href="/api/ezp/v2/content/objectstategroups/{objectStateGroupId}/objectstates"/>
-        <globalUrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/urlaliases"/>
-        <urlWildcards media-type="application/vnd.ez.api.UrlWildcardList+xml" href="/api/ezp/v2/content/urlwildcards"/>
-        <createSession media-type="application/vnd.ez.api.UserSession+xml" href="/api/ezp/v2/user/sessions"/>
-        <refreshSession media-type="application/vnd.ez.api.UserSession+xml" href="/api/ezp/v2/user/sessions/{sessionId}/refresh"/>
+        <content href="/api/ezp/v2/content/objects" media-type="" />
+        <contentByRemoteId href="/api/ezp/v2/content/objects{?remoteId}" media-type="" />
+        <contentTypes href="/api/ezp/v2/content/types" media-type="application/vnd.ez.api.ContentTypeInfoList+xml" />
+        <contentTypeByIdentifier href="/api/ezp/v2/content/types{?identifier}" media-type="" />
+        <contentTypeGroups href="/api/ezp/v2/content/typegroups" media-type="application/vnd.ez.api.ContentTypeGroupList+xml" />
+        <contentTypeGroupByIdentifier href="/api/ezp/v2/content/typegroups{?identifier}" media-type="" />
+        <users href="/api/ezp/v2/user/users" media-type="application/vnd.ez.api.UserRefList+xml" />
+        <usersByRoleId href="/api/ezp/v2/user/users{?roleId}" media-type="application/vnd.ez.api.UserRefList+xml" />
+        <usersByRemoteId href="/api/ezp/v2/user/users{?remoteId}" media-type="application/vnd.ez.api.UserRefList+xml" />
+        <usersByEmail href="/api/ezp/v2/user/users{?email}" media-type="application/vnd.ez.api.UserRefList+xml" />
+        <usersByLogin href="/api/ezp/v2/user/users{?login}" media-type="application/vnd.ez.api.UserRefList+xml" />
+        <roles href="/api/ezp/v2/user/roles" media-type="application/vnd.ez.api.RoleList+xml" />
+        <rootLocation href="/api/ezp/v2/content/locations/1/2" media-type="application/vnd.ez.api.Location+xml" />
+        <rootUserGroup href="/api/ezp/v2/user/groups/1/5" media-type="application/vnd.ez.api.UserGroup+xml" />
+        <rootMediaFolder href="/api/ezp/v2/content/locations/1/43" media-type="application/vnd.ez.api.Location+xml" />
+        <locationByRemoteId href="/api/ezp/v2/content/locations{?remoteId}" media-type="" />
+        <locationByPath href="/api/ezp/v2/content/locations{?locationPath}" media-type="" />
+        <trash href="/api/ezp/v2/content/trash" media-type="application/vnd.ez.api.Trash+xml" />
+        <sections href="/api/ezp/v2/content/sections" media-type="application/vnd.ez.api.SectionList+xml" />
+        <views href="/api/ezp/v2/views" media-type="application/vnd.ez.api.RefList+xml" />
+        <objectStateGroups href="/api/ezp/v2/content/objectstategroups" media-type="application/vnd.ez.api.ObjectStateGroupList+xml" />
+        <objectStates href="/api/ezp/v2/content/objectstategroups/{objectStateGroupId}/objectstates" media-type="application/vnd.ez.api.ObjectStateList+xml" />
+        <globalUrlAliases href="/api/ezp/v2/content/urlaliases" media-type="application/vnd.ez.api.UrlAliasRefList+xml" />
+        <urlWildcards href="/api/ezp/v2/content/urlwildcards" media-type="application/vnd.ez.api.UrlWildcardList+xml" />
+        <createSession href="/api/ezp/v2/user/sessions" media-type="application/vnd.ez.api.UserSession+xml" />
+        <refreshSession href="/api/ezp/v2/user/sessions/{sessionId}/refresh" media-type="application/vnd.ez.api.UserSession+xml" />
     </Root>
 
 JSON Example
