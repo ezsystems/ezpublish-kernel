@@ -160,7 +160,6 @@ XML;
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', '/api/ezp/v2/content/typegroups?identifier=testUpdateContentTypeGroup')
         );
-        // @todo Check if list filtered by identifier is supposed to send a 307
         self::assertHttpResponseCodeEquals($response, 307);
     }
 
