@@ -236,28 +236,28 @@ XML;
      * @depends testCreateContentType
      * Covers GET /content/types?identifier=<contentTypeIdentifier>
      */
-    public function testListContentTypesByIdentifier()
+    public function testListContentTypesByIdentifier($contentTypeHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=tCreate')
         );
 
-        // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
-        self::assertHttpResponseCodeEquals($response, 200);
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertEquals($response->getHeader('Location'), $contentTypeHref);
     }
 
     /**
      * @depends testCreateContentType
-     * Covers GET /content/types?remoteid=<contentTypeRemoteId>
+     * Covers GET /content/types?remoteId=<contentTypeRemoteId>
      */
-    public function testListContentTypesByRemoteId()
+    public function testListContentTypesByRemoteId($contentTypeHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', '/api/ezp/v2/content/types?remoteId=testCreateContentType')
         );
 
-        // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
-        self::assertHttpResponseCodeEquals($response, 200);
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertEquals($response->getHeader('Location'), $contentTypeHref);
     }
 
     /**

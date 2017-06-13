@@ -209,24 +209,20 @@ class ContentType extends RestController
      */
     public function listContentTypes(Request $request)
     {
+        if ($request->query->has('identifier')) {
+            $contentType = $this->loadContentTypeByIdentifier($request);
+            return $this->createContentTypeRedirect($contentType->id);
+        }
+
+        if ($request->query->has('remoteId')) {
+            $contentType = $this->loadContentTypeByRemoteId($request);
+            return $this->createContentTypeRedirect($contentType->id);
+        }
+
         if ($this->getMediaType($request) === 'application/vnd.ez.api.contenttypelist') {
             $return = new Values\ContentTypeList(array(), $request->getPathInfo());
         } else {
             $return = new Values\ContentTypeInfoList(array(), $request->getPathInfo());
-        }
-
-        if ($request->query->has('identifier')) {
-            $return->contentTypes = array($this->loadContentTypeByIdentifier($request));
-
-            return $return;
-        }
-
-        if ($request->query->has('remoteId')) {
-            $return->contentTypes = array(
-                $this->loadContentTypeByRemoteId($request),
-            );
-
-            return $return;
         }
 
         $limit = null;
@@ -246,6 +242,22 @@ class ContentType extends RestController
         $return->contentTypes = array_slice($contentTypes, $offset, $limit);
 
         return $return;
+    }
+
+    /**
+     * @param mixed $contentTypeId
+     * @return Values\TemporaryRedirect
+     */
+    private function createContentTypeRedirect($contentTypeId)
+    {
+        return new Values\TemporaryRedirect(
+            $this->router->generate(
+                'ezpublish_rest_loadContentType',
+                array(
+                    'contentTypeId' => $contentTypeId,
+                )
+            )
+        );
     }
 
     /**
