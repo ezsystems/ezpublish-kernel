@@ -468,11 +468,13 @@ class User extends RestController
                 $user = $this->userService->loadUser(
                     $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id
                 );
+
                 return $this->redirectToUser($user->id);
             }
 
             if ($request->query->has('login')) {
                 $user = $this->userService->loadUserByLogin($request->query->get('login'));
+
                 return $this->redirectToUser($user->id);
             }
 
