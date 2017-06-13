@@ -7159,12 +7159,12 @@ Simplified ContentCreate Example
 
     {
         "ContentCreate": {
-            "ContentType": "/content/types/_by_identified/article",
+            "ContentType": "/content/types/?identifier=article",
             "LocationCreate": {
-                "_parentUrlAliasPath": "/content/urlaliases/_by_path/places-tastes/tastes/"
+                "_parentUrlAliasPath": "/content/urlaliases/?path=/places-tastes/tastes/"
             },
-            "ContentSection": "/content/section/_by_identifier/places",
-            "Owner": "/user/users/_by_login/jessica",
+            "ContentSection": "/content/section/?identifier=places",
+            "Owner": "/user/users/?login=jessica",
             "alwaysAvailable": "false",
             "modificationDate": "2017-03-02T12:00:00",
             "remoteId": "remote123456",
