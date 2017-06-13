@@ -136,18 +136,23 @@ support GET/HEAD operations and will return a redirect to the cannonical entity
 URL. However, when using them as a reference in a POST/PUT/PATCH request, the
 server will accept them and automatically reference the correct entity.
 
+Alias URLs are built using the collection resource of an entity + a filter
+query parameter which identifies the entity in question uniquely (e.g.
+``remoteId`` or ``identifier``).
+
 A request/response cycle for an alias URI is supposed to be executed as follows:
 
-:Resource: /content/types/_by_identifier/article
+:Resource: /content/types/?identifier=article
 :Method: GET
 :Response:
 
 .. code:: http
 
-        HTTP/1.1 308 Permanent Redirect
+        HTTP/1.1 307 Temporary Redirect
         Location: /content/types/23
 
-Therefore, referencing the content type with ID 23 is valid using the URI ``/content/types/_by_identifier/article``.
+Therefore, referencing the content type with ID 23 is valid using the URI
+``/content/types/?identifier=article``.
 
 OPTIONS requests
 ----------------
