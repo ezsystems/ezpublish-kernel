@@ -464,23 +464,21 @@ class User extends RestController
         $restUsers = array();
 
         try {
+            if ($request->query->has('remoteId')) {
+                $user = $this->userService->loadUser(
+                    $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id
+                );
+                return $this->redirectToUser($user->id);
+            }
+
+            if ($request->query->has('login')) {
+                $user = $this->userService->loadUserByLogin($request->query->get('login'));
+                return $this->redirectToUser($user->id);
+            }
+
             if ($request->query->has('roleId')) {
                 $restUsers = $this->loadUsersAssignedToRole(
                     $this->requestParser->parseHref($request->query->get('roleId'), 'roleId')
-                );
-            } elseif ($request->query->has('remoteId')) {
-                $restUsers = array(
-                    $this->buildRestUserObject(
-                        $this->userService->loadUser(
-                            $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id
-                        )
-                    ),
-                );
-            } elseif ($request->query->has('login')) {
-                $restUsers = array(
-                    $this->buildRestUserObject(
-                        $this->userService->loadUserByLogin($request->query->get('login'))
-                    ),
                 );
             } elseif ($request->query->has('email')) {
                 foreach ($this->userService->loadUsersByEmail($request->query->get('email')) as $user) {
@@ -500,6 +498,22 @@ class User extends RestController
         }
 
         return new Values\UserRefList($restUsers, $request->getPathInfo());
+    }
+
+    /**
+     * @param mixed $userId
+     * @return Values\TemporaryRedirect
+     */
+    private function redirectToUser($userId)
+    {
+        return new Values\TemporaryRedirect(
+            $this->router->generate(
+                'ezpublish_rest_loadUser',
+                array(
+                    'userId' => $userId,
+                )
+            )
+        );
     }
 
     public function verifyUsers(Request $request)

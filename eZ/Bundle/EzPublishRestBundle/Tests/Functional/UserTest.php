@@ -226,11 +226,41 @@ XML;
      * @depends testCreateUser
      * Covers GET /user/users?remoteId={userRemoteId}
      */
-    public function testLoadUserByRemoteId()
+    public function testLoadUserByRemoteId($userHref)
     {
         $remoteId = $this->addTestSuffix('testCreateUser');
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', "/api/ezp/v2/user/users?remoteId=$remoteId")
+        );
+
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertEquals($response->getHeader('Location'), $userHref);
+    }
+
+    /**
+     * @depends testCreateUser
+     * Covers GET /user/users?login={userLogin}
+     */
+    public function testLoadUserByLogin($userHref)
+    {
+        $login = $this->addTestSuffix('testCreateUser');
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', "/api/ezp/v2/user/users?login=$login")
+        );
+
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertEquals($response->getHeader('Location'), $userHref);
+    }
+
+    /**
+     * @depends testCreateUser
+     * Covers GET /user/users?email={userEmail}
+     */
+    public function testLoadUserByEmail()
+    {
+        $email = $this->addTestSuffix('testCreateUser') . '@example.net';
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', "/api/ezp/v2/user/users?email=$email")
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
