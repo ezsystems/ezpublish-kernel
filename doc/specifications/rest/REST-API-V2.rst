@@ -368,13 +368,14 @@ XML Example
         <contentByRemoteId href="/api/ezp/v2/content/objects{?remoteId}" media-type="" />
         <contentTypes href="/api/ezp/v2/content/types" media-type="application/vnd.ez.api.ContentTypeInfoList+xml" />
         <contentTypeByIdentifier href="/api/ezp/v2/content/types{?identifier}" media-type="" />
+        <contentTypeByRemoteId href="/api/ezp/v2/content/types{?remoteId}" media-type="" />
         <contentTypeGroups href="/api/ezp/v2/content/typegroups" media-type="application/vnd.ez.api.ContentTypeGroupList+xml" />
         <contentTypeGroupByIdentifier href="/api/ezp/v2/content/typegroups{?identifier}" media-type="" />
         <users href="/api/ezp/v2/user/users" media-type="application/vnd.ez.api.UserRefList+xml" />
         <usersByRoleId href="/api/ezp/v2/user/users{?roleId}" media-type="application/vnd.ez.api.UserRefList+xml" />
-        <usersByRemoteId href="/api/ezp/v2/user/users{?remoteId}" media-type="application/vnd.ez.api.UserRefList+xml" />
+        <usersByRemoteId href="/api/ezp/v2/user/users{?remoteId}" media-type="" />
         <usersByEmail href="/api/ezp/v2/user/users{?email}" media-type="application/vnd.ez.api.UserRefList+xml" />
-        <usersByLogin href="/api/ezp/v2/user/users{?login}" media-type="application/vnd.ez.api.UserRefList+xml" />
+        <usersByLogin href="/api/ezp/v2/user/users{?login}" media-type="" />
         <roles href="/api/ezp/v2/user/roles" media-type="application/vnd.ez.api.RoleList+xml" />
         <rootLocation href="/api/ezp/v2/content/locations/1/2" media-type="application/vnd.ez.api.Location+xml" />
         <rootUserGroup href="/api/ezp/v2/user/groups/1/5" media-type="application/vnd.ez.api.UserGroup+xml" />
