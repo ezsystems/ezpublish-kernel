@@ -43,7 +43,7 @@ matrix:
     - php: 7.0
       env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=dev SYMFONY_DEBUG=1
     - php: 7.0
-      env: BEHAT_OPTS="--profile=rest --suite=fullJson" RUN_INSTALL=1
+      env: BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" RUN_INSTALL=1
     - php: 7.0
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0"
     - php: 7.0
