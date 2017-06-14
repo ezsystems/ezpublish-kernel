@@ -251,6 +251,7 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
      *
      * @since 5.0
+     * @deprecated Never implemented, and might be redesigned if it ever is.
      */
     public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $modifier = null);
 
@@ -384,6 +385,7 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
      *
      * @since 5.0
+     * @deprecated Never implemented, and might be redesigned if it ever is.
      */
     public function addTranslationInfo(TranslationInfo $translationInfo);
 
@@ -396,11 +398,11 @@ interface ContentService
      * @param array $filter
      *
      * @todo TBD - filter by sourceversion destination version and languages
-     * @deprecated Never implemented, and might be redesigned if it ever is.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
      *
      * @since 5.0
+     * @deprecated Never implemented, and might be redesigned if it ever is.
      */
     public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array());
 
