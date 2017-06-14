@@ -49,7 +49,7 @@ class VersionInfoTest extends PHPUnit_Framework_TestCase
     private function createVersionInfoWithStatus($status)
     {
         return new VersionInfo(array(
-            'status' => $status
+            'status' => $status,
         ));
     }
 }

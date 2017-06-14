@@ -556,7 +556,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $draft = $this->testCreateContent();
 
-        if ($draft->getVersionInfo()->status !== Repository\Values\Content\VersionInfo::STATUS_DRAFT) {
+        if (!$draft->getVersionInfo()->isDraft()) {
             $this->markTestSkipped('Provided content object is not a draft.');
         }
 

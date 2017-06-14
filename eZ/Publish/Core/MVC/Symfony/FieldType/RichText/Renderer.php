@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\RichText;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Templating\EngineInterface;
@@ -391,7 +390,7 @@ class Renderer implements RendererInterface
 
         // Check that Content is published, since sudo allows loading unpublished content.
         if (
-            $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
+            !$content->getVersionInfo()->isPublished()
             && !$this->authorizationChecker->isGranted(
                 new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
             )

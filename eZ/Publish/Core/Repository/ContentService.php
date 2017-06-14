@@ -248,7 +248,7 @@ class ContentService implements ContentServiceInterface
 
         $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
 
-        if ($versionInfo->status === APIVersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             $function = 'read';
         } else {
             $function = 'versionread';
@@ -312,9 +312,8 @@ class ContentService implements ContentServiceInterface
         if (!$this->repository->canUser('content', 'read', $content)) {
             throw new UnauthorizedException('content', 'read', array('contentId' => $contentId));
         }
-
         if (
-            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+            !$content->getVersionInfo()->isPublished()
             && !$this->repository->canUser('content', 'versionread', $content)
         ) {
             throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentId, 'versionNo' => $versionNo));
@@ -421,7 +420,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if (
-            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+            !$content->getVersionInfo()->isPublished()
             && !$this->repository->canUser('content', 'versionread', $content)
         ) {
             throw new UnauthorizedException('content', 'versionread', array('remoteId' => $remoteId, 'versionNo' => $versionNo));
@@ -1150,7 +1149,7 @@ class ContentService implements ContentServiceInterface
             null,
             $versionInfo->versionNo
         );
-        if ($content->versionInfo->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$content->versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is not a draft and can not be updated'
@@ -1446,7 +1445,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function internalPublishVersion(APIVersionInfo $versionInfo, $publicationDate = null)
     {
-        if ($versionInfo->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new BadStateException('$versionInfo', 'Only versions in draft status can be published.');
         }
 
@@ -1501,7 +1500,7 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteVersion(APIVersionInfo $versionInfo)
     {
-        if ($versionInfo->status === APIVersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is published and can not be removed'
@@ -1643,7 +1642,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadRelations(APIVersionInfo $versionInfo)
     {
-        if ($versionInfo->status === APIVersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             $function = 'read';
         } else {
             $function = 'versionread';
@@ -1736,7 +1735,7 @@ class ContentService implements ContentServiceInterface
             $sourceVersion->versionNo
         );
 
-        if ($sourceVersion->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$sourceVersion->isDraft()) {
             throw new BadStateException(
                 '$sourceVersion',
                 'Relations of type common can only be added to versions of status draft'
@@ -1788,7 +1787,7 @@ class ContentService implements ContentServiceInterface
             $sourceVersion->versionNo
         );
 
-        if ($sourceVersion->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$sourceVersion->isDraft()) {
             throw new BadStateException(
                 '$sourceVersion',
                 'Relations of type common can only be removed from versions of status draft'
