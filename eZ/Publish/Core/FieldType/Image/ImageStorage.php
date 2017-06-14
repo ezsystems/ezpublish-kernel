@@ -113,6 +113,10 @@ class ImageStorage extends GatewayBasedStorage
                 return false;
             }
 
+            if (!isset($field->value->data['id'])) {
+                return false;
+            }
+
             $this->IOService->loadBinaryFile($field->value->data['id']);
 
             $field->value->data = array_merge(
