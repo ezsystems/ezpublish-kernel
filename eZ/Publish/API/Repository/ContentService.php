@@ -396,6 +396,7 @@ interface ContentService
      * @param array $filter
      *
      * @todo TBD - filter by sourceversion destination version and languages
+     * @deprecated Never implemented, and might be redesigned if it ever is.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
      *
