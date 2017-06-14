@@ -98,4 +98,34 @@ abstract class VersionInfo extends ValueObject implements MultiLanguageName
      * @var string[]
      */
     protected $languageCodes = array();
+
+    /**
+     * Returns true if version is a draft.
+     *
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->status === self::STATUS_DRAFT;
+    }
+
+    /**
+     * Returns true if version is published.
+     *
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->status === self::STATUS_PUBLISHED;
+    }
+
+    /**
+     * Returns true if version is archived.
+     *
+     * @return bool
+     */
+    public function isArchived()
+    {
+        return $this->status === self::STATUS_ARCHIVED;
+    }
 }
