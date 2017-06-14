@@ -66,6 +66,7 @@ class ImageConverter implements Converter
         return $this->fillXml(
             array_merge(
                 array(
+                    'uri' => '',
                     'path' => '',
                     'width' => '',
                     'height' => '',
