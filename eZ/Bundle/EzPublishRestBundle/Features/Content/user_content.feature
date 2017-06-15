@@ -2,7 +2,7 @@ Feature: users can be manipulated using the Content API
 
     Background:
         Given I have "administrator" permissions
-	
+
     @broken
     Scenario: Creating and publishing a user with the Content API works
          When I create a "POST" request to "/content/objects"
