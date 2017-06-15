@@ -25,7 +25,6 @@ use Symfony\Component\Config\FileLocator;
 use InvalidArgumentException;
 use Symfony\Component\Yaml\Yaml;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
-use RuntimeException;
 
 class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
 {
@@ -517,10 +516,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     public function addConfigParser(ParserInterface $configParser)
     {
-        if ($this->mainConfigParser !== null) {
-            throw new RuntimeException('Main config parser is already instantiated');
-        }
-
         $this->configParsers[] = $configParser;
     }
 
