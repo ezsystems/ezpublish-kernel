@@ -259,6 +259,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'initialLanguageCode' => $content->getVersionInfo()->initialLanguageCode,
             )
         );
+        $this->assertTrue($content->getVersionInfo()->isDraft());
+        $this->assertFalse($content->getVersionInfo()->isPublished());
+        $this->assertFalse($content->getVersionInfo()->isArchived());
     }
 
     /**
@@ -687,7 +690,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'modificationDate' => $this->createDateTime(1060695457),
                 'creatorId' => 14,
                 'creationDate' => $this->createDateTime(1060695450),
-                'status' => 1,
+                'status' => VersionInfo::STATUS_PUBLISHED,
                 'initialLanguageCode' => 'eng-US',
                 'languageCodes' => [
                     'eng-US',
@@ -695,6 +698,9 @@ class ContentServiceTest extends BaseContentServiceTest
             ],
             $versionInfo
         );
+        $this->assertTrue($versionInfo->isPublished());
+        $this->assertFalse($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isArchived());
     }
 
     /**
@@ -919,6 +925,9 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $content->versionInfo->status);
         $this->assertGreaterThanOrEqual($time, $content->contentInfo->publishedDate->getTimestamp());
         $this->assertGreaterThanOrEqual($time, $content->contentInfo->modificationDate->getTimestamp());
+        $this->assertTrue($content->versionInfo->isPublished());
+        $this->assertFalse($content->versionInfo->isDraft());
+        $this->assertFalse($content->versionInfo->isArchived());
 
         return $content;
     }
@@ -994,6 +1003,9 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertNotNull($content->getVersionInfo()->modificationDate);
+        $this->assertTrue($content->getVersionInfo()->isPublished());
+        $this->assertFalse($content->getVersionInfo()->isDraft());
+        $this->assertFalse($content->getVersionInfo()->isArchived());
     }
 
     /**
@@ -1262,6 +1274,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'versionNo' => $versionInfo->versionNo,
             )
         );
+        $this->assertTrue($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isPublished());
+        $this->assertFalse($versionInfo->isArchived());
     }
 
     /**
@@ -1763,6 +1778,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'versionNo' => $versionInfo->versionNo,
             )
         );
+        $this->assertTrue($versionInfo->isPublished());
+        $this->assertFalse($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isArchived());
     }
 
     /**
@@ -1793,6 +1811,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'versionNo' => $versionInfo->versionNo,
             )
         );
+        $this->assertTrue($versionInfo->isArchived());
+        $this->assertFalse($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isPublished());
     }
 
     /**
@@ -2262,6 +2283,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 $newCurrentUserDrafts[0]->getContentInfo()->remoteId,
             )
         );
+        $this->assertTrue($newCurrentUserDrafts[0]->isDraft());
+        $this->assertFalse($newCurrentUserDrafts[0]->isArchived());
+        $this->assertFalse($newCurrentUserDrafts[0]->isPublished());
     }
 
     /**
@@ -3085,6 +3109,13 @@ class ContentServiceTest extends BaseContentServiceTest
             'Creation time did not match within delta of 2 seconds',
             2
         );
+        $this->assertTrue($versions[0]->isArchived());
+        $this->assertFalse($versions[0]->isDraft());
+        $this->assertFalse($versions[0]->isPublished());
+
+        $this->assertTrue($versions[1]->isPublished());
+        $this->assertFalse($versions[1]->isDraft());
+        $this->assertFalse($versions[1]->isArchived());
     }
 
     /**
