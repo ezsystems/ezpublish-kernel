@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository\Tests\Values\User;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use Mockery;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -35,6 +36,25 @@ class UserGroupTest extends PHPUnit_Framework_TestCase
             ],
             $group
         );
+    }
+
+    /**
+     * Test a new class and default values on properties.
+     *
+     * @covers \eZ\Publish\API\Repository\Values\User\User::__construct
+     */
+    public function testGetName()
+    {
+        $name = 'Translated name';
+        $contentMock = Mockery::mock('eZ\Publish\API\Repository\Values\Content\Content');
+        $versionInfoMock = Mockery::mock('eZ\Publish\API\Repository\Values\Content\VersionInfo');
+
+        $contentMock->shouldReceive('getVersionInfo')->andReturn($versionInfoMock);
+        $versionInfoMock->shouldReceive('getName')->andReturn($name);
+
+        $object = new UserGroup(['content' => $contentMock]);
+
+        $this->assertEquals($name, $object->getName());
     }
 
     /**

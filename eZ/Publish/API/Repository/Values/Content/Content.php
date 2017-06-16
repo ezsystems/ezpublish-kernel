@@ -28,6 +28,18 @@ abstract class Content extends ValueObject
     abstract public function getVersionInfo();
 
     /**
+     * Shorthand method for getVersionInfo()->getName().
+     *
+     * @see \eZ\Publish\API\Repository\Values\Content\VersionInfo::getName()
+     *
+     * @param string|null $languageCode
+     *
+     * @return string|null The name for a given language, or null if $languageCode is not set
+     *         or does not exist.
+     */
+    abstract public function getName($languageCode = null);
+
+    /**
      * Returns a field value for the given value.
      *
      * - If $languageCode is defined,

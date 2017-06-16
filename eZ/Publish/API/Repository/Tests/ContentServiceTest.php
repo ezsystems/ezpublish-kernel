@@ -2908,10 +2908,11 @@ class ContentServiceTest extends BaseContentServiceTest
             isset($languageCodes[0]) ? $languageCodes[0] : null
         );
         $nameValue = $content->getFieldValue('name');
-        $name = $content->getVersionInfo()->getName();
         /** @var \eZ\Publish\Core\FieldType\TextLine\Value $nameValue */
         self::assertEquals($expectedName, $nameValue->text);
-        self::assertEquals($expectedName, $name);
+        self::assertEquals($expectedName, $content->getVersionInfo()->getName());
+        // Also check value on shortcut method on content
+        self::assertEquals($expectedName, $content->getName());
     }
 
     /**

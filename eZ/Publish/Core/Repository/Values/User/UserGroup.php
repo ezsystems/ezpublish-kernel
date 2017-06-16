@@ -35,6 +35,14 @@ class UserGroup extends APIUserGroup
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getName($languageCode = null)
+    {
+        return $this->content->getVersionInfo()->getName($languageCode);
+    }
+
+    /**
      * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
