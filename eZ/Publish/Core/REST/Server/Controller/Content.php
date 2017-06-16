@@ -350,7 +350,7 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status === VersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             throw new ForbiddenException('Version in status PUBLISHED cannot be deleted');
         }
 
@@ -406,7 +406,7 @@ class Content extends RestController
             $contentInfo
         );
 
-        if ($versionInfo->status === VersionInfo::STATUS_DRAFT) {
+        if ($versionInfo->isDraft()) {
             throw new ForbiddenException('Current version is already in status DRAFT');
         }
 
@@ -457,7 +457,7 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Only version in status DRAFT can be updated');
         }
 
@@ -509,7 +509,7 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Only version in status DRAFT can be published');
         }
 
@@ -645,7 +645,7 @@ class Content extends RestController
                     throw new ForbiddenException('Relation is not of type COMMON');
                 }
 
-                if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+                if (!$versionInfo->isDraft()) {
                     throw new ForbiddenException('Relation of type COMMON can only be removed from drafts');
                 }
 
@@ -680,7 +680,7 @@ class Content extends RestController
 
         $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
         $versionInfo = $this->repository->getContentService()->loadVersionInfo($contentInfo, $versionNumber);
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Relation of type COMMON can only be added to drafts');
         }
 

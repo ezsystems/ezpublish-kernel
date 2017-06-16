@@ -17,7 +17,6 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -370,7 +369,7 @@ class ViewController extends Controller
 
             // Check that Content is published, since sudo allows loading unpublished content.
             if (
-                $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+                !$content->getVersionInfo()->isPublished()
                 && !$this->authorizationChecker->isGranted(
                     new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
                 )

@@ -19,7 +19,6 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -132,10 +131,9 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
 
-        $versionInfoMock->expects($this->any())
-            ->method('__get')
-            ->with('status')
-            ->will($this->returnValue(APIVersionInfo::STATUS_PUBLISHED));
+        $versionInfoMock->expects($this->once())
+            ->method('isPublished')
+            ->willReturn(true);
 
         $contentServiceMock->expects($this->once())
             ->method('loadContentInfo')
@@ -221,9 +219,8 @@ class ContentTest extends BaseServiceMockTest
         $versionInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
 
         $versionInfoMock->expects($this->any())
-            ->method('__get')
-            ->with('status')
-            ->will($this->returnValue(APIVersionInfo::STATUS_DRAFT));
+            ->method('isPublished')
+            ->willReturn(false);
 
         $contentHandler->expects($this->once())
             ->method('loadVersionInfo')
@@ -264,10 +261,9 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
 
-        $versionInfoMock->expects($this->any())
-            ->method('__get')
-            ->with('status')
-            ->will($this->returnValue(APIVersionInfo::STATUS_PUBLISHED));
+        $versionInfoMock->expects($this->once())
+            ->method('isPublished')
+            ->willReturn(true);
 
         $contentHandler->expects($this->once())
             ->method('loadVersionInfo')
@@ -310,10 +306,9 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
 
-        $versionInfoMock->expects($this->any())
-            ->method('__get')
-            ->with('status')
-            ->will($this->returnValue(APIVersionInfo::STATUS_DRAFT));
+        $versionInfoMock->expects($this->once())
+            ->method('isPublished')
+            ->willReturn(false);
 
         $contentHandler->expects($this->once())
             ->method('loadVersionInfo')
@@ -381,14 +376,15 @@ class ContentTest extends BaseServiceMockTest
         $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(array('internalLoadContent'));
         $content = $this->getMock('eZ\Publish\API\Repository\Values\Content\Content');
-        $versionInfo = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\VersionInfo')
-            ->setConstructorArgs(array(array('status' => APIVersionInfo::STATUS_PUBLISHED)))
-            ->getMockForAbstractClass();
+        $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
         $content
             ->expects($this->once())
             ->method('getVersionInfo')
             ->will($this->returnValue($versionInfo));
+        $versionInfo
+            ->expects($this->once())
+            ->method('isPublished')
+            ->willReturn(true);
         $contentId = 123;
         $contentService
             ->expects($this->once())
@@ -412,7 +408,6 @@ class ContentTest extends BaseServiceMockTest
         $content = $this->getMock('eZ\Publish\API\Repository\Values\Content\Content');
         $versionInfo = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\VersionInfo')
-            ->setConstructorArgs(array(array('status' => APIVersionInfo::STATUS_DRAFT)))
             ->getMockForAbstractClass();
         $content
             ->expects($this->once())
@@ -474,7 +469,6 @@ class ContentTest extends BaseServiceMockTest
         $content = $this->getMock('eZ\Publish\API\Repository\Values\Content\Content');
         $versionInfo = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\VersionInfo')
-            ->setConstructorArgs(array(array('status' => APIVersionInfo::STATUS_DRAFT)))
             ->getMockForAbstractClass();
         $content
             ->expects($this->once())
@@ -844,11 +838,14 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValueMap(
                     array(
                         array('versionNo', 123),
-                        array('status', VersionInfo::STATUS_DRAFT),
                         array('contentInfo', $contentInfo),
                     )
                 )
             );
+        $versionInfo
+            ->expects($this->once())
+            ->method('isPublished')
+            ->willReturn(false);
 
         $contentHandler
             ->expects($this->once())
@@ -5297,10 +5294,14 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValueMap(
                     array(
                         array('versionNo', 123),
-                        array('status', VersionInfo::STATUS_DRAFT),
                     )
                 )
             );
+
+        $versionInfoMock->expects($this->once())
+            ->method('isDraft')
+            ->willReturn(true);
+
         $versionInfoMock->expects($this->once())
             ->method('getContentInfo')
             ->will($this->returnValue($contentInfoMock));
@@ -5393,10 +5394,12 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValueMap(
                     array(
                         array('versionNo', 123),
-                        array('status', VersionInfo::STATUS_DRAFT),
                     )
                 )
             );
+        $versionInfoMock->expects($this->once())
+            ->method('isDraft')
+            ->willReturn(true);
         $versionInfoMock->expects($this->once())
             ->method('getContentInfo')
             ->will($this->returnValue($contentInfoMock));
