@@ -100,6 +100,10 @@ class Contextualizer implements ContextualizerInterface
                 $scopeSettings = $config[$this->siteAccessNodeName][$scope][$id];
             }
 
+            if (empty($groupsSettings) && empty($scopeSettings)) {
+                continue;
+            }
+
             if ($options & static::MERGE_FROM_SECOND_LEVEL) {
                 // array_merge() has to be used because we don't
                 // know whether we have a hash or a plain array
