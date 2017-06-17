@@ -127,6 +127,12 @@ class UserGroup extends APIUserGroup
 
             case 'fields':
                 return $this->getFields();
+
+            case 'content':
+                @trigger_error(
+                    sprintf('%s is and internal property. UserGroup itself exposes everything needed.', $property),
+                    E_USER_DEPRECATED
+                );
         }
 
         return parent::__get($property);

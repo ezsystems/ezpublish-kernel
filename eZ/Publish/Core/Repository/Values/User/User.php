@@ -147,6 +147,12 @@ class User extends APIUser
 
             case 'fields':
                 return $this->getFields();
+
+            case 'content':
+                @trigger_error(
+                    sprintf('%s is and internal property. User itself exposes everything needed.', $property),
+                    E_USER_DEPRECATED
+                );
         }
 
         return parent::__get($property);
