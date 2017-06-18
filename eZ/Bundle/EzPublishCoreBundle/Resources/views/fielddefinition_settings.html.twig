@@ -205,6 +205,8 @@
         {% endif %}
         </div>
     </li>
+    {{ block( 'settings_selection_content_types' ) }}
+
     {% set rootLocationId = settings.selectionRoot %}
     {{ block( 'settings_selectionroot' ) }}
 </ul>
@@ -232,21 +234,9 @@
         {% endif %}
         </div>
     </li>
-    <li class="ez-fielddefinition-setting allowed-content-types">
-        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.allowed-content-types.label'|trans|desc("Allowed content types:")}}</div>
-        <div class="ez-fielddefinition-setting-value">
-        {% if settings.selectionContentTypes %}
-            {# TODO display content type name #}
-            <ul>
-            {% for typeIdentifier in settings.selectionContentTypes %}
-                <li>{{ typeIdentifier }}</li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <em>{{ 'fielddefinition.allowed-content-types.any'|trans|desc("Any")}}</em>
-        {% endif %}
-        </div>
-    </li>
+
+    {{ block( 'settings_selection_content_types' ) }}
+
     {% set rootLocationId = settings.selectionDefaultLocation %}
     {{ block( 'settings_selectionroot' ) }}
 </ul>
@@ -320,6 +310,24 @@
         {% else %}
             <em>{{ 'fielddefinition.selection-root.undefined'|trans|desc("No defined root")}}</em>
         {% endif %}
+        </div>
+    </li>
+{% endblock %}
+
+{% block settings_selection_content_types %}
+    <li class="ez-fielddefinition-setting allowed-content-types">
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.allowed-content-types.label'|trans|desc("Allowed content types:")}}</div>
+        <div class="ez-fielddefinition-setting-value">
+            {% if settings.selectionContentTypes %}
+                {# TODO display content type name #}
+                <ul>
+                    {% for typeIdentifier in settings.selectionContentTypes %}
+                        <li>{{ typeIdentifier }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <em>{{ 'fielddefinition.allowed-content-types.any'|trans|desc("Any")}}</em>
+            {% endif %}
         </div>
     </li>
 {% endblock %}

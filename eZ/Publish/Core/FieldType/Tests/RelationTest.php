@@ -61,6 +61,10 @@ class RelationTest extends FieldTypeTest
                 'type' => 'string',
                 'default' => null,
             ),
+            'selectionContentTypes' => array(
+                'type' => 'array',
+                'default' => array(),
+            ),
         );
     }
 

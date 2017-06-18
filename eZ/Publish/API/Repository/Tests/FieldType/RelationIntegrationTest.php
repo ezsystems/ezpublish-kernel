@@ -87,7 +87,11 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
             ),
             'selectionRoot' => array(
                 'type' => 'string',
-                'default' => '',
+                'default' => null,
+            ),
+            'selectionContentTypes' => array(
+                'type' => 'array',
+                'default' => array(),
             ),
         );
     }
@@ -109,7 +113,11 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array('selectionMethod' => 0, 'selectionRoot' => '1');
+        return array(
+            'selectionMethod' => 0,
+            'selectionRoot' => '1',
+            'selectionContentTypes' => array('blog_post'),
+        );
     }
 
     /**
@@ -133,7 +141,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array('selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false);
+        return array('selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false, 'selectionContentTypes' => true);
     }
 
     /**

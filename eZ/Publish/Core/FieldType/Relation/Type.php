@@ -38,6 +38,10 @@ class Type extends FieldType
             'type' => 'string',
             'default' => null,
         ),
+        'selectionContentTypes' => array(
+            'type' => 'array',
+            'default' => array(),
+        ),
     );
 
     /**
@@ -83,6 +87,18 @@ class Type extends FieldType
                     if (!is_int($value) && !is_string($value) && $value !== null) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of either null, string or integer",
+                            null,
+                            array(
+                                '%setting%' => $name,
+                            ),
+                            "[$name]"
+                        );
+                    }
+                    break;
+                case 'selectionContentTypes':
+                    if (!is_array($value)) {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of array type",
                             null,
                             array(
                                 '%setting%' => $name,
