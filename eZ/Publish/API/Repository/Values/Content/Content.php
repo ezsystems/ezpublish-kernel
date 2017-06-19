@@ -37,7 +37,10 @@ abstract class Content extends ValueObject
      * @return string|null The name for a given language, or null if $languageCode is not set
      *         or does not exist.
      */
-    abstract public function getName($languageCode = null);
+    public function getName($languageCode = null)
+    {
+        return $this->getVersionInfo()->getName($languageCode);
+    }
 
     /**
      * Returns a field value for the given value.

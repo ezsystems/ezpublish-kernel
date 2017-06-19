@@ -45,9 +45,9 @@ class UserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test a new class and default values on properties.
+     * Test getName method.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__construct
+     * @covers \eZ\Publish\Core\Repository\Values\User\User::getName
      */
     public function testGetName()
     {

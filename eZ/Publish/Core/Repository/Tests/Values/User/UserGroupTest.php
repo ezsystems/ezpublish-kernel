@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\User;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use Mockery;
 use PHPUnit_Framework_TestCase;
@@ -39,15 +41,15 @@ class UserGroupTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test a new class and default values on properties.
+     * Test getName method.
      *
-     * @covers \eZ\Publish\API\Repository\Values\User\User::__construct
+     * @covers \eZ\Publish\Core\Repository\Values\User\UserGroup::getName
      */
     public function testGetName()
     {
         $name = 'Translated name';
-        $contentMock = Mockery::mock('eZ\Publish\API\Repository\Values\Content\Content');
-        $versionInfoMock = Mockery::mock('eZ\Publish\API\Repository\Values\Content\VersionInfo');
+        $contentMock = Mockery::mock(Content::class);
+        $versionInfoMock = Mockery::mock(VersionInfo::class);
 
         $contentMock->shouldReceive('getVersionInfo')->andReturn($versionInfoMock);
         $versionInfoMock->shouldReceive('getName')->andReturn($name);

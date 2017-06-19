@@ -70,14 +70,6 @@ class Content extends APIContent
     /**
      * {@inheritdoc}
      */
-    public function getName($languageCode = null)
-    {
-        return $this->versionInfo->getName($languageCode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getFieldValue($fieldDefIdentifier, $languageCode = null)
     {
         if (null === $languageCode) {
