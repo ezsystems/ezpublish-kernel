@@ -12,7 +12,7 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class Section extends MultipleValued
@@ -59,7 +59,7 @@ class Section extends MultipleValued
 
     public function match(View $view)
     {
-        if (!$view instanceof ContentView) {
+        if (!$view instanceof ContentValueView) {
             return false;
         }
 
