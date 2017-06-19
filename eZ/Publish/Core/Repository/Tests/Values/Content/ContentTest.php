@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use Mockery;
 use PHPUnit_Framework_TestCase;
 
 class ContentTest extends PHPUnit_Framework_TestCase
@@ -36,5 +38,21 @@ class ContentTest extends PHPUnit_Framework_TestCase
             }
             $propertiesHash[$property] = 1;
         }
+    }
+
+    /**
+     * Test getName method.
+     *
+     * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getName
+     */
+    public function testGetName()
+    {
+        $name = 'Translated name';
+        $versionInfoMock = Mockery::mock(VersionInfo::class);
+        $versionInfoMock->shouldReceive('getName')->andReturn($name);
+
+        $object = new Content(['versionInfo' => $versionInfoMock]);
+
+        $this->assertEquals($name, $object->getName());
     }
 }
