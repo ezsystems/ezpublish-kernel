@@ -97,6 +97,11 @@ Repetive SQL queries:
     should then perform a batch insert instead of single inserts in a
     for loop.
 
+An example trace of the publishing process, not showing all these queries,
+looks like:
+
+![image](create.png)
+
 ### Summary
 
 -   Refactor field creation to operate as batch function. (1.)
