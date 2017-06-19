@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\User;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\User;
 use Mockery;
 use PHPUnit_Framework_TestCase;
@@ -50,8 +52,8 @@ class UserTest extends PHPUnit_Framework_TestCase
     public function testGetName()
     {
         $name = 'Translated name';
-        $contentMock = Mockery::mock('eZ\Publish\API\Repository\Values\Content\Content');
-        $versionInfoMock = Mockery::mock('eZ\Publish\API\Repository\Values\Content\VersionInfo');
+        $contentMock = Mockery::mock(Content::class);
+        $versionInfoMock = Mockery::mock(VersionInfo::class);
 
         $contentMock->shouldReceive('getVersionInfo')->andReturn($versionInfoMock);
         $versionInfoMock->shouldReceive('getName')->andReturn($name);

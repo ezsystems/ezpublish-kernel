@@ -27,11 +27,19 @@ class UserGroup extends APIUserGroup
     /**
      * Returns the VersionInfo for this version.
      *
-     * @return VersionInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getVersionInfo()
     {
         return $this->content->getVersionInfo();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName($languageCode = null)
+    {
+        return $this->content->getVersionInfo()->getName($languageCode);
     }
 
     /**
