@@ -27,7 +27,7 @@ class UserGroup extends APIUserGroup
     /**
      * Returns the VersionInfo for this version.
      *
-     * @return VersionInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getVersionInfo()
     {
