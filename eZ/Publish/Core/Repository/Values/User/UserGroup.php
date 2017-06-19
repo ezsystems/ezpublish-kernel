@@ -101,7 +101,7 @@ class UserGroup extends APIUserGroup
      *
      * @return array
      */
-    protected function getProperties($dynamicProperties = array('id', 'contentInfo', 'versionInfo', 'fields'))
+    protected function getProperties($dynamicProperties = ['id', 'contentInfo', 'versionInfo', 'fields'])
     {
         return parent::getProperties($dynamicProperties);
     }
@@ -129,8 +129,9 @@ class UserGroup extends APIUserGroup
                 return $this->getFields();
 
             case 'content':
+                // trigger error for this, but for BC let it pass on to normal __get lookup for now
                 @trigger_error(
-                    sprintf('%s is and internal property. UserGroup itself exposes everything needed.', $property),
+                    sprintf('%s is and internal property, usage is deprecated as of 6.10. UserGroup itself exposes everything needed.', $property),
                     E_USER_DEPRECATED
                 );
         }
