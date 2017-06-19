@@ -121,7 +121,7 @@ class User extends APIUser
      *
      * @return array
      */
-    protected function getProperties($dynamicProperties = array('id', 'contentInfo'))
+    protected function getProperties($dynamicProperties = ['id', 'contentInfo', 'versionInfo', 'fields'])
     {
         return parent::getProperties($dynamicProperties);
     }
@@ -140,18 +140,20 @@ class User extends APIUser
                 return $this->getVersionInfo()->getContentInfo();
 
             case 'id':
-                $versionInfo = $this->getVersionInfo();
-                if (empty($versionInfo)) {
-                    return null;
-                }
-
-                return $versionInfo->getContentInfo()->id;
+                return $this->getVersionInfo()->getContentInfo()->id;
 
             case 'versionInfo':
                 return $this->getVersionInfo();
 
             case 'fields':
                 return $this->getFields();
+
+            case 'content':
+                // trigger error for this, but for BC let it pass on to normal __get lookup for now
+                @trigger_error(
+                    sprintf('%s is and internal property, usage is deprecated as of 6.10. User itself exposes everything needed.', $property),
+                    E_USER_DEPRECATED
+                );
         }
 
         return parent::__get($property);

@@ -51,6 +51,31 @@ class UserGroupTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Repository\Values\User\UserGroup::getProperties
+     */
+    public function testObjectProperties()
+    {
+        $object = new UserGroup();
+        $properties = $object->attributes();
+        self::assertNotContains('internalFields', $properties, 'Internal property found ');
+        self::assertContains('id', $properties, 'Property not found ');
+        self::assertContains('fields', $properties, 'Property not found ');
+        self::assertContains('versionInfo', $properties, 'Property not found ');
+        self::assertContains('contentInfo', $properties, 'Property not found ');
+
+        // check for duplicates and double check existence of property
+        $propertiesHash = [];
+        foreach ($properties as $property) {
+            if (isset($propertiesHash[$property])) {
+                self::fail("Property '{$property}' exists several times in properties list");
+            } elseif (!isset($object->$property)) {
+                self::fail("Property '{$property}' does not exist on object, even though it was hinted to be there");
+            }
+            $propertiesHash[$property] = 1;
+        }
+    }
+
+    /**
      * Test setting read only property.
      *
      * @covers \eZ\Publish\API\Repository\Values\User\UserGroup::__set
