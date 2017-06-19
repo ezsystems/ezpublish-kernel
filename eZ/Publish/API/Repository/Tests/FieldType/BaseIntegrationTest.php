@@ -1069,4 +1069,27 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             $fieldType->isEmptyValue($loadedContent->getField('data')->value)
         );
     }
+
+    /**
+     * Test creating new translation from existing content with empty field.
+     */
+    public function testUpdateContentWithNewTranslationOnEmptyField()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $this->testCreateContentWithEmptyFieldValue();
+        $publishedContent = $contentService->publishVersion($content->versionInfo);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField(
+            'data',
+            $publishedContent->getFieldValue('data', 'eng-US'),
+            'eng-US'
+        );
+        $updateStruct->initialLanguageCode = 'eng-GB';
+        $updatedContentDraft = $contentService->updateContent($contentDraft->versionInfo, $updateStruct);
+        $contentService->publishVersion($updatedContentDraft->versionInfo);
+    }
 }
