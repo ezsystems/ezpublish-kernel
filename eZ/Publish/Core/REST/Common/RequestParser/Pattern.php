@@ -78,10 +78,22 @@ class Pattern implements RequestParser
      * @param string $url
      *
      * @return array
+     *
+     * @todo Refactor usages of parse() to accept Request struct.
      */
     public function parse($url)
     {
-        foreach ($this->map as $pattern) {
+        $request = $this->parseRequest($url);
+        return $request->variables;
+    }
+
+    /**
+     * @param string $url
+     * @return Request
+     */
+    private function parseRequest($url)
+    {
+        foreach ($this->map as $type => $pattern) {
             $pattern = $this->compile($pattern);
             if (preg_match($pattern, $url, $match)) {
                 // remove numeric keys
@@ -91,11 +103,26 @@ class Pattern implements RequestParser
                     }
                 }
 
-                return $match;
+                return new Request($type, $match);
             }
         }
 
         throw new Exceptions\InvalidArgumentException("URL '$url' did not match any route.");
+    }
+
+    /**
+     * Returns the type name associated with $url.
+     *
+     * @param string $url
+     * @return string
+     *
+     * @todo Refactor usages of parse() to accept Request struct and remove
+     *       this method.
+     */
+    public function parseType($url)
+    {
+        $request = $this->parseRequest($url);
+        return $request->type;
     }
 
     /**

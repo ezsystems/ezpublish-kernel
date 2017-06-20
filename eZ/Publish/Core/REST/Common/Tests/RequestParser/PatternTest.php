@@ -132,6 +132,21 @@ class PatternTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test parsing type for URL.
+     *
+     * @dataProvider getParseValues
+     */
+    public function testParseType($type, $url, $values)
+    {
+        $urlHandler = $this->getWorkingUrlHandler();
+
+        $this->assertSame(
+            $type,
+            $urlHandler->parseType($url)
+        );
+    }
+
+    /**
      * Test generating unknown URL type.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException

@@ -23,6 +23,14 @@ interface RequestParser
     public function parse($url);
 
     /**
+     * Returns the type name associated with $url.
+     *
+     * @param string $url
+     * @return string
+     */
+    public function parseType($url);
+
+    /**
      * Generate a URL of the given type from the specified values.
      *
      * @param string $type
