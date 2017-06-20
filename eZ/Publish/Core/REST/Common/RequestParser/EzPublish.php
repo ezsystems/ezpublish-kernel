@@ -70,6 +70,7 @@ class EzPublish extends Pattern
         'urlWildcard' => '/content/urlwildcards/{urlwildcard}',
         'urlAliases' => '/content/urlaliases',
         'urlAlias' => '/content/urlaliases/{urlalias}',
+        'urlAliasByUrl' => '/content/urlaliases?url={urlalias}',
         'views' => '/content/views',
         'view' => '/content/views/{view}',
         'viewResults' => '/content/views/{view}/results',

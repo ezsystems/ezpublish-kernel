@@ -14,6 +14,8 @@ class ResourceResolverFactory
 
     private $contentTypeService;
 
+    private $urlAliasService;
+
     private $sectionService;
 
     private $userService;
@@ -21,18 +23,21 @@ class ResourceResolverFactory
     /**
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\API\Repository\UrlAliasService $urlAliasService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      * @param \eZ\Publish\API\Repository\UserService $userService
      */
     public function __construct(
         RequestParser $requestParser,
         ContentTypeService $contentTypeService,
+        UrlAliasService $urlAliasService,
         SectionService $sectionService,
         UserService $userService
     ) {
         $this->requestParser = $requestParser;
 
         $this->contentTypeService = $contentTypeService;
+        $this->urlAliasService = $urlAliasService;
         $this->sectionService = $sectionService;
         $this->userService = $userService;
     }
@@ -43,6 +48,7 @@ class ResourceResolverFactory
     public function createResolver()
     {
         $contentTypeService = $this->contentTypeService;
+        $urlAliasService = $this->urlAliasService;
         $sectionService = $this->sectionService;
         $userService = $this->userService;
 
@@ -59,7 +65,12 @@ class ResourceResolverFactory
                     return $contentTypeService->loadContentTypeByRemoteId($uriParameters['type']);
                 },
 
-                // TODO: URLAliases still need an alias URI (SIC ;))
+                'urlAlias' => function ($uriParameters) use ($urlAliasService) {
+                    return $urlAliasService->load($uriParameters['urlAlias']);
+                },
+                'urlAliasByUrl' => function ($uriParameters) use ($urlAliasService) {
+                    return $urlAliasService->lookup($uriParameters['urlAlias']);
+                },
 
                 'section' => function ($uriParameters) use ($sectionService) {
                     return $sectionService->loadSection($uriParameters['section']);
