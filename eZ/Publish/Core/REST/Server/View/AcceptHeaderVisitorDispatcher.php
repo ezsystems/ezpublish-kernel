@@ -12,8 +12,8 @@ namespace eZ\Publish\Core\REST\Server\View;
 
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
+use Qafoo\RMF\View\NowViewFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use RuntimeException;
 
 /**
  * Dispatcher for various visitors depending on the mime-type accept header.
@@ -45,7 +45,7 @@ class AcceptHeaderVisitorDispatcher
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $result
      *
-     * @throws RuntimeException
+     * @throws NowViewFoundException
      *
      * @return Response
      */
@@ -60,6 +60,6 @@ class AcceptHeaderVisitorDispatcher
             }
         }
 
-        throw new RuntimeException('No view mapping found.');
+        throw new NowViewFoundException('No view mapping found.');
     }
 }
