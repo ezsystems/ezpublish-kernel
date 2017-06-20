@@ -71,7 +71,10 @@ class ResourceResolverFactory
                 'user' => function ($uriParameters) use ($userService) {
                     return $userService->loadUser($uriParameters['user']);
                 },
-                // TODO: User by Login missing in URL mapping
+                // TODO: User by Remote ID
+                'userByLogin' => function ($uriParameters) use ($userService) {
+                    return $userService->loadUserByLogin($uriParameters['user']);
+                },
             ]
         );
     }
