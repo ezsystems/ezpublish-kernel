@@ -88,7 +88,6 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
-        $this->defaultScope = $siteAccess->name;
     }
 
     /**
@@ -127,7 +126,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     public function hasParameter($paramName, $namespace = null, $scope = null)
     {
         $namespace = $namespace ?: $this->defaultNamespace;
-        $scope = $scope ?: $this->defaultScope;
+        $scope = $scope ?: $this->getDefaultScope();
 
         $defaultScopeParamName = "$namespace." . self::SCOPE_DEFAULT . ".$paramName";
         $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";
@@ -167,7 +166,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     public function getParameter($paramName, $namespace = null, $scope = null)
     {
         $namespace = $namespace ?: $this->defaultNamespace;
-        $scope = $scope ?: $this->defaultScope;
+        $scope = $scope ?: $this->getDefaultScope();
         $triedScopes = array();
 
         // Global scope
@@ -183,7 +182,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         if ($this->container->hasParameter($relativeScopeParamName)) {
             return $this->container->getParameter($relativeScopeParamName);
         }
-        $triedScopes[] = $this->defaultScope;
+        $triedScopes[] = $scope;
         unset($relativeScopeParamName);
 
         // Relative scope, siteaccess group wise
@@ -235,7 +234,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
 
     public function getDefaultScope()
     {
-        return $this->defaultScope;
+        return $this->defaultScope ?: $this->siteAccess->name;
     }
 
     public function setDefaultScope($scope)
