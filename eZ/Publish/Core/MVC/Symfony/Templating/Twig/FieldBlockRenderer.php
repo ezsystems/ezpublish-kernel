@@ -199,8 +199,6 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * @param array $params
      * @param int $type Either self::VIEW or self::EDIT
      *
-     * @throws MissingFieldBlockException If no template block can be found for $field
-     *
      * @return string
      */
     private function renderFieldDefinition(FieldDefinition $fieldDefinition, array $params, $type)
@@ -218,7 +216,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         $blocks = $this->getBlocksByFieldDefinition($fieldDefinition, $type);
 
         if (!$this->baseTemplate->hasBlock($blockName, $context, $blocks)) {
-            throw new MissingFieldBlockException("Cannot find '$blockName' template block.");
+            return '';
         }
 
         return $this->baseTemplate->renderBlock($blockName, $context, $blocks);
