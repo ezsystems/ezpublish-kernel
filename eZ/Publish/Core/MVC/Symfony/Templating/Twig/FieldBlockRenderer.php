@@ -153,6 +153,8 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * @param array $params
      * @param int $type Either self::VIEW or self::EDIT
      *
+     * @throws MissingFieldBlockException If no template block can be found for $field
+     *
      * @return string
      */
     private function renderContentField(Field $field, $fieldTypeIdentifier, array $params, $type)
@@ -171,12 +173,15 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         if (is_string($this->baseTemplate)) {
             $this->baseTemplate = $this->twig->loadTemplate($this->baseTemplate);
         }
+        $blockName = $this->getRenderFieldBlockName($fieldTypeIdentifier, $type);
+        $context = $this->twig->mergeGlobals($params);
+        $blocks = $this->getBlocksByField($fieldTypeIdentifier, $type, $localTemplate);
 
-        return $this->baseTemplate->renderBlock(
-            $this->getRenderFieldBlockName($fieldTypeIdentifier, $type),
-            $this->twig->mergeGlobals($params),
-            $this->getBlocksByField($fieldTypeIdentifier, $type, $localTemplate)
-        );
+        if (!$this->baseTemplate->hasBlock($blockName, $context, $blocks)) {
+            throw new MissingFieldBlockException("Cannot find '$blockName' template block.");
+        }
+
+        return $this->baseTemplate->renderBlock($blockName, $context, $blocks);
     }
 
     public function renderFieldDefinitionView(FieldDefinition $fieldDefinition, array $params = [])
@@ -194,6 +199,8 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * @param array $params
      * @param int $type Either self::VIEW or self::EDIT
      *
+     * @throws MissingFieldBlockException If no template block can be found for $field
+     *
      * @return string
      */
     private function renderFieldDefinition(FieldDefinition $fieldDefinition, array $params, $type)
@@ -206,12 +213,15 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
             'fielddefinition' => $fieldDefinition,
             'settings' => $fieldDefinition->getFieldSettings(),
         ];
+        $blockName = $this->getRenderFieldDefinitionBlockName($fieldDefinition->fieldTypeIdentifier, $type);
+        $context = $this->twig->mergeGlobals($params);
+        $blocks = $this->getBlocksByFieldDefinition($fieldDefinition, $type);
 
-        return $this->baseTemplate->renderBlock(
-            $this->getRenderFieldDefinitionBlockName($fieldDefinition->fieldTypeIdentifier, $type),
-            $this->twig->mergeGlobals($params),
-            $this->getBlocksByFieldDefinition($fieldDefinition, $type)
-        );
+        if (!$this->baseTemplate->hasBlock($blockName, $context, $blocks)) {
+            throw new MissingFieldBlockException("Cannot find '$blockName' template block.");
+        }
+
+        return $this->baseTemplate->renderBlock($blockName, $context, $blocks);
     }
 
     /**
@@ -290,8 +300,6 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * @param string $name
      * @param string $resourcesName
      *
-     * @throws MissingFieldBlockException If no template block can be found for $field
-     *
      * @return array
      */
     private function getBlockByName($name, $resourcesName)
@@ -315,7 +323,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
             }
         }
 
-        throw new MissingFieldBlockException("Cannot find '$name' template block.");
+        return [];
     }
 
     /**
