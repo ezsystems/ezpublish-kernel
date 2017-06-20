@@ -15,45 +15,39 @@ class ResourceResolver
     private $requestParser;
 
     /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
+     * @var callable[string]
      */
-    protected $contentTypeService;
+    protected $loaderMap;
 
     /**
      * @param RequestParser $requestParser
-     * @param ContentTypeService $contentTypeService
+     * @param callable[string] $loaderMap
      */
-    public function __construct(RequestParser $requestParser, ContentTypeService $contentTypeService)
+    public function __construct(RequestParser $requestParser, array $loaderMap)
     {
         $this->requestParser = $requestParser;
-        $this->contentTypeService = $contentTypeService;
+
+        foreach ($loaderMap as $uriType => $loaderFunction) {
+            $this->addLoader($uriType, $loaderFunction);
+        }
     }
 
-    /**
-     * @param string $uri
-     */
-    public function resolveContentType($uri)
+    private function addLoader($uriType, callable $loaderFunction)
     {
-        $contentTypeVariables = $this->requestParser->parse($uri);
+        $this->loaderMap[$uriType] = $loaderFunction;
+    }
+
+    public function resolve($uri)
+    {
         $uriType = $this->requestParser->parseType($uri);
 
-        switch ($uriType) {
-            case 'typeByIdentifier':
-                return $this->contentTypeService->loadContentTypeByIdentifier(
-                    $contentTypeVariables['type']
-                );
-
-            case 'typeByRemoteId':
-                return $this->contentTypeService->loadContentTypeByRemoteId(
-                    $contentTypeVariables['type']
-                );
-
-            case 'type':
-                return $this->contentTypeService->loadContentType(
-                    $contentTypeVariables['type']
-                );
+        if (!isset($this->loaderMap[$uriType])) {
+            throw new Exceptions\InvalidArgumentException("No loader defined for type '$uriType'.");
         }
+        $loaderFunction = $this->loaderMap[$uriType];
 
-        throw new Exceptions\InvalidArgumentException("Could not retrieve ContenType for '$uri'.");
+        $loaderParameters = $this->requestParser->parse($uri);
+
+        return $loaderFunction($loaderParameters);
     }
 }
