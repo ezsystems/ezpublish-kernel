@@ -178,7 +178,7 @@ class FullText extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $string
      *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery|null
      */
     protected function getWordIdSubquery(SelectQuery $query, $string)
     {
@@ -186,6 +186,11 @@ class FullText extends CriterionHandler
         $tokens = $this->tokenizeString(
             $this->processor->transform($string, $this->configuration['commands'])
         );
+
+        if (empty($tokens)) {
+            return null;
+        }
+
         $wordExpressions = array();
         foreach ($tokens as $token) {
             $wordExpressions[] = $this->getWordExpression($subQuery, $token);
@@ -231,6 +236,12 @@ class FullText extends CriterionHandler
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
+
+        $wordIdSubquery = $this->getWordIdSubquery($subSelect, $criterion->value);
+        if ($wordIdSubquery === null) {
+            return $query->expr->neq(1, 1);
+        }
+
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentobject_id')
@@ -239,7 +250,7 @@ class FullText extends CriterionHandler
             )->where(
                 $query->expr->in(
                     $this->dbHandler->quoteColumn('word_id'),
-                    $this->getWordIdSubquery($subSelect, $criterion->value)
+                    $wordIdSubquery
                 )
             );
 
