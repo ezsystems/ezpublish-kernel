@@ -88,6 +88,8 @@ class EzPublish extends Pattern
         'policy' => '/user/roles/{role}/policies/{policy}',
         'users' => '/user/users',
         'user' => '/user/users/{user}',
+        'userByRemoteId' => '/user/users?remoteId={user}',
+        'userByLogin' => '/user/users?login={user}',
         'userDrafts' => '/user/users/{user}/drafts',
         'userGroups' => '/user/users/{user}/groups',
         'userGroupAssign' => '/user/users/{user}/groups?group={&group}',
