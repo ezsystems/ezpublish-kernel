@@ -38,17 +38,17 @@ class RelationTest extends PHPUnit_Framework_TestCase
     public function testToStorageFieldDefinition()
     {
         $fieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
-                        'fieldSettings' => array(
+                    [
+                        'fieldSettings' => [
                             'selectionMethod' => Type::SELECTION_BROWSE,
                             'selectionRoot' => 12345,
-                            'selectionContentTypes' => array('article', 'blog_post'),
-                        ),
-                    )
+                            'selectionContentTypes' => ['article', 'blog_post'],
+                        ],
+                    ]
                 ),
-            )
+            ]
         );
 
         $expectedStorageFieldDefinition = new StorageFieldDefinition();

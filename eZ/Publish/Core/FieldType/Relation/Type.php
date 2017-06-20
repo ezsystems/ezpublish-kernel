@@ -29,20 +29,20 @@ class Type extends FieldType
     const SELECTION_BROWSE = 0;
     const SELECTION_DROPDOWN = 1;
 
-    protected $settingsSchema = array(
-        'selectionMethod' => array(
+    protected $settingsSchema = [
+        'selectionMethod' => [
             'type' => 'int',
             'default' => self::SELECTION_BROWSE,
-        ),
-        'selectionRoot' => array(
+        ],
+        'selectionRoot' => [
             'type' => 'string',
             'default' => null,
-        ),
-        'selectionContentTypes' => array(
+        ],
+        'selectionContentTypes' => [
             'type' => 'array',
-            'default' => array(),
-        ),
-    );
+            'default' => [],
+        ],
+    ];
 
     /**
      * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
@@ -100,9 +100,9 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of array type",
                             null,
-                            array(
+                            [
                                 '%setting%' => $name,
-                            ),
+                            ],
                             "[$name]"
                         );
                     }

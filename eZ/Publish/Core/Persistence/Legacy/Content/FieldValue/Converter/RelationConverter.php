@@ -53,9 +53,9 @@ class RelationConverter implements Converter
      */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        $fieldValue->data = array(
+        $fieldValue->data = [
             'destinationContentId' => $value->dataInt ?: null,
-        );
+        ];
         $fieldValue->sortKey = (int)$value->sortKeyInt;
     }
 
@@ -104,21 +104,23 @@ class RelationConverter implements Converter
     /**
      * Converts field definition data in $storageDef into $fieldDef.
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints>
-     *     <allowed-class contentclass-identifier="blog_post"/>
-     *   </constraints>
-     *   <selection_type value="1"/>
-     *   <contentobject-placement node-id="67"/>
-     * </related-objects>
+     * <code>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints>
+     *       <allowed-class contentclass-identifier="blog_post"/>
+     *     </constraints>
+     *     <selection_type value="1"/>
+     *     <contentobject-placement node-id="67"/>
+     *   </related-objects>
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints/>
-     *   <selection_type value="0"/>
-     *   <contentobject-placement/>
-     * </related-objects>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints/>
+     *     <selection_type value="0"/>
+     *     <contentobject-placement/>
+     *   </related-objects>
+     * </code>
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
@@ -127,11 +129,11 @@ class RelationConverter implements Converter
     {
         // default settings
         // use dataInt1 and dataInt2 fields as default for backward compatibility
-        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = [
             'selectionMethod' => $storageDef->dataInt1,
             'selectionRoot' => $storageDef->dataInt2 === 0 ? '' : $storageDef->dataInt2,
-            'selectionContentTypes' => array(),
-        );
+            'selectionContentTypes' => [],
+        ];
 
         if ($storageDef->dataText5 === null) {
             return;
