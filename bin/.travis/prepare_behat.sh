@@ -24,4 +24,4 @@ cd ezplatform
 #fi
 
 # Install everything needed for behat testing, using our local branch of this repo
-./bin/.travis/trusty/setup_from_external_repo.sh $BRANCH_BUILD_DIR "ezsystems/ezpublish-kernel:dev-tmp_ci_branch"
+./bin/.travis/trusty/setup_from_external_repo.sh $BRANCH_BUILD_DIR "ezsystems/ezpublish-kernel:dev-tmp_ci_branch as 6.99.x-dev"
