@@ -179,6 +179,8 @@ class FullText extends CriterionHandler
      * @param string $string
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery|null
+     *
+     * @throws InvalidArgumentException On invalid $string
      */
     protected function getWordIdSubquery(SelectQuery $query, $string)
     {
@@ -188,7 +190,7 @@ class FullText extends CriterionHandler
         );
 
         if (empty($tokens)) {
-            return null;
+            throw new InvalidArgumentException('string', 'Search query does not contains any searchable token');
         }
 
         $wordExpressions = array();
@@ -237,11 +239,6 @@ class FullText extends CriterionHandler
     ) {
         $subSelect = $query->subSelect();
 
-        $wordIdSubquery = $this->getWordIdSubquery($subSelect, $criterion->value);
-        if ($wordIdSubquery === null) {
-            return $query->expr->neq(1, 1);
-        }
-
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentobject_id')
@@ -250,7 +247,7 @@ class FullText extends CriterionHandler
             )->where(
                 $query->expr->in(
                     $this->dbHandler->quoteColumn('word_id'),
-                    $wordIdSubquery
+                    $this->getWordIdSubquery($subSelect, $criterion->value)
                 )
             );
 

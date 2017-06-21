@@ -707,6 +707,15 @@ class SearchServiceTest extends BaseTest
         );
     }
 
+    public function getFullTextQueriesWithoutWords()
+    {
+        return [
+            ['searchQuery' => ''],
+            ['searchQuery' => '\''],
+            ['searchQuery' => ' '],
+        ];
+    }
+
     /**
      * Test for the findContent() method.
      *
@@ -4165,6 +4174,47 @@ class SearchServiceTest extends BaseTest
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($englishContent->id, $searchResult->searchHits[0]->valueObject->id);
+    }
+
+    /**
+     * Test for FullText on the findContent() method.
+     *
+     * @param string $searchQuery
+     *
+     * @dataProvider getFullTextQueriesWithoutWords
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    public function testFullTextOnQueryWithoutWords($searchQuery)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            'eng-GB'
+        );
+
+        $contentCreateStruct->setField('name', 'foxes');
+
+        $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $this->refreshSearch($repository);
+
+        $query = new Query(
+            [
+                'query' => new Criterion\FullText($searchQuery),
+            ]
+        );
+
+        $searchResult = $searchService->findContentInfo($query);
     }
 
     /**
