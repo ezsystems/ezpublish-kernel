@@ -5,8 +5,6 @@ namespace eZ\Publish\Core\REST\Server;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
-use eZ\Publish\API\Repository\ContentTypeService;
-
 class ResourceResolver
 {
     /**

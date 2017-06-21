@@ -44,6 +44,7 @@ class Router implements RequestParser
     public function parseType($url)
     {
         $matchResult = $this->matchUrl($url);
+
         return $matchResult['_route'];
     }
 
@@ -74,6 +75,7 @@ class Router implements RequestParser
         }
 
         $this->router->setContext($originalContext);
+
         return $matchResult;
     }
 

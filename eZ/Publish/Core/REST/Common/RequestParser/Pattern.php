@@ -84,6 +84,7 @@ class Pattern implements RequestParser
     public function parse($url)
     {
         $request = $this->parseRequest($url);
+
         return $request->variables;
     }
 
@@ -122,6 +123,7 @@ class Pattern implements RequestParser
     public function parseType($url)
     {
         $request = $this->parseRequest($url);
+
         return $request->type;
     }
 

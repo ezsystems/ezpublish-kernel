@@ -6,11 +6,8 @@ use eZ\Publish\Core\REST\Server\ResourceResolver;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
-use eZ\Publish\API\Repository\ContentTypeService;
-
 class ResourceResolverTest extends \PHPUnit_Framework_TestCase
 {
-
     private $resourceResolver;
 
     private $resolverCallableMock;
@@ -18,7 +15,7 @@ class ResourceResolverTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->resolverCallableMock = $this->getMockBuilder(
-            \stdClass::class            
+            \stdClass::class
         )->setMethods(['__invoke'])
         ->getMock();
 

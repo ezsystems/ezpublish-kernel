@@ -275,8 +275,7 @@ class Content extends RestController
     private function parseContentCreate(Request $request)
     {
         if ($request->headers->has('content-type')
-            && $request->headers->get('content-type') === 'application/vnd.ez.api.simplified.ContentCreate+json')
-        {
+            && $request->headers->get('content-type') === 'application/vnd.ez.api.simplified.ContentCreate+json') {
             return $this->parseSimplifiedContentCreate($request);
         }
 
