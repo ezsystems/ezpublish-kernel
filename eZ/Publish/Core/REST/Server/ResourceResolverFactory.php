@@ -35,10 +35,10 @@ class ResourceResolverFactory
      */
     public function createResolver()
     {
-        $contentTypeService = $this->getContentTypeService();
-        $urlAliasService = $this->getUrlAliasService();
-        $sectionService = $this->getSectionService();
-        $userService = $this->getUserService();
+        $contentTypeService = $this->repository->getContentTypeService();
+        $urlAliasService = $this->repository->getUrlAliasService();
+        $sectionService = $this->repository->getSectionService();
+        $userService = $this->repository->getUserService();
 
         return new ResourceResolver(
             $this->requestParser,
