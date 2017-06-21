@@ -7165,7 +7165,7 @@ Simplified ContentCreate Example
             },
             "ContentSection": "/content/section/?identifier=places",
             "Owner": "/user/users/?login=jessica",
-            "alwaysAvailable": "false",
+            "alwaysAvailable": false,
             "modificationDate": "2017-03-02T12:00:00",
             "remoteId": "remote123456",
             "fields": {
