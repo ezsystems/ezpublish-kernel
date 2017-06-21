@@ -4,42 +4,30 @@ namespace eZ\Publish\Core\REST\Server;
 
 use eZ\Publish\Core\REST\Common\RequestParser;
 
-use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\SectionService;
-use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Repository;
 
 class ResourceResolverFactory
 {
+    /**
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     */
     private $requestParser;
 
-    private $contentTypeService;
-
-    private $urlAliasService;
-
-    private $sectionService;
-
-    private $userService;
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
 
     /**
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
-     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
-     * @param \eZ\Publish\API\Repository\UrlAliasService $urlAliasService
-     * @param \eZ\Publish\API\Repository\SectionService $sectionService
-     * @param \eZ\Publish\API\Repository\UserService $userService
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
     public function __construct(
         RequestParser $requestParser,
-        ContentTypeService $contentTypeService,
-        UrlAliasService $urlAliasService,
-        SectionService $sectionService,
-        UserService $userService
+        Repository $repository
     ) {
         $this->requestParser = $requestParser;
-
-        $this->contentTypeService = $contentTypeService;
-        $this->urlAliasService = $urlAliasService;
-        $this->sectionService = $sectionService;
-        $this->userService = $userService;
+        $this->repository = $repository;
     }
 
     /**
@@ -47,10 +35,10 @@ class ResourceResolverFactory
      */
     public function createResolver()
     {
-        $contentTypeService = $this->contentTypeService;
-        $urlAliasService = $this->urlAliasService;
-        $sectionService = $this->sectionService;
-        $userService = $this->userService;
+        $contentTypeService = $this->getContentTypeService();
+        $urlAliasService = $this->getUrlAliasService();
+        $sectionService = $this->getSectionService();
+        $userService = $this->getUserService();
 
         return new ResourceResolver(
             $this->requestParser,
