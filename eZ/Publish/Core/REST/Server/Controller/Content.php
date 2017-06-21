@@ -231,12 +231,7 @@ class Content extends RestController
      */
     public function createContent(Request $request)
     {
-        $contentCreate = $this->inputDispatcher->parse(
-            new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
-                $request->getContent()
-            )
-        );
+        $contentCreate = $this->parseContentCreate($request);
 
         try {
             $content = $this->repository->getContentService()->createContent(
@@ -271,6 +266,67 @@ class Content extends RestController
                 ),
             )
         );
+    }
+
+    /**
+     * @param Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
+     */
+    private function parseContentCreate(Request $request)
+    {
+        if ($request->headers->has('content-type')
+            && $request->headers->get('content-type') === 'application/vnd.ez.api.simplified.ContentCreate+json')
+        {
+            return $this->parseSimplifiedContentCreate($request);
+        }
+
+        return $this->inputDispatcher->parse(
+            new Message(
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
+            )
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
+     *
+     * @todo This needs to be completed and can potentially be extracted into a dedicated service
+     * @todo How can we validate the structure before using it? What about JSON schema?
+     */
+    private function parseSimplifiedContentCreate(Request $request)
+    {
+        $input = json_decode($request->getBody(), true);
+
+        if (!isset($input['ContentCreate'])) {
+            throw new BadRequestException("Key 'ContentCreate' missing.");
+        }
+        $input = $input['ContentCreate'];
+
+        $contentCreate = $this->repository->getContentService()->newContentCreateStruct(
+            $this->resourceResolver->resolve($input['ContentType']),
+            // TODO: Retrieve default language code
+            'eng-US'
+        );
+
+        $section = $this->resourceResolver->resolve($input['ContentSection']);
+        $owner = $this->resourceResolver->resolve($input['Owner']);
+
+        $contentCreate->sectionId = $section->id;
+        $contentCreate->ownerId = $owner->id;
+
+        $contentCreate->alwaysAvailable = (bool) $input['alwaysAvailable'];
+        $contentCreate->remoteId = $input['remoteId'];
+        $contentCreate->modificationDate = new \DateTime($input['modificationDate']);
+
+        foreach ($input['fields'] as $languageCode => $fields) {
+            foreach ($fields as $fieldDefIdentifier => $plainValue) {
+                $contentCreate->setField($fieldDefIdentifier, $plainValue, $languageCode);
+            }
+        }
+
+        return $contentCreate;
     }
 
     /**
