@@ -34,6 +34,25 @@ class Router implements RequestParser
      */
     public function parse($url)
     {
+        return $this->matchUrl($url);
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function parseType($url)
+    {
+        $matchResult = $this->matchUrl($url);
+        return $matchResult['_route'];
+    }
+
+    /**
+     * @param string $url
+     * @return array
+     */
+    private function matchUrl($url)
+    {
         // we create a request with a new context in order to match $url to a route and get its properties
         $request = Request::create($url, 'GET');
         $originalContext = $this->router->getContext();
@@ -55,7 +74,6 @@ class Router implements RequestParser
         }
 
         $this->router->setContext($originalContext);
-
         return $matchResult;
     }
 
