@@ -26,6 +26,8 @@ parameters:
 
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
     ezpublish_rest.request_parser.class: eZ\Bundle\EzPublishRestBundle\RequestParser\Router
+    ezpublish_rest.resource_resolver.class: eZ\Publish\Core\REST\Server\ResourceResolver
+    ezpublish_rest.resource_resolver.factory.class: eZ\Publish\Core\REST\Server\ResourceResolverFactory
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
     ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
@@ -126,6 +128,14 @@ services:
          class: "%ezpublish_rest.root_resource_builder.class%"
          arguments: ["@router", "@ezpublish_rest.templated_router", "$rest_root_resources$"]
 
+    ezpublish_rest.resource_resolver:
+        class: "%ezpublish_rest.resource_resolver.class%"
+        factory: [ "@ezpublish_rest.resource_resolver.factory", "createResolver"]
+
+    ezpublish_rest.resource_resolver.factory:
+        class: "%ezpublish_rest.resource_resolver.factory.class%"
+        arguments: ["@ezpublish_rest.request_parser", "@ezpublish.api.repository"]
+
     ezpublish_rest.controller.base:
         class: "%ezpublish_rest.controller.base.class%"
         calls:
@@ -134,6 +144,7 @@ services:
             - [ setRouter, ["@router"] ]
             - [ setRequestParser, ["@ezpublish_rest.request_parser"] ]
             - [ setRepository, ["@ezpublish.api.repository"] ]
+            - [ setResourceResolver, ["@ezpublish_rest.resource_resolver"] ]
 
     ezpublish_rest.controller.root:
         class: "%ezpublish_rest.controller.root.class%"

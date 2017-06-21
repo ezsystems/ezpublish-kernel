@@ -15,6 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
+use eZ\Publish\Core\REST\Server\ResourceResolver;
 
 abstract class Controller implements ContainerAwareInterface
 {
@@ -42,6 +43,11 @@ abstract class Controller implements ContainerAwareInterface
      */
     protected $repository;
 
+    /**
+     * @var \eZ\Publish\Core\REST\Server\ResourceResolver
+     */
+    protected $resourceResolver;
+
     public function setInputDispatcher(InputDispatcher $inputDispatcher)
     {
         $this->inputDispatcher = $inputDispatcher;
@@ -60,6 +66,11 @@ abstract class Controller implements ContainerAwareInterface
     public function setRequestParser(RequestParser $requestParser)
     {
         $this->requestParser = $requestParser;
+    }
+
+    public function setResourceResolver(ResourceResolver $resourceResolver)
+    {
+        $this->resourceResolver = $resourceResolver;
     }
 
     /**
