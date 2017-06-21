@@ -9,52 +9,29 @@
 namespace eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 class LegacyStorage extends Gateway
 {
     /**
-     * Connection.
-     *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
-    /**
-     * Set database handler for this gateway.
-     *
-     * @param mixed $dbHandler
-     *
-     * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
-     */
-    public function setConnection($dbHandler)
+    public function __construct(DatabaseHandler $dbHandler)
     {
-        // This obviously violates the Liskov substitution Principle, but with
-        // the given class design there is no sane other option. Actually the
-        // dbHandler *should* be passed to the constructor, and there should
-        // not be the need to post-inject it.
-        if (!$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler) {
-            throw new \RuntimeException('Invalid dbHandler passed');
-        }
-
         $this->dbHandler = $dbHandler;
     }
 
     /**
      * Returns the active connection.
      *
-     * @throws \RuntimeException if no connection has been set, yet.
-     *
      * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
-        if ($this->dbHandler === null) {
-            throw new \RuntimeException('Missing database connection.');
-        }
-
         return $this->dbHandler;
     }
 
@@ -64,8 +41,8 @@ class LegacyStorage extends Gateway
      * Potentially rewrites data in $field and returns true, if the $field
      * needs to be updated in the database.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
      * @return bool If restoring of the internal field data is required
      */
@@ -79,7 +56,7 @@ class LegacyStorage extends Gateway
                 'hasData' => false,
             );
 
-            return;
+            return false;
         }
 
         if ($this->hasFieldData($field->id, $versionInfo->versionNo)) {
@@ -99,8 +76,8 @@ class LegacyStorage extends Gateway
     /**
      * Performs an update on the field data.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
      * @return bool
      */
@@ -138,8 +115,8 @@ class LegacyStorage extends Gateway
     /**
      * Stores new field data.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      */
     protected function storeNewFieldData(VersionInfo $versionInfo, Field $field)
     {
@@ -170,8 +147,8 @@ class LegacyStorage extends Gateway
     /**
      * Sets the loaded field data into $field->externalData.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
      * @return array
      */
@@ -245,7 +222,7 @@ class LegacyStorage extends Gateway
     /**
      * Deletes the data for all given $fieldIds.
      *
-     * @param VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param array $fieldIds
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds)

@@ -9,15 +9,21 @@
 namespace eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 class LegacyStorage extends Gateway
 {
     /**
      * Connection.
      *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
+
+    public function __construct(DatabaseHandler $dbHandler)
+    {
+        $this->dbHandler = $dbHandler;
+    }
 
     /**
      * Default values for user fields.
@@ -39,6 +45,7 @@ class LegacyStorage extends Gateway
      * Maps legacy database column names to property names.
      *
      * @var array
+     * @return array
      */
     protected function getPropertyMap()
     {
@@ -80,24 +87,6 @@ class LegacyStorage extends Gateway
                 'cast' => 'intval',
             ),
         );
-    }
-
-    /**
-     * Set dbHandler for gateway.
-     *
-     * @param mixed $dbHandler
-     */
-    public function setConnection($dbHandler)
-    {
-        // This obviously violates the Liskov substitution Principle, but with
-        // the given class design there is no sane other option. Actually the
-        // dbHandler *should* be passed to the constructor, and there should
-        // not be the need to post-inject it.
-        if (!$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler) {
-            throw new \RuntimeException('Invalid dbHandler passed');
-        }
-
-        $this->dbHandler = $dbHandler;
     }
 
     /**

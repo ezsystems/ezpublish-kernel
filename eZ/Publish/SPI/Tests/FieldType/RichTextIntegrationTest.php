@@ -50,7 +50,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -67,13 +67,16 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
+        $urlGateway = new UrlGateway($this->getDatabaseHandler());
+
         return $this->getHandler(
             'ezrichtext',
             $fieldType,
             new RichTextConverter(),
             new FieldType\RichText\RichTextStorage(
-                array(
-                    'LegacyStorage' => new LegacyStorage(new UrlGateway()),
+                new LegacyStorage(
+                    $urlGateway,
+                    $this->getDatabaseHandler()
                 )
             )
         );

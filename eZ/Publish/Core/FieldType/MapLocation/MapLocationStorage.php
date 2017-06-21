@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\MapLocation;
 
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
@@ -18,13 +18,20 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class MapLocationStorage extends GatewayBasedStorage
 {
     /**
+     * @var \eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway
+     */
+    protected $gateway;
+
+    /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param array $context
+     * @return mixed
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway($context);
-
-        return $gateway->storeFieldData($versionInfo, $field);
+        return $this->gateway->storeFieldData($versionInfo, $field);
     }
 
     /**
@@ -38,20 +45,19 @@ class MapLocationStorage extends GatewayBasedStorage
      */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway($context);
-        $gateway->getFieldData($versionInfo, $field);
+        $this->gateway->getFieldData($versionInfo, $field);
     }
 
     /**
-     * @param VersionInfo $versionInfo
-     * @param array $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param array $fieldIds
      * @param array $context
      *
      * @return bool
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        $this->getGateway($context)->deleteFieldData($versionInfo, $fieldIds);
+        $this->gateway->deleteFieldData($versionInfo, $fieldIds);
     }
 
     /**
@@ -65,8 +71,10 @@ class MapLocationStorage extends GatewayBasedStorage
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     * @return \eZ\Publish\SPI\Search\Field[]|null
      */
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {

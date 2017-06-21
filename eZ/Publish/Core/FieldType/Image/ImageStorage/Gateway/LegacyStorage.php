@@ -9,15 +9,14 @@
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use eZ\Publish\Core\IO\UrlRedecorator;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 class LegacyStorage extends Gateway
 {
     /**
-     * Connection.
-     *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -26,58 +25,32 @@ class LegacyStorage extends Gateway
      *
      * @var array
      */
-    protected $fieldNameMap = array(
+    protected $fieldNameMap = [
         'id' => 'fieldId',
         'version' => 'versionNo',
         'language_code' => 'languageCode',
         'path_identification_string' => 'nodePathString',
         'data_string' => 'xml',
-    );
+    ];
 
     /**
-     * @var UrlRedecorator
+     * @var \eZ\Publish\Core\IO\UrlRedecorator
      */
     private $redecorator;
 
-    public function __construct(UrlRedecorator $redecorator)
+    public function __construct(UrlRedecorator $redecorator, DatabaseHandler $dbHandler)
     {
         $this->redecorator = $redecorator;
-    }
-
-    /**
-     * Set database handler for this gateway.
-     *
-     * @param mixed $dbHandler
-     *
-     * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
-     */
-    public function setConnection($dbHandler)
-    {
-        // This obviously violates the Liskov substitution Principle, but with
-        // the given class design there is no sane other option. Actually the
-        // dbHandler *should* be passed to the constructor, and there should
-        // not be the need to post-inject it.
-        if (!$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler) {
-            throw new \RuntimeException('Invalid dbHandler passed');
-        }
-
         $this->dbHandler = $dbHandler;
     }
 
     /**
      * Returns the active connection.
      *
-     * @throws \RuntimeException if no connection has been set, yet.
-     *
      * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
-        if ($this->dbHandler === null) {
-            throw new \RuntimeException('Missing database connection.');
-        }
-
         return $this->dbHandler;
     }
 

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage;
 
-use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 
 /**
  * Abstract gateway class for Url field type.

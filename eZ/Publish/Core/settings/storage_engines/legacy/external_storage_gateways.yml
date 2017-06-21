@@ -22,48 +22,40 @@ services:
 
     ezpublish.fieldType.ezbinaryfile.storage_gateway:
         class: "%ezpublish.fieldType.ezbinaryfile.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezbinaryfile, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezkeyword.storage_gateway:
         class: "%ezpublish.fieldType.ezkeyword.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezkeyword, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezmedia.storage_gateway:
         class: "%ezpublish.fieldType.ezmedia.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezmedia, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezrichtext.storage_gateway:
         class: "%ezpublish.fieldType.ezrichtext.storage_gateway.class%"
-        arguments: ["@ezpublish.fieldType.ezurl.storage_gateway"]
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezrichtext, identifier: LegacyStorage}
+        arguments:
+            - "@ezpublish.fieldType.ezurl.storage_gateway"
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
 
     ezpublish.fieldType.ezurl.storage_gateway:
         class: "%ezpublish.fieldType.ezurl.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezurl, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezpage.storage_gateway:
         class: "%ezpublish.fieldType.ezpage.storage_gateway.class%"
-        calls:
-            - [setConnection, ["@ezpublish.api.storage_engine.legacy.dbhandler"]]
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezimage.storage_gateway:
         class: "%ezpublish.fieldType.ezimage.storage_gateway.class%"
         arguments:
             - "@ezpublish.core.io.image_fieldtype.legacy_url_redecorator"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezimage, identifier: LegacyStorage}
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
 
     ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
         class: "%ezpublish.fieldType.ezgmaplocation.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
 
     ezpublish.fieldType.ezuser.storage_gateway:
         class: "%ezpublish.fieldType.ezuser.storage_gateway.class%"
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezuser, identifier: LegacyStorage}
+        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]

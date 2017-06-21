@@ -48,7 +48,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -60,9 +60,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\UrlConverter(),
             new FieldType\Url\UrlStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Url\UrlStorage\Gateway\LegacyStorage(),
-                )
+                new FieldType\Url\UrlStorage\Gateway\LegacyStorage($this->getDatabaseHandler())
             )
         );
     }
