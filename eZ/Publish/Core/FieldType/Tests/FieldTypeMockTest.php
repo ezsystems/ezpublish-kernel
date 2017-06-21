@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FieldTypeMockTest extends PHPUnit_Framework_TestCase
+class FieldTypeMockTest extends TestCase
 {
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException

@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 
-class UserTest extends PHPUnit_Framework_TestCase
+class UserTest extends TestCase
 {
     public function testConstruct()
     {

@@ -9,10 +9,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\Event\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class InteractiveLoginEventTest extends PHPUnit_Framework_TestCase
+class InteractiveLoginEventTest extends TestCase
 {
     public function testGetSetAPIUser()
     {

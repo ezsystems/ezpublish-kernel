@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render\Template;
 use DOMDocument;
 
-class TemplateTest extends PHPUnit_Framework_TestCase
+class TemplateTest extends TestCase
 {
     public function setUp()
     {

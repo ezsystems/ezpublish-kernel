@@ -8,10 +8,10 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Security\PolicyProvider;
 
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubYamlPolicyProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
 
-class YamlPolicyProviderTest extends PHPUnit_Framework_TestCase
+class YamlPolicyProviderTest extends TestCase
 {
     public function testSingleYaml()
     {

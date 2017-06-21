@@ -9,12 +9,12 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests;
 
 use Symfony\Component\HttpFoundation\Response;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @mvc
  */
-class ControllerTest extends PHPUnit_Framework_TestCase
+class ControllerTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Controller\Controller

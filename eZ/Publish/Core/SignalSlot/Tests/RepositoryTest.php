@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\SignalSlot\Tests;
 use eZ\Publish\Core\SignalSlot\Repository;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RepositoryTest extends PHPUnit_Framework_TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @dataProvider serviceMethods

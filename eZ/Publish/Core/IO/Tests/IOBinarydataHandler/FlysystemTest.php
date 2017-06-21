@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\IO\Tests\IOBinarydataHandler;
 use eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 
-class FlysystemTest extends PHPUnit_Framework_TestCase
+class FlysystemTest extends TestCase
 {
     /** @var \eZ\Publish\Core\IO\IOBinarydataHandler|\PHPUnit_Framework_MockObject_MockObject */
     private $handler;

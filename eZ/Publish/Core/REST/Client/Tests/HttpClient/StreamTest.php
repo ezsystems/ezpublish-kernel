@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\REST\Client\Tests\HttpClient;
 
 use eZ\Publish\Core\REST\Client\HttpClient\Stream;
 use eZ\Publish\Core\REST\Client\HttpClient\ConnectionException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for stream HTTP client.
  */
-class StreamTest extends PHPUnit_Framework_TestCase
+class StreamTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient\Stream

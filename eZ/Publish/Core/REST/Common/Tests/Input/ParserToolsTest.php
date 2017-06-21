@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ParserToolsTest extends PHPUnit_Framework_TestCase
+class ParserToolsTest extends TestCase
 {
     public function testIsEmbeddedObjectReturnsTrue()
     {

@@ -10,9 +10,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Sugges
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class YamlSuggestionFormatterTest extends PHPUnit_Framework_TestCase
+class YamlSuggestionFormatterTest extends TestCase
 {
     public function testFormat()
     {

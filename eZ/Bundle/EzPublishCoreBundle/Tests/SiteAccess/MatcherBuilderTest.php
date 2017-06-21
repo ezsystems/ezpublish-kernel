@@ -10,8 +10,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\SiteAccess;
 
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use PHPUnit\Framework\TestCase;
 
-class MatcherBuilderTest extends \PHPUnit_Framework_TestCase
+class MatcherBuilderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

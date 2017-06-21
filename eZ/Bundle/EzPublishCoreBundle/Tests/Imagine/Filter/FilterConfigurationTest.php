@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FilterConfigurationTest extends PHPUnit_Framework_TestCase
+class FilterConfigurationTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

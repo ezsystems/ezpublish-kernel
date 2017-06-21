@@ -19,12 +19,12 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract test case for spi cache impl.
  */
-abstract class HandlerTest extends PHPUnit_Framework_TestCase
+abstract class HandlerTest extends TestCase
 {
     /**
      * @var \Stash\Interfaces\PoolInterface|\PHPUnit_Framework_MockObject_MockObject

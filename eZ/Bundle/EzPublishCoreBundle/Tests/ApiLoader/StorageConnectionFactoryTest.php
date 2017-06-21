@@ -10,8 +10,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use PHPUnit\Framework\TestCase;
 
-class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
+class StorageConnectionFactoryTest extends TestCase
 {
     /**
      * @dataProvider getConnectionProvider

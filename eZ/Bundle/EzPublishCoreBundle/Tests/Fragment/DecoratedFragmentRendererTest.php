@@ -10,11 +10,11 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
-class DecoratedFragmentRendererTest extends PHPUnit_Framework_TestCase
+class DecoratedFragmentRendererTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

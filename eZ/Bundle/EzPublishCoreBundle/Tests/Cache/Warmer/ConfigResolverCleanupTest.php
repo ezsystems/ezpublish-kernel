@@ -9,11 +9,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Cache\Warmer;
 
 use eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ConfigResolverCleanup;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 
-class ConfigResolverCleanupTest extends PHPUnit_Framework_TestCase
+class ConfigResolverCleanupTest extends TestCase
 {
     public function testIsOptional()
     {

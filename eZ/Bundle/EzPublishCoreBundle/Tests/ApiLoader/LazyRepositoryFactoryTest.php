@@ -9,8 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory;
+use PHPUnit\Framework\TestCase;
 
-class LazyRepositoryFactoryTest extends \PHPUnit_Framework_TestCase
+class LazyRepositoryFactoryTest extends TestCase
 {
     public function testBuildRepository()
     {

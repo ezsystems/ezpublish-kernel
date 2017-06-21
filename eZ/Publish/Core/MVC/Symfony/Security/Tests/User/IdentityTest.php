@@ -9,8 +9,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User\Identity;
+use PHPUnit\Framework\TestCase;
 
-class IdentityTest extends \PHPUnit_Framework_TestCase
+class IdentityTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\Identity::__construct

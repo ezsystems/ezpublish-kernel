@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Helper\Tests;
 
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
+class PreviewLocationProviderTest extends TestCase
 {
     /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
     private $contentService;

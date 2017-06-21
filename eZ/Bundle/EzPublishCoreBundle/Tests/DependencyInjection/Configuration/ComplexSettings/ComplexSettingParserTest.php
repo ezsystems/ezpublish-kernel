@@ -8,10 +8,10 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\ComplexSettings;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 
-class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
+class ComplexSettingParserTest extends TestCase
 {
     /** @var ComplexSettingParser */
     private $parser;

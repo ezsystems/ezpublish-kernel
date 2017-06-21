@@ -9,13 +9,13 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Persistence\Legacy\TransactionHandler;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Exception;
 
 /**
  * Test case for TransactionHandler.
  */
-class TransactionHandlerTest extends PHPUnit_Framework_TestCase
+class TransactionHandlerTest extends TestCase
 {
     /**
      * Transaction handler to test.

@@ -9,10 +9,10 @@
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\RichTextProcessor;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DOMDocument;
 
-class RichTextProcessorTest extends PHPUnit_Framework_TestCase
+class RichTextProcessorTest extends TestCase
 {
     public function testPostProcessValueHash()
     {

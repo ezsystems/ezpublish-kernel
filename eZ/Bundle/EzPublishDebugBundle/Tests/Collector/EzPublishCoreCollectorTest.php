@@ -9,12 +9,12 @@
 namespace eZ\Bundle\EzPublishDebugBundle\Tests\Collector;
 
 use eZ\Bundle\EzPublishDebugBundle\Collector\EzPublishCoreCollector;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
 
-class EzPublishCoreCollectorTest extends PHPUnit_Framework_TestCase
+class EzPublishCoreCollectorTest extends TestCase
 {
     /**
      * @var EzPublishCoreCollector

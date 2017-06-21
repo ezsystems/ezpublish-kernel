@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
@@ -18,7 +18,7 @@ use eZ\Publish\Core\Repository\Values\User\User;
 /**
  * Base test case for tests on services using Mock testing.
  */
-abstract class Base extends PHPUnit_Framework_TestCase
+abstract class Base extends TestCase
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository

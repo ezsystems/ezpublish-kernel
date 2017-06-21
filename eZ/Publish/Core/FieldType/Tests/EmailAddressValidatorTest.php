@@ -10,14 +10,14 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
 use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @todo add more tests, like on validateConstraints method
  * @group fieldType
  * @group validator
  */
-class EmailAddressValidatorTest extends PHPUnit_Framework_TestCase
+class EmailAddressValidatorTest extends TestCase
 {
     /**
      * This test ensure an EmailAddressValidator can be created.

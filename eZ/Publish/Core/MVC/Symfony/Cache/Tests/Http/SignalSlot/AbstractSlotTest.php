@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements SlotTest
+abstract class AbstractSlotTest extends TestCase implements SlotTest
 {
     /** @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot */
     protected $slot;

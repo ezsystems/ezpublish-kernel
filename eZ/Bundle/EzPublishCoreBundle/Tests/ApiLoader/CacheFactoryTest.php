@@ -9,8 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory;
+use PHPUnit\Framework\TestCase;
 
-class CacheFactoryTest extends \PHPUnit_Framework_TestCase
+class CacheFactoryTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\IO\Tests\IOMetadataHandler;
 use eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
-class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
+class LegacyDFSClusterTest extends TestCase
 {
     /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
     private $handler;

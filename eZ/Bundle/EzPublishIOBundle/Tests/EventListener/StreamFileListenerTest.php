@@ -11,13 +11,13 @@ namespace eZ\Bundle\EzPublishIOBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\IO\Values\BinaryFile;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use DateTime;
 
-class StreamFileListenerTest extends PHPUnit_Framework_TestCase
+class StreamFileListenerTest extends TestCase
 {
     /** @var StreamFileListener */
     private $eventListener;

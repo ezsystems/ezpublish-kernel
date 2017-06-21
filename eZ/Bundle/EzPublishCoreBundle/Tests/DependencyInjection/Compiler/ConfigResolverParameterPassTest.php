@@ -13,9 +13,9 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
+class ConfigResolverParameterPassTest extends TestCase
 {
     public function testProcess()
     {

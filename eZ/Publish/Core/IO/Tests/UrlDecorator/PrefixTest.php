@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\IO\Tests\UrlDecorator;
 
 use eZ\Publish\Core\IO\UrlDecorator\Prefix;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PrefixTest extends PHPUnit_Framework_TestCase
+class PrefixTest extends TestCase
 {
     /**
      * @dataProvider provideData
