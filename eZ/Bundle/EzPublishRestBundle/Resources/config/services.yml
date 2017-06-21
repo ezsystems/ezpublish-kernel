@@ -27,7 +27,7 @@ parameters:
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
     ezpublish_rest.request_parser.class: eZ\Bundle\EzPublishRestBundle\RequestParser\Router
     ezpublish_rest.resource_resolver.class: eZ\Publish\Core\REST\Server\ResourceResolver
-    ezpublish_rest.resource_resolver.factory.class: eZ\Publish\Core\REST\Server\ResourceResolverFactory
+    ezpublish_rest.resource_resolver.factory.class: eZ\Bundle\EzPublishRestBundle\ResourceResolverFactory
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
     ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer

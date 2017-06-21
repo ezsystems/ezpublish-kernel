@@ -1,6 +1,6 @@
 <?php
 
-namespace eZ\Publish\Core\REST\Server;
+namespace eZ\Bundle\EzPublishRestBundle;
 
 use eZ\Publish\Core\REST\Common\RequestParser;
 
