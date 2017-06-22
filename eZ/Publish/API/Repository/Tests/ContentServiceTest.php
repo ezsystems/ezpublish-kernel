@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -5158,6 +5157,174 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test removal of the specific translation from all the Versions of a Content Object.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
+     */
+    public function testRemoveTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $content = $this->createContentVersion2();
+
+        // create multiple versions to exceed archive limit
+        for ($i = 0; $i < 5; ++$i) {
+            $contentDraft = $contentService->createContentDraft($content->contentInfo);
+            $contentUpdateStruct = $contentService->newContentUpdateStruct();
+            $contentDraft = $contentService->updateContent(
+                $contentDraft->versionInfo,
+                $contentUpdateStruct
+            );
+            $contentService->publishVersion($contentDraft->versionInfo);
+        }
+
+        $contentService->removeTranslation($content->contentInfo, 'eng-GB');
+
+        $this->assertTranslationDoesNotExist('eng-GB', $content->id);
+    }
+
+    /**
+     * Test removing a translation which is initial for some Version, updates initialLanguageCode
+     * with mainLanguageCode (assuming they are different).
+     */
+    public function testRemoveTranslationUpdatesInitialLanguageCodeVersion()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion2();
+        // create another, copied, version
+        $contentDraft = $contentService->updateContent(
+            $contentService->createContentDraft($content->contentInfo)->versionInfo,
+            $contentService->newContentUpdateStruct()
+        );
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        // remove first version with only one translation as it is not the subject of this test
+        $contentService->deleteVersion(
+            $contentService->loadVersionInfo($publishedContent->contentInfo, 1)
+        );
+
+        // sanity check
+        self::assertEquals('eng-US', $content->contentInfo->mainLanguageCode);
+        self::assertEquals('eng-US', $content->versionInfo->initialLanguageCode);
+
+        // update mainLanguageCode so it is different than initialLanguageCode for Version
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $content = $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
+
+        $contentService->removeTranslation($content->contentInfo, 'eng-US');
+
+        $this->assertTranslationDoesNotExist('eng-US', $content->id);
+    }
+
+    /**
+     * Test removal of a main translation throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Specified translation is the main translation of the Content Object
+     */
+    public function testRemoveTranslationMainLanguageThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $content = $this->createContentVersion2();
+
+        // delete first version which has only one translation
+        $contentService->deleteVersion($contentService->loadVersionInfo($content->contentInfo, 1));
+
+        // try to remove main translation
+        $contentService->removeTranslation($content->contentInfo, $content->contentInfo->mainLanguageCode);
+    }
+
+    /**
+     * Test removal of the last remaining translation throws BadStateException.
+     *
+     * Note: this test case reproduces the following scenario:
+     * 1. Create the Content with a single translation.
+     * 2. Create a new Version with that translation and add to it another translation.
+     * 3. Update mainLanguageCode of the Content Object, to avoid trying to remove the main translation.
+     * 4. Try to remove a translation that is the only one in the first version.
+     * 5. Observe BadStateException with a message about trying to remove the last translation.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Specified translation is the only one Content Object Version has
+     */
+    public function testRemoveTranslationLastLanguageThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        // content created by the createContentVersion1 method has eng-US translation only.
+        $content = $this->createContentVersion1();
+
+        // create new version and add eng-GB translation
+        $contentDraft = $contentService->createContentDraft($content->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('name', 'Awesome Board', 'eng-GB');
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        // update mainLanguageCode to avoid exception related to that
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+
+        $content = $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
+
+        $contentService->removeTranslation($content->contentInfo, 'eng-US');
+    }
+
+    /**
+     * Test removal of the translation by the user who is not allowed to delete a content
+     * throws UnauthorizedException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @expectedExceptionMessage User does not have access to 'delete' 'content'
+     */
+    public function testRemoveTranslationThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion2();
+
+        // create user that can read/create/edit but cannot delete content
+        $this->createRoleWithPolicies('Writer', [
+            ['content', 'read'],
+            ['content', 'versionread'],
+            ['content', 'create'],
+            ['content', 'edit'],
+        ]);
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+        $contentService->removeTranslation($content->contentInfo, 'eng-GB');
+    }
+
+    /**
+     * Test removal of a non-existent translation throws InvalidArgumentException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$languageCode' is invalid: Specified translation does not exist
+     */
+    public function testRemoveTranslationThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        // content created by the createContentVersion1 method has eng-US translation only.
+        $content = $this->createContentVersion1();
+        $contentService->removeTranslation($content->contentInfo, 'ger-DE');
+    }
+
+    /**
      * Test for the newTranslationInfo() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo
@@ -5361,6 +5528,35 @@ class ContentServiceTest extends BaseContentServiceTest
                 );
                 break;
             }
+        }
+    }
+
+    /**
+     * Assert that given Content has no references to a translation specified by the $languageCode.
+     *
+     * @param string $languageCode
+     * @param int $contentId
+     */
+    private function assertTranslationDoesNotExist($languageCode, $contentId)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->loadContent($contentId);
+
+        foreach ($content->fields as $fieldIdentifier => $field) {
+            /** @var array $field */
+            self::assertArrayNotHasKey($languageCode, $field);
+            self::assertNotEquals($languageCode, $content->contentInfo->mainLanguageCode);
+            self::assertArrayNotHasKey($languageCode, $content->versionInfo->getNames());
+            self::assertNotEquals($languageCode, $content->versionInfo->initialLanguageCode);
+            self::assertNotContains($languageCode, $content->versionInfo->languageCodes);
+        }
+        foreach ($contentService->loadVersions($content->contentInfo) as $versionInfo) {
+            self::assertArrayNotHasKey($languageCode, $versionInfo->getNames());
+            self::assertNotEquals($languageCode, $versionInfo->contentInfo->mainLanguageCode);
+            self::assertNotEquals($languageCode, $versionInfo->initialLanguageCode);
+            self::assertNotContains($languageCode, $versionInfo->languageCodes);
         }
     }
 
