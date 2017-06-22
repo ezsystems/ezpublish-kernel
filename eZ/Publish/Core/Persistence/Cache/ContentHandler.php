@@ -298,4 +298,28 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
         return $content;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeTranslationFromContent($contentId, $languageCode, $mainLanguageCode)
+    {
+        $this->logger->logCall(
+            __METHOD__,
+            [
+                'contentId' => $contentId,
+                'languageCode' => $languageCode,
+                'mainLanguageCode' => $mainLanguageCode,
+            ]
+        );
+
+        $this->cache->clear('content', $contentId);
+        $this->cache->clear('content', 'info', $contentId);
+
+        $this->persistenceHandler->contentHandler()->removeTranslationFromContent(
+            $contentId,
+            $languageCode,
+            $mainLanguageCode
+        );
+    }
 }

@@ -393,4 +393,13 @@ abstract class Gateway
      * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
      */
     abstract public function copyRelations($originalContentId, $copiedContentId, $versionNo = null);
+
+    /**
+     * Remove the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     * @param string $mainLanguageCode Content Object main language code
+     */
+    abstract public function removeTranslationFromContent($contentId, $languageCode, $mainLanguageCode);
 }

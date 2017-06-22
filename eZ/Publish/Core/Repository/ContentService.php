@@ -1867,6 +1867,88 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
+     *
+     * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
+     *       a warning before performing it.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
+     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $languageCode
+     *
+     * @since 6.11
+     */
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        if ($contentInfo->mainLanguageCode === $languageCode) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified translation is the main translation of the Content Object'
+            );
+        }
+        // before actual removal, collect information on Versions
+        $versions = [];
+        foreach ($this->loadVersions($contentInfo) as $versionInfo) {
+            // check if user is authorized to delete Version
+            if (!$this->repository->canUser('content', 'delete', $versionInfo)) {
+                throw new UnauthorizedException(
+                    'content',
+                    'delete',
+                    [
+                        'contentId' => $contentInfo->id,
+                        'versionNo' => $versionInfo->versionNo,
+                    ]
+                );
+            }
+            // check if the specified translation exists for the Version
+            if (!in_array($languageCode, $versionInfo->languageCodes)) {
+                // if translation does not exist, simply ignore Version (see InvalidArgumentException later on)
+                continue;
+            }
+            // check if the specified translation is not the only one
+            if (count($versionInfo->languageCodes) < 2) {
+                throw new BadStateException(
+                    '$languageCode',
+                    'Specified translation is the only one Content Object Version has'
+                );
+            }
+            // add version to the list
+            $versions[] = $versionInfo->versionNo;
+        }
+
+        // if there are no Versions with the given translation, $languageCode arg is invalid
+        if (empty($versions)) {
+            throw new InvalidArgumentException(
+                '$languageCode',
+                sprintf(
+                    'Specified translation does not exist in the Content Object(id=%d)',
+                     $contentInfo->id
+                )
+            );
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->persistenceHandler->contentHandler()->removeTranslationFromContent(
+                $contentInfo->id,
+                $languageCode,
+                $contentInfo->mainLanguageCode
+            );
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            // cover generic unexpected exception to fulfill API promise on @throws
+            throw new BadStateException('$contentInfo', 'Translation removal failed', $e);
+        }
+    }
+
+    /**
      * Instantiates a new content create struct object.
      *
      * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
