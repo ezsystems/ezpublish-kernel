@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\ContentService as APIContentService;
@@ -218,9 +217,7 @@ class ContentService implements APIContentService, Sessionable
      */
     protected function isErrorResponse(Message $response)
     {
-        return (
-            strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0
-        );
+        return strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0;
     }
 
     /**
