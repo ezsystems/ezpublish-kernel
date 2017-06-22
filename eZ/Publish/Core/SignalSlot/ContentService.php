@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal;
@@ -629,6 +630,32 @@ class ContentService implements ContentServiceInterface
     public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
     {
         return $this->service->loadTranslationInfos($contentInfo, $filter);
+    }
+
+    /**
+     * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
+     *
+     * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
+     *       a warning before performing it.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
+     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $languageCode
+     *
+     * @since 6.11
+     */
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        $this->service->removeTranslation($contentInfo, $languageCode);
+        $this->signalDispatcher->emit(
+            new RemoveTranslationSignal(['contentId' => $contentInfo->id, 'languageCode' => $languageCode])
+        );
     }
 
     /**
