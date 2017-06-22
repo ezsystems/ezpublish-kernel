@@ -67,7 +67,7 @@
         "_ezplatform_branch_for_behat_tests": "2.0",
         "branch-alias": {
             "dev-master": "7.0.x-dev",
-            "dev-tmp_ci_branch": "7.0.x-dev"
+            "dev-tmp_ci_branch": "6.99.x-dev"
         }
     }
 }
