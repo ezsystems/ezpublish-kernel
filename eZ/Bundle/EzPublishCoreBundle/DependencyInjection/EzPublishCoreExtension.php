@@ -102,6 +102,10 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         // Slots
         $loader->load('slot.yml');
 
+        if ($container->hasExtension('fos_js_routing')) {
+            $loader->load('routing/js_routing.yml');
+        }
+
         // Default settings
         $this->handleDefaultSettingsLoading($container, $loader);
 
