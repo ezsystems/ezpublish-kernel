@@ -25,6 +25,8 @@ _ez_content_view:
         viewType: full
         locationId: null
         layout: true
+    options:
+        expose: true
 
 _ezpublishPreviewContent:
     path: /content/versionview/{contentId}/{versionNo}/{language}/site_access/{siteAccessName}
