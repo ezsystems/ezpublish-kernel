@@ -12,6 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 
 /**
  * Legacy Image IOService.
@@ -149,7 +150,13 @@ class Legacy implements IOServiceInterface
     public function loadBinaryFileByUri($binaryFileUri)
     {
         try {
-            return $this->publishedIOService->loadBinaryFileByUri($binaryFileUri);
+            $image = $this->publishedIOService->loadBinaryFileByUri($binaryFileUri);
+
+            if ($image instanceof MissingBinaryFile) {
+                $image = $this->draftIOService->loadBinaryFileByUri($binaryFileUri);
+            }
+
+            return $image;
         } catch (InvalidArgumentException $prefixException) {
             // InvalidArgumentException means that the prefix didn't match, NotFound can pass through
             try {
