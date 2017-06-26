@@ -14,7 +14,7 @@ the existing Versions of a Content Object and is specified as:
  *       a warning before performing it.
  *
  * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
- *         is the only one Content Object has.
+ *         is the only one a Version has or it is the main translation of a Content Object.
  * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
  *         to delete the content (in one of the locations of the given Content Object).
  * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
