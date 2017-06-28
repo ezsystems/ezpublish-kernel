@@ -153,7 +153,7 @@ class Legacy implements IOServiceInterface
             $image = $this->publishedIOService->loadBinaryFileByUri($binaryFileUri);
 
             if ($image instanceof MissingBinaryFile) {
-                throw new InvalidArgumentException();
+                throw new InvalidArgumentException('binaryFileUri', sprintf("Can't find file with url {0}", $binaryFileUri));
             }
 
             return $image;
