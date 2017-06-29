@@ -351,6 +351,52 @@ class Handler implements BaseLocationHandler
             $destinationParentId,
             Gateway::NODE_ASSIGNMENT_OP_CODE_MOVE
         );
+
+        $sourceLocation = $this->load($sourceId);
+        $destinationParentSectionId = $this->getSectionId($destinationParentId);
+        $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
+    }
+
+    /**
+     * Retrieves section ID of the location's content.
+     *
+     * @param int $locationId
+     *
+     * @return int
+     */
+    private function getSectionId($locationId)
+    {
+        $location = $this->load($locationId);
+        $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+
+        return $locationContentInfo->sectionId;
+    }
+
+    /**
+     * If the location is the main location for its content, updates subtree section.
+     *
+     * @param Location $location
+     * @param int $sectionId
+     */
+    private function updateSubtreeSectionIfNecessary(Location $location, $sectionId)
+    {
+        if ($this->isMainLocation($location)) {
+            $this->setSectionForSubtree($location->id, $sectionId);
+        }
+    }
+
+    /**
+     * Checks if the location is the main location for its content.
+     *
+     * @param Location $location
+     *
+     * @return bool
+     */
+    private function isMainLocation(Location $location)
+    {
+        $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+
+        return $locationContentInfo->mainLocationId === $location->id;
     }
 
     /**
