@@ -310,51 +310,10 @@ class Handler implements BaseLocationHandler
             );
         }
 
-        // If subtree root is main location for its content, update subtree section to the one of the
-        // parent location content
-        $subtreeRootContentInfo = $this->contentHandler->loadContentInfo($copiedSubtreeRootLocation->contentId);
-        if ($subtreeRootContentInfo->mainLocationId === $copiedSubtreeRootLocation->id) {
-            $this->setSectionForSubtree(
-                $copiedSubtreeRootLocation->id,
-                $this->contentHandler->loadContentInfo($this->load($destinationParentId)->contentId)->sectionId
-            );
-        }
+        $destinationParentSectionId = $this->getSectionId($destinationParentId);
+        $this->updateSubtreeSectionIfNecessary($copiedSubtreeRootLocation, $destinationParentSectionId);
 
         return $copiedSubtreeRootLocation;
-    }
-
-    /**
-     * Moves location identified by $sourceId into new parent identified by $destinationParentId.
-     *
-     * Performs a full move of the location identified by $sourceId to a new
-     * destination, identified by $destinationParentId. Relations do not need
-     * to be updated, since they refer to Content. URLs are not touched.
-     *
-     * @param mixed $sourceId
-     * @param mixed $destinationParentId
-     *
-     * @return bool
-     */
-    public function move($sourceId, $destinationParentId)
-    {
-        $sourceNodeData = $this->locationGateway->getBasicNodeData($sourceId);
-        $destinationNodeData = $this->locationGateway->getBasicNodeData($destinationParentId);
-
-        $this->locationGateway->moveSubtreeNodes(
-            $sourceNodeData,
-            $destinationNodeData
-        );
-
-        $this->locationGateway->updateNodeAssignment(
-            $sourceNodeData['contentobject_id'],
-            $sourceNodeData['parent_node_id'],
-            $destinationParentId,
-            Gateway::NODE_ASSIGNMENT_OP_CODE_MOVE
-        );
-
-        $sourceLocation = $this->load($sourceId);
-        $destinationParentSectionId = $this->getSectionId($destinationParentId);
-        $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
     }
 
     /**
@@ -397,6 +356,40 @@ class Handler implements BaseLocationHandler
         $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
 
         return $locationContentInfo->mainLocationId === $location->id;
+    }
+
+    /**
+     * Moves location identified by $sourceId into new parent identified by $destinationParentId.
+     *
+     * Performs a full move of the location identified by $sourceId to a new
+     * destination, identified by $destinationParentId. Relations do not need
+     * to be updated, since they refer to Content. URLs are not touched.
+     *
+     * @param mixed $sourceId
+     * @param mixed $destinationParentId
+     *
+     * @return bool
+     */
+    public function move($sourceId, $destinationParentId)
+    {
+        $sourceNodeData = $this->locationGateway->getBasicNodeData($sourceId);
+        $destinationNodeData = $this->locationGateway->getBasicNodeData($destinationParentId);
+
+        $this->locationGateway->moveSubtreeNodes(
+            $sourceNodeData,
+            $destinationNodeData
+        );
+
+        $this->locationGateway->updateNodeAssignment(
+            $sourceNodeData['contentobject_id'],
+            $sourceNodeData['parent_node_id'],
+            $destinationParentId,
+            Gateway::NODE_ASSIGNMENT_OP_CODE_MOVE
+        );
+
+        $sourceLocation = $this->load($sourceId);
+        $destinationParentSectionId = $this->getSectionId($destinationParentId);
+        $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
     }
 
     /**
