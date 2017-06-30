@@ -91,7 +91,13 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadUserGroup',
-                array($userGroupId),
+                array($userGroupId, array()),
+                $userGroup,
+                0,
+            ),
+            array(
+                'loadUserGroup',
+                array($userGroupId, array('eng-GB', 'eng-US')),
                 $userGroup,
                 0,
             ),

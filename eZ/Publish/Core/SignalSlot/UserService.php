@@ -94,15 +94,16 @@ class UserService implements UserServiceInterface
      * Loads a user group for the given id.
      *
      * @param mixed $id
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id)
+    public function loadUserGroup($id, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUserGroup($id);
+        return $this->service->loadUserGroup($id, $prioritizedLanguages);
     }
 
     /**
