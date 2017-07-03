@@ -15,6 +15,9 @@ use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\InsertQuery;
 
+/**
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\DoctrineStorage} instead.
+ */
 abstract class LegacyStorage extends Gateway
 {
     /**
@@ -24,6 +27,10 @@ abstract class LegacyStorage extends Gateway
 
     public function __construct(DatabaseHandler $dbHandler)
     {
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
         $this->dbHandler = $dbHandler;
     }
 

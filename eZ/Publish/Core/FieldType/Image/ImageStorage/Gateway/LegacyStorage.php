@@ -13,6 +13,9 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
+/**
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\DoctrineStorage} instead.
+ */
 class LegacyStorage extends Gateway
 {
     /**
@@ -40,6 +43,10 @@ class LegacyStorage extends Gateway
 
     public function __construct(UrlRedecorator $redecorator, DatabaseHandler $dbHandler)
     {
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
         $this->redecorator = $redecorator;
         $this->dbHandler = $dbHandler;
     }
