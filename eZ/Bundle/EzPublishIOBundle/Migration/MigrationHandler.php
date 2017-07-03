@@ -45,7 +45,7 @@ abstract class MigrationHandler implements MigrationHandlerInterface
         $this->logger = $logger;
     }
 
-    final public function setIODataHandlersByIdentifiers(
+    public function setIODataHandlersByIdentifiers(
         $fromMetadataHandlerIdentifier,
         $fromBinarydataHandlerIdentifier,
         $toMetadataHandlerIdentifier,
