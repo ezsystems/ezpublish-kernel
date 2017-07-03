@@ -60,7 +60,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\KeywordConverter(),
             new FieldType\Keyword\KeywordStorage(
-                new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage($this->getDatabaseHandler())
+                new FieldType\Keyword\KeywordStorage\Gateway\DoctrineStorage(
+                    $this->getDatabaseHandler()->getConnection()
+                )
             )
         );
     }

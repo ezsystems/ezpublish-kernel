@@ -6,6 +6,9 @@ use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
+/**
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\DoctrineStorage} instead.
+ */
 class LegacyStorage extends Gateway
 {
     /**
@@ -15,6 +18,10 @@ class LegacyStorage extends Gateway
 
     public function __construct(DatabaseHandler $dbHandler)
     {
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
         $this->dbHandler = $dbHandler;
     }
 

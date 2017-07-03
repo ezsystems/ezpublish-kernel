@@ -60,8 +60,8 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\MapLocationConverter(),
             new FieldType\MapLocation\MapLocationStorage(
-                new FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage(
-                    $this->getDatabaseHandler()
+                new FieldType\MapLocation\MapLocationStorage\Gateway\DoctrineStorage(
+                    $this->getDatabaseHandler()->getConnection()
                 )
             )
         );

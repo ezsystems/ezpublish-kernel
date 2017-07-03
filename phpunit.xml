@@ -19,6 +19,7 @@
     </testsuite>
     <testsuite name="eZ\Publish\Core\FieldType">
       <directory>eZ/Publish/Core/FieldType/Tests</directory>
+      <exclude>eZ/Publish/Core/FieldType/Tests/Integration</exclude>
     </testsuite>
     <testsuite name="eZ\Publish\Core\Limitation">
       <directory>eZ/Publish/Core/Limitation/Tests</directory>

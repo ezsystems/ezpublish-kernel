@@ -14,6 +14,8 @@ use PDO;
 
 /**
  * Url field type external storage gateway implementation using Zeta Database Component.
+ *
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage} instead.
  */
 class LegacyStorage extends Gateway
 {
@@ -27,6 +29,10 @@ class LegacyStorage extends Gateway
 
     public function __construct(DatabaseHandler $dbHandler)
     {
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
         $this->dbHandler = $dbHandler;
     }
 
