@@ -278,7 +278,7 @@ class MapperTest extends TestCase
         );
 
         $this->assertEquals(
-            5,
+            6,
             count($types[0]->fieldDefinitions),
             'Incorrect number of field definitions'
         );
@@ -299,6 +299,23 @@ class MapperTest extends TestCase
                 'position' => 2,
             ),
             $types[0]->fieldDefinitions[2]
+        );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => 159,
+                'name' => [],
+                'description' => [],
+                'identifier' => 'show_children',
+                'fieldGroup' => '',
+                'fieldType' => 'ezboolean',
+                'isTranslatable' => false,
+                'isRequired' => false,
+                'isInfoCollector' => false,
+                'isSearchable' => false,
+                'position' => 6,
+            ),
+            $types[0]->fieldDefinitions[5]
         );
     }
 
