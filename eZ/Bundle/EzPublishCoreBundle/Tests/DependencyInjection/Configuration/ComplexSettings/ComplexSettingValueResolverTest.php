@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\ComplexSettings;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ComplexSettingValueResolverTest extends PHPUnit_Framework_TestCase
+class ComplexSettingValueResolverTest extends TestCase
 {
     public function testGetArgumentValue()
     {

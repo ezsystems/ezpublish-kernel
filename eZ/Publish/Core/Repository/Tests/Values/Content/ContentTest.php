@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ContentTest extends PHPUnit_Framework_TestCase
+class ContentTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getProperties

@@ -10,13 +10,13 @@ namespace eZ\Publish\Core\REST\Server\Tests\Security;
 
 use eZ\Publish\Core\REST\Server\Security\RestAuthenticator;
 use eZ\Publish\Core\MVC\Symfony\Security\User as EzUser;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
+class RestSessionBasedAuthenticatorTest extends TestCase
 {
     const PROVIDER_KEY = 'test_key';
 

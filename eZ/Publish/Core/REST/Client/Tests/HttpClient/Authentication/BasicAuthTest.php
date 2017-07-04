@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\REST\Client\Tests\HttpClient\Authentication;
 
 use eZ\Publish\Core\REST\Client\HttpClient\Authentication\BasicAuth;
 use eZ\Publish\Core\REST\Common\Message;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Basic Auth HTTP Client.
  */
-class BasicAuthTest extends PHPUnit_Framework_TestCase
+class BasicAuthTest extends TestCase
 {
     /**
      * Mock for the inner HTTP client.

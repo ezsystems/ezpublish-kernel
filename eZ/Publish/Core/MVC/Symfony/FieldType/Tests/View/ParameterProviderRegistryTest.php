@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\View;
 
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ParameterProviderRegistryTest extends PHPUnit_Framework_TestCase
+class ParameterProviderRegistryTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::setParameterProvider

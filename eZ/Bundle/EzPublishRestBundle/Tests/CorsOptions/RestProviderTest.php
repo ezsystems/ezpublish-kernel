@@ -14,10 +14,10 @@ use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Exception;
 
-class RestProviderTest extends PHPUnit_Framework_TestCase
+class RestProviderTest extends TestCase
 {
     /**
      * Return value expectation for RequestMatcher::matchRequest

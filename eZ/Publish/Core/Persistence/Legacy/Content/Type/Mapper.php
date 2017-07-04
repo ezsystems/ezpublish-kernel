@@ -139,8 +139,8 @@ class Mapper
 
         $type->id = (int)$row['ezcontentclass_id'];
         $type->status = (int)$row['ezcontentclass_version'];
-        $type->name = unserialize($row['ezcontentclass_serialized_name_list']);
-        $type->description = unserialize($row['ezcontentclass_serialized_description_list']);
+        $type->name = $this->unserialize($row['ezcontentclass_serialized_name_list']);
+        $type->description = $this->unserialize($row['ezcontentclass_serialized_description_list']);
         // Unset redundant data
         unset(
             $type->name['always-available'],
@@ -182,8 +182,8 @@ class Mapper
         $field = new FieldDefinition();
 
         $field->id = (int)$row['ezcontentclass_attribute_id'];
-        $field->name = unserialize($row['ezcontentclass_attribute_serialized_name_list']);
-        $field->description = unserialize($row['ezcontentclass_attribute_serialized_description_list']);
+        $field->name = $this->unserialize($row['ezcontentclass_attribute_serialized_name_list']);
+        $field->description = $this->unserialize($row['ezcontentclass_attribute_serialized_description_list']);
         // Unset redundant data
         unset(
             $field->name['always-available'],
@@ -381,5 +381,20 @@ class Mapper
             $storageFieldDef,
             $fieldDef
         );
+    }
+
+    /**
+     * Wrap unserialize to set default value in case of empty serialization.
+     *
+     * @param string $serialized Serialized structure to process
+     * @param mixed $default Default value in case of empty serialization
+     *
+     * @return array|mixed
+     */
+    protected function unserialize($serialized, $default = [])
+    {
+        return $serialized
+            ? unserialize($serialized)
+            : $default;
     }
 }

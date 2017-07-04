@@ -10,12 +10,12 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
 use eZ\Publish\Core\REST\Common;
 use stdClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Visitor test.
  */
-class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
+class ValueObjectVisitorDispatcherTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Common\Output\Visitor

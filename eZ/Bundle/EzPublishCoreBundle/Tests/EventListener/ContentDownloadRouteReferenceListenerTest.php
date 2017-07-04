@@ -13,11 +13,11 @@ use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCase
+class ContentDownloadRouteReferenceListenerTest extends TestCase
 {
     /** @var \eZ\Publish\Core\Helper\TranslationHelper|\PHPUnit_Framework_MockObject_MockObject */
     protected $translationHelperMock;

@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RouteReferenceTest extends PHPUnit_Framework_TestCase
+class RouteReferenceTest extends TestCase
 {
     public function testConstruct()
     {

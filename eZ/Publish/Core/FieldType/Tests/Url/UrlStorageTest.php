@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\FieldType\Tests\Url;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UrlStorageTest extends PHPUnit_Framework_TestCase
+class UrlStorageTest extends TestCase
 {
     public function testStoreFieldDataWithExistingUrl()
     {

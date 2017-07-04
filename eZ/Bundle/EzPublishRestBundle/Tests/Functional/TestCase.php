@@ -10,9 +10,9 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\Response as HttpResponse;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase extends BaseTestCase
 {
     /**
      * @var \Buzz\Client\ClientInterface

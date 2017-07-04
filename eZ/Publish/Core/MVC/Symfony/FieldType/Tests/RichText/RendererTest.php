@@ -13,9 +13,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RendererTest extends PHPUnit_Framework_TestCase
+class RendererTest extends TestCase
 {
     public function setUp()
     {

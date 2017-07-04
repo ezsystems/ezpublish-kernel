@@ -9,10 +9,10 @@
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing\OptionsLoader;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\Mapper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
 
-class MapperTest extends PHPUnit_Framework_TestCase
+class MapperTest extends TestCase
 {
     /** @var Mapper */
     protected $mapper;

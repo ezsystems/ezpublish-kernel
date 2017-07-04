@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\DefaultAuthenticationSuccessHandler;
 use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
-class DefaultAuthenticationSuccessHandlerTest extends PHPUnit_Framework_TestCase
+class DefaultAuthenticationSuccessHandlerTest extends TestCase
 {
     public function testSetConfigResolver()
     {

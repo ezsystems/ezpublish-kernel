@@ -12,10 +12,10 @@ use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
+class ViewControllerListenerTest extends TestCase
 {
     /**
      * @var \Symfony\Component\HttpKernel\Controller\ControllerResolver|\PHPUnit_Framework_MockObject_MockObject

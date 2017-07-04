@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter;
 
 use eZ\Publish\Core\FieldType\RichText\Converter\Link;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use DOMDocument;
@@ -18,7 +18,7 @@ use DOMDocument;
  * Tests the Link converter
  * Class LinkTest.
  */
-class LinkTest extends PHPUnit_Framework_TestCase
+class LinkTest extends TestCase
 {
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject

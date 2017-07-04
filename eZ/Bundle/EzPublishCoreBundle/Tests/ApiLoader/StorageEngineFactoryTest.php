@@ -10,9 +10,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
+class StorageEngineFactoryTest extends TestCase
 {
     public function testRegisterStorageEngine()
     {

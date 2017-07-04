@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SimplifiedRequestTest extends PHPUnit_Framework_TestCase
+class SimplifiedRequestTest extends TestCase
 {
     /**
      * @param string $url

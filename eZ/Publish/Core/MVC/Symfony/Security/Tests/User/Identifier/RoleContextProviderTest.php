@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User\Identifier;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider\RoleContextProvider;
 use FOS\HttpCache\UserContext\UserContext;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RoleContextProviderTest extends PHPUnit_Framework_TestCase
+class RoleContextProviderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

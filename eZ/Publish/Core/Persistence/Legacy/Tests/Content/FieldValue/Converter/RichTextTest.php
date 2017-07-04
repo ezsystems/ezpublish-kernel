@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for RichText converter in Legacy storage.
@@ -19,7 +19,7 @@ use PHPUnit_Framework_TestCase;
  * @group fieldType
  * @group ezrichtext
  */
-class RichTextTest extends PHPUnit_Framework_TestCase
+class RichTextTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter

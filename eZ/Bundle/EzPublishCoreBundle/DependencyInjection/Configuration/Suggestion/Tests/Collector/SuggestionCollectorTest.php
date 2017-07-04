@@ -4,9 +4,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Sugges
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SuggestionCollectorTest extends PHPUnit_Framework_TestCase
+class SuggestionCollectorTest extends TestCase
 {
     public function testAddHasGetSuggestions()
     {

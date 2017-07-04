@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Tests;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConfigSuggestionTest extends PHPUnit_Framework_TestCase
+class ConfigSuggestionTest extends TestCase
 {
     public function testEmptyConstructor()
     {

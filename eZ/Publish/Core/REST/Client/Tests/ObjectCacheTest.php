@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\REST\Client\Tests;
 
 use eZ\Publish\Core\REST\Client\ObjectCache;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ObjectCacheTest extends PHPUnit_Framework_TestCase
+class ObjectCacheTest extends TestCase
 {
     public function testStoreRestore()
     {

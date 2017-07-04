@@ -8,12 +8,12 @@
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Output generator test class.
  */
-abstract class GeneratorTest extends PHPUnit_Framework_TestCase
+abstract class GeneratorTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Output\Generator

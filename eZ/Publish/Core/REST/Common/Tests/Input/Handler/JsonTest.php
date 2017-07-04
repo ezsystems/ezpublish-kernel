@@ -9,12 +9,12 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input\Handler;
 
 use eZ\Publish\Core\REST\Common;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Json input handler test.
  */
-class JsonTest extends PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser

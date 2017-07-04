@@ -10,10 +10,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ConfigurationProcessorTest extends PHPUnit_Framework_TestCase
+class ConfigurationProcessorTest extends TestCase
 {
     public function testConstruct()
     {

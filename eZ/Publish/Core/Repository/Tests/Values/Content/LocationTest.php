@@ -10,12 +10,12 @@ namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test internal integrity of @see \eZ\Publish\Core\Repository\Values\Content\Location ValueObject.
  */
-class LocationTest extends PHPUnit_Framework_TestCase
+class LocationTest extends TestCase
 {
     use ValueObjectTestTrait;
 

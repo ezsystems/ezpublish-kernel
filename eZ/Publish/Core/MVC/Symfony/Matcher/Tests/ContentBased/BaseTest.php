@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

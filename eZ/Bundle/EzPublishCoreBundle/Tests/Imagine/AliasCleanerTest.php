@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AliasCleanerTest extends PHPUnit_Framework_TestCase
+class AliasCleanerTest extends TestCase
 {
     /**
      * @var AliasCleaner

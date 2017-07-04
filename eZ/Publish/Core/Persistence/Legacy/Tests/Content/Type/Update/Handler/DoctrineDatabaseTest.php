@@ -10,12 +10,12 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\UpdateHandler;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Content Type Handler.
  */
-class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
+class DoctrineDatabaseTest extends TestCase
 {
     /**
      * Gateway mock.

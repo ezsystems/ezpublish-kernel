@@ -10,11 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\User;
 
-class UserWrappedTest extends PHPUnit_Framework_TestCase
+class UserWrappedTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

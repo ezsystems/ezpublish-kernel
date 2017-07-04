@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\Block\Id\Block as BlockIdMatcher;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BlockTest extends PHPUnit_Framework_TestCase
+class BlockTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface
