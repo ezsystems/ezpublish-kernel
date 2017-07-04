@@ -98,12 +98,16 @@ class TolerantIOService extends IOService
 
     public function loadBinaryFileByUri($binaryFileUri)
     {
+        $binaryFileId = $this->binarydataHandler->getIdFromUri($binaryFileUri);
         try {
-            $binaryFileId = $this->removeUriPrefix($this->binarydataHandler->getIdFromUri($binaryFileUri));
+            $binaryFileId = $this->removeUriPrefix($binaryFileId);
         } catch (InvalidArgumentException $e) {
             $this->logMissingFile($binaryFileUri);
 
-            return new MissingBinaryFile(['uri' => $binaryFileUri]);
+            return new MissingBinaryFile([
+                'id' => $binaryFileId,
+                'uri' => $binaryFileUri,
+            ]);
         }
 
         try {
