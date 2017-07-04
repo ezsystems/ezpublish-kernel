@@ -9,13 +9,13 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\UriSigner;
 use ReflectionObject;
 
-class FragmentListenerFactoryTest extends PHPUnit_Framework_TestCase
+class FragmentListenerFactoryTest extends TestCase
 {
     /**
      * @dataProvider buildFragmentListenerProvider

@@ -11,9 +11,9 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\DependencyInjection\Compiler;
 use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler\FieldTypeProcessorPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FieldTypeProcessorPassTest extends PHPUnit_Framework_TestCase
+class FieldTypeProcessorPassTest extends TestCase
 {
     public function testProcess()
     {

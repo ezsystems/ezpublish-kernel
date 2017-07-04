@@ -12,11 +12,11 @@ use eZ\Bundle\EzPublishCoreBundle\EventListener\SessionInitByPostListener;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
+class SessionInitByPostListenerTest extends TestCase
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\EventListener\SessionInitByPostListener

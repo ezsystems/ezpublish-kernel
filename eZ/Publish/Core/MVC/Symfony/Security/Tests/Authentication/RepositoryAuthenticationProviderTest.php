@@ -10,11 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 
-class RepositoryAuthenticationProviderTest extends PHPUnit_Framework_TestCase
+class RepositoryAuthenticationProviderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface

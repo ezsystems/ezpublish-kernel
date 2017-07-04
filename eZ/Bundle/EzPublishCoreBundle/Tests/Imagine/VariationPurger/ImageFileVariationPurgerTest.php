@@ -8,8 +8,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 use ArrayIterator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger;
 use eZ\Publish\Core\IO\Values\BinaryFile;
+use PHPUnit\Framework\TestCase;
 
-class ImageFileVariationPurgerTest extends \PHPUnit_Framework_TestCase
+class ImageFileVariationPurgerTest extends TestCase
 {
     /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $ioServiceMock;

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DOMDocument;
 
 /**
@@ -20,7 +20,7 @@ use DOMDocument;
  * @group fieldType
  * @group ezauthor
  */
-class AuthorTest extends PHPUnit_Framework_TestCase
+class AuthorTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter

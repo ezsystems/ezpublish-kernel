@@ -10,12 +10,12 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Content Type Updater.
  */
-class ContentUpdaterTest extends PHPUnit_Framework_TestCase
+class ContentUpdaterTest extends TestCase
 {
     /**
      * Content gateway mock.

@@ -11,10 +11,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Contextualizer;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ContextualizerTest extends PHPUnit_Framework_TestCase
+class ContextualizerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

@@ -9,11 +9,11 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Security;
 
 use eZ\Publish\Core\REST\Server\Security\RestLogoutHandler;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RestLogoutHandlerTest extends PHPUnit_Framework_TestCase
+class RestLogoutHandlerTest extends TestCase
 {
     public function testLogout()
     {

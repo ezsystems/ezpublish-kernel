@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 use DateInterval;
 use SimpleXMLElement;
@@ -26,7 +26,7 @@ use ReflectionObject;
 /**
  * Test case for DateAndTime converter in Legacy storage.
  */
-class DateAndTimeTest extends PHPUnit_Framework_TestCase
+class DateAndTimeTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter

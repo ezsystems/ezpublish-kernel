@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\SwirlFilterLoader;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SwirlFilterLoaderTest extends PHPUnit_Framework_TestCase
+class SwirlFilterLoaderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

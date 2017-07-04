@@ -16,12 +16,12 @@ use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class PreviewControllerTest extends PHPUnit_Framework_TestCase
+class PreviewControllerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

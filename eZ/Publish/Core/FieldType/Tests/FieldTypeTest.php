@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Exception;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
-abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
+abstract class FieldTypeTest extends TestCase
 {
     /**
      * Generic cache for the getFieldTypeUnderTest() method.

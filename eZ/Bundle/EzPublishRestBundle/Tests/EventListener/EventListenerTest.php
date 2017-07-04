@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class EventListenerTest extends PHPUnit_Framework_TestCase
+abstract class EventListenerTest extends TestCase
 {
     /** @var EventDispatcherInterface */
     protected $eventMock;

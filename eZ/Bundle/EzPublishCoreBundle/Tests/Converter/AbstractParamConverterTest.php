@@ -8,7 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
-abstract class AbstractParamConverterTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class AbstractParamConverterTest extends TestCase
 {
     public function createConfiguration($class = null, $name = null)
     {

@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\FieldType\Tests\RichText\Validator;
 
 use eZ\Publish\Core\FieldType\RichText\Validator;
 use DOMDocument;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DocbookTest extends PHPUnit_Framework_TestCase
+class DocbookTest extends TestCase
 {
     public function providerForTestValidate()
     {

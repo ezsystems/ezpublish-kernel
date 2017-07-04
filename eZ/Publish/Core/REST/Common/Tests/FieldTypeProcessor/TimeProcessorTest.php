@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class TimeProcessorTest extends PHPUnit_Framework_TestCase
+class TimeProcessorTest extends TestCase
 {
     protected $constants = array(
         'DEFAULT_EMPTY',

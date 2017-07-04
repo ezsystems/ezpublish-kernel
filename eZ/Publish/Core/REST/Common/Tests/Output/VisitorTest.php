@@ -10,13 +10,13 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
 use eZ\Publish\Core\REST\Common;
 use stdClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Visitor test.
  */
-class VisitorTest extends PHPUnit_Framework_TestCase
+class VisitorTest extends TestCase
 {
     public function testVisitDocument()
     {

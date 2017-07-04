@@ -5,9 +5,9 @@
 namespace eZ\Publish\Core\Helper\Tests\FieldsGroups;
 
 use eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ArrayTranslatorFieldsGroupsListTest extends PHPUnit_Framework_TestCase
+class ArrayTranslatorFieldsGroupsListTest extends TestCase
 {
     private $translatorMock;
 

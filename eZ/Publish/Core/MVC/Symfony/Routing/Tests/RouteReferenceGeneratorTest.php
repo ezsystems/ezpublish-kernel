@@ -13,11 +13,11 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class RouteReferenceGeneratorTest extends PHPUnit_Framework_TestCase
+class RouteReferenceGeneratorTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

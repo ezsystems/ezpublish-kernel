@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Voter;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CoreVoterTest extends PHPUnit_Framework_TestCase
+class CoreVoterTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\Repository

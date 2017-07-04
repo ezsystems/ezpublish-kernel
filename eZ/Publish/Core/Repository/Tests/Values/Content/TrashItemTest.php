@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class TrashItemTest extends PHPUnit_Framework_TestCase
+class TrashItemTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::getProperties

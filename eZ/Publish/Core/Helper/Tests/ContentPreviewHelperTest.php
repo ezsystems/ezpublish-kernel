@@ -12,9 +12,9 @@ use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
+class ContentPreviewHelperTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

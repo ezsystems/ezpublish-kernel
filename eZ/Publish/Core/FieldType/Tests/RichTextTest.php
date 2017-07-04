@@ -19,13 +19,13 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\ValidationError;
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group ezrichtext
  */
-class RichTextTest extends PHPUnit_Framework_TestCase
+class RichTextTest extends TestCase
 {
     /**
      * @return \eZ\Publish\Core\FieldType\RichText\Type

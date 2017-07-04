@@ -21,10 +21,10 @@ function time()
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class LocalPurgeClientTest extends PHPUnit_Framework_TestCase
+class LocalPurgeClientTest extends TestCase
 {
     public function testPurge()
     {

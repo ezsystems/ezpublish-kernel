@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor;
 use eZ\Publish\Core\FieldType\Page\Parts\Base;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PageProcessorTest extends PHPUnit_Framework_TestCase
+class PageProcessorTest extends TestCase
 {
     protected $incomingValue;
     protected $outgoingValue;

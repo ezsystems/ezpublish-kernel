@@ -9,12 +9,12 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for PersistenceLogger.
  */
-class PersistenceLoggerTest extends PHPUnit_Framework_TestCase
+class PersistenceLoggerTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger

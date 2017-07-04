@@ -8,13 +8,13 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\RequestParser;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Bundle\EzPublishRestBundle\RequestParser\Router as RouterRequestParser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 
-class RouterTest extends PHPUnit_Framework_TestCase
+class RouterTest extends TestCase
 {
     /**
      * @var \Symfony\Cmf\Component\Routing\ChainRouter

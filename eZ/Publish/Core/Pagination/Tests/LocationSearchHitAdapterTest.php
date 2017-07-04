@@ -13,9 +13,9 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchHitAdapter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class LocationSearchHitAdapterTest extends PHPUnit_Framework_TestCase
+class LocationSearchHitAdapterTest extends TestCase
 {
     /**
      * @var \eZ\Publish\API\Repository\SearchService|\PHPUnit_Framework_MockObject_MockObject

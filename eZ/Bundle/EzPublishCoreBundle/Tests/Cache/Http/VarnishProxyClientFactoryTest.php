@@ -10,10 +10,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Cache\Http;
 
 use eZ\Bundle\EzPublishCoreBundle\Cache\Http\VarnishProxyClientFactory;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
-class VarnishProxyClientFactoryTest extends PHPUnit_Framework_TestCase
+class VarnishProxyClientFactoryTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

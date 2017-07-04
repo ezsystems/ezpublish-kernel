@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Locale\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class LocaleConverterTest extends PHPUnit_Framework_TestCase
+class LocaleConverterTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter

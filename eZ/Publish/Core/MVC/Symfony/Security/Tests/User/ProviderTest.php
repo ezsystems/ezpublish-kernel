@@ -14,9 +14,9 @@ use eZ\Publish\Core\MVC\Symfony\Security\User\Provider;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\User;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ProviderTest extends PHPUnit_Framework_TestCase
+class ProviderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

@@ -10,13 +10,13 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
 use eZ\Publish\Core\FieldType\Validator\IntegerValueValidator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group validator
  */
-class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
+class IntegerValueValidatorTest extends TestCase
 {
     /**
      * @return int

@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class APIFieldTypeTest extends PHPUnit_Framework_TestCase
+class APIFieldTypeTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

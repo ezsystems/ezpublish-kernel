@@ -17,12 +17,12 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStr
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Exception;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Content Type Handler.
  */
-class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
+class ContentTypeHandlerTest extends TestCase
 {
     /**
      * Gateway mock.

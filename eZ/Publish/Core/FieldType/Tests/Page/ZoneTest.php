@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\FieldType\Tests\Page;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ZoneTest extends PHPUnit_Framework_TestCase
+class ZoneTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\FieldType\Page\Parts\Zone::__construct

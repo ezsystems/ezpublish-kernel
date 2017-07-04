@@ -13,9 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
+abstract class BaseMatcherFactoryTest extends TestCase
 {
     /**
      * @param string $matcherServiceIdentifier

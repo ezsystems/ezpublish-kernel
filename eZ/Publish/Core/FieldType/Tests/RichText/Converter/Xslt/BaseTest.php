@@ -10,14 +10,14 @@ namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Xslt;
 
 use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
 use eZ\Publish\Core\FieldType\RichText\Validator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DOMDocument;
 use DOMXpath;
 
 /**
  * Base class for XSLT converter tests.
  */
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\Converter

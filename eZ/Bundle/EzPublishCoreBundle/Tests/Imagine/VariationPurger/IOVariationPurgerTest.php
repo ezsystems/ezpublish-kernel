@@ -6,8 +6,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\IOVariationPurger;
+use PHPUnit\Framework\TestCase;
 
-class IOVariationPurgerTest extends \PHPUnit_Framework_TestCase
+class IOVariationPurgerTest extends TestCase
 {
     public function testPurgesAliasList()
     {

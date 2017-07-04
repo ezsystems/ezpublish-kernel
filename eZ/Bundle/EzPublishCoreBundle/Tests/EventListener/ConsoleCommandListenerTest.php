@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ConsoleCommandListener;
 use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\TestOutput;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ConsoleCommandListenerTest extends PHPUnit_Framework_TestCase
+class ConsoleCommandListenerTest extends TestCase
 {
     /**
      * @var array

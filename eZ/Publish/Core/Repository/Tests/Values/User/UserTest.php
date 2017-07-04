@@ -9,9 +9,12 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\User;
 
 use eZ\Publish\Core\Repository\Values\User\User;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UserTest extends PHPUnit_Framework_TestCase
+/**
+ * Test internal integrity of @see \eZ\Publish\Core\Repository\Values\User\User ValueObject.
+ */
+class UserTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\Repository\Values\User\User::getProperties
