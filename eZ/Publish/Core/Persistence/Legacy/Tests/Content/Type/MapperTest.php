@@ -41,18 +41,18 @@ class MapperTest extends TestCase
             $group
         );
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
-                'name' => array(
+                'name' => [
                     'eng-GB' => 'Media',
-                ),
-                'description' => array(),
+                ],
+                'description' => [],
                 'identifier' => 'Media',
                 'created' => 1032009743,
                 'modified' => 1033922120,
                 'creatorId' => 14,
                 'modifierId' => 14,
-            ),
+            ],
             $group
         );
     }
@@ -66,10 +66,10 @@ class MapperTest extends TestCase
     {
         $struct = new GroupCreateStruct();
 
-        $struct->name = array(
+        $struct->name = [
             'eng-GB' => 'Media',
-        );
-        $struct->description = array();
+        ];
+        $struct->description = [];
         $struct->identifier = 'Media';
         $struct->created = 1032009743;
         $struct->modified = 1033922120;
@@ -107,11 +107,11 @@ class MapperTest extends TestCase
     {
         // Taken from example DB
         $struct = new CreateStruct();
-        $struct->name = array(
+        $struct->name = [
             'eng-US' => 'Folder',
-        );
+        ];
         $struct->status = 0;
-        $struct->description = array();
+        $struct->description = [];
         $struct->identifier = 'folder';
         $struct->created = 1024392098;
         $struct->modified = 1082454875;
@@ -126,18 +126,18 @@ class MapperTest extends TestCase
         $struct->sortOrder = Location::SORT_ORDER_ASC;
         $struct->defaultAlwaysAvailable = true;
 
-        $struct->groupIds = array(
+        $struct->groupIds = [
             1,
-        );
+        ];
 
         $fieldDefName = new FieldDefinition();
 
         $fieldDefShortDescription = new FieldDefinition();
 
-        $struct->fieldDefinitions = array(
+        $struct->fieldDefinitions = [
             $fieldDefName,
             $fieldDefShortDescription,
-        );
+        ];
 
         return $struct;
     }
@@ -172,11 +172,11 @@ class MapperTest extends TestCase
         // Taken from example DB
         $type = new Type();
         $type->id = 23;
-        $type->name = array(
+        $type->name = [
             'eng-US' => 'Folder',
-        );
+        ];
         $type->status = 0;
-        $type->description = array();
+        $type->description = [];
         $type->identifier = 'folder';
         $type->created = 1024392098;
         $type->modified = 1082454875;
@@ -190,9 +190,9 @@ class MapperTest extends TestCase
         $type->sortField = Location::SORT_FIELD_MODIFIED_SUBNODE;
         $type->sortOrder = Location::SORT_ORDER_ASC;
         $type->defaultAlwaysAvailable = true;
-        $type->groupIds = array(
+        $type->groupIds = [
             1,
-        );
+        ];
 
         $fieldDefName = new FieldDefinition();
         $fieldDefName->id = 42;
@@ -200,10 +200,10 @@ class MapperTest extends TestCase
         $fieldDefShortDescription = new FieldDefinition();
         $fieldDefName->id = 128;
 
-        $type->fieldDefinitions = array(
+        $type->fieldDefinitions = [
             $fieldDefName,
             $fieldDefShortDescription,
-        );
+        ];
 
         return $type;
     }
@@ -227,7 +227,7 @@ class MapperTest extends TestCase
         $groupFixture->identifier = 'Media';
 
         $this->assertEquals(
-            array($groupFixture),
+            [$groupFixture],
             $groups
         );
     }
@@ -252,13 +252,13 @@ class MapperTest extends TestCase
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'status' => 0,
-                'name' => array(
+                'name' => [
                     'eng-US' => 'Folder',
-                ),
-                'description' => array(),
+                ],
+                'description' => [],
                 'created' => 1024392098,
                 'creatorId' => 14,
                 'modified' => 1082454875,
@@ -269,26 +269,26 @@ class MapperTest extends TestCase
                 'nameSchema' => '<short_name|name>',
                 'isContainer' => true,
                 'initialLanguageId' => 2,
-                'groupIds' => array(1),
+                'groupIds' => [1],
                 'sortField' => 1,
                 'sortOrder' => 1,
                 'defaultAlwaysAvailable' => true,
-            ),
+            ],
             $types[0]
         );
 
         $this->assertEquals(
-            5,
+            6,
             count($types[0]->fieldDefinitions),
             'Incorrect number of field definitions'
         );
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 155,
-                'name' => array(
+                'name' => [
                     'eng-US' => 'Short name',
-                ),
-                'description' => array(),
+                ],
+                'description' => [],
                 'identifier' => 'short_name',
                 'fieldGroup' => '',
                 'fieldType' => 'ezstring',
@@ -297,8 +297,25 @@ class MapperTest extends TestCase
                 'isInfoCollector' => false,
                 'isSearchable' => true,
                 'position' => 2,
-            ),
+            ],
             $types[0]->fieldDefinitions[2]
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'id' => 159,
+                'name' => [],
+                'description' => [],
+                'identifier' => 'show_children',
+                'fieldGroup' => '',
+                'fieldType' => 'ezboolean',
+                'isTranslatable' => false,
+                'isRequired' => false,
+                'isInfoCollector' => false,
+                'isSearchable' => false,
+                'position' => 6,
+            ],
+            $types[0]->fieldDefinitions[5]
         );
     }
 
@@ -322,7 +339,7 @@ class MapperTest extends TestCase
                 )
             );
 
-        $converterRegistry = new ConverterRegistry(array('some_type' => $converterMock));
+        $converterRegistry = new ConverterRegistry(['some_type' => $converterMock]);
 
         $mapper = new Mapper($converterRegistry);
 
@@ -354,7 +371,7 @@ class MapperTest extends TestCase
                 )
             );
 
-        $converterRegistry = new ConverterRegistry(array('some_type' => $converterMock));
+        $converterRegistry = new ConverterRegistry(['some_type' => $converterMock]);
 
         $mapper = new Mapper($converterRegistry);
 
@@ -375,8 +392,8 @@ class MapperTest extends TestCase
     {
         $mapper = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper',
-            array('toFieldDefinition'),
-            array($this->getConverterRegistryMock())
+            ['toFieldDefinition'],
+            [$this->getConverterRegistryMock()]
         );
         // Dedicatedly tested test
         $mapper->expects($this->atLeastOnce())
@@ -405,8 +422,8 @@ class MapperTest extends TestCase
     {
         return $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-            array(),
-            array(array())
+            [],
+            [[]]
         );
     }
 
