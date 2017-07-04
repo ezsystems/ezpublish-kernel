@@ -4,9 +4,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ChainConfigResolverTest extends PHPUnit_Framework_TestCase
+class ChainConfigResolverTest extends TestCase
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver

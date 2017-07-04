@@ -13,9 +13,9 @@ use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RichTextStorageTest extends PHPUnit_Framework_TestCase
+class RichTextStorageTest extends TestCase
 {
     public function providerForTestGetFieldData()
     {

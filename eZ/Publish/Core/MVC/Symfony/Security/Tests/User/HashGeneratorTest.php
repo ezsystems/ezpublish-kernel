@@ -9,8 +9,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator;
+use PHPUnit\Framework\TestCase;
 
-class HashGeneratorTest extends \PHPUnit_Framework_TestCase
+class HashGeneratorTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator::setIdentityDefiner

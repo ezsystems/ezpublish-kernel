@@ -3,8 +3,9 @@
 namespace eZ\Publish\Core\Persistence\Doctrine\Tests;
 
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
+use PHPUnit\Framework\TestCase;
 
-class ConnectionHandlerTest extends \PHPUnit_Framework_TestCase
+class ConnectionHandlerTest extends TestCase
 {
     /**
      * @dataProvider dataDsn

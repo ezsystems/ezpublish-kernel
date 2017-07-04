@@ -26,9 +26,9 @@ use eZ\Publish\Core\SignalSlot\TrashService;
 use eZ\Publish\Core\SignalSlot\LocationService;
 use eZ\Publish\Core\SignalSlot\LanguageService;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RepositoryTest extends PHPUnit_Framework_TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @dataProvider serviceMethods

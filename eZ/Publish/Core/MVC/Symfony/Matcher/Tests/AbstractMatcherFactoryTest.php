@@ -15,9 +15,9 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
+abstract class AbstractMatcherFactoryTest extends TestCase
 {
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.

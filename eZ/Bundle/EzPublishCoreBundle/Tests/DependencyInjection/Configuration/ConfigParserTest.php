@@ -9,11 +9,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
-class ConfigParserTest extends PHPUnit_Framework_TestCase
+class ConfigParserTest extends TestCase
 {
     /**
      * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType

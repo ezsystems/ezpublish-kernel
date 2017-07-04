@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\BorderFilterLoader;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BorderFilterLoaderTest extends PHPUnit_Framework_TestCase
+class BorderFilterLoaderTest extends TestCase
 {
     /**
      * @expectedException \Imagine\Exception\InvalidArgumentException

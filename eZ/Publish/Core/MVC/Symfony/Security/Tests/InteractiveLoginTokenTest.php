@@ -9,10 +9,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\Role;
 
-class InteractiveLoginTokenTest extends PHPUnit_Framework_TestCase
+class InteractiveLoginTokenTest extends TestCase
 {
     public function testConstruct()
     {

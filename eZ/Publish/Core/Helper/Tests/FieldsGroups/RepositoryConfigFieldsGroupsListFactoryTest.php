@@ -5,9 +5,9 @@
 namespace eZ\Publish\Core\Helper\Tests\FieldsGroups;
 
 use eZ\Publish\Core\Helper\FieldsGroups\RepositoryConfigFieldsGroupsListFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RepositoryConfigFieldsGroupsListFactoryTest extends PHPUnit_Framework_TestCase
+class RepositoryConfigFieldsGroupsListFactoryTest extends TestCase
 {
     private $repositoryConfigMock;
 

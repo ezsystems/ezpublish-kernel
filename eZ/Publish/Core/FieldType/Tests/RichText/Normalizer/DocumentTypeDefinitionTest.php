@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\FieldType\Tests\RichText\Normalizer;
 
 use eZ\Publish\Core\FieldType\RichText\Normalizer\DocumentTypeDefinition;
 use DOMDocument;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DocumentTypeDefinitionTest extends PHPUnit_Framework_TestCase
+class DocumentTypeDefinitionTest extends TestCase
 {
     public function providerForTestNormalize()
     {

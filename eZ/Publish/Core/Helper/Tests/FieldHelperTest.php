@@ -15,9 +15,9 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType;
 use eZ\Publish\Core\FieldType\TextLine\Value;
 use eZ\Publish\Core\Helper\FieldHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FieldHelperTest extends PHPUnit_Framework_TestCase
+class FieldHelperTest extends TestCase
 {
     /**
      * @var FieldHelper

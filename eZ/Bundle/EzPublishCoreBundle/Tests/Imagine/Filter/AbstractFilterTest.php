@@ -8,9 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AbstractFilterTest extends PHPUnit_Framework_TestCase
+class AbstractFilterTest extends TestCase
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter

@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\REST\Common\Tests\Input;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * FieldTypeParser test class.
  */
-class FieldTypeParserTest extends PHPUnit_Framework_TestCase
+class FieldTypeParserTest extends TestCase
 {
     protected $contentServiceMock;
 

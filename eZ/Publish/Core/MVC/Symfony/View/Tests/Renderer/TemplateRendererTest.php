@@ -8,9 +8,9 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Renderer;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class TemplateRendererTest extends PHPUnit_Framework_TestCase
+class TemplateRendererTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer

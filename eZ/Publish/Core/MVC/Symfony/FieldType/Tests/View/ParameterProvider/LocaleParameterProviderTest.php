@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\View\ParameterProvider;
 
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class LocaleParameterProviderTest extends PHPUnit_Framework_TestCase
+class LocaleParameterProviderTest extends TestCase
 {
     public function providerForTestGetViewParameters()
     {

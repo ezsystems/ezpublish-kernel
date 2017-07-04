@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ContentInfoTest extends PHPUnit_Framework_TestCase
+class ContentInfoTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\API\Repository\Values\Content\ContentInfo::getProperties

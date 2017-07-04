@@ -10,13 +10,13 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host as HostMapMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 
-class RouterHostElementTest extends PHPUnit_Framework_TestCase
+class RouterHostElementTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder

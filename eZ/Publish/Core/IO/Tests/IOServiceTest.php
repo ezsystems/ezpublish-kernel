@@ -14,12 +14,12 @@ use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for IO Service.
  */
-class IOServiceTest extends PHPUnit_Framework_TestCase
+class IOServiceTest extends TestCase
 {
     const PREFIX = 'test-prefix';
 

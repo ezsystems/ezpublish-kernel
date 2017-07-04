@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateAndTimeProcessor;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DateAndTimeProcessorTest extends PHPUnit_Framework_TestCase
+class DateAndTimeProcessorTest extends TestCase
 {
     protected $constants = array(
         'DEFAULT_EMPTY',

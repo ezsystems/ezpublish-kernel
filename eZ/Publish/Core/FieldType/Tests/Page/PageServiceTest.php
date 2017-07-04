@@ -16,9 +16,9 @@ use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\FieldType\Page\Value;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PageServiceTest extends PHPUnit_Framework_TestCase
+class PageServiceTest extends TestCase
 {
     /**
      * Class to instantiate to get the page service.

@@ -12,10 +12,10 @@ use eZ\Publish\Core\IO\IOMetadataHandler\Flysystem;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use League\Flysystem\FileNotFoundException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
-class FlysystemTest extends PHPUnit_Framework_TestCase
+class FlysystemTest extends TestCase
 {
     /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
     private $handler;

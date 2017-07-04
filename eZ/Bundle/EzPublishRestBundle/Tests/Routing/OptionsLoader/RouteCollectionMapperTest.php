@@ -10,14 +10,14 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing\OptionsLoader;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\Mapper;
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
  * @covers \eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper
  */
-class RouteCollectionMapperTest extends PHPUnit_Framework_TestCase
+class RouteCollectionMapperTest extends TestCase
 {
     /** @var RouteCollectionMapper */
     protected $collectionMapper;

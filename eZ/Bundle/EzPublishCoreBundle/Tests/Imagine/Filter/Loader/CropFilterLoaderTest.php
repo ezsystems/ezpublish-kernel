@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\CropFilterLoader;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CropFilterLoaderTest extends PHPUnit_Framework_TestCase
+class CropFilterLoaderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

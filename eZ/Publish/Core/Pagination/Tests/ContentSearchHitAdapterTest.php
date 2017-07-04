@@ -13,9 +13,9 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Pagination\Pagerfanta\ContentSearchHitAdapter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
+class ContentSearchHitAdapterTest extends TestCase
 {
     /**
      * @var \eZ\Publish\API\Repository\SearchService|\PHPUnit_Framework_MockObject_MockObject

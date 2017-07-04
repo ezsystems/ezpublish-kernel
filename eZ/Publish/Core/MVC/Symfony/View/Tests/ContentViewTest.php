@@ -9,12 +9,12 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group mvc
  */
-class ContentViewTest extends PHPUnit_Framework_TestCase
+class ContentViewTest extends TestCase
 {
     /**
      * Params that are always returned by this view.

@@ -10,9 +10,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConfigResolverTest extends PHPUnit_Framework_TestCase
+class ConfigResolverTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess

@@ -15,8 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 use ReflectionObject;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use PHPUnit\Framework\TestCase;
 
-class DefaultRouterTest extends \PHPUnit_Framework_TestCase
+class DefaultRouterTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\DependencyInjection\ContainerInterface

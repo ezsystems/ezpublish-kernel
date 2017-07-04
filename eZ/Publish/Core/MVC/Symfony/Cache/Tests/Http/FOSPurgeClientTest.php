@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
+class FOSPurgeClientTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

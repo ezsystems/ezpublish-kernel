@@ -14,12 +14,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for RelationList converter in Legacy storage.
  */
-class RelationListTest extends PHPUnit_Framework_TestCase
+class RelationListTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter

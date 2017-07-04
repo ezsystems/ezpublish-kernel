@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\MVC\Symfony\CacheTests\Http;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
+class LocationAwareStoreTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore

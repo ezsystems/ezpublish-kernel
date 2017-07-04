@@ -9,12 +9,12 @@
 namespace eZ\Publish\Core\SignalSlot\Tests\SignalDispatcher;
 
 use eZ\Publish\Core\SignalSlot;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group signalSlot
  */
-class DefaultSignalDispatcherTest extends PHPUnit_Framework_TestCase
+class DefaultSignalDispatcherTest extends TestCase
 {
     public function testEmitSignalNoSlot()
     {

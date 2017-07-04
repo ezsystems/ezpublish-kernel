@@ -11,13 +11,13 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\LocaleListener;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class LocaleListenerTest extends PHPUnit_Framework_TestCase
+class LocaleListenerTest extends TestCase
 {
     /**
      * @var LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject

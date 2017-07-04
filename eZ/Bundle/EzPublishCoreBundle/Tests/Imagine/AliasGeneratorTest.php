@@ -17,9 +17,9 @@ use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AliasGeneratorTest extends PHPUnit_Framework_TestCase
+class AliasGeneratorTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

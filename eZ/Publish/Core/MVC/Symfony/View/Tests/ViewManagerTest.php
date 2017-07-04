@@ -14,12 +14,12 @@ use eZ\Publish\Core\MVC\Symfony\View\View;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group mvc
  */
-class ViewManagerTest extends PHPUnit_Framework_TestCase
+class ViewManagerTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager

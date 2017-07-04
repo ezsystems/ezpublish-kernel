@@ -13,10 +13,10 @@ use eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class InstantCachePurgerTest extends PHPUnit_Framework_TestCase
+class InstantCachePurgerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

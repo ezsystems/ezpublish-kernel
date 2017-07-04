@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class Base extends PHPUnit_Framework_TestCase
+abstract class Base extends TestCase
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject

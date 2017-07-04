@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RepositoryConfigurationProviderTest extends PHPUnit_Framework_TestCase
+class RepositoryConfigurationProviderTest extends TestCase
 {
     public function testGetRepositoryConfigSpecifiedRepository()
     {

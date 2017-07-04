@@ -8,13 +8,13 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText as URITextMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 
-class RouterURITextTest extends PHPUnit_Framework_TestCase
+class RouterURITextTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder

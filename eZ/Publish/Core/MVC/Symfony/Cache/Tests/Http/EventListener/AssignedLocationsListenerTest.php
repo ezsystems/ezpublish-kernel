@@ -13,9 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\AssignedLocationsListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AssignedLocationsListenerTest extends PHPUnit_Framework_TestCase
+class AssignedLocationsListenerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

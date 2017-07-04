@@ -12,9 +12,9 @@ use eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
+class ConfigScopeListenerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

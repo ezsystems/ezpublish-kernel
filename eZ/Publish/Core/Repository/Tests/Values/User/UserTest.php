@@ -13,12 +13,12 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\User;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test internal integrity of @see \eZ\Publish\Core\Repository\Values\User\User ValueObject.
  */
-class UserTest extends PHPUnit_Framework_TestCase
+class UserTest extends TestCase
 {
     use ValueObjectTestTrait;
 

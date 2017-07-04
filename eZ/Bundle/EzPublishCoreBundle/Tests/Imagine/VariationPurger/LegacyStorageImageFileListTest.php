@@ -6,8 +6,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList;
+use PHPUnit\Framework\TestCase;
 
-class LegacyStorageImageFileListTest extends \PHPUnit_Framework_TestCase
+class LegacyStorageImageFileListTest extends TestCase
 {
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader|\PHPUnit_Framework_MockObject_MockObject */
     protected $rowReaderMock;

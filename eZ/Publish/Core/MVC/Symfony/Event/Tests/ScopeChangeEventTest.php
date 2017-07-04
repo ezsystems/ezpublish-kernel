@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Event\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ScopeChangeEventTest extends PHPUnit_Framework_TestCase
+class ScopeChangeEventTest extends TestCase
 {
     public function testGetSiteAccess()
     {

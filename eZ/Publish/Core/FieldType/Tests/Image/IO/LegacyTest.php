@@ -13,9 +13,9 @@ use eZ\Publish\Core\FieldType\Image\IO\OptionsProvider;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class LegacyTest extends PHPUnit_Framework_TestCase
+class LegacyTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\FieldType\Image\IO\Legacy

@@ -17,11 +17,11 @@ use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use eZ\Publish\SPI\Variation\VariationPurger;
 use Liip\ImagineBundle\Model\Binary;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 
-class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
+class IORepositoryResolverTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

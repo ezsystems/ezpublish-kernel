@@ -11,9 +11,9 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\DependencyInjection\Compiler;
 use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler\ValueObjectVisitorPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ValueObjectVisitorPassTest extends PHPUnit_Framework_TestCase
+class ValueObjectVisitorPassTest extends TestCase
 {
     public function testProcess()
     {

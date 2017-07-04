@@ -9,13 +9,13 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\OriginalRequestListener;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
+class OriginalRequestListenerTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {

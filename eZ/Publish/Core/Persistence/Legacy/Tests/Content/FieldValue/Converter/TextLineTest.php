@@ -15,12 +15,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLineConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for TextLine converter in Legacy storage.
  */
-class TextLineTest extends PHPUnit_Framework_TestCase
+class TextLineTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLineConverter

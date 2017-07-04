@@ -9,13 +9,13 @@
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
-class RouterTest extends PHPUnit_Framework_TestCase
+class RouterTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder

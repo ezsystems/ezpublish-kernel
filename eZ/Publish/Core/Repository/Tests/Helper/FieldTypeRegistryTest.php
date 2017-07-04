@@ -8,12 +8,12 @@
 namespace eZ\Publish\Core\Repository\Tests\Helper;
 
 use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test case for FieldTypeRegistry helper.
  */
-class FieldTypeRegistryTest extends PHPUnit_Framework_TestCase
+class FieldTypeRegistryTest extends TestCase
 {
     public function testConstructor()
     {

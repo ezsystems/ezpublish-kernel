@@ -10,13 +10,13 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader;
 use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
  * @covers \eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader
  */
-class OptionsLoaderTest extends PHPUnit_Framework_TestCase
+class OptionsLoaderTest extends TestCase
 {
     /**
      * @param string $type

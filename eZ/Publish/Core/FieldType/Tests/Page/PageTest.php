@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\FieldType\Tests\Page;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PageTest extends PHPUnit_Framework_TestCase
+class PageTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\FieldType\Page\Parts\Page::__construct

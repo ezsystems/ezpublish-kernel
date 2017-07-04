@@ -13,12 +13,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Url converter in Legacy storage.
  */
-class UrlTest extends PHPUnit_Framework_TestCase
+class UrlTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlConverter

@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\IO\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\IO\UrlRedecorator;
 
-class UrlRedecoratorTest extends PHPUnit_Framework_TestCase
+class UrlRedecoratorTest extends TestCase
 {
     /** @var UrlRedecorator|\PHPUnit_Framework_MockObject_MockObject */
     private $redecorator;

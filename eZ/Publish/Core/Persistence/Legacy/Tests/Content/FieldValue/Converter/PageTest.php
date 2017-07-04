@@ -12,9 +12,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverte
 use eZ\Publish\Core\FieldType\Page\Parts;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PageTest extends PHPUnit_Framework_TestCase
+class PageTest extends TestCase
 {
     const PAGE_XML_REFERENCE = <<<EOT
 <?xml version="1.0"?>
