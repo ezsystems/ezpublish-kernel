@@ -146,11 +146,23 @@ services:
         class: "%ezpublish.fieldType.indexable.unindexed.class%"
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezuser}
+            - {name: ezpublish.fieldType.indexable, alias: ezenum}
+            - {name: ezpublish.fieldType.indexable, alias: ezidentifier}
             - {name: ezpublish.fieldType.indexable, alias: ezinisetting}
-            - {name: ezpublish.fieldType.indexable, alias: ezpackage}
+            - {name: ezpublish.fieldType.indexable, alias: ezmatrix}
             - {name: ezpublish.fieldType.indexable, alias: ezmultioption}
+            - {name: ezpublish.fieldType.indexable, alias: ezmultioption2}
+            - {name: ezpublish.fieldType.indexable, alias: ezmultiprice}
+            - {name: ezpublish.fieldType.indexable, alias: ezoption}
+            - {name: ezpublish.fieldType.indexable, alias: ezpackage}
+            - {name: ezpublish.fieldType.indexable, alias: ezprice}
+            - {name: ezpublish.fieldType.indexable, alias: ezproductcategory}
+            - {name: ezpublish.fieldType.indexable, alias: ezrangeoption}
             - {name: ezpublish.fieldType.indexable, alias: ezsrrating}
             - {name: ezpublish.fieldType.indexable, alias: ezsubtreesubscription}
-            - {name: ezpublish.fieldType.indexable, alias: ezoption}
-            - {name: ezpublish.fieldType.indexable, alias: ezpage}
             - {name: ezpublish.fieldType.indexable, alias: ezcomcomments}
+            - {name: ezpublish.fieldType.indexable, alias: ezpaex}
+            - {name: ezpublish.fieldType.indexable, alias: ezsurvey}
+            - {name: ezpublish.fieldType.indexable, alias: eztags}
+            - {name: ezpublish.fieldType.indexable, alias: ezpage}
+            - {name: ezpublish.fieldType.indexable, alias: ezrecommendation}
