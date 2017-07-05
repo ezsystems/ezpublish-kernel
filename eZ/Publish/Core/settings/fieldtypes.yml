@@ -306,11 +306,25 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezcountry}
 
+    ezpublish.fieldType.ezdate:
+        class: "%ezpublish.fieldType.ezdate.class%"
+        parent: ezpublish.fieldType
+        arguments: [ "ezdate" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezdate}
+
     ezpublish.fieldType.ezdatetime:
         class: "%ezpublish.fieldType.ezdatetime.class%"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezdatetime}
+
+    ezpublish.fieldType.eztime:
+        class: "%ezpublish.fieldType.eztime.class%"
+        parent: ezpublish.fieldType
+        arguments: [ "eztime" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: eztime}
 
     ezpublish.fieldType.ezemail:
         class: "%ezpublish.fieldType.ezemail.class%"
@@ -428,13 +442,6 @@ services:
 
     # Not implemented fieldtypes
     # Configured to use the Null type to not throw exception
-    ezpublish.fieldType.ezdate:
-        class: "%ezpublish.fieldType.ezdate.class%"
-        parent: ezpublish.fieldType
-        arguments: [ "ezdate" ]
-        tags:
-            - {name: ezpublish.fieldType, alias: ezdate}
-
     ezpublish.fieldType.ezenum:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
@@ -525,13 +532,6 @@ services:
         arguments: [ "ezsubtreesubscription" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezsubtreesubscription}
-
-    ezpublish.fieldType.eztime:
-        class: "%ezpublish.fieldType.eztime.class%"
-        parent: ezpublish.fieldType
-        arguments: [ "eztime" ]
-        tags:
-            - {name: ezpublish.fieldType, alias: eztime}
 
     # not implemented fieldtypes from extensions
     ezpublish.fieldType.ezcomcomments:
