@@ -1999,6 +1999,54 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Get prioritized languages list data.
+     *
+     * Test cases using this data provider should expect the following arguments:
+     * <code>
+     *   array $prioritizedLanguagesList
+     *   string $expectedLanguage (if null - use main language)
+     * </code>
+     *
+     * @return array
+     */
+    public function getPrioritizedLanguageList()
+    {
+        return [
+            [[], null],
+            [['eng-US'], 'eng-US'],
+            [['eng-GB'], 'eng-GB'],
+            [['eng-US', 'eng-GB'], 'eng-US'],
+            [['eng-GB', 'eng-US'], 'eng-GB'],
+            // use non-existent group as the first one
+            [['ger-DE'], null],
+            [['ger-DE', 'eng-GB'], 'eng-GB'],
+        ];
+    }
+
+    /**
+     * @param int $parentGroupId
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     */
+    private function createMultiLanguageUserGroup($parentGroupId = 4)
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // create user group with multiple translations
+        $parentGroupId = $this->generateId('group', $parentGroupId);
+        $parentGroup = $userService->loadUserGroup($parentGroupId);
+
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct('eng-US');
+        $userGroupCreateStruct->setField('name', 'US user group', 'eng-US');
+        $userGroupCreateStruct->setField('name', 'GB user group', 'eng-GB');
+        $userGroupCreateStruct->setField('description', 'US user group description', 'eng-US');
+        $userGroupCreateStruct->setField('description', 'GB user group description', 'eng-GB');
+        $userGroupCreateStruct->alwaysAvailable = true;
+
+        return $userService->createUserGroup($userGroupCreateStruct, $parentGroup);
+    }
+
+    /**
      * Create a user group fixture in a variable named <b>$userGroup</b>,.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
@@ -2028,6 +2076,43 @@ class UserServiceTest extends BaseTest
         /* END: Inline */
 
         return $userGroup;
+    }
+
+    /**
+     * Create user with multiple translations of User Content fields.
+     *
+     * @param int $userGroupId User group ID (default 13 - Editors)
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createMultiLanguageUser($userGroupId = 13)
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $randomLogin = md5(rand() . time());
+        $userCreateStruct = $userService->newUserCreateStruct(
+            $randomLogin,
+            "{$randomLogin}@example.com",
+            'secret',
+            'eng-US'
+        );
+        $userCreateStruct->enabled = true;
+        $userCreateStruct->alwaysAvailable = true;
+
+        // set field for each language
+        foreach (['eng-US', 'eng-GB'] as $languageCode) {
+            $userCreateStruct->setField('first_name', "{$languageCode} Example", $languageCode);
+            $userCreateStruct->setField('last_name', "{$languageCode} User", $languageCode);
+            $userCreateStruct->setField('signature', "{$languageCode} signature", $languageCode);
+        }
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup($userGroupId);
+
+        // Create a new user
+        return $userService->createUser($userCreateStruct, [$group]);
     }
 
     private function createHash($login, $password, $type)
