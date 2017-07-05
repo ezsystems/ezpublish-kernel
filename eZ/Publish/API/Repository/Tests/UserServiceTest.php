@@ -1999,6 +1999,77 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test that multi-language logic for the loadUserGroup method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userGroup = $this->createMultiLanguageUserGroup();
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $userGroup->contentInfo->mainLanguageCode;
+        }
+
+        $loadedUserGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUserGroup->getName($expectedLanguageCode),
+            $loadedUserGroup->getName()
+        );
+        self::assertEquals(
+            $loadedUserGroup->getFieldValue('description', $expectedLanguageCode),
+            $loadedUserGroup->getFieldValue('description')
+        );
+    }
+
+    /**
+     * Test that multi-language logic works correctly after updating user group main language.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupWithPrioritizedLanguagesListAfterMainLanguageUpdate(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $userGroup = $this->createMultiLanguageUserGroup();
+
+        $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $userGroupUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $userService->updateUserGroup($userGroup, $userGroupUpdateStruct);
+
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = 'eng-GB';
+        }
+
+        $loadedUserGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUserGroup->getName($expectedLanguageCode),
+            $loadedUserGroup->getName()
+        );
+        self::assertEquals(
+            $loadedUserGroup->getFieldValue('description', $expectedLanguageCode),
+            $loadedUserGroup->getFieldValue('description')
+        );
+    }
+
+    /**
      * Get prioritized languages list data.
      *
      * Test cases using this data provider should expect the following arguments:
