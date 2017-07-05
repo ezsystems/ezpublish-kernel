@@ -103,7 +103,13 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadSubUserGroups',
-                array($parentGroup, 1, 1),
+                array($parentGroup, 1, 1, array()),
+                array($userGroup),
+                0,
+            ),
+            array(
+                'loadSubUserGroups',
+                array($parentGroup, 1, 1, array('eng-GB', 'eng-US')),
                 array($userGroup),
                 0,
             ),
