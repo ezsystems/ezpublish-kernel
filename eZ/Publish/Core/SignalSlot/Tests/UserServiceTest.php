@@ -150,7 +150,13 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadUser',
-                array($userId),
+                array($userId, array()),
+                $user,
+                0,
+            ),
+            array(
+                'loadUser',
+                array($userId, array('eng-GB', 'eng-US')),
                 $user,
                 0,
             ),
