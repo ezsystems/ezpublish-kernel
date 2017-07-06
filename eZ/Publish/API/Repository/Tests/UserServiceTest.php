@@ -2110,6 +2110,85 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test that multi-language logic for the loadUser method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUser
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $user = $this->createMultiLanguageUser();
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $user->contentInfo->mainLanguageCode;
+        }
+
+        $loadedUser = $userService->loadUser($user->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['fist_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUser method works correctly after updating
+     * user content main language.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserWithPrioritizedLanguagesListAfterMainLanguageUpdate(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $user = $this->createMultiLanguageUser();
+        // sanity check
+        self::assertEquals($user->contentInfo->mainLanguageCode, 'eng-US');
+
+        $userUpdateStruct = $userService->newUserUpdateStruct();
+        $userUpdateStruct->contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $userUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $userService->updateUser($user, $userUpdateStruct);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = 'eng-GB';
+        }
+
+        $loadedUser = $userService->loadUser($user->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['fist_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
      * Get prioritized languages list data.
      *
      * Test cases using this data provider should expect the following arguments:
