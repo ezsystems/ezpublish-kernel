@@ -102,13 +102,15 @@ class UrlAliasGenerator extends Generator
             $rootLocationId = $this->rootLocationId;
         }
 
+        $customViewType = $parameters['viewType'] ?: false;
+
         $queryString = '';
-        unset($parameters['language'], $parameters['contentId']);
+        unset($parameters['language'], $parameters['contentId'], $parameters['viewType']);
         if (!empty($parameters)) {
             $queryString = '?' . http_build_query($parameters, '', '&');
         }
 
-        if (!empty($urlAliases)) {
+        if (!$customViewType && !empty($urlAliases)) {
             $path = $urlAliases[0]->path;
             // Remove rootLocation's prefix if needed.
             if ($rootLocationId !== null) {
@@ -123,9 +125,13 @@ class UrlAliasGenerator extends Generator
                 }
             }
         } else {
+            $contentViewParameters = ['contentId' => $location->contentId, 'locationId' => $location->id];
+            if ($customViewType) {
+                $contentViewParameters['viewType'] = $customViewType;
+            }
             $path = $this->defaultRouter->generate(
                 self::INTERNAL_CONTENT_VIEW_ROUTE,
-                array('contentId' => $location->contentId, 'locationId' => $location->id)
+                $contentViewParameters
             );
         }
 
