@@ -102,7 +102,7 @@ class UrlAliasGenerator extends Generator
             $rootLocationId = $this->rootLocationId;
         }
 
-        $customViewType = $parameters['viewType'] ?: false;
+        $customViewType = $parameters['viewType'] ?? false;
 
         $queryString = '';
         unset($parameters['language'], $parameters['contentId'], $parameters['viewType']);
