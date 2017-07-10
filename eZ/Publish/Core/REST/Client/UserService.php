@@ -248,12 +248,14 @@ class UserService implements APIUserService, Sessionable
      * Loads a user for the given login.
      *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
+     * @throws \Exception Method is not implemented
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login)
+    public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }

@@ -171,12 +171,13 @@ interface UserService
      * with mysql before in eZ Publish 3.x/4.x/5.x.
      *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login);
+    public function loadUserByLogin($login, array $prioritizedLanguages = []);
 
     /**
      * Loads a user for the given email.

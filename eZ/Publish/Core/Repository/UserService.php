@@ -588,12 +588,13 @@ class UserService implements UserServiceInterface
      * {@inheritdoc}
      *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login)
+    public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
         if (!is_string($login) || empty($login)) {
             throw new InvalidArgumentValue('login', $login);
@@ -601,7 +602,7 @@ class UserService implements UserServiceInterface
 
         $spiUser = $this->userHandler->loadByLogin($login);
 
-        return $this->buildDomainUserObject($spiUser);
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
     }
 
     /**
@@ -1080,13 +1081,20 @@ class UserService implements UserServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\User $spiUser
      * @param \eZ\Publish\API\Repository\Values\Content\Content|null $content
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function buildDomainUserObject(SPIUser $spiUser, APIContent $content = null)
-    {
+    protected function buildDomainUserObject(
+        SPIUser $spiUser,
+        APIContent $content = null,
+        array $prioritizedLanguages = []
+    ) {
         if ($content === null) {
-            $content = $this->repository->getContentService()->internalLoadContent($spiUser->id);
+            $content = $this->repository->getContentService()->internalLoadContent(
+                $spiUser->id,
+                $prioritizedLanguages
+            );
         }
 
         return new User(

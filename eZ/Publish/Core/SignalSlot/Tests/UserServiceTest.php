@@ -174,7 +174,13 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadUserByLogin',
-                array('admin'),
+                array('admin', array()),
+                $user,
+                0,
+            ),
+            array(
+                'loadUserByLogin',
+                array('admin', array('eng-GB', 'eng-US')),
                 $user,
                 0,
             ),

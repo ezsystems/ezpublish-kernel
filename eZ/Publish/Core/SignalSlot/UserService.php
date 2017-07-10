@@ -281,14 +281,15 @@ class UserService implements UserServiceInterface
      * {@inheritdoc}
      *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login)
+    public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUserByLogin($login);
+        return $this->service->loadUserByLogin($login, $prioritizedLanguages);
     }
 
     /**
