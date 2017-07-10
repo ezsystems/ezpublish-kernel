@@ -2189,6 +2189,41 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test that multi-language logic for the loadUserByLogin method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserByLogin
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserByLoginWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $user = $this->createMultiLanguageUser();
+
+        // load, with prioritized languages, the newly created user
+        $loadedUser = $userService->loadUserByLogin($user->login, $prioritizedLanguages);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
+        }
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
      * Get prioritized languages list data.
      *
      * Test cases using this data provider should expect the following arguments:
