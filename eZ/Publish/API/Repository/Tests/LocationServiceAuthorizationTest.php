@@ -115,6 +115,35 @@ class LocationServiceAuthorizationTest extends BaseTest
     }
 
     /**
+     * Test for the loadLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
+     */
+    public function testLoadLocationsNoAccess()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $editorsGroupId = $this->generateId('group', 13);
+        $editorGroupContentInfo = $repository->getContentService()->loadContentInfo($editorsGroupId);
+
+        // this should return one location for admin
+        $locations = $locationService->loadLocations($editorGroupContentInfo);
+        $this->assertCount(1, $locations);
+        $this->assertInstanceOf(Location::class, $locations[0]);
+
+        $user = $this->createUserVersion1();
+
+        // Set current user to newly created user
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        // This should return empty array given current user does not have read access
+        $locations = $locationService->loadLocations($editorGroupContentInfo);
+        $this->assertEmpty($locations);
+    }
+
+    /**
      * Test for the updateLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()

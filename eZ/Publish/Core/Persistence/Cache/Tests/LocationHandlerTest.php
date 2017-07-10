@@ -496,6 +496,12 @@ class LocationHandlerTest extends HandlerTest
             ->with('user', 'role', 'assignments', 'byGroup')
             ->will($this->returnValue(true));
 
+        $this->cacheMock
+            ->expects($this->at(2))
+            ->method('clear')
+            ->with('content')
+            ->will($this->returnValue(true));
+
         $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler');
         $this->persistenceHandlerMock
             ->expects($this->once())
