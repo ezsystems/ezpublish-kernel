@@ -168,7 +168,13 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadUserByCredentials',
-                array('admin', 'with great power comes great responsibility'),
+                array('admin', 'with great power comes great responsibility', array()),
+                $user,
+                0,
+            ),
+            array(
+                'loadUserByCredentials',
+                array('admin', 'with great power comes great responsibility', array('eng-GB', 'eng-US')),
                 $user,
                 0,
             ),
