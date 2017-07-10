@@ -2011,10 +2011,9 @@ class DoctrineDatabase extends Gateway
      *
      * @param int $contentId
      * @param int $languageId
-     * @param int $mainLanguageId
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
-    private function deleteTranslationFromContentVersions($contentId, $languageId, $mainLanguageId)
+    private function deleteTranslationFromContentVersions($contentId, $languageId)
     {
         $query = $this->connection->createQueryBuilder();
         $query->update('ezcontentobject_version')
@@ -2022,7 +2021,12 @@ class DoctrineDatabase extends Gateway
             ->set('language_mask', 'language_mask & ~ ' . $languageId)
             ->set('modified', ':now')
             // update initial_language_id only if it matches removed translation languageId
-            ->set('initial_language_id', 'CASE WHEN initial_language_id = :languageId THEN :mainLanguageId ELSE initial_language_id END')
+            ->set(
+                'initial_language_id',
+                'CASE WHEN initial_language_id = :languageId ' .
+                'THEN (SELECT initial_language_id FROM ezcontentobject c WHERE c.id = :contentId) ' .
+                'ELSE initial_language_id END'
+            )
             ->where('contentobject_id = :contentId')
             ->andWhere(
             // make sure removed translation is not the last one (incl. alwaysAvailable)
@@ -2034,7 +2038,6 @@ class DoctrineDatabase extends Gateway
             ->setParameter(':now', time())
             ->setParameter(':contentId', $contentId)
             ->setParameter(':languageId', $languageId)
-            ->setParameter(':mainLanguageId', $mainLanguageId)
         ;
 
         $rowCount = $query->execute();
