@@ -1935,11 +1935,7 @@ class ContentService implements ContentServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->persistenceHandler->contentHandler()->removeTranslationFromContent(
-                $contentInfo->id,
-                $languageCode,
-                $contentInfo->mainLanguageCode
-            );
+            $this->persistenceHandler->contentHandler()->removeTranslationFromContent($contentInfo->id, $languageCode);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();

@@ -716,12 +716,8 @@ class Handler implements BaseContentHandler
     /**
      * {@inheritdoc}
      */
-    public function removeTranslationFromContent($contentId, $languageCode, $mainLanguageCode)
+    public function removeTranslationFromContent($contentId, $languageCode)
     {
-        $this->contentGateway->removeTranslationFromContent(
-            $contentId,
-            $languageCode,
-            $mainLanguageCode
-        );
+        $this->contentGateway->removeTranslationFromContent($contentId, $languageCode);
     }
 }

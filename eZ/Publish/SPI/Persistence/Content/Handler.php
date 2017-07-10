@@ -264,7 +264,6 @@ interface Handler
      *
      * @param int $contentId
      * @param string $languageCode language code of the translation
-     * @param string $mainLanguageCode Content Object main language code
      */
-    public function removeTranslationFromContent($contentId, $languageCode, $mainLanguageCode);
+    public function removeTranslationFromContent($contentId, $languageCode);
 }

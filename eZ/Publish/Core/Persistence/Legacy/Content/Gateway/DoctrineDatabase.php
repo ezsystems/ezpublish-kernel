@@ -1899,17 +1899,15 @@ class DoctrineDatabase extends Gateway
      *
      * @param int $contentId
      * @param string $languageCode language code of the translation
-     * @param string $mainLanguageCode Content Object main language code
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function removeTranslationFromContent($contentId, $languageCode, $mainLanguageCode)
+    public function removeTranslationFromContent($contentId, $languageCode)
     {
         $language = $this->languageHandler->loadByLanguageCode($languageCode);
-        $mainLanguage = $this->languageHandler->loadByLanguageCode($mainLanguageCode);
 
         $this->connection->beginTransaction();
         try {
-            $this->deleteTranslationFromContentVersions($contentId, $language->id, $mainLanguage->id);
+            $this->deleteTranslationFromContentVersions($contentId, $language->id);
             $this->deleteTranslationFromContentObject($contentId, $language->id);
 
             $this->deleteTranslationFromContentAttributes($contentId, $languageCode);

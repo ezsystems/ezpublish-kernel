@@ -399,7 +399,6 @@ abstract class Gateway
      *
      * @param int $contentId
      * @param string $languageCode language code of the translation
-     * @param string $mainLanguageCode Content Object main language code
      */
-    abstract public function removeTranslationFromContent($contentId, $languageCode, $mainLanguageCode);
+    abstract public function removeTranslationFromContent($contentId, $languageCode);
 }
