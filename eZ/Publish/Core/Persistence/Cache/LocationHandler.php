@@ -139,6 +139,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $this->cache->clear('location');//TIMBER! (path[Identification]String)
         $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+        $this->cache->clear('content');//TIMBER!
 
         return $return;
     }
