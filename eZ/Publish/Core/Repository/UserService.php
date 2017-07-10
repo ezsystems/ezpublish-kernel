@@ -612,10 +612,11 @@ class UserService implements UserServiceInterface
      * {@inheritdoc}
      *
      * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersByEmail($email)
+    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
     {
         if (!is_string($email) || empty($email)) {
             throw new InvalidArgumentValue('email', $email);
@@ -623,7 +624,7 @@ class UserService implements UserServiceInterface
 
         $users = array();
         foreach ($this->userHandler->loadByEmail($email) as $spiUser) {
-            $users[] = $this->buildDomainUserObject($spiUser);
+            $users[] = $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
         }
 
         return $users;

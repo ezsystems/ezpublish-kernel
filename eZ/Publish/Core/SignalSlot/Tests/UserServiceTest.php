@@ -192,7 +192,13 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadUsersByEmail',
-                array('admin@ez.no'),
+                array('admin@ez.no', array()),
+                array($user),
+                0,
+            ),
+            array(
+                'loadUsersByEmail',
+                array('admin@ez.no', array('eng-GB', 'eng-US')),
                 array($user),
                 0,
             ),

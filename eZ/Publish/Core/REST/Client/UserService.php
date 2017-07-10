@@ -269,10 +269,13 @@ class UserService implements APIUserService, Sessionable
      * several users having same email in the past (by means of a configuration option).
      *
      * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
+     *
+     * @throws \Exception Method is not implemented
      */
-    public function loadUsersByEmail($email)
+    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }

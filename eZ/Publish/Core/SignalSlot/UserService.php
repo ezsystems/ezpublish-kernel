@@ -299,12 +299,13 @@ class UserService implements UserServiceInterface
      * {@inheritdoc}
      *
      * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersByEmail($email)
+    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUsersByEmail($email);
+        return $this->service->loadUsersByEmail($email, $prioritizedLanguages);
     }
 
     /**
