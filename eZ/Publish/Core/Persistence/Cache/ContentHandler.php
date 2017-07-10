@@ -313,13 +313,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             ]
         );
 
-        $this->cache->clear('content', $contentId);
-        $this->cache->clear('content', 'info', $contentId);
-
         $this->persistenceHandler->contentHandler()->removeTranslationFromContent(
             $contentId,
             $languageCode,
             $mainLanguageCode
         );
+
+        $this->cache->clear('content', $contentId);
+        $this->cache->clear('content', 'info', $contentId);
     }
 }
