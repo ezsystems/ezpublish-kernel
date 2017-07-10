@@ -870,14 +870,15 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25)
+    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
         $locationService = $this->repository->getLocationService();
 
-        if (!$this->repository->canUser('content', 'read', $user)) {
+        if (!$this->repository->getPermissionResolver()->canUser('content', 'read', $user)) {
             throw new UnauthorizedException('content', 'read');
         }
 
@@ -899,19 +900,20 @@ class UserService implements UserServiceInterface
         $searchQuery->performCount = false;
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userGroupClassID']),
                 new CriterionLocationId($parentLocationIds),
-            )
+            ]
         );
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $userGroups = array();
+        $userGroups = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $userGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $resultItem->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }

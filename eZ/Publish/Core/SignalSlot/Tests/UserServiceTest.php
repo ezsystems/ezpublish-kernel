@@ -242,7 +242,13 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadUserGroupsOfUser',
-                array($user, 1, 1),
+                array($user, 1, 1, array()),
+                array($userGroup),
+                0,
+            ),
+            array(
+                'loadUserGroupsOfUser',
+                array($user, 1, 1, array('eng-GB', 'eng-US')),
                 array($userGroup),
                 0,
             ),
