@@ -362,16 +362,22 @@ class UserService implements APIUserService, Sessionable
     /**
      * Loads the users of a user group.
      *
+     * @throws \Exception Method is not implemented
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of users returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25)
-    {
+    public function loadUsersOfUserGroup(
+        UserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         throw new \Exception('@todo: Implement.');
     }
 

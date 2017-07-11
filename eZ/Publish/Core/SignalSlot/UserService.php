@@ -433,12 +433,22 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of users returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25)
-    {
-        return $this->service->loadUsersOfUserGroup($userGroup, $offset, $limit);
+    public function loadUsersOfUserGroup(
+        UserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
+        return $this->service->loadUsersOfUserGroup(
+            $userGroup,
+            $offset,
+            $limit,
+            $prioritizedLanguages
+        );
     }
 
     /**

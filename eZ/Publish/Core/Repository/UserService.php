@@ -929,15 +929,20 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of users returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(APIUserGroup $userGroup, $offset = 0, $limit = 25)
-    {
+    public function loadUsersOfUserGroup(
+        APIUserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
 
         if ($loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            return array();
+            return [];
         }
 
         $mainGroupLocation = $this->repository->getLocationService()->loadLocation(
@@ -947,10 +952,10 @@ class UserService implements UserServiceInterface
         $searchQuery = new LocationQuery();
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userClassID']),
                 new CriterionParentLocationId($mainGroupLocation->id),
-            )
+            ]
         );
 
         $searchQuery->offset = $offset;
@@ -960,12 +965,13 @@ class UserService implements UserServiceInterface
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $users = array();
+        $users = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $users[] = $this->buildDomainUserObject(
                 $this->userHandler->load($resultItem->valueObject->contentInfo->id),
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $resultItem->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }
