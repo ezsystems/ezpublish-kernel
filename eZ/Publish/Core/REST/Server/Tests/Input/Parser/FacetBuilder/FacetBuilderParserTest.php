@@ -17,7 +17,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 {
     public function testGenericFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
@@ -30,7 +30,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
                     'filter' => new LocationId(123),
                 ],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -52,14 +52,14 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryContentTypeFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
             'FacetBuilders' => [
                 'ContentType' => [],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -75,7 +75,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryCriterionFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
@@ -84,7 +84,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
                     'filter' => new LocationId(123),
                 ],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -102,7 +102,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryFieldFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
@@ -115,7 +115,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
                     'sort' => 'COUNT_DESC',
                 ],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -137,7 +137,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryLocationFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
@@ -146,7 +146,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
                     'location' => new Location(),
                 ],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -164,14 +164,14 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQuerySectionFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
             'FacetBuilders' => [
                 'Section' => [],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -187,14 +187,14 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryTermFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
             'FacetBuilders' => [
                 'Term' => [],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -210,7 +210,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryUserFacetBuilder()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
@@ -219,7 +219,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
                     'select' => 'MODIFIER',
                 ],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -237,12 +237,12 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryNoFacetBuilders()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
             'FacetBuilders' => [],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());
@@ -256,7 +256,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
 
     public function testQueryMultipleFacetBuilders()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
@@ -266,7 +266,7 @@ class FacetBuilderParserTest extends FacetBuilderBaseTest
                     'select' => 'MODIFIER',
                 ],
             ],
-        );
+        ];
 
         $parser = $this->getParser();
         $result = $parser->parse($inputArray, $this->getParsingDispatcher());

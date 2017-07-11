@@ -662,7 +662,7 @@ services:
 
     ezpublish_rest.input.parser.internal.facetbuilder.content_type:
         parent: ezpublish_rest.input.parser
-        class: '%ezpublish_rest.input.parser.internal.facetbuilder.content_type.class%'
+        class: "%ezpublish_rest.input.parser.internal.facetbuilder.content_type.class%"
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.ContentType }
 
