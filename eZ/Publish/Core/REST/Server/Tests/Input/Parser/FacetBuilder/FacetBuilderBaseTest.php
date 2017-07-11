@@ -17,6 +17,9 @@ use eZ\Publish\Core\REST\Server\Tests\Input\Parser\BaseTest;
 
 abstract class FacetBuilderBaseTest extends BaseTest
 {
+    /**
+     * @return \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
+     */
     protected function getParsingDispatcher()
     {
         $parsingDispatcher = new ParsingDispatcher();
@@ -70,7 +73,9 @@ abstract class FacetBuilderBaseTest extends BaseTest
     }
 
     /**
-     * Returns the session input parser.
+     * Returns the query parser.
+     *
+     * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentQuery
      */
     protected function internalGetParser()
     {
