@@ -41,8 +41,10 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     public function createDraftFromVersion($contentId, $srcVersion, $userId)
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $srcVersion, 'user' => $userId));
+        $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
+        $this->cache->invalidateTags(["content-$contentId-version-list"]);
 
-        return $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
+        return $draft;
     }
 
     /**

@@ -43,7 +43,7 @@ class ContentHandlerTest extends AbstractCacheHandlerTest
         // string $method, array $arguments, array? $tags, string? $key
         return [
             ['create', [new CreateStruct()]],
-            ['createDraftFromVersion', [2, 1, 14]],
+            ['createDraftFromVersion', [2, 1, 14], ['content-2-version-list']],
             ['copy', [2, 1]],
             ['loadDraftsForUser', [14]],
             ['setStatus', [2, 0, 1], ['content-2-version-list'], 'ez-content-version-info-2-1'],
