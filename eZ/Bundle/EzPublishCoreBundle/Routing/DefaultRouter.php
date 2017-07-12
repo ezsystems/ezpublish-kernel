@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 
 /**
@@ -95,7 +96,13 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
             unset($parameters['siteaccess']);
         }
 
-        $url = parent::generate($name, $parameters, $referenceType);
+        try {
+            $url = parent::generate($name, $parameters, $referenceType);
+        } catch (RouteNotFoundException $e) {
+            // Switch back to original context, for next links generation.
+            $this->setContext($originalContext);
+            throw $e;
+        }
 
         // Now putting back SiteAccess URI if needed.
         if ($isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer) {
