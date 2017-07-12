@@ -1201,21 +1201,26 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      */
     public function testSetName()
     {
-        $beforeCount = array(
-            'all' => $this->countContentNames(),
-            'this' => $this->countContentNames(14),
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
         $gateway = $this->getDatabaseGateway();
 
         $gateway->setName(14, 2, 'Hello world!', 'eng-GB');
 
+        $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
             array(array('eng-GB', 2, 14, 4, 'Hello world!', 'eng-GB')),
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
-                ->select('*')
+            $query->select('*')
                 ->from('ezcontentobject_name')
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq('contentobject_id', 14),
+                        $query->expr->eq('content_version', 2),
+                        $query->expr->eq('content_translation', $query->bindValue('eng-GB'))
+                    )
+                )
         );
     }
 
