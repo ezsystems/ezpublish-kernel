@@ -49,7 +49,7 @@ come up with an extensible working state a lot faster::
     {
         // @TODO: Check if __toString is actually defined and throw an
         // exception otherwise, because it is not part of the SPIValue
-        // interface
+        // interface – or add the method to the interface.
         return (string) $value;
     }
 
@@ -95,6 +95,10 @@ This leaves only two methods to implement:
   developers tend to try stuff in the web interface and the connecting dots are
   missing to be able to do this.
 
+  We *could* also make this method optional by adding a ``::fromInput()``
+  method to the value object and providing default implementations for the
+  pre-defined value classes (see below).
+
 __ https://doc.ez.no/display/EZP/eZ+Publish+5+Field+Type+Tutorial
 
 The Type Class
@@ -118,6 +122,13 @@ issues:
 * Field type indentifier MUST NOT contain dashes so that Twig template blocks
   work. We should probably document (and verify or normalize) them as
   ``/^[a-zA-Z0-9_]+$/``.
+
+  Internal normalization probably isn't an option since a developer would have
+  to use different identifiers in Twig template blocks then the one specified
+  in the field type implementation. We could assert on a proper identifier in
+  the test case. The documentation suggests to use ``.`` as a separator in the
+  name – we should ensure this works fine with Twig since I guess this could be
+  considered an operator by Twig, too.
 
 We should probably document the field type base test class
 ``eZ\Publish\Core\FieldType\Tests\FieldTypeTest`` which allows to test drive a
@@ -235,6 +246,77 @@ Testing The Field Type
 It would be really helpful to include instructions on how to use and test a
 field type in the user interface since this is what most developers will want
 to do. This is also essential to make sure the templates integrate properly.
+
+Custom Storage
+==============
+
+With the new ``eZ\Publish\SPI\FieldType\GatewayBasedStorage`` together with the
+``eZ\Publish\SPI\Tests\FieldType\BaseIntegrationTest`` it should be simple
+enough for developers to develop a custom field storage implementation.
+
+A dedicated tutorial section should guide the developer through setting up the
+test, running it and developing the field storage this way. The documentation
+on the test case should be revisited for this, and the tutorial should probably
+explicitely mention the ``stop-on-failure`` flag, which is really useful for
+developing new implementations for against existing tests::
+
+    bin/phpunit --stop-on-failure path/to/my/FieldTypeIntegrationTest.php
+
+This should be mentioned together with registering the new custom storage,
+which is also is yet undocumented. To make sure this also works we can replace
+the ``getCustomHandler()`` method in the ``BaseIntegrationTest`` with access to
+the actual Dependency Injection Container to make sure this integration also
+works. Maybe also add a test explicitely testing that the returned handler is
+correct and providing sensible failure output with helpful text or links.
+
+As far as I see it we can provide a defualt implementation in the
+``GatewayBasedStorage`` for ``getContentTypeId()`` since it only affects kernel
+related tables::
+
+    /**
+     * Retrieve the ContentType ID for the given $field.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
+     * @return int
+     */
+    public function getContentTypeId(Field $field)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select($this->connection->quoteIdentifier('contentclass_id'))
+            ->from($this->connection->quoteIdentifier('ezcontentclass_attribute'))
+            ->where(
+                $query->expr()->eq('id', ':fieldDefinitionId')
+            )
+            ->setParameter(':fieldDefinitionId', $field->fieldDefinitionId);
+
+        $statement = $query->execute();
+
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        if ($row === false) {
+            throw new RuntimeException(
+                sprintf(
+                    'Content Type ID cannot be retrieved based on the field definition ID "%s"',
+                    $field->fieldDefinitionId
+                )
+            );
+        }
+
+        return intval($row['contentclass_id']);
+    }
+
+This does not solve the set up issues:
+
+* A non existing table must be created
+
+* An external database / web service might need to be reset during tests
+
+But since the schema management inside eZ Publish is yet to be defined we can
+skip on this for now and document this as a potential issue in the repective
+tutorial section. People can still overwrite ``setupBeforeClass`` to implement
+this manually in their integration test.
 
 ..
    Local Variables:
