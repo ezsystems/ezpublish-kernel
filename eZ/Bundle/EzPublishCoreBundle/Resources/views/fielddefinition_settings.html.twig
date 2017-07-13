@@ -14,6 +14,16 @@
         {% set defaultValue = fielddefinition.defaultValue.text %}
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
+    <li class="ez-fielddefinition-setting min-length">
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.min-length.label'|trans|desc("Min string length:")}}</div>
+        <div class="ez-fielddefinition-setting-value">
+        {% if fielddefinition.validatorConfiguration.StringLengthValidator.minStringLength %}
+            {{ 'fielddefinition.min-length.value'|trans({'%min%': fielddefinition.validatorConfiguration.StringLengthValidator.minStringLength})|desc("%min% characters")}}
+        {% else %}
+            <em>{{ 'fielddefinition.min-length.undefined'|trans|desc("No defined minimum string length")}}</em>
+        {% endif %}
+        </div>
+    </li>
     <li class="ez-fielddefinition-setting max-length">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.max-length.label'|trans|desc("Max string length:")}}</div>
         <div class="ez-fielddefinition-setting-value">
