@@ -72,8 +72,13 @@ abstract class Query extends CriterionParser
         }
 
         // FacetBuilders
-        // -- contentTypeFacetBuilder
+        // -- facetBuilderListType
         if (array_key_exists('FacetBuilders', $data)) {
+            $facetBuilders = [];
+            foreach ($data['FacetBuilders'] as $facetBuilderName => $facetBuilderData) {
+                $facetBuilders[] = $this->dispatchFacetBuilder($facetBuilderName, $facetBuilderData, $parsingDispatcher);
+            }
+            $query->facetBuilders = $facetBuilders;
         }
 
         return $query;
