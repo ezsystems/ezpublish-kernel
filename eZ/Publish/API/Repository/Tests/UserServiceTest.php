@@ -1999,6 +1999,430 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test that multi-language logic for the loadUserGroup method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userGroup = $this->createMultiLanguageUserGroup();
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $userGroup->contentInfo->mainLanguageCode;
+        }
+
+        $loadedUserGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUserGroup->getName($expectedLanguageCode),
+            $loadedUserGroup->getName()
+        );
+        self::assertEquals(
+            $loadedUserGroup->getFieldValue('description', $expectedLanguageCode),
+            $loadedUserGroup->getFieldValue('description')
+        );
+    }
+
+    /**
+     * Test that multi-language logic works correctly after updating user group main language.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupWithPrioritizedLanguagesListAfterMainLanguageUpdate(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $userGroup = $this->createMultiLanguageUserGroup();
+
+        $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $userGroupUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $userService->updateUserGroup($userGroup, $userGroupUpdateStruct);
+
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = 'eng-GB';
+        }
+
+        $loadedUserGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUserGroup->getName($expectedLanguageCode),
+            $loadedUserGroup->getName()
+        );
+        self::assertEquals(
+            $loadedUserGroup->getFieldValue('description', $expectedLanguageCode),
+            $loadedUserGroup->getFieldValue('description')
+        );
+    }
+
+    /**
+     * Test that multi-language logic for the loadSubUserGroups method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadSubUserGroups
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadSubUserGroupsWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // create main group for subgroups
+        $userGroup = $this->createMultiLanguageUserGroup(4);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $userGroup->contentInfo->mainLanguageCode;
+        }
+
+        // create subgroups
+        $this->createMultiLanguageUserGroup($userGroup->id);
+        $this->createMultiLanguageUserGroup($userGroup->id);
+
+        $userGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        $subUserGroups = $userService->loadSubUserGroups($userGroup, 0, 2, $prioritizedLanguages);
+        foreach ($subUserGroups as $subUserGroup) {
+            self::assertEquals(
+                $subUserGroup->getName($expectedLanguageCode),
+                $subUserGroup->getName()
+            );
+            self::assertEquals(
+                $subUserGroup->getFieldValue('description', $expectedLanguageCode),
+                $subUserGroup->getFieldValue('description')
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUser method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUser
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $user = $this->createMultiLanguageUser();
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $user->contentInfo->mainLanguageCode;
+        }
+
+        $loadedUser = $userService->loadUser($user->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['fist_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUser method works correctly after updating
+     * user content main language.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserWithPrioritizedLanguagesListAfterMainLanguageUpdate(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $user = $this->createMultiLanguageUser();
+        // sanity check
+        self::assertEquals($user->contentInfo->mainLanguageCode, 'eng-US');
+
+        $userUpdateStruct = $userService->newUserUpdateStruct();
+        $userUpdateStruct->contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $userUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $userService->updateUser($user, $userUpdateStruct);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = 'eng-GB';
+        }
+
+        $loadedUser = $userService->loadUser($user->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['fist_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUserByLogin method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserByLogin
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserByLoginWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $user = $this->createMultiLanguageUser();
+
+        // load, with prioritized languages, the newly created user
+        $loadedUser = $userService->loadUserByLogin($user->login, $prioritizedLanguages);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
+        }
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUserByCredentials method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserByCredentials
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserByCredentialsWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $user = $this->createMultiLanguageUser();
+
+        // load, with prioritized languages, the newly created user
+        $loadedUser = $userService->loadUserByCredentials(
+            $user->login,
+            'secret',
+            $prioritizedLanguages
+        );
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
+        }
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUsersByEmail method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUsersByEmail
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUsersByEmailWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $user = $this->createMultiLanguageUser();
+
+        // load, with prioritized languages, users by email
+        $loadedUsers = $userService->loadUsersByEmail($user->email, $prioritizedLanguages);
+
+        foreach ($loadedUsers as $loadedUser) {
+            if ($expectedLanguageCode === null) {
+                $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
+            }
+            self::assertEquals(
+                $loadedUser->getName($expectedLanguageCode),
+                $loadedUser->getName()
+            );
+
+            foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+                self::assertEquals(
+                    $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                    $loadedUser->getFieldValue($fieldIdentifier)
+                );
+            }
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUserGroupsOfUser method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupsOfUserWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $userGroup = $this->createMultiLanguageUserGroup();
+        $user = $this->createMultiLanguageUser($userGroup->id);
+
+        $userGroups = $userService->loadUserGroupsOfUser($user, 0, 25, $prioritizedLanguages);
+        foreach ($userGroups as $userGroup) {
+            self::assertEquals(
+                $userGroup->getName($expectedLanguageCode),
+                $userGroup->getName()
+            );
+            self::assertEquals(
+                $userGroup->getFieldValue('description', $expectedLanguageCode),
+                $userGroup->getFieldValue('description')
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUsersOfUserGroup method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUsersOfUserGroupWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // create parent user group
+        $userGroup = $this->createMultiLanguageUserGroup();
+        // add two users to the created parent user group
+        $this->createMultiLanguageUser($userGroup->id);
+        $this->createMultiLanguageUser($userGroup->id);
+
+        // test loading of users via user group with prioritized languages list
+        $users = $userService->loadUsersOfUserGroup($userGroup, 0, 25, $prioritizedLanguages);
+        foreach ($users as $user) {
+            if ($expectedLanguageCode === null) {
+                $expectedLanguageCode = $user->contentInfo->mainLanguageCode;
+            }
+            self::assertEquals(
+                $user->getName($expectedLanguageCode),
+                $user->getName()
+            );
+
+            foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+                self::assertEquals(
+                    $user->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                    $user->getFieldValue($fieldIdentifier)
+                );
+            }
+        }
+    }
+
+    /**
+     * Get prioritized languages list data.
+     *
+     * Test cases using this data provider should expect the following arguments:
+     * <code>
+     *   array $prioritizedLanguagesList
+     *   string $expectedLanguage (if null - use main language)
+     * </code>
+     *
+     * @return array
+     */
+    public function getPrioritizedLanguageList()
+    {
+        return [
+            [[], null],
+            [['eng-US'], 'eng-US'],
+            [['eng-GB'], 'eng-GB'],
+            [['eng-US', 'eng-GB'], 'eng-US'],
+            [['eng-GB', 'eng-US'], 'eng-GB'],
+            // use non-existent group as the first one
+            [['ger-DE'], null],
+            [['ger-DE', 'eng-GB'], 'eng-GB'],
+        ];
+    }
+
+    /**
+     * @param int $parentGroupId
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     */
+    private function createMultiLanguageUserGroup($parentGroupId = 4)
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // create user group with multiple translations
+        $parentGroupId = $this->generateId('group', $parentGroupId);
+        $parentGroup = $userService->loadUserGroup($parentGroupId);
+
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct('eng-US');
+        $userGroupCreateStruct->setField('name', 'US user group', 'eng-US');
+        $userGroupCreateStruct->setField('name', 'GB user group', 'eng-GB');
+        $userGroupCreateStruct->setField('description', 'US user group description', 'eng-US');
+        $userGroupCreateStruct->setField('description', 'GB user group description', 'eng-GB');
+        $userGroupCreateStruct->alwaysAvailable = true;
+
+        return $userService->createUserGroup($userGroupCreateStruct, $parentGroup);
+    }
+
+    /**
      * Create a user group fixture in a variable named <b>$userGroup</b>,.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
@@ -2028,6 +2452,43 @@ class UserServiceTest extends BaseTest
         /* END: Inline */
 
         return $userGroup;
+    }
+
+    /**
+     * Create user with multiple translations of User Content fields.
+     *
+     * @param int $userGroupId User group ID (default 13 - Editors)
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createMultiLanguageUser($userGroupId = 13)
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $randomLogin = md5(rand() . time());
+        $userCreateStruct = $userService->newUserCreateStruct(
+            $randomLogin,
+            "{$randomLogin}@example.com",
+            'secret',
+            'eng-US'
+        );
+        $userCreateStruct->enabled = true;
+        $userCreateStruct->alwaysAvailable = true;
+
+        // set field for each language
+        foreach (['eng-US', 'eng-GB'] as $languageCode) {
+            $userCreateStruct->setField('first_name', "{$languageCode} Example", $languageCode);
+            $userCreateStruct->setField('last_name', "{$languageCode} User", $languageCode);
+            $userCreateStruct->setField('signature', "{$languageCode} signature", $languageCode);
+        }
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup($userGroupId);
+
+        // Create a new user
+        return $userService->createUser($userCreateStruct, [$group]);
     }
 
     private function createHash($login, $password, $type)

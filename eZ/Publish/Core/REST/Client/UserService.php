@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\UserService as APIUserService;
@@ -101,32 +100,17 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
-     * Loads a user group for the given id.
-     *
-     * @param mixed $id
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
+     * {@inheritdoc}
      */
-    public function loadUserGroup($id)
+    public function loadUserGroup($id, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads the sub groups of a user group.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of user groups returned
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
+     * {@inheritdoc}
      */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25)
+    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }
@@ -198,15 +182,9 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
-     * Loads a user.
-     *
-     * @param mixed $userId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
+     * {@inheritdoc}
      */
-    public function loadUser($userId)
+    public function loadUser($userId, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }
@@ -216,7 +194,6 @@ class UserService implements APIUserService, Sessionable
      *
      * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
      *
-     * @uses loadUser()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -226,46 +203,25 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
-     * Loads a user for the given login and password.
-     *
-     * @param string $login
-     * @param string $password the plain password
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentValue if credentials are invalid
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     * {@inheritdoc}
      */
-    public function loadUserByCredentials($login, $password)
+    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads a user for the given login.
-     *
-     * @param string $login
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     * {@inheritdoc}
      */
-    public function loadUserByLogin($login)
+    public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads a user for the given email.
-     *
-     * Returns an array of Users since eZ Publish has under certain circumstances allowed
-     * several users having same email in the past (by means of a configuration option).
-     *
-     * @param string $email
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     * {@inheritdoc}
      */
-    public function loadUsersByEmail($email)
+    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }
@@ -331,34 +287,22 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
-     * Loads the user groups the user belongs to.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of user groups returned
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     * {@inheritdoc}
      */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25)
+    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads the users of a user group.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of users returned
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     * {@inheritdoc}
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25)
-    {
+    public function loadUsersOfUserGroup(
+        UserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         throw new \Exception('@todo: Implement.');
     }
 

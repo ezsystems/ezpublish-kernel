@@ -137,15 +137,16 @@ class UserService implements UserServiceInterface
      * Loads a user group for the given id.
      *
      * @param mixed $id
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id)
+    public function loadUserGroup($id, array $prioritizedLanguages = [])
     {
-        $content = $this->repository->getContentService()->loadContent($id);
+        $content = $this->repository->getContentService()->loadContent($id, $prioritizedLanguages);
 
         return $this->buildDomainUserGroupObject($content);
     }
@@ -156,12 +157,13 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(APIUserGroup $userGroup, $offset = 0, $limit = 25)
+    public function loadSubUserGroups(APIUserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
         $locationService = $this->repository->getLocationService();
 
@@ -187,7 +189,8 @@ class UserService implements UserServiceInterface
         foreach ($searchResult->searchHits as $searchHit) {
             $subUserGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
-                    $searchHit->valueObject->contentInfo->id
+                    $searchHit->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }
@@ -487,15 +490,16 @@ class UserService implements UserServiceInterface
      * Loads a user.
      *
      * @param mixed $userId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      */
-    public function loadUser($userId)
+    public function loadUser($userId, array $prioritizedLanguages = [])
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
-        $content = $this->repository->getContentService()->internalLoadContent($userId);
+        $content = $this->repository->getContentService()->internalLoadContent($userId, $prioritizedLanguages);
         // Get spiUser value from Field Value
         foreach ($content->getFields() as $field) {
             if (!$field->value instanceof UserValue) {
@@ -544,13 +548,14 @@ class UserService implements UserServiceInterface
      *
      * @param string $login
      * @param string $password the plain password
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if credentials are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByCredentials($login, $password)
+    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
     {
         if (!is_string($login) || empty($login)) {
             throw new InvalidArgumentValue('login', $login);
@@ -575,7 +580,7 @@ class UserService implements UserServiceInterface
             throw new NotFoundException('user', $login);
         }
 
-        return $this->buildDomainUserObject($spiUser);
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
     }
 
     /**
@@ -584,12 +589,13 @@ class UserService implements UserServiceInterface
      * {@inheritdoc}
      *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login)
+    public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
         if (!is_string($login) || empty($login)) {
             throw new InvalidArgumentValue('login', $login);
@@ -597,7 +603,7 @@ class UserService implements UserServiceInterface
 
         $spiUser = $this->userHandler->loadByLogin($login);
 
-        return $this->buildDomainUserObject($spiUser);
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
     }
 
     /**
@@ -606,10 +612,11 @@ class UserService implements UserServiceInterface
      * {@inheritdoc}
      *
      * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersByEmail($email)
+    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
     {
         if (!is_string($email) || empty($email)) {
             throw new InvalidArgumentValue('email', $email);
@@ -617,7 +624,7 @@ class UserService implements UserServiceInterface
 
         $users = array();
         foreach ($this->userHandler->loadByEmail($email) as $spiUser) {
-            $users[] = $this->buildDomainUserObject($spiUser);
+            $users[] = $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
         }
 
         return $users;
@@ -863,14 +870,15 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25)
+    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
         $locationService = $this->repository->getLocationService();
 
-        if (!$this->repository->canUser('content', 'read', $user)) {
+        if (!$this->repository->getPermissionResolver()->canUser('content', 'read', $user)) {
             throw new UnauthorizedException('content', 'read');
         }
 
@@ -892,19 +900,20 @@ class UserService implements UserServiceInterface
         $searchQuery->performCount = false;
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userGroupClassID']),
                 new CriterionLocationId($parentLocationIds),
-            )
+            ]
         );
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $userGroups = array();
+        $userGroups = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $userGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $resultItem->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }
@@ -920,15 +929,20 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of users returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(APIUserGroup $userGroup, $offset = 0, $limit = 25)
-    {
+    public function loadUsersOfUserGroup(
+        APIUserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
 
         if ($loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            return array();
+            return [];
         }
 
         $mainGroupLocation = $this->repository->getLocationService()->loadLocation(
@@ -938,10 +952,10 @@ class UserService implements UserServiceInterface
         $searchQuery = new LocationQuery();
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userClassID']),
                 new CriterionParentLocationId($mainGroupLocation->id),
-            )
+            ]
         );
 
         $searchQuery->offset = $offset;
@@ -951,12 +965,13 @@ class UserService implements UserServiceInterface
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $users = array();
+        $users = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $users[] = $this->buildDomainUserObject(
                 $this->userHandler->load($resultItem->valueObject->contentInfo->id),
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $resultItem->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }
@@ -1076,13 +1091,20 @@ class UserService implements UserServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\User $spiUser
      * @param \eZ\Publish\API\Repository\Values\Content\Content|null $content
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function buildDomainUserObject(SPIUser $spiUser, APIContent $content = null)
-    {
+    protected function buildDomainUserObject(
+        SPIUser $spiUser,
+        APIContent $content = null,
+        array $prioritizedLanguages = []
+    ) {
         if ($content === null) {
-            $content = $this->repository->getContentService()->internalLoadContent($spiUser->id);
+            $content = $this->repository->getContentService()->internalLoadContent(
+                $spiUser->id,
+                $prioritizedLanguages
+            );
         }
 
         return new User(
