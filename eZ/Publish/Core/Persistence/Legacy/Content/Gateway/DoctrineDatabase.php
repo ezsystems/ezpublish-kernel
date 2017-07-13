@@ -2024,7 +2024,7 @@ class DoctrineDatabase extends Gateway
             ->set(
                 'initial_language_id',
                 'CASE WHEN initial_language_id = :languageId ' .
-                'THEN (SELECT initial_language_id FROM ezcontentobject c WHERE c.id = :contentId) ' .
+                'THEN (SELECT initial_language_id AS main_language_id FROM ezcontentobject c WHERE c.id = :contentId) ' .
                 'ELSE initial_language_id END'
             )
             ->where('contentobject_id = :contentId')
