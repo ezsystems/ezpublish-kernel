@@ -730,4 +730,21 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * Remove the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    public function removeTranslationFromContent($contentId, $languageCode)
+    {
+        try {
+            return $this->innerGateway->removeTranslationFromContent($contentId, $languageCode);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
 }

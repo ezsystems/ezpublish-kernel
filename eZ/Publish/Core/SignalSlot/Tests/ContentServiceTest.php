@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentService;
 
@@ -293,6 +294,14 @@ class ContentServiceTest extends ServiceTest
                 array($contentInfo, $translationInfoFilter),
                 array($translationInfo),
                 0,
+            ),
+            array(
+                'removeTranslation',
+                array($contentInfo, $language),
+                null,
+                1,
+                RemoveTranslationSignal::class,
+                array('contentId' => $contentId, 'languageCode' => $language),
             ),
             array(
                 'newContentCreateStruct',

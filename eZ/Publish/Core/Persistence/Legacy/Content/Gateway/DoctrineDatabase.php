@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -1890,5 +1892,162 @@ class DoctrineDatabase extends Gateway
         $stmt->bindValue('copied_id', $copiedContentId, PDO::PARAM_INT);
 
         $stmt->execute();
+    }
+
+    /**
+     * Remove the specified translation from the Content Object Version.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function removeTranslationFromContent($contentId, $languageCode)
+    {
+        $language = $this->languageHandler->loadByLanguageCode($languageCode);
+
+        $this->connection->beginTransaction();
+        try {
+            $this->deleteTranslationFromContentVersions($contentId, $language->id);
+            $this->deleteTranslationFromContentObject($contentId, $language->id);
+
+            $this->deleteTranslationFromContentAttributes($contentId, $languageCode);
+            $this->deleteTranslationFromContentNames($contentId, $languageCode);
+
+            $this->connection->commit();
+        } catch (DBALException $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete translation from the ezcontentobject_attribute table.
+     *
+     * @param int $contentId
+     * @param string $languageCode
+     */
+    private function deleteTranslationFromContentAttributes($contentId, $languageCode)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete('ezcontentobject_attribute')
+            ->where('contentobject_id = :contentId')
+            ->andWhere('language_code = :languageCode')
+            ->setParameters(
+                [
+                    ':contentId' => $contentId,
+                    ':languageCode' => $languageCode,
+                ]
+            )
+        ;
+
+        $query->execute();
+    }
+
+    /**
+     * Delete translation from the ezcontentobject_name table.
+     *
+     * @param $contentId
+     * @param $languageCode
+     */
+    private function deleteTranslationFromContentNames($contentId, $languageCode)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete('ezcontentobject_name')
+            ->where('contentobject_id=:contentId')
+            ->andWhere('real_translation=:languageCode')
+            ->setParameters(
+                [
+                    ':languageCode' => $languageCode,
+                    ':contentId' => $contentId,
+                ]
+            )
+        ;
+
+        $query->execute();
+    }
+
+    /**
+     * Remove language from language_mask of ezcontentobject.
+     *
+     * @param int $contentId
+     * @param int $languageId
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     */
+    private function deleteTranslationFromContentObject($contentId, $languageId)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->update('ezcontentobject')
+            // parameter for bitwise operation has to be placed verbatim (w/o binding) for this to work cross-DBMS
+            ->set('language_mask', 'language_mask & ~ ' . $languageId)
+            ->set('modified', ':now')
+            ->where('id = :contentId')
+            ->andWhere(
+            // make sure removed translation is not the last one (incl. alwaysAvailable)
+                $query->expr()->orX(
+                    'language_mask & ~ ' . $languageId . ' <> 0',
+                    'language_mask & ~ ' . $languageId . ' <> 1'
+                )
+            )
+            ->setParameter(':now', time())
+            ->setParameter(':contentId', $contentId)
+        ;
+
+        $rowCount = $query->execute();
+
+        // no rows updated means that most likely somehow it was the last remaining translation
+        if ($rowCount === 0) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified translation is the only one Content Object Version has'
+            );
+        }
+    }
+
+    /**
+     * Remove language from language_mask of ezcontentobject_version and update initialLanguageId
+     * if it matches the removed one.
+     *
+     * @param int $contentId
+     * @param int $languageId
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     */
+    private function deleteTranslationFromContentVersions($contentId, $languageId)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->update('ezcontentobject_version')
+            // parameter for bitwise operation has to be placed verbatim (w/o binding) for this to work cross-DBMS
+            ->set('language_mask', 'language_mask & ~ ' . $languageId)
+            ->set('modified', ':now')
+            // update initial_language_id only if it matches removed translation languageId
+            ->set(
+                'initial_language_id',
+                'CASE WHEN initial_language_id = :languageId ' .
+                'THEN (SELECT initial_language_id AS main_language_id FROM ezcontentobject c WHERE c.id = :contentId) ' .
+                'ELSE initial_language_id END'
+            )
+            ->where('contentobject_id = :contentId')
+            ->andWhere(
+            // make sure removed translation is not the last one (incl. alwaysAvailable)
+                $query->expr()->orX(
+                    'language_mask & ~ ' . $languageId . ' <> 0',
+                    'language_mask & ~ ' . $languageId . ' <> 1'
+                )
+            )
+            ->setParameter(':now', time())
+            ->setParameter(':contentId', $contentId)
+            ->setParameter(':languageId', $languageId)
+        ;
+
+        $rowCount = $query->execute();
+
+        // no rows updated means that most likely somehow it was the last remaining translation
+        if ($rowCount === 0) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified translation is the only one Content Object Version has'
+            );
+        }
     }
 }

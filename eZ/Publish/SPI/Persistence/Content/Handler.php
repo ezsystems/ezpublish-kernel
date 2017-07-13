@@ -258,4 +258,12 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct);
+
+    /**
+     * Remove the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    public function removeTranslationFromContent($contentId, $languageCode);
 }

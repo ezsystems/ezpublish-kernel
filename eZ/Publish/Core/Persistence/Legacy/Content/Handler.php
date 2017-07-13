@@ -712,4 +712,12 @@ class Handler implements BaseContentHandler
             $this->contentGateway->loadReverseRelations($destinationContentId, $type)
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeTranslationFromContent($contentId, $languageCode)
+    {
+        $this->contentGateway->removeTranslationFromContent($contentId, $languageCode);
+    }
 }
