@@ -19,10 +19,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class ImageConverter implements Converter
 {
-    /** @var IOServiceInterface */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $imageIoService;
 
-    /** @var UrlRedecoratorInterface */
+    /** @var \eZ\Publish\Core\IO\UrlRedecoratorInterface */
     private $urlRedecorator;
 
     public function __construct(IOServiceInterface $imageIoService, UrlRedecoratorInterface $urlRedecorator)
