@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
-use eZ\Publish\Core\IO\UrlRedecorator;
+use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
@@ -37,11 +37,11 @@ class LegacyStorage extends Gateway
     ];
 
     /**
-     * @var \eZ\Publish\Core\IO\UrlRedecorator
+     * @var \eZ\Publish\Core\IO\UrlRedecoratorInterface
      */
     private $redecorator;
 
-    public function __construct(UrlRedecorator $redecorator, DatabaseHandler $dbHandler)
+    public function __construct(UrlRedecoratorInterface $redecorator, DatabaseHandler $dbHandler)
     {
         @trigger_error(
             sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),

@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\IO\IOServiceInterface;
-use eZ\Publish\Core\IO\UrlRedecorator;
+use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -22,10 +22,10 @@ class ImageConverter implements Converter
     /** @var IOServiceInterface */
     private $imageIoService;
 
-    /** @var UrlRedecorator */
+    /** @var UrlRedecoratorInterface */
     private $urlRedecorator;
 
-    public function __construct(IOServiceInterface $imageIoService, UrlRedecorator $urlRedecorator)
+    public function __construct(IOServiceInterface $imageIoService, UrlRedecoratorInterface $urlRedecorator)
     {
         $this->imageIoService = $imageIoService;
         $this->urlRedecorator = $urlRedecorator;
