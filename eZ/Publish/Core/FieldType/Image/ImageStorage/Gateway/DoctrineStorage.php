@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
 use DOMDocument;
-use eZ\Publish\Core\IO\UrlRedecorator;
+use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use PDO;
@@ -41,11 +41,11 @@ class DoctrineStorage extends Gateway
     ];
 
     /**
-     * @var \eZ\Publish\Core\IO\UrlRedecorator
+     * @var \eZ\Publish\Core\IO\UrlRedecoratorInterface
      */
     private $redecorator;
 
-    public function __construct(UrlRedecorator $redecorator, Connection $connection)
+    public function __construct(UrlRedecoratorInterface $redecorator, Connection $connection)
     {
         $this->redecorator = $redecorator;
         $this->connection = $connection;

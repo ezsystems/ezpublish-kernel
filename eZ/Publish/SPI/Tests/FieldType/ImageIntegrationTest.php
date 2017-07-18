@@ -76,9 +76,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $fieldType = new FieldType\Image\Type();
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $urlRedecorator = self::$container->get('ezpublish.core.io.image_fieldtype.legacy_url_redecorator');
-        /** @var \eZ\Publish\Core\IO\UrlRedecorator $urlRedecorator */
         $this->ioService = self::$container->get('ezpublish.fieldType.ezimage.io_service');
+        /** @var \eZ\Publish\Core\IO\UrlRedecoratorInterface $urlRedecorator */
+        $urlRedecorator = self::$container->get('ezpublish.core.io.image_fieldtype.legacy_url_redecorator');
 
         return $this->getHandler(
             'ezimage',
