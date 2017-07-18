@@ -177,7 +177,7 @@ class DoctrineDatabase extends Gateway
             )
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn('login', 'ezuser'),
+                $query->expr->lower($this->handler->quoteColumn('login', 'ezuser')),
                 // Index is case in-sensitive, on some db's lowercase, so we lowercase $login
                 $query->bindValue(mb_strtolower($login, 'UTF-8'), null, \PDO::PARAM_STR)
             )
