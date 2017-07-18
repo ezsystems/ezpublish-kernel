@@ -269,9 +269,11 @@ abstract class BaseTest extends TestCase
     /**
      * Create a user in editor user group.
      *
+     * @param string $login
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function createUserVersion1()
+    protected function createUserVersion1($login = 'user')
     {
         $repository = $this->getRepository();
 
@@ -283,8 +285,8 @@ abstract class BaseTest extends TestCase
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
+            $login,
+            "{$login}@example.com",
             'secret',
             'eng-US'
         );

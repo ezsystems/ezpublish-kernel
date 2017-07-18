@@ -1353,10 +1353,10 @@ class UserServiceTest extends BaseTest
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        $user = $this->createUserVersion1('User');
 
         // Load the newly created user
-        $userReloaded = $userService->loadUserByLogin('user');
+        $userReloaded = $userService->loadUserByLogin('User');
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
