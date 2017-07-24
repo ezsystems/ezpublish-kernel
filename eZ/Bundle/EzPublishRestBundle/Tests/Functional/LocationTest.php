@@ -21,7 +21,7 @@ class LocationTest extends RESTFunctionalTestCase
         $content = $this->createFolder('testCreateLocation', '/api/ezp/v2/content/locations/1/2');
         $contentHref = $content['_href'];
 
-        $remoteId = $this->addTestSuffix('testCreatelocation');
+        $remoteId = $this->addTestSuffix('testCreateLocation');
 
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
