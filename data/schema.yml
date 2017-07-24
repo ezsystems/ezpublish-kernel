@@ -1201,7 +1201,8 @@ tables:
             password_hash: { type: string, options: { notnull: false, length: 50 } }
             password_hash_type: { type: integer, options: { notnull: true, default: '1' } }
         indices:
-            ezuser_login: { columns: [login], unique: true }
+            # create index on the expression: lower(login)
+            ezuser_login: { columns: [login], unique: true, wrap_in: {login: 'lower'} }
     ezuser_accountkey:
         fields:
             id: { type: integer, pk: true, options: { notnull: true, autoincrement: true } }
