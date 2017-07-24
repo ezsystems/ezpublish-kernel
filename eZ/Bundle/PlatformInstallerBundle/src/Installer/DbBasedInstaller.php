@@ -144,6 +144,9 @@ class DbBasedInstaller
                 if (!empty($index['length'])) {
                     $options['length'] = $index['length'];
                 }
+                if (!empty($index['wrap_in'])) {
+                    $options['wrap_in'] = $index['wrap_in'];
+                }
                 if (!empty($index['unique'])) {
                     $table->addUniqueIndex($index['columns'], $indexName, $options);
                 } else {
