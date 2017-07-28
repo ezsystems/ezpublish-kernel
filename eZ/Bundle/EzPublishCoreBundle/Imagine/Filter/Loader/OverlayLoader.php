@@ -24,7 +24,7 @@ class OverlayLoader extends FilterLoaderWrapped
             'opacity' => $options[0],
             'startColor' => $options[1],
             'endColor' => $options[1],
-            'linerClass' => Horizontal::class
+            'linerClass' => Horizontal::class,
         ]);
     }
 }
