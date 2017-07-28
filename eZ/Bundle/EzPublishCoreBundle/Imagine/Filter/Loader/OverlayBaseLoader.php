@@ -16,7 +16,7 @@ class OverlayBaseLoader extends FilterLoaderWrapped
         if (!isset($options['opacity'], $options['startColor'], $options['endColor'], $options['linerClass'])) {
             throw new InvalidArgumentException('Missing one of required options');
         }
-        
+
         $startOpacity = $endOpacity = $options['opacity'];
         if (is_array($options['opacity'])) {
             if (count($options['opacity']) < 2) {
