@@ -14,7 +14,7 @@ class OverlayBaseLoader extends FilterLoaderWrapped
     public function load(ImageInterface $image, array $options = array())
     {
         if (!isset($options['opacity'], $options['startColor'], $options['endColor'], $options['linerClass'])) {
-            throw new InvalidArgumentException('Missing liner option');
+            throw new InvalidArgumentException('Missing one of required options');
         }
         $imageSize = $image->getSize();
         $palette = $image->palette();
