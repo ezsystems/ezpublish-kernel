@@ -17,7 +17,7 @@ class OverlayBaseLoader extends FilterLoaderWrapped
             throw new InvalidArgumentException('Missing liner option');
         }
         $imageSize = $image->getSize();
-        $palette   = $image->palette();
+        $palette = $image->palette();
 
         $startColor = $palette->color($options['startColor'], $options['opacity']);
         switch (true) {
@@ -43,8 +43,8 @@ class OverlayBaseLoader extends FilterLoaderWrapped
 
         $overlay = $image->copy();
         /** @var Horizontal|Vertical $liner */
-        $liner   = new $options['linerClass']($linerSize, $startColor, $endColor);
-        $filter  = new Fill($liner);
+        $liner = new $options['linerClass']($linerSize, $startColor, $endColor);
+        $filter = new Fill($liner);
         $overlay = $filter->apply($overlay);
 
         return $image->paste($overlay, new Point(0, 0));
