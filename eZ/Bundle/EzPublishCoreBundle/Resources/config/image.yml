@@ -19,7 +19,11 @@ parameters:
     ezpublish.image_alias.imagine.filter.loader.reduce_noise.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ReduceNoiseFilterLoader
     ezpublish.image_alias.imagine.filter.loader.grayscale.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
     ezpublish.image_alias.imagine.filter.loader.swirl.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\SwirlFilterLoader
-
+    ezpublish.image_alias.imagine.filter.overlay_base.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayBaseLoader
+    ezpublish.image_alias.imagine.filter.overlay.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayLoader
+    ezpublish.image_alias.imagine.filter.overlay_gradient_vertical.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayGradientVerticalLoader
+    ezpublish.image_alias.imagine.filter.overlay_gradient_horizontal.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayGradientHorizontalLoader
+    
     ezpublish.image_alias.imagine.filter.unsupported.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\UnsupportedFilter
     ezpublish.image_alias.imagine.filter.reduce_noise.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\ReduceNoiseFilter
     ezpublish.image_alias.imagine.filter.reduce_noise.gmagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\ReduceNoiseFilter
@@ -194,7 +198,38 @@ services:
         public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
-
+    
+    ezpublish.image_alias.imagine.filter.loader.overlay_base:
+        class: "%ezpublish.image_alias.imagine.filter.loader.overlay_base.class%"
+        public: false
+    
+    ezpublish.image_alias.imagine.filter.overlay_base:
+        abstract: true
+        public: false
+        calls:
+           - [setInnerLoader, ["@ezpublish.image_alias.imagine.filter.loader.overlay_base"]]
+    
+    ezpublish.image_alias.imagine.filter.loader.overlay:
+        parent: ezpublish.image_alias.imagine.filter.overlay_base
+        class: "%ezpublish.image_alias.imagine.filter.loader.overlay.class%"
+        public: false
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "overlay" }
+    
+    ezpublish.image_alias.imagine.filter.loader.overlay_gradient_horizontal:
+        parent: ezpublish.image_alias.imagine.filter.overlay_base
+        class: "%ezpublish.image_alias.imagine.filter.loader.overlay_gradient_horizontal.class%"
+        public: false
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "overlay/gradienthorizontal" }
+    
+    ezpublish.image_alias.imagine.filter.loader.overlay_gradient_vertical:
+        parent: ezpublish.image_alias.imagine.filter.overlay_base
+        class: "%ezpublish.image_alias.imagine.filter.loader.overlay_gradient_vertical.class%"
+        public: false
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "overlay/gradientvertical" }  
+    
     ezpublish.image_alias.variation_purger:
         # < platform 2015.05
         # alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
