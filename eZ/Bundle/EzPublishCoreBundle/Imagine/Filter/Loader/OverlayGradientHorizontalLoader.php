@@ -28,7 +28,7 @@ class OverlayGradientHorizontalLoader extends FilterLoaderWrapped
             'opacity' => $options[0],
             'startColor' => $options[1],
             'endColor' => $options[2],
-            'linerClass' => Horizontal::class
+            'linerClass' => Horizontal::class,
         ]);
     }
 }
