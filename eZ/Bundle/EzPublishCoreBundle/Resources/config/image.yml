@@ -19,10 +19,10 @@ parameters:
     ezpublish.image_alias.imagine.filter.loader.reduce_noise.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ReduceNoiseFilterLoader
     ezpublish.image_alias.imagine.filter.loader.grayscale.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
     ezpublish.image_alias.imagine.filter.loader.swirl.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\SwirlFilterLoader
-    ezpublish.image_alias.imagine.filter.overlay_base.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayBaseLoader
-    ezpublish.image_alias.imagine.filter.overlay.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayLoader
-    ezpublish.image_alias.imagine.filter.overlay_gradient_vertical.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayGradientVerticalLoader
-    ezpublish.image_alias.imagine.filter.overlay_gradient_horizontal.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayGradientHorizontalLoader
+    ezpublish.image_alias.imagine.filter.loader.overlay_base.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayBaseLoader
+    ezpublish.image_alias.imagine.filter.loader.overlay.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayLoader
+    ezpublish.image_alias.imagine.filter.loader.overlay_gradient_vertical.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayGradientVerticalLoader
+    ezpublish.image_alias.imagine.filter.loader.overlay_gradient_horizontal.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayGradientHorizontalLoader
     
     ezpublish.image_alias.imagine.filter.unsupported.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\UnsupportedFilter
     ezpublish.image_alias.imagine.filter.reduce_noise.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\ReduceNoiseFilter
