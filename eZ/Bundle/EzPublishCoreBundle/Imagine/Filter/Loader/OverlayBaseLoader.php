@@ -16,22 +16,30 @@ class OverlayBaseLoader extends FilterLoaderWrapped
         if (!isset($options['opacity'], $options['startColor'], $options['endColor'], $options['linerClass'])) {
             throw new InvalidArgumentException('Missing one of required options');
         }
+        
+        $startOpacity = $endOpacity = $options['opacity'];
+        if (is_array($options['opacity'])) {
+            if (count($options['opacity']) < 2) {
+                throw new InvalidArgumentException('Opacity should contains 2 parameters or should be a string, array given');
+            }
+            list($startOpacity, $endOpacity) = $options['opacity'];
+        }
+
         $imageSize = $image->getSize();
         $palette = $image->palette();
 
         $startColor = $palette->color($options['startColor'], $options['opacity']);
         switch (true) {
-            case $options['endColor'] === $options['startColor']:
-                $endColor = $startColor;
-                break;
             case strpos($options['endColor'], '+') === 0:
-                $endColor = $startColor->lighten(str_replace('+', '', $options['endColor']));
+                $endColor = $palette->color($options['endColor'], $endOpacity)
+                    ->lighten(str_replace('+', '', $options['endColor']));
                 break;
             case strpos($options['endColor'], '-') === 0:
-                $endColor = $startColor->darken(str_replace('-', '', $options['endColor']));
+                $endColor = $palette->color($options['endColor'], $endOpacity)
+                    ->darken(str_replace('-', '', $options['endColor']));
                 break;
             default:
-                $endColor = $palette->color($options['endColor'], $options['opacity']);
+                $endColor = $palette->color($options['endColor'], $endOpacity);
                 break;
         }
 
