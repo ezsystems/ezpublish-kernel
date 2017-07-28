@@ -13,17 +13,17 @@ class OverlayLoader extends FilterLoaderWrapped
         if (count($options) < 2) {
             throw new InvalidArgumentException('Missing opacity and/or color option(s)');
         }
-        if (isset($options['opacity'])){
+        if (isset($options['opacity'])) {
             $options[0] = $options['opacity'];
         }
-        if (isset($options['color'])){
+        if (isset($options['color'])) {
             $options[1] = $options['color'];
         }
 
         return $this->innerLoader->load($image, [
-            'opacity'    => $options[0],
+            'opacity' => $options[0],
             'startColor' => $options[1],
-            'endColor'   => $options[1],
+            'endColor' => $options[1],
             'linerClass' => Horizontal::class
         ]);
     }
