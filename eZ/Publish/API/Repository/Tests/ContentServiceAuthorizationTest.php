@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 
 /**
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
@@ -1550,6 +1551,59 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             count($expectedRelations),
             "Expected to find '" . (count($expectedRelations) + count($actualRelations))
             . "' relations found '" . count($actualRelations) . "'"
+        );
+    }
+
+    /**
+     * Test copying Content to the authorized Location (limited by policies).
+     */
+    public function testCopyContentToAuthorizedLocation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $roleService = $repository->getRoleService();
+
+        // Create and publish folders for the test case
+        $folderDraft = $this->createContentDraft('folder', 2, ['name' => 'Folder1']);
+        $contentService->publishVersion($folderDraft->versionInfo);
+        $authorizedFolderDraft = $this->createContentDraft('folder', 2, ['name' => 'AuthorizedFolder']);
+        $authorizedFolder = $contentService->publishVersion($authorizedFolderDraft->versionInfo);
+
+        // Prepare Role for the test case
+        $roleIdentifier = 'authorized_folder';
+        $roleCreateStruct = $roleService->newRoleCreateStruct($roleIdentifier);
+        $locationLimitation = new LocationLimitation(
+            ['limitationValues' => [$authorizedFolder->contentInfo->mainLocationId]]
+        );
+        $roleCreateStruct->addPolicy($roleService->newPolicyCreateStruct('content', 'read'));
+        $roleCreateStruct->addPolicy($roleService->newPolicyCreateStruct('content', 'versionread'));
+
+        $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'create');
+        $policyCreateStruct->addLimitation($locationLimitation);
+        $roleCreateStruct->addPolicy($policyCreateStruct);
+
+        // check if content/publish policy is available (@since 6.8)
+        $limitations = $roleService->getLimitationTypesByModuleFunction('content', 'publish');
+        if (array_key_exists('Node', $limitations)) {
+            $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'publish');
+            $policyCreateStruct->addLimitation($locationLimitation);
+            $roleCreateStruct->addPolicy($policyCreateStruct);
+        }
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
+
+        // Create a user with that Role
+        $user = $this->createCustomUserVersion1('Users', $roleIdentifier);
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        // Test copying Content to the authorized Location
+        $contentService->copyContent(
+            $authorizedFolder->contentInfo,
+            $locationService->newLocationCreateStruct(
+                $authorizedFolder->contentInfo->mainLocationId
+            )
         );
     }
 }
