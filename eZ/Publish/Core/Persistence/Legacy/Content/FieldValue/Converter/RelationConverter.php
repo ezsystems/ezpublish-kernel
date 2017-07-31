@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use DOMDocument;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -52,9 +53,9 @@ class RelationConverter implements Converter
      */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        $fieldValue->data = array(
+        $fieldValue->data = [
             'destinationContentId' => $value->dataInt ?: null,
-        );
+        ];
         $fieldValue->sortKey = (int)$value->sortKeyInt;
     }
 
@@ -66,30 +67,103 @@ class RelationConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        // Selection method, 0 = browse, 1 = dropdown
-        $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'];
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+        $doc = new DOMDocument('1.0', 'utf-8');
+        $root = $doc->createElement('related-objects');
+        $doc->appendChild($root);
 
-        // Selection root, location ID
-        $storageDef->dataInt2 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'];
+        $constraints = $doc->createElement('constraints');
+        if (!empty($fieldSettings['selectionContentTypes'])) {
+            foreach ($fieldSettings['selectionContentTypes'] as $typeIdentifier) {
+                $allowedClass = $doc->createElement('allowed-class');
+                $allowedClass->setAttribute('contentclass-identifier', $typeIdentifier);
+                $constraints->appendChild($allowedClass);
+                unset($allowedClass);
+            }
+        }
+        $root->appendChild($constraints);
+
+        $selectionType = $doc->createElement('selection_type');
+        if (isset($fieldSettings['selectionMethod'])) {
+            $selectionType->setAttribute('value', (int)$fieldSettings['selectionMethod']);
+        } else {
+            $selectionType->setAttribute('value', 0);
+        }
+        $root->appendChild($selectionType);
+
+        $defaultLocation = $doc->createElement('contentobject-placement');
+        if (!empty($fieldSettings['selectionRoot'])) {
+            $defaultLocation->setAttribute('node-id', (int)$fieldSettings['selectionRoot']);
+        }
+        $root->appendChild($defaultLocation);
+
+        $doc->appendChild($root);
+        $storageDef->dataText5 = $doc->saveXML();
     }
 
     /**
      * Converts field definition data in $storageDef into $fieldDef.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
+     * <code>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints>
+     *       <allowed-class contentclass-identifier="blog_post"/>
+     *     </constraints>
+     *     <selection_type value="1"/>
+     *     <contentobject-placement node-id="67"/>
+     *   </related-objects>
+     *
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints/>
+     *     <selection_type value="0"/>
+     *     <contentobject-placement/>
+     *   </related-objects>
+     * </code>
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        // Selection method, 0 = browse, 1 = dropdown
-        $fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'] = $storageDef->dataInt1;
+        // default settings
+        // use dataInt1 and dataInt2 fields as default for backward compatibility
+        $fieldDef->fieldTypeConstraints->fieldSettings = [
+            'selectionMethod' => $storageDef->dataInt1,
+            'selectionRoot' => $storageDef->dataInt2 === 0 ? '' : $storageDef->dataInt2,
+            'selectionContentTypes' => [],
+        ];
 
-        // Selection root, location ID
+        if ($storageDef->dataText5 === null) {
+            return;
+        }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'] =
-            $storageDef->dataInt2 === 0
-            ? ''
-            : $storageDef->dataInt2;
+        // read settings from storage
+        $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
+        $dom = new DOMDocument('1.0', 'utf-8');
+        if (empty($storageDef->dataText5) || $dom->loadXML($storageDef->dataText5) !== true) {
+            return;
+        }
+
+        if ($selectionType = $dom->getElementsByTagName('selection_type')) {
+            $fieldSettings['selectionMethod'] = (int)$selectionType->item(0)->getAttribute('value');
+        }
+
+        if (
+            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')) &&
+            $defaultLocation->item(0)->hasAttribute('node-id')
+        ) {
+            $fieldSettings['selectionRoot'] = (int)$defaultLocation->item(0)->getAttribute('node-id');
+        }
+
+        if (!($constraints = $dom->getElementsByTagName('constraints'))) {
+            return;
+        }
+
+        foreach ($constraints->item(0)->getElementsByTagName('allowed-class') as $allowedClass) {
+            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute('contentclass-identifier');
+        }
     }
 
     /**
@@ -99,7 +173,7 @@ class RelationConverter implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return false
+     * @return string
      */
     public function getIndexColumn()
     {
