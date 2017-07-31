@@ -80,16 +80,20 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'selectionMethod' => array(
+        return [
+            'selectionMethod' => [
                 'type' => 'int',
                 'default' => 0,
-            ),
-            'selectionRoot' => array(
+            ],
+            'selectionRoot' => [
                 'type' => 'string',
-                'default' => '',
-            ),
-        );
+                'default' => null,
+            ],
+            'selectionContentTypes' => [
+                'type' => 'array',
+                'default' => [],
+            ],
+        ];
     }
 
     /**
@@ -109,7 +113,11 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array('selectionMethod' => 0, 'selectionRoot' => '1');
+        return [
+            'selectionMethod' => 0,
+            'selectionRoot' => '1',
+            'selectionContentTypes' => ['blog_post'],
+        ];
     }
 
     /**
@@ -133,7 +141,12 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array('selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false);
+        return [
+            'selectionMethod' => 'a',
+            'selectionRoot' => true,
+            'unknownSetting' => false,
+            'selectionContentTypes' => true,
+        ];
     }
 
     /**

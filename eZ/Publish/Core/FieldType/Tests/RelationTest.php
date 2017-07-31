@@ -52,16 +52,20 @@ class RelationTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'selectionMethod' => array(
+        return [
+            'selectionMethod' => [
                 'type' => 'int',
                 'default' => RelationType::SELECTION_BROWSE,
-            ),
-            'selectionRoot' => array(
+            ],
+            'selectionRoot' => [
                 'type' => 'string',
                 'default' => null,
-            ),
-        );
+            ],
+            'selectionContentTypes' => [
+                'type' => 'array',
+                'default' => [],
+            ],
+        ];
     }
 
     /**
