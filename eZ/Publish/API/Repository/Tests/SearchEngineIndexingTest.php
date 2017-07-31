@@ -1052,6 +1052,51 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test search engine is updated after removal of the translation from all the Versions.
+     */
+    public function testRemoveTranslation()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $contentService = $repository->getContentService();
+
+        $content = $this->createMultiLanguageContent(
+            [
+                'eng-US' => 'AmE Name',
+                'eng-GB' => 'BrE Name',
+            ],
+            2,
+            false
+        );
+
+        $contentService->removeTranslation($content->contentInfo, 'eng-GB');
+
+        $this->refreshSearch($repository);
+
+        // Test ContentId search returns Content without removed Translation
+        $query = new Query([
+            'query' => new Criterion\ContentId($content->contentInfo->id),
+            'filter' => new Criterion\LanguageCode('eng-GB', false),
+        ]);
+        $result = $searchService->findContent($query);
+        self::assertEquals(0, $result->totalCount);
+
+        // Test FullText search for removed unique name part returns no results
+        $query = new Query([
+            'query' => new Criterion\FullText('BrE'),
+        ]);
+        $result = $searchService->findContent($query);
+        self::assertEquals(0, $result->totalCount);
+
+        // Test Location Search returns Content without removed Translation
+        $query = new LocationQuery([
+            'query' => new Criterion\FullText('BrE'),
+        ]);
+        $result = $searchService->findLocations($query);
+        self::assertEquals(0, $result->totalCount);
+    }
+
+    /**
      * Will create if not exists a simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
@@ -1151,6 +1196,45 @@ class SearchEngineIndexingTest extends BaseTest
         $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
 
         return $contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    /**
+     * Create and publish a content with specified, in multiple languages, fields.
+     *
+     * @param string[] $names multi-language name field in the form of: <code>['lang-code' => 'name']</code>
+     * @param int $parentLocationId
+     * @param bool $alwaysAvailable
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createMultiLanguageContent(array $names, $parentLocationId, $alwaysAvailable)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $testableContentType = $this->createTestContentType();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $testableContentType,
+            array_keys($names)[0]
+        );
+
+        foreach ($names as $languageCode => $value) {
+            $contentCreateStruct->setField('name', $value, $languageCode);
+        }
+
+        $contentCreateStruct->alwaysAvailable = $alwaysAvailable;
+
+        $contentDraft = $contentService->createContent(
+            $contentCreateStruct,
+            [
+                $locationService->newLocationCreateStruct($parentLocationId),
+            ]
+        );
+        $publishedContent = $contentService->publishVersion($contentDraft->getVersionInfo());
+
+        return $publishedContent;
     }
 
     /**
