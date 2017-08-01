@@ -1542,6 +1542,8 @@ class DoctrineDatabase extends Gateway
     /**
      * Returns a language sub select query for setName.
      *
+     * Return sub select query which gets proper language mask for alwaysAvailable Content.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     private function getLanguageQuery()
