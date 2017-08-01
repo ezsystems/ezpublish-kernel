@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
@@ -78,8 +79,16 @@ class Page extends AbstractParser
 
         // filters blocks and layouts for each siteaccess to keep only
         // the enabled ones for this sa
+        $configResolver = new ConfigResolver(
+            $container->getParameter('ezpublish.siteaccess.groups_by_siteaccess'),
+            $container->getParameter('ezpublish.config.default_scope')
+        );
+        $configResolver->setContainer($container);
+
         foreach ($config['siteaccess']['list'] as $sa) {
-            $ezpageSettings = $container->getParameter("ezsettings.$sa.ezpage");
+            $siteAccess = new SiteAccess($sa);
+            $configResolver->setSiteAccess($siteAccess);
+            $ezpageSettings = $configResolver->getParameter('ezpage');
             foreach (array('layouts', 'blocks') as $type) {
                 $enabledKey = 'enabled' . ucfirst($type);
                 if (empty($ezpageSettings[$enabledKey])) {
