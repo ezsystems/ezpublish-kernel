@@ -5243,6 +5243,21 @@ class ContentTest extends BaseServiceMockTest
         $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
         $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
         $locationCreateStruct = new LocationCreateStruct();
+        $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
+        $locationServiceMock = $this->getLocationServiceMock();
+
+        $repository->expects($this->once())
+            ->method('getLocationService')
+            ->will($this->returnValue($locationServiceMock))
+        ;
+
+        $locationServiceMock->expects($this->once())
+            ->method('loadLocation')
+            ->with(
+                $locationCreateStruct->parentLocationId
+            )
+            ->will($this->returnValue($location))
+        ;
 
         $contentInfo->expects($this->any())
             ->method('__get')
@@ -5255,7 +5270,7 @@ class ContentTest extends BaseServiceMockTest
                 'content',
                 'create',
                 $contentInfo,
-                $locationCreateStruct
+                [$location]
             )
             ->will($this->returnValue(false));
 
@@ -5277,10 +5292,17 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
         $locationCreateStruct = new LocationCreateStruct();
+        $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
 
-        $repositoryMock->expects($this->exactly(2))
+        $repositoryMock->expects($this->exactly(3))
             ->method('getLocationService')
             ->will($this->returnValue($locationServiceMock));
+
+        $locationServiceMock->expects($this->once())
+            ->method('loadLocation')
+            ->with($locationCreateStruct->parentLocationId)
+            ->will($this->returnValue($location))
+        ;
 
         $contentInfoMock->expects($this->any())
             ->method('__get')
@@ -5318,7 +5340,7 @@ class ContentTest extends BaseServiceMockTest
                 'content',
                 'create',
                 $contentInfoMock,
-                $locationCreateStruct
+                [$location]
             )
             ->will($this->returnValue(true));
 
@@ -5377,10 +5399,17 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
         $locationCreateStruct = new LocationCreateStruct();
+        $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
 
-        $repositoryMock->expects($this->exactly(2))
+        $repositoryMock->expects($this->exactly(3))
             ->method('getLocationService')
             ->will($this->returnValue($locationServiceMock));
+
+        $locationServiceMock->expects($this->once())
+            ->method('loadLocation')
+            ->with($locationCreateStruct->parentLocationId)
+            ->will($this->returnValue($location))
+        ;
 
         $contentInfoMock->expects($this->any())
             ->method('__get')
@@ -5416,7 +5445,7 @@ class ContentTest extends BaseServiceMockTest
                 'content',
                 'create',
                 $contentInfoMock,
-                $locationCreateStruct
+                [$location]
             )
             ->will($this->returnValue(true));
 
@@ -5477,6 +5506,20 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
         $locationCreateStruct = new LocationCreateStruct();
+        $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
+        $locationServiceMock = $this->getLocationServiceMock();
+
+        $repositoryMock->expects($this->once())
+            ->method('getLocationService')
+            ->will($this->returnValue($locationServiceMock))
+        ;
+
+        $locationServiceMock->expects($this->once())
+            ->method('loadLocation')
+            ->with($locationCreateStruct->parentLocationId)
+            ->will($this->returnValue($location))
+        ;
+
         $contentInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
         $contentInfoMock->expects($this->any())
             ->method('__get')
@@ -5493,7 +5536,7 @@ class ContentTest extends BaseServiceMockTest
                 'content',
                 'create',
                 $contentInfoMock,
-                $locationCreateStruct
+                [$location]
             )
             ->will($this->returnValue(true));
 

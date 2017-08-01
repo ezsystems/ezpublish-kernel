@@ -1525,7 +1525,7 @@ class DoctrineDatabase extends Gateway
             $q->bindValue($version, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('language_id'),
-            $q->bindValue($language->id, null, \PDO::PARAM_INT)
+            '(' . $this->getLanguageQuery()->getQuery() . ')'
         )->set(
             $this->dbHandler->quoteColumn('content_translation'),
             $q->bindValue($language->languageCode)
@@ -1536,7 +1536,56 @@ class DoctrineDatabase extends Gateway
             $this->dbHandler->quoteColumn('name'),
             $q->bindValue($name)
         );
+        $q->bindValue($language->id, ':languageId', \PDO::PARAM_INT);
+        $q->bindValue($contentId, ':contentId', \PDO::PARAM_INT);
         $q->prepare()->execute();
+    }
+
+    /**
+     * Returns a language sub select query for setName.
+     *
+     * Return sub select query which gets proper language mask for alwaysAvailable Content.
+     *
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     */
+    private function getLanguageQuery()
+    {
+        $languageQuery = $this->dbHandler->createSelectQuery();
+        $languageQuery
+            ->select(
+                $languageQuery->expr->searchedCase(
+                    [
+                        $languageQuery->expr->lAnd(
+                            $languageQuery->expr->eq(
+                                $this->dbHandler->quoteColumn('initial_language_id'),
+                                ':languageId'
+                            ),
+                            // wrap bitwise check into another "neq" to provide cross-DBMS compatibility
+                            $languageQuery->expr->neq(
+                                $languageQuery->expr->bitAnd(
+                                    $this->dbHandler->quoteColumn('language_mask'),
+                                    ':languageId'
+                                ),
+                                0
+                            )
+                        ),
+                        $languageQuery->expr->bitOr(
+                            ':languageId',
+                            1
+                        ),
+                    ],
+                    ':languageId'
+                )
+            )
+            ->from('ezcontentobject')
+            ->where(
+                $languageQuery->expr->eq(
+                    'id',
+                    ':contentId'
+                )
+            );
+
+        return $languageQuery;
     }
 
     /**
