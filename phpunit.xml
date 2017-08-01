@@ -68,6 +68,9 @@
     <testsuite name="eZ Publish SignalSlot test suite">
         <directory>eZ/Publish/Core/SignalSlot</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\Repository\SiteAccessAware">
+        <directory>eZ/Publish/Core/Repository/SiteAccessAware</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Pagination">
         <directory>eZ/Publish/Core/Pagination</directory>
     </testsuite>
