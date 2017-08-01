@@ -280,6 +280,8 @@ class ViewController extends Controller
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @deprecated Since 6.0.0. Viewing content is now done with ViewAction.
      */
     public function viewContent($contentId, $viewType, $layout = false, array $params = array())
     {
@@ -335,6 +337,8 @@ class ViewController extends Controller
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @deprecated Since 6.0.0. Embedding content is now done with EmbedAction.
      */
     public function embedContent($contentId, $viewType, $layout = false, array $params = array())
     {
