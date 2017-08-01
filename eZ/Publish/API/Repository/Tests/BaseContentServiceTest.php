@@ -325,4 +325,49 @@ abstract class BaseContentServiceTest extends BaseTest
 
         return $contentVersion2;
     }
+
+    /**
+     * Create Content Draft with custom field values and generated remoteId.
+     *
+     * @param string $contentTypeIdentifier
+     * @param int $parentLocationId
+     * @param array $fieldValues map of <code>['fieldIdentifier' => 'field value']</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft
+     */
+    protected function createContentDraft(
+        $contentTypeIdentifier,
+        $parentLocationId,
+        array $fieldValues
+    ) {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // Load content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+
+        // Prepare new Content Object
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+
+        foreach ($fieldValues as $fieldIdentifier => $fieldValue) {
+            $contentCreateStruct->setField($fieldIdentifier, $fieldValue);
+        }
+
+        $contentCreateStruct->sectionId = $this->generateId('section', 1);
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Prepare Location
+        $locationCreateStruct = $locationService->newLocationCreateStruct(
+            $this->generateId('location', $parentLocationId)
+        );
+        // Create a draft
+        $contentDraft = $contentService->createContent(
+            $contentCreateStruct,
+            [$locationCreateStruct]
+        );
+
+        return $contentDraft;
+    }
 }

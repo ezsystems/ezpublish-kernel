@@ -1615,14 +1615,17 @@ class ContentService implements ContentServiceInterface
      */
     public function copyContent(ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, APIVersionInfo $versionInfo = null)
     {
-        if (!$this->repository->canUser('content', 'create', $contentInfo, $destinationLocationCreateStruct)) {
+        $destinationLocation = $this->repository->getLocationService()->loadLocation(
+            $destinationLocationCreateStruct->parentLocationId
+        );
+        if (!$this->repository->canUser('content', 'create', $contentInfo, [$destinationLocation])) {
             throw new UnauthorizedException(
                 'content',
                 'create',
-                array(
+                [
                     'parentLocationId' => $destinationLocationCreateStruct->parentLocationId,
                     'sectionId' => $contentInfo->sectionId,
-                )
+                ]
             );
         }
 
