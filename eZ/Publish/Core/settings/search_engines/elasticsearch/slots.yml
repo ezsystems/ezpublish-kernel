@@ -21,6 +21,7 @@ parameters:
     ezpublish.search.elasticsearch.slot.set_content_state.class: eZ\Publish\Core\Search\Common\Slot\SetContentState
     ezpublish.search.elasticsearch.slot.swap_location.class: eZ\Publish\Core\Search\Common\Slot\SwapLocation
     ezpublish.search.elasticsearch.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
+    ezpublish.search.elasticsearch.slot.remove_translation.class: eZ\Publish\Core\Search\Common\Slot\RemoveTranslation
     ezpublish.search.elasticsearch.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
 
 
@@ -158,6 +159,12 @@ services:
         class: "%ezpublish.search.elasticsearch.slot.update_content_metadata.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\UpdateContentMetadataSignal}
+
+    ezpublish.search.elasticsearch.slot.remove_translation:
+        parent: ezpublish.search.elasticsearch.slot
+        class: "%ezpublish.search.elasticsearch.slot.remove_translation.class%"
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\RemoveTranslationSignal}
 
     ezpublish.search.elasticsearch.slot.assign_section:
         parent: ezpublish.search.elasticsearch.slot

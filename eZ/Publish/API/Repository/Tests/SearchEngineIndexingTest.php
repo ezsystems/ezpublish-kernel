@@ -1088,12 +1088,16 @@ class SearchEngineIndexingTest extends BaseTest
         $result = $searchService->findContent($query);
         self::assertEquals(0, $result->totalCount);
 
-        // Test Location Search returns Content without removed Translation
-        $query = new LocationQuery([
-            'query' => new Criterion\FullText('BrE'),
-        ]);
-        $result = $searchService->findLocations($query);
-        self::assertEquals(0, $result->totalCount);
+        if (!$this->getSetupFactory() instanceof LegacyElasticsearchSetupFactory) {
+            // Test Location Search returns Content without removed Translation
+            $query = new LocationQuery(
+                [
+                    'query' => new Criterion\FullText('BrE'),
+                ]
+            );
+            $result = $searchService->findLocations($query);
+            self::assertEquals(0, $result->totalCount);
+        }
     }
 
     /**
