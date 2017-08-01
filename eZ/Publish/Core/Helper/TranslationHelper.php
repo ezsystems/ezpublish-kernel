@@ -127,8 +127,10 @@ class TranslationHelper
      */
     public function getTranslatedField(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
+        $mainLanguageCode = $content->getVersionInfo()->getContentInfo()->mainLanguageCode;
+
         // Loop over prioritized languages to get the appropriate translated field.
-        foreach ($this->getLanguages($forcedLanguage) as $lang) {
+        foreach ($this->getLanguages($forcedLanguage, null, $mainLanguageCode) as $lang) {
             $field = $content->getField($fieldDefIdentifier, $lang);
             if ($field instanceof Field) {
                 return $field;
@@ -303,15 +305,32 @@ class TranslationHelper
     /**
      * @param string|null $forcedLanguage
      * @param string|null $fallbackLanguage
+     * @param string|null $mainLanguage
      *
      * @return array|mixed
      */
-    private function getLanguages($forcedLanguage = null, $fallbackLanguage = null)
+    private function getLanguages($forcedLanguage = null, $fallbackLanguage = null, $mainLanguage = null)
     {
         if ($forcedLanguage !== null) {
             $languages = array($forcedLanguage);
         } else {
             $languages = $this->configResolver->getParameter('languages');
+
+            if ($mainLanguage !== null && in_array($mainLanguage, $languages)) {
+                // Always add $mainLanguage as the first entry, because it is our main language
+                $result = array($mainLanguage);
+                if (!empty($languages)) {
+                    $priorityLanguage = array_shift($languages);
+                    // then add the priority language at the top
+                    array_unshift($result, $priorityLanguage);
+                    // add the remaining languages
+                    $result = array_merge($result, $languages);
+                    // and remove duplicates
+                    $result = array_unique($result);
+                }
+
+                return $result;
+            }
         }
 
         // Always add $fallbackLanguage, even if null, as last entry so that we can fallback to
