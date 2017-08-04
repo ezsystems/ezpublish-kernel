@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
@@ -50,12 +50,12 @@ class Converter
      *
      * @param string $fieldTypeIdentifier
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function convertCriteria($fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column)
+    public function convertCriteria($fieldTypeIdentifier, SelectQuery $query, Matcher $criterion, $column)
     {
         if ($this->registry->has($fieldTypeIdentifier)) {
             return $this->registry->get($fieldTypeIdentifier)->handle($query, $criterion, $column);

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\CustomFi
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\CustomField;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
@@ -21,11 +22,11 @@ class CustomFieldIn extends CustomField
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      *
      * @return bool
      */
-    public function canVisit(Criterion $criterion)
+    public function canVisit(Matcher $criterion)
     {
         return
             $criterion instanceof Criterion\CustomField &&
@@ -39,11 +40,11 @@ class CustomFieldIn extends CustomField
     /**
      * Returns nested condition common for filter and query contexts.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      *
      * @return array
      */
-    protected function getCondition(Criterion $criterion)
+    protected function getCondition(Matcher $criterion)
     {
         $terms = array();
         $values = (array)$criterion->value;
@@ -66,13 +67,13 @@ class CustomFieldIn extends CustomField
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitFilter(Matcher $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $filter = array(
             'nested' => array(

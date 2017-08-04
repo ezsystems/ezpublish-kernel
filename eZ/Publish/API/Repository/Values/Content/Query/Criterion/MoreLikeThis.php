@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * A more like this criterion is matched by content which contains similar terms
  * found in the given content, text or url fetch.
  */
-class MoreLikeThis extends Criterion implements CriterionInterface
+class MoreLikeThis extends Matcher implements CriterionInterface
 {
     const CONTENT = 1;
     const TEXT = 2;

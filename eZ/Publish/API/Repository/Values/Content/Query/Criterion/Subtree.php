@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
@@ -18,7 +18,7 @@ use InvalidArgumentException;
  *
  * Content will be matched if it is part of at least one of the given subtree path strings
  */
-class Subtree extends Criterion implements CriterionInterface
+class Subtree extends Matcher implements CriterionInterface
 {
     /**
      * Creates a new SubTree criterion.

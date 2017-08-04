@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -2293,13 +2294,13 @@ class SearchServiceTest extends BaseTest
      *
      * @param array $contentDataList
      * @param array $languageSettings
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param array $expected
      */
     public function testMultilingualFieldFilterContent(
         array $contentDataList,
         $languageSettings,
-        Criterion $criterion,
+        Matcher $criterion,
         $expected
     ) {
         $this->assertMultilingualFieldFilter(
@@ -2318,13 +2319,13 @@ class SearchServiceTest extends BaseTest
      *
      * @param array $contentDataList
      * @param array $languageSettings
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param array $expected
      */
     public function testMultilingualFieldFilterLocation(
         array $contentDataList,
         $languageSettings,
-        Criterion $criterion,
+        Matcher $criterion,
         $expected
     ) {
         $this->assertMultilingualFieldFilter(
@@ -2339,14 +2340,14 @@ class SearchServiceTest extends BaseTest
     /**
      * @param array $contentDataList
      * @param array $languageSettings
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param array $expected
      * @param bool $contentSearch
      */
     protected function assertMultilingualFieldFilter(
         array $contentDataList,
         $languageSettings,
-        Criterion $criterion,
+        Matcher $criterion,
         $expected,
         $contentSearch = true
     ) {

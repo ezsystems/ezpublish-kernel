@@ -55,7 +55,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     {
         $handler = $this->getPermissionsCriterionHandlerMock(array('getPermissionsCriterion'));
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -64,7 +64,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ->method('getPermissionsCriterion')
             ->will($this->returnValue($permissionsCriterion));
 
-        /* @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /* @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
         $result = $handler->addPermissionsCriterion($criterionMock);
 
         $this->assertSame($permissionsCriterion, $result);
@@ -73,7 +73,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     public function providerForTestAddPermissionsCriterion()
     {
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -104,7 +104,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ->method('getPermissionsCriterion')
             ->will($this->returnValue($permissionsCriterionMock));
 
-        /* @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /* @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
         $result = $handler->addPermissionsCriterion($givenCriterion);
 
         $this->assertTrue($result);
@@ -114,7 +114,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     public function providerForTestGetPermissionsCriterion()
     {
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
         $limitationMock = $this

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
  *
  * Provides content filtering based on distance from geographical location.
  */
-class MapLocationDistance extends Criterion implements CriterionInterface, CustomFieldInterface
+class MapLocationDistance extends Matcher implements CriterionInterface, CustomFieldInterface
 {
     /**
      * Custom field definitions to query instead of default field.

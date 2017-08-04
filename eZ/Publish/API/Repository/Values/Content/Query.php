@@ -33,7 +33,7 @@ class Query extends ValueObject
      * Can contain multiple criterion, as items of a logical one (by default
      * AND)
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher
      */
     public $filter;
 
@@ -46,7 +46,7 @@ class Query extends ValueObject
      * Can contain multiple criterion, as items of a logical one (by default
      * AND). Defaults to MatchAll.
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher
      */
     public $query;
 

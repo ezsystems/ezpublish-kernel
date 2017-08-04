@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -21,7 +21,7 @@ abstract class Gateway
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
-     * @param Criterion $criterion
+     * @param Matcher $criterion
      * @param int $offset
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
@@ -31,7 +31,7 @@ abstract class Gateway
      * @return mixed[][]
      */
     abstract public function find(
-        Criterion $criterion,
+        Matcher $criterion,
         $offset,
         $limit,
         array $sort = null,

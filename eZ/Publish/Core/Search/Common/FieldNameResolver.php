@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Search\Common;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use RuntimeException;
 
 /**
@@ -96,7 +96,7 @@ class FieldNameResolver
      * @see \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface
      * @see \eZ\Publish\SPI\FieldType\Indexable
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param string $fieldDefinitionIdentifier
      * @param null|string $fieldTypeIdentifier
      * @param null|string $name
@@ -104,7 +104,7 @@ class FieldNameResolver
      * @return string[]
      */
     public function getFieldNames(
-        Criterion $criterion,
+        Matcher $criterion,
         $fieldDefinitionIdentifier,
         $fieldTypeIdentifier = null,
         $name = null
@@ -125,7 +125,7 @@ class FieldNameResolver
      * @see \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface
      * @see \eZ\Publish\SPI\FieldType\Indexable
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param string $fieldDefinitionIdentifier
      * @param null|string $fieldTypeIdentifier
      * @param null|string $name
@@ -133,7 +133,7 @@ class FieldNameResolver
      * @return array<string, \eZ\Publish\SPI\Search\FieldType>
      */
     public function getFieldTypes(
-        Criterion $criterion,
+        Matcher $criterion,
         $fieldDefinitionIdentifier,
         $fieldTypeIdentifier = null,
         $name = null

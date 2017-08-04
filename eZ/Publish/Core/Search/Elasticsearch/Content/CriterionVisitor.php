@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use RuntimeException;
 
@@ -20,23 +20,23 @@ abstract class CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      *
      * @return bool
      */
-    abstract public function canVisit(Criterion $criterion);
+    abstract public function canVisit(Matcher $criterion);
 
     /**
      * Map field value to a proper Elasticsearch filter representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed Hash representation of Elasticsearch filter abstract syntax tree
      */
     abstract public function visitFilter(
-        Criterion $criterion,
+        Matcher $criterion,
         CriterionVisitorDispatcher $dispatcher,
         array $languageFilter
     );
@@ -46,13 +46,13 @@ abstract class CriterionVisitor
      *
      * By default this method fallbacks on {@link self::visitFilter()}, override it as needed.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed Hash representation of Elasticsearch query abstract syntax tree
      */
-    public function visitQuery(Criterion $criterion, CriterionVisitorDispatcher $dispatcher, array $languageFilter)
+    public function visitQuery(Matcher $criterion, CriterionVisitorDispatcher $dispatcher, array $languageFilter)
     {
         return $this->visitFilter($criterion, $dispatcher, $languageFilter);
     }

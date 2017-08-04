@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
@@ -171,14 +171,14 @@ class Handler implements BaseTrashHandler
      * sorted with SortClause objects contained in $sort (if any).
      * If no criterion is provided (null), no filter is applied.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param int $offset Offset to start listing from, 0 by default
      * @param int $limit Limit for the listing. Null by default (no limit)
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
-    public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
+    public function findTrashItems(Matcher $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
         // CBA: Ignore criterion for now.
         $rows = $this->locationGateway->listTrashed($offset, $limit, $sort);

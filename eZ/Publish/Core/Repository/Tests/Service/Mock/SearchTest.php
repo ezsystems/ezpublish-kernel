@@ -214,9 +214,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -339,7 +339,7 @@ class SearchTest extends BaseServiceMockTest
             );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock, 'limit' => 10));
@@ -413,7 +413,7 @@ class SearchTest extends BaseServiceMockTest
         $searchHandlerMock->expects($this->never())->method('findContent');
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -529,9 +529,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -561,9 +561,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -609,9 +609,9 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -662,7 +662,7 @@ class SearchTest extends BaseServiceMockTest
         );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock, 'limit' => 10));
@@ -790,9 +790,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock));

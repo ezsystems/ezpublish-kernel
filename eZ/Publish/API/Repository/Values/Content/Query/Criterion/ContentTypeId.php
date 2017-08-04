@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: will match from a list of ContentTypeId
  * - EQ: will match against one ContentTypeId
  */
-class ContentTypeId extends Criterion implements CriterionInterface
+class ContentTypeId extends Matcher implements CriterionInterface
 {
     /**
      * Creates a new ContentType criterion.

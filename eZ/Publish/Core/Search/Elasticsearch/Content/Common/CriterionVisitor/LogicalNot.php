@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content\Common\CriterionVisitor;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use RuntimeException;
 
 /**
@@ -21,11 +22,11 @@ class LogicalNot extends CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      *
      * @return bool
      */
-    public function canVisit(Criterion $criterion)
+    public function canVisit(Matcher $criterion)
     {
         return $criterion instanceof Criterion\LogicalNot;
     }
@@ -35,9 +36,9 @@ class LogicalNot extends CriterionVisitor
      *
      * @throws \RuntimeException
      *
-     * @param Criterion $criterion
+     * @param Matcher $criterion
      */
-    protected function validateCriterionInput(Criterion $criterion)
+    protected function validateCriterionInput(Matcher $criterion)
     {
         /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         if (!isset($criterion->criteria[0]) || (count($criterion->criteria) > 1)) {
@@ -48,13 +49,13 @@ class LogicalNot extends CriterionVisitor
     /**
      * Map field value to a proper Elasticsearch filter representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitFilter(Matcher $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $this->validateCriterionInput($criterion);
 
@@ -67,13 +68,13 @@ class LogicalNot extends CriterionVisitor
     /**
      * Map field value to a proper Elasticsearch query representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitQuery(Matcher $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $this->validateCriterionInput($criterion);
 

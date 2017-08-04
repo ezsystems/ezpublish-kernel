@@ -215,7 +215,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param int $totalCount
      */
     public function testMatchAllContentInfoQuery($criterion, $totalCount)
@@ -234,7 +234,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param int $totalCount
      */
     public function testMatchAllContentInfoFilter($criterion, $totalCount)
@@ -253,7 +253,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param int $totalCount
      */
     public function testMatchAllLocationQuery($criterion, $totalCount)
@@ -272,7 +272,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param int $totalCount
      */
     public function testMatchAllLocationFilter($criterion, $totalCount)

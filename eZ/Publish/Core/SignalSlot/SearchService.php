@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 
 /**
  * SearchService class.
@@ -92,14 +92,14 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if criterion is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $filter
      * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findSingle(Matcher $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
         return $this->service->findSingle($filter, $languageFilter, $filterOnUserPermissions);
     }
@@ -110,9 +110,9 @@ class SearchService implements SearchServiceInterface
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Matcher $filter = null)
     {
         return $this->service->suggest($prefix, $fieldPaths, $limit, $filter);
     }

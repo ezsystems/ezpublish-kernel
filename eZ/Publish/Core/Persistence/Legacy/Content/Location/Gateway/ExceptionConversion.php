@@ -8,8 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -85,14 +84,14 @@ class ExceptionConversion extends Gateway
     /**
      * Returns total count and data for all Locations satisfying the parameters.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
      * @return mixed[][]
      */
-    public function find(Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null)
+    public function find(Matcher $criterion, $offset = 0, $limit = null, array $sortClauses = null)
     {
         try {
             return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses);

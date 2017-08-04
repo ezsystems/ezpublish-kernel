@@ -125,7 +125,7 @@ class LocationService implements LocationServiceInterface
         }
 
         /** Check read access to whole source subtree
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
+         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
          */
         $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
         if ($contentReadCriterion === false) {
@@ -588,7 +588,7 @@ class LocationService implements LocationServiceInterface
         }
 
         /** Check read access to whole source subtree
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
+         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
          */
         $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
         if ($contentReadCriterion === false) {
@@ -667,7 +667,7 @@ class LocationService implements LocationServiceInterface
         }
 
         /** Check remove access to descendants
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
+         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
          */
         $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion('content', 'remove');
         if ($contentReadCriterion === false) {

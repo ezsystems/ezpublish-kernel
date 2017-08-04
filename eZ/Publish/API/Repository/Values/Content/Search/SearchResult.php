@@ -33,7 +33,7 @@ class SearchResult extends ValueObject
      * If spellcheck is on this field contains a collated query suggestion where in the appropriate
      * criterions the wrong spelled value is replaced by a corrected one (TBD).
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher
      */
     public $spellSuggestion;
 

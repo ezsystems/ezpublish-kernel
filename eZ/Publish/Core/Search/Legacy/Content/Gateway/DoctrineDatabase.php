@@ -13,7 +13,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Search\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
@@ -77,7 +77,7 @@ class DoctrineDatabase extends Gateway
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
-     * @param Criterion $criterion
+     * @param Matcher $criterion
      * @param int $offset
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
@@ -87,7 +87,7 @@ class DoctrineDatabase extends Gateway
      * @return mixed[][]
      */
     public function find(
-        Criterion $criterion,
+        Matcher $criterion,
         $offset,
         $limit,
         array $sort = null,
@@ -136,14 +136,14 @@ class DoctrineDatabase extends Gateway
     /**
      * Get query condition.
      *
-     * @param Criterion $filter
+     * @param Matcher $filter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param array $languageFilter
      *
      * @return string
      */
     protected function getQueryCondition(
-        Criterion $filter,
+        Matcher $filter,
         SelectQuery $query,
         array $languageFilter
     ) {
@@ -183,12 +183,12 @@ class DoctrineDatabase extends Gateway
     /**
      * Get result count.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $filter
      * @param array $languageFilter
      *
      * @return int
      */
-    protected function getResultCount(Criterion $filter, array $languageFilter)
+    protected function getResultCount(Matcher $filter, array $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
 
@@ -215,7 +215,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Get sorted arrays of content IDs, which should be returned.
      *
-     * @param Criterion $filter
+     * @param Matcher $filter
      * @param array $sort
      * @param mixed $offset
      * @param mixed $limit
@@ -224,7 +224,7 @@ class DoctrineDatabase extends Gateway
      * @return int[]
      */
     protected function getContentInfoList(
-        Criterion $filter,
+        Matcher $filter,
         $sort,
         $offset,
         $limit,

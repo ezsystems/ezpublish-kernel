@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 
 /**
  * Base class for Field criterion visitors.
@@ -36,7 +36,7 @@ abstract class Field extends FieldFilterBase
     /**
      * Get field names.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param string $fieldDefinitionIdentifier
      * @param string $fieldTypeIdentifier
      * @param string $name
@@ -44,7 +44,7 @@ abstract class Field extends FieldFilterBase
      * @return array
      */
     protected function getFieldNames(
-        Criterion $criterion,
+        Matcher $criterion,
         $fieldDefinitionIdentifier,
         $fieldTypeIdentifier = null,
         $name = null

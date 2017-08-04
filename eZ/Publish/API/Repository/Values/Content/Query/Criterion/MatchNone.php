@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * Useful for BlockingLimitation type, where a limitation is typically missing and needs to
  * tell the system should block everything within the OR conditions it might be part of.
  */
-class MatchNone extends Criterion implements CriterionInterface
+class MatchNone extends Matcher implements CriterionInterface
 {
     public function __construct()
     {

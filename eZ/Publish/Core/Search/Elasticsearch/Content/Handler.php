@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -101,7 +102,7 @@ class Handler implements SearchHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $filter
      * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Also used to define which field languages are loaded for the returned content.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
@@ -109,7 +110,7 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array())
+    public function findSingle(Matcher $filter, array $languageFilter = array())
     {
         $query = new Query();
         $query->filter = $filter;
@@ -159,9 +160,9 @@ class Handler implements SearchHandlerInterface
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Matcher $filter = null)
     {
         // TODO: Implement suggest() method.
     }

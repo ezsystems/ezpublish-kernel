@@ -35,7 +35,7 @@ abstract class Criterion extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Matcher
      */
     public function dispatchCriterion($criterionName, $criterionData, ParsingDispatcher $parsingDispatcher)
     {
@@ -78,7 +78,7 @@ abstract class Criterion extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Matcher
      */
     public function dispatchSortClause($sortClauseName, $direction, ParsingDispatcher $parsingDispatcher)
     {

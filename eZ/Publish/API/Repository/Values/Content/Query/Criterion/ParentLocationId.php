@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: matches against a list of location ids
  * - EQ: matches against a unique location id
  */
-class ParentLocationId extends Criterion implements CriterionInterface
+class ParentLocationId extends Matcher implements CriterionInterface
 {
     /**
      * Creates a new ParentLocationId criterion.

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  *
  * Provides content filtering based on Fields contents & values.
  */
-class CustomField extends Criterion implements CriterionInterface
+class CustomField extends Matcher implements CriterionInterface
 {
     public function getSpecifications()
     {

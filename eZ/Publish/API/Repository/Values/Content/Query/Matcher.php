@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use InvalidArgumentException;
 
-abstract class Criterion
+abstract class Matcher
 {
     /**
      * The operator used by the Criterion.

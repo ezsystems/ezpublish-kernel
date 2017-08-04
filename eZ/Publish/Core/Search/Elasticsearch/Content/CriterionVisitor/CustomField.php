@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 
 /**
  * Base class for CustomField criterion visitors.
@@ -19,24 +19,24 @@ abstract class CustomField extends FieldFilterBase
     /**
      * Returns nested condition common for filter and query contexts.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      *
      * @return array
      */
-    abstract protected function getCondition(Criterion $criterion);
+    abstract protected function getCondition(Matcher $criterion);
 
     /**
      * Map field value to a proper Elasticsearch query representation.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitQuery(Matcher $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $query = array(
             'bool' => array(
