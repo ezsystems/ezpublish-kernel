@@ -135,10 +135,30 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
+    
+        //get contentobject id to reindex before deleting them
+        $trashedItems = $this->service->findTrashItems(new \eZ\Publish\API\Repository\Values\Content\Query());
+
         $returnValue = $this->service->emptyTrash();
+
+        foreach ($trashedItems->items as $item) {
+            $this->signalDispatcher->emit(
+                new TrashSignal(
+                    array(
+                        'locationId' => $item->id,
+                        'parentLocationId' => $item->parentLocationId,
+                        'contentId' => $item->contentId,
+                        'contentTrashed' => true,
+                    )
+                )
+            );
+        }
+
         $this->signalDispatcher->emit(new EmptyTrashSignal(array()));
 
         return $returnValue;
+
+
     }
 
     /**
