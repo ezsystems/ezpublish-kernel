@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on its state.
@@ -19,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: matches against a list of object state IDs
  * - EQ: matches against one object state ID
  */
-class ObjectStateId extends Matcher implements CriterionInterface
+class ObjectStateId extends Matcher
 {
     /**
      * Creates a new ObjectStateId criterion.

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use InvalidArgumentException;
 
@@ -51,5 +52,10 @@ abstract class LogicalOperator extends Matcher
             }
             $this->criteria[] = $criterion;
         }
+    }
+
+    public function getSpecifications()
+    {
+        throw new NotImplementedException('getSpecifications() not implemented for LogicalOperators');
     }
 }

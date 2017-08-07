@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
@@ -31,7 +30,7 @@ use InvalidArgumentException;
  * );
  * </code>
  */
-class DateMetadata extends Matcher implements CriterionInterface
+class DateMetadata extends Matcher
 {
     /**
      * DateMetadata target: modification date.

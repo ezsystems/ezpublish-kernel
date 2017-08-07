@@ -10,14 +10,13 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * SectionId Criterion.
  *
  * Will match content that belongs to one of the given sections
  */
-class SectionId extends Matcher implements CriterionInterface
+class SectionId extends Matcher
 {
     /**
      * Creates a new Section criterion.

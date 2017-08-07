@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches Content based on the relations in relation field.
@@ -22,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: will match if Content relates to one or more of the given ids through given relation field
  * - CONTAINS: will match if Content relates to all of the given ids through given relation field
  */
-class FieldRelation extends Matcher implements CriterionInterface
+class FieldRelation extends Matcher
 {
     public function getSpecifications()
     {

@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
@@ -20,7 +19,7 @@ use InvalidArgumentException;
  * content within the tree you are searching for if content has visible location elsewhere.
  * This is intentional and you should rather use LocationSearch if this is not the behaviour you want.
  */
-class Visibility extends Matcher implements CriterionInterface
+class Visibility extends Matcher
 {
     /**
      * Visibility constant: visible.

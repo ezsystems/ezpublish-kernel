@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
@@ -33,7 +32,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
  * - Simple stop word removal might be applied to the words provided in the
  *   query.
  */
-class FullText extends Matcher implements CriterionInterface, CustomFieldInterface
+class FullText extends Matcher implements CustomFieldInterface
 {
     /**
      * Fuzziness of the fulltext search.

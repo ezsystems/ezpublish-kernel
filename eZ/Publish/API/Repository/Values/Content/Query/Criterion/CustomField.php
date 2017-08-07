@@ -10,14 +10,13 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * The Field Criterion class.
  *
  * Provides content filtering based on Fields contents & values.
  */
-class CustomField extends Matcher implements CriterionInterface
+class CustomField extends Matcher
 {
     public function getSpecifications()
     {

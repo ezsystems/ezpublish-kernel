@@ -9,11 +9,10 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * This is the base class for Location criterions.
  */
-abstract class Location extends Matcher implements CriterionInterface
+abstract class Location extends Matcher
 {
 }

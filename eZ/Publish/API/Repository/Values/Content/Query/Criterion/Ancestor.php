@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
@@ -18,7 +17,7 @@ use InvalidArgumentException;
  *
  * Content will be matched if it is part of at least one of the given subtree path strings.
  */
-class Ancestor extends Matcher implements CriterionInterface
+class Ancestor extends Matcher
 {
     /**
      * Creates a new Ancestor criterion.
