@@ -4182,7 +4182,7 @@ class SearchServiceTest extends BaseTest
      * @param string $searchQuery
      *
      * @dataProvider getFullTextQueriesWithoutWords
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\Core\Search\Common\Exception\InvalidFullTextSearchString
      */
     public function testFullTextOnQueryWithoutWords($searchQuery)
     {
@@ -4214,7 +4214,7 @@ class SearchServiceTest extends BaseTest
             ]
         );
 
-        $searchResult = $searchService->findContentInfo($query);
+        $searchService->findContentInfo($query);
     }
 
     /**
