@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Search\Common\Exception\InvalidFullTextSearchString;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
@@ -178,9 +179,9 @@ class FullText extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $string
      *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery|null
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      *
-     * @throws InvalidArgumentException On invalid $string
+     * @throws \eZ\Publish\Core\Search\Common\Exception\InvalidFullTextSearchString On invalid $string
      */
     protected function getWordIdSubquery(SelectQuery $query, $string)
     {
@@ -190,7 +191,7 @@ class FullText extends CriterionHandler
         );
 
         if (empty($tokens)) {
-            throw new InvalidArgumentException('string', 'Search query does not contains any searchable token');
+            throw new InvalidFullTextSearchString('string', 'Search query does not contain a valid FullText search string');
         }
 
         $wordExpressions = array();
@@ -223,6 +224,8 @@ class FullText extends CriterionHandler
      * Generate query expression for a Criterion this handler accepts.
      *
      * accept() must be called before calling this method.
+     *
+     * @uses ::getWordIdSubquery() To get subquery to select relevant word IDs.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
