@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
@@ -52,15 +51,5 @@ abstract class LogicalOperator implements CriterionInterface
             }
             $this->criteria[] = $criterion;
         }
-    }
-
-    public function getSpecifications()
-    {
-        throw new NotImplementedException('getSpecifications() not implemented for LogicalOperators');
-    }
-
-    public static function createFromQueryBuilder($target, $operator, $value)
-    {
-        throw new NotImplementedException('createFromQueryBuilder() not implemented for LogicalOperators');
     }
 }

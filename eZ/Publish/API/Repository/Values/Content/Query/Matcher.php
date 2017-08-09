@@ -114,6 +114,38 @@ abstract class Matcher implements CriterionInterface
     }
 
     /**
+     * Matcher description function.
+     *
+     * Returns the combination of the Matcher's supported operator/value,
+     * as an array of eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications objects
+     * - Operator is one supported Operator, as an Operator::* constant
+     * - ValueType is the type of input value this operator requires, either array or single
+     * - SupportedTypes is an array of types the operator will accept
+     * - ValueCountLimitation is an integer saying how many values are expected.
+     *
+     * <code>
+     * // IN and EQ are supported
+     * return array(
+     *     // The EQ operator expects a single value, either as an integer or a string
+     *     new Specifications(
+     *         Operator::EQ,
+     *         Specifications::INPUT_TYPE_SINGLE,
+     *         array( Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING ),
+     *     ),
+     *     // The IN operator expects an array of values, of either integers or strings
+     *     new Specifications(
+     *         Operator::IN,
+     *         Specifications::INPUT_TYPE_ARRAY,
+     *         array( Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING )
+     *     )
+     * )*
+     * </code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications[]
+     */
+    abstract public function getSpecifications();
+
+    /**
      * Returns a callback that checks the values types depending on the operator specifications.
      *
      * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
@@ -146,6 +178,15 @@ abstract class Matcher implements CriterionInterface
         return $callback;
     }
 
+    /**
+     * Creates a new Matcher for $target with operator $operator on $value.
+     *
+     * @param string $target The target (field identifier for a field, metadata identifier, etc)
+     * @param string $operator The matcher operator, from Criterion\Operator
+     * @param mixed $value The Matcher value, either as an individual item or an array
+     *
+     * @return Matcher
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
         return new static($target, $operator, $value);
