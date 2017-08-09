@@ -21,7 +21,7 @@ class ArrayObject extends NativeArrayObject
     /**
      * Reference to the parent node.
      *
-     * @var \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator\Json\JsonObject
      */
     protected $_ref_parent;
 
@@ -38,7 +38,7 @@ class ArrayObject extends NativeArrayObject
     /**
      * Get Parent of current node.
      *
-     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\JsonObject
      */
     public function getParent()
     {
