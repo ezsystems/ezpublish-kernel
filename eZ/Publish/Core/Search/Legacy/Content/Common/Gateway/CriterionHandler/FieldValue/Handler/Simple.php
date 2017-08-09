@@ -25,23 +25,23 @@ class Simple extends Handler
      * Generates query expression for operator and value of a Field Criterion.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $matcher
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle(SelectQuery $query, Matcher $criterion, $column)
+    public function handle(SelectQuery $query, Matcher $matcher, $column)
     {
-        switch ($criterion->operator) {
+        switch ($matcher->operator) {
             case Criterion\Operator::CONTAINS:
                 $filter = $query->expr->eq(
                     $this->dbHandler->quoteColumn($column),
-                    $query->bindValue($this->lowerCase($criterion->value))
+                    $query->bindValue($this->lowerCase($matcher->value))
                 );
                 break;
 
             default:
-                $filter = parent::handle($query, $criterion, $column);
+                $filter = parent::handle($query, $matcher, $column);
         }
 
         return $filter;

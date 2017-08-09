@@ -68,28 +68,28 @@ abstract class Handler
      * @throws \RuntimeException If operator is not handled.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $matcher
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle(SelectQuery $query, Matcher $criterion, $column)
+    public function handle(SelectQuery $query, Matcher $matcher, $column)
     {
         $column = $this->dbHandler->quoteColumn($column);
 
-        switch ($criterion->operator) {
+        switch ($matcher->operator) {
             case Criterion\Operator::IN:
                 $filter = $query->expr->in(
                     $column,
-                    array_map(array($this, 'lowercase'), $criterion->value)
+                    array_map(array($this, 'lowercase'), $matcher->value)
                 );
                 break;
 
             case Criterion\Operator::BETWEEN:
                 $filter = $query->expr->between(
                     $column,
-                    $query->bindValue($this->lowercase($criterion->value[0])),
-                    $query->bindValue($this->lowercase($criterion->value[1]))
+                    $query->bindValue($this->lowercase($matcher->value[0])),
+                    $query->bindValue($this->lowercase($matcher->value[1]))
                 );
                 break;
 
@@ -99,10 +99,10 @@ abstract class Handler
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
             case Criterion\Operator::LIKE:
-                $operatorFunction = $this->comparatorMap[$criterion->operator];
+                $operatorFunction = $this->comparatorMap[$matcher->operator];
                 $filter = $query->expr->$operatorFunction(
                     $column,
-                    $query->bindValue($this->lowercase($criterion->value))
+                    $query->bindValue($this->lowercase($matcher->value))
                 );
                 break;
 
@@ -110,13 +110,13 @@ abstract class Handler
                 $filter = $query->expr->like(
                     $column,
                     $query->bindValue(
-                        '%' . $this->prepareLikeString($criterion->value) . '%'
+                        '%' . $this->prepareLikeString($matcher->value) . '%'
                     )
                 );
                 break;
 
             default:
-                throw new RuntimeException("Unknown operator '{$criterion->operator}' for Field criterion handler.");
+                throw new RuntimeException("Unknown operator '{$matcher->operator}' for Field criterion handler.");
         }
 
         return $filter;
