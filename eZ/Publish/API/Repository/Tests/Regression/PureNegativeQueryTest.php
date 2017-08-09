@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * This test will try to execute search queries that might be interpreted as "pure negative"
@@ -215,7 +216,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllContentInfoQuery($criterion, $totalCount)
@@ -234,7 +235,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllContentInfoFilter($criterion, $totalCount)
@@ -253,7 +254,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllLocationQuery($criterion, $totalCount)
@@ -272,7 +273,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllLocationFilter($criterion, $totalCount)

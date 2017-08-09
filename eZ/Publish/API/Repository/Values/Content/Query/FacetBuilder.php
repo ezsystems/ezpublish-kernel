@@ -32,7 +32,7 @@ abstract class FacetBuilder extends ValueObject
     /**
      * An additional facet filter that will further filter the documents the facet will be executed on.
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @var CriterionInterface
      */
     public $filter = null;
 

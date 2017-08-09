@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -35,7 +36,7 @@ abstract class Criterion extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @return CriterionInterface
      */
     public function dispatchCriterion($criterionName, $criterionData, ParsingDispatcher $parsingDispatcher)
     {
@@ -78,7 +79,7 @@ abstract class Criterion extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @return CriterionInterface
      */
     public function dispatchSortClause($sortClauseName, $direction, ParsingDispatcher $parsingDispatcher)
     {

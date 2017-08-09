@@ -20,6 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use Exception;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * Mock test case for Search service.
@@ -214,9 +215,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -339,7 +340,7 @@ class SearchTest extends BaseServiceMockTest
             );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock, 'limit' => 10));
@@ -413,7 +414,7 @@ class SearchTest extends BaseServiceMockTest
         $searchHandlerMock->expects($this->never())->method('findContent');
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -529,9 +530,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -561,9 +562,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -609,9 +610,9 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -662,7 +663,7 @@ class SearchTest extends BaseServiceMockTest
         );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock, 'limit' => 10));
@@ -790,9 +791,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock));

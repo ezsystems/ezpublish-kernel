@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A NOT logical criterion.
@@ -20,11 +20,11 @@ class LogicalNot extends LogicalOperator
      *
      * Will match of the given criterion doesn't match
      *
-     * @param Matcher[] $criteria One criterion, as an array
+     * @param CriterionInterface $criterion
      *
-     * @throws \InvalidArgumentException if more than one criterion is given in the array parameter
+     * @throws \InvalidArgumentException
      */
-    public function __construct(Matcher $criterion)
+    public function __construct(CriterionInterface $criterion)
     {
         parent::__construct(array($criterion));
     }

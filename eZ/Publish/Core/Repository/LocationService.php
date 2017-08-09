@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -125,7 +126,7 @@ class LocationService implements LocationServiceInterface
         }
 
         /** Check read access to whole source subtree
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
+         * @var bool|CriterionInterface
          */
         $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
         if ($contentReadCriterion === false) {
@@ -588,7 +589,7 @@ class LocationService implements LocationServiceInterface
         }
 
         /** Check read access to whole source subtree
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
+         * @var bool|CriterionInterface
          */
         $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
         if ($contentReadCriterion === false) {
@@ -667,7 +668,7 @@ class LocationService implements LocationServiceInterface
         }
 
         /** Check remove access to descendants
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
+         * @var bool|CriterionInterface
          */
         $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion('content', 'remove');
         if ($contentReadCriterion === false) {

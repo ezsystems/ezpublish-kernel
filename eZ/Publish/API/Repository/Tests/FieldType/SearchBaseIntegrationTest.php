@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field;
@@ -1064,10 +1064,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * $fieldName refers to additional field (to the default field) defined in Indexable definition,
      * and is resolved using FieldNameResolver.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param string $fieldName
      */
-    protected function modifyFieldCriterion(Matcher $criterion, $fieldName)
+    protected function modifyFieldCriterion(CriterionInterface $criterion, $fieldName)
     {
         $setupFactory = $this->getSetupFactory();
         /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $container */
@@ -1120,7 +1120,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      *
      * Implemented separately to utilize recursion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher[]|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $criteriaOrSortClauses
+     * @param CriterionInterface[]|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $criteriaOrSortClauses
      * @param string $fieldName
      */
     protected function doModifyField(array $criteriaOrSortClauses, $fieldName)
@@ -1243,12 +1243,12 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * Returns SearchResult of the tested Content for the given $criterion.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param bool $filter Denotes search by filtering if true, search by querying if false
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function findContent(Repository $repository, Matcher $criterion, $filter)
+    protected function findContent(Repository $repository, CriterionInterface $criterion, $filter)
     {
         $searchService = $repository->getSearchService();
 
@@ -1300,12 +1300,12 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * Returns SearchResult of the tested Locations for the given $criterion.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param bool $filter Denotes search by filtering if true, search by querying if false
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function findLocations(Repository $repository, Matcher $criterion, $filter)
+    protected function findLocations(Repository $repository, CriterionInterface $criterion, $filter)
     {
         $this->checkLocationFieldSearchSupport();
         $searchService = $repository->getSearchService();
@@ -1394,7 +1394,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * Search result can be empty, contain both Content One and Content Two or only one of them.
      *
      * @param array $context
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param bool $includesOne
      * @param bool $includesTwo
      * @param bool $filter
@@ -1403,7 +1403,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function assertFindResult(
         array $context,
-        Matcher $criterion,
+        CriterionInterface $criterion,
         $includesOne,
         $includesTwo,
         $filter,

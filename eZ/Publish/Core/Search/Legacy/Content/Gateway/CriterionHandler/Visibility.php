@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -22,11 +22,11 @@ class Visibility extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Matcher $criterion)
+    public function accept(CriterionInterface $criterion)
     {
         return $criterion instanceof Criterion\Visibility;
     }
@@ -43,7 +43,7 @@ class Visibility extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -51,11 +51,12 @@ class Visibility extends CriterionHandler
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Matcher $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
 
+        /** @var Criterion\Visibility $criterion */
         if ($criterion->value[0] === Criterion\Visibility::VISIBLE) {
             $expression = $query->expr->lAnd(
                 $query->expr->eq(

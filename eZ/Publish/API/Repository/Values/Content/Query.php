@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -33,7 +34,7 @@ class Query extends ValueObject
      * Can contain multiple criterion, as items of a logical one (by default
      * AND)
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @var CriterionInterface
      */
     public $filter;
 
@@ -46,7 +47,7 @@ class Query extends ValueObject
      * Can contain multiple criterion, as items of a logical one (by default
      * AND). Defaults to MatchAll.
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @var CriterionInterface
      */
     public $query;
 

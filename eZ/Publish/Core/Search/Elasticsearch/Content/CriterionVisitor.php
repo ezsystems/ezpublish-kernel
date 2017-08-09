@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use RuntimeException;
 
@@ -20,23 +20,23 @@ abstract class CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    abstract public function canVisit(Matcher $criterion);
+    abstract public function canVisit(CriterionInterface $criterion);
 
     /**
      * Map field value to a proper Elasticsearch filter representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed Hash representation of Elasticsearch filter abstract syntax tree
      */
     abstract public function visitFilter(
-        Matcher $criterion,
+        CriterionInterface $criterion,
         CriterionVisitorDispatcher $dispatcher,
         array $languageFilter
     );
@@ -46,13 +46,13 @@ abstract class CriterionVisitor
      *
      * By default this method fallbacks on {@link self::visitFilter()}, override it as needed.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed Hash representation of Elasticsearch query abstract syntax tree
      */
-    public function visitQuery(Matcher $criterion, CriterionVisitorDispatcher $dispatcher, array $languageFilter)
+    public function visitQuery(CriterionInterface $criterion, CriterionVisitorDispatcher $dispatcher, array $languageFilter)
     {
         return $this->visitFilter($criterion, $dispatcher, $languageFilter);
     }

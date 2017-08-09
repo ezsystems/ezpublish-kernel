@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Search;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -33,7 +34,7 @@ class SearchResult extends ValueObject
      * If spellcheck is on this field contains a collated query suggestion where in the appropriate
      * criterions the wrong spelled value is replaced by a corrected one (TBD).
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @var CriterionInterface
      */
     public $spellSuggestion;
 

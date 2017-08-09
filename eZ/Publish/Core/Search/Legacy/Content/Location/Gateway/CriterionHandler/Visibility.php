@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use RuntimeException;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PDO;
@@ -24,11 +24,11 @@ class Visibility extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Matcher $criterion)
+    public function accept(CriterionInterface $criterion)
     {
         return $criterion instanceof Criterion\Visibility;
     }
@@ -40,7 +40,7 @@ class Visibility extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -48,11 +48,12 @@ class Visibility extends CriterionHandler
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Matcher $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
         $column = $this->dbHandler->quoteColumn('is_invisible', 'ezcontentobject_tree');
 
+        /** @var Criterion\Visibility $criterion */
         switch ($criterion->value[0]) {
             case Criterion\Visibility::VISIBLE:
                 return $query->expr->eq(

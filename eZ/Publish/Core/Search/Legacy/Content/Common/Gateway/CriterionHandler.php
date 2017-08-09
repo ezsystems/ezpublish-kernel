@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
@@ -50,11 +50,11 @@ abstract class CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    abstract public function accept(Matcher $criterion);
+    abstract public function accept(CriterionInterface $criterion);
 
     /**
      * Generate query expression for a Criterion this handler accepts.
@@ -63,13 +63,13 @@ abstract class CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      */
     abstract public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Matcher $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     );
 

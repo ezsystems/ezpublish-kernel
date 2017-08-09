@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * Mock test case for PermissionCriterionHandler.
@@ -55,7 +56,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     {
         $handler = $this->getPermissionsCriterionHandlerMock(array('getPermissionsCriterion'));
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -64,7 +65,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ->method('getPermissionsCriterion')
             ->will($this->returnValue($permissionsCriterion));
 
-        /* @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $result = $handler->addPermissionsCriterion($criterionMock);
 
         $this->assertSame($permissionsCriterion, $result);
@@ -73,7 +74,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     public function providerForTestAddPermissionsCriterion()
     {
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -104,7 +105,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ->method('getPermissionsCriterion')
             ->will($this->returnValue($permissionsCriterionMock));
 
-        /* @var \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $result = $handler->addPermissionsCriterion($givenCriterion);
 
         $this->assertTrue($result);
@@ -114,7 +115,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     public function providerForTestGetPermissionsCriterion()
     {
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $limitationMock = $this

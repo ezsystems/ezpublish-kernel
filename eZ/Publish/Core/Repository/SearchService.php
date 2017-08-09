@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location as LocationCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location as LocationSortClause;
@@ -190,7 +190,7 @@ class SearchService implements SearchServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher[] $criteria
+     * @param CriterionInterface[] $criteria
      * @param string $argumentName
      */
     protected function validateContentCriteria(array $criteria, $argumentName)
@@ -231,7 +231,7 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if criterion is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $filter
+     * @param CriterionInterface $filter
      * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
@@ -239,7 +239,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Matcher $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findSingle(CriterionInterface $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
         $this->validateContentCriteria(array($filter), '$filter');
 
@@ -264,9 +264,9 @@ class SearchService implements SearchServiceInterface
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $filter
+     * @param CriterionInterface $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Matcher $filter = null)
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, CriterionInterface $filter = null)
     {
     }
 

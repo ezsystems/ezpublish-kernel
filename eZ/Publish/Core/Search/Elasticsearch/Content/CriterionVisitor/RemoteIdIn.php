@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
@@ -22,11 +22,11 @@ class RemoteIdIn extends CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function canVisit(Matcher $criterion)
+    public function canVisit(CriterionInterface $criterion)
     {
         return
             $criterion instanceof Criterion\RemoteId &&
@@ -39,14 +39,15 @@ class RemoteIdIn extends CriterionVisitor
     /**
      * Map field value to a proper Elasticsearch filter representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Matcher $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
+        /** @var Criterion\RemoteId $criterion */
         if (count($criterion->value) > 1) {
             $filter = array(
                 'terms' => array(

@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Legacy\Content\Gateway;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;
@@ -40,7 +40,7 @@ class ExceptionConversion extends Gateway
     /**
      * Returns a list of object satisfying the $criterion.
      *
-     * @param Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
@@ -52,7 +52,7 @@ class ExceptionConversion extends Gateway
      * @return mixed[][]
      */
     public function find(
-        Matcher $criterion,
+        CriterionInterface $criterion,
         $offset = 0,
         $limit = null,
         array $sort = null,

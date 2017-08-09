@@ -6,10 +6,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion as CriterionValue;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 
 /**
  * Content/Location Query Parser.
@@ -95,7 +95,7 @@ abstract class Query extends CriterionParser
      * @param array $criteriaArray
      * @param ParsingDispatcher $parsingDispatcher
      *
-     * @return Matcher|null A criterion, or a LogicalAnd with a set of Criterion, or null if an empty array was given
+     * @return CriterionInterface|null A CriterionInterface, or null if an empty array was given
      */
     private function processCriteriaArray(array $criteriaArray, ParsingDispatcher $parsingDispatcher)
     {

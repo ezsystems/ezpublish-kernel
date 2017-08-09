@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use InvalidArgumentException;
 
@@ -21,21 +22,21 @@ abstract class LogicalOperator extends Matcher
     /**
      * The set of criteria combined by the logical operator.
      *
-     * @var Matcher[]
+     * @var CriterionInterface[]
      */
     public $criteria = array();
 
     /**
      * Creates a Logic operation with the given criteria.
      *
-     * @param Matcher[] $criteria
+     * @param CriterionInterface[] $criteria
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(array $criteria)
     {
         foreach ($criteria as $key => $criterion) {
-            if (!$criterion instanceof Matcher) {
+            if (!$criterion instanceof CriterionInterface) {
                 if ($criterion === null) {
                     $type = 'null';
                 } elseif (is_object($criterion)) {

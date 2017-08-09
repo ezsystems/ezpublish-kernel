@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
@@ -55,7 +55,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function findTrashItems(Matcher $criterion = null, $offset = 0, $limit = null, array $sort = null)
+    public function findTrashItems(CriterionInterface $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
         $this->logger->logCall(__METHOD__, array('criterion' => get_class($criterion)));
 

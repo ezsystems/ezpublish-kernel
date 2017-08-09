@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\User\Limitation;
@@ -50,11 +50,11 @@ class PermissionsCriterionHandler
      *
      * @uses ::getPermissionsCriterion()
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
-     * @return bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @return bool|CriterionInterface
      */
-    public function addPermissionsCriterion(Matcher &$criterion)
+    public function addPermissionsCriterion(CriterionInterface &$criterion)
     {
         $permissionCriterion = $this->getPermissionsCriterion();
         if ($permissionCriterion === true || $permissionCriterion === false) {
@@ -86,7 +86,7 @@ class PermissionsCriterionHandler
      * @param string $module
      * @param string $function
      *
-     * @return bool|\eZ\Publish\API\Repository\Values\Content\Query\Matcher
+     * @return bool|CriterionInterface
      */
     public function getPermissionsCriterion($module = 'content', $function = 'read')
     {

@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
@@ -22,11 +22,11 @@ class LocationIdIn extends CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function canVisit(Matcher $criterion)
+    public function canVisit(CriterionInterface $criterion)
     {
         return
             $criterion instanceof Criterion\LocationId &&
@@ -39,12 +39,13 @@ class LocationIdIn extends CriterionVisitor
     /**
      * Returns nested condition common for filter and query contexts.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return array
      */
-    protected function getCondition(Matcher $criterion)
+    protected function getCondition(CriterionInterface $criterion)
     {
+        /** @var Criterion\LocationId $criterion */
         if (count($criterion->value) > 1) {
             return array(
                 'terms' => array(
@@ -63,13 +64,13 @@ class LocationIdIn extends CriterionVisitor
     /**
      * Map field value to a proper Elasticsearch filter representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Matcher $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         return array(
             'nested' => array(
@@ -82,13 +83,13 @@ class LocationIdIn extends CriterionVisitor
     /**
      * Map field value to a proper Elasticsearch query representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitQuery(Matcher $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitQuery(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         return array(
             'nested' => array(

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use RuntimeException;
 
@@ -71,13 +71,13 @@ class CriterionVisitorDispatcher
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param string $context
      * @param array $languageFilter
      *
      * @return string
      */
-    public function dispatch(Matcher $criterion, $context, array $languageFilter = array())
+    public function dispatch(CriterionInterface $criterion, $context, array $languageFilter = array())
     {
         if (!isset($this->contextMethodMap[$context])) {
             throw new RuntimeException(

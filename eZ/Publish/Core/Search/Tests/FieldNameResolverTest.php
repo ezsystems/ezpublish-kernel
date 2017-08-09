@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Search\Tests;
 
 use ArrayObject;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * Test case for FieldNameResolver.
@@ -91,7 +92,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher'
+                    CriterionInterface::class
                 ),
                 'content_type_identifier_1',
                 'field_definition_identifier_1',
@@ -105,7 +106,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher'
+                    CriterionInterface::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -165,7 +166,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher'
+                    CriterionInterface::class
                 ),
                 'content_type_identifier_1',
                 'field_definition_identifier_1',
@@ -179,7 +180,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher'
+                    CriterionInterface::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -241,7 +242,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher'
+                    CriterionInterface::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -302,7 +303,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher'
+                    CriterionInterface::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -862,12 +863,12 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Matcher|\PHPUnit_Framework_MockObject_MockObject
+     * @return CriterionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getCriterionMock()
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Matcher')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

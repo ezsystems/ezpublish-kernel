@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -22,11 +22,11 @@ class LogicalNot extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Matcher $criterion)
+    public function accept(CriterionInterface $criterion)
     {
         return $criterion instanceof Criterion\LogicalNot;
     }
@@ -38,7 +38,7 @@ class LogicalNot extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -46,9 +46,10 @@ class LogicalNot extends CriterionHandler
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Matcher $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
+        /** @var Criterion\LogicalNot $criterion */
         return $query->expr->not(
             $converter->convertCriteria($query, $criterion->criteria[0], $languageSettings)
         );

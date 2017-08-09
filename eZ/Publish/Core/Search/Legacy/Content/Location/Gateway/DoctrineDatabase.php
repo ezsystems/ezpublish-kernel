@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use PDO;
 
@@ -74,7 +74,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Returns total count and data for all Locations satisfying the parameters.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param int $offset
      * @param int $limit
      * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
@@ -84,7 +84,7 @@ class DoctrineDatabase extends Gateway
      * @return mixed[][]
      */
     public function find(
-        Matcher $criterion,
+        CriterionInterface $criterion,
         $offset,
         $limit,
         array $sortClauses = null,
@@ -182,12 +182,12 @@ class DoctrineDatabase extends Gateway
     /**
      * Returns total results count for $criterion and $sortClauses.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageFilter
      *
      * @return array
      */
-    protected function getTotalCount(Matcher $criterion, array $languageFilter)
+    protected function getTotalCount(CriterionInterface $criterion, array $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
         $query

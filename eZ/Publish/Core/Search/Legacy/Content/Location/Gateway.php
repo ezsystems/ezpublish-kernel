@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Location;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * Base class for location search gateways.
@@ -18,7 +18,7 @@ abstract class Gateway
     /**
      * Returns total count and data for all Locations satisfying the parameters.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $criterion
+     * @param CriterionInterface $criterion
      * @param int $offset
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
@@ -28,7 +28,7 @@ abstract class Gateway
      * @return mixed[][]
      */
     abstract public function find(
-        Matcher $criterion,
+        CriterionInterface $criterion,
         $offset,
         $limit,
         array $sortClauses = null,
