@@ -8,6 +8,7 @@ parameters:
     ezpublish.search.legacy.slot.trash.class: eZ\Publish\Core\Search\Common\Slot\Trash
     ezpublish.search.legacy.slot.recover.class: eZ\Publish\Core\Search\Common\Slot\Recover
     ezpublish.search.legacy.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
+    ezpublish.search.legacy.slot.remove_translation.class: eZ\Publish\Core\Search\Common\Slot\RemoveTranslation
     ezpublish.search.legacy.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
     ezpublish.search.legacy.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
     ezpublish.search.legacy.slot.delete_user.class: eZ\Publish\Core\Search\Common\Slot\DeleteUser
@@ -70,6 +71,12 @@ services:
         class: "%ezpublish.search.legacy.slot.update_content_metadata.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: ContentService\UpdateContentMetadataSignal}
+
+    ezpublish.search.legacy.slot.remove_translation:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.remove_translation.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\RemoveTranslationSignal}
 
     ezpublish.search.legacy.slot.assign_section:
         parent: ezpublish.search.legacy.slot
