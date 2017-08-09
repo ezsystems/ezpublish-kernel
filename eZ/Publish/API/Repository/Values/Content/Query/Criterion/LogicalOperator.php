@@ -10,14 +10,13 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
 use InvalidArgumentException;
 
 /**
  * Note that the class should ideally have been in a Logical namespace, but it would have then be named 'And',
  * and 'And' is a PHP reserved word.
  */
-abstract class LogicalOperator extends Matcher
+abstract class LogicalOperator implements CriterionInterface
 {
     /**
      * The set of criteria combined by the logical operator.
@@ -58,5 +57,10 @@ abstract class LogicalOperator extends Matcher
     public function getSpecifications()
     {
         throw new NotImplementedException('getSpecifications() not implemented for LogicalOperators');
+    }
+
+    public static function createFromQueryBuilder($target, $operator, $value)
+    {
+        throw new NotImplementedException('createFromQueryBuilder() not implemented for LogicalOperators');
     }
 }
