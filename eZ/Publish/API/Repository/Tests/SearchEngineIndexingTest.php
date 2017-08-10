@@ -612,7 +612,7 @@ class SearchEngineIndexingTest extends BaseTest
         $rootLocationId = 2;
         $locationToUpdate = $locationService->loadLocation($rootLocationId);
 
-        $criterion = new Criterion\LogicalAnd([
+        $criterion = new Criterion\LogicalOperator\LogicalAnd([
             new Criterion\LocationId($rootLocationId),
             new Criterion\Location\Priority(Criterion\Operator::GT, 0),
         ]);
@@ -858,7 +858,7 @@ class SearchEngineIndexingTest extends BaseTest
         $searchService = $repository->getSearchService();
         $user = $this->createUser('TestUser', 'Jon', 'Snow');
 
-        $criterion = new Criterion\LogicalAnd(
+        $criterion = new Criterion\LogicalOperator\LogicalAnd(
             [
                 new Criterion\FullText('Jon Snow'),
                 new Criterion\ContentTypeIdentifier('user'),

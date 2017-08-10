@@ -438,7 +438,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\SectionId(array(1)),
                             new Criterion\ContentTypeIdentifier(array('article')),
@@ -508,7 +508,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\SectionId(array(1)),
                             new Criterion\ContentTypeIdentifier('product'),

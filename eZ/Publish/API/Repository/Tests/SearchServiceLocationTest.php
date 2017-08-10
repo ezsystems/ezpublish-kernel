@@ -390,7 +390,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -471,7 +471,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -568,7 +568,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -670,7 +670,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -788,7 +788,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -894,7 +894,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         $distanceCriterion,
@@ -999,7 +999,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(

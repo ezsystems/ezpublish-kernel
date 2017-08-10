@@ -250,7 +250,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
             $criterions[] = new Criterion\ObjectStateId($limitationGroup);
         }
 
-        return new Criterion\LogicalAnd($criterions);
+        return new Criterion\LogicalOperator\LogicalAnd($criterions);
     }
 
     /**

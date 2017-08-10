@@ -27,7 +27,7 @@ class LogicalOr extends CriterionVisitor
      */
     public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LogicalOr;
+        return $criterion instanceof Criterion\LogicalOperator\LogicalOr;
     }
 
     /**
@@ -41,7 +41,7 @@ class LogicalOr extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator */
         return array(
             'or' => array_map(
                 function ($value) use ($dispatcher, $languageFilter) {
@@ -63,7 +63,7 @@ class LogicalOr extends CriterionVisitor
      */
     public function visitQuery(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator */
         return array(
             'bool' => array(
                 'should' => array_map(

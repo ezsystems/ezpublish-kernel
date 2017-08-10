@@ -108,6 +108,6 @@ abstract class Query extends CriterionParser
             $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
         }
 
-        return (count($criteria) === 1) ? $criteria[0] : new CriterionValue\LogicalAnd($criteria);
+        return (count($criteria) === 1) ? $criteria[0] : new CriterionValue\LogicalOperator\LogicalAnd($criteria);
     }
 }

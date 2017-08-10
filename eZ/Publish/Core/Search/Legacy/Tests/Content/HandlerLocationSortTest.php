@@ -592,7 +592,7 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
         $result = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\SectionId(array(1)),
                             new Criterion\ContentTypeIdentifier(array('article')),
@@ -662,7 +662,7 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
         $result = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\SectionId(array(1)),
                             new Criterion\ContentTypeIdentifier('product'),

@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
 use eZ\Publish\Core\Repository\Helper\LimitationService;

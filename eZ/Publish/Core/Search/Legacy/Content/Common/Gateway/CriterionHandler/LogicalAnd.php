@@ -28,7 +28,7 @@ class LogicalAnd extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LogicalAnd;
+        return $criterion instanceof Criterion\LogicalOperator\LogicalAnd;
     }
 
     /**
@@ -50,7 +50,7 @@ class LogicalAnd extends CriterionHandler
         array $languageSettings
     ) {
         $subexpressions = array();
-        /** @var Criterion\LogicalAnd $criterion */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalAnd $criterion */
         foreach ($criterion->criteria as $subCriterion) {
             $subexpressions[] = $converter->convertCriteria(
                 $query,

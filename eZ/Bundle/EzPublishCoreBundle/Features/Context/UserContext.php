@@ -109,7 +109,7 @@ class UserContext implements Context
             $criterionArray[] = new Criterion\ParentLocationId($parentLocationId);
         }
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd($criterionArray);
+        $query->filter = new Criterion\LogicalOperator\LogicalAnd($criterionArray);
 
         $result = $this->searchService->findContent($query, array(), false);
 

@@ -132,7 +132,7 @@ class SearchServiceAuthorizationTest extends BaseTest
 
         // Search for "Admin Users" user group which user normally does not have access to
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalOperator\LogicalAnd(
             array(
                 new Criterion\ContentId(12),
             )

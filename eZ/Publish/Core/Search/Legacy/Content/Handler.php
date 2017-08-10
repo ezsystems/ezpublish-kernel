@@ -157,7 +157,7 @@ class Handler implements SearchHandlerInterface
 
         // The legacy search does not know about scores, so that we just
         // combine the query with the filter
-        $filter = new Criterion\LogicalAnd(array($query->query, $query->filter));
+        $filter = new Criterion\LogicalOperator\LogicalAnd(array($query->query, $query->filter));
 
         $data = $this->gateway->find(
             $filter,
@@ -272,7 +272,7 @@ class Handler implements SearchHandlerInterface
         // The legacy search does not know about scores, so we just
         // combine the query with the filter
         $data = $this->locationGateway->find(
-            new Criterion\LogicalAnd(array($query->query, $query->filter)),
+            new Criterion\LogicalOperator\LogicalAnd(array($query->query, $query->filter)),
             $query->offset,
             $query->limit,
             $query->sortClauses,

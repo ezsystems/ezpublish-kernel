@@ -529,7 +529,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LogicalAnd(
+                        'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
                                 new Criterion\ContentId(
                                     array(1, 4, 10)
@@ -553,7 +553,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\LogicalOr(
+                    'filter' => new Criterion\LogicalOperator\LogicalOr(
                         array(
                             new Criterion\ContentId(
                                 array(1, 4, 10)
@@ -589,12 +589,12 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LogicalAnd(
+                        'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
                                 new Criterion\ContentId(
                                     array(1, 4, 10)
                                 ),
-                                new Criterion\LogicalNot(
+                                new Criterion\LogicalOperator\LogicalNot(
                                     new Criterion\ContentId(
                                         array(10, 12)
                                     )
@@ -868,7 +868,7 @@ class HandlerContentTest extends LanguageAwareTestCase
                 new Query(
                     array(
                         // Status criterion is gone, but this will also match all published
-                        'filter' => new Criterion\LogicalNot(
+                        'filter' => new Criterion\LogicalOperator\LogicalNot(
                             new Criterion\ContentId(
                                 array(0)
                             )
@@ -1007,7 +1007,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LogicalOr(
+                        'filter' => new Criterion\LogicalOperator\LogicalOr(
                             array(
                                 new Criterion\Field(
                                     'name',

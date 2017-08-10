@@ -10,8 +10,8 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalNot as LogicalNotCriterion;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as LogicalNotCriterion;
 
 /**
  * Parser for LogicalNot Criterion.
@@ -26,7 +26,7 @@ class LogicalNot extends CriterionParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalNot
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

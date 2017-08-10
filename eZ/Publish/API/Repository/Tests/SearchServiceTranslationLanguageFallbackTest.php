@@ -1487,7 +1487,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         list($repository, $data) = $context;
 
         $queryProperties = array(
-            'filter' => new Criterion\LogicalAnd(
+            'filter' => new Criterion\LogicalOperator\LogicalAnd(
                 array(
                     new Criterion\ContentTypeIdentifier('test-type'),
                     new Criterion\Subtree('/1/2/'),

@@ -51,7 +51,7 @@ class SearchServiceTest extends BaseTest
             ),
             1 => array(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\ContentId(
                                 array(1, 4, 10)
@@ -67,7 +67,7 @@ class SearchServiceTest extends BaseTest
             ),
             2 => array(
                 array(
-                    'filter' => new Criterion\LogicalOr(
+                    'filter' => new Criterion\LogicalOperator\LogicalOr(
                         array(
                             new Criterion\ContentId(
                                 array(1, 4, 10)
@@ -83,12 +83,12 @@ class SearchServiceTest extends BaseTest
             ),
             3 => array(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\ContentId(
                                 array(1, 4, 10)
                             ),
-                            new Criterion\LogicalNot(
+                            new Criterion\LogicalOperator\LogicalNot(
                                 new Criterion\ContentId(
                                     array(10, 12)
                                 )
@@ -101,14 +101,14 @@ class SearchServiceTest extends BaseTest
             ),
             4 => array(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\ContentId(
                                 array(1, 4, 10)
                             ),
-                            new Criterion\LogicalAnd(
+                            new Criterion\LogicalOperator\LogicalAnd(
                                 array(
-                                    new Criterion\LogicalNot(
+                                    new Criterion\LogicalOperator\LogicalNot(
                                         new Criterion\ContentId(
                                             array(10, 12)
                                         )
@@ -352,7 +352,7 @@ class SearchServiceTest extends BaseTest
             ),
             27 => array(
                 array(
-                    'filter' => new Criterion\LogicalOr(
+                    'filter' => new Criterion\LogicalOperator\LogicalOr(
                         array(
                             new Criterion\Field(
                                 'name',
@@ -2386,7 +2386,7 @@ class SearchServiceTest extends BaseTest
         if ($contentSearch) {
             $query = new Query(
                 array(
-                    'query' => new Criterion\LogicalAnd(
+                    'query' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\ContentTypeId($contentType->id),
                             $criterion,
@@ -2399,7 +2399,7 @@ class SearchServiceTest extends BaseTest
         } else {
             $query = new LocationQuery(
                 array(
-                    'query' => new Criterion\LogicalAnd(
+                    'query' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
                             new Criterion\ContentTypeId($contentType->id),
                             $criterion,
@@ -2702,7 +2702,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -2782,7 +2782,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -2878,7 +2878,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -2950,7 +2950,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -3051,7 +3051,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -3168,7 +3168,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -3278,7 +3278,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         $distanceCriterion,
@@ -3387,7 +3387,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeId($contentType->id),
                         new Criterion\MapLocationDistance(
@@ -3449,7 +3449,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ParentLocationId($designLocationId),
                         new Criterion\Location\IsMainLocation(
@@ -3493,7 +3493,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ParentLocationId($designLocationId),
                         new Criterion\Location\IsMainLocation(
@@ -3738,7 +3738,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                $queryType => new Criterion\LogicalAnd($criteria),
+                $queryType => new Criterion\LogicalOperator\LogicalAnd($criteria),
                 'sortClauses' => array(
                     new SortClause\ContentId(),
                 ),
@@ -3827,7 +3827,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                $queryType => new Criterion\LogicalAnd($criteria),
+                $queryType => new Criterion\LogicalOperator\LogicalAnd($criteria),
                 'sortClauses' => array(
                     new SortClause\Location\Id(),
                 ),

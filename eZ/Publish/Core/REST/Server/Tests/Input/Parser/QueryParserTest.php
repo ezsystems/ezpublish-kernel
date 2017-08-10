@@ -81,7 +81,7 @@ class QueryParserTest extends BaseTest
         $result = $parser->parse($inputArray, $parsingDispatcher);
 
         $expectedQuery = new Query();
-        $expectedQuery->filter = new Query\Criterion\LogicalAnd([
+        $expectedQuery->filter = new Query\Criterion\LogicalOperator\LogicalAnd([
             new Query\Criterion\ContentTypeIdentifier('article'),
             new Query\Criterion\ParentLocationId(762),
         ]);
@@ -139,7 +139,7 @@ class QueryParserTest extends BaseTest
         $result = $parser->parse($inputArray, $parsingDispatcher);
 
         $expectedQuery = new Query();
-        $expectedQuery->query = new Query\Criterion\LogicalAnd([
+        $expectedQuery->query = new Query\Criterion\LogicalOperator\LogicalAnd([
             new Query\Criterion\ContentTypeIdentifier('article'),
             new Query\Criterion\ParentLocationId(762),
         ]);

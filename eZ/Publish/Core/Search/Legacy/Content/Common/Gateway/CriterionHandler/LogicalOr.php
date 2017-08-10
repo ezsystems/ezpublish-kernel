@@ -28,7 +28,7 @@ class LogicalOr extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LogicalOr;
+        return $criterion instanceof Criterion\LogicalOperator\LogicalOr;
     }
 
     /**
@@ -50,7 +50,7 @@ class LogicalOr extends CriterionHandler
         array $languageSettings
     ) {
         $subexpressions = array();
-        /** @var Criterion\LogicalOr $criterion */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOr $criterion */
         foreach ($criterion->criteria as $subCriterion) {
             $subexpressions[] = $converter->convertCriteria(
                 $query,

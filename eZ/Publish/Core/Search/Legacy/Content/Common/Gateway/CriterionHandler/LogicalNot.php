@@ -28,7 +28,7 @@ class LogicalNot extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LogicalNot;
+        return $criterion instanceof Criterion\LogicalOperator\LogicalNot;
     }
 
     /**
@@ -49,7 +49,7 @@ class LogicalNot extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\LogicalNot $criterion */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalNot $criterion */
         return $query->expr->not(
             $converter->convertCriteria($query, $criterion->criteria[0], $languageSettings)
         );

@@ -17,8 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalNot;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Field as FieldSortClause;
@@ -1260,7 +1260,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         $query = new Query(
             array(
-                $criteriaProperty => new Criterion\LogicalAnd(
+                $criteriaProperty => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
                         $criterion,
@@ -1318,7 +1318,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         $query = new LocationQuery(
             array(
-                $criteriaProperty => new Criterion\LogicalAnd(
+                $criteriaProperty => new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
                         $criterion,

@@ -28,7 +28,7 @@ class LogicalNot extends CriterionVisitor
      */
     public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LogicalNot;
+        return $criterion instanceof Criterion\LogicalOperator\LogicalNot;
     }
 
     /**
@@ -40,7 +40,7 @@ class LogicalNot extends CriterionVisitor
      */
     protected function validateCriterionInput(CriterionInterface $criterion)
     {
-        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator */
         if (!isset($criterion->criteria[0]) || (count($criterion->criteria) > 1)) {
             throw new RuntimeException('Invalid aggregation in LogicalNot criterion.');
         }
@@ -59,7 +59,7 @@ class LogicalNot extends CriterionVisitor
     {
         $this->validateCriterionInput($criterion);
 
-        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator */
         return array(
             'not' => $dispatcher->dispatch($criterion->criteria[0], Dispatcher::CONTEXT_FILTER, $languageFilter),
         );
@@ -78,7 +78,7 @@ class LogicalNot extends CriterionVisitor
     {
         $this->validateCriterionInput($criterion);
 
-        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator */
         return array(
             'bool' => array(
                 'must_not' => $dispatcher->dispatch(

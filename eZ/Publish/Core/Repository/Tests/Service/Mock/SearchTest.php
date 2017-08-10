@@ -100,7 +100,7 @@ class SearchTest extends BaseServiceMockTest
             array(
                 new Query(
                     array(
-                        'query' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
                                 new Criterion\Location\Depth(Criterion\Operator::LT, 2),
                             )
@@ -153,7 +153,7 @@ class SearchTest extends BaseServiceMockTest
                 "Argument '\$filter' is invalid: Location criterions cannot be used in Content search",
             ),
             array(
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     array(
                         new Criterion\Location\Depth(Criterion\Operator::LT, 2),
                     )

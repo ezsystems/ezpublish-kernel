@@ -1,19 +1,18 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
 
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
- * Note that the class should ideally have been in a Logical namespace, but it would have then be named 'And',
- * and 'And' is a PHP reserved word.
+ * A class representing logical operator.
  */
 abstract class LogicalOperator implements CriterionInterface
 {
