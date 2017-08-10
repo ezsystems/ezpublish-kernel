@@ -57,7 +57,3 @@ class RemoveTranslationSignal extends Signal
     public $languageCode;
 }
 ```
-
-**NOTE:** Search engine reindexing and HttpCache refreshing **have to be done manually** after
-performing this operation, until SearchEngine and HttpCache have been gotten support for
-the corresponding `RemoveTranslationSignal`.
