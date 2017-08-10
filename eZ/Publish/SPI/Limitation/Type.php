@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\SPI\Limitation;
 
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
@@ -107,7 +108,7 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface|\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator
+     * @return CriterionInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser);
 

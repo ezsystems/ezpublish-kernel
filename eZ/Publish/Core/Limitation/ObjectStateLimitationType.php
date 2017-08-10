@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -222,7 +223,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface|\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator
+     * @return CriterionInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
