@@ -42,17 +42,15 @@ matrix:
     - php: 7.0
       env: BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" RUN_INSTALL=1 SYMFONY_ENV=behat
     - php: 7.0
-      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0"
-    - php: 7.0
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
 # 7.1
     - php: 7.1
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="^3.2.0"
-    - php: 7.1
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
-# hhvm - disabled, no need to enable before travis has newer versions avaiable
-#    - php: hhvm
-#      env: TEST_CONFIG="phpunit.xml"
+# 7.2
+    - php: 7.2
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 7.2
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0"
 
 
 # test only master, stable branches and pull requests
