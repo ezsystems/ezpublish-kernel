@@ -14,12 +14,12 @@ namespace eZ\Publish\Core\REST\Common\Output\Generator\Json;
  * Special JSON object (\stdClass) implementation, which allows to access the
  * parent object it is assigned to again.
  */
-class Object
+class JsonObject
 {
     /**
      * Reference to the parent node.
      *
-     * @var \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator\Json\JsonObject
      */
     protected $_ref_parent;
 
@@ -36,7 +36,7 @@ class Object
     /**
      * Get Parent of current node.
      *
-     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\JsonObject
      */
     public function getParent()
     {

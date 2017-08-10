@@ -21,7 +21,7 @@ class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
     /**
      * @var array
      */
-    private $where;
+    private $where = array();
 
     /**
      * Opens the query and sets the target table to $table.
