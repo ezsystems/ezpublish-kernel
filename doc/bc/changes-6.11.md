@@ -4,6 +4,11 @@ Changes affecting version compatibility with former or future versions.
 
 ## Changes
 
+- `eZ\Publish\Core\REST\Common\Output\Generator\Json\Object` renamed to `JsonObject`
+
+  For PHP 7.2 compatibility _(found when testing against beta2)_ we need to avoid uing the word `object` in class
+  names which has now been added as a keyword in the language and made avaiable as type hint for objects.
+
 ## Deprecations
 
 - EZP-26885: Field Type external storage

@@ -153,7 +153,7 @@ class ConnectionHandler implements DatabaseHandler
             $parsed['driver'] = $str;
         }
 
-        if (!count($dsn)) {
+        if (empty($dsn)) {
             return $parsed;
         }
 
