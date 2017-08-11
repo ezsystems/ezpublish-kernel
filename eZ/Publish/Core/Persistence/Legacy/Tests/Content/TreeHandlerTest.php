@@ -231,7 +231,7 @@ class TreeHandlerTest extends TestCase
         $treeHandler
             ->expects($this->once())
             ->method('changeMainLocation')
-            ->with(102, 203, 1, 204);
+            ->with(102, 203);
         $this->getLocationGatewayMock()
             ->expects($this->at(11))
             ->method('removeLocation')

@@ -195,9 +195,7 @@ class TreeHandler
 
                 $this->changeMainLocation(
                     $contentId,
-                    $newMainLocationRow['node_id'],
-                    $newMainLocationRow['contentobject_version'],
-                    $newMainLocationRow['parent_node_id']
+                    $newMainLocationRow['node_id']
                 );
             }
         }
