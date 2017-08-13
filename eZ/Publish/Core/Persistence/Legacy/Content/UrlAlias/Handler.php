@@ -803,6 +803,23 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
+     * Notifies the underlying engine that Locations Content Translation was removed.
+     *
+     * @param int[] $locationIds all Locations of the Content that got Translation removed
+     * @param string $languageCode language code of the removed Translation
+     */
+    public function translationRemoved(array $locationIds, $languageCode)
+    {
+        $languageId = $this->languageHandler->loadByLanguageCode($languageCode)->id;
+
+        $actions = [];
+        foreach ($locationIds as $locationId) {
+            $actions[] = 'eznode:' . $locationId;
+        }
+        $this->gateway->bulkRemoveTranslation($languageId, $actions);
+    }
+
+    /**
      * Recursively removes aliases by given $id and $action.
      *
      * $original parameter is used to limit removal of moved Location aliases to history entries only.

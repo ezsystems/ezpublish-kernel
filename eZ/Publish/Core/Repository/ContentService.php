@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -1939,6 +1940,13 @@ class ContentService implements ContentServiceInterface
         $this->repository->beginTransaction();
         try {
             $this->persistenceHandler->contentHandler()->removeTranslationFromContent($contentInfo->id, $languageCode);
+            $locationIds = array_map(
+                function (Location $location) {
+                    return $location->id;
+                },
+                $this->repository->getLocationService()->loadLocations($contentInfo)
+            );
+            $this->persistenceHandler->urlAliasHandler()->translationRemoved($locationIds, $languageCode);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
