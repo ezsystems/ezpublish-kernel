@@ -25,6 +25,8 @@ services:
         class: "%ezpublish.cache_pool.class%"
         arguments: ["@ezpublish.cache_pool.driver"]
 
+    # Note for tests: Default changed to in-memory Array cache in tests/common.yml by default, and opt in for redis
+    # testing is defined in containerBuilder.php
     ezpublish.cache_pool.driver:
         class: "%ezpublish.cache_pool.driver.class%"
         arguments: ["", 120]
