@@ -1901,23 +1901,6 @@ CREATE TABLE `ezsearch_object_word_link` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `ezsearch_return_count`
---
-
-DROP TABLE IF EXISTS `ezsearch_return_count`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ezsearch_return_count` (
-  `count` int(11) NOT NULL DEFAULT '0',
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `phrase_id` int(11) NOT NULL DEFAULT '0',
-  `time` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `ezsearch_return_cnt_ph_id_cnt` (`phrase_id`,`count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `ezsearch_search_phrase`
 --
 

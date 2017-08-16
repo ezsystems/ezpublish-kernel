@@ -12056,8 +12056,6 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'word_id' => '973',
     ),
   ),
-  'ezsearch_return_count' => array(
-  ),
   'ezsearch_search_phrase' => array(
   ),
   'ezsearch_word' => array(
