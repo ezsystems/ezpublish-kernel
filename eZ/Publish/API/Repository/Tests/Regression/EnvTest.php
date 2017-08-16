@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\Regression;
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * Test case to verify Integration tests are setup with the right instances.
@@ -34,7 +34,7 @@ class EnvTest extends BaseTest
         if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
             $this->assertInstanceOf(RedisAdapter::class, $innerPool);
         } else {
-            $this->assertInstanceOf(FilesystemAdapter::class, $innerPool);
+            $this->assertInstanceOf(ArrayAdapter::class, $innerPool);
         }
     }
 }
