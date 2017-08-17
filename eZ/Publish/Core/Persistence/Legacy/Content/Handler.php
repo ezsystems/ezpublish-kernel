@@ -587,20 +587,23 @@ class Handler implements BaseContentHandler
      */
     public function copy($contentId, $versionNo = null)
     {
+        $contentInfo = $this->loadContentInfo($contentId);
+
         $currentVersionNo = isset($versionNo) ?
             $versionNo :
-            $this->loadContentInfo($contentId)->currentVersionNo;
+            $contentInfo->currentVersionNo;
 
         // Copy content in given version or current version
         $createStruct = $this->mapper->createCreateStructFromContent(
-            $this->load($contentId, $currentVersionNo)
+            $this->load($contentId, $currentVersionNo),
+            !isset($versionNo)
         );
+
         $content = $this->internalCreate($createStruct, $currentVersionNo);
 
         // If version was not passed also copy other versions
         if (!isset($versionNo)) {
             $contentType = $this->contentTypeHandler->load($createStruct->typeId);
-
             foreach ($this->listVersions($contentId) as $versionInfo) {
                 if ($versionInfo->versionNo === $currentVersionNo) {
                     continue;
@@ -628,7 +631,6 @@ class Handler implements BaseContentHandler
                     );
                 }
             }
-
             // Batch copy relations for all versions
             $this->contentGateway->copyRelations($contentId, $content->versionInfo->contentInfo->id);
         } else {

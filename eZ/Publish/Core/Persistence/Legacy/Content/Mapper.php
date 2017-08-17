@@ -70,7 +70,9 @@ class Mapper
         $contentInfo->ownerId = $struct->ownerId;
         $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
-        $contentInfo->mainLanguageCode = $this->languageHandler->load($struct->initialLanguageId)->languageCode;
+        $contentInfo->mainLanguageCode = $this->languageHandler
+            ->load(isset($struct->mainLanguageId) ? $struct->mainLanguageId : $struct->initialLanguageId)
+            ->languageCode;
         $contentInfo->name = isset($struct->name[$contentInfo->mainLanguageCode])
             ? $struct->name[$contentInfo->mainLanguageCode]
             : '';
@@ -430,10 +432,11 @@ class Mapper
      * Creates CreateStruct from $content.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param bool $preserveMainLanguage
      *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
-    public function createCreateStructFromContent(Content $content)
+    public function createCreateStructFromContent(Content $content, $preserveMainLanguage = false)
     {
         $struct = new CreateStruct();
         $struct->name = $content->versionInfo->names;
@@ -444,6 +447,9 @@ class Mapper
         $struct->alwaysAvailable = $content->versionInfo->contentInfo->alwaysAvailable;
         $struct->remoteId = md5(uniqid(get_class($this), true));
         $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->initialLanguageCode)->id;
+        if ($preserveMainLanguage) {
+            $struct->mainLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->contentInfo->mainLanguageCode)->id;
+        }
         $struct->modified = time();
 
         foreach ($content->fields as $field) {

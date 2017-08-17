@@ -373,6 +373,29 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
+     */
+    public function testCreateCreateStructFromContentWithPreserveOriginalLanguage()
+    {
+        $time = time();
+        $mapper = $this->getMapper();
+
+        $content = $this->getContentExtractReference();
+        $content->versionInfo->contentInfo->mainLanguageCode = 'eng-GB';
+
+        $struct = $mapper->createCreateStructFromContent($content, true);
+
+        $this->assertInstanceOf(CreateStruct::class, $struct);
+        $this->assertStructsEqual($content->versionInfo->contentInfo, $struct, ['sectionId', 'ownerId']);
+        self::assertNotEquals($content->versionInfo->contentInfo->remoteId, $struct->remoteId);
+        self::assertSame($content->versionInfo->contentInfo->contentTypeId, $struct->typeId);
+        self::assertSame(2, $struct->initialLanguageId);
+        self::assertSame(4, $struct->mainLanguageId);
+        self::assertSame($content->versionInfo->contentInfo->alwaysAvailable, $struct->alwaysAvailable);
+        self::assertGreaterThanOrEqual($time, $struct->modified);
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
      * @dataProvider extractContentInfoFromRowProvider
      *
