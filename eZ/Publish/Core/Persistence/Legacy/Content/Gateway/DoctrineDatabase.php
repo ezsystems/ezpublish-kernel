@@ -120,7 +120,14 @@ class DoctrineDatabase extends Gateway
      */
     public function insertContentObject(CreateStruct $struct, $currentVersionNo = 1)
     {
-        $initialLanguageCode = $this->languageHandler->load($struct->initialLanguageId)->languageCode;
+        if (isset($struct->mainLanguageId)) {
+            $initialLanguageId = $struct->mainLanguageId;
+        } else {
+            $initialLanguageId = $struct->initialLanguageId;
+        }
+
+        $initialLanguageCode = $this->languageHandler->load($initialLanguageId)->languageCode;
+
         if (isset($struct->name[$initialLanguageCode])) {
             $name = $struct->name[$initialLanguageCode];
         } else {
@@ -150,7 +157,7 @@ class DoctrineDatabase extends Gateway
             $q->bindValue($struct->ownerId, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('initial_language_id'),
-            $q->bindValue($struct->initialLanguageId, null, \PDO::PARAM_INT)
+            $q->bindValue($initialLanguageId, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('remote_id'),
             $q->bindValue($struct->remoteId, null, \PDO::PARAM_STR)
@@ -168,7 +175,7 @@ class DoctrineDatabase extends Gateway
             $q->bindValue(
                 $this->generateLanguageMask(
                     $struct->fields,
-                    $this->languageHandler->load($struct->initialLanguageId)->languageCode,
+                    $initialLanguageCode,
                     $struct->alwaysAvailable
                 ),
                 null,
