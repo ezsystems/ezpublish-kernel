@@ -600,6 +600,7 @@ class Handler implements BaseContentHandler
         // If version was not passed also copy other versions
         if (!isset($versionNo)) {
             $contentType = $this->contentTypeHandler->load($createStruct->typeId);
+
             foreach ($this->listVersions($contentId) as $versionInfo) {
                 if ($versionInfo->versionNo === $currentVersionNo) {
                     continue;
