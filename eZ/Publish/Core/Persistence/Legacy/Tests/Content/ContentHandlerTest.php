@@ -1232,7 +1232,7 @@ class ContentHandlerTest extends TestCase
 
         $mapperMock->expects($this->once())
             ->method('createCreateStructFromContent')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'), true)
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'))
             ->will(
                 $this->returnValue($createStructStub)
             );

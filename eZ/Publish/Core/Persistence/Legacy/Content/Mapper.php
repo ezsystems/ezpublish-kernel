@@ -432,11 +432,10 @@ class Mapper
      * Creates CreateStruct from $content.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param bool $preserveMainLanguage
      *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
-    public function createCreateStructFromContent(Content $content, $preserveMainLanguage = false)
+    public function createCreateStructFromContent(Content $content)
     {
         $struct = new CreateStruct();
         $struct->name = $content->versionInfo->names;
@@ -447,9 +446,7 @@ class Mapper
         $struct->alwaysAvailable = $content->versionInfo->contentInfo->alwaysAvailable;
         $struct->remoteId = md5(uniqid(get_class($this), true));
         $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->initialLanguageCode)->id;
-        if ($preserveMainLanguage) {
-            $struct->mainLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->contentInfo->mainLanguageCode)->id;
-        }
+        $struct->mainLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->contentInfo->mainLanguageCode)->id;
         $struct->modified = time();
 
         foreach ($content->fields as $field) {
