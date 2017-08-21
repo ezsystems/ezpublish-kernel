@@ -400,4 +400,18 @@ class ExceptionConversion extends Gateway
             throw new \RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bulkRemoveTranslation($languageId, $actions)
+    {
+        try {
+            return $this->innerGateway->bulkRemoveTranslation($languageId, $actions);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
 }

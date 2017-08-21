@@ -160,4 +160,12 @@ interface Handler
      * @param mixed $locationId
      */
     public function locationDeleted($locationId);
+
+    /**
+     * Notifies the underlying engine that Locations Content Translation was removed.
+     *
+     * @param int[] $locationIds all Locations of the Content that got Translation removed
+     * @param string $languageCode language code of the removed Translation
+     */
+    public function translationRemoved(array $locationIds, $languageCode);
 }

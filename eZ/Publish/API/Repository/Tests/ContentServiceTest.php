@@ -5220,6 +5220,49 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test removal of the specific translation properly updates languages of the URL alias.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
+     */
+    public function testRemoveTranslationUpdatesUrlAlias()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $content = $this->createContentVersion2();
+        $mainLocation = $locationService->loadLocation($content->contentInfo->mainLocationId);
+
+        // create custom URL alias for Content main Location
+        $urlAliasService->createUrlAlias($mainLocation, '/my-custom-url', 'eng-GB');
+
+        // create secondary Location for Content
+        $secondaryLocation = $locationService->createLocation(
+            $content->contentInfo,
+            $locationService->newLocationCreateStruct(2)
+        );
+
+        // create custom URL alias for Content secondary Location
+        $urlAliasService->createUrlAlias($secondaryLocation, '/my-secondary-url', 'eng-GB');
+
+        // remove Translation
+        $contentService->removeTranslation($content->contentInfo, 'eng-GB');
+
+        foreach ([$mainLocation, $secondaryLocation] as $location) {
+            // check auto-generated URL aliases
+            foreach ($urlAliasService->listLocationAliases($location, false) as $alias) {
+                self::assertNotContains('eng-GB', $alias->languageCodes);
+            }
+
+            // check custom URL aliases
+            foreach ($urlAliasService->listLocationAliases($location) as $alias) {
+                self::assertNotContains('eng-GB', $alias->languageCodes);
+            }
+        }
+    }
+
+    /**
      * Test removal of a main translation throws BadStateException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
