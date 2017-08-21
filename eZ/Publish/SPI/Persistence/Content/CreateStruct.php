@@ -70,6 +70,15 @@ class CreateStruct extends ValueObject
     public $initialLanguageId;
 
     /**
+     * Optional, main language of the content, if not set $initialLanguageId will be used instead.
+     *
+     * Typical use is copy operations where content main language and version initial language might differ.
+     *
+     * @var mixed|null
+     */
+    public $mainLanguageId;
+
+    /**
      * Modification date.
      *
      * @var int
