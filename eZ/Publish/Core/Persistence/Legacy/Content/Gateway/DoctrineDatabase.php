@@ -120,12 +120,7 @@ class DoctrineDatabase extends Gateway
      */
     public function insertContentObject(CreateStruct $struct, $currentVersionNo = 1)
     {
-        if (isset($struct->mainLanguageId)) {
-            $initialLanguageId = $struct->mainLanguageId;
-        } else {
-            $initialLanguageId = $struct->initialLanguageId;
-        }
-
+        $initialLanguageId = !empty($struct->mainLanguageId) ? $struct->mainLanguageId : $struct->initialLanguageId;
         $initialLanguageCode = $this->languageHandler->load($initialLanguageId)->languageCode;
 
         if (isset($struct->name[$initialLanguageCode])) {
