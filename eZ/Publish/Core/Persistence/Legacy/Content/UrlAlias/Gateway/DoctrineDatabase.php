@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
@@ -1125,5 +1126,38 @@ class DoctrineDatabase extends Gateway
         }
 
         return $languageId;
+    }
+
+    /**
+     * Removes languageId of removed translation from lang_mask and deletes single language rows for multiple Locations.
+     *
+     * Note: URL aliases are not historized as translation removal from all Versions is permanent w/o preserving history.
+     *
+     * @param int $languageId Language Id to be removed
+     * @param string[] $actions actions for which to perform the update
+     */
+    public function bulkRemoveTranslation($languageId, $actions)
+    {
+        $connection = $this->dbHandler->getConnection();
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $query = $connection->createQueryBuilder();
+        $query
+            ->update($connection->quoteIdentifier($this->table))
+            // parameter for bitwise operation has to be placed verbatim (w/o binding) for this to work cross-DBMS
+            ->set('lang_mask', 'lang_mask & ~ ' . $languageId)
+            ->where('action IN (:actions)')
+            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY)
+        ;
+        $query->execute();
+
+        // cleanup: delete single language rows (including alwaysAvailable)
+        $query = $connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where('action IN (:actions)')
+            ->andWhere('lang_mask IN (0, 1)')
+            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY)
+        ;
+        $query->execute();
     }
 }

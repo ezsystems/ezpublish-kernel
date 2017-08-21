@@ -227,4 +227,12 @@ abstract class Gateway
      * @return int
      */
     abstract public function getLocationContentMainLanguageId($locationId);
+
+    /**
+     * Removes languageId of removed translation from lang_mask and deletes single language rows for multiple Locations.
+     *
+     * @param int $languageId Language Id to be removed
+     * @param string[] $actions actions for which to perform the update
+     */
+    abstract public function bulkRemoveTranslation($languageId, $actions);
 }
