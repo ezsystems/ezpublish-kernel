@@ -70,7 +70,9 @@ class Mapper
         $contentInfo->ownerId = $struct->ownerId;
         $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
-        $contentInfo->mainLanguageCode = $this->languageHandler->load($struct->initialLanguageId)->languageCode;
+        $contentInfo->mainLanguageCode = $this->languageHandler
+            ->load(isset($struct->mainLanguageId) ? $struct->mainLanguageId : $struct->initialLanguageId)
+            ->languageCode;
         $contentInfo->name = isset($struct->name[$contentInfo->mainLanguageCode])
             ? $struct->name[$contentInfo->mainLanguageCode]
             : '';
@@ -444,6 +446,7 @@ class Mapper
         $struct->alwaysAvailable = $content->versionInfo->contentInfo->alwaysAvailable;
         $struct->remoteId = md5(uniqid(get_class($this), true));
         $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->initialLanguageCode)->id;
+        $struct->mainLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->contentInfo->mainLanguageCode)->id;
         $struct->modified = time();
 
         foreach ($content->fields as $field) {
