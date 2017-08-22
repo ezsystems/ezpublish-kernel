@@ -1052,6 +1052,56 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test FullText Criterion works properly for multilingual Content.
+     *
+     * @dataProvider getLanguagesFilter
+     * @param array $languagesFilter
+     */
+    public function testFullTextSearchForMultilingualContent(array $languagesFilter)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $searchService = $repository->getSearchService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $this->createTestContentType();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $contentCreateStruct->setField('name', 'contentGB', 'eng-GB');
+        $contentCreateStruct->setField('name', 'contentUS', 'eng-US');
+
+        $contentDraft = $contentService->createContent(
+            $contentCreateStruct,
+            [$locationService->newLocationCreateStruct(2)]
+        );
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $this->refreshSearch($repository);
+
+        $query = new Query(
+            [
+                'query' => new Query\Criterion\FullText('contentUS'),
+            ]
+        );
+
+        $result = $searchService->findContent($query, ['languages' => $languagesFilter]);
+
+        self::assertEquals(1, $result->totalCount);
+        self::assertEquals($publishedContent->id, $result->searchHits[0]->valueObject->id);
+    }
+
+    /**
+     * Data provider returning languages filter (prioritized languages list).
+     */
+    public function getLanguagesFilter()
+    {
+        return [
+            [[]],
+            [['eng-US', 'eng-GB']],
+        ];
+    }
+
+    /**
      * Will create if not exists a simple content type for test purposes with just one required field name.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
