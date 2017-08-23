@@ -942,4 +942,22 @@ class URLAliasServiceTest extends BaseTest
         $loadedAlias = $urlAliasService->lookUp('/Contact-Us', 'ger-DE');
         /* END: Use Case */
     }
+
+    /**
+     * Test for the lookUp() method.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::lookUp($url, $languageCode)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testLookUpThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Throws InvalidArgumentException
+        $loadedAlias = $urlAliasService->lookUp(str_repeat('/1', 99), 'ger-DE');
+        /* END: Use Case */
+    }
 }
