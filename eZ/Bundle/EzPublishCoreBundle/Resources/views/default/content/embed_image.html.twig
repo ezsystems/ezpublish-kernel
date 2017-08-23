@@ -4,6 +4,6 @@
     {{ ez_render_field(
        content,
        image_field_identifier,
-       { parameters: { alias: objectParameters.size } }
+       { parameters: { alias: objectParameters.size|default('original') } }
     ) }}
 {% endif %}
