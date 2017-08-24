@@ -608,6 +608,7 @@ class URLAliasService implements URLAliasServiceInterface
      * looks up the URLAlias for the given url.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path exceeded maximum depth level
      *
      * @param string $url
      * @param string $languageCode

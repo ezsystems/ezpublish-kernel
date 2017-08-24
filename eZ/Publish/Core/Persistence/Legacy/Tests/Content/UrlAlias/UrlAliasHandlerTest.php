@@ -70,6 +70,22 @@ class UrlAliasHandlerTest extends TestCase
         $handler->lookup('wooden/iron');
     }
 
+    /**
+     * Test for the lookup() method.
+     *
+     * Trying to lookup URL alias with exceeded path segments limit
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @group location
+     * @group case-correction
+     */
+    public function testLookupThrowsInvalidArgumentException()
+    {
+        $handler = $this->getHandler();
+        $handler->lookup(str_repeat('/1', 99));
+    }
+
     public function providerForTestLookupLocationUrlAlias()
     {
         return array(

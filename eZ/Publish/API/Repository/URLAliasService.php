@@ -100,6 +100,7 @@ interface URLAliasService
      * @param string $languageCode
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path exceeded maximum depth level
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
