@@ -8,6 +8,7 @@
  */
 namespace EzSystems\PlatformInstallerBundle;
 
+use EzSystems\PlatformInstallerBundle\DependencyInjection\Compiler\DatabaseInstallerTagPass;
 use EzSystems\PlatformInstallerBundle\DependencyInjection\Compiler\InstallerTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -18,5 +19,6 @@ class EzSystemsPlatformInstallerBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new InstallerTagPass());
+        $container->addCompilerPass(new DatabaseInstallerTagPass());
     }
 }
