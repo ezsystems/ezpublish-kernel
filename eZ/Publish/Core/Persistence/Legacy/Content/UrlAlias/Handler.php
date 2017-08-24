@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
@@ -33,6 +34,11 @@ class Handler implements UrlAliasHandlerInterface
      * @deprecated
      */
     const CONTENT_REPOSITORY_ROOT_LOCATION_ID = 2;
+
+    /**
+     * The maximum level of alias depth.
+     */
+    const MAX_URL_ALIAS_DEPTH_LEVEL = 60;
 
     /**
      * UrlAlias Gateway.
@@ -491,6 +497,7 @@ class Handler implements UrlAliasHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \RuntimeException
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
      * @param string $url
      *
@@ -503,12 +510,16 @@ class Handler implements UrlAliasHandlerInterface
             $urlHashes[$level] = $this->getHash($text);
         }
 
+        $pathDepth = count($urlHashes);
+        if ($pathDepth > self::MAX_URL_ALIAS_DEPTH_LEVEL) {
+            throw new InvalidArgumentException('$urlHashes', 'Exceeded maximum depth level of content url alias.');
+        }
+
         $data = $this->gateway->loadUrlAliasData($urlHashes);
         if (empty($data)) {
             throw new NotFoundException('URLAlias', $url);
         }
 
-        $pathDepth = count($urlHashes);
         $hierarchyData = array();
         $isPathHistory = false;
         for ($level = 0; $level < $pathDepth; ++$level) {
