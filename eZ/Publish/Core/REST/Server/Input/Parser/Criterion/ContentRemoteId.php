@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\RemoteId as ContentRemoteIdCriterion;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId as ContentRemoteIdCriterion;
 
 /**
  * Parser for RemoteId Criterion.
@@ -26,7 +26,7 @@ class ContentRemoteId extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId
+     * @return ContentRemoteIdCriterion
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

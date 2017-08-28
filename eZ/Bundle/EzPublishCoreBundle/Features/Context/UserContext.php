@@ -101,12 +101,12 @@ class UserContext implements Context
     public function searchUserGroups($name, $parentLocationId = null)
     {
         $criterionArray = array(
-            new Criterion\Subtree(self::USERGROUP_ROOT_SUBTREE),
-            new Criterion\ContentTypeIdentifier(self::USERGROUP_CONTENT_IDENTIFIER),
-            new Criterion\Field('name', Criterion\Operator::EQ, $name),
+            new Criterion\Matcher\Subtree(self::USERGROUP_ROOT_SUBTREE),
+            new Criterion\Matcher\ContentTypeIdentifier(self::USERGROUP_CONTENT_IDENTIFIER),
+            new Criterion\Matcher\Field('name', Criterion\Operator::EQ, $name),
         );
         if ($parentLocationId) {
-            $criterionArray[] = new Criterion\ParentLocationId($parentLocationId);
+            $criterionArray[] = new Criterion\Matcher\ParentLocationId($parentLocationId);
         }
         $query = new Query();
         $query->filter = new Criterion\LogicalOperator\LogicalAnd($criterionArray);

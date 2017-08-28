@@ -28,7 +28,7 @@ class SectionId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\SectionId;
+        return $criterion instanceof Criterion\Matcher\SectionId;
     }
 
     /**
@@ -49,7 +49,7 @@ class SectionId extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\SectionId $criterion */
+        /** @var Criterion\Matcher\SectionId $criterion */
         return $query->expr->in(
             $this->dbHandler->quoteColumn('section_id', 'ezcontentobject'),
             $criterion->value

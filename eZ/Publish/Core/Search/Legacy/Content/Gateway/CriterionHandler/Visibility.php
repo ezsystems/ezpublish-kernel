@@ -28,7 +28,7 @@ class Visibility extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Visibility;
+        return $criterion instanceof Criterion\Matcher\Visibility;
     }
 
     /**
@@ -56,8 +56,8 @@ class Visibility extends CriterionHandler
     ) {
         $subSelect = $query->subSelect();
 
-        /** @var Criterion\Visibility $criterion */
-        if ($criterion->value[0] === Criterion\Visibility::VISIBLE) {
+        /** @var Criterion\Matcher\Visibility $criterion */
+        if ($criterion->value[0] === Criterion\Matcher\Visibility::VISIBLE) {
             $expression = $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('is_hidden', 'ezcontentobject_tree'),

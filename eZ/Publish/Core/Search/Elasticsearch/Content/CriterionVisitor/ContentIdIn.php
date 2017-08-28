@@ -29,7 +29,7 @@ class ContentIdIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\ContentId &&
+            $criterion instanceof Criterion\Matcher\ContentId &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -47,7 +47,7 @@ class ContentIdIn extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\ContentId $criterion */
+        /** @var Criterion\Matcher\ContentId $criterion */
         return array(
             'ids' => array(
                 'type' => 'content',

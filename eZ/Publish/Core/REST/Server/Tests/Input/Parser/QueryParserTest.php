@@ -44,14 +44,14 @@ class QueryParserTest extends BaseTest
             ->expects($this->once())
             ->method('parse')
             ->with(['ContentTypeIdentifierCriterion' => 'article'])
-            ->will($this->returnValue(new Query\Criterion\ContentTypeIdentifier('article')));
+            ->will($this->returnValue(new Query\Criterion\Matcher\ContentTypeIdentifier('article')));
 
         $parser = $this->getParser();
 
         $result = $parser->parse($inputArray, $parsingDispatcher);
 
         $expectedQuery = new Query();
-        $expectedQuery->filter = new Query\Criterion\ContentTypeIdentifier('article');
+        $expectedQuery->filter = new Query\Criterion\Matcher\ContentTypeIdentifier('article');
 
         $this->assertEquals($expectedQuery, $result);
     }
@@ -69,12 +69,12 @@ class QueryParserTest extends BaseTest
             ->expects($this->at(0))
             ->method('parse')
             ->with(['ContentTypeIdentifierCriterion' => 'article'])
-            ->will($this->returnValue(new Query\Criterion\ContentTypeIdentifier('article')));
+            ->will($this->returnValue(new Query\Criterion\Matcher\ContentTypeIdentifier('article')));
         $parsingDispatcher
             ->expects($this->at(1))
             ->method('parse')
             ->with(['ParentLocationIdCriterion' => 762])
-            ->will($this->returnValue(new Query\Criterion\ParentLocationId(762)));
+            ->will($this->returnValue(new Query\Criterion\Matcher\ParentLocationId(762)));
 
         $parser = $this->getParser();
 
@@ -82,8 +82,8 @@ class QueryParserTest extends BaseTest
 
         $expectedQuery = new Query();
         $expectedQuery->filter = new Query\Criterion\LogicalOperator\LogicalAnd([
-            new Query\Criterion\ContentTypeIdentifier('article'),
-            new Query\Criterion\ParentLocationId(762),
+            new Query\Criterion\Matcher\ContentTypeIdentifier('article'),
+            new Query\Criterion\Matcher\ParentLocationId(762),
         ]);
 
         $this->assertEquals($expectedQuery, $result);
@@ -102,14 +102,14 @@ class QueryParserTest extends BaseTest
             ->expects($this->once())
             ->method('parse')
             ->with(['ContentTypeIdentifierCriterion' => 'article'])
-            ->will($this->returnValue(new Query\Criterion\ContentTypeIdentifier('article')));
+            ->will($this->returnValue(new Query\Criterion\Matcher\ContentTypeIdentifier('article')));
 
         $parser = $this->getParser();
 
         $result = $parser->parse($inputArray, $parsingDispatcher);
 
         $expectedQuery = new Query();
-        $expectedQuery->query = new Query\Criterion\ContentTypeIdentifier('article');
+        $expectedQuery->query = new Query\Criterion\Matcher\ContentTypeIdentifier('article');
 
         $this->assertEquals($expectedQuery, $result);
     }
@@ -127,12 +127,12 @@ class QueryParserTest extends BaseTest
             ->expects($this->at(0))
             ->method('parse')
             ->with(['ContentTypeIdentifierCriterion' => 'article'])
-            ->will($this->returnValue(new Query\Criterion\ContentTypeIdentifier('article')));
+            ->will($this->returnValue(new Query\Criterion\Matcher\ContentTypeIdentifier('article')));
         $parsingDispatcher
             ->expects($this->at(1))
             ->method('parse')
             ->with(['ParentLocationIdCriterion' => 762])
-            ->will($this->returnValue(new Query\Criterion\ParentLocationId(762)));
+            ->will($this->returnValue(new Query\Criterion\Matcher\ParentLocationId(762)));
 
         $parser = $this->getParser();
 
@@ -140,8 +140,8 @@ class QueryParserTest extends BaseTest
 
         $expectedQuery = new Query();
         $expectedQuery->query = new Query\Criterion\LogicalOperator\LogicalAnd([
-            new Query\Criterion\ContentTypeIdentifier('article'),
-            new Query\Criterion\ParentLocationId(762),
+            new Query\Criterion\Matcher\ContentTypeIdentifier('article'),
+            new Query\Criterion\Matcher\ParentLocationId(762),
         ]);
 
         $this->assertEquals($expectedQuery, $result);

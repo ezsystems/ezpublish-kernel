@@ -28,7 +28,7 @@ class ContentTypeGroupId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\ContentTypeGroupId;
+        return $criterion instanceof Criterion\Matcher\ContentTypeGroupId;
     }
 
     /**
@@ -50,7 +50,7 @@ class ContentTypeGroupId extends CriterionHandler
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
-        /** @var Criterion\ContentTypeGroupId $criterion */
+        /** @var Criterion\Matcher\ContentTypeGroupId $criterion */
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentclass_id')

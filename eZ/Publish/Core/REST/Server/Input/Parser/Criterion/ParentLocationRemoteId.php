@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ParentLocationId as ParentLocationIdCriterion;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as ParentLocationIdCriterion;
 
 /**
  * Parser for ParentLocationId Criterion.
@@ -39,7 +39,7 @@ class ParentLocationRemoteId extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId
+     * @return ParentLocationIdCriterion
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

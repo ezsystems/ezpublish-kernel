@@ -157,11 +157,11 @@ class ContentTypeLimitationType extends AbstractPersistenceLimitationType implem
 
         if (!isset($value->limitationValues[1])) {
             // 1 limitation value: EQ operation
-            return new Criterion\ContentTypeId($value->limitationValues[0]);
+            return new Criterion\Matcher\ContentTypeId($value->limitationValues[0]);
         }
 
         // several limitation values: IN operation
-        return new Criterion\ContentTypeId($value->limitationValues);
+        return new Criterion\Matcher\ContentTypeId($value->limitationValues);
     }
 
     /**

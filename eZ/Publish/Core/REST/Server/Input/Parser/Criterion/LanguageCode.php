@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\LanguageCode as LanguageCodeCriterion;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode as LanguageCodeCriterion;
 
 /**
  * Parser for LanguageCode Criterion.
@@ -26,7 +26,7 @@ class LanguageCode extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode
+     * @return LanguageCodeCriterion
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

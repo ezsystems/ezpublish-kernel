@@ -635,7 +635,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $query = new Query();
         $query->filter = new Criterion\LogicalOperator\LogicalAnd(
             array(
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
+                new Criterion\Matcher\Field('title', Criterion\Operator::LIKE, '*'),
             )
         );
 
@@ -673,7 +673,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $query = new Query();
         $query->filter = new Criterion\LogicalOperator\LogicalAnd(
             array(
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
+                new Criterion\Matcher\Field('title', Criterion\Operator::LIKE, '*'),
             )
         );
 
@@ -715,7 +715,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $query = new Query();
         $query->filter = new Criterion\LogicalOperator\LogicalAnd(
             array(
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
+                new Criterion\Matcher\Field('title', Criterion\Operator::LIKE, '*'),
             )
         );
 

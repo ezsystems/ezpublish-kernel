@@ -29,7 +29,7 @@ class CustomFieldIn extends CustomField
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\CustomField &&
+            $criterion instanceof Criterion\Matcher\CustomField &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ ||
@@ -46,7 +46,7 @@ class CustomFieldIn extends CustomField
      */
     protected function getCondition(CriterionInterface $criterion)
     {
-        /** @var Criterion\CustomField $criterion */
+        /** @var Criterion\Matcher\CustomField $criterion */
         $terms = array();
         $values = (array)$criterion->value;
 

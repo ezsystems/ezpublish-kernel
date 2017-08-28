@@ -120,7 +120,7 @@ class FullText extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\FullText;
+        return $criterion instanceof Criterion\Matcher\FullText;
     }
 
     /**
@@ -232,7 +232,7 @@ class FullText extends CriterionHandler
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
-        /** @var Criterion\FullText $criterion */
+        /** @var Criterion\Matcher\FullText $criterion */
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentobject_id')

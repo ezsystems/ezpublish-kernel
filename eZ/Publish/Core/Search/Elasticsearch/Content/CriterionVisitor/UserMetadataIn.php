@@ -30,7 +30,7 @@ class UserMetadataIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\UserMetadata &&
+            $criterion instanceof Criterion\Matcher\UserMetadata &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -50,17 +50,17 @@ class UserMetadataIn extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\UserMetadata $criterion */
+        /** @var Criterion\Matcher\UserMetadata $criterion */
         switch ($criterion->target) {
-            case Criterion\UserMetadata::MODIFIER:
+            case Criterion\Matcher\UserMetadata::MODIFIER:
                 $fieldName = 'creator_id';
                 break;
 
-            case Criterion\UserMetadata::OWNER:
+            case Criterion\Matcher\UserMetadata::OWNER:
                 $fieldName = 'owner_id';
                 break;
 
-            case Criterion\UserMetadata::GROUP:
+            case Criterion\Matcher\UserMetadata::GROUP:
                 $fieldName = 'owner_user_group_mid';
                 break;
 

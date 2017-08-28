@@ -226,7 +226,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(),
@@ -254,7 +254,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -282,7 +282,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -310,7 +310,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
+                    'filter' => new Criterion\Matcher\SectionId(array(4, 2, 6, 3)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -356,7 +356,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
+                    'filter' => new Criterion\Matcher\SectionId(array(4, 2, 6, 3)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -410,7 +410,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\SectionId(array(2, 3)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2, 3)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -440,8 +440,8 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                 array(
                     'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
-                            new Criterion\SectionId(array(1)),
-                            new Criterion\ContentTypeIdentifier(array('article')),
+                            new Criterion\Matcher\SectionId(array(1)),
+                            new Criterion\Matcher\ContentTypeIdentifier(array('article')),
                         )
                     ),
                     'offset' => 0,
@@ -510,8 +510,8 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                 array(
                     'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
-                            new Criterion\SectionId(array(1)),
-                            new Criterion\ContentTypeIdentifier('product'),
+                            new Criterion\Matcher\SectionId(array(1)),
+                            new Criterion\Matcher\ContentTypeIdentifier('product'),
                         )
                     ),
                     'offset' => 0,

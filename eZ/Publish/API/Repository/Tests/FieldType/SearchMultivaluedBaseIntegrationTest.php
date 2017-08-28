@@ -9,8 +9,8 @@
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalNot;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Field;
 
 /**
  * Integration test for searching and sorting with Field criterion and Field sort clause.

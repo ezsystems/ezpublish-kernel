@@ -29,7 +29,7 @@ class LanguageCodeIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\LanguageCode &&
+            $criterion instanceof Criterion\Matcher\LanguageCode &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -45,7 +45,7 @@ class LanguageCodeIn extends CriterionVisitor
      */
     protected function getCondition(CriterionInterface $criterion)
     {
-        /** @var Criterion\LanguageCode $criterion */
+        /** @var Criterion\Matcher\LanguageCode $criterion */
         if (count($criterion->value) > 1) {
             return array(
                 'terms' => array(
@@ -74,7 +74,7 @@ class LanguageCodeIn extends CriterionVisitor
     {
         $filter = $this->getCondition($criterion);
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode $criterion */
+        /** @var Criterion\Matcher\LanguageCode $criterion */
         if ($criterion->matchAlwaysAvailable) {
             $filter = array(
                 'or' => array(
@@ -104,7 +104,7 @@ class LanguageCodeIn extends CriterionVisitor
     {
         $filter = $this->getCondition($criterion);
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode $criterion */
+        /** @var Criterion\Matcher\LanguageCode $criterion */
         if ($criterion->matchAlwaysAvailable) {
             $filter = array(
                 'bool' => array(

@@ -21,6 +21,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Test Case for LimitationType.
@@ -471,7 +472,7 @@ class SectionLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId', $criterion);
+        self::assertInstanceOf(Criterion\Matcher\SectionId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
@@ -490,7 +491,7 @@ class SectionLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId', $criterion);
+        self::assertInstanceOf(Criterion\Matcher\SectionId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);

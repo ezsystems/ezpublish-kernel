@@ -137,7 +137,7 @@ class BlockingLimitationType implements SPILimitationTypeInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
-        return new Criterion\MatchNone();
+        return new Criterion\Matcher\MatchNone();
     }
 
     /**

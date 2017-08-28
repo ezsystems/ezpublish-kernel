@@ -18,6 +18,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Limitation\ContentTypeLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Test Case for LimitationType.
@@ -420,7 +421,7 @@ class ContentTypeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId', $criterion);
+        self::assertInstanceOf(Criterion\Matcher\ContentTypeId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
@@ -439,7 +440,7 @@ class ContentTypeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId', $criterion);
+        self::assertInstanceOf(Criterion\Matcher\ContentTypeId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);

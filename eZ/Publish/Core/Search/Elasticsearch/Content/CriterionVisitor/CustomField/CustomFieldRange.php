@@ -31,7 +31,7 @@ class CustomFieldRange extends CustomField
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\CustomField &&
+            $criterion instanceof Criterion\Matcher\CustomField &&
             (
                 $criterion->operator === Operator::LT ||
                 $criterion->operator === Operator::LTE ||
@@ -50,7 +50,7 @@ class CustomFieldRange extends CustomField
      */
     protected function getCondition(CriterionInterface $criterion)
     {
-        /** @var Criterion\CustomField $criterion */
+        /** @var Criterion\Matcher\CustomField $criterion */
         $values = (array)$criterion->value;
         $start = $values[0];
         $end = isset($values[1]) ? $values[1] : null;

@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
@@ -68,7 +68,7 @@ abstract class Handler
      * @throws \RuntimeException If operator is not handled.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $matcher
+     * @param Matcher $matcher
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression

@@ -29,7 +29,7 @@ class DateMetadata extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\DateMetadata;
+        return $criterion instanceof Criterion\Matcher\DateMetadata;
     }
 
     /**
@@ -50,9 +50,9 @@ class DateMetadata extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\DateMetadata $criterion */
+        /** @var Criterion\Matcher\DateMetadata $criterion */
         $column = $this->dbHandler->quoteColumn(
-            $criterion->target === Criterion\DateMetadata::MODIFIED ? 'modified' : 'published',
+            $criterion->target === Criterion\Matcher\DateMetadata::MODIFIED ? 'modified' : 'published',
             'ezcontentobject'
         );
 

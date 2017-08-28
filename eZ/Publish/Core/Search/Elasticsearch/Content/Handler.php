@@ -87,8 +87,8 @@ class Handler implements SearchHandlerInterface
      */
     public function findContent(Query $query, array $languageFilter = array())
     {
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
-        $query->query = $query->query ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
+        $query->query = $query->query ?: new Criterion\Matcher\MatchAll();
 
         $data = $this->gateway->find($query, $this->contentDocumentTypeIdentifier, $languageFilter);
 
@@ -146,8 +146,8 @@ class Handler implements SearchHandlerInterface
      */
     public function findLocations(LocationQuery $query, array $languageFilter = array())
     {
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
-        $query->query = $query->query ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
+        $query->query = $query->query ?: new Criterion\Matcher\MatchAll();
 
         $data = $this->locationGateway->find($query, $this->locationDocumentTypeIdentifier);
 

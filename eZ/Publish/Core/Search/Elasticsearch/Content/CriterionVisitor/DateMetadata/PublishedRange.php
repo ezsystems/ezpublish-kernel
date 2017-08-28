@@ -29,7 +29,7 @@ class PublishedRange extends DateMetadata
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\DateMetadata &&
+            $criterion instanceof Criterion\Matcher\DateMetadata &&
             $criterion->target === 'created' &&
             (
                 $criterion->operator === Operator::LT ||
@@ -51,7 +51,7 @@ class PublishedRange extends DateMetadata
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\DateMetadata $criterion */
+        /** @var Criterion\Matcher\DateMetadata $criterion */
         $start = $this->getNativeTime($criterion->value[0]);
         $end = isset($criterion->value[1]) ? $this->getNativeTime($criterion->value[1]) : null;
 

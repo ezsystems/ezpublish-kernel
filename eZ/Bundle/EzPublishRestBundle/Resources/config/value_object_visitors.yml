@@ -863,4 +863,4 @@ services:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: 'eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Criterion\ContentTypeIdentifier'
         tags:
-            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier }
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ContentTypeIdentifier }

@@ -29,7 +29,7 @@ class DepthRange extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\Location\Depth &&
+            $criterion instanceof Criterion\Matcher\Location\Depth &&
             (
                 $criterion->operator === Operator::LT ||
                 $criterion->operator === Operator::LTE ||
@@ -52,7 +52,7 @@ class DepthRange extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\Location\Depth $criterion */
+        /** @var Criterion\Matcher\Location\Depth $criterion */
         $start = $criterion->value[0];
         $end = isset($criterion->value[1]) ? $criterion->value[1] : null;
 

@@ -29,7 +29,7 @@ class UserMetadata extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\UserMetadata;
+        return $criterion instanceof Criterion\Matcher\UserMetadata;
     }
 
     /**
@@ -50,15 +50,15 @@ class UserMetadata extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\UserMetadata $criterion */
+        /** @var Criterion\Matcher\UserMetadata $criterion */
         switch ($criterion->target) {
-            case Criterion\UserMetadata::MODIFIER:
+            case Criterion\Matcher\UserMetadata::MODIFIER:
                 return $query->expr->in(
                     $this->dbHandler->quoteColumn('creator_id', 'ezcontentobject_version'),
                     $criterion->value
                 );
 
-            case Criterion\UserMetadata::GROUP:
+            case Criterion\Matcher\UserMetadata::GROUP:
                 $subSelect = $query->subSelect();
                 $subSelect
                     ->select(
@@ -92,7 +92,7 @@ class UserMetadata extends CriterionHandler
                     $subSelect
                 );
 
-            case Criterion\UserMetadata::OWNER:
+            case Criterion\Matcher\UserMetadata::OWNER:
                 return $query->expr->in(
                     $this->dbHandler->quoteColumn('owner_id', 'ezcontentobject'),
                     $criterion->value

@@ -164,11 +164,11 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
 
         if (!isset($value->limitationValues[1])) {
             // 1 limitation value: EQ operation
-            return new Criterion\LanguageCode($value->limitationValues[0]);
+            return new Criterion\Matcher\LanguageCode($value->limitationValues[0]);
         }
 
         // several limitation values: IN operation
-        return new Criterion\LanguageCode($value->limitationValues);
+        return new Criterion\Matcher\LanguageCode($value->limitationValues);
     }
 
     /**

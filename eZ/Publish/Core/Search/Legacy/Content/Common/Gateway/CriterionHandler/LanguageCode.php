@@ -47,7 +47,7 @@ class LanguageCode extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LanguageCode;
+        return $criterion instanceof Criterion\Matcher\LanguageCode;
     }
 
     /**
@@ -68,8 +68,8 @@ class LanguageCode extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
+        /** @var $criterion Criterion\Matcher\LanguageCode */
         $languages = array_flip($criterion->value);
-        /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode */
         $languages['always-available'] = $criterion->matchAlwaysAvailable;
 
         return $query->expr->gt(

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata as UserMetadataCriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\UserMetadata as UserMetadataCriterion;
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata;
 use eZ\Publish\Core\REST\Server\Tests\Input\Parser\BaseTest;
 

@@ -29,7 +29,7 @@ class PublishedIn extends DateMetadata
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\DateMetadata &&
+            $criterion instanceof Criterion\Matcher\DateMetadata &&
             $criterion->target === 'created' &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
@@ -48,7 +48,7 @@ class PublishedIn extends DateMetadata
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\DateMetadata $criterion */
+        /** @var Criterion\Matcher\DateMetadata $criterion */
         if (count($criterion->value) > 1) {
             $that = $this;
             $filter = array(

@@ -51,6 +51,6 @@ trait Views
     public function iSetTheFilterPropertyOfTheQuery($field)
     {
         // @todo this could be improved if setFieldToValue used PropertyAccessor.
-        $this->requestObject->contentQuery->$field = new Criterion\ContentTypeIdentifier('folder');
+        $this->requestObject->contentQuery->$field = new Criterion\Matcher\ContentTypeIdentifier('folder');
     }
 }

@@ -29,7 +29,7 @@ class DepthIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\Location\Depth &&
+            $criterion instanceof Criterion\Matcher\Location\Depth &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -49,7 +49,7 @@ class DepthIn extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\Location\Depth $criterion */
+        /** @var Criterion\Matcher\Location\Depth $criterion */
         return array(
             'terms' => array(
                 'depth_i' => $criterion->value,

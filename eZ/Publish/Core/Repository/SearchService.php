@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location as LocationCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Location\Location as LocationCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location as LocationSortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
@@ -172,7 +172,7 @@ class SearchService implements SearchServiceInterface
         }
 
         $query = clone $query;
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
 
         $this->validateContentCriteria(array($query->query), '$query');
         $this->validateContentCriteria(array($query->filter), '$query');
@@ -302,7 +302,7 @@ class SearchService implements SearchServiceInterface
         }
 
         $query = clone $query;
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
 
         if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
             return new SearchResult(array('time' => 0, 'totalCount' => 0));

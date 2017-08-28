@@ -10,7 +10,7 @@ namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**

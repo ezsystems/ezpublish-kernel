@@ -29,7 +29,7 @@ class PriorityRange extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\Location\Priority &&
+            $criterion instanceof Criterion\Matcher\Location\Priority &&
             (
                 $criterion->operator === Operator::LT ||
                 $criterion->operator === Operator::LTE ||
@@ -52,7 +52,7 @@ class PriorityRange extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\Location\Priority $criterion */
+        /** @var Criterion\Matcher\Location\Priority $criterion */
         $start = $criterion->value[0];
         $end = isset($criterion->value[1]) ? $criterion->value[1] : null;
 

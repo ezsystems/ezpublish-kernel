@@ -28,7 +28,7 @@ class LocationId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LocationId;
+        return $criterion instanceof Criterion\Matcher\LocationId;
     }
 
     /**
@@ -50,7 +50,7 @@ class LocationId extends CriterionHandler
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
-        /** @var Criterion\LocationId $criterion */
+        /** @var Criterion\Matcher\LocationId $criterion */
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentobject_id')

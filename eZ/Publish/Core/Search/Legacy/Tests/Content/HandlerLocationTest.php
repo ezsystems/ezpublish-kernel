@@ -286,7 +286,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
         $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId(2),
+                    'filter' => new Criterion\Matcher\LocationId(2),
                 )
             )
         );
@@ -302,7 +302,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
         $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId(2),
+                    'filter' => new Criterion\Matcher\LocationId(2),
                     'offset' => 0,
                     'limit' => 0,
                 )
@@ -323,7 +323,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
         $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId(2),
+                    'filter' => new Criterion\Matcher\LocationId(2),
                     'offset' => 0,
                     'limit' => null,
                 )
@@ -344,7 +344,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
         $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId(2),
+                    'filter' => new Criterion\Matcher\LocationId(2),
                     'offset' => 1000,
                     'limit' => null,
                 )
@@ -362,7 +362,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\LocationId(
+                        'filter' => new Criterion\Matcher\LocationId(
                             array(4, 12, 13)
                         ),
                         'limit' => 10,
@@ -379,7 +379,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ParentLocationId(5),
+                        'filter' => new Criterion\Matcher\ParentLocationId(5),
                         'limit' => 10,
                     )
                 )
@@ -396,10 +396,10 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     array(
                         'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\LocationId(
+                                new Criterion\Matcher\LocationId(
                                     array(4, 12, 13)
                                 ),
-                                new Criterion\LocationId(
+                                new Criterion\Matcher\LocationId(
                                     array(13, 44)
                                 ),
                             )
@@ -420,10 +420,10 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     array(
                         'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\LocationId(
+                                new Criterion\Matcher\LocationId(
                                     array(2, 44, 160, 166)
                                 ),
-                                new Criterion\ParentLocationId(
+                                new Criterion\Matcher\ParentLocationId(
                                     array(5, 156)
                                 ),
                             )
@@ -442,7 +442,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::EQ, 1),
+                        'filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::EQ, 1),
                         'limit' => 10,
                     )
                 )
@@ -457,7 +457,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::IN, array(1, 2)),
+                        'filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::IN, array(1, 2)),
                         'limit' => 50,
                     )
                 )
@@ -472,7 +472,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::BETWEEN, array(0, 1)),
+                        'filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::BETWEEN, array(0, 1)),
                     )
                 )
             )
@@ -486,7 +486,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::GT, 4),
+                        'filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::GT, 4),
                         'limit' => 50,
                     )
                 )
@@ -501,7 +501,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::GTE, 5),
+                        'filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::GTE, 5),
                         'limit' => 50,
                     )
                 )
@@ -516,7 +516,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                        'filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                         'limit' => 10,
                     )
                 )
@@ -531,7 +531,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::LTE, 2),
+                        'filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LTE, 2),
                         'limit' => 50,
                     )
                 )
@@ -546,7 +546,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Location\Priority(
+                        'filter' => new Criterion\Matcher\Location\Priority(
                             Criterion\Operator::BETWEEN,
                             array(1, 10)
                         ),
@@ -564,7 +564,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\LocationRemoteId(
+                        'filter' => new Criterion\Matcher\LocationRemoteId(
                             array('3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983')
                         ),
                         'limit' => 10,
@@ -581,8 +581,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Visibility(
-                            Criterion\Visibility::VISIBLE
+                        'filter' => new Criterion\Matcher\Visibility(
+                            Criterion\Matcher\Visibility::VISIBLE
                         ),
                         'limit' => 5,
                         'sortClauses' => array(new SortClause\Location\Id()),
@@ -599,8 +599,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Visibility(
-                            Criterion\Visibility::HIDDEN
+                        'filter' => new Criterion\Matcher\Visibility(
+                            Criterion\Matcher\Visibility::HIDDEN
                         ),
                     )
                 )
@@ -617,11 +617,11 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     array(
                         'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\LocationId(
+                                new Criterion\Matcher\LocationId(
                                     array(2, 5, 12, 356)
                                 ),
                                 new Criterion\LogicalOperator\LogicalNot(
-                                    new Criterion\LocationId(
+                                    new Criterion\Matcher\LocationId(
                                         array(12, 13, 14)
                                     )
                                 ),
@@ -643,10 +643,10 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     array(
                         'filter' => new Criterion\LogicalOperator\LogicalOr(
                             array(
-                                new Criterion\LocationId(
+                                new Criterion\Matcher\LocationId(
                                     array(2, 5, 12)
                                 ),
-                                new Criterion\LocationId(
+                                new Criterion\Matcher\LocationId(
                                     array(12, 13, 14)
                                 ),
                             )
@@ -665,7 +665,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ContentId(223),
+                        'filter' => new Criterion\Matcher\ContentId(223),
                     )
                 )
             )
@@ -679,7 +679,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ContentId(
+                        'filter' => new Criterion\Matcher\ContentId(
                             array(223, 224, 225)
                         ),
                     )
@@ -695,7 +695,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ContentTypeGroupId(2),
+                        'filter' => new Criterion\Matcher\ContentTypeGroupId(2),
                         'limit' => 10,
                     )
                 )
@@ -710,7 +710,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ContentTypeId(4),
+                        'filter' => new Criterion\Matcher\ContentTypeId(4),
                         'limit' => 10,
                     )
                 )
@@ -725,7 +725,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ContentTypeIdentifier('folder'),
+                        'filter' => new Criterion\Matcher\ContentTypeIdentifier('folder'),
                         'limit' => 5,
                         'sortClauses' => array(new SortClause\Location\Id()),
                     )
@@ -741,7 +741,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ObjectStateId(1),
+                        'filter' => new Criterion\Matcher\ObjectStateId(1),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -757,7 +757,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\ObjectStateId(array(1, 2)),
+                        'filter' => new Criterion\Matcher\ObjectStateId(array(1, 2)),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\Location\Id()),
                     )
@@ -773,7 +773,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\RemoteId(
+                        'filter' => new Criterion\Matcher\RemoteId(
                             array('f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca')
                         ),
                         'limit' => 10,
@@ -790,7 +790,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\SectionId(array(2)),
+                        'filter' => new Criterion\Matcher\SectionId(array(2)),
                         'limit' => 10,
                     )
                 )
@@ -805,8 +805,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::GT,
                             1311154214
                         ),
@@ -824,8 +824,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::GTE,
                             1311154214
                         ),
@@ -843,8 +843,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::IN,
                             array(1311154214, 1311154215)
                         ),
@@ -862,8 +862,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::BETWEEN,
                             array(1311154213, 1311154215)
                         ),
@@ -881,8 +881,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::CREATED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::CREATED,
                             Criterion\Operator::BETWEEN,
                             array(1299780749, 1311154215)
                         ),
@@ -900,8 +900,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             2
                         ),
@@ -918,8 +918,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             14
                         ),
@@ -938,8 +938,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             226
                         ),
@@ -956,8 +956,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::IN,
                             array(226)
                         ),
@@ -974,8 +974,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::MODIFIER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::MODIFIER,
                             Criterion\Operator::EQ,
                             226
                         ),
@@ -992,8 +992,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::MODIFIER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::MODIFIER,
                             Criterion\Operator::IN,
                             array(226)
                         ),
@@ -1010,8 +1010,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::EQ,
                             11
                         ),
@@ -1028,8 +1028,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::IN,
                             array(11)
                         ),
@@ -1046,8 +1046,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::EQ,
                             13
                         ),
@@ -1064,8 +1064,8 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::IN,
                             array(13)
                         ),
@@ -1082,7 +1082,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\LanguageCode('eng-US'),
+                        'filter' => new Criterion\Matcher\LanguageCode('eng-US'),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\Location\Id()),
                     )
@@ -1098,7 +1098,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\LanguageCode(array('eng-US', 'eng-GB')),
+                        'filter' => new Criterion\Matcher\LanguageCode(array('eng-US', 'eng-GB')),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\Location\Id()),
                     )
@@ -1114,7 +1114,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\LanguageCode('eng-GB', true),
+                        'filter' => new Criterion\Matcher\LanguageCode('eng-GB', true),
                         'limit' => 20,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -1128,7 +1128,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
         $result = $this->getContentSearchHandler()->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\MatchAll(),
+                    'filter' => new Criterion\Matcher\MatchAll(),
                     'limit' => 10,
                     'sortClauses' => array(new SortClause\Location\Id()),
                 )
@@ -1150,7 +1150,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FullText('applied webpage'),
+                        'filter' => new Criterion\Matcher\FullText('applied webpage'),
                         'limit' => 10,
                     )
                 )
@@ -1165,7 +1165,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FullText('applie*'),
+                        'filter' => new Criterion\Matcher\FullText('applie*'),
                         'limit' => 10,
                     )
                 )
@@ -1180,7 +1180,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler(array('enableWildcards' => false))->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FullText('applie*'),
+                        'filter' => new Criterion\Matcher\FullText('applie*'),
                         'limit' => 10,
                     )
                 )
@@ -1200,7 +1200,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $handler->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FullText('the'),
+                        'filter' => new Criterion\Matcher\FullText('the'),
                         'limit' => 10,
                     )
                 )
@@ -1219,7 +1219,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
         $result = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\FullText(
+                    'filter' => new Criterion\Matcher\FullText(
                         'the'
                     ),
                     'limit' => 10,
@@ -1261,7 +1261,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(60)
@@ -1279,7 +1279,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(4)
@@ -1297,7 +1297,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(60, 75)
@@ -1315,7 +1315,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(60, 64)
@@ -1333,7 +1333,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array(60, 64)
@@ -1351,7 +1351,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array(4, 10)
@@ -1369,7 +1369,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'name',
                             Criterion\Operator::EQ,
                             'members'
@@ -1388,7 +1388,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'name',
                             Criterion\Operator::IN,
                             array('members', 'anonymous users')
@@ -1407,7 +1407,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'name',
                             Criterion\Operator::CONTAINS,
                             'nonymous use'
@@ -1426,7 +1426,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'publish_date',
                             Criterion\Operator::CONTAINS,
                             1174643880
@@ -1445,7 +1445,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'publish_date',
                             Criterion\Operator::CONTAINS,
                             1174643
@@ -1464,7 +1464,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'price',
                             Criterion\Operator::BETWEEN,
                             array(10000, 1000000)
@@ -1485,12 +1485,12 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     array(
                         'filter' => new Criterion\LogicalOperator\LogicalOr(
                             array(
-                                new Criterion\Field(
+                                new Criterion\Matcher\Field(
                                     'name',
                                     Criterion\Operator::EQ,
                                     'members'
                                 ),
-                                new Criterion\Field(
+                                new Criterion\Matcher\Field(
                                     'price',
                                     Criterion\Operator::BETWEEN,
                                     array(10000, 1000000)
@@ -1513,9 +1513,9 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     array(
                         'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\ParentLocationId(224),
-                                new Criterion\Location\IsMainLocation(
-                                    Criterion\Location\IsMainLocation::MAIN
+                                new Criterion\Matcher\ParentLocationId(224),
+                                new Criterion\Matcher\Location\IsMainLocation(
+                                    Criterion\Matcher\Location\IsMainLocation::MAIN
                                 ),
                             )
                         ),
@@ -1535,9 +1535,9 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     array(
                         'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\ParentLocationId(224),
-                                new Criterion\Location\IsMainLocation(
-                                    Criterion\Location\IsMainLocation::NOT_MAIN
+                                new Criterion\Matcher\ParentLocationId(224),
+                                new Criterion\Matcher\Location\IsMainLocation(
+                                    Criterion\Matcher\Location\IsMainLocation::NOT_MAIN
                                 ),
                             )
                         ),

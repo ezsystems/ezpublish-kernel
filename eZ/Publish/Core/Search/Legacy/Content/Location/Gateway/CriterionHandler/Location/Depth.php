@@ -29,7 +29,7 @@ class Depth extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Location\Depth;
+        return $criterion instanceof Criterion\Matcher\Location\Depth;
     }
 
     /**
@@ -52,7 +52,7 @@ class Depth extends CriterionHandler
     ) {
         $column = $this->dbHandler->quoteColumn('depth', 'ezcontentobject_tree');
 
-        /** @var Criterion\Location\Depth $criterion */
+        /** @var Criterion\Matcher\Location\Depth $criterion */
         switch ($criterion->operator) {
             case Criterion\Operator::IN:
                 return $query->expr->in(

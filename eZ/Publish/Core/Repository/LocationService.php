@@ -23,10 +23,10 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalNot as CriterionLogicalNot;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Subtree as CriterionSubtree;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Exception;
@@ -323,7 +323,7 @@ class LocationService implements LocationServiceInterface
     protected function searchChildrenLocations(APILocation $location, $offset = 0, $limit = -1)
     {
         $query = new LocationQuery([
-            'filter' => new Criterion\ParentLocationId($location->id),
+            'filter' => new Criterion\Matcher\ParentLocationId($location->id),
             'offset' => $offset >= 0 ? (int)$offset : 0,
             'limit' => $limit >= 0 ? (int)$limit : null,
             'sortClauses' => $location->getSortClauses(),

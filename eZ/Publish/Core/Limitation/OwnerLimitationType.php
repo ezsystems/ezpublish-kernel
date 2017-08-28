@@ -171,8 +171,8 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
             );
         }
 
-        return new Criterion\UserMetadata(
-            Criterion\UserMetadata::OWNER,
+        return new Criterion\Matcher\UserMetadata(
+            Criterion\Matcher\UserMetadata::OWNER,
             Criterion\Operator::EQ,
             $currentUser->getUserId()
         );

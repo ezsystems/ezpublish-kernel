@@ -30,7 +30,7 @@ class Visibility extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Visibility;
+        return $criterion instanceof Criterion\Matcher\Visibility;
     }
 
     /**
@@ -53,15 +53,15 @@ class Visibility extends CriterionHandler
     ) {
         $column = $this->dbHandler->quoteColumn('is_invisible', 'ezcontentobject_tree');
 
-        /** @var Criterion\Visibility $criterion */
+        /** @var Criterion\Matcher\Visibility $criterion */
         switch ($criterion->value[0]) {
-            case Criterion\Visibility::VISIBLE:
+            case Criterion\Matcher\Visibility::VISIBLE:
                 return $query->expr->eq(
                     $column,
                     $query->bindValue(0, null, PDO::PARAM_INT)
                 );
 
-            case Criterion\Visibility::HIDDEN:
+            case Criterion\Matcher\Visibility::HIDDEN:
                 return $query->expr->eq(
                     $column,
                     $query->bindValue(1, null, PDO::PARAM_INT)

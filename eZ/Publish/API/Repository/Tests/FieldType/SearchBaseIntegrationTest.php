@@ -16,9 +16,9 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Field as FieldSortClause;
@@ -1221,7 +1221,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         $this->checkFullTextSupport();
 
-        $criteria = new Criterion\FullText($valueOne);
+        $criteria = new Criterion\Matcher\FullText($valueOne);
 
         $this->assertFindResult($context, $criteria, true, false, $filter, $content, null);
     }
@@ -1234,7 +1234,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         $this->checkFullTextSupport();
 
-        $criteria = new Criterion\FullText($valueTwo);
+        $criteria = new Criterion\Matcher\FullText($valueTwo);
 
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, null);
     }
@@ -1262,7 +1262,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             array(
                 $criteriaProperty => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
+                        new Criterion\Matcher\ContentTypeIdentifier('test-' . $this->getTypeName()),
                         $criterion,
                     )
                 ),
@@ -1286,7 +1286,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
+                'filter' => new Criterion\Matcher\ContentTypeIdentifier('test-' . $this->getTypeName()),
                 'sortClauses' => array(
                     $sortClause,
                 ),
@@ -1320,7 +1320,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             array(
                 $criteriaProperty => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
+                        new Criterion\Matcher\ContentTypeIdentifier('test-' . $this->getTypeName()),
                         $criterion,
                     )
                 ),
@@ -1345,7 +1345,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
+                'filter' => new Criterion\Matcher\ContentTypeIdentifier('test-' . $this->getTypeName()),
                 'sortClauses' => array(
                     $sortClause,
                 ),

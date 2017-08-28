@@ -60,7 +60,7 @@ class MapLocationDistanceRange extends Field
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\MapLocationDistance &&
+            $criterion instanceof Criterion\Matcher\MapLocationDistance &&
             (
                 $criterion->operator === Operator::LT ||
                 $criterion->operator === Operator::LTE ||
@@ -81,7 +81,7 @@ class MapLocationDistanceRange extends Field
      */
     protected function getCondition(CriterionInterface $criterion)
     {
-        /** @var Criterion\MapLocationDistance $criterion */
+        /** @var Criterion\Matcher\MapLocationDistance $criterion */
         $criterion->value = (array)$criterion->value;
 
         $start = $criterion->value[0];

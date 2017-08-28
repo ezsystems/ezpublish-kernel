@@ -29,7 +29,7 @@ class PriorityIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\Location\Priority &&
+            $criterion instanceof Criterion\Matcher\Location\Priority &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -49,7 +49,7 @@ class PriorityIn extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\Location\Priority $criterion */
+        /** @var Criterion\Matcher\Location\Priority $criterion */
         return array(
             'terms' => array(
                 'priority_i' => $criterion->value,

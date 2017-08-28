@@ -28,7 +28,7 @@ class Ancestor extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Ancestor;
+        return $criterion instanceof Criterion\Matcher\Ancestor;
     }
 
     /**
@@ -50,7 +50,7 @@ class Ancestor extends CriterionHandler
         array $languageSettings
     ) {
         $idSet = array();
-        /** @var Criterion\Ancestor $criterion */
+        /** @var Criterion\Matcher\Ancestor $criterion */
         foreach ($criterion->value as $value) {
             foreach (explode('/', trim($value, '/')) as $id) {
                 $idSet[$id] = true;

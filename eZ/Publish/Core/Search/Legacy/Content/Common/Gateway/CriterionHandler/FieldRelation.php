@@ -29,7 +29,7 @@ class FieldRelation extends FieldBase
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\FieldRelation;
+        return $criterion instanceof Criterion\Matcher\FieldRelation;
     }
 
     /**
@@ -85,7 +85,7 @@ class FieldRelation extends FieldBase
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\FieldRelation $criterion */
+        /** @var Criterion\Matcher\FieldRelation $criterion */
         $column = $this->dbHandler->quoteColumn('to_contentobject_id', 'ezcontentobject_link');
         $fieldDefinitionIds = $this->getFieldDefinitionsIds($criterion->target);
 

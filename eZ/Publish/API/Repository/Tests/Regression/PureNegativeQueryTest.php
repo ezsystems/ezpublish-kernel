@@ -22,7 +22,7 @@ class PureNegativeQueryTest extends BaseTest
 {
     public function providerForTestMatchAll()
     {
-        $query = new Query(['filter' => new Criterion\MatchAll()]);
+        $query = new Query(['filter' => new Criterion\Matcher\MatchAll()]);
         $result = $this->getRepository()->getSearchService()->findContent($query);
         // Sanity check
         $this->assertGreaterThan(0, $result->totalCount);
@@ -33,8 +33,8 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 1,
@@ -42,8 +42,8 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 0,
@@ -51,9 +51,9 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
+                        new Criterion\Matcher\ContentId($contentId),
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\MatchAll()
+                            new Criterion\Matcher\MatchAll()
                         ),
                     ]
                 ),
@@ -62,9 +62,9 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
+                        new Criterion\Matcher\ContentId($contentId),
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\MatchAll()
+                            new Criterion\Matcher\MatchAll()
                         ),
                     ]
                 ),
@@ -73,8 +73,8 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchAll(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchAll(),
                     ]
                 ),
                 $totalCount,
@@ -82,8 +82,8 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchAll(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchAll(),
                     ]
                 ),
                 1,
@@ -91,8 +91,8 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\MatchAll(),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\MatchAll(),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 $totalCount,
@@ -100,8 +100,8 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\MatchAll(),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\MatchAll(),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 0,
@@ -109,9 +109,9 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
+                        new Criterion\Matcher\ContentId($contentId),
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),
@@ -120,10 +120,10 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
+                        new Criterion\Matcher\ContentId($contentId),
                         new Criterion\LogicalOperator\LogicalNot(
                             new Criterion\LogicalOperator\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -134,11 +134,11 @@ class PureNegativeQueryTest extends BaseTest
                 new Criterion\LogicalOperator\LogicalOr(
                     [
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                         new Criterion\LogicalOperator\LogicalNot(
                             new Criterion\LogicalOperator\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -149,10 +149,10 @@ class PureNegativeQueryTest extends BaseTest
                 new Criterion\LogicalOperator\LogicalOr(
                     [
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),
@@ -161,9 +161,9 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
+                        new Criterion\Matcher\ContentId($contentId),
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),
@@ -172,10 +172,10 @@ class PureNegativeQueryTest extends BaseTest
             [
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
+                        new Criterion\Matcher\ContentId($contentId),
                         new Criterion\LogicalOperator\LogicalNot(
                             new Criterion\LogicalOperator\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -186,11 +186,11 @@ class PureNegativeQueryTest extends BaseTest
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                         new Criterion\LogicalOperator\LogicalNot(
                             new Criterion\LogicalOperator\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -201,10 +201,10 @@ class PureNegativeQueryTest extends BaseTest
                 new Criterion\LogicalOperator\LogicalAnd(
                     [
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                         new Criterion\LogicalOperator\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),

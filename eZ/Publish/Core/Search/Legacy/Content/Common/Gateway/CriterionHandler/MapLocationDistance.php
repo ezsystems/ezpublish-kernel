@@ -40,7 +40,7 @@ class MapLocationDistance extends FieldBase
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\MapLocationDistance;
+        return $criterion instanceof Criterion\Matcher\MapLocationDistance;
     }
 
     /**
@@ -107,7 +107,7 @@ class MapLocationDistance extends FieldBase
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\MapLocationDistance $criterion */
+        /** @var Criterion\Matcher\MapLocationDistance $criterion */
         $fieldDefinitionIds = $this->getFieldDefinitionIds($criterion->target);
         $subSelect = $query->subSelect();
 

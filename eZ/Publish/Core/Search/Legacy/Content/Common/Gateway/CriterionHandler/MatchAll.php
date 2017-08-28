@@ -28,7 +28,7 @@ class MatchAll extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\MatchAll;
+        return $criterion instanceof Criterion\Matcher\MatchAll;
     }
 
     /**

@@ -29,7 +29,7 @@ class LocationRemoteIdIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\LocationRemoteId &&
+            $criterion instanceof Criterion\Matcher\LocationRemoteId &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -47,7 +47,7 @@ class LocationRemoteIdIn extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\LocationRemoteId $criterion */
+        /** @var Criterion\Matcher\LocationRemoteId $criterion */
         if (count($criterion->value) > 1) {
             $filter = array(
                 'terms' => array(

@@ -29,7 +29,7 @@ class SubtreeIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\Subtree &&
+            $criterion instanceof Criterion\Matcher\Subtree &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -47,7 +47,7 @@ class SubtreeIn extends CriterionVisitor
     {
         $filters = array();
 
-        /** @var Criterion\Subtree $criterion */
+        /** @var Criterion\Matcher\Subtree $criterion */
         foreach ($criterion->value as $value) {
             $filters[] = array(
                 'prefix' => array(

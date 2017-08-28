@@ -28,7 +28,7 @@ class MatchAll extends CriterionVisitor
      */
     public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\MatchAll;
+        return $criterion instanceof Criterion\Matcher\MatchAll;
     }
 
     /**

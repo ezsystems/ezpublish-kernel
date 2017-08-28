@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId as ObjectStateIdCriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ObjectStateId as ObjectStateIdCriterion;
 
 /**
  * Parser for ObjectStateId Criterion.
@@ -26,7 +26,7 @@ class ObjectStateId extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId
+     * @return ObjectStateIdCriterion
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

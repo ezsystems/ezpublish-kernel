@@ -29,7 +29,7 @@ class Priority extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Location\Priority;
+        return $criterion instanceof Criterion\Matcher\Location\Priority;
     }
 
     /**
@@ -52,7 +52,7 @@ class Priority extends CriterionHandler
     ) {
         $column = $this->dbHandler->quoteColumn('priority');
 
-        /** @var Criterion\Location\Priority $criterion */
+        /** @var Criterion\Matcher\Location\Priority $criterion */
         switch ($criterion->operator) {
             case Criterion\Operator::BETWEEN:
                 return $query->expr->between(

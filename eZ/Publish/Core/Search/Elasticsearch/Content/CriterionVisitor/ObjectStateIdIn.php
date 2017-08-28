@@ -29,7 +29,7 @@ class ObjectStateIdIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\ObjectStateId &&
+            $criterion instanceof Criterion\Matcher\ObjectStateId &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -47,7 +47,7 @@ class ObjectStateIdIn extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\ObjectStateId $criterion */
+        /** @var Criterion\Matcher\ObjectStateId $criterion */
         if (count($criterion->value) > 1) {
             $filter = array(
                 'terms' => array(

@@ -234,20 +234,20 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
 
         if (!isset($value->limitationValues[1])) {
             // 1 limitation value: EQ operation
-            return new Criterion\ObjectStateId($value->limitationValues[0]);
+            return new Criterion\Matcher\ObjectStateId($value->limitationValues[0]);
         }
 
         $groupedLimitationValues = $this->groupLimitationValues($value->limitationValues);
 
         if (count($groupedLimitationValues) === 1) {
             // one group, several limitation values: IN operation
-            return new Criterion\ObjectStateId($groupedLimitationValues[0]);
+            return new Criterion\Matcher\ObjectStateId($groupedLimitationValues[0]);
         }
 
         // limitations from different groups require logical AND between them
         $criterions = [];
         foreach ($groupedLimitationValues as $limitationGroup) {
-            $criterions[] = new Criterion\ObjectStateId($limitationGroup);
+            $criterions[] = new Criterion\Matcher\ObjectStateId($limitationGroup);
         }
 
         return new Criterion\LogicalOperator\LogicalAnd($criterions);

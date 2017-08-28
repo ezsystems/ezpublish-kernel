@@ -200,8 +200,8 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
             }
         }
 
-        return new Criterion\UserMetadata(
-            Criterion\UserMetadata::GROUP,
+        return new Criterion\Matcher\UserMetadata(
+            Criterion\Matcher\UserMetadata::GROUP,
             Criterion\Operator::IN,
             $groupIds
         );

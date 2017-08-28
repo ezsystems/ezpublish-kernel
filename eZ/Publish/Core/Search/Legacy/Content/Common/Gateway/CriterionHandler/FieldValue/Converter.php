@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Matcher;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
@@ -50,7 +50,7 @@ class Converter
      *
      * @param string $fieldTypeIdentifier
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $matcher
+     * @param Matcher $matcher
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression

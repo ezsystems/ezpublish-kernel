@@ -28,7 +28,7 @@ class ContentId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\ContentId;
+        return $criterion instanceof Criterion\Matcher\ContentId;
     }
 
     /**
@@ -49,7 +49,7 @@ class ContentId extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\ContentId $criterion */
+        /** @var Criterion\Matcher\ContentId $criterion */
         return $query->expr->in(
             $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
             $criterion->value

@@ -28,7 +28,7 @@ class MatchNone extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\MatchNone;
+        return $criterion instanceof Criterion\Matcher\MatchNone;
     }
 
     /**

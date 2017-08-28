@@ -24,7 +24,7 @@ class Field extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Field
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

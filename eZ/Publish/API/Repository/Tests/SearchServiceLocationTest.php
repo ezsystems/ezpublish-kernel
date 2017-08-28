@@ -112,7 +112,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'query' => new Criterion\Field(
+                'query' => new Criterion\Matcher\Field(
                     'countries',
                     Criterion\Operator::CONTAINS,
                     'Belgium'
@@ -142,7 +142,7 @@ class SearchServiceLocationTest extends BaseTest
         $this->createMultipleCountriesContent();
         $query = new LocationQuery(
             array(
-                'query' => new Criterion\Field(
+                'query' => new Criterion\Matcher\Field(
                     'countries',
                     Criterion\Operator::CONTAINS,
                     'Netherlands Antilles'
@@ -168,7 +168,7 @@ class SearchServiceLocationTest extends BaseTest
         $searchService->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'some_hopefully_unknown_field',
                         Criterion\Operator::BETWEEN,
                         array(10, 1000)
@@ -190,7 +190,7 @@ class SearchServiceLocationTest extends BaseTest
         $searchService->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'some_hopefully_unknown_field',
                         Criterion\Operator::EQ,
                         1000
@@ -212,7 +212,7 @@ class SearchServiceLocationTest extends BaseTest
         $searchService->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'tag_cloud_url',
                         Criterion\Operator::EQ,
                         'http://nimbus.com'
@@ -247,7 +247,7 @@ class SearchServiceLocationTest extends BaseTest
     {
         $query = new LocationQuery(
             array(
-                'query' => new Criterion\CustomField(
+                'query' => new Criterion\Matcher\CustomField(
                     'custom_field',
                     Criterion\Operator::EQ,
                     'AdMiNiStRaToR'
@@ -286,7 +286,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'query' => new Criterion\Field(
+                'query' => new Criterion\Matcher\Field(
                     'first_name',
                     Criterion\Operator::EQ,
                     'User'
@@ -392,8 +392,8 @@ class SearchServiceLocationTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::LTE,
                             240,
@@ -473,8 +473,8 @@ class SearchServiceLocationTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             240,
@@ -570,8 +570,8 @@ class SearchServiceLocationTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::BETWEEN,
                             array(239, 241),
@@ -672,8 +672,8 @@ class SearchServiceLocationTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             235,
@@ -790,8 +790,8 @@ class SearchServiceLocationTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             235,
@@ -883,7 +883,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $this->refreshSearch($repository);
 
-        $distanceCriterion = new Criterion\MapLocationDistance(
+        $distanceCriterion = new Criterion\Matcher\MapLocationDistance(
             'maplocation',
             Criterion\Operator::LTE,
             240,
@@ -896,7 +896,7 @@ class SearchServiceLocationTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
                         $distanceCriterion,
                     )
                 ),
@@ -1001,8 +1001,8 @@ class SearchServiceLocationTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             235,

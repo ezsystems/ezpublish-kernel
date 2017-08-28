@@ -29,7 +29,7 @@ class SectionIdIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\SectionId &&
+            $criterion instanceof Criterion\Matcher\SectionId &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -47,7 +47,7 @@ class SectionIdIn extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\SectionId $criterion */
+        /** @var Criterion\Matcher\SectionId $criterion */
         if (count($criterion->value) > 1) {
             $filter = array(
                 'terms' => array(

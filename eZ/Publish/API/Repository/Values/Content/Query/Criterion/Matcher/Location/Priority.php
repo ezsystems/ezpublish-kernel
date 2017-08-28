@@ -1,14 +1,13 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location\Priority class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Location\Location\Priority class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Location;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 

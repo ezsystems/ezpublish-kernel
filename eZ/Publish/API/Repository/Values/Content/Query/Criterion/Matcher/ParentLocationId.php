@@ -1,29 +1,31 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ParentLocationId class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 
 /**
- * SectionId Criterion.
+ * A criterion that matches content based on its parent location id.
  *
- * Will match content that belongs to one of the given sections
+ * Own location id is done using {@see LocationId}
+ *
+ * Supported operators:
+ * - IN: matches against a list of location ids
+ * - EQ: matches against a unique location id
  */
-class SectionId extends Matcher
+class ParentLocationId extends Matcher
 {
     /**
-     * Creates a new Section criterion.
+     * Creates a new ParentLocationId criterion.
      *
-     * Matches the content against one or more sectionId
-     *
-     * @param int|int[] $value One or more sectionId that must be matched
+     * @param int|int[] $value One or more locationId parent locations must be matched against
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

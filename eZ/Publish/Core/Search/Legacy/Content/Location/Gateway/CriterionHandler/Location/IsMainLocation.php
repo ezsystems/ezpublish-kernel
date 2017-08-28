@@ -29,7 +29,7 @@ class IsMainLocation extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Location\IsMainLocation;
+        return $criterion instanceof Criterion\Matcher\Location\IsMainLocation;
     }
 
     /**
@@ -53,15 +53,15 @@ class IsMainLocation extends CriterionHandler
         $idColumn = $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree');
         $mainIdColumn = $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree');
 
-        /** @var Criterion\Location\IsMainLocation $criterion */
+        /** @var Criterion\Matcher\Location\IsMainLocation $criterion */
         switch ($criterion->value[0]) {
-            case Criterion\Location\IsMainLocation::MAIN:
+            case Criterion\Matcher\Location\IsMainLocation::MAIN:
                 return $query->expr->eq(
                     $idColumn,
                     $mainIdColumn
                 );
 
-            case Criterion\Location\IsMainLocation::NOT_MAIN:
+            case Criterion\Matcher\Location\IsMainLocation::NOT_MAIN:
                 return $query->expr->neq(
                     $idColumn,
                     $mainIdColumn

@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Matcher;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -25,7 +25,7 @@ class Simple extends Handler
      * Generates query expression for operator and value of a Field Criterion.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Matcher $matcher
+     * @param Matcher $matcher
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression

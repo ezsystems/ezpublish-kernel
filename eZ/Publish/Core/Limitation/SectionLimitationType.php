@@ -162,11 +162,11 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
 
         if (!isset($value->limitationValues[1])) {
             // 1 limitation value: EQ operation
-            return new Criterion\SectionId($value->limitationValues[0]);
+            return new Criterion\Matcher\SectionId($value->limitationValues[0]);
         }
 
         // several limitation values: IN operation
-        return new Criterion\SectionId($value->limitationValues);
+        return new Criterion\Matcher\SectionId($value->limitationValues);
     }
 
     /**

@@ -24,7 +24,7 @@ class MoreLikeThis extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\MoreLikeThis
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\MoreLikeThis
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

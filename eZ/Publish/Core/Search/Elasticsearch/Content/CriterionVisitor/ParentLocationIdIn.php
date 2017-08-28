@@ -29,7 +29,7 @@ class ParentLocationIdIn extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\ParentLocationId &&
+            $criterion instanceof Criterion\Matcher\ParentLocationId &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
@@ -45,7 +45,7 @@ class ParentLocationIdIn extends CriterionVisitor
      */
     protected function getCondition(CriterionInterface $criterion)
     {
-        /** @var Criterion\ParentLocationId $criterion */
+        /** @var Criterion\Matcher\ParentLocationId $criterion */
         if (count($criterion->value) > 1) {
             return array(
                 'terms' => array(

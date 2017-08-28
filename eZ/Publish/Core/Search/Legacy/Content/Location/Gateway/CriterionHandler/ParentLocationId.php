@@ -28,7 +28,7 @@ class ParentLocationId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\ParentLocationId;
+        return $criterion instanceof Criterion\Matcher\ParentLocationId;
     }
 
     /**
@@ -49,7 +49,7 @@ class ParentLocationId extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\ParentLocationId $criterion */
+        /** @var Criterion\Matcher\ParentLocationId $criterion */
         return $query->expr->in(
             $this->dbHandler->quoteColumn('parent_node_id', 'ezcontentobject_tree'),
             $criterion->value

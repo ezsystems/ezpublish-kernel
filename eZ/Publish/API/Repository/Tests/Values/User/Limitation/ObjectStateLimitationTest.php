@@ -289,7 +289,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $permissionResolver->setCurrentUserReference($user);
 
         $query = new Query();
-        $query->filter = new Criterion\MatchAll();
+        $query->filter = new Criterion\Matcher\MatchAll();
         $query->limit = 50;
 
         $this->refreshSearch($repository);

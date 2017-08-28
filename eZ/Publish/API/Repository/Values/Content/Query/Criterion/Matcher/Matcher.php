@@ -6,11 +6,12 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Values\Content\Query;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 abstract class Matcher implements CriterionInterface

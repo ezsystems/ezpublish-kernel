@@ -104,7 +104,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
      */
     protected function getSubtreeLocationsCount($subtreePathString)
     {
-        $criterion = new Criterion\Subtree($subtreePathString);
+        $criterion = new Criterion\Matcher\Subtree($subtreePathString);
         $query = new LocationQuery(['filter' => $criterion]);
 
         $result = $this->getRepository()->getSearchService()->findLocations($query);

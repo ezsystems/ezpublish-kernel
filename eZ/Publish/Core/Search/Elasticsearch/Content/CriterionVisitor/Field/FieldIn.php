@@ -30,7 +30,7 @@ class FieldIn extends Field
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\Field &&
+            $criterion instanceof Criterion\Matcher\Field &&
             (
                 ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ ||
@@ -49,7 +49,7 @@ class FieldIn extends Field
      */
     protected function getCondition(CriterionInterface $criterion)
     {
-        /** @var Criterion\Field $criterion */
+        /** @var Criterion\Matcher\Field $criterion */
         $fieldNames = $this->getFieldNames($criterion, $criterion->target);
 
         $values = (array)$criterion->value;

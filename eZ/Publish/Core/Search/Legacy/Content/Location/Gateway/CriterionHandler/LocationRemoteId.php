@@ -28,7 +28,7 @@ class LocationRemoteId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LocationRemoteId;
+        return $criterion instanceof Criterion\Matcher\LocationRemoteId;
     }
 
     /**
@@ -49,7 +49,7 @@ class LocationRemoteId extends CriterionHandler
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\LocationRemoteId $criterion */
+        /** @var Criterion\Matcher\LocationRemoteId $criterion */
         return $query->expr->in(
             $this->dbHandler->quoteColumn('remote_id', 'ezcontentobject_tree'),
             $criterion->value

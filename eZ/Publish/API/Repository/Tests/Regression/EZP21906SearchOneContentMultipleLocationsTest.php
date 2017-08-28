@@ -80,9 +80,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('feedback_form'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('feedback_form'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                     )
@@ -94,9 +94,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('feedback_form'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('feedback_form'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                         'sortClauses' => array(new SortClause\ContentName()),
@@ -109,9 +109,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('feedback_form'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('feedback_form'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                     )
@@ -123,9 +123,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('feedback_form'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('feedback_form'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                         'sortClauses' => array(new SortClause\ContentName(Query::SORT_DESC)),
@@ -138,9 +138,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('feedback_form'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('feedback_form'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                     )
@@ -152,9 +152,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('folder'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('folder'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                         'sortClauses' => array(new SortClause\ContentName()),
@@ -167,9 +167,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('folder'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('folder'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                         'sortClauses' => array(new SortClause\ContentName(Query::SORT_DESC)),
@@ -182,9 +182,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('folder'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('folder'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                     )
@@ -196,9 +196,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('folder'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('folder'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                     )
@@ -210,9 +210,9 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Subtree('/1/2/'),
-                                new Criterion\ContentTypeIdentifier('product'),
-                                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+                                new Criterion\Matcher\Subtree('/1/2/'),
+                                new Criterion\Matcher\ContentTypeIdentifier('product'),
+                                new Criterion\Matcher\Visibility(Criterion\Matcher\Visibility::VISIBLE),
                             )
                         ),
                     )

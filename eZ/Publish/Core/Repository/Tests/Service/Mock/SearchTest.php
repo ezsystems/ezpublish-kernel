@@ -90,11 +90,11 @@ class SearchTest extends BaseServiceMockTest
     {
         return array(
             array(
-                new Query(array('filter' => new Criterion\Location\Depth(Criterion\Operator::LT, 2))),
+                new Query(array('filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2))),
                 "Argument '\$query' is invalid: Location criterions cannot be used in Content search",
             ),
             array(
-                new Query(array('query' => new Criterion\Location\Depth(Criterion\Operator::LT, 2))),
+                new Query(array('query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2))),
                 "Argument '\$query' is invalid: Location criterions cannot be used in Content search",
             ),
             array(
@@ -102,7 +102,7 @@ class SearchTest extends BaseServiceMockTest
                     array(
                         'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                                new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                             )
                         ),
                     )
@@ -149,13 +149,13 @@ class SearchTest extends BaseServiceMockTest
     {
         return array(
             array(
-                new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                 "Argument '\$filter' is invalid: Location criterions cannot be used in Content search",
             ),
             array(
                 new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                        new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                     )
                 ),
                 "Argument '\$filter' is invalid: Location criterions cannot be used in Content search",
@@ -267,7 +267,7 @@ class SearchTest extends BaseServiceMockTest
             );
 
         $serviceQuery = new Query();
-        $handlerQuery = new Query(array('filter' => new Criterion\MatchAll(), 'limit' => 25));
+        $handlerQuery = new Query(array('filter' => new Criterion\Matcher\MatchAll(), 'limit' => 25));
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
@@ -479,7 +479,7 @@ class SearchTest extends BaseServiceMockTest
             ->with(
                 new Query(
                     array(
-                        'filter' => new Criterion\MatchAll(),
+                        'filter' => new Criterion\Matcher\MatchAll(),
                         'limit' => 25,
                     )
                 ),
@@ -731,7 +731,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock->expects($this->never())->method('hasAccess');
 
         $serviceQuery = new LocationQuery();
-        $handlerQuery = new LocationQuery(array('filter' => new Criterion\MatchAll(), 'limit' => 25));
+        $handlerQuery = new LocationQuery(array('filter' => new Criterion\Matcher\MatchAll(), 'limit' => 25));
         $spiLocation = new SPILocation();
         $locationMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
 
@@ -837,7 +837,7 @@ class SearchTest extends BaseServiceMockTest
             ->with(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\MatchAll(),
+                        'filter' => new Criterion\Matcher\MatchAll(),
                         'limit' => 25,
                     )
                 )

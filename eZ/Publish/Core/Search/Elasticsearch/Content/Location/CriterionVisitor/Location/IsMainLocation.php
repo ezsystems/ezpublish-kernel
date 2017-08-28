@@ -29,7 +29,7 @@ class IsMainLocation extends CriterionVisitor
     public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\Location\IsMainLocation && $criterion->operator === Operator::EQ;
+            $criterion instanceof Criterion\Matcher\Location\IsMainLocation && $criterion->operator === Operator::EQ;
     }
 
     /**
@@ -43,10 +43,10 @@ class IsMainLocation extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\Location\IsMainLocation $criterion */
+        /** @var Criterion\Matcher\Location\IsMainLocation $criterion */
         return array(
             'term' => array(
-                'is_main_location_b' => ($criterion->value[0] === Criterion\Location\IsMainLocation::MAIN ? true : false),
+                'is_main_location_b' => ($criterion->value[0] === Criterion\Matcher\Location\IsMainLocation::MAIN ? true : false),
             ),
         );
     }

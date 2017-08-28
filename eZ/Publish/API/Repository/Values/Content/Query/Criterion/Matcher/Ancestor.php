@@ -1,37 +1,39 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use InvalidArgumentException;
 
 /**
- * Criterion that matches content that belongs to a given (list of) Subtree(s).
+ * A criterion that matches content that is ancestor to the given Location path string.
  *
- * Content will be matched if it is part of at least one of the given subtree path strings
+ * Content will be matched if it is part of at least one of the given subtree path strings.
  */
-class Subtree extends Matcher
+class Ancestor extends Matcher
 {
     /**
-     * Creates a new SubTree criterion.
+     * Creates a new Ancestor criterion.
      *
-     * @param string|string[] $value an array of subtree path strings, eg: /1/2/
+     * @param string $value Location path string
      *
-     * @throws InvalidArgumentException if a non path string is given
-     * @throws InvalidArgumentException if the value type doesn't match the operator
+     * @throws \InvalidArgumentException if a non integer or string id is given
+     * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct($value)
     {
         foreach ((array)$value as $pathString) {
             if (preg_match('/^(\/\w+)+\/$/', $pathString) !== 1) {
-                throw new InvalidArgumentException("value '$pathString' must follow the pathString format, eg /1/2/");
+                throw new InvalidArgumentException(
+                    "value '$pathString' must follow the pathString format, eg /1/2/"
+                );
             }
         }
 

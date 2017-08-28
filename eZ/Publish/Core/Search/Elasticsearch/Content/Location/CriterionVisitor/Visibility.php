@@ -28,7 +28,7 @@ class Visibility extends CriterionVisitor
      */
     public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Visibility && $criterion->operator === Operator::EQ;
+        return $criterion instanceof Criterion\Matcher\Visibility && $criterion->operator === Operator::EQ;
     }
 
     /**
@@ -42,10 +42,10 @@ class Visibility extends CriterionVisitor
      */
     public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        /** @var Criterion\Visibility $criterion */
+        /** @var Criterion\Matcher\Visibility $criterion */
         return array(
             'term' => array(
-                'invisible_b' => ($criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false),
+                'invisible_b' => ($criterion->value[0] === Criterion\Matcher\Visibility::HIDDEN ? true : false),
             ),
         );
     }

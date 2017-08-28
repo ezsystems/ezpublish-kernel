@@ -28,7 +28,7 @@ class ObjectStateId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\ObjectStateId;
+        return $criterion instanceof Criterion\Matcher\ObjectStateId;
     }
 
     /**
@@ -55,7 +55,7 @@ class ObjectStateId extends CriterionHandler
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
-        /** @var Criterion\ObjectStateId $criterion */
+        /** @var Criterion\Matcher\ObjectStateId $criterion */
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentobject_id')

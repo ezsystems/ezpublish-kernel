@@ -52,7 +52,7 @@ class ContentTypeIdentifier extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\ContentTypeIdentifier;
+        return $criterion instanceof Criterion\Matcher\ContentTypeIdentifier;
     }
 
     /**
@@ -75,7 +75,7 @@ class ContentTypeIdentifier extends CriterionHandler
     ) {
         $idList = array();
 
-        /** @var Criterion\ContentTypeIdentifier $criterion */
+        /** @var Criterion\Matcher\ContentTypeIdentifier $criterion */
         foreach ($criterion->value as $identifier) {
             $idList[] = $this->contentTypeHandler->loadByIdentifier($identifier)->id;
         }

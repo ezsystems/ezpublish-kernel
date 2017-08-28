@@ -57,7 +57,7 @@ class FullText extends FieldFilterBase
      */
     public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\FullText;
+        return $criterion instanceof Criterion\Matcher\FullText;
     }
 
     /**
@@ -77,7 +77,7 @@ class FullText extends FieldFilterBase
         );
 
         // Add boosted fields if any
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
+        /** @var Criterion\Matcher\FullText $criterion */
         foreach ($criterion->boost as $field => $boost) {
             $fieldNames = $this->getFieldNames($criterion, $field);
 

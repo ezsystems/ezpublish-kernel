@@ -28,7 +28,7 @@ class Visibility extends CriterionVisitor
      */
     public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Visibility && $criterion->operator === Operator::EQ;
+        return $criterion instanceof Criterion\Matcher\Visibility && $criterion->operator === Operator::EQ;
     }
 
     /**
@@ -40,8 +40,8 @@ class Visibility extends CriterionVisitor
      */
     protected function getInternalValue(CriterionInterface $criterion)
     {
-        /** @var Criterion\Visibility $criterion */
-        return $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false;
+        /** @var Criterion\Matcher\Visibility $criterion */
+        return $criterion->value[0] === Criterion\Matcher\Visibility::HIDDEN ? true : false;
     }
 
     /**

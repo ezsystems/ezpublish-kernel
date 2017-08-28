@@ -27,7 +27,7 @@ class MatchNone extends CriterionVisitor
      */
     public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\MatchNone;
+        return $criterion instanceof Criterion\Matcher\MatchNone;
     }
 
     /**

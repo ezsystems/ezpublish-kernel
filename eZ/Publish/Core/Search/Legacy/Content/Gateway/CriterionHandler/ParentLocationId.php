@@ -28,7 +28,7 @@ class ParentLocationId extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\ParentLocationId;
+        return $criterion instanceof Criterion\Matcher\ParentLocationId;
     }
 
     /**
@@ -50,7 +50,7 @@ class ParentLocationId extends CriterionHandler
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
-        /** @var Criterion\ParentLocationId $criterion */
+        /** @var Criterion\Matcher\ParentLocationId $criterion */
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentobject_id')

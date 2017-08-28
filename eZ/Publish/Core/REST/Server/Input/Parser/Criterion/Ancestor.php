@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Ancestor as AncestorCriterion;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor as AncestorCriterion;
 
 /**
  * Parser for Ancestor Criterion.
@@ -26,7 +26,7 @@ class Ancestor extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor
+     * @return AncestorCriterion
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

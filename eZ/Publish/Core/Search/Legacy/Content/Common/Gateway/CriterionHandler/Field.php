@@ -82,7 +82,7 @@ class Field extends FieldBase
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Field;
+        return $criterion instanceof Criterion\Matcher\Field;
     }
 
     /**
@@ -146,7 +146,7 @@ class Field extends FieldBase
         CriterionInterface $criterion,
         array $languageSettings
     ) {
-        /** @var Criterion\Field $criterion */
+        /** @var Criterion\Matcher\Field $criterion */
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();

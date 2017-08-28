@@ -152,8 +152,8 @@ class Handler implements SearchHandlerInterface
         }
 
         $start = microtime(true);
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
-        $query->query = $query->query ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
+        $query->query = $query->query ?: new Criterion\Matcher\MatchAll();
 
         // The legacy search does not know about scores, so that we just
         // combine the query with the filter
@@ -234,7 +234,7 @@ class Handler implements SearchHandlerInterface
 
         $searchQuery = new Query();
         $searchQuery->filter = $filter;
-        $searchQuery->query = new Criterion\MatchAll();
+        $searchQuery->query = new Criterion\Matcher\MatchAll();
         $searchQuery->offset = 0;
         $searchQuery->limit = 2; // Because we optimize away the count query below
         $searchQuery->performCount = true;
@@ -266,8 +266,8 @@ class Handler implements SearchHandlerInterface
         }
 
         $start = microtime(true);
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
-        $query->query = $query->query ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
+        $query->query = $query->query ?: new Criterion\Matcher\MatchAll();
 
         // The legacy search does not know about scores, so we just
         // combine the query with the filter

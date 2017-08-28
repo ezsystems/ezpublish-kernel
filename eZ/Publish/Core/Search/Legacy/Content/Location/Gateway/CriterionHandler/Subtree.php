@@ -28,7 +28,7 @@ class Subtree extends CriterionHandler
      */
     public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Subtree;
+        return $criterion instanceof Criterion\Matcher\Subtree;
     }
 
     /**
@@ -50,7 +50,7 @@ class Subtree extends CriterionHandler
         array $languageSettings
     ) {
         $statements = array();
-        /** @var Criterion\Subtree $criterion */
+        /** @var Criterion\Matcher\Subtree $criterion */
         foreach ($criterion->value as $pattern) {
             $statements[] = $query->expr->like(
                 $this->dbHandler->quoteColumn('path_string', 'ezcontentobject_tree'),

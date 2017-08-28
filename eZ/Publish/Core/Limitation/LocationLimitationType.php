@@ -208,11 +208,11 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
 
         if (!isset($value->limitationValues[1])) {
             // 1 limitation value: EQ operation
-            return new Criterion\LocationId($value->limitationValues[0]);
+            return new Criterion\Matcher\LocationId($value->limitationValues[0]);
         }
 
         // several limitation values: IN operation
-        return new Criterion\LocationId($value->limitationValues);
+        return new Criterion\Matcher\LocationId($value->limitationValues);
     }
 
     /**
