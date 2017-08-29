@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 
 /**
  * SearchService class.

@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchHitAdapter;
 use PHPUnit\Framework\TestCase;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 
 class LocationSearchHitAdapterTest extends TestCase
 {
@@ -45,7 +46,7 @@ class LocationSearchHitAdapterTest extends TestCase
     {
         $nbResults = 123;
         $query = new LocationQuery();
-        $query->filter = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->filter = $this->getMock(CriterionInterface::class);
         $query->sortClauses = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
             ->disableOriginalConstructor()
@@ -75,7 +76,7 @@ class LocationSearchHitAdapterTest extends TestCase
         $nbResults = 123;
 
         $query = new LocationQuery();
-        $query->filter = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->filter = $this->getMock(CriterionInterface::class);
         $query->sortClauses = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
             ->disableOriginalConstructor()

@@ -10,8 +10,8 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Repository\Values\User\Policy;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * Mock test case for PermissionCriterionHandler.

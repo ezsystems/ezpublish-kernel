@@ -10,8 +10,8 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 abstract class Matcher implements CriterionInterface

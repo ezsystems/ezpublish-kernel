@@ -149,7 +149,7 @@ class NewObjectStateLimitationType extends AbstractPersistenceLimitationType imp
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException Not applicable, needs context of new state.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {

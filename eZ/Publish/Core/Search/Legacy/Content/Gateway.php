@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 
 /**
  * The Content Search Gateway provides the implementation for one database to

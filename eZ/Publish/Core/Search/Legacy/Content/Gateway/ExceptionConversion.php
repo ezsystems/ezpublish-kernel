@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway;
 
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\Core\Search\Legacy\Content\Gateway;
 use Doctrine\DBAL\DBALException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use PDOException;
 use RuntimeException;
 

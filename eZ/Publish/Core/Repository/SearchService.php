@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Location\Location as LocationCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location as LocationSortClause;

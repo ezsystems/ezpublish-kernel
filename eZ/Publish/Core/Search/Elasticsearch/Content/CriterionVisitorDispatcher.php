@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use RuntimeException;
 
 /**

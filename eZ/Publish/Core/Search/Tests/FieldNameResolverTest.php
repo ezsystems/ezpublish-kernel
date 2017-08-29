@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Search\Tests;
 
 use ArrayObject;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 
 /**
  * Test case for FieldNameResolver.

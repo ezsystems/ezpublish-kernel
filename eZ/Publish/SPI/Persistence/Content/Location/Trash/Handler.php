@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\SPI\Persistence\Content\Location\Trash;
 
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.

@@ -153,7 +153,7 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface
      *
      * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow, or deprecate
      */
