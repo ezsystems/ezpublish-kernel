@@ -24,6 +24,19 @@ Changes affecting version compatibility with former or future versions.
 * "cache_pool_name" siteaccess setting has been removed & replaced by "cache_service_name" as the semantic is different.
   The new setting should contain the full service name of a  symfony cache service, by default app_cache.app is used.
 
+* Criterion interfaces were changed. eZ\Publish\API\Repository\Values\Content\Query\Criterion abstract class was 
+  renamed to eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher and is now implementing
+  CriterionInterface. Also, all classes extending the Matcher were moved to the
+  eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher namespace. 
+  eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator class changed namespace, so the full class
+  name is now eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOperator. Additionally,
+  the LogicalOperator now implements CriterionInterface instead of extending the Matcher (former Criterion) abstract
+  class. Furthermore, all classes extending the LogicalOperator were moved to the
+  eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator namespace.
+  eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface changed namespace, so the full class name is now
+  eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface. Custom classes extending the former
+  Criterion abstract class should now extend the Matcher abstract class (if they are used to match the content based on
+  some conditions) or the LogicalOperator abstract class (if they represent the logical operators).
 
 ## Deprecations
 
