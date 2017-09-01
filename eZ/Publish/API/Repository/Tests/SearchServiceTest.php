@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -41,7 +42,7 @@ class SearchServiceTest extends BaseTest
         return array(
             0 => array(
                 array(
-                    'filter' => new Criterion\ContentId(
+                    'filter' => new Criterion\Matcher\ContentId(
                         array(1, 4, 10)
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -50,12 +51,12 @@ class SearchServiceTest extends BaseTest
             ),
             1 => array(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(1, 4, 10)
                             ),
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(4, 12)
                             ),
                         )
@@ -66,12 +67,12 @@ class SearchServiceTest extends BaseTest
             ),
             2 => array(
                 array(
-                    'filter' => new Criterion\LogicalOr(
+                    'filter' => new Criterion\LogicalOperator\LogicalOr(
                         array(
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(1, 4, 10)
                             ),
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(4, 12)
                             ),
                         )
@@ -82,13 +83,13 @@ class SearchServiceTest extends BaseTest
             ),
             3 => array(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(1, 4, 10)
                             ),
-                            new Criterion\LogicalNot(
-                                new Criterion\ContentId(
+                            new Criterion\LogicalOperator\LogicalNot(
+                                new Criterion\Matcher\ContentId(
                                     array(10, 12)
                                 )
                             ),
@@ -100,15 +101,15 @@ class SearchServiceTest extends BaseTest
             ),
             4 => array(
                 array(
-                    'filter' => new Criterion\LogicalAnd(
+                    'filter' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(1, 4, 10)
                             ),
-                            new Criterion\LogicalAnd(
+                            new Criterion\LogicalOperator\LogicalAnd(
                                 array(
-                                    new Criterion\LogicalNot(
-                                        new Criterion\ContentId(
+                                    new Criterion\LogicalOperator\LogicalNot(
+                                        new Criterion\Matcher\ContentId(
                                             array(10, 12)
                                         )
                                     ),
@@ -122,7 +123,7 @@ class SearchServiceTest extends BaseTest
             ),
             5 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeId(
+                    'filter' => new Criterion\Matcher\ContentTypeId(
                         4
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -131,7 +132,7 @@ class SearchServiceTest extends BaseTest
             ),
             6 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeIdentifier(
+                    'filter' => new Criterion\Matcher\ContentTypeIdentifier(
                         'user'
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -140,14 +141,14 @@ class SearchServiceTest extends BaseTest
             ),
             7 => array(
                 array(
-                    'filter' => new Criterion\MatchNone(),
+                    'filter' => new Criterion\Matcher\MatchNone(),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'MatchNone.php',
             ),
             8 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeGroupId(
+                    'filter' => new Criterion\Matcher\ContentTypeGroupId(
                         2
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -156,8 +157,8 @@ class SearchServiceTest extends BaseTest
             ),
             9 => array(
                 array(
-                    'filter' => new Criterion\DateMetadata(
-                        Criterion\DateMetadata::MODIFIED,
+                    'filter' => new Criterion\Matcher\DateMetadata(
+                        Criterion\Matcher\DateMetadata::MODIFIED,
                         Criterion\Operator::GT,
                         1343140540
                     ),
@@ -167,8 +168,8 @@ class SearchServiceTest extends BaseTest
             ),
             10 => array(
                 array(
-                    'filter' => new Criterion\DateMetadata(
-                        Criterion\DateMetadata::MODIFIED,
+                    'filter' => new Criterion\Matcher\DateMetadata(
+                        Criterion\Matcher\DateMetadata::MODIFIED,
                         Criterion\Operator::GTE,
                         1311154215
                     ),
@@ -178,8 +179,8 @@ class SearchServiceTest extends BaseTest
             ),
             11 => array(
                 array(
-                    'filter' => new Criterion\DateMetadata(
-                        Criterion\DateMetadata::MODIFIED,
+                    'filter' => new Criterion\Matcher\DateMetadata(
+                        Criterion\Matcher\DateMetadata::MODIFIED,
                         Criterion\Operator::LTE,
                         1311154215
                     ),
@@ -190,8 +191,8 @@ class SearchServiceTest extends BaseTest
             ),
             12 => array(
                 array(
-                    'filter' => new Criterion\DateMetadata(
-                        Criterion\DateMetadata::MODIFIED,
+                    'filter' => new Criterion\Matcher\DateMetadata(
+                        Criterion\Matcher\DateMetadata::MODIFIED,
                         Criterion\Operator::IN,
                         array(1033920794, 1060695457, 1343140540)
                     ),
@@ -201,8 +202,8 @@ class SearchServiceTest extends BaseTest
             ),
             13 => array(
                 array(
-                    'filter' => new Criterion\DateMetadata(
-                        Criterion\DateMetadata::MODIFIED,
+                    'filter' => new Criterion\Matcher\DateMetadata(
+                        Criterion\Matcher\DateMetadata::MODIFIED,
                         Criterion\Operator::BETWEEN,
                         array(1033920776, 1072180276)
                     ),
@@ -212,8 +213,8 @@ class SearchServiceTest extends BaseTest
             ),
             14 => array(
                 array(
-                    'filter' => new Criterion\DateMetadata(
-                        Criterion\DateMetadata::CREATED,
+                    'filter' => new Criterion\Matcher\DateMetadata(
+                        Criterion\Matcher\DateMetadata::CREATED,
                         Criterion\Operator::BETWEEN,
                         array(1033920776, 1072180278)
                     ),
@@ -223,7 +224,7 @@ class SearchServiceTest extends BaseTest
             ),
             15 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
+                    'filter' => new Criterion\Matcher\CustomField(
                         'user_group_name_value_s',
                         Criterion\Operator::EQ,
                         'Members'
@@ -234,7 +235,7 @@ class SearchServiceTest extends BaseTest
             ),
             16 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
+                    'filter' => new Criterion\Matcher\CustomField(
                         'user_group_name_value_s',
                         Criterion\Operator::CONTAINS,
                         'Members'
@@ -245,7 +246,7 @@ class SearchServiceTest extends BaseTest
             ),
             17 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
+                    'filter' => new Criterion\Matcher\CustomField(
                         'user_group_name_value_s',
                         Criterion\Operator::LT,
                         'Members'
@@ -256,7 +257,7 @@ class SearchServiceTest extends BaseTest
             ),
             18 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
+                    'filter' => new Criterion\Matcher\CustomField(
                         'user_group_name_value_s',
                         Criterion\Operator::LTE,
                         'Members'
@@ -267,7 +268,7 @@ class SearchServiceTest extends BaseTest
             ),
             19 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
+                    'filter' => new Criterion\Matcher\CustomField(
                         'user_group_name_value_s',
                         Criterion\Operator::GT,
                         'Members'
@@ -278,7 +279,7 @@ class SearchServiceTest extends BaseTest
             ),
             20 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
+                    'filter' => new Criterion\Matcher\CustomField(
                         'user_group_name_value_s',
                         Criterion\Operator::GTE,
                         'Members'
@@ -289,7 +290,7 @@ class SearchServiceTest extends BaseTest
             ),
             21 => array(
                 array(
-                    'filter' => new Criterion\CustomField(
+                    'filter' => new Criterion\Matcher\CustomField(
                         'user_group_name_value_s',
                         Criterion\Operator::BETWEEN,
                         array('Administrator users', 'Members')
@@ -300,7 +301,7 @@ class SearchServiceTest extends BaseTest
             ),
             22 => array(
                 array(
-                    'filter' => new Criterion\RemoteId(
+                    'filter' => new Criterion\Matcher\RemoteId(
                         array('f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca')
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -309,7 +310,7 @@ class SearchServiceTest extends BaseTest
             ),
             23 => array(
                 array(
-                    'filter' => new Criterion\SectionId(
+                    'filter' => new Criterion\Matcher\SectionId(
                         array(2)
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -318,7 +319,7 @@ class SearchServiceTest extends BaseTest
             ),
             24 => array(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'name',
                         Criterion\Operator::EQ,
                         'Members'
@@ -329,7 +330,7 @@ class SearchServiceTest extends BaseTest
             ),
             25 => array(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'name',
                         Criterion\Operator::IN,
                         array('Members', 'Anonymous Users')
@@ -340,8 +341,8 @@ class SearchServiceTest extends BaseTest
             ),
             26 => array(
                 array(
-                    'filter' => new Criterion\DateMetadata(
-                        Criterion\DateMetadata::MODIFIED,
+                    'filter' => new Criterion\Matcher\DateMetadata(
+                        Criterion\Matcher\DateMetadata::MODIFIED,
                         Criterion\Operator::BETWEEN,
                         array(1033920275, 1033920794)
                     ),
@@ -351,15 +352,15 @@ class SearchServiceTest extends BaseTest
             ),
             27 => array(
                 array(
-                    'filter' => new Criterion\LogicalOr(
+                    'filter' => new Criterion\LogicalOperator\LogicalOr(
                         array(
-                            new Criterion\Field(
+                            new Criterion\Matcher\Field(
                                 'name',
                                 Criterion\Operator::EQ,
                                 'Members'
                             ),
-                            new Criterion\DateMetadata(
-                                Criterion\DateMetadata::MODIFIED,
+                            new Criterion\Matcher\DateMetadata(
+                                Criterion\Matcher\DateMetadata::MODIFIED,
                                 Criterion\Operator::BETWEEN,
                                 array(1033920275, 1033920794)
                             ),
@@ -371,7 +372,7 @@ class SearchServiceTest extends BaseTest
             ),
             28 => array(
                 array(
-                    'filter' => new Criterion\Subtree(
+                    'filter' => new Criterion\Matcher\Subtree(
                         '/1/5/'
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -380,7 +381,7 @@ class SearchServiceTest extends BaseTest
             ),
             29 => array(
                 array(
-                    'filter' => new Criterion\LocationId(
+                    'filter' => new Criterion\Matcher\LocationId(
                         array(1, 2, 5)
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -389,7 +390,7 @@ class SearchServiceTest extends BaseTest
             ),
             30 => array(
                 array(
-                    'filter' => new Criterion\ParentLocationId(
+                    'filter' => new Criterion\Matcher\ParentLocationId(
                         array(1)
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -398,7 +399,7 @@ class SearchServiceTest extends BaseTest
             ),
             31 => array(
                 array(
-                    'filter' => new Criterion\LocationRemoteId(
+                    'filter' => new Criterion\Matcher\LocationRemoteId(
                         array('3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983')
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -408,7 +409,7 @@ class SearchServiceTest extends BaseTest
             32 => array(
                 array(
                     // There is no Status Criterion anymore, this should match all published as well
-                    'filter' => new Criterion\Subtree(
+                    'filter' => new Criterion\Matcher\Subtree(
                         '/1/'
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -437,8 +438,8 @@ class SearchServiceTest extends BaseTest
             ),
             33 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::MODIFIER,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::MODIFIER,
                         Criterion\Operator::EQ,
                         14
                     ),
@@ -451,8 +452,8 @@ class SearchServiceTest extends BaseTest
             ),
             34 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::MODIFIER,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::MODIFIER,
                         Criterion\Operator::IN,
                         array(14)
                     ),
@@ -465,8 +466,8 @@ class SearchServiceTest extends BaseTest
             ),
             35 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::OWNER,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::OWNER,
                         Criterion\Operator::EQ,
                         14
                     ),
@@ -479,8 +480,8 @@ class SearchServiceTest extends BaseTest
             ),
             36 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::OWNER,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::OWNER,
                         Criterion\Operator::IN,
                         array(14)
                     ),
@@ -493,8 +494,8 @@ class SearchServiceTest extends BaseTest
             ),
             37 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::GROUP,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::GROUP,
                         Criterion\Operator::EQ,
                         12
                     ),
@@ -507,8 +508,8 @@ class SearchServiceTest extends BaseTest
             ),
             38 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::GROUP,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::GROUP,
                         Criterion\Operator::IN,
                         array(12)
                     ),
@@ -521,8 +522,8 @@ class SearchServiceTest extends BaseTest
             ),
             39 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::GROUP,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::GROUP,
                         Criterion\Operator::EQ,
                         4
                     ),
@@ -535,8 +536,8 @@ class SearchServiceTest extends BaseTest
             ),
             40 => array(
                 array(
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::GROUP,
+                    'filter' => new Criterion\Matcher\UserMetadata(
+                        Criterion\Matcher\UserMetadata::GROUP,
                         Criterion\Operator::IN,
                         array(4)
                     ),
@@ -549,7 +550,7 @@ class SearchServiceTest extends BaseTest
             ),
             41 => array(
                 array(
-                    'filter' => new Criterion\Ancestor(
+                    'filter' => new Criterion\Matcher\Ancestor(
                         array(
                             '/1/5/44/',
                             '/1/5/44/45/',
@@ -572,17 +573,17 @@ class SearchServiceTest extends BaseTest
         return array(
             array(
                 array(
-                    'filter' => new Criterion\ContentId(
+                    'filter' => new Criterion\Matcher\ContentId(
                         array(58, 10)
                     ),
-                    'query' => new Criterion\FullText('contact'),
+                    'query' => new Criterion\Matcher\FullText('contact'),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'FullTextFiltered.php',
             ),
             array(
                 array(
-                    'query' => new Criterion\FullText(
+                    'query' => new Criterion\Matcher\FullText(
                         'contact',
                         array(
                             'boost' => array(
@@ -597,7 +598,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'query' => new Criterion\FullText(
+                    'query' => new Criterion\Matcher\FullText(
                         'Contact*'
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -606,14 +607,14 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'query' => new Criterion\LanguageCode('eng-GB', false),
+                    'query' => new Criterion\Matcher\LanguageCode('eng-GB', false),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'LanguageCode.php',
             ),
             array(
                 array(
-                    'query' => new Criterion\LanguageCode(array('eng-US', 'eng-GB')),
+                    'query' => new Criterion\Matcher\LanguageCode(array('eng-US', 'eng-GB')),
                     'offset' => 10,
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
@@ -621,7 +622,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'query' => new Criterion\LanguageCode('eng-GB'),
+                    'query' => new Criterion\Matcher\LanguageCode('eng-GB'),
                     'offset' => 10,
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
@@ -629,8 +630,8 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'query' => new Criterion\Visibility(
-                        Criterion\Visibility::VISIBLE
+                    'query' => new Criterion\Matcher\Visibility(
+                        Criterion\Matcher\Visibility::VISIBLE
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
                     'limit' => 50,
@@ -647,28 +648,28 @@ class SearchServiceTest extends BaseTest
         return array(
             array(
                 array(
-                    'query' => new Criterion\Location\Depth(Criterion\Operator::EQ, 1),
+                    'query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::EQ, 1),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'Depth.php',
             ),
             array(
                 array(
-                    'query' => new Criterion\Location\Depth(Criterion\Operator::IN, array(1, 3)),
+                    'query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::IN, array(1, 3)),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'DepthIn.php',
             ),
             array(
                 array(
-                    'query' => new Criterion\Location\Depth(Criterion\Operator::GT, 2),
+                    'query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::GT, 2),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'DepthGt.php',
             ),
             array(
                 array(
-                    'query' => new Criterion\Location\Depth(Criterion\Operator::GTE, 2),
+                    'query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::GTE, 2),
                     'sortClauses' => array(new SortClause\ContentId()),
                     'limit' => 50,
                 ),
@@ -676,14 +677,14 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'query' => new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                    'query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'Depth.php',
             ),
             array(
                 array(
-                    'query' => new Criterion\Location\Depth(Criterion\Operator::LTE, 2),
+                    'query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LTE, 2),
                     'sortClauses' => array(new SortClause\ContentId()),
                     'limit' => 50,
                 ),
@@ -691,7 +692,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'query' => new Criterion\Location\Depth(Criterion\Operator::BETWEEN, array(1, 2)),
+                    'query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::BETWEEN, array(1, 2)),
                     'sortClauses' => array(new SortClause\ContentId()),
                     'limit' => 50,
                 ),
@@ -699,7 +700,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'filter' => new Criterion\Ancestor('/1/5/44/45/'),
+                    'filter' => new Criterion\Matcher\Ancestor('/1/5/44/45/'),
                     'sortClauses' => array(
                         new SortClause\Location\Depth(),
                     ),
@@ -759,7 +760,7 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture(
             new Query(
                 array(
-                    'query' => new Criterion\ContentId(
+                    'query' => new Criterion\Matcher\ContentId(
                         array(1, 4, 10)
                     ),
                     'sortClauses' => array(new SortClause\ContentId()),
@@ -825,7 +826,7 @@ class SearchServiceTest extends BaseTest
         return array(
             array(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'name',
                         Criterion\Operator::EQ,
                         'Members'
@@ -835,7 +836,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'name',
                         Criterion\Operator::EQ,
                         'members'
@@ -845,7 +846,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'name',
                         Criterion\Operator::EQ,
                         'MEMBERS'
@@ -895,7 +896,7 @@ class SearchServiceTest extends BaseTest
         return array(
             0 => array(
                 array(
-                    'filter' => new Criterion\FieldRelation(
+                    'filter' => new Criterion\Matcher\FieldRelation(
                         'image',
                         Criterion\Operator::IN,
                         array(1, 4, 10)
@@ -906,7 +907,7 @@ class SearchServiceTest extends BaseTest
             ),
             1 => array(
                 array(
-                    'filter' => new Criterion\FieldRelation(
+                    'filter' => new Criterion\Matcher\FieldRelation(
                         'image',
                         Criterion\Operator::IN,
                         array(4, 49)
@@ -917,7 +918,7 @@ class SearchServiceTest extends BaseTest
             ),
             2 => array(
                 array(
-                    'filter' => new Criterion\FieldRelation(
+                    'filter' => new Criterion\Matcher\FieldRelation(
                         'image',
                         Criterion\Operator::IN,
                         array(4)
@@ -928,7 +929,7 @@ class SearchServiceTest extends BaseTest
             ),
             3 => array(
                 array(
-                    'filter' => new Criterion\FieldRelation(
+                    'filter' => new Criterion\Matcher\FieldRelation(
                         'image',
                         Criterion\Operator::CONTAINS,
                         array(1, 4, 10)
@@ -939,7 +940,7 @@ class SearchServiceTest extends BaseTest
             ),
             4 => array(
                 array(
-                    'filter' => new Criterion\FieldRelation(
+                    'filter' => new Criterion\Matcher\FieldRelation(
                         'image',
                         Criterion\Operator::CONTAINS,
                         array(4, 49)
@@ -950,7 +951,7 @@ class SearchServiceTest extends BaseTest
             ),
             5 => array(
                 array(
-                    'filter' => new Criterion\FieldRelation(
+                    'filter' => new Criterion\Matcher\FieldRelation(
                         'image',
                         Criterion\Operator::CONTAINS,
                         array(4)
@@ -1024,7 +1025,7 @@ class SearchServiceTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $content = $searchService->findSingle(
-            new Criterion\ContentId(
+            new Criterion\Matcher\ContentId(
                 array(4)
             )
         );
@@ -1042,7 +1043,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query();
         $query->performCount = false;
-        $query->query = new Criterion\ContentTypeId(
+        $query->query = new Criterion\Matcher\ContentTypeId(
             array(4)
         );
 
@@ -1076,7 +1077,7 @@ class SearchServiceTest extends BaseTest
         $query = new Query();
         $query->performCount = false;
         $query->limit = 0;
-        $query->query = new Criterion\ContentTypeId(
+        $query->query = new Criterion\Matcher\ContentTypeId(
             array(4)
         );
 
@@ -1090,7 +1091,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery();
         $query->performCount = false;
-        $query->query = new Criterion\ContentTypeId(
+        $query->query = new Criterion\Matcher\ContentTypeId(
             array(4)
         );
 
@@ -1124,7 +1125,7 @@ class SearchServiceTest extends BaseTest
         $query = new LocationQuery();
         $query->performCount = false;
         $query->limit = 0;
-        $query->query = new Criterion\ContentTypeId(
+        $query->query = new Criterion\Matcher\ContentTypeId(
             array(4)
         );
 
@@ -1191,7 +1192,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'query' => new Criterion\Field(
+                'query' => new Criterion\Matcher\Field(
                     'countries',
                     Criterion\Operator::CONTAINS,
                     'Belgium'
@@ -1221,7 +1222,7 @@ class SearchServiceTest extends BaseTest
         $this->createMultipleCountriesContent();
         $query = new Query(
             array(
-                'query' => new Criterion\Field(
+                'query' => new Criterion\Matcher\Field(
                     'countries',
                     Criterion\Operator::CONTAINS,
                     'Netherlands Antilles'
@@ -1248,7 +1249,7 @@ class SearchServiceTest extends BaseTest
         $searchService->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'some_hopefully_unknown_field',
                         Criterion\Operator::BETWEEN,
                         array(10, 1000)
@@ -1271,7 +1272,7 @@ class SearchServiceTest extends BaseTest
         $searchService->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'some_hopefully_unknown_field',
                         Criterion\Operator::EQ,
                         1000
@@ -1294,7 +1295,7 @@ class SearchServiceTest extends BaseTest
         $searchService->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'tag_cloud_url',
                         Criterion\Operator::EQ,
                         'http://nimbus.com'
@@ -1357,7 +1358,7 @@ class SearchServiceTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $searchService->findSingle(
-            new Criterion\ContentId(
+            new Criterion\Matcher\ContentId(
                 array(4, 10)
             )
         );
@@ -1372,7 +1373,7 @@ class SearchServiceTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $searchService->findSingle(
-            new Criterion\Field(
+            new Criterion\Matcher\Field(
                 'tag_cloud_url',
                 Criterion\Operator::EQ,
                 'http://nimbus.com'
@@ -1387,7 +1388,7 @@ class SearchServiceTest extends BaseTest
         return array(
             0 => array(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(),
@@ -1405,7 +1406,7 @@ class SearchServiceTest extends BaseTest
             ),
             1 => array(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -1417,7 +1418,7 @@ class SearchServiceTest extends BaseTest
             ),
             2 => array(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
@@ -1429,7 +1430,7 @@ class SearchServiceTest extends BaseTest
             ),
             3 => array(
                 array(
-                    'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
+                    'filter' => new Criterion\Matcher\SectionId(array(4, 2, 6, 3)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
@@ -1441,7 +1442,7 @@ class SearchServiceTest extends BaseTest
             ),
             4 => array(
                 array(
-                    'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
+                    'filter' => new Criterion\Matcher\SectionId(array(4, 2, 6, 3)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
@@ -1453,7 +1454,7 @@ class SearchServiceTest extends BaseTest
             ),
             5 => array(
                 array(
-                    'filter' => new Criterion\SectionId(array(2, 3)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2, 3)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
@@ -1465,7 +1466,7 @@ class SearchServiceTest extends BaseTest
             ),
             6 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeId(1),
+                    'filter' => new Criterion\Matcher\ContentTypeId(1),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
@@ -1477,7 +1478,7 @@ class SearchServiceTest extends BaseTest
             ),
             7 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeId(array(1, 3)),
+                    'filter' => new Criterion\Matcher\ContentTypeId(array(1, 3)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
@@ -1489,7 +1490,7 @@ class SearchServiceTest extends BaseTest
             ),
             8 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeId(array(1, 3)),
+                    'filter' => new Criterion\Matcher\ContentTypeId(array(1, 3)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
@@ -1501,7 +1502,7 @@ class SearchServiceTest extends BaseTest
             ),
             9 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeId(array(1, 3)),
+                    'filter' => new Criterion\Matcher\ContentTypeId(array(1, 3)),
                     'offset' => 3,
                     'limit' => 5,
                     'sortClauses' => array(
@@ -1514,7 +1515,7 @@ class SearchServiceTest extends BaseTest
             ),
             10 => array(
                 array(
-                    'filter' => new Criterion\ContentTypeId(array(1, 3)),
+                    'filter' => new Criterion\Matcher\ContentTypeId(array(1, 3)),
                     'offset' => 3,
                     'limit' => 5,
                     'sortClauses' => array(
@@ -1535,7 +1536,7 @@ class SearchServiceTest extends BaseTest
         return array(
             array(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(new SortClause\Location\Path(Query::SORT_DESC)),
@@ -1544,7 +1545,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(new SortClause\Location\Depth(Query::SORT_ASC)),
@@ -1576,7 +1577,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'filter' => new Criterion\SectionId(array(3)),
+                    'filter' => new Criterion\Matcher\SectionId(array(3)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -1588,7 +1589,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                    'filter' => new Criterion\Matcher\SectionId(array(2)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -2101,7 +2102,7 @@ class SearchServiceTest extends BaseTest
         if ($contentSearch) {
             $query = new Query(
                 array(
-                    'query' => new Criterion\ContentTypeId($contentType->id),
+                    'query' => new Criterion\Matcher\ContentTypeId($contentType->id),
                     'sortClauses' => $sortClauses,
                 )
             );
@@ -2109,7 +2110,7 @@ class SearchServiceTest extends BaseTest
         } else {
             $query = new LocationQuery(
                 array(
-                    'query' => new Criterion\ContentTypeId($contentType->id),
+                    'query' => new Criterion\Matcher\ContentTypeId($contentType->id),
                     'sortClauses' => $sortClauses,
                 )
             );
@@ -2142,7 +2143,7 @@ class SearchServiceTest extends BaseTest
                         'ger-DE',
                     ),
                 ),
-                new Criterion\Field('integer', Criterion\Operator::LT, 5),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::LT, 5),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2160,7 +2161,7 @@ class SearchServiceTest extends BaseTest
                     ),
                     'useAlwaysAvailable' => false,
                 ),
-                new Criterion\Field('integer', Criterion\Operator::LT, 2),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::LT, 2),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2175,7 +2176,7 @@ class SearchServiceTest extends BaseTest
                         'eng-GB',
                     ),
                 ),
-                new Criterion\Field('integer', Criterion\Operator::LTE, 4),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::LTE, 4),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2194,7 +2195,7 @@ class SearchServiceTest extends BaseTest
                     ),
                     'useAlwaysAvailable' => false,
                 ),
-                new Criterion\Field('integer', Criterion\Operator::LTE, 4),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::LTE, 4),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2206,7 +2207,7 @@ class SearchServiceTest extends BaseTest
             4 => array(
                 $fixture,
                 $languageSettings,
-                new Criterion\Field('integer', Criterion\Operator::LTE, 4),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::LTE, 4),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2219,7 +2220,7 @@ class SearchServiceTest extends BaseTest
             5 => array(
                 $fixture,
                 $languageSettings,
-                new Criterion\Field('integer', Criterion\Operator::GT, 1),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::GT, 1),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2232,7 +2233,7 @@ class SearchServiceTest extends BaseTest
             6 => array(
                 $fixture,
                 $languageSettings,
-                new Criterion\Field('integer', Criterion\Operator::GTE, 2),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::GTE, 2),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2245,7 +2246,7 @@ class SearchServiceTest extends BaseTest
             7 => array(
                 $fixture,
                 $languageSettings,
-                new Criterion\Field('integer', Criterion\Operator::BETWEEN, array(2, 4)),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::BETWEEN, array(2, 4)),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2257,13 +2258,13 @@ class SearchServiceTest extends BaseTest
             8 => array(
                 $fixture,
                 $languageSettings,
-                new Criterion\Field('integer', Criterion\Operator::BETWEEN, array(4, 2)),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::BETWEEN, array(4, 2)),
                 array(),
             ),
             9 => array(
                 $fixture,
                 $languageSettings,
-                new Criterion\Field('integer', Criterion\Operator::EQ, 4),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::EQ, 4),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2274,7 +2275,7 @@ class SearchServiceTest extends BaseTest
             10 => array(
                 $fixture,
                 $languageSettings,
-                new Criterion\Field('integer', Criterion\Operator::EQ, 2),
+                new Criterion\Matcher\Field('integer', Criterion\Operator::EQ, 2),
                 /**
                  * Expected order, Value eng-GB, Value ger-DE.
                  *
@@ -2293,13 +2294,13 @@ class SearchServiceTest extends BaseTest
      *
      * @param array $contentDataList
      * @param array $languageSettings
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $expected
      */
     public function testMultilingualFieldFilterContent(
         array $contentDataList,
         $languageSettings,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         $expected
     ) {
         $this->assertMultilingualFieldFilter(
@@ -2318,13 +2319,13 @@ class SearchServiceTest extends BaseTest
      *
      * @param array $contentDataList
      * @param array $languageSettings
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $expected
      */
     public function testMultilingualFieldFilterLocation(
         array $contentDataList,
         $languageSettings,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         $expected
     ) {
         $this->assertMultilingualFieldFilter(
@@ -2339,14 +2340,14 @@ class SearchServiceTest extends BaseTest
     /**
      * @param array $contentDataList
      * @param array $languageSettings
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $expected
      * @param bool $contentSearch
      */
     protected function assertMultilingualFieldFilter(
         array $contentDataList,
         $languageSettings,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         $expected,
         $contentSearch = true
     ) {
@@ -2385,9 +2386,9 @@ class SearchServiceTest extends BaseTest
         if ($contentSearch) {
             $query = new Query(
                 array(
-                    'query' => new Criterion\LogicalAnd(
+                    'query' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
-                            new Criterion\ContentTypeId($contentType->id),
+                            new Criterion\Matcher\ContentTypeId($contentType->id),
                             $criterion,
                         )
                     ),
@@ -2398,9 +2399,9 @@ class SearchServiceTest extends BaseTest
         } else {
             $query = new LocationQuery(
                 array(
-                    'query' => new Criterion\LogicalAnd(
+                    'query' => new Criterion\LogicalOperator\LogicalAnd(
                         array(
-                            new Criterion\ContentTypeId($contentType->id),
+                            new Criterion\Matcher\ContentTypeId($contentType->id),
                             $criterion,
                         )
                     ),
@@ -2522,7 +2523,7 @@ class SearchServiceTest extends BaseTest
     {
         $query = new Query(
             array(
-                'query' => new Criterion\CustomField(
+                'query' => new Criterion\Matcher\CustomField(
                     'custom_field',
                     Criterion\Operator::EQ,
                     'AdMiNiStRaToR'
@@ -2559,7 +2560,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'query' => new Criterion\Field(
+                'query' => new Criterion\Matcher\Field(
                     'first_name',
                     Criterion\Operator::EQ,
                     'User'
@@ -2602,7 +2603,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\ContentTypeId(1),
+                'filter' => new Criterion\Matcher\ContentTypeId(1),
                 'offset' => 0,
                 'limit' => 10,
                 'sortClauses' => array(
@@ -2701,10 +2702,10 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::LTE,
                             240,
@@ -2781,10 +2782,10 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             240,
@@ -2877,10 +2878,10 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::BETWEEN,
                             array(239, 241),
@@ -2949,10 +2950,10 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::BETWEEN,
                             array(221, 350),
@@ -3050,10 +3051,10 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             235,
@@ -3167,10 +3168,10 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             235,
@@ -3266,7 +3267,7 @@ class SearchServiceTest extends BaseTest
 
         $this->refreshSearch($repository);
 
-        $distanceCriterion = new Criterion\MapLocationDistance(
+        $distanceCriterion = new Criterion\Matcher\MapLocationDistance(
             'maplocation',
             Criterion\Operator::LTE,
             240,
@@ -3277,9 +3278,9 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
                         $distanceCriterion,
                     )
                 ),
@@ -3386,10 +3387,10 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\MapLocationDistance(
+                        new Criterion\Matcher\ContentTypeId($contentType->id),
+                        new Criterion\Matcher\MapLocationDistance(
                             'maplocation',
                             Criterion\Operator::GTE,
                             235,
@@ -3448,11 +3449,11 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ParentLocationId($designLocationId),
-                        new Criterion\Location\IsMainLocation(
-                            Criterion\Location\IsMainLocation::MAIN
+                        new Criterion\Matcher\ParentLocationId($designLocationId),
+                        new Criterion\Matcher\Location\IsMainLocation(
+                            Criterion\Matcher\Location\IsMainLocation::MAIN
                         ),
                     )
                 ),
@@ -3492,11 +3493,11 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\LogicalAnd(
+                'filter' => new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\ParentLocationId($designLocationId),
-                        new Criterion\Location\IsMainLocation(
-                            Criterion\Location\IsMainLocation::NOT_MAIN
+                        new Criterion\Matcher\ParentLocationId($designLocationId),
+                        new Criterion\Matcher\Location\IsMainLocation(
+                            Criterion\Matcher\Location\IsMainLocation::NOT_MAIN
                         ),
                     )
                 ),
@@ -3537,7 +3538,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\ParentLocationId($designLocationId),
+                'filter' => new Criterion\Matcher\ParentLocationId($designLocationId),
                 'offset' => 0,
                 'limit' => 10,
                 'sortClauses' => array(
@@ -3580,7 +3581,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\ParentLocationId($designLocationId),
+                'filter' => new Criterion\Matcher\ParentLocationId($designLocationId),
                 'offset' => 0,
                 'limit' => 10,
                 'sortClauses' => array(
@@ -3629,7 +3630,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\ContentId($content->id),
+                'filter' => new Criterion\Matcher\ContentId($content->id),
                 'sortClauses' => array(
                     new SortClause\Location\Id(LocationQuery::SORT_ASC),
                 ),
@@ -3726,18 +3727,18 @@ class SearchServiceTest extends BaseTest
         // Do not limit for LSE, as it does not not require reindexing.
         // See explanation below.
         if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
-            $criteria[] = new Criterion\ContentTypeIdentifier('folder');
+            $criteria[] = new Criterion\Matcher\ContentTypeIdentifier('folder');
         }
 
-        $criteria[] = new Criterion\UserMetadata(
-            Criterion\UserMetadata::GROUP,
+        $criteria[] = new Criterion\Matcher\UserMetadata(
+            Criterion\Matcher\UserMetadata::GROUP,
             Criterion\Operator::EQ,
             $editorsUserGroupId
         );
 
         $query = new Query(
             array(
-                $queryType => new Criterion\LogicalAnd($criteria),
+                $queryType => new Criterion\LogicalOperator\LogicalAnd($criteria),
                 'sortClauses' => array(
                     new SortClause\ContentId(),
                 ),
@@ -3815,18 +3816,18 @@ class SearchServiceTest extends BaseTest
         // Do not limit for LSE, as it does not not require reindexing.
         // See explanation below.
         if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
-            $criteria[] = new Criterion\ContentTypeIdentifier('folder');
+            $criteria[] = new Criterion\Matcher\ContentTypeIdentifier('folder');
         }
 
-        $criteria[] = new Criterion\UserMetadata(
-            Criterion\UserMetadata::GROUP,
+        $criteria[] = new Criterion\Matcher\UserMetadata(
+            Criterion\Matcher\UserMetadata::GROUP,
             Criterion\Operator::EQ,
             $editorsUserGroupId
         );
 
         $query = new LocationQuery(
             array(
-                $queryType => new Criterion\LogicalAnd($criteria),
+                $queryType => new Criterion\LogicalOperator\LogicalAnd($criteria),
                 'sortClauses' => array(
                     new SortClause\Location\Id(),
                 ),
@@ -3922,7 +3923,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'query' => new Criterion\FullText('foxes'),
+                'query' => new Criterion\Matcher\FullText('foxes'),
             )
         );
 
@@ -3989,7 +3990,7 @@ class SearchServiceTest extends BaseTest
         // will not be correctly stemmed
         $query = new Query(
             array(
-                'query' => new Criterion\FullText('foxing'),
+                'query' => new Criterion\Matcher\FullText('foxing'),
             )
         );
 
@@ -4042,7 +4043,7 @@ class SearchServiceTest extends BaseTest
         // Content will be found because translation in Russian will be correctly stemmed
         $query = new Query(
             array(
-                'query' => new Criterion\FullText('важнее'),
+                'query' => new Criterion\Matcher\FullText('важнее'),
             )
         );
 
@@ -4095,7 +4096,7 @@ class SearchServiceTest extends BaseTest
         // Content should be found because translation in Russian will be correctly stemmed
         $query = new Query(
             array(
-                'query' => new Criterion\FullText('важнее'),
+                'query' => new Criterion\Matcher\FullText('важнее'),
             )
         );
 
@@ -4118,7 +4119,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             [
-                'filter' => new Criterion\ContentId([4]),
+                'filter' => new Criterion\Matcher\ContentId([4]),
                 'offset' => 0,
             ]
         );
@@ -4191,7 +4192,7 @@ class SearchServiceTest extends BaseTest
 
         $this->refreshSearch($repository);
 
-        $criterion = new Criterion\FullText(
+        $criterion = new Criterion\Matcher\FullText(
             'red apple',
             [
                 'boost' => [

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText as FullTextCriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\FullText as FullTextCriterion;
 
 /**
  * Parser for FullText Criterion.
@@ -26,7 +26,7 @@ class FullText extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText
+     * @return FullTextCriterion
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

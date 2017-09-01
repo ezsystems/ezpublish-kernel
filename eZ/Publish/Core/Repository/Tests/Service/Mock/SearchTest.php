@@ -13,6 +13,7 @@ use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -89,19 +90,19 @@ class SearchTest extends BaseServiceMockTest
     {
         return array(
             array(
-                new Query(array('filter' => new Criterion\Location\Depth(Criterion\Operator::LT, 2))),
+                new Query(array('filter' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2))),
                 "Argument '\$query' is invalid: Location criterions cannot be used in Content search",
             ),
             array(
-                new Query(array('query' => new Criterion\Location\Depth(Criterion\Operator::LT, 2))),
+                new Query(array('query' => new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2))),
                 "Argument '\$query' is invalid: Location criterions cannot be used in Content search",
             ),
             array(
                 new Query(
                     array(
-                        'query' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                                new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                             )
                         ),
                     )
@@ -148,13 +149,13 @@ class SearchTest extends BaseServiceMockTest
     {
         return array(
             array(
-                new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                 "Argument '\$filter' is invalid: Location criterions cannot be used in Content search",
             ),
             array(
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     array(
-                        new Criterion\Location\Depth(Criterion\Operator::LT, 2),
+                        new Criterion\Matcher\Location\Depth(Criterion\Operator::LT, 2),
                     )
                 ),
                 "Argument '\$filter' is invalid: Location criterions cannot be used in Content search",
@@ -214,9 +215,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -266,7 +267,7 @@ class SearchTest extends BaseServiceMockTest
             );
 
         $serviceQuery = new Query();
-        $handlerQuery = new Query(array('filter' => new Criterion\MatchAll(), 'limit' => 25));
+        $handlerQuery = new Query(array('filter' => new Criterion\Matcher\MatchAll(), 'limit' => 25));
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
@@ -339,7 +340,7 @@ class SearchTest extends BaseServiceMockTest
             );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock, 'limit' => 10));
@@ -413,7 +414,7 @@ class SearchTest extends BaseServiceMockTest
         $searchHandlerMock->expects($this->never())->method('findContent');
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
@@ -478,7 +479,7 @@ class SearchTest extends BaseServiceMockTest
             ->with(
                 new Query(
                     array(
-                        'filter' => new Criterion\MatchAll(),
+                        'filter' => new Criterion\Matcher\MatchAll(),
                         'limit' => 25,
                     )
                 ),
@@ -529,9 +530,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -561,9 +562,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -609,9 +610,9 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -662,7 +663,7 @@ class SearchTest extends BaseServiceMockTest
         );
 
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock, 'limit' => 10));
@@ -730,7 +731,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock->expects($this->never())->method('hasAccess');
 
         $serviceQuery = new LocationQuery();
-        $handlerQuery = new LocationQuery(array('filter' => new Criterion\MatchAll(), 'limit' => 25));
+        $handlerQuery = new LocationQuery(array('filter' => new Criterion\Matcher\MatchAll(), 'limit' => 25));
         $spiLocation = new SPILocation();
         $locationMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
 
@@ -790,9 +791,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        /** @var CriterionInterface $criterionMock */
         $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
+            ->getMockBuilder(CriterionInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock));
@@ -836,7 +837,7 @@ class SearchTest extends BaseServiceMockTest
             ->with(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\MatchAll(),
+                        'filter' => new Criterion\Matcher\MatchAll(),
                         'limit' => 25,
                     )
                 )

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\Field;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
@@ -52,14 +53,14 @@ class MapLocationDistanceRange extends Field
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function canVisit(Criterion $criterion)
+    public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\MapLocationDistance &&
+            $criterion instanceof Criterion\Matcher\MapLocationDistance &&
             (
                 $criterion->operator === Operator::LT ||
                 $criterion->operator === Operator::LTE ||
@@ -74,12 +75,13 @@ class MapLocationDistanceRange extends Field
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return array
      */
-    protected function getCondition(Criterion $criterion)
+    protected function getCondition(CriterionInterface $criterion)
     {
+        /** @var Criterion\Matcher\MapLocationDistance $criterion */
         $criterion->value = (array)$criterion->value;
 
         $start = $criterion->value[0];
@@ -128,13 +130,13 @@ class MapLocationDistanceRange extends Field
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $filter = array(
             'nested' => array(
@@ -164,13 +166,13 @@ class MapLocationDistanceRange extends Field
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitQuery(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $query = array(
             'filtered' => array(

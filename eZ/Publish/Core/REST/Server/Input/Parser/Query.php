@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion as CriterionValue;
@@ -94,7 +95,7 @@ abstract class Query extends CriterionParser
      * @param array $criteriaArray
      * @param ParsingDispatcher $parsingDispatcher
      *
-     * @return CriterionValue|null A criterion, or a LogicalAnd with a set of Criterion, or null if an empty array was given
+     * @return CriterionInterface|null A CriterionInterface, or null if an empty array was given
      */
     private function processCriteriaArray(array $criteriaArray, ParsingDispatcher $parsingDispatcher)
     {
@@ -107,6 +108,6 @@ abstract class Query extends CriterionParser
             $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
         }
 
-        return (count($criteria) === 1) ? $criteria[0] : new CriterionValue\LogicalAnd($criteria);
+        return (count($criteria) === 1) ? $criteria[0] : new CriterionValue\LogicalOperator\LogicalAnd($criteria);
     }
 }

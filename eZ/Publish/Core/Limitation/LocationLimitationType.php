@@ -197,7 +197,7 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
@@ -208,11 +208,11 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
 
         if (!isset($value->limitationValues[1])) {
             // 1 limitation value: EQ operation
-            return new Criterion\LocationId($value->limitationValues[0]);
+            return new Criterion\Matcher\LocationId($value->limitationValues[0]);
         }
 
         // several limitation values: IN operation
-        return new Criterion\LocationId($value->limitationValues);
+        return new Criterion\Matcher\LocationId($value->limitationValues);
     }
 
     /**

@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -222,7 +223,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface|\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator
+     * @return CriterionInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
@@ -233,23 +234,23 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
 
         if (!isset($value->limitationValues[1])) {
             // 1 limitation value: EQ operation
-            return new Criterion\ObjectStateId($value->limitationValues[0]);
+            return new Criterion\Matcher\ObjectStateId($value->limitationValues[0]);
         }
 
         $groupedLimitationValues = $this->groupLimitationValues($value->limitationValues);
 
         if (count($groupedLimitationValues) === 1) {
             // one group, several limitation values: IN operation
-            return new Criterion\ObjectStateId($groupedLimitationValues[0]);
+            return new Criterion\Matcher\ObjectStateId($groupedLimitationValues[0]);
         }
 
         // limitations from different groups require logical AND between them
         $criterions = [];
         foreach ($groupedLimitationValues as $limitationGroup) {
-            $criterions[] = new Criterion\ObjectStateId($limitationGroup);
+            $criterions[] = new Criterion\Matcher\ObjectStateId($limitationGroup);
         }
 
-        return new Criterion\LogicalAnd($criterions);
+        return new Criterion\LogicalOperator\LogicalAnd($criterions);
     }
 
     /**

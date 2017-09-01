@@ -12,6 +12,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use RuntimeException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PDO;
 
@@ -23,13 +24,13 @@ class Visibility extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Visibility;
+        return $criterion instanceof Criterion\Matcher\Visibility;
     }
 
     /**
@@ -39,7 +40,7 @@ class Visibility extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -47,19 +48,20 @@ class Visibility extends CriterionHandler
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
         $column = $this->dbHandler->quoteColumn('is_invisible', 'ezcontentobject_tree');
 
+        /** @var Criterion\Matcher\Visibility $criterion */
         switch ($criterion->value[0]) {
-            case Criterion\Visibility::VISIBLE:
+            case Criterion\Matcher\Visibility::VISIBLE:
                 return $query->expr->eq(
                     $column,
                     $query->bindValue(0, null, PDO::PARAM_INT)
                 );
 
-            case Criterion\Visibility::HIDDEN:
+            case Criterion\Matcher\Visibility::HIDDEN:
                 return $query->expr->eq(
                     $column,
                     $query->bindValue(1, null, PDO::PARAM_INT)

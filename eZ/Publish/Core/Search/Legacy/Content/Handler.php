@@ -22,6 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper;
@@ -151,12 +152,12 @@ class Handler implements SearchHandlerInterface
         }
 
         $start = microtime(true);
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
-        $query->query = $query->query ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
+        $query->query = $query->query ?: new Criterion\Matcher\MatchAll();
 
         // The legacy search does not know about scores, so that we just
         // combine the query with the filter
-        $filter = new Criterion\LogicalAnd(array($query->query, $query->filter));
+        $filter = new Criterion\LogicalOperator\LogicalAnd(array($query->query, $query->filter));
 
         $data = $this->gateway->find(
             $filter,
@@ -213,7 +214,7 @@ class Handler implements SearchHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param CriterionInterface $filter
      * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Also used to define which field languages are loaded for the returned content.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
@@ -221,7 +222,7 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array())
+    public function findSingle(CriterionInterface $filter, array $languageFilter = array())
     {
         if (!isset($languageFilter['languages'])) {
             $languageFilter['languages'] = array();
@@ -233,7 +234,7 @@ class Handler implements SearchHandlerInterface
 
         $searchQuery = new Query();
         $searchQuery->filter = $filter;
-        $searchQuery->query = new Criterion\MatchAll();
+        $searchQuery->query = new Criterion\Matcher\MatchAll();
         $searchQuery->offset = 0;
         $searchQuery->limit = 2; // Because we optimize away the count query below
         $searchQuery->performCount = true;
@@ -265,13 +266,13 @@ class Handler implements SearchHandlerInterface
         }
 
         $start = microtime(true);
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
-        $query->query = $query->query ?: new Criterion\MatchAll();
+        $query->filter = $query->filter ?: new Criterion\Matcher\MatchAll();
+        $query->query = $query->query ?: new Criterion\Matcher\MatchAll();
 
         // The legacy search does not know about scores, so we just
         // combine the query with the filter
         $data = $this->locationGateway->find(
-            new Criterion\LogicalAnd(array($query->query, $query->filter)),
+            new Criterion\LogicalOperator\LogicalAnd(array($query->query, $query->filter)),
             $query->offset,
             $query->limit,
             $query->sortClauses,
@@ -305,10 +306,11 @@ class Handler implements SearchHandlerInterface
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param CriterionInterface $filter
+     *
      * @throws NotImplementedException
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, CriterionInterface $filter = null)
     {
         throw new NotImplementedException('Suggestions are not supported by legacy search engine.');
     }

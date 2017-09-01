@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Limitation\BlockingLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Test Case for LimitationType.
@@ -276,7 +277,7 @@ class BlockingLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone', $criterion);
+        self::assertInstanceOf(Criterion\Matcher\MatchNone::class, $criterion);
         self::assertInternalType('null', $criterion->value);
         self::assertInternalType('null', $criterion->operator);
     }

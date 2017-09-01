@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Matcher;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -48,17 +49,17 @@ class Collection extends Handler
      * Generates query expression for operator and value of a Field Criterion.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param Matcher $matcher
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle(SelectQuery $query, Criterion $criterion, $column)
+    public function handle(SelectQuery $query, Matcher $matcher, $column)
     {
-        switch ($criterion->operator) {
+        switch ($matcher->operator) {
             case Criterion\Operator::CONTAINS:
                 $quotedColumn = $this->dbHandler->quoteColumn($column);
-                $value = $this->prepareLikeString($criterion->value);
+                $value = $this->prepareLikeString($matcher->value);
                 $filter = $query->expr->lOr(
                     array(
                         $query->expr->eq(
@@ -94,7 +95,7 @@ class Collection extends Handler
                 break;
 
             default:
-                $filter = parent::handle($query, $criterion, $column);
+                $filter = parent::handle($query, $matcher, $column);
         }
 
         return $filter;

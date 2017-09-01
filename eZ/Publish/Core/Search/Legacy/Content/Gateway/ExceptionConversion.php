@@ -9,8 +9,8 @@
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway;
 
 use eZ\Publish\Core\Search\Legacy\Content\Gateway;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Doctrine\DBAL\DBALException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use PDOException;
 use RuntimeException;
 
@@ -40,7 +40,7 @@ class ExceptionConversion extends Gateway
     /**
      * Returns a list of object satisfying the $criterion.
      *
-     * @param Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
@@ -52,7 +52,7 @@ class ExceptionConversion extends Gateway
      * @return mixed[][]
      */
     public function find(
-        Criterion $criterion,
+        CriterionInterface $criterion,
         $offset = 0,
         $limit = null,
         array $sort = null,

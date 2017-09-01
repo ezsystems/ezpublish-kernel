@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 
 /**
  * This test will try to execute search queries that might be interpreted as "pure negative"
@@ -21,7 +22,7 @@ class PureNegativeQueryTest extends BaseTest
 {
     public function providerForTestMatchAll()
     {
-        $query = new Query(['filter' => new Criterion\MatchAll()]);
+        $query = new Query(['filter' => new Criterion\Matcher\MatchAll()]);
         $result = $this->getRepository()->getSearchService()->findContent($query);
         // Sanity check
         $this->assertGreaterThan(0, $result->totalCount);
@@ -30,99 +31,99 @@ class PureNegativeQueryTest extends BaseTest
 
         return [
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 1,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 0,
             ],
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\LogicalNot(
-                            new Criterion\MatchAll()
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\MatchAll()
                         ),
                     ]
                 ),
                 1,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\LogicalNot(
-                            new Criterion\MatchAll()
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\MatchAll()
                         ),
                     ]
                 ),
                 0,
             ],
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchAll(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchAll(),
                     ]
                 ),
                 $totalCount,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\MatchAll(),
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\Matcher\MatchAll(),
                     ]
                 ),
                 1,
             ],
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\MatchAll(),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\MatchAll(),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 $totalCount,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\MatchAll(),
-                        new Criterion\MatchNone(),
+                        new Criterion\Matcher\MatchAll(),
+                        new Criterion\Matcher\MatchNone(),
                     ]
                 ),
                 0,
             ],
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),
                 $totalCount,
             ],
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\LogicalNot(
-                            new Criterion\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\LogicalOperator\LogicalNot(
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -130,14 +131,14 @@ class PureNegativeQueryTest extends BaseTest
                 1,
             ],
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
-                        new Criterion\LogicalNot(
-                            new Criterion\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\LogicalOperator\LogicalNot(
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -145,36 +146,36 @@ class PureNegativeQueryTest extends BaseTest
                 $totalCount,
             ],
             [
-                new Criterion\LogicalOr(
+                new Criterion\LogicalOperator\LogicalOr(
                     [
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),
                 $totalCount - 1,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),
                 0,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\ContentId($contentId),
-                        new Criterion\LogicalNot(
-                            new Criterion\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                        new Criterion\Matcher\ContentId($contentId),
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\LogicalOperator\LogicalNot(
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -182,14 +183,14 @@ class PureNegativeQueryTest extends BaseTest
                 1,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
-                        new Criterion\LogicalNot(
-                            new Criterion\LogicalNot(
-                                new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\LogicalOperator\LogicalNot(
+                                new Criterion\Matcher\ContentId($contentId)
                             )
                         ),
                     ]
@@ -197,13 +198,13 @@ class PureNegativeQueryTest extends BaseTest
                 0,
             ],
             [
-                new Criterion\LogicalAnd(
+                new Criterion\LogicalOperator\LogicalAnd(
                     [
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
-                        new Criterion\LogicalNot(
-                            new Criterion\ContentId($contentId)
+                        new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId($contentId)
                         ),
                     ]
                 ),
@@ -215,7 +216,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllContentInfoQuery($criterion, $totalCount)
@@ -234,7 +235,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllContentInfoFilter($criterion, $totalCount)
@@ -253,7 +254,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllLocationQuery($criterion, $totalCount)
@@ -272,7 +273,7 @@ class PureNegativeQueryTest extends BaseTest
     /**
      * @dataProvider providerForTestMatchAll
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param int $totalCount
      */
     public function testMatchAllLocationFilter($criterion, $totalCount)

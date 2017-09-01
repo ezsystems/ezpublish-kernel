@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Matcher;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
@@ -50,21 +50,21 @@ class Converter
      *
      * @param string $fieldTypeIdentifier
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param Matcher $matcher
      * @param string $column
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function convertCriteria($fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column)
+    public function convertCriteria($fieldTypeIdentifier, SelectQuery $query, Matcher $matcher, $column)
     {
         if ($this->registry->has($fieldTypeIdentifier)) {
-            return $this->registry->get($fieldTypeIdentifier)->handle($query, $criterion, $column);
+            return $this->registry->get($fieldTypeIdentifier)->handle($query, $matcher, $column);
         }
 
         if ($this->defaultHandler === null) {
             throw new RuntimeException("No conversion for a field type '$fieldTypeIdentifier' found.");
         }
 
-        return $this->defaultHandler->handle($query, $criterion, $column);
+        return $this->defaultHandler->handle($query, $matcher, $column);
     }
 }

@@ -14,7 +14,7 @@ class ContentTypeIdentifier extends ValueObjectVisitor
     /**
      * @param Visitor $visitor
      * @param Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier $data
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ContentTypeIdentifier $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {

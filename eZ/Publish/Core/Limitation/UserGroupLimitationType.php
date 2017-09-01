@@ -176,7 +176,7 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
@@ -200,8 +200,8 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
             }
         }
 
-        return new Criterion\UserMetadata(
-            Criterion\UserMetadata::GROUP,
+        return new Criterion\Matcher\UserMetadata(
+            Criterion\Matcher\UserMetadata::GROUP,
             Criterion\Operator::IN,
             $groupIds
         );

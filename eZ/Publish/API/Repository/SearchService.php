@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\API\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 
 /**
  * Search service.
@@ -60,7 +60,7 @@ interface SearchService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if criterion is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param CriterionInterface $filter
      * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
@@ -68,7 +68,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true);
+    public function findSingle(CriterionInterface $filter, array $languageFilter = array(), $filterOnUserPermissions = true);
 
     /**
      * Suggests a list of values for the given prefix.
@@ -76,9 +76,9 @@ interface SearchService
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param CriterionInterface $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null);
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, CriterionInterface $filter = null);
 
     /**
      * Finds Locations for the given query.

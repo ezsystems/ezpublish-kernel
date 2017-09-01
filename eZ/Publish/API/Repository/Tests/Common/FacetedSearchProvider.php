@@ -37,7 +37,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -55,7 +55,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -74,7 +74,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -93,7 +93,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -111,7 +111,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -129,7 +129,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -144,7 +144,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\Matcher\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -159,7 +159,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\Matcher\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -173,7 +173,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -191,7 +191,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -210,7 +210,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -230,7 +230,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                        'filter' => new Criterion\Matcher\SectionId(array(1)),
                         'offset' => 0,
                         'limit' => 10,
                         'facetBuilders' => array(
@@ -251,7 +251,7 @@ trait FacetedSearchProvider
             array(
                 new $queryClass(
                     array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\Matcher\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(

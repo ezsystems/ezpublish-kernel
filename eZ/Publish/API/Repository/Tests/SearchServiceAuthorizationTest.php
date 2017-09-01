@@ -42,7 +42,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // Should return Content with location id: 2 as the anonymous user should have access to standard section
-        $searchResult = $searchService->findContent(new Query(array('filter' => new Criterion\LocationId(2))));
+        $searchResult = $searchService->findContent(new Query(array('filter' => new Criterion\Matcher\LocationId(2))));
         /* END: Use Case */
 
         self::assertEquals(1, $searchResult->totalCount, 'Search query should return totalCount of 1');
@@ -71,7 +71,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will return an empty search result
-        $searchResult = $searchService->findContent(new Query(array('filter' => new Criterion\LocationId(5))));
+        $searchResult = $searchService->findContent(new Query(array('filter' => new Criterion\Matcher\LocationId(5))));
         /* END: Use Case */
 
         self::assertEmpty(
@@ -105,7 +105,7 @@ class SearchServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "NotFoundException" as user does not have access
         $searchService->findSingle(
-            new Criterion\ContentId(
+            new Criterion\Matcher\ContentId(
                 array(4)
             )
         );
@@ -132,9 +132,9 @@ class SearchServiceAuthorizationTest extends BaseTest
 
         // Search for "Admin Users" user group which user normally does not have access to
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalOperator\LogicalAnd(
             array(
-                new Criterion\ContentId(12),
+                new Criterion\Matcher\ContentId(12),
             )
         );
 
@@ -167,7 +167,7 @@ class SearchServiceAuthorizationTest extends BaseTest
 
         // Search for "Admin Users" user group which user normally does not have access to
         $content = $repository->getSearchService()->findSingle(
-            new Criterion\ContentId(12),
+            new Criterion\Matcher\ContentId(12),
             array(),
             false
         );
@@ -201,7 +201,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         // This call will fail with a "NotFoundException", because the current
         // user has no access to the "Admin Users" user group
         $searchService->findSingle(
-            new Criterion\ContentId(12)
+            new Criterion\Matcher\ContentId(12)
         );
         /* END: Use Case */
     }

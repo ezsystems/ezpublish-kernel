@@ -16,10 +16,10 @@ use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use DateTime;
 use Exception;
@@ -261,7 +261,7 @@ class TrashService implements TrashServiceInterface
      */
     public function findTrashItems(Query $query)
     {
-        if ($query->filter !== null && !$query->filter instanceof Criterion) {
+        if ($query->filter !== null && !$query->filter instanceof CriterionInterface) {
             throw new InvalidArgumentValue('query->filter', $query->filter, 'Query');
         }
 

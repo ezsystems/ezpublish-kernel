@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 use Doctrine\DBAL\DBALException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use PDOException;
 use RuntimeException;
 
@@ -39,7 +39,7 @@ class ExceptionConversion extends Gateway
     /**
      * Returns total count and data for all Locations satisfying the parameters.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
@@ -51,7 +51,7 @@ class ExceptionConversion extends Gateway
      * @return mixed[][]
      */
     public function find(
-        Criterion $criterion,
+        CriterionInterface $criterion,
         $offset = 0,
         $limit = null,
         array $sortClauses = null,

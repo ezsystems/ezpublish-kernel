@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as APISubtreeCriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Subtree as APISubtreeCriterion;
 
 /**
  * Criterion that matches content that belongs to a given (list of) Subtree(s).

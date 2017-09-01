@@ -10,7 +10,7 @@ namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ObjectStateId;
 
 /**
  * Test case for ObjectState issues in EZP-20018.
@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
 class EZP20018ObjectStateTest extends BaseTest
 {
     /**
-     * @see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId
+     * @see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ObjectStateId
      */
     public function testSearchForNonUsedObjectState()
     {
@@ -51,7 +51,7 @@ class EZP20018ObjectStateTest extends BaseTest
     }
 
     /**
-     * @see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId
+     * @see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\ObjectStateId
      */
     public function testSearchForUsedObjectState()
     {

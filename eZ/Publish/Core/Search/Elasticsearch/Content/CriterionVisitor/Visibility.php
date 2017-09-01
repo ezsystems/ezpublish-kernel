@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
@@ -21,37 +22,38 @@ class Visibility extends CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function canVisit(Criterion $criterion)
+    public function canVisit(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Visibility && $criterion->operator === Operator::EQ;
+        return $criterion instanceof Criterion\Matcher\Visibility && $criterion->operator === Operator::EQ;
     }
 
     /**
      * Map Criterion visibility value to a proper Elasticsearch representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    protected function getInternalValue(Criterion $criterion)
+    protected function getInternalValue(CriterionInterface $criterion)
     {
-        return $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false;
+        /** @var Criterion\Matcher\Visibility $criterion */
+        return $criterion->value[0] === Criterion\Matcher\Visibility::HIDDEN ? true : false;
     }
 
     /**
      * Map field value to a proper Elasticsearch filter representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         return array(
             'nested' => array(
@@ -68,13 +70,13 @@ class Visibility extends CriterionVisitor
     /**
      * Map field value to a proper Elasticsearch query representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitQuery(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         return array(
             'nested' => array(

@@ -15,6 +15,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -75,13 +76,13 @@ class Field extends FieldBase
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Field;
+        return $criterion instanceof Criterion\Matcher\Field;
     }
 
     /**
@@ -134,7 +135,7 @@ class Field extends FieldBase
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -142,9 +143,10 @@ class Field extends FieldBase
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
+        /** @var Criterion\Matcher\Field $criterion */
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();

@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Matcher\Visibility as VisibilityCriterion;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility as VisibilityCriterion;
 
 /**
  * Parser for Visibility Criterion.
@@ -26,7 +26,7 @@ class Visibility extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility
+     * @return VisibilityCriterion
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

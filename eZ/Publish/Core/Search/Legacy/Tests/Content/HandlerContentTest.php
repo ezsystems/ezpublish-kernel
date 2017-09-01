@@ -333,7 +333,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId(10),
+                    'filter' => new Criterion\Matcher\ContentId(10),
                 )
             )
         );
@@ -354,7 +354,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId(10),
+                    'filter' => new Criterion\Matcher\ContentId(10),
                     'offset' => 0,
                     'limit' => 0,
                 )
@@ -381,7 +381,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId(10),
+                    'filter' => new Criterion\Matcher\ContentId(10),
                     'offset' => 0,
                     'limit' => null,
                 )
@@ -408,7 +408,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId(10),
+                    'filter' => new Criterion\Matcher\ContentId(10),
                     'offset' => 1000,
                     'limit' => null,
                 )
@@ -429,7 +429,7 @@ class HandlerContentTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $contentInfo = $locator->findSingle(new Criterion\ContentId(10));
+        $contentInfo = $locator->findSingle(new Criterion\Matcher\ContentId(10));
 
         $this->assertEquals(10, $contentInfo->id);
     }
@@ -441,7 +441,7 @@ class HandlerContentTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
         $locator->findSingle(
-            new Criterion\Field(
+            new Criterion\Matcher\Field(
                 'tag_cloud_url',
                 Criterion\Operator::EQ,
                 'http://nimbus.com'
@@ -458,7 +458,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\Field(
+                    'filter' => new Criterion\Matcher\Field(
                         'tag_cloud_url',
                         Criterion\Operator::EQ,
                         'http://nimbus.com'
@@ -475,7 +475,7 @@ class HandlerContentTest extends LanguageAwareTestCase
     public function testFindSingleTooMany()
     {
         $locator = $this->getContentSearchHandler();
-        $locator->findSingle(new Criterion\ContentId(array(4, 10, 12, 23)));
+        $locator->findSingle(new Criterion\Matcher\ContentId(array(4, 10, 12, 23)));
     }
 
     /**
@@ -484,7 +484,7 @@ class HandlerContentTest extends LanguageAwareTestCase
     public function testFindSingleZero()
     {
         $locator = $this->getContentSearchHandler();
-        $locator->findSingle(new Criterion\ContentId(0));
+        $locator->findSingle(new Criterion\Matcher\ContentId(0));
     }
 
     public function testContentIdFilter()
@@ -494,7 +494,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ContentId(
+                        'filter' => new Criterion\Matcher\ContentId(
                             array(1, 4, 10)
                         ),
                         'limit' => 10,
@@ -511,7 +511,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId(
+                    'filter' => new Criterion\Matcher\ContentId(
                         array(1, 4, 10)
                     ),
                     'limit' => 10,
@@ -529,12 +529,12 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LogicalAnd(
+                        'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\ContentId(
+                                new Criterion\Matcher\ContentId(
                                     array(1, 4, 10)
                                 ),
-                                new Criterion\ContentId(
+                                new Criterion\Matcher\ContentId(
                                     array(4, 12)
                                 ),
                             )
@@ -553,12 +553,12 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\LogicalOr(
+                    'filter' => new Criterion\LogicalOperator\LogicalOr(
                         array(
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(1, 4, 10)
                             ),
-                            new Criterion\ContentId(
+                            new Criterion\Matcher\ContentId(
                                 array(4, 12)
                             ),
                         )
@@ -589,13 +589,13 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LogicalAnd(
+                        'filter' => new Criterion\LogicalOperator\LogicalAnd(
                             array(
-                                new Criterion\ContentId(
+                                new Criterion\Matcher\ContentId(
                                     array(1, 4, 10)
                                 ),
-                                new Criterion\LogicalNot(
-                                    new Criterion\ContentId(
+                                new Criterion\LogicalOperator\LogicalNot(
+                                    new Criterion\Matcher\ContentId(
                                         array(10, 12)
                                     )
                                 ),
@@ -615,7 +615,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Subtree(
+                        'filter' => new Criterion\Matcher\Subtree(
                             array('/1/2/69/')
                         ),
                         'limit' => 10,
@@ -632,7 +632,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Subtree('/1/2/69/'),
+                        'filter' => new Criterion\Matcher\Subtree('/1/2/69/'),
                         'limit' => 10,
                     )
                 )
@@ -647,7 +647,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ContentTypeId(4),
+                        'filter' => new Criterion\Matcher\ContentTypeId(4),
                         'limit' => 10,
                     )
                 )
@@ -662,7 +662,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ContentTypeIdentifier('folder'),
+                        'filter' => new Criterion\Matcher\ContentTypeIdentifier('folder'),
                         'limit' => 5,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -678,7 +678,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ContentTypeGroupId(2),
+                        'filter' => new Criterion\Matcher\ContentTypeGroupId(2),
                         'limit' => 10,
                     )
                 )
@@ -693,8 +693,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::GT,
                             1311154214
                         ),
@@ -712,8 +712,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::GTE,
                             1311154214
                         ),
@@ -731,8 +731,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::IN,
                             array(1311154214, 1311154215)
                         ),
@@ -750,8 +750,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::MODIFIED,
                             Criterion\Operator::BETWEEN,
                             array(1311154213, 1311154215)
                         ),
@@ -769,8 +769,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::CREATED,
+                        'filter' => new Criterion\Matcher\DateMetadata(
+                            Criterion\Matcher\DateMetadata::CREATED,
                             Criterion\Operator::BETWEEN,
                             array(1299780749, 1311154215)
                         ),
@@ -788,7 +788,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LocationId(array(1, 2, 5)),
+                        'filter' => new Criterion\Matcher\LocationId(array(1, 2, 5)),
                         'limit' => 10,
                     )
                 )
@@ -803,7 +803,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ParentLocationId(array(1)),
+                        'filter' => new Criterion\Matcher\ParentLocationId(array(1)),
                         'limit' => 10,
                     )
                 )
@@ -818,7 +818,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\RemoteId(
+                        'filter' => new Criterion\Matcher\RemoteId(
                             array('f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca')
                         ),
                         'limit' => 10,
@@ -835,7 +835,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LocationRemoteId(
+                        'filter' => new Criterion\Matcher\LocationRemoteId(
                             array('3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983')
                         ),
                         'limit' => 10,
@@ -852,7 +852,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\SectionId(array(2)),
+                        'filter' => new Criterion\Matcher\SectionId(array(2)),
                         'limit' => 10,
                     )
                 )
@@ -868,8 +868,8 @@ class HandlerContentTest extends LanguageAwareTestCase
                 new Query(
                     array(
                         // Status criterion is gone, but this will also match all published
-                        'filter' => new Criterion\LogicalNot(
-                            new Criterion\ContentId(
+                        'filter' => new Criterion\LogicalOperator\LogicalNot(
+                            new Criterion\Matcher\ContentId(
                                 array(0)
                             )
                         ),
@@ -893,7 +893,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'name',
                             Criterion\Operator::EQ,
                             'members'
@@ -912,7 +912,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'name',
                             Criterion\Operator::IN,
                             array('members', 'anonymous users')
@@ -931,7 +931,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'name',
                             Criterion\Operator::CONTAINS,
                             'nonymous use'
@@ -950,7 +950,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'publish_date',
                             Criterion\Operator::CONTAINS,
                             1174643880
@@ -969,7 +969,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'publish_date',
                             Criterion\Operator::CONTAINS,
                             1174643
@@ -988,7 +988,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Field(
+                        'filter' => new Criterion\Matcher\Field(
                             'price',
                             Criterion\Operator::BETWEEN,
                             array(10000, 1000000)
@@ -1007,14 +1007,14 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LogicalOr(
+                        'filter' => new Criterion\LogicalOperator\LogicalOr(
                             array(
-                                new Criterion\Field(
+                                new Criterion\Matcher\Field(
                                     'name',
                                     Criterion\Operator::EQ,
                                     'members'
                                 ),
-                                new Criterion\Field(
+                                new Criterion\Matcher\Field(
                                     'price',
                                     Criterion\Operator::BETWEEN,
                                     array(10000, 1000000)
@@ -1035,7 +1035,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText('applied webpage'),
+                        'filter' => new Criterion\Matcher\FullText('applied webpage'),
                         'limit' => 10,
                     )
                 )
@@ -1050,7 +1050,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText('applie*'),
+                        'filter' => new Criterion\Matcher\FullText('applie*'),
                         'limit' => 10,
                     )
                 )
@@ -1067,7 +1067,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             )->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText('applie*'),
+                        'filter' => new Criterion\Matcher\FullText('applie*'),
                         'limit' => 10,
                     )
                 )
@@ -1088,7 +1088,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $handler->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText('the'),
+                        'filter' => new Criterion\Matcher\FullText('the'),
                         'limit' => 10,
                     )
                 )
@@ -1107,7 +1107,7 @@ class HandlerContentTest extends LanguageAwareTestCase
         $result = $handler->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\FullText(
+                    'filter' => new Criterion\Matcher\FullText(
                         'the'
                     ),
                     'limit' => 10,
@@ -1147,7 +1147,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ObjectStateId(1),
+                        'filter' => new Criterion\Matcher\ObjectStateId(1),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -1163,7 +1163,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ObjectStateId(array(1, 2)),
+                        'filter' => new Criterion\Matcher\ObjectStateId(array(1, 2)),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -1179,7 +1179,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LanguageCode('eng-US'),
+                        'filter' => new Criterion\Matcher\LanguageCode('eng-US'),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -1195,7 +1195,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LanguageCode(array('eng-US', 'eng-GB')),
+                        'filter' => new Criterion\Matcher\LanguageCode(array('eng-US', 'eng-GB')),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -1211,7 +1211,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LanguageCode('eng-GB', true),
+                        'filter' => new Criterion\Matcher\LanguageCode('eng-GB', true),
                         'limit' => 20,
                         'sortClauses' => array(new SortClause\ContentId()),
                     )
@@ -1227,8 +1227,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Visibility(
-                            Criterion\Visibility::VISIBLE
+                        'filter' => new Criterion\Matcher\Visibility(
+                            Criterion\Matcher\Visibility::VISIBLE
                         ),
                         'limit' => 10,
                         'sortClauses' => array(new SortClause\ContentId()),
@@ -1245,8 +1245,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             2
                         ),
@@ -1263,8 +1263,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             14
                         ),
@@ -1283,8 +1283,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             226
                         ),
@@ -1301,8 +1301,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::OWNER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::OWNER,
                             Criterion\Operator::IN,
                             array(226)
                         ),
@@ -1319,8 +1319,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::MODIFIER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::MODIFIER,
                             Criterion\Operator::EQ,
                             226
                         ),
@@ -1337,8 +1337,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::MODIFIER,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::MODIFIER,
                             Criterion\Operator::IN,
                             array(226)
                         ),
@@ -1355,8 +1355,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::EQ,
                             11
                         ),
@@ -1373,8 +1373,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::IN,
                             array(11)
                         ),
@@ -1391,8 +1391,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::EQ,
                             13
                         ),
@@ -1409,8 +1409,8 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\UserMetadata(
-                            Criterion\UserMetadata::GROUP,
+                        'filter' => new Criterion\Matcher\UserMetadata(
+                            Criterion\Matcher\UserMetadata::GROUP,
                             Criterion\Operator::IN,
                             array(13)
                         ),
@@ -1427,7 +1427,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(60)
@@ -1445,7 +1445,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(4)
@@ -1463,7 +1463,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(60, 75)
@@ -1481,7 +1481,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array(60, 64)
@@ -1499,7 +1499,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array(60, 64)
@@ -1517,7 +1517,7 @@ class HandlerContentTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FieldRelation(
+                        'filter' => new Criterion\Matcher\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array(4, 10)

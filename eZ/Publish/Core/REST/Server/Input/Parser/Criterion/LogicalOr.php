@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr as LogicalOrCriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOr as LogicalOrCriterion;
 
 /**
  * Parser for LogicalOr Criterion.
@@ -26,7 +26,7 @@ class LogicalOr extends CriterionParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOr
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

@@ -1437,7 +1437,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         list($repository, $data) = $context;
 
         $queryProperties = array(
-            'filter' => new Criterion\ContentTypeIdentifier('test-type'),
+            'filter' => new Criterion\Matcher\ContentTypeIdentifier('test-type'),
             'sortClauses' => array(
                 new SortClause\Field('test-type', 'sort_field'),
             ),
@@ -1487,10 +1487,10 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         list($repository, $data) = $context;
 
         $queryProperties = array(
-            'filter' => new Criterion\LogicalAnd(
+            'filter' => new Criterion\LogicalOperator\LogicalAnd(
                 array(
-                    new Criterion\ContentTypeIdentifier('test-type'),
-                    new Criterion\Subtree('/1/2/'),
+                    new Criterion\Matcher\ContentTypeIdentifier('test-type'),
+                    new Criterion\Matcher\Subtree('/1/2/'),
                 )
             ),
             'sortClauses' => array(
@@ -1542,7 +1542,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         list($repository, $data) = $context;
 
         $queryProperties = array(
-            'filter' => new Criterion\ContentTypeIdentifier('test-type'),
+            'filter' => new Criterion\Matcher\ContentTypeIdentifier('test-type'),
             'sortClauses' => array(
                 new SortClause\Location\Depth(Query::SORT_ASC),
                 new SortClause\Field('test-type', 'sort_field'),

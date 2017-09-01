@@ -21,6 +21,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Test Case for LimitationType.
@@ -555,7 +556,7 @@ class SubtreeLimitationTypeTest extends Base
         );
 
         // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
-        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\Subtree', $criterion);
+        self::assertInstanceOf(Criterion\Matcher\Subtree::class, $criterion);
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
             $criterion
@@ -579,7 +580,7 @@ class SubtreeLimitationTypeTest extends Base
         );
 
         // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
-        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\Subtree', $criterion);
+        self::assertInstanceOf(Criterion\Matcher\Subtree::class, $criterion);
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
             $criterion

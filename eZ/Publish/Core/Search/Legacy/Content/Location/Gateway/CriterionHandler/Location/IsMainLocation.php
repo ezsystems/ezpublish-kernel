@@ -12,6 +12,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use RuntimeException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -22,13 +23,13 @@ class IsMainLocation extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Location\IsMainLocation;
+        return $criterion instanceof Criterion\Matcher\Location\IsMainLocation;
     }
 
     /**
@@ -38,7 +39,7 @@ class IsMainLocation extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -46,20 +47,21 @@ class IsMainLocation extends CriterionHandler
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
         $idColumn = $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree');
         $mainIdColumn = $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree');
 
+        /** @var Criterion\Matcher\Location\IsMainLocation $criterion */
         switch ($criterion->value[0]) {
-            case Criterion\Location\IsMainLocation::MAIN:
+            case Criterion\Matcher\Location\IsMainLocation::MAIN:
                 return $query->expr->eq(
                     $idColumn,
                     $mainIdColumn
                 );
 
-            case Criterion\Location\IsMainLocation::NOT_MAIN:
+            case Criterion\Matcher\Location\IsMainLocation::NOT_MAIN:
                 return $query->expr->neq(
                     $idColumn,
                     $mainIdColumn

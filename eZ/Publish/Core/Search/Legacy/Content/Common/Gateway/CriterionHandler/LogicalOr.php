@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -21,13 +22,13 @@ class LogicalOr extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\LogicalOr;
+        return $criterion instanceof Criterion\LogicalOperator\LogicalOr;
     }
 
     /**
@@ -37,7 +38,7 @@ class LogicalOr extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -45,10 +46,11 @@ class LogicalOr extends CriterionHandler
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
         $subexpressions = array();
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator\LogicalOr $criterion */
         foreach ($criterion->criteria as $subCriterion) {
             $subexpressions[] = $converter->convertCriteria(
                 $query,

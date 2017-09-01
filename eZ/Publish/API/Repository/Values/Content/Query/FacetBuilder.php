@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -32,7 +33,7 @@ abstract class FacetBuilder extends ValueObject
     /**
      * An additional facet filter that will further filter the documents the facet will be executed on.
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @var CriterionInterface
      */
     public $filter = null;
 

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -21,13 +22,13 @@ class Visibility extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\Visibility;
+        return $criterion instanceof Criterion\Matcher\Visibility;
     }
 
     /**
@@ -42,7 +43,7 @@ class Visibility extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -50,12 +51,13 @@ class Visibility extends CriterionHandler
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
 
-        if ($criterion->value[0] === Criterion\Visibility::VISIBLE) {
+        /** @var Criterion\Matcher\Visibility $criterion */
+        if ($criterion->value[0] === Criterion\Matcher\Visibility::VISIBLE) {
             $expression = $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('is_hidden', 'ezcontentobject_tree'),

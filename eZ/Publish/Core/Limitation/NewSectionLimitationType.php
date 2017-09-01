@@ -148,7 +148,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException Not applicable, needs context of new section.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {

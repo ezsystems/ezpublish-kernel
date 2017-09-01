@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\DateMeta
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\DateMetadata;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
@@ -21,14 +22,14 @@ class ModifiedRange extends DateMetadata
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function canVisit(Criterion $criterion)
+    public function canVisit(CriterionInterface $criterion)
     {
         return
-            $criterion instanceof Criterion\DateMetadata &&
+            $criterion instanceof Criterion\Matcher\DateMetadata &&
             $criterion->target === 'modified' &&
             (
                 $criterion->operator === Operator::LT ||
@@ -42,14 +43,15 @@ class ModifiedRange extends DateMetadata
     /**
      * Map field value to a proper Elasticsearch filter representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
+    public function visitFilter(CriterionInterface $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
+        /** @var Criterion\Matcher\DateMetadata $criterion */
         $start = $this->getNativeTime($criterion->value[0]);
         $end = isset($criterion->value[1]) ? $this->getNativeTime($criterion->value[1]) : null;
 

@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -33,13 +34,13 @@ class MapLocationDistance extends FieldBase
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      *
      * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(CriterionInterface $criterion)
     {
-        return $criterion instanceof Criterion\MapLocationDistance;
+        return $criterion instanceof Criterion\Matcher\MapLocationDistance;
     }
 
     /**
@@ -95,7 +96,7 @@ class MapLocationDistance extends FieldBase
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param CriterionInterface $criterion
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
@@ -103,9 +104,10 @@ class MapLocationDistance extends FieldBase
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Criterion $criterion,
+        CriterionInterface $criterion,
         array $languageSettings
     ) {
+        /** @var Criterion\Matcher\MapLocationDistance $criterion */
         $fieldDefinitionIds = $this->getFieldDefinitionIds($criterion->target);
         $subSelect = $query->subSelect();
 

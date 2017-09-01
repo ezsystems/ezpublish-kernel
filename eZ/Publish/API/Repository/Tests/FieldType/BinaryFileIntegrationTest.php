@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Integration test for use field type.
