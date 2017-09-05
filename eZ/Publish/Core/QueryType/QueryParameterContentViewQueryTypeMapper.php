@@ -24,14 +24,14 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
         $this->queryTypeRegistry = $queryTypeRegistry;
     }
 
-    public function map(ContentView $contentView)
+    public function map(ContentView $contentView, $queryParam = 'query')
     {
         if (!$contentView instanceof ContentView) {
             throw new InvalidArgumentException('ContentView expected');
         }
 
-        if (!$contentView->hasParameter('query')) {
-            throw new InvalidArgumentException('query', "Missing required 'query' view parameter");
+        if (!$contentView->hasParameter($queryParam)) {
+            throw new InvalidArgumentException("Missing required '{$queryParam}' view parameter");
         }
 
         $queryOptions = $contentView->getParameter('query');
