@@ -186,15 +186,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                     break;
 
                 case URLAlias::VIRTUAL:
-                    // Handle case-correction redirect
-                    if ($this->needsCaseRedirect($urlAlias, $requestedPath, $pathPrefix)) {
-                        $request->attributes->set('semanticPathinfo', $this->removePathPrefix($urlAlias->path, $pathPrefix));
-                        $request->attributes->set('needsRedirect', true);
-                    } else {
-                        // Virtual aliases should load the Content at homepage URL
-                        $request->attributes->set('semanticPathinfo', '/');
-                        $request->attributes->set('needsForward', true);
-                    }
+                    // Virtual aliases should load the Content at homepage URL
+                    $request->attributes->set('semanticPathinfo', '/');
+                    $request->attributes->set('needsRedirect', true);
 
                     break;
             }
