@@ -130,7 +130,7 @@ class RequestEventListener implements EventSubscriberInterface
                 }
                 $event->setResponse(
                     new RedirectResponse(
-                        $semanticPathinfo . ($queryString ? "?$queryString" : ''),
+                        $event->getRequest()->getBaseUrl() . $semanticPathinfo . ($queryString ? "?$queryString" : ''),
                         301,
                         $headers
                     )
