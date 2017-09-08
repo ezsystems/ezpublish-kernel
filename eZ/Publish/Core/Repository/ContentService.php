@@ -1898,6 +1898,7 @@ class ContentService implements ContentServiceInterface
         }
         // before actual removal, collect information on Versions
         $versions = [];
+        $singleLangVersions = [];
         foreach ($this->loadVersions($contentInfo) as $versionInfo) {
             // check if user is authorized to delete Version
             if (!$this->repository->canUser('content', 'delete', $versionInfo)) {
@@ -1915,15 +1916,22 @@ class ContentService implements ContentServiceInterface
                 // if translation does not exist, simply ignore Version (see InvalidArgumentException later on)
                 continue;
             }
-            // check if the specified translation is not the only one
+            // check if the specified translation is the only one
             if (count($versionInfo->languageCodes) < 2) {
-                throw new BadStateException(
-                    '$languageCode',
-                    'Specified translation is the only one Content Object Version has'
-                );
+                $singleLangVersions[] = $versionInfo->versionNo;
+            } else {
+                // otherwise add Version to the list of valid Versions to be processed
+                $versions[] = $versionInfo->versionNo;
             }
-            // add version to the list
-            $versions[] = $versionInfo->versionNo;
+        }
+
+        if (!empty($singleLangVersions)) {
+            $verList = implode(', ', $singleLangVersions);
+            throw new BadStateException(
+                '$languageCode',
+                "The Version(s): {$verList} of the ContentId={$contentInfo->id} have only one language {$languageCode}. Remove these Version(s) before proceeding.\n" .
+                "Hint: Command 'ezplatform:remove-content-translation' handles this for you, look into it to see how this can be handled in custom code."
+            );
         }
 
         // if there are no Versions with the given translation, $languageCode arg is invalid
