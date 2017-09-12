@@ -54,8 +54,9 @@ class DoctrineStorage extends Gateway
             )
             ->from($this->connection->quoteIdentifier(self::EZM_POOL_TABLE), 'p')
             ->innerJoin(
-                't',
+                'p',
                 $this->connection->quoteIdentifier('ezcontentobject_tree'),
+                't',
                 $query->expr()->eq(
                     $this->connection->quoteIdentifier('t.node_id'),
                     $this->connection->quoteIdentifier('p.node_id')
@@ -64,7 +65,7 @@ class DoctrineStorage extends Gateway
             ->where(
                 $query->expr()->eq('p.block_id', ':blockId'),
                 $query->expr()->gt('p.ts_visible', ':tsVisible'),
-                $query->expr()->eq('p.ts_hidden', 'tsHidden')
+                $query->expr()->eq('p.ts_hidden', ':tsHidden')
             )
             ->setParameter(':blockId', $block->id)
             ->setParameter(':tsVisible', 0, PDO::PARAM_INT)
@@ -114,7 +115,7 @@ class DoctrineStorage extends Gateway
             ->where(
                 $query->expr()->eq('p.block_id', ':blockId'),
                 $query->expr()->gt('p.ts_visible', ':tsVisible'),
-                $query->expr()->eq('p.ts_hidden', 'tsHidden')
+                $query->expr()->eq('p.ts_hidden', ':tsHidden')
             )
             ->setParameter(':blockId', $block->id)
             ->setParameter(':tsVisible', 0, PDO::PARAM_INT)
@@ -163,7 +164,7 @@ class DoctrineStorage extends Gateway
             ->where(
                 $query->expr()->eq('p.block_id', ':blockId'),
                 $query->expr()->eq('p.ts_visible', ':tsVisible'),
-                $query->expr()->eq('p.ts_hidden', 'tsHidden')
+                $query->expr()->eq('p.ts_hidden', ':tsHidden')
             )
             ->setParameter(':blockId', $block->id)
             ->setParameter(':tsVisible', 0, PDO::PARAM_INT)
@@ -251,8 +252,9 @@ class DoctrineStorage extends Gateway
             ->select($this->connection->quoteIdentifier('contentobject_id'))
             ->from($this->connection->quoteIdentifier('ezcontentobject_tree'), 't')
             ->innerJoin(
-                'b',
+                't',
                 $this->connection->quoteIdentifier(self::EZM_BLOCK_TABLE),
+                'b',
                 $query->expr()->eq(
                     $this->connection->quoteIdentifier('b.node_id'),
                     $this->connection->quoteIdentifier('t.node_id')
@@ -261,7 +263,7 @@ class DoctrineStorage extends Gateway
             ->where(
                 $query->expr()->eq($this->connection->quoteIdentifier('b.id'), ':id')
             )
-            ->setParameter($id, null, PDO::PARAM_STR)
+            ->setParameter(':id', $id, PDO::PARAM_STR)
         ;
 
         $statement = $query->execute();
