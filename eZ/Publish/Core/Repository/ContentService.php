@@ -1964,6 +1964,86 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Delete specified Translation from a Content Draft.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the only one the Content Draft has or it is the main Translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to edit the Content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given Draft.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if specified Version was not found
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo Content Version Draft
+     * @param string $languageCode Language code of the Translation to be removed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft w/o the specified Translation
+     *
+     * @since 6.12
+     */
+    public function deleteTranslationFromDraft(APIVersionInfo $versionInfo, $languageCode)
+    {
+        if (!$versionInfo->isDraft()) {
+            throw new BadStateException(
+                '$versionInfo',
+                'Version is not a draft, so Translations cannot be modified. Create a Draft before proceeding'
+            );
+        }
+
+        if ($versionInfo->contentInfo->mainLanguageCode === $languageCode) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified Translation is the main Translation of the Content Object. Change it before proceeding.'
+            );
+        }
+
+        if (!$this->repository->canUser('content', 'edit', $versionInfo->contentInfo)) {
+            throw new UnauthorizedException(
+                'content', 'edit', ['contentId' => $versionInfo->contentInfo->id]
+            );
+        }
+
+        if (!in_array($languageCode, $versionInfo->languageCodes)) {
+            throw new InvalidArgumentException(
+                '$languageCode',
+                sprintf(
+                    'The Version (ContentId=%d, VersionNo=%d) is not translated into %s',
+                    $versionInfo->contentInfo->id,
+                    $versionInfo->versionNo,
+                    $languageCode
+                )
+            );
+        }
+
+        if (count($versionInfo->languageCodes) === 1) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified Translation is the only one Content Object Version has'
+            );
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $spiContent = $this->persistenceHandler->contentHandler()->deleteTranslationFromDraft(
+                $versionInfo->contentInfo->id,
+                $versionInfo->versionNo,
+                $languageCode
+            );
+            $this->repository->commit();
+
+            return $this->domainMapper->buildContentDomainObject($spiContent);
+        } catch (APINotFoundException $e) {
+            // avoid wrapping expected NotFoundException in BadStateException handled below
+            $this->repository->rollback();
+            throw $e;
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            // cover generic unexpected exception to fulfill API promise on @throws
+            throw new BadStateException('$contentInfo', 'Translation removal failed', $e);
+        }
+    }
+
+    /**
      * Instantiates a new content create struct object.
      *
      * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable

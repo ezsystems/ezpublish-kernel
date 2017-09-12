@@ -720,4 +720,43 @@ class Handler implements BaseContentHandler
     {
         $this->contentGateway->removeTranslationFromContent($contentId, $languageCode);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNo, $languageCode)
+    {
+        $versionInfo = $this->loadVersionInfo($contentId, $versionNo);
+
+        $this->fieldHandler->deleteTranslationFromVersionFields(
+            $versionInfo,
+            $languageCode
+        );
+        $this->contentGateway->deleteTranslationFromVersion(
+            $contentId,
+            $versionNo,
+            $languageCode
+        );
+
+        // get all [languageCode => name] entries except the removed Translation
+        $names = array_filter(
+            $versionInfo->names,
+            function ($lang) use ($languageCode) {
+                return $lang !== $languageCode;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        // set new Content name
+        foreach ($names as $language => $name) {
+            $this->contentGateway->setName(
+                $contentId,
+                $versionNo,
+                $name,
+                $language
+            );
+        }
+
+        // reload entire Version w/o removed Translation
+        return $this->load($contentId, $versionNo);
+    }
 }

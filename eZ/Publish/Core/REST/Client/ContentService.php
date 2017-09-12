@@ -771,6 +771,14 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
      * Instantiates a new TranslationInfo object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo

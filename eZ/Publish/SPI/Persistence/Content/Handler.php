@@ -266,4 +266,15 @@ interface Handler
      * @param string $languageCode language code of the translation
      */
     public function removeTranslationFromContent($contentId, $languageCode);
+
+    /**
+     * Remove the specified Translation from the given Version Draft of a Content Object.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content The Content Draft w/o removed Translation
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNo, $languageCode);
 }
