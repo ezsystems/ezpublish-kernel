@@ -5325,7 +5325,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @expectedExceptionMessage User does not have access to 'delete' 'content'
+     * @expectedExceptionMessage User does not have access to 'remove' 'content'
      */
     public function testRemoveTranslationThrowsUnauthorizedException()
     {
