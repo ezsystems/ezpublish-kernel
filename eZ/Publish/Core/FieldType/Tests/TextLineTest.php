@@ -544,6 +544,16 @@ class TextLineTest extends FieldTypeTest
                 ),
                 new TextLineValue('lililili'),
             ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'StringLengthValidator' => array(
+                            'maxStringLength' => 10,
+                        ),
+                    ),
+                ),
+                new TextLineValue('♔♕♖♗♘♙♚♛♜♝'),
+            ),
         );
     }
 
@@ -680,6 +690,27 @@ class TextLineTest extends FieldTypeTest
                         'The string can not be shorter than %size% characters.',
                         array(
                             '%size%' => 10,
+                        ),
+                        'text'
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'StringLengthValidator' => array(
+                            'minStringLength' => 5,
+                            'maxStringLength' => 10,
+                        ),
+                    ),
+                ),
+                new TextLineValue('ABC♔'),
+                array(
+                    new ValidationError(
+                        'The string can not be shorter than %size% character.',
+                        'The string can not be shorter than %size% characters.',
+                        array(
+                            '%size%' => 5,
                         ),
                         'text'
                     ),

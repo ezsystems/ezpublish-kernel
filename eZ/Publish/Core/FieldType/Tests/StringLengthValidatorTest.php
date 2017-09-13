@@ -168,6 +168,7 @@ class StringLengthValidatorTest extends TestCase
             array('hello'),
             array('hello!'),
             array('0123456789'),
+            array('♔♕♖♗♘♙♚♛♜♝'),
         );
     }
 
@@ -227,6 +228,12 @@ class StringLengthValidatorTest extends TestCase
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
                 array('%size%' => $this->getMaxStringLength()),
+            ),
+            array(
+                'ABC♔',
+                'The string can not be shorter than %size% character.',
+                'The string can not be shorter than %size% characters.',
+                array('%size%' => $this->getMinStringLength()),
             ),
         );
     }
