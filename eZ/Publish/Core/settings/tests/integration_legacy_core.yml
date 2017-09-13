@@ -6,10 +6,6 @@ parameters:
     ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory
 
 services:
-    # disable cache - TODO fix bug with trash recover
-    ezpublish.api.persistence_handler:
-        alias: ezpublish.spi.persistence.legacy
-
     ezpublish.signalslot.signal_dispatcher.factory:
         class: "%ezpublish.signalslot.signal_dispatcher.factory.class%"
         arguments:
