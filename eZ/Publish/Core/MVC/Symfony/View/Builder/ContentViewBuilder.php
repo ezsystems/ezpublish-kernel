@@ -46,23 +46,90 @@ class ContentViewBuilder implements ViewBuilder
     private $defaultTemplates;
 
     /**
-     * @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader
+     * @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader|null
      */
     private $locationLoader;
+
+    /**
+     * @var string
+     */
+    private $viewClassFullName;
 
     public function __construct(
         Repository $repository,
         AuthorizationCheckerInterface $authorizationChecker,
         Configurator $viewConfigurator,
         ParametersInjector $viewParametersInjector,
-        ContentInfoLocationLoader $locationLoader = null
+        ContentInfoLocationLoader $locationLoader = null,
+        $viewClassFullName = null
     ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
         $this->viewConfigurator = $viewConfigurator;
         $this->viewParametersInjector = $viewParametersInjector;
         $this->locationLoader = $locationLoader;
+        $this->viewClassFullName = ContentView::class;
+        if ($viewClassFullName) {
+            $viewReflectCLass = new \ReflectionClass($viewClassFullName);
+            $view2 = $viewReflectCLass->newInstanceWithoutConstructor();
+            if (!($view2 instanceof ContentView)) {
+                throw new InvalidArgumentException('viewClassFullName',
+                    "View class '" . $viewClassFullName . "' does not extend: " . ContentView::class
+                );
+            }
+            $this->viewClassFullName = $viewClassFullName;
+        }
     }
+
+    /**
+     * @return Repository|\eZ\Publish\Core\Repository\Repository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
+     * @return AuthorizationCheckerInterface
+     */
+    public function getAuthorizationChecker()
+    {
+        return $this->authorizationChecker;
+    }
+
+    /**
+     * @return Configurator
+     */
+    public function getViewConfigurator()
+    {
+        return $this->viewConfigurator;
+    }
+
+    /**
+     * @return ParametersInjector
+     */
+    public function getViewParametersInjector()
+    {
+        return $this->viewParametersInjector;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDefaultTemplates()
+    {
+        return $this->defaultTemplates;
+    }
+
+    /**
+     * @return ContentInfoLocationLoader|null
+     */
+    public function getLocationLoader()
+    {
+        return $this->locationLoader;
+    }
+
+
 
     public function matches($argument)
     {
@@ -80,7 +147,9 @@ class ContentViewBuilder implements ViewBuilder
      */
     public function buildView(array $parameters)
     {
-        $view = new ContentView(null, [], $parameters['viewType']);
+        $viewClassFullName = $this->getViewClassFullName();
+        /** @var \eZ\Publish\Core\MVC\Symfony\View\ContentView $view */
+        $view = new $viewClassFullName(null, [], $parameters['viewType']);
         $view->setIsEmbed($this->isEmbed($parameters));
 
         if ($view->isEmbed() && $parameters['viewType'] === null) {
@@ -90,12 +159,14 @@ class ContentViewBuilder implements ViewBuilder
         if (isset($parameters['locationId'])) {
             $location = $this->loadLocation($parameters['locationId']);
         } elseif (isset($parameters['location'])) {
+            /** @var Location $location */
             $location = $parameters['location'];
         } else {
             $location = null;
         }
 
         if (isset($parameters['content'])) {
+            /** @var Content $content */
             $content = $parameters['content'];
         } else {
             if (isset($parameters['contentId'])) {
@@ -115,9 +186,9 @@ class ContentViewBuilder implements ViewBuilder
             if ($location->contentId !== $content->id) {
                 throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');
             }
-        } elseif (isset($this->locationLoader)) {
+        } elseif ($this->getLocationLoader()) {
             try {
-                $location = $this->locationLoader->loadLocation($content->contentInfo);
+                $location = $this->getLocationLoader()->loadLocation($content->contentInfo);
             } catch (NotFoundException $e) {
                 // nothing else to do
             }
@@ -127,8 +198,8 @@ class ContentViewBuilder implements ViewBuilder
             $view->setLocation($location);
         }
 
-        $this->viewParametersInjector->injectViewParameters($view, $parameters);
-        $this->viewConfigurator->configure($view);
+        $this->getViewParametersInjector()->injectViewParameters($view, $parameters);
+        $this->getViewConfigurator()->configure($view);
 
         // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
         if (!$view->getControllerReference() instanceof ControllerReference) {
@@ -151,9 +222,9 @@ class ContentViewBuilder implements ViewBuilder
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    private function loadContent($contentId)
+    protected function loadContent($contentId)
     {
-        return $this->repository->getContentService()->loadContent($contentId);
+        return $this->getRepository()->getContentService()->loadContent($contentId);
     }
 
     /**
@@ -167,9 +238,10 @@ class ContentViewBuilder implements ViewBuilder
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    private function loadEmbeddedContent($contentId, Location $location = null)
+    protected function loadEmbeddedContent($contentId, Location $location = null)
     {
-        $content = $this->repository->sudo(
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+        $content = $this->getRepository()->sudo(
             function (Repository $repository) use ($contentId) {
                 return $repository->getContentService()->loadContent($contentId);
             }
@@ -185,7 +257,7 @@ class ContentViewBuilder implements ViewBuilder
         // Check that Content is published, since sudo allows loading unpublished content.
         if (
             $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
-            && !$this->authorizationChecker->isGranted(
+            && !$this->getAuthorizationChecker()->isGranted(
                 new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
             )
         ) {
@@ -203,9 +275,9 @@ class ContentViewBuilder implements ViewBuilder
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    private function loadLocation($locationId)
+    protected function loadLocation($locationId)
     {
-        $location = $this->repository->sudo(
+        $location = $this->getRepository()->sudo(
             function (Repository $repository) use ($locationId) {
                 return $repository->getLocationService()->loadLocation($locationId);
             }
@@ -221,11 +293,11 @@ class ContentViewBuilder implements ViewBuilder
      * Checks if a user can read a content, or view it as an embed.
      *
      * @param Content $content
-     * @param $location
+     * @param Location|null $location
      *
      * @return bool
      */
-    private function canRead(Content $content, Location $location = null)
+    protected function canRead(Content $content, Location $location = null)
     {
         $limitations = ['valueObject' => $content->contentInfo];
         if (isset($location)) {
@@ -236,8 +308,8 @@ class ContentViewBuilder implements ViewBuilder
         $viewEmbedAttribute = new AuthorizationAttribute('content', 'view_embed', $limitations);
 
         return
-            $this->authorizationChecker->isGranted($readAttribute) ||
-            $this->authorizationChecker->isGranted($viewEmbedAttribute);
+            $this->getAuthorizationChecker()->isGranted($readAttribute) ||
+            $this->getAuthorizationChecker()->isGranted($viewEmbedAttribute);
     }
 
     /**
@@ -248,7 +320,7 @@ class ContentViewBuilder implements ViewBuilder
      *
      * @return bool
      */
-    private function isEmbed($parameters)
+    protected function isEmbed($parameters)
     {
         if ($parameters['_controller'] === 'ez_content:embedAction') {
             return true;
@@ -258,5 +330,12 @@ class ContentViewBuilder implements ViewBuilder
         }
 
         return false;
+    }
+    /**
+     * @return string
+     */
+    public function getViewClassFullName()
+    {
+        return $this->viewClassFullName;
     }
 }
