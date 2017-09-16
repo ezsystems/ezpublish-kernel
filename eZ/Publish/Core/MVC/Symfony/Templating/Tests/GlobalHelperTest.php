@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator;
 use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
@@ -46,6 +47,8 @@ class GlobalHelperTest extends TestCase
      */
     protected $translationHelper;
 
+    protected $rootLocationIdCalculator;
+
     protected function setUp()
     {
         parent::setUp();
@@ -57,7 +60,10 @@ class GlobalHelperTest extends TestCase
         $this->translationHelper = $this->getMockBuilder('eZ\Publish\Core\Helper\TranslationHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->helper = new GlobalHelper($this->configResolver, $this->locationService, $this->router, $this->translationHelper);
+        $this->rootLocationIdCalculator = $this->getMockBuilder(RootLocationIdCalculator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->helper = new GlobalHelper($this->configResolver, $this->locationService, $this->router, $this->translationHelper, $this->rootLocationIdCalculator);
     }
 
     public function testGetSiteaccess()
@@ -155,10 +161,9 @@ class GlobalHelperTest extends TestCase
     public function testGetRootLocation()
     {
         $rootLocationId = 2;
-        $this->configResolver
+        $this->rootLocationIdCalculator
             ->expects($this->once())
-            ->method('getParameter')
-            ->with('content.tree_root.location_id')
+            ->method('getRootLocationId')
             ->will($this->returnValue($rootLocationId));
 
         $rootLocation = $this

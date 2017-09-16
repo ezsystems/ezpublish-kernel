@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,11 @@ class RoutingListenerTest extends TestCase
      */
     private $urlAliasGenerator;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $rootLocationIdCalculator;
+
     protected function setUp()
     {
         parent::setUp();
@@ -46,11 +52,15 @@ class RoutingListenerTest extends TestCase
             ->getMockBuilder('eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->rootLocationIdCalculator = $this
+            ->getMockBuilder(RootLocationIdCalculator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testGetSubscribedEvents()
     {
-        $listener = new RoutingListener($this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator);
+        $listener = new RoutingListener($this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator, $this->rootLocationIdCalculator);
         $this->assertSame(
             array(
                 MVCEvents::SITEACCESS => array('onSiteAccessMatch', 200),
@@ -69,10 +79,16 @@ class RoutingListenerTest extends TestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array('content.tree_root.location_id', null, null, $rootLocationId),
                         array('content.tree_root.excluded_uri_prefixes', null, null, $excludedUriPrefixes),
                     )
                 )
+            );
+
+        $this->rootLocationIdCalculator
+            ->expects($this->once())
+            ->method('getRootLocationId')
+            ->will(
+                $this->returnValue($rootLocationId)
             );
 
         $this->urlAliasRouter
@@ -89,7 +105,7 @@ class RoutingListenerTest extends TestCase
             ->with($excludedUriPrefixes);
 
         $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST);
-        $listener = new RoutingListener($this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator);
+        $listener = new RoutingListener($this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator, $this->rootLocationIdCalculator);
         $listener->onSiteAccessMatch($event);
     }
 }

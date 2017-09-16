@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
+use eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -43,16 +44,20 @@ class GlobalHelper
      */
     protected $translationHelper;
 
+    protected $rootLocationIdCalculator;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         LocationService $locationService,
         RouterInterface $router,
-        TranslationHelper $translationHelper
+        TranslationHelper $translationHelper,
+        RootLocationIdCalculator $rootLocationIdCalculator
     ) {
         $this->configResolver = $configResolver;
         $this->locationService = $locationService;
         $this->router = $router;
         $this->translationHelper = $translationHelper;
+        $this->rootLocationIdCalculator = $rootLocationIdCalculator;
     }
 
     /**
@@ -143,9 +148,7 @@ class GlobalHelper
      */
     public function getRootLocation()
     {
-        return $this->locationService->loadLocation(
-            $this->configResolver->getParameter('content.tree_root.location_id')
-        );
+        return $this->locationService->loadLocation($this->rootLocationIdCalculator->getRootLocationId());
     }
 
     /**

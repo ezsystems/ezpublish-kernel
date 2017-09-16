@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit\Framework\TestCase;
@@ -57,6 +58,8 @@ class UrlAliasGeneratorTest extends TestCase
      */
     private $configResolver;
 
+    private $rootLocationIdCalculator;
+
     protected function setUp()
     {
         parent::setUp();
@@ -64,6 +67,9 @@ class UrlAliasGeneratorTest extends TestCase
         $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
         $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
         $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->rootLocationIdCalculator = $this->getMockBuilder(RootLocationIdCalculator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $this->repository = $repository = $this
             ->getMockBuilder($repositoryClass)
@@ -100,6 +106,7 @@ class UrlAliasGeneratorTest extends TestCase
             $this->repository,
             $this->router,
             $this->configResolver,
+            $this->rootLocationIdCalculator,
             $urlAliasCharmap
         );
         $this->urlAliasGenerator->setLogger($this->logger);
@@ -233,10 +240,16 @@ class UrlAliasGeneratorTest extends TestCase
                     array(
                         array('languages', null, 'foo', $languages),
                         array('languages', null, 'bar', $languages),
-                        array('content.tree_root.location_id', null, 'foo', $saRootLocations['foo']),
-                        array('content.tree_root.location_id', null, 'bar', $saRootLocations['bar']),
                     )
                 )
+            );
+
+        $this->rootLocationIdCalculator
+            ->expects($this->exactly(1))
+            ->method('getRootLocationIdBySiteaccess')
+            ->with($parameters['siteaccess'])
+            ->will(
+                $this->returnValue($saRootLocations[$parameters['siteaccess']])
             );
 
         $location = new Location(array('id' => 123));

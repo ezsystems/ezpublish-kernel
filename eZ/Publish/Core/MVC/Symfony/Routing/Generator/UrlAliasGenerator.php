@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -55,6 +56,9 @@ class UrlAliasGenerator extends Generator
      */
     private $configResolver;
 
+    /** @var RootLocationIdCalculator */
+    private $rootLocationIdCalculator;
+
     /**
      * Array of characters that are potentially unsafe for output for (x)html, json, etc,
      * and respective url-encoded value.
@@ -63,11 +67,12 @@ class UrlAliasGenerator extends Generator
      */
     private $unsafeCharMap;
 
-    public function __construct(Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver, array $unsafeCharMap = array())
+    public function __construct(Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver, RootLocationIdCalculator $rootLocationIdCalculator, array $unsafeCharMap = array())
     {
         $this->repository = $repository;
         $this->defaultRouter = $defaultRouter;
         $this->configResolver = $configResolver;
+        $this->rootLocationIdCalculator = $rootLocationIdCalculator;
         $this->unsafeCharMap = $unsafeCharMap;
     }
 
@@ -95,7 +100,8 @@ class UrlAliasGenerator extends Generator
             $languages = $this->configResolver->getParameter('languages', null, $siteaccess);
             $urlAliases = $urlAliasService->listLocationAliases($location, false, null, null, $languages);
             // Use the target SiteAccess root location
-            $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id', null, $siteaccess);
+
+            $rootLocationId = $this->rootLocationIdCalculator->getRootLocationIdBySiteaccess($siteaccess);
         } else {
             $languages = null;
             $urlAliases = $urlAliasService->listLocationAliases($location, false);

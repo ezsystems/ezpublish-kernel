@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use InvalidArgumentException;
 
 /**
  * Configuration parser handling content related config.
@@ -34,9 +35,12 @@ class Content extends AbstractParser
                     ->arrayNode('tree_root')
                         ->canBeUnset()
                         ->children()
+                            ->scalarNode('location_remote_id')
+                                ->info("Root locationRemoteId for routing and link generation.\ If set, it will be used instead of location_id. ")
+                                ->cannotBeEmpty()
+                            ->end()
                             ->integerNode('location_id')
-                                ->info("Root locationId for routing and link generation.\nUseful for multisite apps with one repository.")
-                                ->isRequired()
+                                ->info("Root locationId for routing and link generation.\nUseful for multisite apps with one repository. It won't be used if location_remote_id is set")
                             ->end()
                             ->arrayNode('excluded_uri_prefixes')
                                 ->info("URI prefixes that are allowed to be outside the content tree\n(useful for content sharing between multiple sites).\nPrefixes are not case sensitive")
@@ -57,11 +61,26 @@ class Content extends AbstractParser
             $contextualizer->setContextualParameter('content.default_ttl', $currentScope, $scopeSettings['content']['default_ttl']);
 
             if (isset($scopeSettings['content']['tree_root'])) {
-                $contextualizer->setContextualParameter(
-                    'content.tree_root.location_id',
-                    $currentScope,
-                    $scopeSettings['content']['tree_root']['location_id']
-                );
+                if (isset($scopeSettings['content']['tree_root']['location_id']) &&
+                    isset($scopeSettings['content']['tree_root']['location_remote_id'])) {
+                    throw new InvalidArgumentException(
+                        sprintf("You cannot set location_id and location_remote_id tree_root params for the '%s' siteaccess at the same time", $currentScope)
+                    );
+                }
+
+                if (isset($scopeSettings['content']['tree_root']['location_id'])) {
+                    $contextualizer->setContextualParameter(
+                        'content.tree_root.location_id',
+                        $currentScope,
+                        $scopeSettings['content']['tree_root']['location_id']
+                    );
+                } elseif (isset($scopeSettings['content']['tree_root']['location_remote_id'])) {
+                    $contextualizer->setContextualParameter(
+                        'content.tree_root.location_remote_id',
+                        $currentScope,
+                        $scopeSettings['content']['tree_root']['location_remote_id']
+                    );
+                }
                 if (isset($scopeSettings['content']['tree_root']['excluded_uri_prefixes'])) {
                     $contextualizer->setContextualParameter(
                         'content.tree_root.excluded_uri_prefixes',

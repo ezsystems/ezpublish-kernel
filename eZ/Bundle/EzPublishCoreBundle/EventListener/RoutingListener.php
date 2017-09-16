@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
@@ -35,11 +36,17 @@ class RoutingListener implements EventSubscriberInterface
      */
     private $urlAliasGenerator;
 
-    public function __construct(ConfigResolverInterface $configResolver, RouterInterface $urlAliasRouter, Generator $urlAliasGenerator)
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator
+     */
+    private $rootLocationIdCalculator;
+
+    public function __construct(ConfigResolverInterface $configResolver, RouterInterface $urlAliasRouter, Generator $urlAliasGenerator, RootLocationIdCalculator $rootLocationIdCalculator)
     {
         $this->configResolver = $configResolver;
         $this->urlAliasRouter = $urlAliasRouter;
         $this->urlAliasGenerator = $urlAliasGenerator;
+        $this->rootLocationIdCalculator = $rootLocationIdCalculator;
     }
 
     public static function getSubscribedEvents()
@@ -51,7 +58,7 @@ class RoutingListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)
     {
-        $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
+        $rootLocationId = $this->rootLocationIdCalculator->getRootLocationId();
         $this->urlAliasRouter->setRootLocationId($rootLocationId);
         $this->urlAliasGenerator->setRootLocationId($rootLocationId);
         $this->urlAliasGenerator->setExcludedUriPrefixes($this->configResolver->getParameter('content.tree_root.excluded_uri_prefixes'));

@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\MVC\Symfony\Routing\RootLocationIdCalculator;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
@@ -82,6 +83,9 @@ class UrlAliasRouterTest extends TestCase
                     $repository,
                     $this->getMock('Symfony\\Component\\Routing\\RouterInterface'),
                     $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface'),
+                    $this->getMockBuilder(RootLocationIdCalculator::class)
+                        ->disableOriginalConstructor()
+                        ->getMock(),
                 )
             )
             ->getMock();

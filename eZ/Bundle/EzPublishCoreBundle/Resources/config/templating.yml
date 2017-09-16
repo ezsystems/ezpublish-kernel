@@ -137,7 +137,7 @@ services:
 
     ezpublish.templating.global_helper.core:
         class: "%ezpublish.templating.global_helper.core.class%"
-        arguments: ["@ezpublish.config.resolver", "@ezpublish.api.service.location", "@router", "@ezpublish.translation_helper"]
+        arguments: ["@ezpublish.config.resolver", "@ezpublish.api.service.location", "@router", "@ezpublish.translation_helper", "@ezpublish.root_location_id.calculator"]
         calls:
             - [setRequestStack, ["@request_stack"]]
 

@@ -53,6 +53,27 @@ class ContentTest extends AbstractParserTestCase
         }
     }
 
+    /**
+     * @test
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage You cannot set location_id and location_remote_id tree_root params for the 'ezdemo_site' siteaccess at the same time
+     */
+    public function testThrowExceptionWhenNeeded()
+    {
+        $this->load(
+            array(
+                'system' => array(
+                    'ezdemo_site' => array(
+                        'content' => array(
+                            'tree_root' => array('location_id' => 123, 'location_remote_id' => 'location-remote-id-123'),
+                        ),
+                    ),
+                ),
+            )
+        );
+    }
+
     public function contentSettingsProvider()
     {
         return array(
