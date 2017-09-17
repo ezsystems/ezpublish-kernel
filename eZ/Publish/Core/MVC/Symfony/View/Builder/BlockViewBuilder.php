@@ -61,7 +61,6 @@ class BlockViewBuilder implements ViewBuilder
         return $this->viewClassFullName;
     }
 
-
     public function matches($argument)
     {
         return strpos($argument, 'ez_page:') !== false;

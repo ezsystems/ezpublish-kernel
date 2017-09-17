@@ -129,8 +129,6 @@ class ContentViewBuilder implements ViewBuilder
         return $this->locationLoader;
     }
 
-
-
     public function matches($argument)
     {
         return strpos($argument, 'ez_content:') !== false;
@@ -331,6 +329,7 @@ class ContentViewBuilder implements ViewBuilder
 
         return false;
     }
+
     /**
      * @return string
      */
