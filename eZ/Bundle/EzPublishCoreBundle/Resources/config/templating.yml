@@ -226,7 +226,7 @@ services:
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
             - "@ezpublish.content_info_location_loader.main"
-            - "%ezpublish.view.content.class%"
+            - '%ezpublish.view.content.class%'
 
     ezpublish.view_builder.block:
         class: "%ezpublish.view_builder.block.class%"
@@ -234,7 +234,7 @@ services:
             - "@ezpublish.fieldType.ezpage.pageService"
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
-            - "%ezpublish.view.block.class%"
+            - '%ezpublish.view.block.class%'
 
     ezpublish.view.builder_parameter_collector.request_attributes:
         class: "%ezpublish.view.builder_parameter_collector.request_attributes.class%"
