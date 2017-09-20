@@ -1900,10 +1900,10 @@ class ContentService implements ContentServiceInterface
         $versions = [];
         foreach ($this->loadVersions($contentInfo) as $versionInfo) {
             // check if user is authorized to delete Version
-            if (!$this->repository->canUser('content', 'delete', $versionInfo)) {
+            if (!$this->repository->canUser('content', 'remove', $versionInfo)) {
                 throw new UnauthorizedException(
                     'content',
-                    'delete',
+                    'remove',
                     [
                         'contentId' => $contentInfo->id,
                         'versionNo' => $versionInfo->versionNo,
