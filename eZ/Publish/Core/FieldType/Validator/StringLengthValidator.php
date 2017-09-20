@@ -112,7 +112,7 @@ class StringLengthValidator extends Validator
 
         if ($this->constraints['maxStringLength'] !== false &&
             $this->constraints['maxStringLength'] !== 0 &&
-            strlen($value->text) > $this->constraints['maxStringLength']) {
+            mb_strlen($value->text) > $this->constraints['maxStringLength']) {
             $this->errors[] = new ValidationError(
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
@@ -124,7 +124,7 @@ class StringLengthValidator extends Validator
         }
         if ($this->constraints['minStringLength'] !== false &&
             $this->constraints['minStringLength'] !== 0 &&
-            strlen($value->text) < $this->constraints['minStringLength']) {
+            mb_strlen($value->text) < $this->constraints['minStringLength']) {
             $this->errors[] = new ValidationError(
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
