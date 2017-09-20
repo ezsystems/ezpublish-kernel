@@ -21,12 +21,12 @@ class IsMainLocation extends Location
     /**
      * Main constant: is main.
      */
-    const MAIN = 0;
+    const MAIN = 1;
 
     /**
      * Main constant: is not main.
      */
-    const NOT_MAIN = 1;
+    const NOT_MAIN = 0;
 
     /**
      * Creates a new IsMainLocation criterion.
