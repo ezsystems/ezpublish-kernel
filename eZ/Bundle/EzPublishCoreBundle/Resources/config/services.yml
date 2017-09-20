@@ -235,3 +235,10 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\EventSubscriber\CrowdinRequestLocaleSubscriber
         tags:
             - {name: kernel.event_subscriber}
+
+    ezplatform.core.command.remove_content_translation:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\RemoveContentTranslationCommand
+        arguments:
+            - '@ezpublish.api.repository'
+        tags:
+            - { name: console.command }

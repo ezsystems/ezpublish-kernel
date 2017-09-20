@@ -5294,7 +5294,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::removeTranslation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage Specified translation is the only one Content Object Version has
+     * @expectedExceptionMessageRegExp /The Version\(s\): \d+ of the ContentId=\d+ have only one language eng-US/
      */
     public function testRemoveTranslationLastLanguageThrowsBadStateException()
     {
