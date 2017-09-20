@@ -91,7 +91,7 @@ class Type extends FieldType
         if (isset($constraints['maxStringLength']) &&
             $constraints['maxStringLength'] !== false &&
             $constraints['maxStringLength'] !== 0 &&
-            strlen($fieldValue->text) > $constraints['maxStringLength']) {
+            mb_strlen($fieldValue->text) > $constraints['maxStringLength']) {
             $validationErrors[] = new ValidationError(
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
@@ -105,7 +105,7 @@ class Type extends FieldType
         if (isset($constraints['minStringLength']) &&
             $constraints['minStringLength'] !== false &&
             $constraints['minStringLength'] !== 0 &&
-            strlen($fieldValue->text) < $constraints['minStringLength']) {
+            mb_strlen($fieldValue->text) < $constraints['minStringLength']) {
             $validationErrors[] = new ValidationError(
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
