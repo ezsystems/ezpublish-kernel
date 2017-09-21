@@ -23,6 +23,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPITypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as SPILanguageHandler;
@@ -36,6 +37,11 @@ use DateTime;
 class ContentTypeDomainMapper
 {
     /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $contentLanguageHandler;
@@ -48,13 +54,16 @@ class ContentTypeDomainMapper
     /**
      * Setups service with reference to repository.
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      * @param FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
+        SPITypeHandler $contentTypeHandler,
         SPILanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry
     ) {
+        $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
@@ -63,24 +72,17 @@ class ContentTypeDomainMapper
      * Builds a ContentType domain object from value object returned by persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $spiContentType
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group[] $spiContentTypeGroups
      * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function buildContentTypeDomainObject(
         SPIContentType $spiContentType,
-        array $spiContentTypeGroups,
         array $prioritizedLanguages = []
     ) {
         $mainLanguageCode = $this->contentLanguageHandler->load(
             $spiContentType->initialLanguageId
         )->languageCode;
-
-        $contentTypeGroups = array();
-        foreach ($spiContentTypeGroups as $spiContentTypeGroup) {
-            $contentTypeGroups[] = $this->buildContentTypeGroupDomainObject($spiContentTypeGroup, $prioritizedLanguages);
-        }
 
         $fieldDefinitions = array();
         foreach ($spiContentType->fieldDefinitions as $spiFieldDefinition) {
@@ -95,7 +97,7 @@ class ContentTypeDomainMapper
             array(
                 'names' => $spiContentType->name,
                 'descriptions' => $spiContentType->description,
-                'contentTypeGroups' => $contentTypeGroups,
+                'contentTypeGroups' => $this->generateContentTypeGroupDomainObjects($spiContentType, $prioritizedLanguages),
                 'fieldDefinitions' => $fieldDefinitions,
                 'id' => $spiContentType->id,
                 'status' => $spiContentType->status,
@@ -183,15 +185,14 @@ class ContentTypeDomainMapper
      * Decorates ContentType.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $spiContentType
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group[] $spiContentTypeGroups
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function buildContentTypeDraftDomainObject(SPIContentType $spiContentType, array $spiContentTypeGroups)
+    public function buildContentTypeDraftDomainObject(SPIContentType $spiContentType)
     {
         return new ContentTypeDraft(
             array(
-                'innerContentType' => $this->buildContentTypeDomainObject($spiContentType, $spiContentTypeGroups),
+                'innerContentType' => $this->buildContentTypeDomainObject($spiContentType),
             )
         );
     }
@@ -219,6 +220,25 @@ class ContentTypeDomainMapper
                 'prioritizedLanguages' => $prioritizedLanguages,
             )
         );
+    }
+
+    /**
+     * Builds a ContentTypeGroup domain object from value object returned by persistence.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $spiContentType
+     * @param string[] $prioritizedLanguages
+     *
+     * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup[]\Generator
+     */
+    private function generateContentTypeGroupDomainObjects(SPIContentType $spiContentType, array $prioritizedLanguages = [])
+    {
+        // none of this will be executed before generator is iterated over
+        foreach ($spiContentType->groupIds as $groupId) {
+            yield $this->buildContentTypeGroupDomainObject(
+                $this->contentTypeHandler->loadGroup($groupId),
+                $prioritizedLanguages
+            );
+        }
     }
 
     /**
