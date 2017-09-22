@@ -158,12 +158,19 @@ abstract class BaseTest extends TestCase
     {
         if (null === $this->setupFactory) {
             if (false === isset($_ENV['setupFactory'])) {
-                throw new \ErrorException('Missing mandatory setting $_ENV["setupFactory"].');
+                throw new \ErrorException(
+                    'Missing mandatory setting $_ENV["setupFactory"]. You are trying to run integration tests. Use one of the available phpunit-integration-*.xml configurations'
+                );
             }
 
             $setupClass = $_ENV['setupFactory'];
             if (false === class_exists($setupClass)) {
-                throw new \ErrorException('$_ENV["setupFactory"] does not reference an existing class.');
+                throw new \ErrorException(
+                    sprintf(
+                        '$_ENV["setupFactory"] does not reference an existing class. Class %s does not exist. Did you forget to install a dependency?',
+                        $setupClass
+                    )
+                );
             }
 
             $this->setupFactory = new $setupClass();
