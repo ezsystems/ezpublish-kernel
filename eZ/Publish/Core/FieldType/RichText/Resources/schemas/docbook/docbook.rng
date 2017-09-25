@@ -203,7 +203,7 @@
   <define name="db.xlink.href.attribute">
     <attribute name="xlink:href">
       <a:documentation>Identifies a link target with a URI</a:documentation>
-      <data type="anyURI"/>
+      <data type="string" />
     </attribute>
   </define>
   <define name="db.xlink.type.attribute">
