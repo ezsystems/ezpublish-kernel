@@ -1146,13 +1146,15 @@ class DoctrineDatabase extends Gateway
     /**
      * Returns all field IDs of $contentId grouped by their type.
      * If $versionNo is set only field IDs for that version are returned.
+     * If $languageCode is set, only field IDs for that language are returned.
      *
      * @param int $contentId
      * @param int|null $versionNo
+     * @param string|null $languageCode
      *
      * @return int[][]
      */
-    public function getFieldIdsByType($contentId, $versionNo = null)
+    public function getFieldIdsByType($contentId, $versionNo = null, $languageCode = null)
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -1172,6 +1174,15 @@ class DoctrineDatabase extends Gateway
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('version'),
                     $query->bindValue($versionNo, null, \PDO::PARAM_INT)
+                )
+            );
+        }
+
+        if (isset($languageCode)) {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('language_code'),
+                    $query->bindValue($languageCode, null, \PDO::PARAM_STR)
                 )
             );
         }
