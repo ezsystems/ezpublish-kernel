@@ -77,8 +77,7 @@ class UserService implements UserServiceInterface
             'defaultUserPlacement' => 12,
             'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
-             // @todo Change back default if we want part of this in 6.x
-            'hashType' => User::PASSWORD_HASH_BCRYPT,
+            'hashType' => User::PASSWORD_HASH_PHP_DEFAULT,
             'siteName' => 'ez.no',
         );
     }
@@ -1124,7 +1123,8 @@ class UserService implements UserServiceInterface
     protected function verifyPassword($login, $password, $spiUser)
     {
         // In case of bcrypt let php's password functionality do it's magic
-        if ($spiUser->hashAlgorithm === User::PASSWORD_HASH_BCRYPT) {
+        if ($spiUser->hashAlgorithm === User::PASSWORD_HASH_BCRYPT ||
+            $spiUser->hashAlgorithm === User::PASSWORD_HASH_PHP_DEFAULT) {
             return password_verify($password, $spiUser->passwordHash);
         }
 
@@ -1168,6 +1168,9 @@ class UserService implements UserServiceInterface
 
             case User::PASSWORD_HASH_BCRYPT:
                 return password_hash($password, PASSWORD_BCRYPT);
+
+            case User::PASSWORD_HASH_PHP_DEFAULT:
+                return password_hash($password, PASSWORD_DEFAULT);
 
             default:
                 return md5($password);
