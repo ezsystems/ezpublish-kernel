@@ -46,7 +46,7 @@ class ContentType extends APIContentType
     /**
      * Holds the collection of contenttypegroups the contenttype is assigned to.
      *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]|\Generator
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     protected $contentTypeGroups = [];
 
@@ -88,16 +88,6 @@ class ContentType extends APIContentType
      */
     public function getContentTypeGroups()
     {
-        // If value is a generator, get the values and set them back so they can be iterated again later
-        if ($this->contentTypeGroups instanceof \Generator) {
-            $contentTypeGroups = [];
-            foreach ($this->contentTypeGroups as $contentTypeGroup) {
-                $contentTypeGroups[] = $contentTypeGroup;
-            }
-
-            $this->contentTypeGroups = $contentTypeGroups;
-        }
-
         return $this->contentTypeGroups;
     }
 
@@ -141,24 +131,5 @@ class ContentType extends APIContentType
         }
 
         return null;
-    }
-
-    public function __get($property)
-    {
-        switch ($property) {
-            case 'contentTypeGroups':
-                return $this->getContentTypeGroups();
-        }
-
-        return parent::__get($property);
-    }
-
-    public function __isset($property)
-    {
-        if ($property === 'contentTypeGroups') {
-            return true;
-        }
-
-        return parent::__isset($property);
     }
 }

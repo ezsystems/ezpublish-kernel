@@ -20,6 +20,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\GeneratorCollection;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup;
@@ -97,7 +98,10 @@ class ContentTypeDomainMapper
             array(
                 'names' => $spiContentType->name,
                 'descriptions' => $spiContentType->description,
-                'contentTypeGroups' => $this->generateContentTypeGroupDomainObjects($spiContentType, $prioritizedLanguages),
+                'contentTypeGroups' =>
+                    new GeneratorCollection(
+                        $this->generateContentTypeGroupDomainObjects($spiContentType, $prioritizedLanguages)
+                    ),
                 'fieldDefinitions' => $fieldDefinitions,
                 'id' => $spiContentType->id,
                 'status' => $spiContentType->status,
