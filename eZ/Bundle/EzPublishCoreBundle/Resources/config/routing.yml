@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_']
+    ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_', '_ez_user_hash']
     # characters that may require encoding in the urlalias generator
     ezpublish.urlalias_generator.charmap:
         "\"" : "%22"
