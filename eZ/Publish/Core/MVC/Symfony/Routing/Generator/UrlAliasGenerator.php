@@ -102,8 +102,12 @@ class UrlAliasGenerator extends Generator
             $rootLocationId = $this->rootLocationId;
         }
 
+        $fragment = array_key_exists('_fragment', $parameters)
+            ? '#' . $parameters['_fragment']
+            : '';
         $queryString = '';
-        unset($parameters['language'], $parameters['contentId']);
+        unset($parameters['language'], $parameters['contentId'], $parameters['_fragment']);
+
         if (!empty($parameters)) {
             $queryString = '?' . http_build_query($parameters, '', '&');
         }
@@ -132,7 +136,7 @@ class UrlAliasGenerator extends Generator
         $path = $path ?: '/';
 
         // replace potentially unsafe characters with url-encoded counterpart
-        return strtr($path . $queryString, $this->unsafeCharMap);
+        return strtr($path . $queryString . $fragment, $this->unsafeCharMap);
     }
 
     /**
