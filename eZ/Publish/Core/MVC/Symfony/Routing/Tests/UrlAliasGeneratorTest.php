@@ -204,6 +204,11 @@ class UrlAliasGeneratorTest extends TestCase
                 array('some' => 'thing', 'truc' => 'muche'),
                 '/foo/bar?some=thing&truc=muche',
             ),
+            array(
+                new URLAlias(array('path' => '/foo/bar')),
+                array('some' => 'thing', 'truc' => 'muche', '_fragment' => 'fragment'),
+                '/foo/bar?some=thing&truc=muche#fragment',
+            ),
         );
     }
 
