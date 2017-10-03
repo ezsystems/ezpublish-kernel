@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests\Integration\User\UserStorage;
 
 use eZ\Publish\Core\FieldType\Tests\Integration\BaseCoreFieldTypeIntegrationTest;
+use eZ\Publish\Core\Repository\Values\User\User;
 
 /**
  * User Field Type external storage gateway tests.
@@ -31,8 +32,8 @@ abstract class UserStorageGatewayTest extends BaseCoreFieldTypeIntegrationTest
                 'contentId' => 10,
                 'login' => 'anonymous',
                 'email' => 'nospam@ez.no',
-                'passwordHash' => '4e6f6184135228ccd45f8233d72a0363',
-                'passwordHashType' => '2',
+                'passwordHash' => '$2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC',
+                'passwordHashType' => User::PASSWORD_HASH_PHP_DEFAULT,
                 'enabled' => true,
                 'maxLogin' => 1000,
             ],
@@ -41,8 +42,8 @@ abstract class UserStorageGatewayTest extends BaseCoreFieldTypeIntegrationTest
                 'contentId' => 14,
                 'login' => 'admin',
                 'email' => 'spam@ez.no',
-                'passwordHash' => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
-                'passwordHashType' => '2',
+                'passwordHash' => '$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',
+                'passwordHashType' => User::PASSWORD_HASH_PHP_DEFAULT,
                 'enabled' => true,
                 'maxLogin' => 10,
             ],

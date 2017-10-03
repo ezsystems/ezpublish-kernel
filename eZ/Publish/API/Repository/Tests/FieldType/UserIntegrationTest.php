@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -132,8 +133,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             'hasStoredLogin' => true,
             'login' => 'hans',
             'email' => 'hans@example.com',
-            'passwordHash' => '680869a9873105e365d39a6d14e68e46',
-            'passwordHashType' => 2,
+            'passwordHashType' => User::PASSWORD_HASH_PHP_DEFAULT,
             'enabled' => true,
         );
 

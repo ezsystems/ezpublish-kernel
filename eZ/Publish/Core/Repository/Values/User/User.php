@@ -38,6 +38,16 @@ class User extends APIUser
     const PASSWORD_HASH_PLAINTEXT = 5;
 
     /**
+     * @var int Passwords in bcrypt
+     */
+    const PASSWORD_HASH_BCRYPT = 6;
+
+    /**
+     * @var int Passwords hashed by PHPs default algorithm, which may change over time
+     */
+    const PASSWORD_HASH_PHP_DEFAULT = 7;
+
+    /**
      * Internal content representation.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Content

@@ -955,17 +955,11 @@ class UserServiceTest extends BaseTest
             array(
                 'login' => 'user',
                 'email' => 'user@example.com',
-                'passwordHash' => $this->createHash(
-                    'user',
-                    'secret',
-                    $user->hashAlgorithm
-                ),
                 'mainLanguageCode' => 'eng-US',
             ),
             array(
                 'login' => $user->login,
                 'email' => $user->email,
-                'passwordHash' => $user->passwordHash,
                 'mainLanguageCode' => $user->contentInfo->mainLanguageCode,
             )
         );
@@ -1593,18 +1587,12 @@ class UserServiceTest extends BaseTest
             array(
                 'login' => 'user',
                 'email' => 'user@example.com',
-                'passwordHash' => $this->createHash(
-                    'user',
-                    'my-new-password',
-                    $user->hashAlgorithm
-                ),
                 'maxLogin' => 42,
                 'enabled' => false,
             ),
             array(
                 'login' => $user->login,
                 'email' => $user->email,
-                'passwordHash' => $user->passwordHash,
                 'maxLogin' => $user->maxLogin,
                 'enabled' => $user->enabled,
             )
@@ -2489,26 +2477,5 @@ class UserServiceTest extends BaseTest
 
         // Create a new user
         return $userService->createUser($userCreateStruct, [$group]);
-    }
-
-    private function createHash($login, $password, $type)
-    {
-        switch ($type) {
-            case 2:
-                /* PASSWORD_HASH_MD5_USER */
-                return md5("{$login}\n{$password}");
-
-            case 3:
-                /* PASSWORD_HASH_MD5_SITE */
-                $site = null;
-
-                return md5("{$login}\n{$password}\n{$site}");
-
-            case 5:
-                /* PASSWORD_HASH_PLAINTEXT */
-                return $password;
-        }
-        /* PASSWORD_HASH_MD5_PASSWORD (1) */
-        return md5($password);
     }
 }
