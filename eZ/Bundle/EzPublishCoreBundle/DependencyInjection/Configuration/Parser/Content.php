@@ -30,7 +30,8 @@ class Content extends AbstractParser
                 ->children()
                     ->booleanNode('view_cache')->defaultValue(true)->end()
                     ->booleanNode('ttl_cache')->defaultValue(true)->end()
-                    ->scalarNode('default_ttl')->info('Default value for TTL cache, in seconds')->defaultValue(60)->end()
+                    ->scalarNode('default_ttl')->info('Default value for TTL cache, for responses considered OK (200, 204, 304), in seconds')->defaultValue(600)->end()
+                    ->scalarNode('default_error_ttl')->info('Default value for TTL cache on error, for responses not considered as OK, in seconds')->defaultValue(10)->end()
                     ->arrayNode('tree_root')
                         ->canBeUnset()
                         ->children()
@@ -55,6 +56,7 @@ class Content extends AbstractParser
             $contextualizer->setContextualParameter('content.view_cache', $currentScope, $scopeSettings['content']['view_cache']);
             $contextualizer->setContextualParameter('content.ttl_cache', $currentScope, $scopeSettings['content']['ttl_cache']);
             $contextualizer->setContextualParameter('content.default_ttl', $currentScope, $scopeSettings['content']['default_ttl']);
+            $contextualizer->setContextualParameter('content.default_error_ttl', $currentScope, $scopeSettings['content']['default_error_ttl']);
 
             if (isset($scopeSettings['content']['tree_root'])) {
                 $contextualizer->setContextualParameter(

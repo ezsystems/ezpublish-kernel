@@ -300,6 +300,7 @@ services:
             - $content.view_cache$
             - $content.ttl_cache$
             - $content.default_ttl$
+            - $content.default_error_ttl$
         tags:
             - { name: kernel.event_subscriber }
 

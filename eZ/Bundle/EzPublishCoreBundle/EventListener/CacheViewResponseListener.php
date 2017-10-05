@@ -31,17 +31,25 @@ class CacheViewResponseListener implements EventSubscriberInterface
     private $enableTtlCache;
 
     /**
-     * Default ttl for ttl cache.
+     * Default ttl for ttl cache for OK (200) and OK but empty requests (204, 304).
      *
      * @var int
      */
     private $defaultTtl;
 
-    public function __construct($enableViewCache, $enableTtlCache, $defaultTtl)
+    /**
+     * Default ttl for any requests not considered Ok, but been marked to be cached anyway (but for shorter time).
+     *
+     * @var int
+     */
+    private $defaultErrorTtl;
+
+    public function __construct($enableViewCache, $enableTtlCache, $defaultTtl, $defaultErrorTtl = 10)
     {
         $this->enableViewCache = $enableViewCache;
         $this->enableTtlCache = $enableTtlCache;
         $this->defaultTtl = $defaultTtl;
+        $this->defaultErrorTtl = $defaultErrorTtl;
     }
 
     public static function getSubscribedEvents()
@@ -67,7 +75,11 @@ class CacheViewResponseListener implements EventSubscriberInterface
 
         $response->setPublic();
         if ($this->enableTtlCache && !$response->headers->hasCacheControlDirective('s-maxage')) {
-            $response->setSharedMaxAge($this->defaultTtl);
+            if ($response->isOk() || $response->isEmpty()) {
+                $response->setSharedMaxAge($this->defaultTtl);
+            } else {
+                $response->setSharedMaxAge($this->defaultErrorTtl);
+            }
         }
     }
 }

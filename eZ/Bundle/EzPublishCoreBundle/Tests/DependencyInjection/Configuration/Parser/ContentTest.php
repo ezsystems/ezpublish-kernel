@@ -32,7 +32,8 @@ class ContentTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue('content.view_cache', true, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('content.ttl_cache', true, 'ezdemo_site');
-        $this->assertConfigResolverParameterValue('content.default_ttl', 60, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('content.default_ttl', 600, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('content.default_error_ttl', 10, 'ezdemo_site');
     }
 
     /**
@@ -76,12 +77,14 @@ class ContentTest extends AbstractParserTestCase
                         'view_cache' => false,
                         'ttl_cache' => false,
                         'default_ttl' => 123,
+                        'default_error_ttl' => 234,
                     ),
                 ),
                 array(
                     'content.view_cache' => false,
                     'content.ttl_cache' => false,
                     'content.default_ttl' => 123,
+                    'content.default_error_ttl' => 234,
                 ),
             ),
             array(
@@ -93,7 +96,7 @@ class ContentTest extends AbstractParserTestCase
                 array(
                     'content.view_cache' => false,
                     'content.ttl_cache' => true,
-                    'content.default_ttl' => 60,
+                    'content.default_ttl' => 600,
                 ),
             ),
             array(
@@ -105,7 +108,7 @@ class ContentTest extends AbstractParserTestCase
                 array(
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
-                    'content.default_ttl' => 60,
+                    'content.default_ttl' => 600,
                     'content.tree_root.location_id' => 123,
                 ),
             ),
@@ -121,7 +124,8 @@ class ContentTest extends AbstractParserTestCase
                 array(
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
-                    'content.default_ttl' => 60,
+                    'content.default_ttl' => 600,
+                    'content.default_error_ttl' => 10,
                     'content.tree_root.location_id' => 456,
                     'content.tree_root.excluded_uri_prefixes' => array('/media/images', '/products'),
                 ),
