@@ -198,6 +198,7 @@ class SearchServiceFulltextTest extends BaseTest
                 $expectedKeys,
                 function ($carry, $item) {
                     $carry += count((array)$item);
+
                     return $carry;
                 },
                 0
@@ -275,6 +276,7 @@ class SearchServiceFulltextTest extends BaseTest
                 }
 
                 sort($idGroup);
+
                 return $idGroup;
             },
             array_values($scoreGroupedIds)
