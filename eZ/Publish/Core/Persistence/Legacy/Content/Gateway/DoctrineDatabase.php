@@ -1146,13 +1146,15 @@ class DoctrineDatabase extends Gateway
     /**
      * Returns all field IDs of $contentId grouped by their type.
      * If $versionNo is set only field IDs for that version are returned.
+     * If $languageCode is set, only field IDs for that language are returned.
      *
      * @param int $contentId
      * @param int|null $versionNo
+     * @param string|null $languageCode
      *
      * @return int[][]
      */
-    public function getFieldIdsByType($contentId, $versionNo = null)
+    public function getFieldIdsByType($contentId, $versionNo = null, $languageCode = null)
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -1172,6 +1174,15 @@ class DoctrineDatabase extends Gateway
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('version'),
                     $query->bindValue($versionNo, null, \PDO::PARAM_INT)
+                )
+            );
+        }
+
+        if (isset($languageCode)) {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('language_code'),
+                    $query->bindValue($languageCode, null, \PDO::PARAM_STR)
                 )
             );
         }
@@ -1961,7 +1972,8 @@ class DoctrineDatabase extends Gateway
             $this->deleteTranslationFromContentVersions($contentId, $language->id);
             $this->deleteTranslationFromContentObject($contentId, $language->id);
 
-            $this->deleteTranslationFromContentAttributes($contentId, $languageCode);
+            // @todo: move this to field handler when fixing EZP-27949
+            $this->deleteTranslatedFields($languageCode, $contentId);
             $this->deleteTranslationFromContentNames($contentId, $languageCode);
 
             $this->connection->commit();
@@ -1972,12 +1984,14 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Delete translation from the ezcontentobject_attribute table.
+     * Delete Content fields (attributes) for the given Translation.
+     * If $versionNo is given, fields for that Version only will be deleted.
      *
-     * @param int $contentId
      * @param string $languageCode
+     * @param int $contentId
+     * @param int $versionNo (optional) filter by versionNo
      */
-    private function deleteTranslationFromContentAttributes($contentId, $languageCode)
+    public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null)
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -1992,16 +2006,48 @@ class DoctrineDatabase extends Gateway
             )
         ;
 
+        if (null !== $versionNo) {
+            $query
+                ->andWhere('version = :versionNo')
+                ->setParameter(':versionNo', $versionNo)
+            ;
+        }
+
         $query->execute();
+    }
+
+    /**
+     * Delete the specified Translation from the given Version.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param string $languageCode
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode)
+    {
+        $language = $this->languageHandler->loadByLanguageCode($languageCode);
+
+        $this->connection->beginTransaction();
+        try {
+            $this->deleteTranslationFromContentVersions($contentId, $language->id, $versionNo);
+            $this->deleteTranslationFromContentNames($contentId, $languageCode, $versionNo);
+
+            $this->connection->commit();
+        } catch (DBALException $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
     }
 
     /**
      * Delete translation from the ezcontentobject_name table.
      *
-     * @param $contentId
-     * @param $languageCode
+     * @param int $contentId
+     * @param string $languageCode
+     * @param int $versionNo optional, if specified, apply to this Version only.
      */
-    private function deleteTranslationFromContentNames($contentId, $languageCode)
+    private function deleteTranslationFromContentNames($contentId, $languageCode, $versionNo = null)
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -2015,6 +2061,13 @@ class DoctrineDatabase extends Gateway
                 ]
             )
         ;
+
+        if (null !== $versionNo) {
+            $query
+                ->andWhere('content_version = :versionNo')
+                ->setParameter(':versionNo', $versionNo)
+            ;
+        }
 
         $query->execute();
     }
@@ -2062,9 +2115,10 @@ class DoctrineDatabase extends Gateway
      *
      * @param int $contentId
      * @param int $languageId
+     * @param int $versionNo optional, if specified, apply to this Version only.
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
-    private function deleteTranslationFromContentVersions($contentId, $languageId)
+    private function deleteTranslationFromContentVersions($contentId, $languageId, $versionNo = null)
     {
         $query = $this->connection->createQueryBuilder();
         $query->update('ezcontentobject_version')
@@ -2090,6 +2144,13 @@ class DoctrineDatabase extends Gateway
             ->setParameter(':contentId', $contentId)
             ->setParameter(':languageId', $languageId)
         ;
+
+        if (null !== $versionNo) {
+            $query
+                ->andWhere('version = :versionNo')
+                ->setParameter(':versionNo', $versionNo)
+            ;
+        }
 
         $rowCount = $query->execute();
 

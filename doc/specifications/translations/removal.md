@@ -57,3 +57,54 @@ class RemoveTranslationSignal extends Signal
     public $languageCode;
 }
 ```
+
+## Removing the specific language translation from a Content Object Version Draft
+
+For the cases of preserving Version history, PHP API introduces the `deleteTranslationFromDraft`
+method on `ContentService` which removes the specific Translation from the given
+Content Object Version Draft.
+
+**Note**: A PHP API Consumer is responsible for creating Content Object Version Draft
+and publishing it after translation removal.
+
+**Note**: To remove main Translation, main language needs to be changed manually using
+`ContentService::updateContentMetadata` method first.
+
+```php
+/**
+ * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+ *         is the only one the Content Draft has or it is the main Translation of a Content Object.
+ * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+ *         to edit the Content (in one of the locations of the given Content Object).
+ * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+ *         is invalid for the given Draft.
+ * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if specified Version was not found
+ *
+ * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo Content Version Draft
+ * @param string $languageCode Language code of the Translation to be removed
+ *
+ * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft w/o the specified Translation
+ */
+public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode);
+```
+
+Since the returned Content Draft is to be published, both Search and HttpCache are already handled
+by `PublishVersion` Slots once call to `publishVersion()` is made.
+
+### Example usage of deleteTranslationFromDraft API
+
+```php
+$repository->beginTransaction();
+/** @var \eZ\Publish\API\Repository\Repository $repository */
+try {
+    $versionInfo = $contentService->loadVersionInfoById($contentId, $versionNo);
+    $contentDraft = $contentService->createContentDraft($versionInfo->contentInfo, $versionInfo);
+    $contentDraft = $contentService->deleteTranslationFromDraft($contentDraft->versionInfo, $languageCode);
+    $contentService->publishVersion($contentDraft->versionInfo);
+
+    $repository->commit();
+} catch (\Exception $e) {
+    $repository->rollback();
+    throw $e;
+}
+```

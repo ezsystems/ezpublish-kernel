@@ -5368,6 +5368,164 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test deleting a Translation from Draft.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     */
+    public function testDeleteTranslationFromDraft()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'eng-GB';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $draft = $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        $loadedContent = $contentService->loadContent($content->id);
+        self::assertNotContains($languageCode, $loadedContent->versionInfo->languageCodes);
+        self::assertEmpty($loadedContent->getFieldsByLanguage($languageCode));
+    }
+
+    /**
+     * Test deleting a Translation from Draft which has single Translation throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Specified Translation is the only one Content Object Version has
+     */
+    public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnSingleTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        // create Content with single Translation
+        $publishedContent = $contentService->publishVersion(
+            $this->createContentDraft(
+                'forum',
+                2,
+                ['name' => 'Eng-US Version name']
+            )->versionInfo
+        );
+
+        // update mainLanguageCode to avoid exception related to trying to delete main Translation
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $publishedContent = $contentService->updateContentMetadata(
+            $publishedContent->contentInfo,
+            $contentMetadataUpdateStruct
+        );
+
+        // create single Translation Version from the first one
+        $draft = $contentService->createContentDraft(
+            $publishedContent->contentInfo,
+            $publishedContent->versionInfo
+        );
+
+        // attempt to delete Translation
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, 'eng-US');
+    }
+
+    /**
+     * Test deleting the Main Translation from Draft throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Specified Translation is the main Translation of the Content Object
+     */
+    public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnMainTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $mainLanguageCode = 'eng-US';
+        $draft = $this->createMultilingualContentDraft(
+            'forum',
+            2,
+            $mainLanguageCode,
+            [
+                'name' => [
+                    'eng-US' => 'An awesome eng-US forum',
+                    'eng-GB' => 'An awesome eng-GB forum',
+                ],
+            ]
+        );
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, $mainLanguageCode);
+    }
+
+    /**
+     * Test deleting the Translation from Published Version throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Version is not a draft
+     */
+    public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnPublishedVersion()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'eng-US';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $publishedContent = $contentService->publishVersion($draft->versionInfo);
+        $contentService->deleteTranslationFromDraft($publishedContent->versionInfo, $languageCode);
+    }
+
+    /**
+     * Test deleting a Translation from Draft throws UnauthorizedException if user cannot edit Content.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @expectedExceptionMessage User does not have access to 'edit' 'content'
+     */
+    public function testDeleteTranslationFromDraftThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'eng-GB';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+
+        // create user that can read/create/delete but cannot edit or content
+        $this->createRoleWithPolicies('Writer', [
+            ['content', 'read'],
+            ['content', 'versionread'],
+            ['content', 'create'],
+            ['content', 'delete'],
+        ]);
+        $writerUser = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'Writers',
+            'Writer'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
+    }
+
+    /**
+     * Test deleting a non-existent Translation from Draft throws InvalidArgumentException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The Version \(ContentId=\d+, VersionNo=\d+\) is not translated into ger-DE/
+     */
+    public function testDeleteTranslationFromDraftThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'ger-DE';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
+    }
+
+    /**
      * Test for the newTranslationInfo() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo
