@@ -252,7 +252,7 @@ class SearchServiceFulltextTest extends BaseTest
      *
      * @return array
      */
-    private function mapSearchResultToIds(SearchResult $searchResult): array
+    private function mapSearchResultToIds(SearchResult $searchResult)
     {
         $scoreGroupedIds = [];
 
