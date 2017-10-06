@@ -256,8 +256,7 @@ class SearchServiceFulltextTest extends BaseTest
     {
         $scoreGroupedIds = [];
 
-        foreach ($searchResult->searchHits as $index => $searchHit)
-        {
+        foreach ($searchResult->searchHits as $index => $searchHit) {
             if ($searchHit->valueObject instanceof Content || $searchHit->valueObject instanceof Location) {
                 $contentInfo = $searchHit->valueObject->contentInfo;
             } elseif ($searchHit->valueObject instanceof ContentInfo) {
