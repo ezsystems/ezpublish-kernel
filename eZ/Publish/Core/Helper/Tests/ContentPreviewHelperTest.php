@@ -8,10 +8,14 @@
  */
 namespace eZ\Publish\Core\Helper\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPUnit\Framework\TestCase;
 
 class ContentPreviewHelperTest extends TestCase
@@ -34,8 +38,8 @@ class ContentPreviewHelperTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->siteAccessRouter = $this->createMock(SiteAccessRouterInterface::class);
         $this->previewHelper = new ContentPreviewHelper($this->eventDispatcher, $this->siteAccessRouter);
     }
 
@@ -92,7 +96,7 @@ class ContentPreviewHelperTest extends TestCase
     public function testPreviewedContent()
     {
         $this->assertNull($this->previewHelper->getPreviewedContent());
-        $content = $this->getMock('\eZ\Publish\API\Repository\Values\Content\Content');
+        $content = $this->createMock(APIContent::class);
         $this->previewHelper->setPreviewedContent($content);
         $this->assertSame($content, $this->previewHelper->getPreviewedContent());
     }
@@ -100,7 +104,7 @@ class ContentPreviewHelperTest extends TestCase
     public function testPreviewedLocation()
     {
         $this->assertNull($this->previewHelper->getPreviewedLocation());
-        $location = $this->getMock('\eZ\Publish\API\Repository\Values\Content\Location');
+        $location = $this->createMock(APILocation::class);
         $this->previewHelper->setPreviewedLocation($location);
         $this->assertSame($location, $this->previewHelper->getPreviewedLocation());
     }
