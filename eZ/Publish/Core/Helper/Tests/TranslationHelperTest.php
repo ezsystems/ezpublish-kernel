@@ -8,13 +8,16 @@
  */
 namespace eZ\Publish\Core\Helper\Tests;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use Psr\Log\LoggerInterface;
 
 class TranslationHelperTest extends TestCase
 {
@@ -53,9 +56,9 @@ class TranslationHelperTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->contentService = $this->createMock(ContentService::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->siteAccessByLanguages = array(
             'fre-FR' => array('fre'),
             'eng-GB' => array('my_siteaccess', 'eng'),
