@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\EventListener;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\AssignedLocationsListener;
@@ -30,7 +31,7 @@ class AssignedLocationsListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->locationService = $this->getMock('\eZ\Publish\API\Repository\LocationService');
+        $this->locationService = $this->createMock(LocationService::class);
         $this->listener = new AssignedLocationsListener($this->locationService);
     }
 
