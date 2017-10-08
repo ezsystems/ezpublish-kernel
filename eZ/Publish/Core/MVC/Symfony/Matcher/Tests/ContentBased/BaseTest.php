@@ -8,6 +8,15 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured;
+use eZ\Publish\Core\Repository\Repository;
 use PHPUnit\Framework\TestCase;
 
 abstract class BaseTest extends TestCase
@@ -31,7 +40,7 @@ abstract class BaseTest extends TestCase
     protected function getPartiallyMockedViewProvider(array $matchingConfig = array())
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured')
+            ->getMockBuilder(Configured::class)
             ->setConstructorArgs(
                 array(
                     $this->repositoryMock,
@@ -47,7 +56,7 @@ abstract class BaseTest extends TestCase
      */
     protected function getRepositoryMock()
     {
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = Repository::class;
 
         return $this
             ->getMockBuilder($repositoryClass)
@@ -69,7 +78,7 @@ abstract class BaseTest extends TestCase
     protected function getLocationMock(array $properties = array())
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Location')
+            ->getMockBuilder(Location::class)
             ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
     }
@@ -82,7 +91,7 @@ abstract class BaseTest extends TestCase
     protected function getContentInfoMock(array $properties = array())
     {
         return $this->
-            getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo')
+            getMockBuilder(ContentInfo::class)
             ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
     }
@@ -90,23 +99,14 @@ abstract class BaseTest extends TestCase
     protected function getPermissionResolverMock()
     {
         return $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\Permission\PermissionResolver')
+            ->getMockBuilder(PermissionResolver::class)
             ->setMethods(null)
             ->setConstructorArgs(
                 [
-                    $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
-                        ->disableOriginalConstructor()
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\SPI\Persistence\User\Handler')
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
-                        ->getMock(),
+                    $this->createMock(RoleDomainMapper::class),
+                    $this->createMock(LimitationService::class),
+                    $this->createMock(SPIUserHandler::class),
+                    $this->createMock(UserReference::class),
                 ]
             )
             ->getMock();

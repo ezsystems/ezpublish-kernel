@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Id;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType as ParentContentTypeMatcher;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
@@ -42,10 +43,8 @@ class ParentContentTypeTest extends BaseTest
                 $this->returnValue($parentContentInfo)
             );
 
-        $locationServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\LocationService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $locationServiceMock = $this->createMock(LocationService::class);
+
         $locationServiceMock->expects($this->atLeastOnce())
             ->method('loadLocation')
             ->will(

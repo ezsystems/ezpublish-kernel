@@ -8,9 +8,11 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory;
+
 class LocationMatcherFactoryTest extends ContentBasedMatcherFactoryTest
 {
-    protected $matcherFactoryClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\LocationMatcherFactory';
+    protected $matcherFactoryClass = LocationMatcherFactory::class;
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.

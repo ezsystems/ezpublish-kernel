@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
@@ -164,10 +165,8 @@ abstract class AbstractMatcherFactoryTest extends TestCase
      */
     protected function getRepositoryMock()
     {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Repository::class);
+
     }
 
     /**
