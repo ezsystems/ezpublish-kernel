@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator;
+use eZ\Publish\SPI\User\Identity;
+use eZ\Publish\SPI\User\IdentityAware;
 use PHPUnit\Framework\TestCase;
 
 class HashGeneratorTest extends TestCase
@@ -21,11 +23,11 @@ class HashGeneratorTest extends TestCase
     {
         $hashGenerator = new HashGenerator();
         $identityDefiners = array(
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
         );
 
         foreach ($identityDefiners as $definer) {
@@ -42,7 +44,7 @@ class HashGeneratorTest extends TestCase
     public function testSetIdentity()
     {
         $hashGenerator = new HashGenerator();
-        $identity = $this->getMock('eZ\\Publish\\SPI\\User\\Identity');
+        $identity = $this->createMock(Identity::class);
         $hashGenerator->setIdentity($identity);
         $this->assertSame($identity, $hashGenerator->getIdentity());
     }
@@ -57,14 +59,14 @@ class HashGeneratorTest extends TestCase
     public function testGenerate()
     {
         $hashGenerator = new HashGenerator();
-        $identity = $this->getMock('eZ\\Publish\\SPI\\User\\Identity');
+        $identity = $this->createMock(Identity::class);
         $hashGenerator->setIdentity($identity);
         $identityDefiners = array(
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-            $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
+            $this->createMock(IdentityAware::class),
         );
 
         /** @var $definer \PHPUnit_Framework_MockObject_MockObject */
