@@ -103,9 +103,17 @@
     </emphasis>
   </xsl:template>
 
+  <xsl:template match="ezxhtml5:s">
+    <emphasis>
+      <xsl:attribute name="role">strikedthrough</xsl:attribute>
+      <xsl:apply-templates/>
+    </emphasis>
+  </xsl:template>
+
   <xsl:template match="ezxhtml5:del">
     <emphasis>
       <xsl:attribute name="role">strikedthrough</xsl:attribute>
+      <xsl:attribute name="revisionflag">deleted</xsl:attribute>
       <xsl:apply-templates/>
     </emphasis>
   </xsl:template>
