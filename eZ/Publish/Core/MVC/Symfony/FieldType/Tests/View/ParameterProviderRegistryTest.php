@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\View;
 
+use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderInterface;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +23,7 @@ class ParameterProviderRegistryTest extends TestCase
         $registry = new ParameterProviderRegistry();
         $this->assertFalse($registry->hasParameterProvider('foo'));
         $registry->setParameterProvider(
-            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderInterface'),
+            $this->createMock(ParameterProviderInterface::class),
             'foo'
         );
         $this->assertTrue($registry->hasParameterProvider('foo'));
@@ -45,7 +46,7 @@ class ParameterProviderRegistryTest extends TestCase
      */
     public function testGetParameterProvider()
     {
-        $provider = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderInterface');
+        $provider = $this->createMock(ParameterProviderInterface::class);
         $registry = new ParameterProviderRegistry();
         $registry->setParameterProvider($provider, 'foo');
         $this->assertSame($provider, $registry->getParameterProvider('foo'));

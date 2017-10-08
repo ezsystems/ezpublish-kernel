@@ -10,8 +10,11 @@ namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\View\ParameterProvider;
 
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class LocaleParameterProviderTest extends TestCase
 {
@@ -40,7 +43,7 @@ class LocaleParameterProviderTest extends TestCase
     protected function getRequestStackMock($hasLocale)
     {
         $requestStack = new RequestStack();
-        $parameterBagMock = $this->getMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
+        $parameterBagMock = $this->createMock(ParameterBag::class);
 
         $parameterBagMock->expects($this->any())
             ->method('has')
@@ -52,13 +55,8 @@ class LocaleParameterProviderTest extends TestCase
             ->with($this->equalTo('_locale'))
             ->will($this->returnValue('fr_FR'));
 
-        $requestMock = $this->getMock('Symfony\\Component\\HttpFoundation\\Request');
+        $requestMock = $this->createMock(Request::class);
         $requestMock->attributes = $parameterBagMock;
-
-        $requestMock->expects($this->any())
-            ->method('__get')
-            ->with($this->equalTo('attributes'))
-            ->will($this->returnValue($parameterBagMock));
 
         $requestStack->push($requestMock);
 
@@ -67,7 +65,7 @@ class LocaleParameterProviderTest extends TestCase
 
     protected function getLocaleConverterMock()
     {
-        $mock = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Locale\\LocaleConverterInterface');
+        $mock = $this->createMock(LocaleConverterInterface::class);
 
         $mock->expects($this->any())
             ->method('convertToPOSIX')

@@ -8,7 +8,9 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\Page;
 
+use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider;
+use eZ\Publish\Core\FieldType\Page\PageService;
 use PHPUnit\Framework\TestCase;
 
 class ParameterProviderTest extends TestCase
@@ -18,11 +20,8 @@ class ParameterProviderTest extends TestCase
      */
     public function testGetViewParameters()
     {
-        $pageService = $this
-            ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\PageService')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $field = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Field');
+        $pageService = $this->createMock(PageService::class);
+        $field = $this->createMock(Field::class);
         $parameterProvider = new ParameterProvider($pageService);
         $this->assertSame(
             array('pageService' => $pageService),
