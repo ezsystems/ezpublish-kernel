@@ -86,7 +86,7 @@ class LocationAwareStoreTest extends TestCase
      */
     private function getFilesystemMock()
     {
-        return $this->getMock('Symfony\\Component\\Filesystem\\Filesystem');
+        return $this->createMock(Filesystem::class);
     }
 
     public function testPurgeByRequestSingleLocation()
