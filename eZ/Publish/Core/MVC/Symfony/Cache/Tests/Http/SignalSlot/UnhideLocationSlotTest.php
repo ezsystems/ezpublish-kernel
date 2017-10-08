@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnhideLocationSlot;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal;
 
 class UnhideLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
@@ -19,11 +20,11 @@ class UnhideLocationSlotTest extends AbstractPurgeForContentSlotTest implements 
 
     public function getSlotClass()
     {
-        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnhideLocationSlot';
+        return UnhideLocationSlot::class;
     }
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal'];
+        return [UnhideLocationSignal::class];
     }
 }

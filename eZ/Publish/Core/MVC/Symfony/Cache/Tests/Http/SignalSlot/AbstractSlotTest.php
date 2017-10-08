@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
+use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractSlotTest extends TestCase implements SlotTest
@@ -24,7 +25,7 @@ abstract class AbstractSlotTest extends TestCase implements SlotTest
 
     public function setUp()
     {
-        $this->cachePurgerMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger');
+        $this->cachePurgerMock = $this->createMock(GatewayCachePurger::class);
         $this->slot = $this->createSlot();
         self::$signal = $this->createSignal();
     }
