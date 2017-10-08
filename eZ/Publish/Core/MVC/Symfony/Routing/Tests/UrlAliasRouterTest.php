@@ -14,15 +14,20 @@ use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
 
 class UrlAliasRouterTest extends TestCase
 {
@@ -61,7 +66,7 @@ class UrlAliasRouterTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = Repository::class;
         $this->repository = $repository = $this
             ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()
@@ -72,16 +77,16 @@ class UrlAliasRouterTest extends TestCase
                 )
             )
             ->getMock();
-        $this->urlAliasService = $this->getMock('eZ\\Publish\\API\\Repository\\URLAliasService');
-        $this->locationService = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
-        $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $this->urlAliasService = $this->createMock(URLAliasService::class);
+        $this->locationService = $this->createMock(LocationService::class);
+        $this->contentService = $this->createMock(ContentService::class);
         $this->urlALiasGenerator = $this
-            ->getMockBuilder('eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\Generator\\UrlAliasGenerator')
+            ->getMockBuilder(UrlAliasGenerator::class)
             ->setConstructorArgs(
                 array(
                     $repository,
-                    $this->getMock('Symfony\\Component\\Routing\\RouterInterface'),
-                    $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface'),
+                    $this->createMock(RouterInterface::class),
+                    $this->createMock(ConfigResolverInterface::class),
                 )
             )
             ->getMock();
@@ -144,7 +149,7 @@ class UrlAliasRouterTest extends TestCase
 
     public function testGetRouteCollection()
     {
-        $this->assertInstanceOf('Symfony\\Component\\Routing\\RouteCollection', $this->router->getRouteCollection());
+        $this->assertInstanceOf(RouteCollection::class, $this->router->getRouteCollection());
     }
 
     /**
@@ -161,7 +166,7 @@ class UrlAliasRouterTest extends TestCase
             new SiteAccess(
                 'test',
                 'fake',
-                $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher')
+                $this->createMock(Matcher::class)
             )
         );
 
