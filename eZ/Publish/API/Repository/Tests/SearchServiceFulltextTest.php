@@ -80,7 +80,7 @@ class SearchServiceFulltextTest extends BaseTest
      * Return pairs of arguments:
      *  - search string for testing
      *  - an array of corresponding Content keys as defined in testPrepareContent() method,
-     *    ordered and grouped by relevancy
+     *    ordered and grouped by relevancy.
      *
      * @see testPrepareContent
      */
