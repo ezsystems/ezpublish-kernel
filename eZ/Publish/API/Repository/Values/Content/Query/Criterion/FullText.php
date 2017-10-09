@@ -43,7 +43,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
  *   would match "foo" and "foobar", for example.
  * - Simple stop word removal might be applied to the words provided in the
  *   query.
- *
  */
 class FullText extends Criterion implements CriterionInterface, CustomFieldInterface
 {
