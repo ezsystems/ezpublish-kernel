@@ -76,6 +76,14 @@ class SearchServiceFulltextTest extends BaseTest
         return $idMap;
     }
 
+    /**
+     * Return pairs of arguments:
+     *  - search string for testing
+     *  - an array of corresponding Content keys as defined in testPrepareContent() method,
+     *    ordered and grouped by relevancy
+     *
+     * @see testPrepareContent
+     */
     public function providerForTestFulltextSearch()
     {
         return [
