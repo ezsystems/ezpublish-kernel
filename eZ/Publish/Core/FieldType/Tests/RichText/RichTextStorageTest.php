@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class RichTextStorageTest extends TestCase
 {
@@ -342,14 +343,15 @@ class RichTextStorageTest extends TestCase
      */
     protected function getPartlyMockedStorage(StorageGateway $gateway)
     {
-        return $this->getMock(
-            RichTextStorage::class,
-            null,
-            [
-                $gateway,
-                $this->getLoggerMock(),
-            ]
-        );
+        return $this->getMockBuilder(RichTextStorage::class)
+            ->setConstructorArgs(
+                [
+                    $gateway,
+                    $this->getLoggerMock(),
+                ]
+            )
+            ->setMethods(null)
+            ->getMock();
     }
 
     /**
@@ -372,7 +374,7 @@ class RichTextStorageTest extends TestCase
     {
         if (!isset($this->loggerMock)) {
             $this->loggerMock = $this->getMockForAbstractClass(
-                'Psr\\Log\\LoggerInterface'
+                LoggerInterface::class
             );
         }
 
@@ -390,10 +392,7 @@ class RichTextStorageTest extends TestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this
-                ->getMockBuilder(RichTextStorage\Gateway::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->gatewayMock = $this->createMock(RichTextStorage\Gateway::class);
         }
 
         return $this->gatewayMock;

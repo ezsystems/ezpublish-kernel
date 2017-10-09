@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use PHPUnit\Framework\TestCase;
 
 class BlockTest extends TestCase
@@ -29,10 +30,7 @@ class BlockTest extends TestCase
      */
     public function testGetState()
     {
-        $item = $this
-            ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Item')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createMock(Item::class);
 
         $properties = array(
             'id' => '4efd68496edd8184aade729b4d2ee17b',

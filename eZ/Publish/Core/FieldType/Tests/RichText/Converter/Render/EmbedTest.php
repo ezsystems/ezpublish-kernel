@@ -10,7 +10,9 @@ namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed;
+use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use DOMDocument;
+use Psr\Log\LoggerInterface;
 
 class EmbedTest extends TestCase
 {
@@ -532,9 +534,7 @@ class EmbedTest extends TestCase
      */
     protected function getRendererMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface'
-        );
+        return $this->createMock(RendererInterface::class);
     }
 
     /**
@@ -547,8 +547,6 @@ class EmbedTest extends TestCase
      */
     protected function getLoggerMock()
     {
-        return $this->getMock(
-            'Psr\\Log\\LoggerInterface'
-        );
+        return $this->createMock(LoggerInterface::class);
     }
 }
