@@ -8,12 +8,15 @@
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\StatusLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Limitation\StatusLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 
 /**
@@ -165,38 +168,41 @@ class StatusLimitationTypeTest extends Base
         $expected = array('test', 'test' => 9);
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\StatusLimitation', $value);
+        self::assertInstanceOf(StatusLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
-    protected function getVersionInfoMock()
+    protected function getVersionInfoMock($shouldBeCalled = true)
     {
-        $versionInfoMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $versionInfoMock
-            ->expects($this->once())
-            ->method('__get')
-            ->with('status')
-            ->will($this->returnValue(24));
+        $versionInfoMock = $this->getMockBuilder(APIVersionInfo::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array('__get'))
+            ->getMockForAbstractClass();
+
+        if ($shouldBeCalled) {
+            $versionInfoMock
+                ->expects($this->once())
+                ->method('__get')
+                ->with('status')
+                ->will($this->returnValue(24));
+        } else {
+            $versionInfoMock
+                ->expects($this->never())
+                ->method('__get')
+                ->with('status');
+        }
 
         return $versionInfoMock;
     }
 
     protected function getContentMock()
     {
-        $contentMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentMock = $this->getMockBuilder(APIContent::class)
+            ->setConstructorArgs(array())
+            ->setMethods(array())
+            ->getMock();
+
         $contentMock
             ->expects($this->once())
             ->method('getVersionInfo')
@@ -214,7 +220,7 @@ class StatusLimitationTypeTest extends Base
             // VersionInfo, no access
             array(
                 'limitation' => new StatusLimitation(),
-                'object' => $this->getVersionInfoMock(),
+                'object' => $this->getVersionInfoMock(false),
                 'expected' => false,
             ),
             // VersionInfo, no access
@@ -261,8 +267,10 @@ class StatusLimitationTypeTest extends Base
         StatusLimitationType $limitationType
     ) {
         $userMock = $this->getUserMock();
-        $userMock->expects($this->never())->method($this->anything());
+        $userMock->expects($this->never())
+            ->method($this->anything());
 
+        $userMock = new User();
         $value = $limitationType->evaluate(
             $limitation,
             $userMock,
@@ -278,13 +286,10 @@ class StatusLimitationTypeTest extends Base
      */
     public function providerForTestEvaluateInvalidArgument()
     {
-        $versionInfoMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $versionInfoMock = $this->getMockBuilder(APIVersionInfo::class)
+            ->setConstructorArgs(array())
+            ->setMethods(array())
+            ->getMock();
 
         return array(
             // invalid limitation
@@ -313,6 +318,7 @@ class StatusLimitationTypeTest extends Base
         $userMock = $this->getUserMock();
         $userMock->expects($this->never())->method($this->anything());
 
+        $userMock = new User();
         $limitationType->evaluate(
             $limitation,
             $userMock,

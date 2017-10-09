@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -17,6 +19,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Limitation\ParentDepthLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
 
 /**
  * Test Case for LimitationType.
@@ -34,14 +37,7 @@ class ParentDepthLimitationTypeTest extends Base
     public function setUp()
     {
         parent::setUp();
-
-        $this->locationHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->locationHandlerMock = $this->createMock(SPILocationHandler::class);
     }
 
     /**
@@ -144,7 +140,7 @@ class ParentDepthLimitationTypeTest extends Base
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation',
+           ParentDepthLimitation::class,
             $value
         );
         self::assertInternalType('array', $value->limitationValues);
@@ -157,21 +153,8 @@ class ParentDepthLimitationTypeTest extends Base
     public function providerForTestEvaluate()
     {
         // Mocks for testing Content & VersionInfo objects, should only be used once because of expect rules.
-        $contentMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $versionInfoMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            [],
-            [],
-            '',
-            false
-        );
+        $contentMock = $this->createMock(APIContent::class);
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $contentMock
             ->expects($this->once())
@@ -183,13 +166,7 @@ class ParentDepthLimitationTypeTest extends Base
             ->method('getContentInfo')
             ->will($this->returnValue(new ContentInfo(['published' => true])));
 
-        $versionInfoMock2 = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            [],
-            [],
-            '',
-            false
-        );
+        $versionInfoMock2 = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock2
             ->expects($this->once())

@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Limitation\BlockingLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
@@ -142,7 +143,7 @@ class BlockingLimitationTypeTest extends Base
         $expected = array('test', 'test' => 9);
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation', $value);
+        self::assertInstanceOf(BlockingLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
@@ -275,7 +276,7 @@ class BlockingLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone', $criterion);
+        self::assertInstanceOf(MatchNone::class, $criterion);
         self::assertInternalType('null', $criterion->value);
         self::assertInternalType('null', $criterion->operator);
     }
