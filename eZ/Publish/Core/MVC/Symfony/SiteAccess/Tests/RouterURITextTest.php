@@ -8,11 +8,14 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText as URITextMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Psr\Log\LoggerInterface;
 
 class RouterURITextTest extends TestCase
 {
@@ -31,7 +34,7 @@ class RouterURITextTest extends TestCase
     {
         return new Router(
             $this->matcherBuilder,
-            $this->getMock('Psr\\Log\\LoggerInterface'),
+            $this->createMock(LoggerInterface::class),
             'default_sa',
             array(
                 'URIText' => array(
@@ -58,7 +61,7 @@ class RouterURITextTest extends TestCase
     public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
     {
         $sa = $router->match($request);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa);
+        $this->assertInstanceOf(SiteAccess::class, $sa);
         $this->assertSame($siteAccess, $sa->name);
         $router->setSiteAccess();
     }
@@ -169,9 +172,9 @@ class RouterURITextTest extends TestCase
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => $semanticURI)));
 
         $result = $matcher->reverseMatch('something');
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText', $result);
+        $this->assertInstanceOf(URIText::class, $result);
         $request = $result->getRequest();
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest', $request);
+        $this->assertInstanceOf(SimplifiedRequest::class, $request);
         $this->assertSame("/foosomethingbar{$semanticURI}", $request->pathinfo);
     }
 }
