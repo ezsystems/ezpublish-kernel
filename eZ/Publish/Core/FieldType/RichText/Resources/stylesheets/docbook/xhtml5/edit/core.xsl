@@ -110,9 +110,18 @@
         </xsl:element>
       </xsl:when>
       <xsl:when test="@role='strikedthrough'">
-        <xsl:element name="del" namespace="{$outputNamespace}">
-          <xsl:apply-templates/>
-        </xsl:element>
+        <xsl:choose>
+          <xsl:when test="@revisionflag='deleted'">
+            <xsl:element name="del" namespace="{$outputNamespace}">
+              <xsl:apply-templates/>
+            </xsl:element>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:element name="s" namespace="{$outputNamespace}">
+              <xsl:apply-templates/>
+            </xsl:element>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="em" namespace="{$outputNamespace}">
