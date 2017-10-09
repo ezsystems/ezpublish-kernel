@@ -8,8 +8,11 @@
  */
 namespace eZ\Publish\Core\Pagination\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Pagination\Pagerfanta\ContentSearchHitAdapter;
@@ -25,7 +28,7 @@ class ContentSearchHitAdapterTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->searchService = $this->getMock('eZ\Publish\API\Repository\SearchService');
+        $this->searchService = $this->createMock(SearchService::class);
     }
 
     /**
@@ -45,9 +48,9 @@ class ContentSearchHitAdapterTest extends TestCase
     {
         $nbResults = 123;
         $query = new Query();
-        $query->query = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->query = $this->createMock(CriterionInterface::class);
         $query->sortClauses = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
+            ->getMockBuilder(SortClause::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -75,9 +78,9 @@ class ContentSearchHitAdapterTest extends TestCase
         $nbResults = 123;
 
         $query = new Query();
-        $query->query = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->query = $this->createMock(CriterionInterface::class);
         $query->sortClauses = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
+            ->getMockBuilder(SortClause::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -90,7 +93,7 @@ class ContentSearchHitAdapterTest extends TestCase
 
         $hits = array();
         for ($i = 0; $i < $limit; ++$i) {
-            $content = $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\Content\Content');
+            $content = $this->getMockForAbstractClass(APIContent::class);
             $hits[] = new SearchHit(array('valueObject' => $content));
         }
         $finalResult = $this->getExpectedFinalResultFromHits($hits);
