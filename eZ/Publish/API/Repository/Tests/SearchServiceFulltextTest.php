@@ -147,6 +147,14 @@ class SearchServiceFulltextTest extends BaseTest
                 '"fox brown"',
                 [],
             ],
+            [
+                'qui*',
+                [[1, 5, 6, 7, 11, 12, 13, 15]],
+            ],
+            [
+                '+qui* +fox',
+                [6, [11, 13, 15]],
+            ],
         ];
     }
 
