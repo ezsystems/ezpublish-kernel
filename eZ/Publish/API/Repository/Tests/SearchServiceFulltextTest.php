@@ -236,7 +236,7 @@ class SearchServiceFulltextTest extends BaseTest
      *
      * @return array
      */
-    private function mapKeysToIds(array $expectedKeys, array $idMap): array
+    private function mapKeysToIds(array $expectedKeys, array $idMap)
     {
         $expectedIds = [];
 
