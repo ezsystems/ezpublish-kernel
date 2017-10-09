@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\IO\Tests\IOBinarydataHandler;
 use eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
+use League\Flysystem\FilesystemInterface;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 
@@ -24,7 +25,7 @@ class FlysystemTest extends TestCase
 
     public function setUp()
     {
-        $this->filesystem = $this->getMock('League\Flysystem\FilesystemInterface');
+        $this->filesystem = $this->createMock(FilesystemInterface::class);
         $this->handler = new Flysystem($this->filesystem);
     }
 

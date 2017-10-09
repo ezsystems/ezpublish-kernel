@@ -12,6 +12,7 @@ use eZ\Publish\Core\IO\IOMetadataHandler\Flysystem;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use League\Flysystem\FileNotFoundException;
+use League\Flysystem\FilesystemInterface;
 use PHPUnit\Framework\TestCase;
 use DateTime;
 
@@ -25,7 +26,7 @@ class FlysystemTest extends TestCase
 
     public function setUp()
     {
-        $this->filesystem = $this->getMock('League\Flysystem\FilesystemInterface');
+        $this->filesystem = $this->createMock(FilesystemInterface::class);
         $this->handler = new Flysystem($this->filesystem);
     }
 
@@ -57,7 +58,7 @@ class FlysystemTest extends TestCase
 
         $spiBinaryFile = $this->handler->create($spiCreateStruct);
 
-        $this->assertInstanceOf('eZ\Publish\SPI\IO\BinaryFile', $spiBinaryFile);
+        $this->assertInstanceOf(SPIBinaryFile::class, $spiBinaryFile);
         $this->assertEquals($expectedSpiBinaryFile, $spiBinaryFile);
     }
 
@@ -89,7 +90,7 @@ class FlysystemTest extends TestCase
 
         $spiBinaryFile = $this->handler->load('prefix/my/file.png');
 
-        $this->assertInstanceOf('eZ\Publish\SPI\IO\BinaryFile', $spiBinaryFile);
+        $this->assertInstanceOf(SPIBinaryFile::class, $spiBinaryFile);
         $this->assertEquals($expectedSpiBinaryFile, $spiBinaryFile);
     }
 
