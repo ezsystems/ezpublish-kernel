@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use Doctrine\DBAL\DBALException;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use PDOException;
 
 /**
@@ -408,6 +409,20 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->bulkRemoveTranslation($languageId, $actions);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentId, array $languageIds)
+    {
+        try {
+            $this->innerGateway->archiveUrlAliasesForDeletedTranslations($locationId, $parentId, $languageIds);
         } catch (DBALException $e) {
             throw new \RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
