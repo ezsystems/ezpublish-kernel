@@ -21,17 +21,29 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
  *
  * Normalization and querying capabilities might depend on the system
  * configuration or the used search engine and might differ. The following
- * basic query semantics are supported:
+ * query semantics are supported with Solr search engine:
  *
- * - If multiple words are specified an AND query is performed. OR queries are
- *   not yet supported.
- *
+ * - If multiple words are specified an OR query is performed.
+ * - Boolean operators are supported: AND (&&), OR (||), NOT (!).
+ * - Required/prohibit operators are supported: +, -.
+ * - Grouping is supported through parentheses.
+ * - Phrases are supported using double quotes.
  * - Simple wild cards are supported. If an asterisk (*) is used at the end or
  *   beginning of a word this is translated into a wild card query. Thus "fo*"
  *   would match "foo" and "foobar", for example.
- *
  * - Simple stop word removal might be applied to the words provided in the
  *   query.
+ *
+ * The following query semantics are supported with Legacy search engine:
+ *
+ *  - If multiple words are specified an AND query is performed. OR queries are
+ *   not supported.
+ * - Simple wild cards are supported. If an asterisk (*) is used at the end or
+ *   beginning of a word this is translated into a wild card query. Thus "fo*"
+ *   would match "foo" and "foobar", for example.
+ * - Simple stop word removal might be applied to the words provided in the
+ *   query.
+ *
  */
 class FullText extends Criterion implements CriterionInterface, CustomFieldInterface
 {
