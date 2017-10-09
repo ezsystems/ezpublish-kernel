@@ -11,6 +11,11 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\Core\FieldType\Validator\FileSizeValidator;
 use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\API\Repository\IOServiceInterface;
+use eZ\Publish\API\Repository\Values\Translation\Message;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\Translation\Plural;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,7 +38,7 @@ class FileSizeValidatorTest extends TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new FileSizeValidator()
         );
     }
@@ -156,7 +161,7 @@ class FileSizeValidatorTest extends TestCase
     protected function getBinaryFileValue($size)
     {
         $this->markTestSkipped('BinaryFile field type does not use this validator anymore.');
-        $value = new BinaryFileValue($this->getMock('eZ\\Publish\\API\\Repository\\IOServiceInterface'));
+        $value = new BinaryFileValue($this->createMock(IOServiceInterface::class));
         $value->file = new BinaryFile(array('size' => $size));
 
         return $value;
@@ -186,11 +191,11 @@ class FileSizeValidatorTest extends TestCase
         $messages = $validator->getMessage();
         $this->assertCount(1, $messages);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+            ValidationError::class,
             $messages[0]
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Plural',
+            Plural::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -261,7 +266,7 @@ class FileSizeValidatorTest extends TestCase
         $messages = $validator->validateConstraints($constraints);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+            Message::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(

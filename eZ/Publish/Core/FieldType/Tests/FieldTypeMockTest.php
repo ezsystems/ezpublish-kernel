@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use PHPUnit\Framework\TestCase;
+use eZ\Publish\Core\FieldType\FieldType;
 
 class FieldTypeMockTest extends TestCase
 {
@@ -19,7 +20,7 @@ class FieldTypeMockTest extends TestCase
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false
@@ -39,7 +40,7 @@ class FieldTypeMockTest extends TestCase
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false,
@@ -168,7 +169,7 @@ class FieldTypeMockTest extends TestCase
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false
@@ -183,7 +184,7 @@ class FieldTypeMockTest extends TestCase
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false,
@@ -214,7 +215,7 @@ class FieldTypeMockTest extends TestCase
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false,

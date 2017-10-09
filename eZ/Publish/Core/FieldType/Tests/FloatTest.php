@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Float\Type as FloatType;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -106,15 +107,15 @@ class FloatTest extends FieldTypeTest
         return array(
             array(
                 'foo',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new FloatValue('foo'),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

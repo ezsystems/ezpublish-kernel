@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
 use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
+use eZ\Publish\Core\FieldType\Validator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,7 +26,7 @@ class EmailAddressValidatorTest extends TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new EmailAddressValidator()
         );
     }

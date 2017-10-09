@@ -13,6 +13,8 @@ use eZ\Publish\Core\FieldType\Page\Value as PageValue;
 use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
 use eZ\Publish\Core\FieldType\Page\Parts;
 use eZ\Publish\Core\FieldType\Page\HashConverter;
+use eZ\Publish\Core\FieldType\Page\PageService;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use DateTime;
 
 /**
@@ -40,10 +42,7 @@ class PageTest extends FieldTypeTest
     private function getPageServiceMock()
     {
         if (!isset($this->pageServiceMock)) {
-            $this->pageServiceMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\PageService')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->pageServiceMock = $this->createMock(PageService::class);
             $this->pageServiceMock->expects($this->any())
                 ->method('getAvailableZoneLayouts')
                 ->will($this->returnValue(array('2ZonesLayout1', '2ZonesLayout2')));
@@ -225,7 +224,7 @@ class PageTest extends FieldTypeTest
         return array(
             array(
                 new \stdClass(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

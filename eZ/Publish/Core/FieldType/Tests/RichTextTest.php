@@ -8,15 +8,18 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\Core\FieldType\RichText\Normalizer\Aggregate;
 use eZ\Publish\Core\FieldType\RichText\Type as RichTextType;
 use eZ\Publish\Core\FieldType\RichText\Value;
+use eZ\Publish\Core\FieldType\Value as CoreValue;
 use eZ\Publish\Core\FieldType\RichText\ConverterDispatcher;
 use eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher;
 use eZ\Publish\Core\FieldType\RichText\Validator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\FieldType\ValidationError;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -54,7 +57,7 @@ class RichTextTest extends TestCase
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
+            TransformationProcessor::class,
             array(),
             '',
             false,
@@ -94,7 +97,7 @@ class RichTextTest extends TestCase
      */
     public function testAcceptValueInvalidType()
     {
-        $this->getFieldType()->acceptValue($this->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Value')->disableOriginalConstructor()->getMock());
+        $this->getFieldType()->acceptValue($this->createMock(CoreValue::class));
     }
 
     public static function providerForTestAcceptValueValidFormat()
@@ -241,9 +244,7 @@ class RichTextTest extends TestCase
         $value = new Value($xmlString);
 
         /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
-        $fieldDefinitionMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition'
-        );
+        $fieldDefinitionMock = $this->createMock(APIFieldDefinition::class);
 
         $validationErrors = $fieldType->validate($fieldDefinitionMock, $value);
 

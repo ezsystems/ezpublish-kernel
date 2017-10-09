@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -106,11 +107,11 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 23,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new TextLineValue(23),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

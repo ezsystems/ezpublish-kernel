@@ -12,6 +12,7 @@ use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class RelationTest extends FieldTypeTest
@@ -106,7 +107,7 @@ class RelationTest extends FieldTypeTest
         return array(
             array(
                 true,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

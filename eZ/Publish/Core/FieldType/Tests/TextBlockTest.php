@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\TextBlock\Type as TextBlockType;
 use eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -99,11 +100,11 @@ class TextBlockTest extends FieldTypeTest
         return array(
             array(
                 23,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new TextBlockValue(23),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

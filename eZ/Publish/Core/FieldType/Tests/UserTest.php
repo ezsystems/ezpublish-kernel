@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -92,7 +93,7 @@ class UserTest extends FieldTypeTest
         return array(
             array(
                 23,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }
