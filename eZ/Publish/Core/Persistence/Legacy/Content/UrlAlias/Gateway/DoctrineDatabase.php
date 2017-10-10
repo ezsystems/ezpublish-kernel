@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Database\Query;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
 
 /**
@@ -320,13 +321,27 @@ class DoctrineDatabase extends Gateway
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
         if (!empty($row)) {
-            // If language mask is composite (consists of multiple languages) then remove given language from entry
-            if ($row['lang_mask'] & ~($languageId | 1)) {
-                $this->removeTranslation($row['parent'], $row['text_md5'], $languageId);
-            } else {
-                // Otherwise mark entry as history
-                $this->historize($row['parent'], $row['text_md5'], $newId);
-            }
+            $this->archiveUrlAliasForDeletedTranslation($row['lang_mask'], $languageId, $row['parent'], $row['text_md5'], $newId);
+        }
+    }
+
+    /**
+     * Archive (remove or historize) obsolete URL aliases (for translations that were removed).
+     *
+     * @param int $languageMask all languages bit mask
+     * @param int $languageId removed language Id
+     * @param int $parent
+     * @param string $textMD5 checksum
+     * @param $linkId
+     */
+    private function archiveUrlAliasForDeletedTranslation($languageMask, $languageId, $parent, $textMD5, $linkId)
+    {
+        // If language mask is composite (consists of multiple languages) then remove given language from entry
+        if ($languageMask & ~($languageId | 1)) {
+            $this->removeTranslation($parent, $textMD5, $languageId);
+        } else {
+            // Otherwise mark entry as history
+            $this->historize($parent, $textMD5, $linkId);
         }
     }
 
