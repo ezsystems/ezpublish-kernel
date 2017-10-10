@@ -24,8 +24,8 @@ class GeneralSlotFactoryTest extends TestCase
             array(array('slot1' => true, 'slot2' => true)),
             array(
                 array(
-                    'slot1' => $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot'),
-                    'slot2' => $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot'),
+                    'slot1' => $this->createMock(SignalSlot\Slot::class),
+                    'slot2' => $this->createMock(SignalSlot\Slot::class),
                 ),
             ),
         );

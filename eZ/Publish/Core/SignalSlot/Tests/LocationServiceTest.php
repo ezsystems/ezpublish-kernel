@@ -8,20 +8,20 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\LocationService as APILocationService;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\LocationService;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService as LocationServiceSignals;
 
 class LocationServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\LocationService'
-        );
+        return $this->createMock(APILocationService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -77,7 +77,7 @@ class LocationServiceTest extends ServiceTest
                 array($location, $root),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\CopySubtreeSignal',
+                LocationServiceSignals\CopySubtreeSignal::class,
                 array(
                     'subtreeId' => $locationId,
                     'targetParentLocationId' => $rootId,
@@ -118,7 +118,7 @@ class LocationServiceTest extends ServiceTest
                 array($locationContentInfo, $locationCreateStruct),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal',
+                LocationServiceSignals\CreateLocationSignal::class,
                 array(
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
@@ -129,7 +129,7 @@ class LocationServiceTest extends ServiceTest
                 array($location, $locationUpdateStruct),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal',
+                LocationServiceSignals\UpdateLocationSignal::class,
                 array(
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
@@ -140,7 +140,7 @@ class LocationServiceTest extends ServiceTest
                 array($location, $root),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal',
+                LocationServiceSignals\SwapLocationSignal::class,
                 array(
                     'location1Id' => $locationId,
                     'content1Id' => $locationContentId,
@@ -153,7 +153,7 @@ class LocationServiceTest extends ServiceTest
                 array($location),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal',
+                LocationServiceSignals\HideLocationSignal::class,
                 array(
                     'locationId' => $locationId,
                 ),
@@ -163,7 +163,7 @@ class LocationServiceTest extends ServiceTest
                 array($location),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal',
+                LocationServiceSignals\UnhideLocationSignal::class,
                 array(
                     'locationId' => $locationId,
                 ),
@@ -173,7 +173,7 @@ class LocationServiceTest extends ServiceTest
                 array($location, $root),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal',
+                LocationServiceSignals\MoveSubtreeSignal::class,
                 array(
                     'locationId' => $locationId,
                     'newParentLocationId' => $rootId,
@@ -184,7 +184,7 @@ class LocationServiceTest extends ServiceTest
                 array($location),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal',
+                LocationServiceSignals\DeleteLocationSignal::class,
                 array(
                     'locationId' => $locationId,
                     'contentId' => $locationContentId,

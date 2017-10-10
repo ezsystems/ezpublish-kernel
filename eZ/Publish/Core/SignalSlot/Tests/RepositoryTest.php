@@ -36,7 +36,7 @@ class RepositoryTest extends TestCase
     public function testServiceMethod($method, $class)
     {
         $innerRepositoryMock = $this->getMockBuilder(InnerRepository::class)->disableOriginalConstructor()->getMock();
-        $signalDispatcherMock = $this->getMock(SignalDispatcher::class);
+        $signalDispatcherMock = $this->createMock(SignalDispatcher::class);
 
         $contentServiceMock = $this->getMockBuilder(ContentService::class)->disableOriginalConstructor()->getMock();
         $contentTypeServiceMock = $this->getMockBuilder(ContentTypeService::class)->disableOriginalConstructor()->getMock();
@@ -101,7 +101,7 @@ class RepositoryTest extends TestCase
     public function testAggregation($method, $parameters, $return)
     {
         $innerRepositoryMock = $this->getMockBuilder(InnerRepository::class)->disableOriginalConstructor()->getMock();
-        $signalDispatcherMock = $this->getMock(SignalDispatcher::class);
+        $signalDispatcherMock = $this->createMock(SignalDispatcher::class);
 
         $contentServiceMock = $this->getMockBuilder(ContentService::class)->disableOriginalConstructor()->getMock();
         $contentTypeServiceMock = $this->getMockBuilder(ContentTypeService::class)->disableOriginalConstructor()->getMock();

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\SearchService as APISearchService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
@@ -19,9 +20,7 @@ class SearchServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\SearchService'
-        );
+        return $this->createMock(APISearchService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)

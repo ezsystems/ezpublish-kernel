@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\UserService as APIUserService;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
@@ -15,14 +16,13 @@ use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\UserService;
+use eZ\Publish\Core\SignalSlot\Signal\UserService as UserServiceSignals;
 
 class UserServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\UserService'
-        );
+        return $this->createMock(APIUserService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -86,7 +86,7 @@ class UserServiceTest extends ServiceTest
                 array($userGroupCreateStruct, $parentGroup),
                 $userGroup,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserGroupSignal',
+                UserServiceSignals\CreateUserGroupSignal::class,
                 array('userGroupId' => $userGroupId),
             ),
             array(
@@ -118,7 +118,7 @@ class UserServiceTest extends ServiceTest
                 array($userGroup),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserGroupSignal',
+                UserServiceSignals\DeleteUserGroupSignal::class,
                 array('userGroupId' => $userGroupId),
             ),
             array(
@@ -126,7 +126,7 @@ class UserServiceTest extends ServiceTest
                 array($userGroup, $parentGroup2),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\MoveUserGroupSignal',
+                UserServiceSignals\MoveUserGroupSignal::class,
                 array(
                     'userGroupId' => $userGroupId,
                     'newParentId' => $parentGroup2Id,
@@ -137,7 +137,7 @@ class UserServiceTest extends ServiceTest
                 array($userGroup, $userGroupUpdateStruct),
                 $userGroup,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserGroupSignal',
+                UserServiceSignals\UpdateUserGroupSignal::class,
                 array('userGroupId' => $userGroupId),
             ),
             array(
@@ -145,7 +145,7 @@ class UserServiceTest extends ServiceTest
                 array($userCreateStruct, array($userGroup)),
                 $user,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserSignal',
+                UserServiceSignals\CreateUserSignal::class,
                 array('userId' => $userId),
             ),
             array(
@@ -207,7 +207,7 @@ class UserServiceTest extends ServiceTest
                 array($user),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserSignal',
+                UserServiceSignals\DeleteUserSignal::class,
                 array('userId' => $userId),
             ),
             array(
@@ -215,7 +215,7 @@ class UserServiceTest extends ServiceTest
                 array($user, $userUpdateStruct),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserSignal',
+                UserServiceSignals\UpdateUserSignal::class,
                 array('userId' => $userId),
             ),
             array(
@@ -223,7 +223,7 @@ class UserServiceTest extends ServiceTest
                 array($user, $parentGroup2),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal',
+                UserServiceSignals\AssignUserToUserGroupSignal::class,
                 array(
                     'userId' => $userId,
                     'userGroupId' => $parentGroup2Id,
@@ -234,7 +234,7 @@ class UserServiceTest extends ServiceTest
                 array($user, $parentGroup2),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal',
+                UserServiceSignals\UnAssignUserFromUserGroupSignal::class,
                 array(
                     'userId' => $userId,
                     'userGroupId' => $parentGroup2Id,

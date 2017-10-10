@@ -8,17 +8,17 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\FieldTypeService as APIFieldTypeService;
 use eZ\Publish\Core\FieldType\TextLine\Type;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\FieldTypeService;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 
 class FieldTypeServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\FieldTypeService'
-        );
+        return $this->createMock(APIFieldTypeService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -29,7 +29,7 @@ class FieldTypeServiceTest extends ServiceTest
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
+            TransformationProcessor::class,
             array(),
             '',
             false,
