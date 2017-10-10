@@ -166,7 +166,6 @@ abstract class AbstractMatcherFactoryTest extends TestCase
     protected function getRepositoryMock()
     {
         return $this->createMock(Repository::class);
-
     }
 
     /**
