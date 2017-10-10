@@ -12,6 +12,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldRegistry;
 
 /**
  * Test case for Language aware classes.
@@ -89,10 +91,7 @@ abstract class LanguageAwareTestCase extends TestCase
     protected function getFieldNameGeneratorMock()
     {
         if (!isset($this->fieldNameGeneratorMock)) {
-            $this->fieldNameGeneratorMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Search\\Common\\FieldNameGenerator')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->fieldNameGeneratorMock = $this->createMock(FieldNameGenerator::class);
         }
 
         return $this->fieldNameGeneratorMock;
@@ -105,7 +104,7 @@ abstract class LanguageAwareTestCase extends TestCase
     protected function getFullTextMapper(Persistence\Legacy\Content\Type\Handler $contentTypeHandler)
     {
         return new FullTextMapper(
-            $this->getMock('\\eZ\\Publish\\Core\\Search\\Common\\FieldRegistry'),
+            $this->createMock(FieldRegistry::class),
             $contentTypeHandler
         );
     }
