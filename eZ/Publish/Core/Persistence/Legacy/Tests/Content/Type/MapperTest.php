@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 // Needed for $sortOrder and $sortField properties
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -37,7 +38,7 @@ class MapperTest extends TestCase
         $group = $mapper->createGroupFromCreateStruct($createStruct);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group',
+            Group::class,
             $group
         );
         $this->assertPropertiesCorrect(
@@ -325,17 +326,15 @@ class MapperTest extends TestCase
      */
     public function testToStorageFieldDefinition()
     {
-        $converterMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-        );
+        $converterMock = $this->createMock(Converter::class);
         $converterMock->expects($this->once())
             ->method('toStorageFieldDefinition')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
+                    FieldDefinition::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
+                    StorageFieldDefinition::class
                 )
             );
 
@@ -357,17 +356,15 @@ class MapperTest extends TestCase
      */
     public function testToFieldDefinition()
     {
-        $converterMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-        );
+        $converterMock = $this->createMock(Converter::class);
         $converterMock->expects($this->once())
             ->method('toFieldDefinition')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
+                    StorageFieldDefinition::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
+                    FieldDefinition::class
                 )
             );
 
@@ -390,17 +387,17 @@ class MapperTest extends TestCase
      */
     protected function getNonConvertingMapper()
     {
-        $mapper = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper',
-            ['toFieldDefinition'],
-            [$this->getConverterRegistryMock()]
-        );
+        $mapper = $this->getMockBuilder(Mapper::class)
+            ->setMethods(array('toFieldDefinition'))
+            ->setConstructorArgs(array($this->getConverterRegistryMock()))
+            ->getMock();
+
         // Dedicatedly tested test
         $mapper->expects($this->atLeastOnce())
             ->method('toFieldDefinition')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
+                    StorageFieldDefinition::class
                 )
             )->will(
                 $this->returnCallback(
@@ -420,11 +417,7 @@ class MapperTest extends TestCase
      */
     protected function getConverterRegistryMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-            [],
-            [[]]
-        );
+        return $this->createMock(ConverterRegistry::class);
     }
 
     /**

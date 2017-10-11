@@ -10,9 +10,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\FieldStorage;
 
 /**
  * Test case for Content Handler.
@@ -58,8 +60,8 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects($this->once())
             ->method('storeFieldData')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
+                $this->isInstanceOf(VersionInfo::class),
+                $this->isInstanceOf(Field::class),
                 $this->equalTo($this->getContextMock())
             );
 
@@ -90,8 +92,8 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects($this->once())
             ->method('getFieldData')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
+                $this->isInstanceOf(VersionInfo::class),
+                $this->isInstanceOf(Field::class),
                 $this->equalTo($this->getContextMock())
             );
 
@@ -146,7 +148,7 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects($this->once())
             ->method('deleteFieldData')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                $this->isInstanceOf(VersionInfo::class),
                 $this->equalTo(array(1, 2, 3)),
                 $this->equalTo($this->getContextMock())
             );
@@ -195,11 +197,10 @@ class StorageHandlerTest extends TestCase
     protected function getStorageRegistryMock()
     {
         if (!isset($this->storageRegistryMock)) {
-            $this->storageRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageRegistry',
-                array(),
-                array(array())
-            );
+            $this->storageRegistryMock = $this->getMockBuilder(StorageRegistry::class)
+                ->setConstructorArgs(array(array()))
+                ->setMethods(array())
+                ->getMock();
         }
 
         return $this->storageRegistryMock;
@@ -213,9 +214,7 @@ class StorageHandlerTest extends TestCase
     protected function getStorageMock()
     {
         if (!isset($this->storageMock)) {
-            $this->storageMock = $this->getMock(
-                'eZ\\Publish\\SPI\\FieldType\\FieldStorage'
-            );
+            $this->storageMock = $this->createMock(FieldStorage::class);
         }
 
         return $this->storageMock;
@@ -224,9 +223,7 @@ class StorageHandlerTest extends TestCase
     protected function getVersionInfoMock()
     {
         if (!isset($this->versionInfoMock)) {
-            $this->versionInfoMock = $this->getMock(
-                'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'
-            );
+            $this->versionInfoMock = $this->createMock(VersionInfo::class);
         }
 
         return $this->versionInfoMock;

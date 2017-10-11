@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use eZ\Publish\SPI\FieldType\FieldStorage;
+use eZ\Publish\Core\FieldType\NullStorage;
 
 /**
  * Test case for StorageRegistry.
@@ -57,7 +59,7 @@ class StorageRegistryTest extends TestCase
     {
         $registry = new StorageRegistry(array());
         self::assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            NullStorage::class,
             $registry->getStorage('not-found')
         );
     }
@@ -69,8 +71,6 @@ class StorageRegistryTest extends TestCase
      */
     protected function getStorageMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\SPI\\FieldType\\FieldStorage'
-        );
+        return $this->createMock(FieldStorage::class);
     }
 }

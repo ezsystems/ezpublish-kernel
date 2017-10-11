@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 
 /**
  * Test case for Section Handler.
@@ -345,9 +346,7 @@ class SectionHandlerTest extends TestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Section\\Gateway'
-            );
+            $this->gatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->gatewayMock;

@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 /**
  * Test case for FieldValue Converter Registry.
@@ -68,8 +69,6 @@ class FieldValueConverterRegistryTest extends TestCase
      */
     protected function getFieldValueConverterMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-        );
+        return $this->createMock(Converter::class);
     }
 }

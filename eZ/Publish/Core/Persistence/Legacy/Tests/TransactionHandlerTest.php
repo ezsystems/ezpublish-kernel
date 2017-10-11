@@ -9,6 +9,9 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Persistence\Legacy\TransactionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use Exception;
 
 /**
@@ -191,9 +194,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     protected function getDatabaseHandlerMock()
     {
         if (!isset($this->dbHandlerMock)) {
-            $this->dbHandlerMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler'
-            );
+            $this->dbHandlerMock = $this->getMockForAbstractClass(DatabaseHandler::class);
         }
 
         return $this->dbHandlerMock;
@@ -207,13 +208,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     protected function getContentTypeHandlerMock()
     {
         if (!isset($this->contentTypeHandlerMock)) {
-            $this->contentTypeHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\MemoryCachingHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentTypeHandlerMock = $this->createMock(MemoryCachingHandler::class);
         }
 
         return $this->contentTypeHandlerMock;
@@ -227,13 +222,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     protected function getLanguageHandlerMock()
     {
         if (!isset($this->languageHandlerMock)) {
-            $this->languageHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->languageHandlerMock = $this->createMock(CachingHandler::class);
         }
 
         return $this->languageHandlerMock;

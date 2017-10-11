@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * Test case for Language MaskGenerator.
@@ -268,7 +269,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     protected function getLanguageHandler()
     {
         if (!isset($this->languageHandler)) {
-            $this->languageHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler');
+            $this->languageHandler = $this->createMock(LanguageHandler::class);
             $this->languageHandler->expects($this->any())
                                   ->method('loadByLanguageCode')
                                   ->will(
