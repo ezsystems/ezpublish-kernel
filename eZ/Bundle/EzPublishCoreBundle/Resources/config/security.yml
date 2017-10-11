@@ -1,5 +1,6 @@
 parameters:
     security.authentication.provider.dao.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider
+    security.authentication.provider.rememberme.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider
     security.authentication.provider.anonymous.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider
     security.authentication.success_handler.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\DefaultAuthenticationSuccessHandler
     ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider

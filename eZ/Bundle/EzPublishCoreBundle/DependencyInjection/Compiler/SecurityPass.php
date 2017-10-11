@@ -20,7 +20,9 @@ class SecurityPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!($container->hasDefinition('security.authentication.provider.dao') && $container->hasDefinition('security.authentication.provider.anonymous'))) {
+        if (!($container->hasDefinition('security.authentication.provider.dao') &&
+              $container->hasDefinition('security.authentication.provider.rememberme') &&
+              $container->hasDefinition('security.authentication.provider.anonymous'))) {
             return;
         }
 
@@ -30,6 +32,12 @@ class SecurityPass implements CompilerPassInterface
         // We need it for checking user credentials
         $daoAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.dao');
         $daoAuthenticationProviderDef->addMethodCall(
+            'setRepository',
+            array($repositoryReference)
+        );
+
+        $rememberMeAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.rememberme');
+        $rememberMeAuthenticationProviderDef->addMethodCall(
             'setRepository',
             array($repositoryReference)
         );
