@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\RestContent;
 use eZ\Publish\Core\REST\Server\Values\RestTrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -80,7 +81,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->once())
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'));
+            ->with($this->isInstanceOf(RestContent::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

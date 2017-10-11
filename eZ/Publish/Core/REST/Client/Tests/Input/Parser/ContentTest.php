@@ -11,6 +11,10 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo;
+use eZ\Publish\Core\REST\Client\ContentService;
 use eZ\Publish\API\Repository\Values;
 
 class ContentTest extends BaseTest
@@ -72,7 +76,7 @@ class ContentTest extends BaseTest
             ->method('parse')
             ->with(
                 $this->equalTo(array()),
-                $this->isInstanceOf('eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher')
+                $this->isInstanceOf(ParsingDispatcher::class)
             )->will($this->returnValue($versionInfoMock));
 
         $this->getFieldTypeParserMock()->expects($this->exactly(2))
@@ -157,13 +161,7 @@ class ContentTest extends BaseTest
     protected function getVersionInfoParserMock()
     {
         if (!isset($this->versionInfoParserMock)) {
-            $this->versionInfoParserMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Client\\Input\\Parser\\VersionInfo',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->versionInfoParserMock = $this->createMock(VersionInfo::class);
         }
 
         return $this->versionInfoParserMock;
@@ -175,13 +173,7 @@ class ContentTest extends BaseTest
     protected function getContentServiceMock()
     {
         if (!isset($this->contentServiceMock)) {
-            $this->contentServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentServiceMock = $this->createMock(ContentService::class);
         }
 
         return $this->contentServiceMock;
@@ -193,13 +185,7 @@ class ContentTest extends BaseTest
     protected function getFieldTypeParserMock()
     {
         if (!isset($this->fieldTypeParserMock)) {
-            $this->fieldTypeParserMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldTypeParserMock = $this->createMock(FieldTypeParser::class);
         }
 
         return $this->fieldTypeParserMock;

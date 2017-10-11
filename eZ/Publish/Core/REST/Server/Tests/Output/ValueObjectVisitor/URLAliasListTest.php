@@ -104,7 +104,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'));
+            ->with($this->isInstanceOf(Content\URLAlias::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

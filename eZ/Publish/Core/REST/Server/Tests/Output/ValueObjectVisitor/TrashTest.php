@@ -113,7 +113,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestTrashItem'));
+            ->with($this->isInstanceOf(RestTrashItem::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

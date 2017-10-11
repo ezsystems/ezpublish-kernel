@@ -8,9 +8,11 @@
  */
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationProcessor;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\RouterInterface;
 
 class RelationProcessorTest extends TestCase
 {
@@ -64,7 +66,7 @@ class RelationProcessorTest extends TestCase
     {
         $processor = $this->getProcessor();
 
-        $serviceLocationMock = $this->getMockBuilder('eZ\Publish\API\Repository\LocationService')->getMock();
+        $serviceLocationMock = $this->createMock(LocationService::class);
         $processor->setLocationService($serviceLocationMock);
 
         $serviceLocationMock
@@ -72,7 +74,7 @@ class RelationProcessorTest extends TestCase
             ->with('42')
             ->willReturn(new Location(['path' => ['1', '25', '42']]));
 
-        $routerMock = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
+        $routerMock = $this->createMock(RouterInterface::class);
         $processor->setRouter($routerMock);
 
         $routerMock
@@ -98,7 +100,7 @@ class RelationProcessorTest extends TestCase
     {
         $processor = $this->getProcessor();
 
-        $routerMock = $this->getMockBuilder('\Symfony\Component\Routing\RouterInterface')->getMock();
+        $routerMock = $this->createMock(RouterInterface::class);
         $processor->setRouter($routerMock);
 
         $routerMock
@@ -116,7 +118,7 @@ class RelationProcessorTest extends TestCase
     {
         $processor = $this->getProcessor();
 
-        $routerMock = $this->getMockBuilder('\Symfony\Component\Routing\RouterInterface')->getMock();
+        $routerMock = $this->createMock(RouterInterface::class);
         $processor->setRouter($routerMock);
 
         $routerMock

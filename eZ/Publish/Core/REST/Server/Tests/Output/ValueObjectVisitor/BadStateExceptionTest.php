@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
 
 class BadStateExceptionTest extends ExceptionTest
 {
@@ -39,7 +40,7 @@ class BadStateExceptionTest extends ExceptionTest
      */
     protected function getException()
     {
-        return $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException');
+        return $this->getMockForAbstractClass(BadStateException::class);
     }
 
     /**

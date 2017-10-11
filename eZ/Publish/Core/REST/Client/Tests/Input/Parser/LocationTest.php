@@ -58,10 +58,7 @@ class LocationTest extends BaseTest
      */
     public function testResultIsLocation($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
-            $result
-        );
+        $this->assertInstanceOf(Location::class, $result);
     }
 
     /**

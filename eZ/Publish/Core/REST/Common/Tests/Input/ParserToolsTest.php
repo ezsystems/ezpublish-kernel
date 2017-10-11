@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use PHPUnit\Framework\TestCase;
 
 class ParserToolsTest extends TestCase
@@ -46,13 +47,7 @@ class ParserToolsTest extends TestCase
     {
         $parserTools = $this->getParserTools();
 
-        $dispatcherMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $dispatcherMock = $this->createMock(ParsingDispatcher::class);
         $dispatcherMock->expects($this->once())
             ->method('parse')
             ->with(
@@ -76,13 +71,7 @@ class ParserToolsTest extends TestCase
     {
         $parserTools = $this->getParserTools();
 
-        $dispatcherMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $dispatcherMock = $this->createMock(ParsingDispatcher::class);
         $dispatcherMock->expects($this->never())
             ->method('parse');
 

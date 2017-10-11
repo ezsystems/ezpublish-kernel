@@ -105,7 +105,7 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup'));
+            ->with($this->isInstanceOf(\eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

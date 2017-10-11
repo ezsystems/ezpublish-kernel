@@ -12,12 +12,15 @@ use eZ\Publish\Core\REST\Server\Security\RestLogoutHandler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class RestLogoutHandlerTest extends TestCase
 {
     public function testLogout()
     {
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock(SessionInterface::class);
         $sessionId = 'eZSESSID';
         $session
             ->expects($this->once())
@@ -29,7 +32,7 @@ class RestLogoutHandlerTest extends TestCase
         $request->attributes->set('is_rest_request', true);
 
         $response = new Response();
-        $response->headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
+        $response->headers = $this->createMock(ResponseHeaderBag::class);
         $response->headers
             ->expects($this->once())
             ->method('clearCookie')
@@ -39,13 +42,13 @@ class RestLogoutHandlerTest extends TestCase
         $logoutHandler->logout(
             $request,
             $response,
-            $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')
+            $this->createMock(TokenInterface::class)
         );
     }
 
     public function testLogoutNotRest()
     {
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock(SessionInterface::class);
         $session
             ->expects($this->never())
             ->method('getName');
@@ -54,7 +57,7 @@ class RestLogoutHandlerTest extends TestCase
         $request->setSession($session);
 
         $response = new Response();
-        $response->headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
+        $response->headers = $this->createMock(ResponseHeaderBag::class);
         $response->headers
             ->expects($this->never())
             ->method('clearCookie');
@@ -63,7 +66,7 @@ class RestLogoutHandlerTest extends TestCase
         $logoutHandler->logout(
             $request,
             $response,
-            $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')
+            $this->createMock(TokenInterface::class)
         );
     }
 }

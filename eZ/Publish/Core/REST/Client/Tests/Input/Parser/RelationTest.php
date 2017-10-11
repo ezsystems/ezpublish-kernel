@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
 use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Client\ContentService;
 
 class RelationTest extends BaseTest
 {
@@ -90,13 +91,7 @@ class RelationTest extends BaseTest
     protected function getContentServiceMock()
     {
         if (!isset($this->contentServiceMock)) {
-            $this->contentServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentServiceMock = $this->createMock(ContentService::class);
         }
 
         return $this->contentServiceMock;

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\RestUser;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -103,7 +104,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
     {
         return new RestUser(
             new Values\User\User(),
-            $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
+            $this->getMockForAbstractClass(ContentType::class),
             new ContentInfo(
                 array(
                     'id' => 'content23',

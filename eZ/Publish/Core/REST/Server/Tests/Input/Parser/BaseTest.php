@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Tests\BaseTest as ParentBaseTest;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\RequestParser;
 
 /**
  * Base test for input parsers.
@@ -39,13 +41,7 @@ abstract class BaseTest extends ParentBaseTest
     protected function getParsingDispatcherMock()
     {
         if (!isset($this->parsingDispatcherMock)) {
-            $this->parsingDispatcherMock = $this->getMock(
-                '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->parsingDispatcherMock = $this->createMock(ParsingDispatcher::class);
         }
 
         return $this->parsingDispatcherMock;
@@ -88,7 +84,7 @@ abstract class BaseTest extends ParentBaseTest
                 return null;
             };
 
-            $this->requestParserMock = $this->getMock('eZ\\Publish\\Core\\REST\\Common\\RequestParser');
+            $this->requestParserMock = $this->createMock(RequestParser::class);
 
             $this->requestParserMock
                 ->expects($this->any())

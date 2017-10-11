@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
+use eZ\Publish\Core\REST\Server\Values\FieldDefinitionList;
 use eZ\Publish\Core\REST\Server\Values\RestContentType;
 
 /**
@@ -33,7 +34,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->once())
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'));
+            ->with($this->isInstanceOf(FieldDefinitionList::class));
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
