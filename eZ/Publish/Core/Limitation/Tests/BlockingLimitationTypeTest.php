@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Limitation\Tests;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;

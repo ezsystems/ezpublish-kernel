@@ -33,7 +33,7 @@ class EZP20018VisibilityTest extends BaseTest
         $this->assertEquals(0, $results1->totalCount);
         $this->assertCount(0, $results1->searchHits);
 
-         // Hide "Images" Folder
+        // Hide "Images" Folder
         $locationService = $repository->getLocationService();
         $locationService->hideLocation($locationService->loadLocation(54));
 
@@ -61,7 +61,7 @@ class EZP20018VisibilityTest extends BaseTest
         $this->assertEquals(18, $results1->totalCount);
         $this->assertEquals($results1->totalCount, count($results1->searchHits));
 
-         // Hide "Images" Folder
+        // Hide "Images" Folder
         $locationService = $repository->getLocationService();
         $locationService->hideLocation($locationService->loadLocation(54));
 

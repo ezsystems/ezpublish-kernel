@@ -592,7 +592,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method('set');
 
-                // inline calls to loadUrlAlias() using the cache
+        // inline calls to loadUrlAlias() using the cache
         $cacheItemMock2 = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
             ->expects($this->at(1))

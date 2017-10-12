@@ -78,7 +78,7 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
 
     public function getFixturesDir()
     {
-        return dirname(__FILE__) . '/_fixtures/field_rendering_functions/';
+        return __DIR__ . '/_fixtures/field_rendering_functions/';
     }
 
     public function getFieldDefinition($typeIdentifier, $id = null, $settings = array())
