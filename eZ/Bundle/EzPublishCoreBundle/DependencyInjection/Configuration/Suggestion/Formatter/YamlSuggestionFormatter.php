@@ -19,7 +19,7 @@ class YamlSuggestionFormatter implements SuggestionFormatterInterface
         $suggestion = $configSuggestion->getSuggestion();
         if ($suggestion) {
             $yamlConfig = Yaml::dump($suggestion, 8);
-            if (php_sapi_name() !== 'cli') {
+            if (PHP_SAPI !== 'cli') {
                 $yamlConfig = "<pre>$yamlConfig</pre>";
             }
 
