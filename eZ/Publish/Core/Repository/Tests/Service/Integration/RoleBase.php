@@ -345,21 +345,21 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $updatedRole);
 
         // @todo: enable
-/*
-        self::assertEquals(
-            array(
-                'eng-US' => $roleUpdateStruct->names['eng-US']
-            ),
-            $updatedRole->getNames()
-        );
+        /*
+                self::assertEquals(
+                    array(
+                        'eng-US' => $roleUpdateStruct->names['eng-US']
+                    ),
+                    $updatedRole->getNames()
+                );
 
-        self::assertEquals(
-            array(
-                'eng-US' => $roleUpdateStruct->descriptions['eng-US']
-            ),
-            $updatedRole->getDescriptions()
-        );
-*/
+                self::assertEquals(
+                    array(
+                        'eng-US' => $roleUpdateStruct->descriptions['eng-US']
+                    ),
+                    $updatedRole->getDescriptions()
+                );
+        */
         $this->assertPropertiesCorrect(
             array(
                 'id' => $role->id,
