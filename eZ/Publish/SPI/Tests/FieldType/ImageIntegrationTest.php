@@ -101,7 +101,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getDeprecationWarnerMock()
     {
         if (!isset($this->deprecationWarnerMock)) {
-            $this->deprecationWarnerMock = $this->getMock('eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface');
+            $this->deprecationWarnerMock = $this->createMock('eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface');
         }
 
         return $this->deprecationWarnerMock;
@@ -110,7 +110,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getAliasCleanerMock()
     {
         if (!isset($this->aliasCleanerMock)) {
-            $this->aliasCleanerMock = $this->getMock('\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface');
+            $this->aliasCleanerMock = $this->createMock('\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface');
         }
 
         return $this->aliasCleanerMock;
