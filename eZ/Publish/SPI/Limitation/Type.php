@@ -86,7 +86,7 @@ interface Type
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      *         However if $object or $targets is unsupported by ROLE limitation, ACCESS_ABSTAIN should be returned!
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
+     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser

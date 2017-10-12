@@ -40,23 +40,23 @@ abstract class Gateway
      */
     abstract public function load($userId);
 
-     /**
-      * Loads user with user login.
-      *
-      * @param string $login
-      *
-      * @return array
-      */
-     abstract public function loadByLogin($login);
+    /**
+     * Loads user with user login.
+     *
+     * @param string $login
+     *
+     * @return array
+     */
+    abstract public function loadByLogin($login);
 
-     /**
-      * Loads user with user email.
-      *
-      * @param string $email
-      *
-      * @return array
-      */
-     abstract public function loadByEmail($email);
+    /**
+     * Loads user with user email.
+     *
+     * @param string $email
+     *
+     * @return array
+     */
+    abstract public function loadByEmail($email);
 
     /**
      * Update the user information specified by the user struct.

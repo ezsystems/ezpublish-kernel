@@ -10,12 +10,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
-use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
-use eZ\Publish\SPI\Variation\VariationPurger;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
