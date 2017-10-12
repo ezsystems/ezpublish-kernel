@@ -8,7 +8,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\REST\Client\Values\View;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 /**
  * @method mixed getResponseObject
