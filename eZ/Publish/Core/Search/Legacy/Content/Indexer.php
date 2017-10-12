@@ -39,7 +39,7 @@ class Indexer extends SearchIndexer
         }
 
         $stmt = $this->getContentDbFieldsStmt(['count(id)']);
-        $totalCount = intval($stmt->fetchColumn());
+        $totalCount = (int) $stmt->fetchColumn();
         $stmt = $this->getContentDbFieldsStmt(['id', 'current_version']);
 
         $this->searchHandler->purgeIndex();
