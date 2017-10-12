@@ -506,7 +506,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $limitationTypeMock = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
+        $limitationTypeMock = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
         $limitationService = $this->getLimitationServiceMock();
         $roleDomainMapper = $this->getRoleDomainMapperMock();
         $permissionResolverMock = $this->getPermissionResolverMock(['getCurrentUserReference']);
@@ -643,13 +643,12 @@ class PermissionTest extends BaseServiceMockTest
             ]
         );
 
-        $policyMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\User\\Policy',
-            array('getLimitations'),
-            array(),
-            '',
-            false
-        );
+        $policyMock = $this->getMockBuilder('eZ\\Publish\\SPI\\Persistence\\User\\Policy')
+            ->setMethods(array('getLimitations'))
+            ->setConstructorArgs(array())
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $policyMock
             ->expects($this->once())
             ->method('getLimitations')
@@ -691,25 +690,23 @@ class PermissionTest extends BaseServiceMockTest
      */
     private function getPermissionSetsMock()
     {
-        $roleLimitationMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation');
+        $roleLimitationMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation');
         $roleLimitationMock
             ->expects($this->any())
             ->method('getIdentifier')
             ->will($this->returnValue('test-role-limitation-identifier'));
 
-        $policyLimitationMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation');
+        $policyLimitationMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation');
         $policyLimitationMock
             ->expects($this->any())
             ->method('getIdentifier')
             ->will($this->returnValue('test-policy-limitation-identifier'));
 
-        $policyMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\User\\Policy',
-            array('getLimitations'),
-            array(),
-            '',
-            false
-        );
+        $policyMock = $this->getMockBuilder('eZ\\Publish\\SPI\\Persistence\\User\\Policy')
+            ->setMethods(array('getLimitations'))
+            ->setConstructorArgs(array())
+            ->getMock();
+
         $policyMock
             ->expects($this->any())
             ->method('getLimitations')
@@ -816,7 +813,7 @@ class PermissionTest extends BaseServiceMockTest
     public function testCanUserComplex(array $roleLimitationEvaluations, array $policyLimitationEvaluations, $userCan)
     {
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
-        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\ValueObject');
+        $valueObject = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\ValueObject');
         $limitationServiceMock = $this->getLimitationServiceMock();
         $permissionResolverMock = $this->getPermissionResolverMock(
             [
@@ -840,7 +837,7 @@ class PermissionTest extends BaseServiceMockTest
 
         $invocation = 0;
         for ($i = 0; $i < count($permissionSets); ++$i) {
-            $limitation = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
+            $limitation = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
             $limitation
                 ->expects($this->once())
                 ->method('evaluate')
@@ -862,7 +859,7 @@ class PermissionTest extends BaseServiceMockTest
                 $limitations = $policy->getLimitations();
                 for ($k = 0; $k < count($limitations); ++$k) {
                     $limitationsPass = true;
-                    $limitation = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
+                    $limitation = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
                     $limitation
                         ->expects($this->once())
                         ->method('evaluate')

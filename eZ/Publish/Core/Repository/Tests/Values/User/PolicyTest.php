@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Repository\Tests\Values\User;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
 use eZ\Publish\Core\Repository\Values\User\Policy;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PolicyTest extends PHPUnit_Framework_TestCase
+class PolicyTest extends TestCase
 {
     use ValueObjectTestTrait;
 

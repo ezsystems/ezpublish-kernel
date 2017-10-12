@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
-use Mockery;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,11 +47,16 @@ class UserGroupTest extends TestCase
     public function testGetName()
     {
         $name = 'Translated name';
-        $contentMock = Mockery::mock(Content::class);
-        $versionInfoMock = Mockery::mock(VersionInfo::class);
+        $contentMock = $this->createMock(Content::class);
+        $versionInfoMock = $this->createMock(VersionInfo::class);
 
-        $contentMock->shouldReceive('getVersionInfo')->andReturn($versionInfoMock);
-        $versionInfoMock->shouldReceive('getName')->andReturn($name);
+        $contentMock->expects($this->once())
+            ->method('getVersionInfo')
+            ->willReturn($versionInfoMock);
+
+        $versionInfoMock->expects($this->once())
+            ->method('getName')
+            ->willReturn($name);
 
         $object = new UserGroup(['content' => $contentMock]);
 

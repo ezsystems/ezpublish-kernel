@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class VersionInfoTest extends PHPUnit_Framework_TestCase
+class VersionInfoTest extends TestCase
 {
     public function testIsDraft()
     {

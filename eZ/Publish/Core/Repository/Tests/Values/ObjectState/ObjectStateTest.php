@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\Repository\Tests\Values\ObjectState;
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
 use eZ\Publish\Core\Repository\Tests\Values\MultiLanguageTestTrait;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test internal integrity of @see \eZ\Publish\Core\Repository\Values\ObjectState\ObjectState ValueObject.
  */
-class ObjectStateTest extends PHPUnit_Framework_TestCase
+class ObjectStateTest extends TestCase
 {
     use ValueObjectTestTrait;
     use MultiLanguageTestTrait;
