@@ -68,6 +68,6 @@ EOT
             throw new RuntimeException("'--iteration-count' option should be > 0, got '{$iterationCount}'");
         }
 
-        $this->searchIndexer->createSearchIndex($output, intval($iterationCount), empty($noCommit));
+        $this->searchIndexer->createSearchIndex($output, (int) $iterationCount, empty($noCommit));
     }
 }

@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\REST\Common\Output;
 
-use eZ\Publish\Core\REST\Common\Output\Generator as OutputGenerator;
-
 /**
  * Dispatches value objects to a visitor depending on the class name.
  */

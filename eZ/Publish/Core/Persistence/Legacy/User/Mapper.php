@@ -170,7 +170,7 @@ class Mapper
             $id = (int)$row['id'];
             $roleId = (int)$row['role_id'];
             $contentId = (int)$row['contentobject_id'];
-             // if user already have full access to a role, continue
+            // if user already have full access to a role, continue
             if (isset($roleAssignmentData[$roleId][$contentId])
               && $roleAssignmentData[$roleId][$contentId] instanceof RoleAssignment) {
                 continue;
