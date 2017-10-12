@@ -7,7 +7,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use EzSystems\BehatBundle\Context\EzContext;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 class ConsoleContext extends EzContext implements Context, SnippetAcceptingContext
 {

@@ -24,7 +24,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
      */
     protected function getResolverMock($matcherServiceIdentifier)
     {
-        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolverMock = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $resolverMock
         ->expects($this->atLeastOnce())
         ->method('getParameter')

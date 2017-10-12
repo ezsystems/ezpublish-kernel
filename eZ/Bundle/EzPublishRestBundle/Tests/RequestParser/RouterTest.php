@@ -152,7 +152,7 @@ class RouterTest extends TestCase
     private function getRouterMock()
     {
         if (!isset($this->router)) {
-            $this->router = $this->getMock('Symfony\\Cmf\\Component\\Routing\\ChainRouter');
+            $this->router = $this->createMock('Symfony\\Cmf\\Component\\Routing\\ChainRouter');
 
             $this->router
                 ->expects($this->any())

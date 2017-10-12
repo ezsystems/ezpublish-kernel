@@ -26,7 +26,7 @@ class LocationParamConverterTest extends AbstractParamConverterTest
 
     public function setUp()
     {
-        $this->locationServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        $this->locationServiceMock = $this->createMock('eZ\\Publish\\API\\Repository\\LocationService');
 
         $this->converter = new LocationParamConverter($this->locationServiceMock);
     }
@@ -46,7 +46,7 @@ class LocationParamConverterTest extends AbstractParamConverterTest
     public function testApplyLocation()
     {
         $id = 42;
-        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $valueObject = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
 
         $this->locationServiceMock
             ->expects($this->once())

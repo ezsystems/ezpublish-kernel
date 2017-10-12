@@ -27,7 +27,7 @@ class ScalePercentFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->getMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
         $this->loader = new ScalePercentFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -38,7 +38,7 @@ class ScalePercentFilterLoaderTest extends TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface'), $options);
     }
 
     public function loadInvalidProvider()
@@ -60,7 +60,7 @@ class ScalePercentFilterLoaderTest extends TestCase
         $expectedHeight = ($origHeight * $heightPercent) / 100;
 
         $box = new Box($origWidth, $origHeight);
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $image
             ->expects($this->once())
             ->method('getSize')

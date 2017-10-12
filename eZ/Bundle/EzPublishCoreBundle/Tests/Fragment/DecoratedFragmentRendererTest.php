@@ -24,12 +24,12 @@ class DecoratedFragmentRendererTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerRenderer = $this->getMock('Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface');
+        $this->innerRenderer = $this->createMock('Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface');
     }
 
     public function testSetFragmentPathNotRoutableRenderer()
     {
-        $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $matcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
         $siteAccess = new SiteAccess('test', 'test', $matcher);
         $matcher
             ->expects($this->never())
@@ -42,7 +42,7 @@ class DecoratedFragmentRendererTest extends TestCase
 
     public function testSetFragmentPath()
     {
-        $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $matcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
         $siteAccess = new SiteAccess('test', 'test', $matcher);
         $matcher
             ->expects($this->once())
@@ -50,7 +50,7 @@ class DecoratedFragmentRendererTest extends TestCase
             ->with('/foo')
             ->will($this->returnValue('/bar/foo'));
 
-        $innerRenderer = $this->getMock('Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer');
+        $innerRenderer = $this->createMock('Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer');
         $innerRenderer
             ->expects($this->once())
             ->method('setFragmentPath')

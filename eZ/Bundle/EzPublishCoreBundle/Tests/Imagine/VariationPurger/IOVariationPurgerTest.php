@@ -12,7 +12,7 @@ class IOVariationPurgerTest extends TestCase
 {
     public function testPurgesAliasList()
     {
-        $ioService = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $ioService = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
         $ioService
             ->expects($this->exactly(2))
             ->method('deleteDirectory')

@@ -170,7 +170,7 @@ class CsrfListenerTest extends EventListenerTest
      */
     protected function getCsrfProviderMock()
     {
-        $provider = $this->getMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface');
+        $provider = $this->createMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface');
         $provider->expects($this->any())
             ->method('isTokenValid')
             ->will(
@@ -211,7 +211,7 @@ class CsrfListenerTest extends EventListenerTest
     protected function getSessionMock()
     {
         if (!isset($this->sessionMock)) {
-            $this->sessionMock = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+            $this->sessionMock = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
             $this->sessionMock
                 ->expects($this->atLeastOnce())
                 ->method('isStarted')
@@ -296,7 +296,7 @@ class CsrfListenerTest extends EventListenerTest
     protected function getEventDispatcherMock()
     {
         if (!isset($this->eventDispatcherMock)) {
-            $this->eventDispatcherMock = $this->getMock(
+            $this->eventDispatcherMock = $this->createMock(
                 'Symfony\Component\EventDispatcher\EventDispatcherInterface'
             );
         }

@@ -29,7 +29,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
     protected function setUp()
     {
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $this->configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $this->configResolver
             ->expects($this->any())
             ->method('getParameter')
@@ -58,8 +58,8 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
      */
     protected function resetConfigResolver()
     {
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $this->container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
         $this->router->setConfigResolver($this->configResolver);
     }
 

@@ -60,9 +60,9 @@ class RequestEventListenerTest extends TestCase
     {
         parent::setUp();
 
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->router = $this->getMock('Symfony\Component\Routing\RouterInterface');
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->router = $this->createMock('Symfony\Component\Routing\RouterInterface');
+        $this->logger = $this->createMock('Psr\\Log\\LoggerInterface');
 
         $this->requestEventListener = new RequestEventListener($this->configResolver, $this->router, 'foobar', $this->logger);
 
@@ -71,7 +71,7 @@ class RequestEventListenerTest extends TestCase
             ->setMethods(array('getSession', 'hasSession'))
             ->getMock();
 
-        $this->httpKernel = $this->getMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
+        $this->httpKernel = $this->createMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
         $this->event = new GetResponseEvent(
             $this->httpKernel,
             $this->request,
@@ -184,7 +184,7 @@ class RequestEventListenerTest extends TestCase
     {
         $queryParameters = array('some' => 'thing');
         $cookieParameters = array('cookie' => 'value');
-        $siteaccessMatcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $siteaccessMatcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
         $siteaccess = new SiteAccess('test', 'foo', $siteaccessMatcher);
         $semanticPathinfo = '/foo/something';
 

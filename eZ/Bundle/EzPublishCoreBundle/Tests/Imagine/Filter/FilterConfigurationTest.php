@@ -26,7 +26,7 @@ class FilterConfigurationTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver($this->configResolver);
     }

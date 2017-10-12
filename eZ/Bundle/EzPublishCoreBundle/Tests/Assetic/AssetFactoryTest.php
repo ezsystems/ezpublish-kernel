@@ -27,8 +27,8 @@ class AssetFactoryTest extends BaseTest
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->parser = $this->getMock(
+        $this->configResolver = $this->createMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->parser = $this->createMock(
             '\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParserInterface'
         );
     }
@@ -36,9 +36,9 @@ class AssetFactoryTest extends BaseTest
     protected function getAssetFactory()
     {
         $assetFactory = new AssetFactory(
-            $this->getMock('\Symfony\Component\HttpKernel\KernelInterface'),
-            $this->getMock('\Symfony\Component\DependencyInjection\ContainerInterface'),
-            $this->getMock('\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface'),
+            $this->createMock('\Symfony\Component\HttpKernel\KernelInterface'),
+            $this->createMock('\Symfony\Component\DependencyInjection\ContainerInterface'),
+            $this->createMock('\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface'),
             '/root/dir/'
         );
         $assetFactory->setConfigResolver($this->configResolver);

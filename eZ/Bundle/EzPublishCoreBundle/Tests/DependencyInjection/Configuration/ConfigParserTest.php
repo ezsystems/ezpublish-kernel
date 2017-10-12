@@ -22,7 +22,7 @@ class ConfigParserTest extends TestCase
     {
         new ConfigParser(
             array(
-                $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+                $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
                 new stdClass(),
             )
         );
@@ -31,9 +31,9 @@ class ConfigParserTest extends TestCase
     public function testConstruct()
     {
         $innerParsers = array(
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
         );
         $configParser = new ConfigParser($innerParsers);
         $this->assertSame($innerParsers, $configParser->getConfigParsers());
@@ -45,9 +45,9 @@ class ConfigParserTest extends TestCase
         $this->assertSame(array(), $configParser->getConfigParsers());
 
         $innerParsers = array(
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
         );
         $configParser->setConfigParsers($innerParsers);
         $this->assertSame($innerParsers, $configParser->getConfigParsers());
@@ -56,8 +56,8 @@ class ConfigParserTest extends TestCase
     public function testMapConfig()
     {
         $parsers = array(
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
         );
         $configParser = new ConfigParser($parsers);
 
@@ -66,7 +66,7 @@ class ConfigParserTest extends TestCase
             'some' => 'thing',
         );
         $currentScope = 'the_current_scope';
-        $contextualizer = $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
+        $contextualizer = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
 
         foreach ($parsers as $parser) {
             /* @var \PHPUnit_Framework_MockObject_MockObject $parser */
@@ -82,8 +82,8 @@ class ConfigParserTest extends TestCase
     public function testPrePostMap()
     {
         $parsers = array(
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
         );
         $configParser = new ConfigParser($parsers);
 
@@ -91,7 +91,7 @@ class ConfigParserTest extends TestCase
             'foo' => 'bar',
             'some' => 'thing',
         );
-        $contextualizer = $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
+        $contextualizer = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
 
         foreach ($parsers as $parser) {
             /* @var \PHPUnit_Framework_MockObject_MockObject $parser */
@@ -112,8 +112,8 @@ class ConfigParserTest extends TestCase
     public function testAddSemanticConfig()
     {
         $parsers = array(
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
         );
         $configParser = new ConfigParser($parsers);
 

@@ -37,8 +37,8 @@ class BinaryLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->ioService = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
-        $this->extensionGuesser = $this->getMock('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+        $this->ioService = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->extensionGuesser = $this->createMock('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
         $this->binaryLoader = new BinaryLoader($this->ioService, $this->extensionGuesser);
     }
 
