@@ -53,7 +53,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 
     public function getFixturesDir()
     {
-        return dirname(__FILE__) . '/_fixtures/content_functions/';
+        return __DIR__ . '/_fixtures/content_functions/';
     }
 
     /**
