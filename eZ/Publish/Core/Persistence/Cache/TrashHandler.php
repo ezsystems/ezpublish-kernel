@@ -59,7 +59,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
-        $this->logger->logCall(__METHOD__, array('criterion' => get_class($criterion)));
+        $this->logger->logCall(__METHOD__, array('criterion' => $criterion ? get_class($criterion) : 'null'));
 
         return $this->persistenceHandler->trashHandler()->findTrashItems($criterion, $offset, $limit, $sort);
     }
