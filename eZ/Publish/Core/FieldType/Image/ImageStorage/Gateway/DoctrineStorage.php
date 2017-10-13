@@ -222,7 +222,7 @@ class DoctrineStorage extends Gateway
 
         $statement = $selectQuery->execute();
 
-        return intval($statement->fetchColumn());
+        return (int) $statement->fetchColumn();
     }
 
     /**
@@ -272,7 +272,7 @@ class DoctrineStorage extends Gateway
 
         $statement = $selectQuery->execute();
 
-        return intval($statement->fetchColumn()) === 0;
+        return (int) $statement->fetchColumn() === 0;
     }
 
     /**

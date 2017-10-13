@@ -163,7 +163,7 @@ class DoctrineStorage extends Gateway
             );
         }
 
-        return intval($row['contentclass_id']);
+        return (int) $row['contentclass_id'];
     }
 
     /**
