@@ -164,7 +164,7 @@ class DoctrineStorage extends Gateway
 
         $statement = $query->execute();
 
-        return intval($statement->fetchColumn());
+        return (int) $statement->fetchColumn();
     }
 
     /**
