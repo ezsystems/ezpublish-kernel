@@ -9,75 +9,54 @@
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\Search\Common\Indexer as SearchIndexer;
-use eZ\Publish\Core\Search\Legacy\Content\Handler as SearchHandler;
-use PDO;
+use eZ\Publish\Core\Search\Common\IncrementalIndexer;
+use eZ\Publish\Core\Search\Legacy\Content\Handler as LegacySearchHandler;
 use RuntimeException;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\OutputInterface;
 
-class Indexer extends SearchIndexer
+class Indexer extends IncrementalIndexer
 {
-    /**
-     * @var \eZ\Publish\Core\Search\Legacy\Content\Handler
-     */
-    protected $searchHandler;
-
-    /**
-     * Create search engine index.
-     *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param int $iterationCount
-     * @param bool $commit commit changes after each iteration
-     */
-    public function createSearchIndex(OutputInterface $output, $iterationCount, $commit)
+    public function getName()
     {
-        $output->writeln('Creating Legacy Search Engine Index...');
+        return 'eZ Platform Legacy (SQL) Search Engine';
+    }
 
-        if (!$this->searchHandler instanceof SearchHandler) {
-            throw new RuntimeException(sprintf('Expected to find an instance of %s, but found %s', SearchHandler::class, get_class($this->searchHandler)));
-        }
-
-        $stmt = $this->getContentDbFieldsStmt(['count(id)']);
-        $totalCount = (int) $stmt->fetchColumn();
-        $stmt = $this->getContentDbFieldsStmt(['id', 'current_version']);
-
-        $this->searchHandler->purgeIndex();
-
-        $progress = new ProgressBar($output);
-        $progress->start($totalCount);
-
-        $i = 0;
-        do {
-            $contentObjects = [];
-            for ($k = 0; $k <= $iterationCount; ++$k) {
-                if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    break;
-                }
-                try {
-                    $contentObjects[] = $this->persistenceHandler->contentHandler()->load(
-                        $row['id'],
-                        $row['current_version']
+    public function updateSearchIndex(array $contentIds, $commit)
+    {
+        $this->checkSearchEngine();
+        $contentHandler = $this->persistenceHandler->contentHandler();
+        foreach ($contentIds as $contentId) {
+            try {
+                $info = $contentHandler->loadContentInfo($contentId);
+                if ($info->isPublished) {
+                    $this->searchHandler->indexContent(
+                        $contentHandler->load($info->id, $info->currentVersionNo)
                     );
-                } catch (NotFoundException $e) {
-                    $this->logWarning($progress, "Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
+                    continue;
                 }
+            } catch (NotFoundException $e) {
+                // Catch this so we delete the index for this content below
             }
 
-            foreach ($contentObjects as $content) {
-                try {
-                    $this->searchHandler->indexContent($content);
-                } catch (NotFoundException $e) {
-                    // Ignore content objects that have some sort of missing data on it
-                    $this->logWarning($progress, 'Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
-                }
-            }
+            $this->searchHandler->deleteContent($contentId);
+        }
+    }
 
-            $progress->advance($k);
-        } while (($i += $iterationCount) < $totalCount);
-        $progress->finish();
-        $output->writeln('');
+    public function purge()
+    {
+        $this->checkSearchEngine();
+        $this->searchHandler->purgeIndex();
+    }
 
-        $output->writeln('Finished creating Legacy Search Engine Index');
+    private function checkSearchEngine()
+    {
+        if (!$this->searchHandler instanceof LegacySearchHandler) {
+            throw new RuntimeException(
+                sprintf(
+                    'Expected to find an instance of %s, but found %s',
+                    LegacySearchHandler::class,
+                    get_class($this->searchHandler)
+                )
+            );
+        }
     }
 }
