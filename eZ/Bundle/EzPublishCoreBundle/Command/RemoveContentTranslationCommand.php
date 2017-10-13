@@ -97,7 +97,7 @@ class RemoveContentTranslationCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $contentId = intval($input->getArgument('content-id'));
+        $contentId = (int) ($input->getArgument('content-id'));
         $languageCode = $input->getArgument('language-code');
 
         if ($contentId === 0) {
