@@ -12,8 +12,8 @@ use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use stdClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
