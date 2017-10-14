@@ -536,7 +536,6 @@ class ContentCreateTest extends BaseTest
             )
             ->getMock();
 
-
         $fieldTypeParserMock->expects($this->any())
             ->method('parseValue')
             ->with('ezstring', array())
