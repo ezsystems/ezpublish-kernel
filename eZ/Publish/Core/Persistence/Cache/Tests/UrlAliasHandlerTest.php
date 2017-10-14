@@ -21,7 +21,8 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         return $this->createMock(ItemInterface::class);
     }
-    
+
+
     protected function getSPIUrlAliasHandlerMock()
     {
         return $this->createMock(SPIUrlAliasHandler::class);

@@ -546,6 +546,7 @@ class AddFieldTest extends TestCase
     protected function getContentGatewayMock()
     {
         if (!isset($this->contentGatewayMock)) {
+
             $this->contentGatewayMock = $this->createMock(Gateway::class);  
         }
 

@@ -532,7 +532,6 @@ class ContentCreateTest extends BaseTest
                     $this->getContentServiceMock(),
                     $this->getContentTypeServiceMock(),
                     $this->createMock(FieldTypeService::class),
-
                 )
             )
             ->getMock();

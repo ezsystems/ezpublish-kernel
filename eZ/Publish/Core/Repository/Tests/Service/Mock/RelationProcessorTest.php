@@ -558,7 +558,6 @@ class RelationProcessorTest extends BaseServiceMockTest
                 )
             )
             ->getMock();
-
     }
 
     /**
