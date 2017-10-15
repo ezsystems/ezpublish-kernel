@@ -5137,4 +5137,88 @@ class UrlAliasHandlerTest extends TestCase
             glob(__DIR__ . '/../../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr')
         );
     }
+
+    /**
+     * Data provider for tests of archiveUrlAliasesForDeletedTranslations.
+     *
+     * @see testArchiveUrlAliasesForDeletedTranslations for the description of parameters
+     *
+     * @return array
+     */
+    public function providerForArchiveUrlAliasesForDeletedTranslations()
+    {
+        return [
+            [2, ['eng-GB', 'pol-PL'], 'pol-PL'],
+            [3, ['eng-GB', 'pol-PL', 'nor-NO'], 'pol-PL'],
+        ];
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::archiveUrlAliasesForDeletedTranslations()
+     *
+     * @dataProvider providerForArchiveUrlAliasesForDeletedTranslations
+     *
+     * @param int $locationId
+     * @param string[] $expectedLanguages expected language codes before deleting
+     * @param string $removeLanguage language code to be deleted
+     */
+    public function testArchiveUrlAliasesForDeletedTranslations(
+        $locationId,
+        array $expectedLanguages,
+        $removeLanguage
+    ) {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/publish_multilingual.php');
+
+        // collect data persisted from fixtures
+        $urlAliases = $handler->listURLAliasesForLocation($locationId);
+        $collectedLanguages = [];
+        $collectedUrls = [];
+        foreach ($urlAliases as $urlAlias) {
+            // collect languages of all URL aliases
+            $collectedLanguages = array_merge($collectedLanguages, $urlAlias->languageCodes);
+            $isComposite = count($urlAlias->languageCodes) > 1;
+            foreach ($urlAlias->pathData as $pathData) {
+                // collect also actual unique URLs to be removed to check them after removal
+                if (!empty($pathData['translations'][$removeLanguage])) {
+                    $url = $pathData['translations'][$removeLanguage];
+                    $collectedUrls[$url] = $isComposite;
+                }
+            }
+        }
+        // sanity check
+        self::assertEquals($expectedLanguages, $collectedLanguages);
+
+        // remove language
+        $publishedLanguages = array_values(array_diff($collectedLanguages, [$removeLanguage]));
+        $handler->archiveUrlAliasesForDeletedTranslations($locationId, 1, $publishedLanguages);
+
+        // check reloaded structures
+        $urlAliases = $handler->listURLAliasesForLocation($locationId);
+        foreach ($urlAliases as $urlAlias) {
+            self::assertNotContains($removeLanguage, $urlAlias->languageCodes);
+            foreach ($urlAlias->pathData as $pathData) {
+                self::assertNotContains($removeLanguage, $pathData['translations']);
+                foreach ($pathData['translations'] as $url) {
+                    $lookupUrlAlias = $handler->lookup($url);
+                    self::assertNotContains($removeLanguage, $lookupUrlAlias->languageCodes);
+                }
+            }
+        }
+
+        // lookup removed URLs to check they're not found
+        foreach ($collectedUrls as $url => $isComposite) {
+            $urlAlias = $handler->lookup($url);
+            if ($isComposite) {
+                // check if alias no longer refers to removed Translation
+                self::assertNotContains($removeLanguage, $urlAlias->languageCodes);
+                foreach ($urlAlias->pathData as $pathData) {
+                    self::assertNotContains($removeLanguage, $pathData['translations']);
+                }
+            } else {
+                // check if non composite alias for removed translation is historized
+                self::assertTrue($urlAlias->isHistory);
+            }
+        }
+    }
 }
