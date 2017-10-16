@@ -292,6 +292,24 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
+     * Data provider for testArchiveUrlAliasesForDeletedTranslations.
+     *
+     * @see testArchiveUrlAliasesForDeletedTranslations
+     *
+     * @return array
+     */
+    public function providerForTestArchiveUrlAliasesForDeletedTranslations()
+    {
+        return [
+            [314, [2]],
+            [315, [4]],
+            [316, [4]],
+            [317, [2, 8]],
+            [318, [2, 8]],
+        ];
+    }
+
+    /**
      * Test for the cleanupAfterPublish() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
@@ -475,6 +493,39 @@ class DoctrineDatabaseTest extends TestCase
 
         self::assertEquals(1, $gateway->getNextId());
         self::assertEquals(2, $gateway->getNextId());
+    }
+
+    /**
+     * @dataProvider providerForTestArchiveUrlAliasesForDeletedTranslations
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::archiveUrlAliasesForDeletedTranslations
+     *
+     * @param int $locationId
+     * @param int[] $removedLanguageIds
+     */
+    public function testArchiveUrlAliasesForDeletedTranslations($locationId, array $removedLanguageIds)
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_multilang.php');
+        $gateway = $this->getGateway();
+
+        foreach ($gateway->loadLocationEntries($locationId) as $row) {
+            $gateway->archiveUrlAliasesForDeletedTranslations(
+                $locationId,
+                (int) $row['parent'],
+                $removedLanguageIds
+            );
+        }
+
+        // check results
+        $languageMask = 0;
+        foreach ($removedLanguageIds as $languageId) {
+            $languageMask |= $languageId;
+        }
+        foreach ($gateway->loadLocationEntries($locationId) as $row) {
+            self::assertNotEquals(0, (int) $row['lang_mask']);
+            self::assertNotEquals(1, (int) $row['lang_mask']);
+            self::assertEquals(0, (int) $row['lang_mask'] & $languageMask);
+        }
     }
 
     /**
