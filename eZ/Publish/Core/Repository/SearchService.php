@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Search\Capable;
 use eZ\Publish\SPI\Search\Handler;
 
 /**
@@ -316,5 +317,14 @@ class SearchService implements SearchServiceInterface
         }
 
         return $result;
+    }
+
+    public function supports($capabilityFlag)
+    {
+        if ($this->searchHandler instanceof Capable) {
+            return $this->searchHandler->supports($capabilityFlag);
+        }
+
+        return false;
     }
 }
