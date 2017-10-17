@@ -189,11 +189,11 @@ class RelationListConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         // default settings
-        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = [
             'selectionMethod' => 0,
             'selectionDefaultLocation' => null,
-            'selectionContentTypes' => array(),
-        );
+            'selectionContentTypes' => [],
+        ];
 
         // default value
         $fieldDef->defaultValue = new FieldValue();
@@ -206,7 +206,7 @@ class RelationListConverter implements Converter
         // read settings from storage
         $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
         $dom = new DOMDocument('1.0', 'utf-8');
-        if ($dom->loadXML($storageDef->dataText5) !== true) {
+        if (empty($storageDef->dataText5) || $dom->loadXML($storageDef->dataText5) !== true) {
             return;
         }
 
@@ -237,7 +237,7 @@ class RelationListConverter implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return bool
+     * @return string
      */
     public function getIndexColumn()
     {
