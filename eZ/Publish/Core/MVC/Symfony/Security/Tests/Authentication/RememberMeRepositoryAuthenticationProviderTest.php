@@ -48,15 +48,21 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
         $this->authProvider->setRepository($this->repository);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\BadCredentialsException
+     */
     public function testAuthenticateUnsupportedToken()
     {
         $anonymousToken = $this
             ->getMockBuilder(AnonymousToken::class)
             ->setConstructorArgs(['secret', $this->getMock(UserInterface::class)])
             ->getMock();
-        $this->assertNull($this->authProvider->authenticate($anonymousToken));
+        $this->authProvider->authenticate($anonymousToken);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\BadCredentialsException
+     */
     public function testAuthenticateWrongProviderKey()
     {
         $user = $this->getMock(UserInterface::class);
@@ -74,7 +80,7 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
             ->method('getProviderKey')
             ->will($this->returnValue('wrong provider secret'));
 
-        $this->assertNull($this->authProvider->authenticate($rememberMeToken));
+        $this->authProvider->authenticate($rememberMeToken);
     }
 
     /**
