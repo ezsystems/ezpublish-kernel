@@ -115,7 +115,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             ->end()
             ->arrayNode('http_cache')
                 ->info('Settings related to Http cache')
-                ->cannotBeEmpty()
                 ->children()
                     ->arrayNode('purge_servers')
                         ->info('Servers to use for Http PURGE (will NOT be used if ezpublish.http_cache.purge_type is "local").')
