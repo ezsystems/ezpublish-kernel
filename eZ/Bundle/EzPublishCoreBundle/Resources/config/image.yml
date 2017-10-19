@@ -88,6 +88,7 @@ services:
             - "@liip_imagine.filter.manager"
             - "@ezpublish.image_alias.imagine.cache_resolver"
             - "@liip_imagine.filter.configuration"
+            - "@liip_imagine"
             - "@?logger"
 
     ezpublish.image_alias.imagine.alias_cleaner:

@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
@@ -23,6 +24,7 @@ use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Imagine\Image\ImagineInterface;
 use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
 use SplFileInfo;
@@ -63,17 +65,24 @@ class AliasGenerator implements VariationHandler
      */
     private $ioResolver;
 
+    /**
+     * @var \Imagine\Image\ImagineInterface;
+     */
+    private $imagine;
+
     public function __construct(
         LoaderInterface $dataLoader,
         FilterManager $filterManager,
         ResolverInterface $ioResolver,
         FilterConfiguration $filterConfiguration,
+        ImagineInterface $imagine,
         LoggerInterface $logger = null
     ) {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
         $this->ioResolver = $ioResolver;
         $this->filterConfiguration = $filterConfiguration;
+        $this->imagine = $imagine;
         $this->logger = $logger;
     }
 
@@ -118,11 +127,16 @@ class AliasGenerator implements VariationHandler
         }
 
         try {
+            $resolvedPath = $this->ioResolver->resolve($originalPath, $variationName);
+            $image = $this->imagine->open($resolvedPath);
+            $dimensions = $image->getSize();
             $aliasInfo = new SplFileInfo(
-                $this->ioResolver->resolve($originalPath, $variationName)
+                $resolvedPath
             );
         } catch (NotResolvableException $e) {
             // If for some reason image alias cannot be resolved, throw the appropriate exception.
+            throw new InvalidVariationException($variationName, 'image', 0, $e);
+        } catch (RuntimeException $e) {
             throw new InvalidVariationException($variationName, 'image', 0, $e);
         }
 
@@ -133,6 +147,8 @@ class AliasGenerator implements VariationHandler
                 'dirPath' => $aliasInfo->getPath(),
                 'uri' => $aliasInfo->getPathname(),
                 'imageId' => $imageValue->imageId,
+                'width' => $dimensions->getWidth(),
+                'height' => $dimensions->getHeight()
             )
         );
     }
