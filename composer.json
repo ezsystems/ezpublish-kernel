@@ -7,7 +7,7 @@
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-intl": "*",
@@ -16,7 +16,7 @@
         "ext-PDO": "*",
         "ext-SPL": "*",
         "ext-xsl": "*",
-        "symfony/symfony": "^3.2",
+        "symfony/symfony": "^3.3",
         "symfony-cmf/routing": "~1.1",
         "kriswallsmith/buzz": ">=0.9",
         "sensio/distribution-bundle": "^5.0",
@@ -58,7 +58,7 @@
     "config": {
         "process-timeout": 3000,
         "platform": {
-            "php": "7.0"
+            "php": "7.1"
         }
     },
     "extra": {
