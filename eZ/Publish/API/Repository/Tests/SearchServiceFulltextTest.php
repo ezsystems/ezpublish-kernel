@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -25,6 +26,19 @@ use RuntimeException;
  */
 class SearchServiceFulltextTest extends BaseTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if (
+            !$this
+                ->getRepository(false)
+                ->getSearchService()->supports(SearchService::CAPABILITY_ADVANCED_FULLTEXT)
+        ) {
+            $this->markTestSkipped('Engine says it does not support advance fulltext format');
+        }
+    }
+
     /**
      * Create test Content and return Content ID map for subsequent testing.
      */
@@ -191,6 +205,10 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextLocationSearch($searchString, array $expectedKeys, array $idMap)
     {
+        if (($solrVersion = getenv('SOLR_VERSION')) && $solrVersion < 6) {
+            $this->markTestSkipped('Solr 4 detected, skipping as scoring won\'t match');
+        }
+
         $repository = $this->getRepository(false);
         $searchService = $repository->getSearchService();
 
