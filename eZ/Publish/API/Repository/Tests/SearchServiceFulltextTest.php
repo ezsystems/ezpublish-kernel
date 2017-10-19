@@ -35,7 +35,7 @@ class SearchServiceFulltextTest extends BaseTest
                 ->getRepository(false)
                 ->getSearchService()->supports(SearchService::CAPABILITY_ADVANCED_FULLTEXT)
         ) {
-            $this->markTestSkipped("Engine says it does not support advance fulltext format");
+            $this->markTestSkipped('Engine says it does not support advance fulltext format');
         }
     }
 
@@ -206,7 +206,7 @@ class SearchServiceFulltextTest extends BaseTest
     public function testFulltextLocationSearch($searchString, array $expectedKeys, array $idMap)
     {
         if (($solrVersion = getenv('SOLR_VERSION')) && $solrVersion < 6) {
-            $this->markTestSkipped("Solr 4 detected, skipping as scoring won't match");
+            $this->markTestSkipped('Solr 4 detected, skipping as scoring won\'t match');
         }
 
         $repository = $this->getRepository(false);
