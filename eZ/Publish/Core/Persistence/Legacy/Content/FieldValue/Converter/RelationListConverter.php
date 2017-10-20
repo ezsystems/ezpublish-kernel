@@ -210,7 +210,10 @@ class RelationListConverter implements Converter
             return;
         }
 
-        if ($selectionType = $dom->getElementsByTagName('selection_type')) {
+        if (
+            ($selectionType = $dom->getElementsByTagName('selection_type')) &&
+            $selectionType->item(0)->hasAttribute('value')
+        ) {
             $fieldSettings['selectionMethod'] = (int)$selectionType->item(0)->getAttribute('value');
         }
 
