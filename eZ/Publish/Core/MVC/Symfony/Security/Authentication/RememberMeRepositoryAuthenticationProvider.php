@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class RememberMeRepositoryAuthenticationProvider extends RememberMeAuthenticationProvider
 {
@@ -32,7 +32,7 @@ class RememberMeRepositoryAuthenticationProvider extends RememberMeAuthenticatio
     {
         $authenticatedToken = parent::authenticate($token);
         if (empty($authenticatedToken)) {
-            throw new BadCredentialsException('The token is not supported by this authentication provider.');
+            throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
 
         $this->repository->getPermissionResolver()->setCurrentUserReference(
