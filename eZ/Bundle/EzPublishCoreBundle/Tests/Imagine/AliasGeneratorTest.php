@@ -14,6 +14,7 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
@@ -47,9 +48,24 @@ class AliasGeneratorTest extends TestCase
     private $logger;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $imagine;
+
+    /**
      * @var AliasGenerator
      */
     private $aliasGenerator;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $box;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $image;
 
     protected function setUp()
     {
@@ -61,12 +77,16 @@ class AliasGeneratorTest extends TestCase
             ->getMock();
         $this->ioResolver = $this->getMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
         $this->filterConfiguration = new FilterConfiguration();
+        $this->imagine = $this->getMock('\Imagine\Image\ImagineInterface');
         $this->logger = $this->getMock('\Psr\Log\LoggerInterface');
+        $this->box = $this->getMock('\Imagine\Image\BoxInterface');
+        $this->image = $this->getMock('\Imagine\Image\ImageInterface');
         $this->aliasGenerator = new AliasGenerator(
             $this->dataLoader,
             $this->filterManager,
             $this->ioResolver,
             $this->filterConfiguration,
+            $this->imagine,
             $this->logger
         );
     }
@@ -104,6 +124,8 @@ class AliasGeneratorTest extends TestCase
         $variationName = 'my_variation';
         $this->filterConfiguration->set($variationName, array());
         $imageId = '123-45';
+        $imageWidth = 300;
+        $imageHeight = 300;
         $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
         $field = new Field(array('value' => $imageValue));
         $expectedUrl = "http://localhost/foo/bar/image_$variationName.jpg";
@@ -139,6 +161,25 @@ class AliasGeneratorTest extends TestCase
             ->with($originalPath, $variationName)
             ->will($this->returnValue($expectedUrl));
 
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with($expectedUrl)
+            ->will($this->returnValue($this->image));
+        $this->image
+            ->expects($this->once())
+            ->method('getSize')
+            ->will($this->returnValue($this->box));
+
+        $this->box
+            ->expects($this->once())
+            ->method('getWidth')
+            ->will($this->returnValue($imageWidth));
+        $this->box
+            ->expects($this->once())
+            ->method('getHeight')
+            ->will($this->returnValue($imageHeight));
+
         $expected = new ImageVariation(
             array(
                 'name' => $variationName,
@@ -146,6 +187,8 @@ class AliasGeneratorTest extends TestCase
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
                 'imageId' => $imageId,
+                'height' => $imageHeight,
+                'width' => $imageWidth,
             )
         );
         $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));
@@ -156,6 +199,8 @@ class AliasGeneratorTest extends TestCase
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'original';
         $imageId = '123-45';
+        $imageWidth = 300;
+        $imageHeight = 300;
         $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
         $field = new Field(array('value' => $imageValue));
         $expectedUrl = 'http://localhost/foo/bar/image.jpg';
@@ -176,6 +221,25 @@ class AliasGeneratorTest extends TestCase
             ->with($originalPath, $variationName)
             ->will($this->returnValue($expectedUrl));
 
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with($expectedUrl)
+            ->will($this->returnValue($this->image));
+        $this->image
+            ->expects($this->once())
+            ->method('getSize')
+            ->will($this->returnValue($this->box));
+
+        $this->box
+            ->expects($this->once())
+            ->method('getWidth')
+            ->will($this->returnValue($imageWidth));
+        $this->box
+            ->expects($this->once())
+            ->method('getHeight')
+            ->will($this->returnValue($imageHeight));
+
         $expected = new ImageVariation(
             array(
                 'name' => $variationName,
@@ -183,6 +247,8 @@ class AliasGeneratorTest extends TestCase
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
                 'imageId' => $imageId,
+                'height' => $imageHeight,
+                'width' => $imageWidth,
             )
         );
         $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));
@@ -201,6 +267,8 @@ class AliasGeneratorTest extends TestCase
         $this->filterConfiguration->set($reference1, $configReference1);
         $this->filterConfiguration->set($reference2, $configReference2);
         $imageId = '123-45';
+        $imageWidth = 300;
+        $imageHeight = 300;
         $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
         $field = new Field(array('value' => $imageValue));
         $expectedUrl = "http://localhost/foo/bar/image_$variationName.jpg";
@@ -249,6 +317,25 @@ class AliasGeneratorTest extends TestCase
             ->with($originalPath, $variationName)
             ->will($this->returnValue($expectedUrl));
 
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with($expectedUrl)
+            ->will($this->returnValue($this->image));
+        $this->image
+            ->expects($this->once())
+            ->method('getSize')
+            ->will($this->returnValue($this->box));
+
+        $this->box
+            ->expects($this->once())
+            ->method('getWidth')
+            ->will($this->returnValue($imageWidth));
+        $this->box
+            ->expects($this->once())
+            ->method('getHeight')
+            ->will($this->returnValue($imageHeight));
+
         $expected = new ImageVariation(
             array(
                 'name' => $variationName,
@@ -256,6 +343,8 @@ class AliasGeneratorTest extends TestCase
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
                 'imageId' => $imageId,
+                'width' => $imageWidth,
+                'height' => $imageHeight,
             )
         );
         $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));
@@ -266,6 +355,8 @@ class AliasGeneratorTest extends TestCase
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
         $imageId = '123-45';
+        $imageWidth = 300;
+        $imageHeight = 300;
         $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
         $field = new Field(array('value' => $imageValue));
         $expectedUrl = "http://localhost/foo/bar/image_$variationName.jpg";
@@ -296,6 +387,25 @@ class AliasGeneratorTest extends TestCase
             ->with($originalPath, $variationName)
             ->will($this->returnValue($expectedUrl));
 
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with($expectedUrl)
+            ->will($this->returnValue($this->image));
+        $this->image
+            ->expects($this->once())
+            ->method('getSize')
+            ->will($this->returnValue($this->box));
+
+        $this->box
+            ->expects($this->once())
+            ->method('getWidth')
+            ->will($this->returnValue($imageWidth));
+        $this->box
+            ->expects($this->once())
+            ->method('getHeight')
+            ->will($this->returnValue($imageHeight));
+
         $expected = new ImageVariation(
             array(
                 'name' => $variationName,
@@ -303,6 +413,8 @@ class AliasGeneratorTest extends TestCase
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
                 'imageId' => $imageId,
+                'width' => $imageWidth,
+                'height' => $imageHeight,
             )
         );
         $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));

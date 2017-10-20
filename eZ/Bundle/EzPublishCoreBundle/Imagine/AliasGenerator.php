@@ -148,7 +148,7 @@ class AliasGenerator implements VariationHandler
                 'uri' => $aliasInfo->getPathname(),
                 'imageId' => $imageValue->imageId,
                 'width' => $dimensions->getWidth(),
-                'height' => $dimensions->getHeight()
+                'height' => $dimensions->getHeight(),
             )
         );
     }
