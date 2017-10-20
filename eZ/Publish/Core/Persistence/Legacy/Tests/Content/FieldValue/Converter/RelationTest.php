@@ -57,6 +57,9 @@ class RelationTest extends PHPUnit_Framework_TestCase
 <related-objects><constraints><allowed-class contentclass-identifier="article"/><allowed-class contentclass-identifier="blog_post"/></constraints><selection_type value="0"/><contentobject-placement node-id="12345"/></related-objects>
 
 EOT;
+        // For BC these are still set
+        $expectedStorageFieldDefinition->dataInt1 = 0;
+        $expectedStorageFieldDefinition->dataInt2 = 12345;
 
         $actualStorageFieldDefinition = new StorageFieldDefinition();
 
