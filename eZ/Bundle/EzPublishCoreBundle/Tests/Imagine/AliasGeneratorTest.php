@@ -14,7 +14,6 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
-use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
