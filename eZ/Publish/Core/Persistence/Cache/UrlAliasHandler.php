@@ -44,7 +44,10 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
                 'alwaysAvailable' => $alwaysAvailable,
             )
         );
-        $this->clearLocation($locationId);
+
+        // we need to clear all because we are unable to clear cache for children
+        // locations only based on the locationId
+        $this->cache->clear('urlAlias');
 
         $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
             $locationId,
