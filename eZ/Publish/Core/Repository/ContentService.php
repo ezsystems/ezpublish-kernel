@@ -347,6 +347,7 @@ class ContentService implements ContentServiceInterface
             if ($isRemoteId) {
                 $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($id);
                 $id = $spiContentInfo->id;
+                $isRemoteId = false;
             }
 
             // Get current version if $versionNo is not defined
