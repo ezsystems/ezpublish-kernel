@@ -254,6 +254,19 @@ class SubtreeLimitationTypeTest extends Base
     }
 
     /**
+     * @depends testConstruct
+     *
+     * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
+     */
+    public function testBuildValueWithUniqueValues(SubtreeLimitationType $limitationType)
+    {
+        $limitationValues = ['/1/999/', '/1/999/', '/1/999/'];
+        $value = $limitationType->buildValue($limitationValues);
+
+        self::assertEquals(['/1/999/'], $value->limitationValues);
+    }
+
+    /**
      * @return array
      */
     public function providerForTestEvaluate()

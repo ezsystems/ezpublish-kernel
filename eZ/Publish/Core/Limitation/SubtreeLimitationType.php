@@ -100,7 +100,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      */
     public function buildValue(array $limitationValues)
     {
-        return new APISubtreeLimitation(array('limitationValues' => $limitationValues));
+        return new APISubtreeLimitation(array('limitationValues' => array_unique($limitationValues)));
     }
 
     /**
