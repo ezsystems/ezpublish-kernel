@@ -57,6 +57,6 @@ class RichTextEzxmlInputConverterPass implements CompilerPassInterface
     {
         ksort($convertersByPriority);
 
-        return call_user_func_array('array_merge', $convertersByPriority);
+        return array_merge(...$convertersByPriority);
     }
 }

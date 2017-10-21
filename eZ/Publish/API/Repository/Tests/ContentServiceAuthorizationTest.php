@@ -929,7 +929,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         $anonymousUserId = $this->generateId('user', 10);
-        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
         // demo installation

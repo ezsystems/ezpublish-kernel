@@ -732,7 +732,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $this->assertEquals(4, $searchResult->count);
         $this->assertTrue(
-            array_search($demoDesignLocationId, $foundIds) !== false
+            in_array($demoDesignLocationId, $foundIds)
         );
     }
 
