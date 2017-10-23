@@ -362,6 +362,31 @@ class Content extends RestController
     }
 
     /**
+     * Remove the given Translation from the given Version Draft.
+     *
+     * @param int $contentId
+     * @param int $versionNumber
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNumber, $languageCode)
+    {
+        $contentService = $this->repository->getContentService();
+        $versionInfo = $contentService->loadVersionInfoById($contentId, $versionNumber);
+
+        if (!$versionInfo->isDraft()) {
+            throw new ForbiddenException('Translation can be deleted from DRAFT Version only');
+        }
+
+        $contentService->deleteTranslationFromDraft($versionInfo, $languageCode);
+
+        return new Values\NoContent();
+    }
+
+    /**
      * The system creates a new draft version as a copy from the given version.
      *
      * @param mixed $contentId

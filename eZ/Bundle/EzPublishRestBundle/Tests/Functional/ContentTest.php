@@ -414,4 +414,156 @@ XML;
         self::assertHttpResponseCodeEquals($response, 301);
         self::assertHttpResponseHasHeader($response, 'Location');
     }
+
+    /**
+     * Covers DELETE /content/objects/<contentId>/versions/<versionNo>/translations/<languageCode>.
+     *
+     * @depends testCreateDraftFromVersion
+     *
+     * @param string $restContentVersionHref
+     */
+    public function testDeleteTranslationFromDraft($restContentVersionHref)
+    {
+        // create pol-PL Translation
+        $translationToDelete = 'pol-PL';
+        $this->createVersionTranslation($restContentVersionHref, $translationToDelete, 'Polish');
+
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('DELETE', $restContentVersionHref . "/translations/{$translationToDelete}")
+        );
+        self::assertHttpResponseCodeEquals($response, 204);
+
+        // check that the Translation was deleted by reloading Version
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', $restContentVersionHref, '', 'Version+json')
+        );
+
+        $version = json_decode($response->getContent(), true);
+        self::assertNotContains($translationToDelete, $version['Version']['VersionInfo']['languageCodes']);
+    }
+
+    /**
+     * Test that VersionInfo loaded in VersionList contains working DeleteTranslation resource link.
+     *
+     * Covers DELETE /content/objects/<contentId>/versions/<versionNo>/translations/<languageCode>.
+     * Covers GET /content/objects/<contentId>/versions
+     *
+     * @depends testCreateDraftFromVersion
+     *
+     * @param string $restContentVersionHref
+     */
+    public function testLoadContentVersionsProvidesDeleteTranslationFromDraftResourceLink($restContentVersionHref)
+    {
+        $translationToDelete = 'pol-PL';
+        // create Version Draft containing pol-PL Translation
+        $this->createVersionTranslation($restContentVersionHref, $translationToDelete, 'Polish');
+
+        // load Version
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', $restContentVersionHref, '', 'Version+json')
+        );
+        self::assertHttpResponseCodeEquals($response, 200);
+        $version = json_decode($response->getContent(), true);
+
+        // load all Versions
+        self::assertNotEmpty($version['Version']['VersionInfo']['Content']['_href']);
+        $restLoadContentVersionsHref = $version['Version']['VersionInfo']['Content']['_href'] . '/versions';
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', $restLoadContentVersionsHref, '', 'VersionList+json')
+        );
+        self::assertHttpResponseCodeEquals($response, 200);
+
+        // load Version list
+        $versionList = json_decode($response->getContent(), true);
+        $version = $this->getVersionInfoFromJSONVersionListByStatus(
+            $versionList['VersionList'],
+            'DRAFT'
+        );
+
+        // validate VersionTranslationInfo structure
+        self::assertNotEmpty($version['VersionTranslationInfo']['Language']);
+        foreach ($version['VersionTranslationInfo']['Language'] as $versionTranslationInfo) {
+            // Other Translation, as the main one, shouldn't be deletable
+            if ($versionTranslationInfo['languageCode'] !== $translationToDelete) {
+                // check that endpoint is not provided for non-deletable Translation
+                self::assertTrue(empty($versionTranslationInfo['DeleteTranslation']['_href']));
+            } else {
+                // check that provided endpoint works
+                self::assertNotEmpty($versionTranslationInfo['DeleteTranslation']['_href']);
+                $response = $this->sendHttpRequest(
+                    $this->createHttpRequest(
+                        'DELETE',
+                        $versionTranslationInfo['DeleteTranslation']['_href']
+                    )
+                );
+                self::assertHttpResponseCodeEquals($response, 204);
+            }
+        }
+    }
+
+    /**
+     * Publish another Version with new Translation.
+     *
+     * @param string $restContentVersionHref
+     *
+     * @param string $languageCode
+     * @param string $languageName
+     *
+     * @return string
+     */
+    private function createVersionTranslation($restContentVersionHref, $languageCode, $languageName)
+    {
+        $this->ensureLanguageExists($languageCode, $languageName);
+
+        $xml = <<< XML
+<VersionUpdate>
+    <fields>
+        <field>
+            <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
+            <languageCode>{$languageCode}</languageCode>
+            <fieldValue>{$languageName} translated name</fieldValue>
+        </field>
+    </fields>
+</VersionUpdate>
+XML;
+
+        $request = $this->createHttpRequest('PATCH', $restContentVersionHref, 'VersionUpdate+xml', 'Version+json');
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest(
+            $request
+        );
+
+        self::assertHttpResponseCodeEquals($response, 200);
+    }
+
+    /**
+     * Make REST API calls to check if the given Language exists and create it if it doesn't.
+     *
+     * @param string $languageCode
+     * @param string $languageName
+     */
+    private function ensureLanguageExists($languageCode, $languageName)
+    {
+        self::markTestIncomplete('@todo: Implement EZP-21171');
+    }
+
+    /**
+     * Iterate through Version Items returned by REST view for ContentType: VersionList+json
+     * and return first VersionInfo data matching given status.
+     *
+     * @param array $versionList
+     * @param string $status uppercase string representation of Version status
+     *
+     * @return array
+     */
+    private function getVersionInfoFromJSONVersionListByStatus(array $versionList, $status)
+    {
+        foreach ($versionList['VersionItem'] as $versionItem) {
+            if ($versionItem['VersionInfo']['status'] === $status) {
+                return $versionItem['VersionInfo'];
+            }
+        }
+
+        throw new \RuntimeException("Test internal error: Version with status {$status} not found");
+    }
 }
