@@ -3,7 +3,7 @@ parameters:
 
     ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
     ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
-    ezpublish.image_alias.imagine.alias_generator_decorator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGeneratorDecorator
+    ezpublish.image_alias.imagine.alias_generator_decorator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\CachedAliasGeneratorDecorator
     ezpublish.image_alias.imagine.alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
     ezpublish.image_alias.imagine.alias_cleaner.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner
 

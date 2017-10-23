@@ -7,7 +7,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Stash\Interfaces\PoolInterface;
 
-class AliasGeneratorDecorator implements VariationHandler
+class CachedAliasGeneratorDecorator implements VariationHandler
 {
     /**
      * @var VariationHandler
@@ -19,24 +19,42 @@ class AliasGeneratorDecorator implements VariationHandler
      */
     private $cache;
 
+    /**
+     * AliasGeneratorDecorator constructor.
+     * @param VariationHandler $aliasGenerator
+     * @param PoolInterface $cache
+     */
     public function __construct(VariationHandler $aliasGenerator, PoolInterface $cache)
     {
         $this->aliasGenerator = $aliasGenerator;
         $this->cache = $cache;
     }
 
+    /**
+     * @param Field $field
+     * @param VersionInfo $versionInfo
+     * @param string $variationName
+     * @param array $parameters
+     * @return \eZ\Publish\SPI\Variation\Values\Variation
+     */
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array())
     {
         $item = $this->cache->getItem($this->getCacheKey($field, $versionInfo, $variationName));
+        $image = $item->get();
         if ($item->isMiss()) {
-            $image = $this->aliasGenerator->getVariation($field, $versionInfo, $variationName, $parameters);
-            $this->cache->save($item->set($image));
+            $item->set($image = $this->aliasGenerator->getVariation($field, $versionInfo, $variationName, $parameters))->save();
         }
-        return $item->get();
+        return $image;
     }
 
+    /**
+     * @param Field $field
+     * @param VersionInfo $versionInfo
+     * @param $variationName
+     * @return string
+     */
     private function getCacheKey(Field $field, VersionInfo $versionInfo, $variationName)
     {
-        return 'variation/' . $field->value . '/' . $field->id . '/' . $field->fieldDefIdentifier . '/' . $versionInfo->id . '/' . $variationName;
+        return 'variation/' . $versionInfo->getContentInfo()->id . '/' . $versionInfo->id . '/' . $field->id . '/' . $variationName;
     }
 }
