@@ -7,7 +7,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Stash\Interfaces\PoolInterface;
 
-class AliasGeneratorDecorator
+class AliasGeneratorDecorator implements VariationHandler
 {
     /**
      * @var VariationHandler
