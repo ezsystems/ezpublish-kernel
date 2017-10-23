@@ -368,4 +368,27 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
 
         return $return;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes)
+    {
+        $this->logger->logCall(
+            __METHOD__,
+            [
+                'locationId' => $locationId,
+                'parentLocationId' => $parentLocationId,
+                'languageCodes' => implode(',', $languageCodes),
+            ]
+        );
+
+        $this->persistenceHandler->urlAliasHandler()->archiveUrlAliasesForDeletedTranslations(
+            $locationId,
+            $parentLocationId,
+            $languageCodes
+        );
+
+        $this->clearLocation($locationId);
+    }
 }

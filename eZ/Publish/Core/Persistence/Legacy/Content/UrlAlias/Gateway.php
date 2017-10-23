@@ -235,4 +235,13 @@ abstract class Gateway
      * @param string[] $actions actions for which to perform the update
      */
     abstract public function bulkRemoveTranslation($languageId, $actions);
+
+    /**
+     * Archive (remove or historize) URL aliases for removed Translations.
+     *
+     * @param int $locationId
+     * @param int $parentId Parent alias used for linking historized entries
+     * @param int[] $languageIds Language IDs of removed Translations
+     */
+    abstract public function archiveUrlAliasesForDeletedTranslations($locationId, $parentId, array $languageIds);
 }

@@ -5389,6 +5389,93 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Get values for multilingual field.
+     *
+     * @return array
+     */
+    public function providerForDeleteTranslationFromDraftRemovesUrlAliasOnPublishing()
+    {
+        return [
+            [
+                ['eng-US' => 'US Name', 'eng-GB' => 'GB Name'],
+            ],
+            [
+                ['eng-US' => 'Same Name', 'eng-GB' => 'Same Name'],
+            ],
+        ];
+    }
+
+    /**
+     * Test deleting a Translation from Draft removes previously stored URL aliases for published Content.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     *
+     * @dataProvider providerForDeleteTranslationFromDraftRemovesUrlAliasOnPublishing
+     *
+     * @param string[] $fieldValues translated field values
+     */
+    public function testDeleteTranslationFromDraftRemovesUrlAliasOnPublishing(array $fieldValues)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        // set language code to be removed
+        $languageCode = 'eng-GB';
+        $draft = $this->createMultilingualContentDraft(
+            'folder',
+            2,
+            'eng-US',
+            [
+                'name' => [
+                    'eng-GB' => $fieldValues['eng-GB'],
+                    'eng-US' => $fieldValues['eng-US'],
+                ],
+            ]
+        );
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        // create secondary location
+        $locationService->createLocation(
+            $content->contentInfo,
+            $locationService->newLocationCreateStruct(5)
+        );
+
+        // sanity check
+        $locations = $locationService->loadLocations($content->contentInfo);
+        self::assertCount(2, $locations, 'Sanity check: Expected to find 2 Locations');
+        foreach ($locations as $location) {
+            $urlAliasService->createUrlAlias($location, '/us-custom_' . $location->id, 'eng-US');
+            $urlAliasService->createUrlAlias($location, '/gb-custom_' . $location->id, 'eng-GB');
+
+            // check default URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, false, $languageCode);
+            self::assertNotEmpty($aliases, 'Sanity check: URL alias for the translation does not exist');
+
+            // check custom URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, true, $languageCode);
+            self::assertNotEmpty($aliases, 'Sanity check: Custom URL alias for the translation does not exist');
+        }
+
+        // delete translation and publish new version
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $draft = $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
+        $contentService->publishVersion($draft->versionInfo);
+
+        // check that aliases does not exist
+        foreach ($locations as $location) {
+            // check default URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, false, $languageCode);
+            self::assertEmpty($aliases, 'URL alias for the deleted translation still exists');
+
+            // check custom URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, true, $languageCode);
+            self::assertEmpty($aliases, 'Custom URL alias for the deleted translation still exists');
+        }
+    }
+
+    /**
      * Test deleting a Translation from Draft which has single Translation throws BadStateException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft

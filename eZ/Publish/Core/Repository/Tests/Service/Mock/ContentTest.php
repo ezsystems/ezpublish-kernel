@@ -5628,10 +5628,11 @@ class ContentTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('id', 42),
-                        array('contentInfo', $contentInfoMock),
-                    )
+                    [
+                        ['id', 42],
+                        ['contentInfo', $contentInfoMock],
+                        ['versionInfo', $versionInfoMock],
+                    ]
                 )
             );
         $contentMock->expects($this->any())
@@ -5640,6 +5641,15 @@ class ContentTest extends BaseServiceMockTest
         $versionInfoMock->expects($this->any())
             ->method('getContentInfo')
             ->will($this->returnValue($contentInfoMock));
+        $versionInfoMock->expects($this->any())
+            ->method('__get')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['languageCodes', ['eng-GB']],
+                    ]
+                )
+            );
         $contentInfoMock->expects($this->any())
             ->method('__get')
             ->will(
@@ -5718,6 +5728,20 @@ class ContentTest extends BaseServiceMockTest
         $urlAliasHandlerMock->expects($this->once())
             ->method('publishUrlAliasForLocation')
             ->with(123, 456, 'hello', 'eng-GB', true, true);
+
+        $location->expects($this->at(2))
+            ->method('__get')
+            ->with('id')
+            ->will($this->returnValue(123));
+
+        $location->expects($this->at(3))
+            ->method('__get')
+            ->with('parentLocationId')
+            ->will($this->returnValue(456));
+
+        $urlAliasHandlerMock->expects($this->once())
+            ->method('archiveUrlAliasesForDeletedTranslations')
+            ->with(123, 456, ['eng-GB']);
     }
 
     protected $domainMapperMock;

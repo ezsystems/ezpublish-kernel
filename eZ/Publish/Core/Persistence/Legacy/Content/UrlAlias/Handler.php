@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
@@ -868,5 +869,42 @@ class Handler implements UrlAliasHandlerInterface
     protected function getHash($text)
     {
         return md5(mb_strtolower($text, 'UTF-8'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes)
+    {
+        $parentId = $this->getRealAliasId($parentLocationId);
+
+        // filter removed Translations
+        $urlAliases = $this->listURLAliasesForLocation($locationId);
+        $removedLanguages = [];
+        foreach ($urlAliases as $urlAlias) {
+            $removedLanguages = array_merge(
+                $removedLanguages,
+                array_filter(
+                    $urlAlias->languageCodes,
+                    function ($languageCode) use ($languageCodes) {
+                        return !in_array($languageCode, $languageCodes);
+                    }
+                )
+            );
+        }
+
+        if (empty($removedLanguages)) {
+            return;
+        }
+
+        // map languageCodes to their IDs
+        $languageIds = array_map(
+            function ($languageCode) {
+                return $this->languageHandler->loadByLanguageCode($languageCode)->id;
+            },
+            $removedLanguages
+        );
+
+        $this->gateway->archiveUrlAliasesForDeletedTranslations($locationId, $parentId, $languageIds);
     }
 }
