@@ -12,7 +12,11 @@ class XSLTProcessorFunctionsTest extends TestCase
      */
     public function testIsValidUrl($url, $expected)
     {
-        $this->assertEquals($expected, XSLTProcessorFunctions::isValidUrl($url));
+        $this->assertEquals(
+            $expected,
+            XSLTProcessorFunctions::isValidUrl($url),
+            sprintf("'%s' should be %s", $url, $expected ? 'valid' : 'invalid')
+        );
     }
 
     public function providerForIsValidUrl()
@@ -36,11 +40,15 @@ class XSLTProcessorFunctionsTest extends TestCase
             ['ezlocation://72#fragment', true],
             ['ezcontent://70', true],
             ['ezcontent://72#fragment', true],
+
             ["javascript:alert('BOOM!')", false],
             ["vbscript:alert('BOOM!')", false],
             ['Simple text', false],
             ['script&gt;', false],
             ["<script>alert('boom');</script>", false],
+            ['www.google.com', true],
+            ['/en/mylink?getparam=valparam', true],
+            ['', false],
         ];
     }
 }
