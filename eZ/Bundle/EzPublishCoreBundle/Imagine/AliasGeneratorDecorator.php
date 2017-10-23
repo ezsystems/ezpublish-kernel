@@ -30,7 +30,7 @@ class AliasGeneratorDecorator implements VariationHandler
         $item = $this->cache->getItem($this->getCacheKey($field, $versionInfo, $variationName));
         if ($item->isMiss()) {
             $image = $this->aliasGenerator->getVariation($field, $versionInfo, $variationName, $parameters);
-            $item->save($image);
+            $this->cache->save($item->set($image));
         }
         return $item->get();
     }
