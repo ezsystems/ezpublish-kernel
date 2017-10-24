@@ -393,14 +393,13 @@
     xmlns:iso="http://purl.oclc.org/dsdl/schematron"
     xmlns:exsl="http://exslt.org/common"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-    xmlns:php="http://php.net/xsl"
-    extension-element-prefixes="exsl msxsl"
+    extension-element-prefixes="exsl  msxsl"
    >
 <!-- This program implements ISO Schematron, except for abstract patterns which require a preprocess. -->
 
 
 <xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
-<xsl:namespace-alias stylesheet-prefix="php" result-prefix="php"/>
+
 
 <!-- Category: top-level-element -->
 <xsl:output method="xml" omit-xml-declaration="no" standalone="yes"  indent="yes"/>
@@ -570,7 +569,6 @@
 </xsl:template>
 
 <xsl:template match="*" mode="stylesheetbody">
-    <xsl:attribute name="extension-element-prefixes">php</xsl:attribute>
   <!--xsl:template name="stylesheetbody"-->
     <xsl:comment>Implementers: please note that overriding process-prolog or process-root is
     the preferred method for meta-stylesheets to use where possible. </xsl:comment><xsl:text>&#10;</xsl:text>

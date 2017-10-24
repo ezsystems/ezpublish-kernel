@@ -119,9 +119,6 @@ class Validator extends XmlBase
     {
         $stylesheet = $this->loadFile($filename);
         $xsltProcessor = new XSLTProcessor();
-        $xsltProcessor->registerPHPFunctions([
-            'eZ\Publish\Core\FieldType\RichText\XSLTProcessorFunctions::isValidUrl',
-        ]);
         $xsltProcessor->importStyleSheet($stylesheet);
 
         $result = $xsltProcessor->transformToDoc($document);
