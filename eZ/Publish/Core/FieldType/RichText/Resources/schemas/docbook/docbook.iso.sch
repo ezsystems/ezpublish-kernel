@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:schema xmlns:s="http://purl.oclc.org/dsdl/schematron"
-          xmlns:db="http://docbook.org/ns/docbook"
-          xmlns:php="http://php.net/xsl"
-          >
+          xmlns:db="http://docbook.org/ns/docbook">
   <s:ns prefix="db" uri="http://docbook.org/ns/docbook"/>
   <!--s:pattern name="Glossary 'firstterm' type constraint">
     <s:rule context="db:firstterm[@linkend]">
@@ -252,7 +250,7 @@
   </s:pattern>
   <s:pattern name="Element contents validation">
     <s:rule context="db:link">
-      <s:assert test="php:function('eZ\Publish\Core\FieldType\RichText\XSLTProcessorFunctions::isValidUrl', string(@*[name()='xlink:href']))" mode="schematron-get-full-path-2">The value must be a valid URL</s:assert>
+      <s:assert test="not(contains(@*[name()='xlink:href'], 'javascript:') or contains(@*[name()='xlink:href'], 'vbscript:'))" mode="schematron-get-full-path-2">using scripts in links is not allowed</s:assert>
     </s:rule>
   </s:pattern>
 </s:schema>
