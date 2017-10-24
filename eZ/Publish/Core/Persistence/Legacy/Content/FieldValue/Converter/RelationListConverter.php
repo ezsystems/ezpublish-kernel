@@ -211,17 +211,17 @@ class RelationListConverter implements Converter
         }
 
         if (
-            ($selectionType = $dom->getElementsByTagName('selection_type')) &&
-            $selectionType->item(0)->hasAttribute('value')
+            ($selectionType = $dom->getElementsByTagName('selection_type')->item(0)) &&
+            $selectionType->hasAttribute('value')
         ) {
-            $fieldSettings['selectionMethod'] = (int)$selectionType->item(0)->getAttribute('value');
+            $fieldSettings['selectionMethod'] = (int)$selectionType->getAttribute('value');
         }
 
         if (
-            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')) &&
-            $defaultLocation->item(0)->hasAttribute('node-id')
+            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')->item(0)) &&
+            $defaultLocation->hasAttribute('node-id')
         ) {
-            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item(0)->getAttribute('node-id');
+            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->getAttribute('node-id');
         }
 
         if (!($constraints = $dom->getElementsByTagName('constraints'))) {
