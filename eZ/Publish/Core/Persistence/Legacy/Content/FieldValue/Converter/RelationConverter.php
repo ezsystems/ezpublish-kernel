@@ -84,11 +84,8 @@ class RelationConverter implements Converter
         $root->appendChild($constraints);
 
         $selectionType = $doc->createElement('selection_type');
-        if (isset($fieldSettings['selectionMethod'])) {
-            $selectionType->setAttribute('value', (int)$fieldSettings['selectionMethod']);
-        } else {
-            $selectionType->setAttribute('value', 0);
-        }
+        $selectionMethod = isset($fieldSettings['selectionMethod']) ? (int)$fieldSettings['selectionMethod'] : 0;
+        $selectionType->setAttribute('value', $selectionMethod);
         $root->appendChild($selectionType);
 
         $defaultLocation = $doc->createElement('contentobject-placement');
@@ -99,6 +96,13 @@ class RelationConverter implements Converter
 
         $doc->appendChild($root);
         $storageDef->dataText5 = $doc->saveXML();
+
+        // BC: For Backwards Compatibility for legacy and in case of downgrades or data sharing
+        // Selection method, 0 = browse, 1 = dropdown
+        $storageDef->dataInt1 = $selectionMethod;
+
+        // Selection root, location ID, or 0 if empty
+        $storageDef->dataInt2 = (int)$fieldSettings['selectionRoot'];
     }
 
     /**
@@ -146,15 +150,18 @@ class RelationConverter implements Converter
             return;
         }
 
-        if ($selectionType = $dom->getElementsByTagName('selection_type')) {
-            $fieldSettings['selectionMethod'] = (int)$selectionType->item(0)->getAttribute('value');
+        if (
+            ($selectionType = $dom->getElementsByTagName('selection_type')->item(0)) &&
+            $selectionType->hasAttribute('value')
+        ) {
+            $fieldSettings['selectionMethod'] = (int)$selectionType->getAttribute('value');
         }
 
         if (
-            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')) &&
-            $defaultLocation->item(0)->hasAttribute('node-id')
+            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')->item(0)) &&
+            $defaultLocation->hasAttribute('node-id')
         ) {
-            $fieldSettings['selectionRoot'] = (int)$defaultLocation->item(0)->getAttribute('node-id');
+            $fieldSettings['selectionRoot'] = (int)$defaultLocation->getAttribute('node-id');
         }
 
         if (!($constraints = $dom->getElementsByTagName('constraints'))) {
