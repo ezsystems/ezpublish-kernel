@@ -20,7 +20,7 @@ class InstantCachePurgerTest extends BaseTest
             ->expects($this->once())
             ->method('purgeAll');
 
-        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $this->eventDispatcher);
+        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $this->eventDispatcher, $this->repository);
         $purger->clear('cache/dir/');
     }
 }
