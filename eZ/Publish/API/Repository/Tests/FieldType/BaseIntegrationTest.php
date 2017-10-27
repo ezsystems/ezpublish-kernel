@@ -1149,9 +1149,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * Test that removing Translation from all Versions works for data from a Field Type.
      *
-     * @covers \eZ\Publish\API\Repository\ContentService::removeTranslation
+     * @covers \eZ\Publish\API\Repository\ContentService::deleteTranslation
      */
-    public function testRemoveTranslation()
+    public function testDeleteTranslation()
     {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -1189,7 +1189,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         }
 
         // delete Translation from all available Versions
-        $contentService->removeTranslation($publishedContent->contentInfo, 'ger-DE');
+        $contentService->deleteTranslation($publishedContent->contentInfo, 'ger-DE');
 
         // check if are Versions have valid Translation
         foreach ($contentService->loadVersions($publishedContent->contentInfo) as $versionInfo) {

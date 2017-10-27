@@ -1054,7 +1054,7 @@ class SearchEngineIndexingTest extends BaseTest
     /**
      * Test search engine is updated after removal of the translation from all the Versions.
      */
-    public function testRemoveTranslation()
+    public function testDeleteTranslation()
     {
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1069,7 +1069,7 @@ class SearchEngineIndexingTest extends BaseTest
             false
         );
 
-        $contentService->removeTranslation($content->contentInfo, 'eng-GB');
+        $contentService->deleteTranslation($content->contentInfo, 'eng-GB');
 
         $this->refreshSearch($repository);
 
