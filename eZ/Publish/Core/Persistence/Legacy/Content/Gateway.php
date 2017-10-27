@@ -402,7 +402,7 @@ abstract class Gateway
      * @param int $contentId
      * @param string $languageCode language code of the translation
      */
-    abstract public function removeTranslationFromContent($contentId, $languageCode);
+    abstract public function deleteTranslationFromContent($contentId, $languageCode);
 
     /**
      * Delete Content fields (attributes) for the given Translation.

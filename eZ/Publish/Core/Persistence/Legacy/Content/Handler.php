@@ -723,7 +723,7 @@ class Handler implements BaseContentHandler
             $this->listVersions($contentId),
             $languageCode
         );
-        $this->contentGateway->removeTranslationFromContent($contentId, $languageCode);
+        $this->contentGateway->deleteTranslationFromContent($contentId, $languageCode);
     }
 
     /**

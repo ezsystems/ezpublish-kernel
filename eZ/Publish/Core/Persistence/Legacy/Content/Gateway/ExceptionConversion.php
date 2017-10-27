@@ -739,10 +739,10 @@ class ExceptionConversion extends Gateway
      * @param int $contentId
      * @param string $languageCode language code of the translation
      */
-    public function removeTranslationFromContent($contentId, $languageCode)
+    public function deleteTranslationFromContent($contentId, $languageCode)
     {
         try {
-            return $this->innerGateway->removeTranslationFromContent($contentId, $languageCode);
+            return $this->innerGateway->deleteTranslationFromContent($contentId, $languageCode);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

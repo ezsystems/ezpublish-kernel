@@ -1963,7 +1963,7 @@ class DoctrineDatabase extends Gateway
      * @param string $languageCode language code of the translation
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function removeTranslationFromContent($contentId, $languageCode)
+    public function deleteTranslationFromContent($contentId, $languageCode)
     {
         $language = $this->languageHandler->loadByLanguageCode($languageCode);
 
