@@ -412,6 +412,8 @@ interface ContentService
      * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
      *       a warning before performing it.
      *
+     * @deprecated since 6.13, use {@see deleteTranslation} instead
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
      *         is the only one a Version has or it is the main translation of a Content Object.
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
@@ -425,6 +427,25 @@ interface ContentService
      * @since 6.11
      */
     public function removeTranslation(ContentInfo $contentInfo, $languageCode);
+
+    /**
+     * Delete Content item Translation from all Versions (including archived ones) of a Content Object.
+     *
+     * NOTE: this operation is risky and permanent, so user interface should provide a warning before performing it.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
+     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $languageCode
+     *
+     * @since 6.13
+     */
+    public function deleteTranslation(ContentInfo $contentInfo, $languageCode);
 
     /**
      * Delete specified Translation from a Content Draft.

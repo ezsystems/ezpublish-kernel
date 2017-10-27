@@ -296,7 +296,7 @@ class ContentServiceTest extends ServiceTest
                 0,
             ),
             array(
-                'removeTranslation',
+                'deleteTranslation',
                 array($contentInfo, $language),
                 null,
                 1,

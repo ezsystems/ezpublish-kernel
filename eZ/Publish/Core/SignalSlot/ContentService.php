@@ -633,10 +633,21 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
+     * {@inheritdoc}
+     */
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        @trigger_error(
+            __METHOD__ . ' is deprecated, use deleteTranslation instead',
+            E_USER_DEPRECATED
+        );
+        $this->deleteTranslation($contentInfo, $languageCode);
+    }
+
+    /**
+     * Delete Content item Translation from all Versions (including archived ones) of a Content Object.
      *
-     * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
-     *       a warning before performing it.
+     * NOTE: this operation is risky and permanent, so user interface should provide a warning before performing it.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
      *         is the only one a Version has or it is the main translation of a Content Object.
@@ -648,11 +659,11 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $languageCode
      *
-     * @since 6.11
+     * @since 6.13
      */
-    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    public function deleteTranslation(ContentInfo $contentInfo, $languageCode)
     {
-        $this->service->removeTranslation($contentInfo, $languageCode);
+        $this->service->deleteTranslation($contentInfo, $languageCode);
         $this->signalDispatcher->emit(
             new RemoveTranslationSignal(['contentId' => $contentInfo->id, 'languageCode' => $languageCode])
         );
