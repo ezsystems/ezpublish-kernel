@@ -397,12 +397,6 @@ class ObjectStateHandlerTest extends HandlerTest
                 )
             ),
         );
-        $testStateIds = array_map(
-            function ($state) {
-                return $state->id;
-            },
-            $testStates
-        );
 
         $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
@@ -436,7 +430,7 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($testStateIds)
+            ->with($testStates)
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -477,12 +471,6 @@ class ObjectStateHandlerTest extends HandlerTest
                 )
             ),
         );
-        $testStateIds = array_map(
-            function ($state) {
-                return $state->id;
-            },
-            $testStates
-        );
 
         $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
@@ -493,32 +481,11 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($testStateIds));
+            ->will($this->returnValue($testStates));
         $cacheItemMock
             ->expects($this->once())
             ->method('isMiss')
             ->will($this->returnValue(false));
-
-        // load()
-        foreach ($testStates as $i => $state) {
-            $this->cacheMock
-                ->expects($this->at($i + 1))
-                ->method('getItem')
-                ->with('objectstate', $state->id)
-                ->will(
-                    $this->returnCallback(
-                        function ($cachekey, $i) use ($state) {
-                            $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-                            $cacheItemMock
-                                ->expects($this->once())
-                                ->method('get')
-                                ->will($this->returnValue($state));
-
-                            return $cacheItemMock;
-                        }
-                    )
-                );
-        }
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $states = $handler->loadObjectStates(1);
