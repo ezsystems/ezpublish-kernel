@@ -92,22 +92,19 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     public function loadObjectStates($groupId)
     {
         $cache = $this->cache->getItem('objectstate', 'byGroup', $groupId);
-        $objectStateIds = $cache->get();
+        $objectStates = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
 
             $objectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
-
-            $objectStateIds = array();
-            foreach ($objectStates as $objectState) {
-                $objectStateIds[] = $objectState->id;
-            }
-
-            $cache->set($objectStateIds)->save();
+            $cache->set($objectStates)->save();
         } else {
-            $objectStates = array();
-            foreach ($objectStateIds as $stateId) {
-                $objectStates[] = $this->load($stateId);
+            // BC for updates to 6.7LTS installs where cache contains ID's and not objects
+            // @todo Remove in later branches
+            foreach ($objectStates as $key => $state) {
+                if (is_numeric($state)) {
+                    $objectStates[$key] = $this->load($state);
+                }
             }
         }
 
