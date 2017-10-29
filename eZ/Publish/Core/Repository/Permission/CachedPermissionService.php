@@ -54,7 +54,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
      *
      * @var int
      */
-    private $permissionCriterionTimeStamp;
+    private $permissionCriterionTs;
 
     /**
      * CachedPermissionService constructor.
@@ -105,12 +105,12 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
 
         if ($this->permissionCriterion !== null) {
             // If we are still within the cache TTL, then return the cached value
-            if ((time() - $this->permissionCriterionTimeStamp) < $this->cacheTTL) {
+            if ((time() - $this->permissionCriterionTs) < $this->cacheTTL) {
                 return $this->permissionCriterion;
             }
         }
 
-        $this->permissionCriterionTimeStamp = time();
+        $this->permissionCriterionTs = time();
         $this->permissionCriterion = $this->permissionCriterionResolver->getPermissionsCriterion($module, $function);
 
         return $this->permissionCriterion;
