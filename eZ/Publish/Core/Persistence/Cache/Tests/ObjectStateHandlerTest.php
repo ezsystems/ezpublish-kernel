@@ -217,12 +217,6 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadAllGroups($offset = 0, $limit = -1)
     {
         $testGroups = $this->generateObjectGroupsArray();
-        $testGroupIds = array_map(
-            function ($group) {
-                return $group->id;
-            },
-            $testGroups
-        );
 
         $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
@@ -253,36 +247,10 @@ class ObjectStateHandlerTest extends HandlerTest
             ->with(0, -1)
             ->will($this->returnValue($testGroups));
 
-        foreach ($testGroups as $group) {
-            $this->cacheMock
-                ->expects($this->at($group->id))
-                ->method('getItem')
-                ->with('objectstategroup', $group->id)
-                ->will(
-                    $this->returnCallback(
-                        function ($cachekey, $i) use ($group) {
-                            $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-                            $cacheItemMock
-                                ->expects($this->once())
-                                ->method('set')
-                                ->with($group)
-                                ->will($this->returnValue($cacheItemMock));
-
-                            $cacheItemMock
-                                ->expects($this->once())
-                                ->method('save')
-                                ->with();
-
-                            return $cacheItemMock;
-                        }
-                    )
-                );
-        }
-
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($testGroupIds)
+            ->with($testGroups)
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -303,12 +271,6 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadAllGroupsCached($offset = 0, $limit = -1)
     {
         $testGroups = $this->generateObjectGroupsArray($offset, $limit);
-        $testGroupIds = array_map(
-            function ($group) {
-                return $group->id;
-            },
-            $testGroups
-        );
 
         $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
@@ -319,34 +281,13 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($testGroupIds));
+            ->will($this->returnValue($testGroups));
         $cacheItemMock
             ->expects($this->once())
             ->method('isMiss')
             ->will($this->returnValue(false));
 
         $expectedGroups = array_slice($testGroups, $offset, $limit > -1 ?: null);
-
-        // loadGroup()
-        foreach ($expectedGroups as $i => $group) {
-            $this->cacheMock
-                ->expects($this->at($i + 1))
-                ->method('getItem')
-                ->with('objectstategroup', $group->id)
-                ->will(
-                    $this->returnCallback(
-                        function ($cachekey, $i) use ($group) {
-                            $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-                            $cacheItemMock
-                                ->expects($this->once())
-                                ->method('get')
-                                ->will($this->returnValue($group));
-
-                            return $cacheItemMock;
-                        }
-                    )
-                );
-        }
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $groups = $handler->loadAllGroups($offset, $limit);

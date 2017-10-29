@@ -60,26 +60,22 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadAllGroups($offset = 0, $limit = -1)
     {
+        // Method caches all state groups in cache only uses offset / limit to slice the cached result
         $cache = $this->cache->getItem('objectstategroup', 'all');
-        $groupIds = $cache->get();
+        $stateGroups = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('offset' => $offset, 'limit' => $limit));
             $stateGroups = $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
-
-            $groupIds = array();
-            foreach ($stateGroups as $objectStateGroup) {
-                $groupCache = $this->cache->getItem('objectstategroup', $objectStateGroup->id);
-                $groupCache->set($objectStateGroup)->save();
-                $groupIds[] = $objectStateGroup->id;
-            }
-
-            $cache->set($groupIds)->save();
+            $cache->set($stateGroups)->save();
             $stateGroups = array_slice($stateGroups, $offset, $limit > -1 ?: null);
         } else {
-            $groupIds = array_slice($groupIds, $offset, $limit > -1 ?: null);
-            $stateGroups = array();
-            foreach ($groupIds as $groupId) {
-                $stateGroups[] = $this->loadGroup($groupId);
+            $stateGroups = array_slice($stateGroups, $offset, $limit > -1 ?: null);
+            // BC for updates to 6.7LTS installs where cache contains ID's and not objects
+            // @todo Remove in later branches
+            foreach ($stateGroups as $key => $stateGroup) {
+                if (is_numeric($stateGroup)) {
+                    $stateGroups[$key] = $this->loadGroup($stateGroup);
+                }
             }
         }
 
@@ -95,7 +91,6 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $objectStates = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
-
             $objectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
             $cache->set($objectStates)->save();
         } else {
