@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteTranslationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
@@ -666,6 +667,9 @@ class ContentService implements ContentServiceInterface
         $this->service->deleteTranslation($contentInfo, $languageCode);
         $this->signalDispatcher->emit(
             new RemoveTranslationSignal(['contentId' => $contentInfo->id, 'languageCode' => $languageCode])
+        );
+        $this->signalDispatcher->emit(
+            new DeleteTranslationSignal(['contentId' => $contentInfo->id, 'languageCode' => $languageCode])
         );
     }
 

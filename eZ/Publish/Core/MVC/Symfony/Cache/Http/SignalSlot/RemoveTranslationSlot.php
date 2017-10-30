@@ -19,6 +19,6 @@ class RemoveTranslationSlot extends PurgeForContentHttpCacheSlot
 {
     protected function supports(Signal $signal)
     {
-        return $signal instanceof Signal\ContentService\RemoveTranslationSignal;
+        return $signal instanceof Signal\ContentService\DeleteTranslationSignal;
     }
 }

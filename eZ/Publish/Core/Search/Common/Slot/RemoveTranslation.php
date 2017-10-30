@@ -23,7 +23,7 @@ class RemoveTranslation extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!$signal instanceof Signal\ContentService\RemoveTranslationSignal) {
+        if (!$signal instanceof Signal\ContentService\DeleteTranslationSignal) {
             return;
         }
 
