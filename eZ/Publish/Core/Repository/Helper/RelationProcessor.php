@@ -108,8 +108,10 @@ class RelationProcessor
         $mappedRelations = array();
         foreach ($existingRelations as $relation) {
             if ($relation->type === Relation::FIELD) {
-                $fieldDefinitionId = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier)->id;
-                $mappedRelations[$relation->type][$fieldDefinitionId][$relation->destinationContentInfo->id] = $relation;
+                $fieldDefinition = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier);
+                if ($fieldDefinition !== null) {
+                    $mappedRelations[$relation->type][$fieldDefinition->id][$relation->destinationContentInfo->id] = $relation;
+                }
             }
             // Using bitwise AND as Legacy Stack stores COMMON, LINK and EMBED relation types
             // in the same entry using bitmask

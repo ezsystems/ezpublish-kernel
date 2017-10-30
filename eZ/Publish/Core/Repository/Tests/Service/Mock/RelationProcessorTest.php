@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Relation;
@@ -500,6 +501,28 @@ class RelationProcessorTest extends BaseServiceMockTest
             $contentTypeMock,
             $existingRelations
         );
+    }
+
+    /**
+     * Test for the processFieldRelations() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::processFieldRelations
+     */
+    public function testProcessFieldRelationsWhenRelationFieldNoLongerExists()
+    {
+        $existingRelations = [
+            $this->getStubbedRelation(2, Relation::FIELD, 43, 17),
+        ];
+
+        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
+        $contentTypeMock
+            ->expects($this->at(0))
+            ->method('getFieldDefinition')
+            ->with($this->equalTo('identifier43'))
+            ->will($this->returnValue(null));
+
+        $relationProcessor = $this->getPartlyMockedRelationProcessor();
+        $relationProcessor->processFieldRelations([], 24, 2, $contentTypeMock, $existingRelations);
     }
 
     protected function getStubbedRelation($id, $type, $fieldDefinitionId, $contentId)
