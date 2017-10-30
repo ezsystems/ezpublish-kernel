@@ -158,8 +158,11 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
                     );
                 }
 
-                if ($this->isStateGroupUsedForLimitation($stateGroup->id, $limitationValues)) {
-                    $objectStateIdsToVerify[] = $defaultStateId;
+                foreach ($states as $state) {
+                    // check using loose types as limitation values are strings and id's can be int
+                    if (in_array($state->id, $limitationValues)) {
+                        $objectStateIdsToVerify[] = $defaultStateId;
+                    }
                 }
             }
         } else {
