@@ -960,4 +960,73 @@ class URLAliasServiceTest extends BaseTest
         $loadedAlias = $urlAliasService->lookUp(str_repeat('/1', 99), 'ger-DE');
         /* END: Use Case */
     }
+
+    /**
+     * Test for the lookUp() method after renaming parent which is a part of the lookup path.
+     *
+     * @see https://jira.ez.no/browse/EZP-28046
+     * @covers \eZ\Publish\API\Repository\URLAliasService::lookUp
+     * @covers \eZ\Publish\API\Repository\URLAliasService::listLocationAliases
+     */
+    public function testLookupOnRenamedParent()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $locationService = $this->getRepository()->getLocationService();
+        $contentTypeService = $this->getRepository()->getContentTypeService();
+        $contentService = $this->getRepository()->getContentService();
+
+        // 1. Create new container object (e.g. Folder "My Folder").
+        $folderContentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $folderCreateStruct = $contentService->newContentCreateStruct($folderContentType, 'eng-GB');
+        $folderCreateStruct->setField('name', 'My-Folder');
+
+        $folderDraft = $contentService->createContent($folderCreateStruct, [
+            $locationService->newLocationCreateStruct(2),
+        ]);
+
+        $folder = $contentService->publishVersion($folderDraft->versionInfo);
+
+        // 2. Create new object inside this container (e.g. article "My Article").
+        $folderLocation = $locationService->loadLocation($folder->contentInfo->mainLocationId);
+
+        $articleContentType = $contentTypeService->loadContentTypeByIdentifier('article');
+        $articleCreateStruct = $contentService->newContentCreateStruct($articleContentType, 'eng-GB');
+        $articleCreateStruct->setField('title', 'My Article');
+        $articleCreateStruct->setField(
+            'intro',
+            <<< DOCBOOK
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0-variant ezpublish-1.0">
+    <para>Cache invalidation in eZ</para>
+</section>
+DOCBOOK
+        );
+        $article = $contentService->publishVersion(
+            $contentService->createContent($articleCreateStruct, [
+                $locationService->newLocationCreateStruct($folderLocation->id),
+            ])->versionInfo
+        );
+        $articleLocation = $locationService->loadLocation($article->contentInfo->mainLocationId);
+
+        // 3. Navigate to both of them
+        $urlAliasService->lookup('/My-Folder');
+        $urlAliasService->listLocationAliases($folderLocation, false);
+        $urlAliasService->lookup('/My-Folder/My-Article');
+        $urlAliasService->listLocationAliases($articleLocation, false);
+
+        // 4. Rename "My Folder" to "My Folder Modified".
+        $folderDraft = $contentService->createContentDraft($folder->contentInfo);
+        $folderUpdateStruct = $contentService->newContentUpdateStruct();
+        $folderUpdateStruct->setField('name', 'My Folder Modified');
+
+        $contentService->publishVersion(
+            $contentService->updateContent($folderDraft->versionInfo, $folderUpdateStruct)->versionInfo
+        );
+
+        // 5. Navigate to "Article"
+        $urlAliasService->lookup('/My-Folder/My-Article');
+        $aliases = $urlAliasService->listLocationAliases($articleLocation, false);
+
+        $this->assertEquals('/My-Folder-Modified/My-Article', $aliases[0]->path);
+    }
 }
