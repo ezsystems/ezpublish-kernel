@@ -67,19 +67,9 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
             $this->logger->logCall(__METHOD__, array('offset' => $offset, 'limit' => $limit));
             $stateGroups = $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
             $cache->set($stateGroups)->save();
-            $stateGroups = array_slice($stateGroups, $offset, $limit > -1 ?: null);
-        } else {
-            $stateGroups = array_slice($stateGroups, $offset, $limit > -1 ?: null);
-            // BC for updates to 6.7LTS installs where cache contains ID's and not objects
-            // @todo Remove in later branches
-            foreach ($stateGroups as $key => $stateGroup) {
-                if (is_numeric($stateGroup)) {
-                    $stateGroups[$key] = $this->loadGroup($stateGroup);
-                }
-            }
         }
 
-        return $stateGroups;
+        return array_slice($stateGroups, $offset, $limit > -1 ?: null);
     }
 
     /**
@@ -93,14 +83,6 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
             $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
             $objectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
             $cache->set($objectStates)->save();
-        } else {
-            // BC for updates to 6.7LTS installs where cache contains ID's and not objects
-            // @todo Remove in later branches
-            foreach ($objectStates as $key => $state) {
-                if (is_numeric($state)) {
-                    $objectStates[$key] = $this->load($state);
-                }
-            }
         }
 
         return $objectStates;
