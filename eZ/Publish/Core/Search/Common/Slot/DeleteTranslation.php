@@ -12,9 +12,9 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Search Engine slot handling RemoveTranslationSignal.
+ * A Search Engine slot handling DeleteTranslationSignal.
  */
-class RemoveTranslation extends Slot
+class DeleteTranslation extends Slot
 {
     /**
      * Receive the given $signal and react on it.
