@@ -741,7 +741,9 @@ class UserService implements UserServiceInterface
                                 $this->settings['hashType']
                             ) :
                             $loadedUser->passwordHash,
-                        'hashAlgorithm' => $this->settings['hashType'],
+                        'hashAlgorithm' => $userUpdateStruct->password ?
+                            $this->settings['hashType'] :
+                            $loadedUser->hashAlgorithm,
                         'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
                         'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin,
                     )
