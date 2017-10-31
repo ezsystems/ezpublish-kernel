@@ -17,6 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Exception;
@@ -219,6 +220,11 @@ class Repository implements RepositoryInterface
     protected $permissionsHandler;
 
     /**
+     * @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null
+     */
+    protected $backgroundIndexer;
+
+    /**
      * Array of arrays of commit events indexed by the transaction count.
      *
      * @var array
@@ -248,11 +254,13 @@ class Repository implements RepositoryInterface
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
+        BackgroundIndexer $backgroundIndexer,
         array $serviceSettings = array(),
         APIUserReference $user = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
+        $this->backgroundIndexer = $backgroundIndexer;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
             'contentType' => array(),
@@ -730,6 +738,7 @@ class Repository implements RepositoryInterface
             $this->searchHandler,
             $this->getDomainMapper(),
             $this->getPermissionCriterionResolver(),
+            $this->backgroundIndexer,
             $this->serviceSettings['search']
         );
 

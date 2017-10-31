@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -52,6 +53,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             $settings
         );
 
@@ -132,6 +134,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -178,6 +181,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -211,6 +215,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -247,6 +252,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -321,6 +327,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -403,6 +410,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -442,6 +450,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $this->getPermissionCriterionResolverMock(),
+            new NullIndexer(),
             array()
         );
 
@@ -522,6 +531,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock(),
+            new NullIndexer(),
             array()
         );
 
@@ -558,6 +568,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -593,6 +604,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -657,6 +669,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -721,6 +734,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -782,6 +796,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -814,6 +829,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $this->getPermissionCriterionResolverMock(),
+            new NullIndexer(),
             array()
         );
 

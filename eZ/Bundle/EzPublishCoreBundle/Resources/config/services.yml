@@ -170,6 +170,14 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish.search.background_indexer:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\BackgroundIndexingTerminateListener
+        arguments:
+            - '@ezpublish.api.persistence_handler'
+            - '@ezpublish.spi.search'
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezpublish.query_type.registry:
         class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
 
