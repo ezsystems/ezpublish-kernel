@@ -346,7 +346,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
-                array_push($template, $additionalField[0]);
+                $template[] = $additionalField[0];
                 array_unshift($template, $additionalField[2]);
                 array_unshift($template, $additionalField[1]);
 
@@ -1152,7 +1152,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
-                array_push($template, $additionalField[0]);
+                $template[] = $additionalField[0];
                 $fixture[] = $template;
             }
         }

@@ -61,7 +61,7 @@ class OutputVisitorPass implements CompilerPassInterface
 
         // sort by priority and flatten
         krsort($visitors);
-        $visitors = call_user_func_array('array_merge', $visitors);
+        $visitors = array_merge(...$visitors);
 
         foreach ($visitors as $visitor) {
             foreach ($visitor['regexps'] as $regexp) {

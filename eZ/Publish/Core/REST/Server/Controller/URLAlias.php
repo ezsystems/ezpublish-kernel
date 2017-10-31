@@ -88,7 +88,7 @@ class URLAlias extends RestController
             array_pop($locationPathParts)
         );
 
-        $custom = $request->query->has('custom') && $request->query->get('custom') === 'false' ? false : true;
+        $custom = !($request->query->has('custom') && $request->query->get('custom') === 'false');
 
         return new Values\CachedValue(
             new Values\URLAliasRefList(

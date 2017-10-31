@@ -43,7 +43,7 @@ class Visibility extends CriterionVisitor
     {
         return array(
             'term' => array(
-                'invisible_b' => ($criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false),
+                'invisible_b' => ($criterion->value[0] === Criterion\Visibility::HIDDEN),
             ),
         );
     }

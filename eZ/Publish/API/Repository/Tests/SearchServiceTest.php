@@ -2095,7 +2095,7 @@ class SearchServiceTest extends BaseTest
         // field does not affect sort
         $dummySortClause = new SortClause\Field('article', 'title', Query::SORT_ASC);
         array_unshift($sortClauses, $dummySortClause);
-        array_push($sortClauses, $dummySortClause);
+        $sortClauses[] = $dummySortClause;
 
         $searchService = $repository->getSearchService();
         if ($contentSearch) {

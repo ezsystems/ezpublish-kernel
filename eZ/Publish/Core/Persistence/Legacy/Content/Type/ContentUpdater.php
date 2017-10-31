@@ -63,7 +63,6 @@ class ContentUpdater
         $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
         $this->storageHandler = $storageHandler;
-        $this->storageHandler = $storageHandler;
         $this->contentMapper = $contentMapper;
     }
 

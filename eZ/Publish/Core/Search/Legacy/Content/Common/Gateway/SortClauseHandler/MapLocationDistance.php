@@ -51,7 +51,7 @@ class MapLocationDistance extends Field
         /*
          * Note: this formula is precise only for short distances.
          */
-        $longitudeCorrectionByLatitude = pow(cos(deg2rad($target->latitude)), 2);
+        $longitudeCorrectionByLatitude = cos(deg2rad($target->latitude)) ** 2;
         $distanceExpression = $query->expr->add(
             $query->expr->mul(
                 $query->expr->sub(

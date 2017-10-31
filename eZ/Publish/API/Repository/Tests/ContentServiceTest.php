@@ -5074,8 +5074,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        $contentService = $repository->getContentService();
-
         $contentVersion2 = $this->createContentVersion2();
 
         $loadedContent1 = $contentService->loadContent($contentVersion2->id, null, 1);

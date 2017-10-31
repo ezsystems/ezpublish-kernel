@@ -117,7 +117,7 @@ class MapLocationDistance extends FieldBase
          * @todo if ABS function was available in Zeta Database component it should be possible to account for
          * distances across the date line. Revisit when Doctrine DBAL is introduced.
          */
-        $longitudeCorrectionByLatitude = pow(cos(deg2rad($location->latitude)), 2);
+        $longitudeCorrectionByLatitude = cos(deg2rad($location->latitude)) ** 2;
         $distanceExpression = $subSelect->expr->add(
             $subSelect->expr->mul(
                 $subSelect->expr->sub(
@@ -150,7 +150,7 @@ class MapLocationDistance extends FieldBase
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
-                $distanceInDegrees = pow($this->kilometersToDegrees($criterion->value), 2);
+                $distanceInDegrees = $this->kilometersToDegrees($criterion->value) ** 2;
                 $distanceFilter = $subSelect->expr->$operatorFunction(
                     $distanceExpression,
                     $subSelect->expr->round(
@@ -161,8 +161,8 @@ class MapLocationDistance extends FieldBase
                 break;
 
             case Criterion\Operator::BETWEEN:
-                $distanceInDegrees1 = pow($this->kilometersToDegrees($criterion->value[0]), 2);
-                $distanceInDegrees2 = pow($this->kilometersToDegrees($criterion->value[1]), 2);
+                $distanceInDegrees1 = $this->kilometersToDegrees($criterion->value[0]) ** 2;
+                $distanceInDegrees2 = $this->kilometersToDegrees($criterion->value[1]) ** 2;
                 $distanceFilter = $subSelect->expr->between(
                     $distanceExpression,
                     $subSelect->expr->round(
