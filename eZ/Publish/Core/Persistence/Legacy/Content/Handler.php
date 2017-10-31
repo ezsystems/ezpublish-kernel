@@ -718,6 +718,11 @@ class Handler implements BaseContentHandler
      */
     public function removeTranslationFromContent($contentId, $languageCode)
     {
+        $this->fieldHandler->deleteTranslationFromContentFields(
+            $contentId,
+            $this->listVersions($contentId),
+            $languageCode
+        );
         $this->contentGateway->removeTranslationFromContent($contentId, $languageCode);
     }
 
