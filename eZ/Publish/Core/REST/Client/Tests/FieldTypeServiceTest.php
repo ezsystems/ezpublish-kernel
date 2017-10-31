@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests;
 
 use eZ\Publish\Core\REST\Client\FieldTypeService;
+use eZ\Publish\Core\REST\Client\FieldType;
 use PHPUnit\Framework\TestCase;
 
 class FieldTypeServiceTest extends TestCase
@@ -25,13 +26,7 @@ class FieldTypeServiceTest extends TestCase
 
     public function testAddFieldType()
     {
-        $fieldTypeMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\FieldType',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $fieldTypeMock = $this->createMock(FieldType::class);
         $fieldTypeMock->expects($this->once())
             ->method('getFieldTypeIdentifier')
             ->will($this->returnValue('my-type'));
@@ -47,13 +42,7 @@ class FieldTypeServiceTest extends TestCase
 
     public function testGetFieldType()
     {
-        $fieldTypeMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\FieldType',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $fieldTypeMock = $this->createMock(FieldType::class);
         $fieldTypeMock->expects($this->once())
             ->method('getFieldTypeIdentifier')
             ->will($this->returnValue('my-type'));
@@ -80,24 +69,12 @@ class FieldTypeServiceTest extends TestCase
 
     public function testGetFieldTypes()
     {
-        $myFieldTypeMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\FieldType',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $myFieldTypeMock = $this->createMock(FieldType::class);
         $myFieldTypeMock->expects($this->once())
             ->method('getFieldTypeIdentifier')
             ->will($this->returnValue('my-type'));
 
-        $yourFieldTypeMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\FieldType',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $yourFieldTypeMock = $this->createMock(FieldType::class);
         $yourFieldTypeMock->expects($this->once())
             ->method('getFieldTypeIdentifier')
             ->will($this->returnValue('your-type'));

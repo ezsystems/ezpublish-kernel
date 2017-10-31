@@ -45,7 +45,7 @@ class ExceptionListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->translator = $this->getMock('\Symfony\Component\Translation\TranslatorInterface');
+        $this->translator = $this->createMock('\Symfony\Component\Translation\TranslatorInterface');
         $this->listener = new ExceptionListener($this->translator);
     }
 
@@ -64,7 +64,7 @@ class ExceptionListenerTest extends TestCase
     private function generateExceptionEvent(Exception $exception)
     {
         return new GetResponseForExceptionEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
             new Request(),
             'master',
             $exception

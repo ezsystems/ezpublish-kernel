@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 
 class ObjectStateGroupTest extends BaseTest
 {
@@ -70,10 +71,7 @@ class ObjectStateGroupTest extends BaseTest
      */
     public function testResultIsObjectStateGroup($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup',
-            $result
-        );
+        $this->assertInstanceOf(ObjectStateGroup::class, $result);
     }
 
     /**

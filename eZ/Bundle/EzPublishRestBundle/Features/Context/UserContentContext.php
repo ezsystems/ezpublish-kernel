@@ -21,7 +21,7 @@ use eZ\Publish\Core\REST\Client\Values\Content\Content;
 use eZ\Publish\Core\REST\Client\Values\Content\VersionUpdate;
 use eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct;
 use eZ\Publish\Core\REST\Server\Values\Version;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 class UserContentContext extends RawMinkContext implements Context, SnippetAcceptingContext, MinkAwareContext
 {

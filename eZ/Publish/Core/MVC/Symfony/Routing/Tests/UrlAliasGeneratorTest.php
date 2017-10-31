@@ -8,12 +8,24 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class UrlAliasGeneratorTest extends TestCase
 {
@@ -60,11 +72,11 @@ class UrlAliasGeneratorTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->router = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
-        $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->siteAccessRouter = $this->createMock(SiteAccessRouterInterface::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $repositoryClass = Repository::class;
         $this->repository = $repository = $this
             ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()
@@ -75,8 +87,8 @@ class UrlAliasGeneratorTest extends TestCase
                 )
             )
             ->getMock();
-        $this->urlAliasService = $this->getMock('eZ\\Publish\\API\\Repository\\URLAliasService');
-        $this->locationService = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        $this->urlAliasService = $this->createMock(URLAliasService::class);
+        $this->locationService = $this->createMock(LocationService::class);
         $this->repository
             ->expects($this->any())
             ->method('getURLAliasService')
@@ -181,7 +193,7 @@ class UrlAliasGeneratorTest extends TestCase
             ->with($location, false)
             ->will($this->returnValue(array($urlAlias)));
 
-        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer')));
+        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->createMock(SiteAccess\URILexer::class)));
 
         $this->assertSame($expected, $this->urlAliasGenerator->doGenerate($location, $parameters));
     }
@@ -272,7 +284,7 @@ class UrlAliasGeneratorTest extends TestCase
                 )
             );
 
-        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer')));
+        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->createMock(SiteAccess\URILexer::class)));
 
         $this->assertSame($expected, $this->urlAliasGenerator->doGenerate($location, $parameters));
     }
@@ -421,23 +433,14 @@ class UrlAliasGeneratorTest extends TestCase
     protected function getPermissionResolverMock()
     {
         return $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\Permission\PermissionResolver')
+            ->getMockBuilder(PermissionResolver::class)
             ->setMethods(null)
             ->setConstructorArgs(
                 [
-                    $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
-                        ->disableOriginalConstructor()
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\SPI\Persistence\User\Handler')
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
-                        ->getMock(),
+                    $this->createMock(RoleDomainMapper::class),
+                    $this->createMock(LimitationService::class),
+                    $this->createMock(SPIUserHandler::class),
+                    $this->createMock(UserReference::class),
                 ]
             )
             ->getMock();

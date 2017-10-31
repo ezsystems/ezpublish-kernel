@@ -13,10 +13,13 @@ use eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class SiteAccessMatchListenerTest extends TestCase
@@ -44,11 +47,9 @@ class SiteAccessMatchListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->saRouter = $this->getMockBuilder('\eZ\Publish\Core\MVC\Symfony\SiteAccess\Router')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventDispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->userHashMatcher = $this->getMock('\Symfony\Component\HttpFoundation\RequestMatcherInterface');
+        $this->saRouter = $this->createMock(Router::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->userHashMatcher = $this->createMock(RequestMatcherInterface::class);
         $this->listener = new SiteAccessMatchListener($this->saRouter, $this->eventDispatcher, $this->userHashMatcher);
     }
 
@@ -64,7 +65,7 @@ class SiteAccessMatchListenerTest extends TestCase
     {
         $request = new Request();
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -92,7 +93,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $request = new Request();
         $request->attributes->set('serialized_siteaccess', serialize($siteAccess));
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -124,7 +125,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $request = new Request();
         $request->attributes->set('siteaccess', $siteAccess);
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -158,7 +159,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $path = '/foo/bar';
         $request = Request::create(sprintf('%s://%s:%d%s', $scheme, $host, $port, $path));
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -207,7 +208,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $request = Request::create('http://localhost/_fos_user_hash');
         $request->attributes->set('_ez_original_request', $originalRequest);
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );

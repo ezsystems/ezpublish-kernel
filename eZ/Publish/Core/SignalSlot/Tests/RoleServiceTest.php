@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\RoleService as APIRoleService;
 use eZ\Publish\Core\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -21,14 +22,14 @@ use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\RoleService;
+use eZ\Publish\SPI\Limitation\Type as LimitationType;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService as RoleServiceSignals;
 
 class RoleServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\RoleService'
-        );
+        return $this->createMock(APIRoleService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -86,7 +87,7 @@ class RoleServiceTest extends ServiceTest
                 array($roleCreateStruct),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal',
+                RoleServiceSignals\CreateRoleSignal::class,
                 array('roleId' => $roleId),
             ),
             array(
@@ -94,7 +95,7 @@ class RoleServiceTest extends ServiceTest
                 array($role),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleDraftSignal',
+                RoleServiceSignals\CreateRoleDraftSignal::class,
                 array('roleId' => $roleId),
             ),
             array(
@@ -102,7 +103,7 @@ class RoleServiceTest extends ServiceTest
                 array($role, $roleUpdateStruct),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal',
+                RoleServiceSignals\UpdateRoleSignal::class,
                 array('roleId' => $roleId),
             ),
             array(
@@ -110,7 +111,7 @@ class RoleServiceTest extends ServiceTest
                 array($roleDraft, $roleUpdateStruct),
                 $roleDraft,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleDraftSignal',
+                RoleServiceSignals\UpdateRoleDraftSignal::class,
                 array('roleId' => $roleId),
             ),
             array(
@@ -118,7 +119,7 @@ class RoleServiceTest extends ServiceTest
                 array($roleDraft),
                 $roleDraft,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\PublishRoleDraftSignal',
+                RoleServiceSignals\PublishRoleDraftSignal::class,
                 array('roleId' => $roleId),
             ),
             array(
@@ -126,7 +127,7 @@ class RoleServiceTest extends ServiceTest
                 array($role, $policyCreateStruct),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicySignal',
+                RoleServiceSignals\AddPolicySignal::class,
                 array(
                     'roleId' => $roleId,
                     'policyId' => $roleId,
@@ -137,7 +138,7 @@ class RoleServiceTest extends ServiceTest
                 array($roleDraft, $policyCreateStruct),
                 $roleDraft,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicyByRoleDraftSignal',
+                RoleServiceSignals\AddPolicyByRoleDraftSignal::class,
                 array(
                     'roleId' => $roleId,
                     'policyId' => $roleId,
@@ -148,7 +149,7 @@ class RoleServiceTest extends ServiceTest
                 array($role, $policy),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal',
+                RoleServiceSignals\RemovePolicySignal::class,
                 array(
                     'roleId' => $roleId,
                     'policyId' => $policyId,
@@ -159,7 +160,7 @@ class RoleServiceTest extends ServiceTest
                 array($roleDraft, $policyDraft),
                 $roleDraft,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicyByRoleDraftSignal',
+                RoleServiceSignals\RemovePolicyByRoleDraftSignal::class,
                 array(
                     'roleId' => $roleId,
                     'policyId' => $policyId,
@@ -170,7 +171,7 @@ class RoleServiceTest extends ServiceTest
                 array($policy),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal',
+                RoleServiceSignals\RemovePolicySignal::class,
                 array(
                     'roleId' => $roleId,
                     'policyId' => $policyId,
@@ -181,7 +182,7 @@ class RoleServiceTest extends ServiceTest
                 array($policy, $policyUpdateStruct),
                 $policy,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal',
+                RoleServiceSignals\UpdatePolicySignal::class,
                 array('policyId' => $policyId),
             ),
             array(
@@ -213,7 +214,7 @@ class RoleServiceTest extends ServiceTest
                 array($role),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal',
+                RoleServiceSignals\DeleteRoleSignal::class,
                 array('roleId' => $roleId),
             ),
             array(
@@ -221,7 +222,7 @@ class RoleServiceTest extends ServiceTest
                 array($roleDraft),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleDraftSignal',
+                RoleServiceSignals\DeleteRoleDraftSignal::class,
                 array('roleId' => $roleId),
             ),
             array(
@@ -235,7 +236,7 @@ class RoleServiceTest extends ServiceTest
                 array($role, $userGroup, $roleLimitation),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal',
+                RoleServiceSignals\AssignRoleToUserGroupSignal::class,
                 array(
                     'roleId' => $roleId,
                     'userGroupId' => $userGroupId,
@@ -247,7 +248,7 @@ class RoleServiceTest extends ServiceTest
                 array($role, $userGroup),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal',
+                RoleServiceSignals\UnassignRoleFromUserGroupSignal::class,
                 array(
                     'roleId' => $roleId,
                     'userGroupId' => $userGroupId,
@@ -258,7 +259,7 @@ class RoleServiceTest extends ServiceTest
                 array($role, $user, $roleLimitation),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserSignal',
+                RoleServiceSignals\AssignRoleToUserSignal::class,
                 array(
                     'roleId' => $roleId,
                     'userId' => $userId,
@@ -270,7 +271,7 @@ class RoleServiceTest extends ServiceTest
                 array($role, $user),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal',
+                RoleServiceSignals\UnassignRoleFromUserSignal::class,
                 array(
                     'roleId' => $roleId,
                     'userId' => $userId,
@@ -321,13 +322,13 @@ class RoleServiceTest extends ServiceTest
             array(
                 'getLimitationType',
                 array('identifier'),
-                $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type'),
+                $this->createMock(LimitationType::class),
                 0,
             ),
             array(
                 'getLimitationTypesByModuleFunction',
                 array('module', 'function'),
-                array($this->getMock('eZ\\Publish\\SPI\\Limitation\\Type')),
+                array($this->createMock(LimitationType::class)),
                 0,
             ),
         );

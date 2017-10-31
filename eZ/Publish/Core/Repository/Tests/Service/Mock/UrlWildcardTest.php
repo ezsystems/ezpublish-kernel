@@ -790,13 +790,14 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedURLWildcardService(array $methods = null)
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\URLWildcardService',
-            $methods,
-            array(
-                $this->getRepositoryMock(),
-                $this->getPersistenceMock()->urlWildcardHandler(),
+        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\URLWildcardService')
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->getRepositoryMock(),
+                    $this->getPersistenceMock()->urlWildcardHandler(),
+                )
             )
-        );
+            ->getMock();
     }
 }

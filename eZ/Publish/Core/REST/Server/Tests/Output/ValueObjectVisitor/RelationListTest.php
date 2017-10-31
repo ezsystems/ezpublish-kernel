@@ -12,6 +12,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\RelationList;
 use eZ\Publish\Core\Repository\Values\Content;
+use eZ\Publish\Core\REST\Server\Values\RestRelation;
 
 class RelationListTest extends ValueObjectVisitorBaseTest
 {
@@ -114,7 +115,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestRelation'));
+            ->with($this->isInstanceOf(RestRelation::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

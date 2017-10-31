@@ -26,7 +26,7 @@ class AliasCleanerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resolver = $this->getMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+        $this->resolver = $this->createMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
         $this->aliasCleaner = new AliasCleaner($this->resolver);
     }
 

@@ -19,6 +19,7 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIHandler;
 
 /**
  * Test Case for LimitationType.
@@ -36,14 +37,7 @@ class NewObjectStateLimitationTypeTest extends Base
     public function setUp()
     {
         parent::setUp();
-
-        $this->objectStateHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->objectStateHandlerMock = $this->createMock(SPIHandler::class);
     }
 
     /**
@@ -207,7 +201,7 @@ class NewObjectStateLimitationTypeTest extends Base
         $expected = array('test', 'test' => 9);
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation', $value);
+        self::assertInstanceOf(NewObjectStateLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }

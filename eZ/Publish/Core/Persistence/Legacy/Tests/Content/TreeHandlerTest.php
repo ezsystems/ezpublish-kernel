@@ -13,6 +13,11 @@ use eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 
 /**
  * Test case for Tree Handler.
@@ -368,9 +373,7 @@ class TreeHandlerTest extends TestCase
     protected function getLocationGatewayMock()
     {
         if (!isset($this->locationGatewayMock)) {
-            $this->locationGatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway'
-            );
+            $this->locationGatewayMock = $this->getMockForAbstractClass(LocationGateway::class);
         }
 
         return $this->locationGatewayMock;
@@ -389,13 +392,7 @@ class TreeHandlerTest extends TestCase
     protected function getLocationMapperMock()
     {
         if (!isset($this->locationMapperMock)) {
-            $this->locationMapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->locationMapperMock = $this->createMock(LocationMapper::class);
         }
 
         return $this->locationMapperMock;
@@ -414,9 +411,7 @@ class TreeHandlerTest extends TestCase
     protected function getContentGatewayMock()
     {
         if (!isset($this->contentGatewayMock)) {
-            $this->contentGatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
-            );
+            $this->contentGatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->contentGatewayMock;
@@ -435,13 +430,7 @@ class TreeHandlerTest extends TestCase
     protected function getContentMapperMock()
     {
         if (!isset($this->contentMapper)) {
-            $this->contentMapper = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentMapper = $this->createMock(Mapper::class);
         }
 
         return $this->contentMapper;
@@ -460,13 +449,7 @@ class TreeHandlerTest extends TestCase
     protected function getFieldHandlerMock()
     {
         if (!isset($this->fieldHandlerMock)) {
-            $this->fieldHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldHandlerMock = $this->createMock(FieldHandler::class);
         }
 
         return $this->fieldHandlerMock;
@@ -479,17 +462,18 @@ class TreeHandlerTest extends TestCase
      */
     protected function getPartlyMockedTreeHandler(array $methods)
     {
-        return $this->getMock(
-            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\TreeHandler',
-            $methods,
-            array(
-                $this->getLocationGatewayMock(),
-                $this->getLocationMapperMock(),
-                $this->getContentGatewayMock(),
-                $this->getContentMapperMock(),
-                $this->getFieldHandlerMock(),
+        return $this->getMockBuilder(TreeHandler::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->getLocationGatewayMock(),
+                    $this->getLocationMapperMock(),
+                    $this->getContentGatewayMock(),
+                    $this->getContentMapperMock(),
+                    $this->getFieldHandlerMock(),
+                )
             )
-        );
+            ->getMock();
     }
 
     /**

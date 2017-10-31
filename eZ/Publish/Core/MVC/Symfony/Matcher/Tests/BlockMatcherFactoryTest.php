@@ -8,9 +8,12 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Matcher\BlockMatcherFactory;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\Location;
+
 class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
 {
-    protected $matcherFactoryClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\BlockMatcherFactory';
+    protected $matcherFactoryClass = BlockMatcherFactory::class;
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.
@@ -51,7 +54,7 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
                     'test' => array(
                         'template' => 'foo.html.twig',
                         'match' => array(
-                            '\\eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\Id\\Location' => true,
+                            Location::class => true,
                         ),
                     ),
                 ),

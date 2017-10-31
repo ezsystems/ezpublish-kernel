@@ -17,6 +17,10 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStr
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Exception;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -81,7 +85,7 @@ class ContentTypeHandlerTest extends TestCase
             ->method('createGroupFromCreateStruct')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group\\CreateStruct'
+                    GroupCreateStruct::class
                 )
             )
             ->will(
@@ -93,7 +97,7 @@ class ContentTypeHandlerTest extends TestCase
             ->method('insertGroup')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group'
+                    Group::class
                 )
             )
             ->will($this->returnValue(23));
@@ -104,7 +108,7 @@ class ContentTypeHandlerTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group',
+            Group::class,
             $group
         );
         $this->assertEquals(
@@ -128,15 +132,15 @@ class ContentTypeHandlerTest extends TestCase
             ->method('updateGroup')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group\\UpdateStruct'
+                    GroupUpdateStruct::class
                 )
             );
 
-        $handlerMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            array('loadGroup'),
-            array($gatewayMock, $mapperMock, $this->getUpdateHandlerMock())
-        );
+        $handlerMock = $this->getMockBuilder(Handler::class)
+            ->setMethods(array('loadGroup'))
+            ->setConstructorArgs(array($gatewayMock, $mapperMock, $this->getUpdateHandlerMock()))
+            ->getMock();
+
         $handlerMock->expects($this->once())
             ->method('loadGroup')
             ->with(
@@ -150,7 +154,7 @@ class ContentTypeHandlerTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group',
+            Group::class,
             $res
         );
     }
@@ -483,7 +487,7 @@ class ContentTypeHandlerTest extends TestCase
             ->method('insertType')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
+                    Type::class
                 )
             )
             ->will($this->returnValue(23));
@@ -499,23 +503,23 @@ class ContentTypeHandlerTest extends TestCase
             ->with(
                 $this->equalTo(23),
                 $this->equalTo(1),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition')
+                $this->isInstanceOf(FieldDefinition::class),
+                $this->isInstanceOf(StorageFieldDefinition::class)
             )
             ->will($this->returnValue(42));
 
         $mapperMock->expects($this->exactly(2))
             ->method('toStorageFieldDefinition')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition')
+                $this->isInstanceOf(FieldDefinition::class),
+                $this->isInstanceOf(StorageFieldDefinition::class)
             );
 
         $handler = $this->getHandler();
         $type = $handler->create($createStructFix);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
+            Type::class,
             $type,
             'Incorrect type returned from create()'
         );
@@ -555,15 +559,15 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(23),
                 $this->equalTo(1),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\UpdateStruct'
+                    UpdateStruct::class
                 )
             );
 
-        $handlerMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            array('load'),
-            array($gatewayMock, $this->getMapperMock(), $this->getUpdateHandlerMock())
-        );
+        $handlerMock = $this->getMockBuilder(Handler::class)
+            ->setMethods(array('load'))
+            ->setConstructorArgs(array($gatewayMock, $this->getMapperMock(), $this->getUpdateHandlerMock()))
+            ->getMock();
+
         $handlerMock->expects($this->once())
             ->method('load')
             ->with(
@@ -575,7 +579,7 @@ class ContentTypeHandlerTest extends TestCase
         $res = $handlerMock->update(23, 1, new UpdateStruct());
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
+            Type::class,
             $res
         );
     }
@@ -647,17 +651,17 @@ class ContentTypeHandlerTest extends TestCase
             ->method('createCreateStructFromType')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
+                    Type::class
                 )
             )->will(
                 $this->returnValue(new CreateStruct())
             );
 
-        $handlerMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            array('load', 'internalCreate'),
-            array($gatewayMock, $mapperMock, $this->getUpdateHandlerMock())
-        );
+        $handlerMock = $this->getMockBuilder(Handler::class)
+            ->setMethods(array('load', 'internalCreate'))
+            ->setConstructorArgs(array($gatewayMock, $mapperMock, $this->getUpdateHandlerMock()))
+            ->getMock();
+
         $handlerMock->expects($this->once())
             ->method('load')
             ->with(
@@ -687,7 +691,7 @@ class ContentTypeHandlerTest extends TestCase
         $res = $handlerMock->createDraft(42, 23);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
+            Type::class,
             $res
         );
     }
@@ -703,17 +707,17 @@ class ContentTypeHandlerTest extends TestCase
             ->method('createCreateStructFromType')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
+                    Type::class
                 )
             )->will(
                 $this->returnValue(new CreateStruct(array('identifier' => 'testCopy')))
             );
 
-        $handlerMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            array('load', 'internalCreate', 'update'),
-            array($gatewayMock, $mapperMock, $this->getUpdateHandlerMock())
-        );
+        $handlerMock = $this->getMockBuilder(Handler::class)
+            ->setMethods(array('load', 'internalCreate', 'update'))
+            ->setConstructorArgs(array($gatewayMock, $mapperMock, $this->getUpdateHandlerMock()))
+            ->getMock();
+
         $handlerMock->expects($this->once())
             ->method('load')
             ->with(
@@ -783,7 +787,7 @@ class ContentTypeHandlerTest extends TestCase
         $res = $handlerMock->copy(42, 23, 0);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
+            Type::class,
             $res
         );
     }
@@ -893,7 +897,7 @@ class ContentTypeHandlerTest extends TestCase
         $fieldDefinition = $handler->getFieldDefinition(42, Type::STATUS_DEFINED);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition',
+            FieldDefinition::class,
             $fieldDefinition
         );
     }
@@ -910,10 +914,10 @@ class ContentTypeHandlerTest extends TestCase
             ->method('toStorageFieldDefinition')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
+                    FieldDefinition::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
+                    StorageFieldDefinition::class
                 )
             );
 
@@ -924,10 +928,10 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(23),
                 $this->equalTo(1),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
+                    FieldDefinition::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
+                    StorageFieldDefinition::class
                 )
             )->will(
                 $this->returnValue(42)
@@ -998,10 +1002,10 @@ class ContentTypeHandlerTest extends TestCase
             ->method('toStorageFieldDefinition')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
+                    FieldDefinition::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
+                    StorageFieldDefinition::class
                 )
             );
 
@@ -1012,7 +1016,7 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(23),
                 $this->equalTo(1),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
+                    FieldDefinition::class
                 )
             );
 
@@ -1047,18 +1051,18 @@ class ContentTypeHandlerTest extends TestCase
         $updateHandlerMock->expects($this->once())
             ->method('updateContentObjects')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type')
+                $this->isInstanceOf(Type::class),
+                $this->isInstanceOf(Type::class)
             );
         $updateHandlerMock->expects($this->once())
             ->method('deleteOldType')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type')
+                $this->isInstanceOf(Type::class)
             );
         $updateHandlerMock->expects($this->once())
             ->method('publishNewType')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type'),
+                $this->isInstanceOf(Type::class),
                 $this->equalTo(0)
             );
 
@@ -1098,7 +1102,7 @@ class ContentTypeHandlerTest extends TestCase
         $updateHandlerMock->expects($this->once())
             ->method('publishNewType')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type'),
+                $this->isInstanceOf(Type::class),
                 $this->equalTo(0)
             );
 
@@ -1128,15 +1132,16 @@ class ContentTypeHandlerTest extends TestCase
      */
     protected function getPartlyMockedHandler(array $methods)
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            $methods,
-            array(
-                $this->getGatewayMock(),
-                $this->getMapperMock(),
-                $this->getUpdateHandlerMock(),
+        return $this->getMockBuilder(Handler::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->getGatewayMock(),
+                    $this->getMapperMock(),
+                    $this->getUpdateHandlerMock(),
+                )
             )
-        );
+            ->getMock();
     }
 
     /**
@@ -1148,7 +1153,7 @@ class ContentTypeHandlerTest extends TestCase
     {
         if (!isset($this->gatewayMock)) {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
+                Gateway::class
             );
         }
 
@@ -1165,13 +1170,10 @@ class ContentTypeHandlerTest extends TestCase
     protected function getMapperMock($methods = array())
     {
         if (!isset($this->mapperMock)) {
-            $this->mapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper',
-                $methods,
-                array(),
-                '',
-                false
-            );
+            $this->mapperMock = $this->getMockBuilder(Mapper::class)
+                ->disableOriginalConstructor()
+                ->setMethods($methods)
+                ->getMock();
         }
 
         return $this->mapperMock;
@@ -1185,13 +1187,10 @@ class ContentTypeHandlerTest extends TestCase
     public function getUpdateHandlerMock()
     {
         if (!isset($this->updateHandlerMock)) {
-            $this->updateHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->updateHandlerMock = $this->getMockBuilder(UpdateHandler::class)
+                ->disableOriginalConstructor()
+                ->setMethods(array())
+                ->getMock();
         }
 
         return $this->updateHandlerMock;

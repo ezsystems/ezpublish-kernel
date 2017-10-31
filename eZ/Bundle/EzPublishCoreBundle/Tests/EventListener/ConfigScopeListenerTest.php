@@ -34,11 +34,11 @@ class ConfigScopeListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface');
-        $this->viewManager = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager');
+        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface');
+        $this->viewManager = $this->createMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager');
         $this->viewProviders = array(
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
+            $this->createMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
         );
     }
 

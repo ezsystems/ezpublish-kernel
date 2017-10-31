@@ -18,7 +18,7 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
     {
         $matcherServiceIdentifier = 'my.matcher.service';
         $resolverMock = $this->getResolverMock($matcherServiceIdentifier);
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
         $container
             ->expects($this->atLeastOnce())
             ->method('has')
@@ -35,12 +35,12 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
             ->will(
                 $this->returnValueMap(
                     array(
-                        array($matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MatcherInterface')),
+                        array($matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->createMock('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MatcherInterface')),
                     )
                 )
             );
 
-        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->createMock('eZ\\Publish\\API\\Repository\\Repository'));
         $matcherFactory->setContainer($container);
         $matcherFactory->match($this->getBlockMock());
     }
@@ -48,8 +48,8 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
     public function testSetSiteAccessNull()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $resolverMock = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
 
         $resolverMock
             ->expects($this->once())
@@ -69,7 +69,7 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
                     )
                 )
             );
-        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->createMock('eZ\\Publish\\API\\Repository\\Repository'));
         $matcherFactory->setContainer($container);
         $matcherFactory->setSiteAccess();
     }
@@ -77,8 +77,8 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
     public function testSetSiteAccess()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $resolverMock = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
 
         $siteAccessName = 'siteaccess_name';
         $updatedMatchConfig = array(
@@ -114,7 +114,7 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
                     )
                 )
             );
-        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->createMock('eZ\\Publish\\API\\Repository\\Repository'));
         $matcherFactory->setContainer($container);
         $matcherFactory->setSiteAccess(new SiteAccess($siteAccessName));
 

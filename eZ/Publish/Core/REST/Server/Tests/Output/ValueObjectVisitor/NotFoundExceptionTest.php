@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 class NotFoundExceptionTest extends ExceptionTest
@@ -39,7 +40,7 @@ class NotFoundExceptionTest extends ExceptionTest
      */
     protected function getException()
     {
-        return $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException');
+        return $this->getMockForAbstractClass(NotFoundException::class);
     }
 
     /**

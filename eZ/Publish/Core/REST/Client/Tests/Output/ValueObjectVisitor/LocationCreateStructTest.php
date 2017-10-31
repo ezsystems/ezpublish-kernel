@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -237,7 +238,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        $this->locationServiceMock = $this->getMock('eZ\Publish\API\Repository\LocationService');
+        $this->locationServiceMock = $this->createMock(LocationService::class);
         return new ValueObjectVisitor\LocationCreateStruct($this->locationServiceMock);
     }
 }

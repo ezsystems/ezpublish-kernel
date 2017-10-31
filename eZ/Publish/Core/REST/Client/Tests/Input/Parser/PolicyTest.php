@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\API\Repository\Values\User\Policy;
 
 class PolicyTest extends BaseTest
 {
@@ -44,10 +45,7 @@ class PolicyTest extends BaseTest
      */
     public function testResultIsPolicy($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy',
-            $result
-        );
+        $this->assertInstanceOf(Policy::class, $result);
     }
 
     /**

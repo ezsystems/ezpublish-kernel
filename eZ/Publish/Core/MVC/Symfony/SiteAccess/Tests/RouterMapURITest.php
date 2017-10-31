@@ -106,7 +106,7 @@ class RouterMapURITest extends TestCase
         $matcher->setRequest($request);
 
         $result = $matcher->reverseMatch('ezdemo_site');
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI', $result);
+        $this->assertInstanceOf(URIMapMatcher::class, $result);
         $this->assertSame($request, $matcher->getRequest());
         $this->assertSame('toutouyoutou', $result->getMapKey());
         $this->assertSame('/toutouyoutou/foo', $result->getRequest()->pathinfo);

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeGroupInput;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
@@ -30,7 +31,7 @@ class ContentTypeGroupInputTest extends BaseTest
         $result = $contentTypeGroupInput->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroupCreateStruct',
+            ContentTypeGroupCreateStruct::class,
             $result,
             'ContentTypeGroupCreateStruct not created correctly.'
         );
@@ -92,13 +93,7 @@ class ContentTypeGroupInputTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
 
         $contentTypeServiceMock->expects($this->any())
             ->method('newContentTypeGroupCreateStruct')

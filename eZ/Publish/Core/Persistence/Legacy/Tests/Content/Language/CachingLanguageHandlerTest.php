@@ -10,8 +10,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct as SPILanguageCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as SPILanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache;
 
 /**
  * Test case for caching Language Handler.
@@ -84,7 +87,7 @@ class CachingLanguageHandlerTest extends TestCase
             ->method('create')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\CreateStruct'
+                    SPILanguageCreateStruct::class
                 )
             )->will($this->returnValue($languageFixture));
 
@@ -312,9 +315,7 @@ class CachingLanguageHandlerTest extends TestCase
     protected function getInnerLanguageHandlerMock()
     {
         if (!isset($this->innerHandlerMock)) {
-            $this->innerHandlerMock = $this->getMock(
-                'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler'
-            );
+            $this->innerHandlerMock = $this->createMock(SPILanguageHandler::class);
         }
 
         return $this->innerHandlerMock;
@@ -328,9 +329,7 @@ class CachingLanguageHandlerTest extends TestCase
     protected function getLanguageCacheMock()
     {
         if (!isset($this->languageCacheMock)) {
-            $this->languageCacheMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache'
-            );
+            $this->languageCacheMock = $this->createMock(Cache::class);
         }
 
         return $this->languageCacheMock;

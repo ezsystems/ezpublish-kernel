@@ -19,6 +19,9 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
+use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -63,17 +66,9 @@ abstract class HandlerTest extends TestCase
     {
         parent::setUp();
 
-        $this->persistenceHandlerMock = $this->getMock('eZ\Publish\SPI\Persistence\Handler');
-
-        $this->cacheMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator',
-            array(),
-            array(),
-            '',
-            false
-        );
-
-        $this->loggerMock = $this->getMock('eZ\\Publish\\Core\\Persistence\\Cache\\PersistenceLogger');
+        $this->persistenceHandlerMock = $this->createMock(Handler::class);
+        $this->cacheMock = $this->createMock(CacheServiceDecorator::class);
+        $this->loggerMock = $this->createMock(PersistenceLogger::class);
 
         $this->persistenceCacheHandler = new CacheHandler(
             $this->persistenceHandlerMock,

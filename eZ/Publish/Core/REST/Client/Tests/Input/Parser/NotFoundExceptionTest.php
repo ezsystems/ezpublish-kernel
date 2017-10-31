@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 class NotFoundExceptionTest extends BaseTest
 {
@@ -26,7 +27,7 @@ class NotFoundExceptionTest extends BaseTest
         );
 
         $exception = $parser->parse($inputArray, $this->getParsingDispatcherMock());
-        self::assertInstanceOf('eZ\Publish\API\Repository\Exceptions\NotFoundException', $exception);
+        self::assertInstanceOf(NotFoundException::class, $exception);
         self::assertEquals('Section with ID "23" not found.', $exception->getMessage());
     }
 

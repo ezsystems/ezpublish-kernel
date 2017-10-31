@@ -26,13 +26,13 @@ class SwirlFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->filter = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface');
+        $this->filter = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface');
         $this->loader = new SwirlFilterLoader($this->filter);
     }
 
     public function testLoadNoOption()
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $this->filter
             ->expects($this->never())
             ->method('setOption');
@@ -51,7 +51,7 @@ class SwirlFilterLoaderTest extends TestCase
      */
     public function testLoadWithOption($degrees)
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $this->filter
             ->expects($this->once())
             ->method('setOption')

@@ -9,7 +9,12 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
@@ -315,7 +320,7 @@ class AddFieldTest extends TestCase
             ->method('toStorageValue')
             ->with(
                 $value,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $this->getContentGatewayMock()
@@ -324,7 +329,7 @@ class AddFieldTest extends TestCase
             ->with(
                 $content,
                 $field,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             )
             ->will($this->returnValue(23));
 
@@ -364,7 +369,7 @@ class AddFieldTest extends TestCase
             ->method('toStorageValue')
             ->with(
                 $value,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $this->getContentGatewayMock()
@@ -373,7 +378,7 @@ class AddFieldTest extends TestCase
             ->with(
                 $content,
                 $field,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             )
             ->will($this->returnValue(23));
 
@@ -388,7 +393,7 @@ class AddFieldTest extends TestCase
             ->method('updateField')
             ->with(
                 $field,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $action = $this->getMockedAction();
@@ -419,7 +424,7 @@ class AddFieldTest extends TestCase
             ->method('toStorageValue')
             ->with(
                 $value,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $this->getContentGatewayMock()
@@ -428,7 +433,7 @@ class AddFieldTest extends TestCase
             ->with(
                 $content,
                 $field,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $this->getContentStorageHandlerMock()
@@ -467,7 +472,7 @@ class AddFieldTest extends TestCase
             ->method('toStorageValue')
             ->with(
                 $value,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $this->getContentGatewayMock()
@@ -476,7 +481,7 @@ class AddFieldTest extends TestCase
             ->with(
                 $content,
                 $field,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $this->getContentStorageHandlerMock()
@@ -490,7 +495,7 @@ class AddFieldTest extends TestCase
             ->method('updateField')
             ->with(
                 $field,
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $action = $this->getMockedAction();
@@ -541,9 +546,7 @@ class AddFieldTest extends TestCase
     protected function getContentGatewayMock()
     {
         if (!isset($this->contentGatewayMock)) {
-            $this->contentGatewayMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
-            );
+            $this->contentGatewayMock = $this->createMock(Gateway::class);
         }
 
         return $this->contentGatewayMock;
@@ -557,9 +560,7 @@ class AddFieldTest extends TestCase
     protected function getFieldValueConverterMock()
     {
         if (!isset($this->fieldValueConverterMock)) {
-            $this->fieldValueConverterMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-            );
+            $this->fieldValueConverterMock = $this->createMock(Converter::class);
         }
 
         return $this->fieldValueConverterMock;
@@ -573,13 +574,7 @@ class AddFieldTest extends TestCase
     protected function getContentStorageHandlerMock()
     {
         if (!isset($this->contentStorageHandlerMock)) {
-            $this->contentStorageHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentStorageHandlerMock = $this->createMock(StorageHandler::class);
         }
 
         return $this->contentStorageHandlerMock;
@@ -593,13 +588,7 @@ class AddFieldTest extends TestCase
     protected function getContentMapperMock()
     {
         if (!isset($this->contentMapperMock)) {
-            $this->contentMapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentMapperMock = $this->createMock(ContentMapper::class);
         }
 
         return $this->contentMapperMock;
@@ -652,7 +641,7 @@ class AddFieldTest extends TestCase
     protected function getMockedAction($methods = array())
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action\\AddField')
+            ->getMockBuilder(AddField::class)
             ->setMethods((array)$methods)
             ->setConstructorArgs(
                 array(

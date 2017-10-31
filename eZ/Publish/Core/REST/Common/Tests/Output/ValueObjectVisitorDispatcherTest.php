@@ -9,6 +9,9 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use stdClass;
 use PHPUnit\Framework\TestCase;
 
@@ -81,7 +84,6 @@ class ValueObjectVisitorDispatcherTest extends TestCase
     {
         $data = new ValueObject();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $valueObjectVisitor1 = $this->getValueObjectVisitorMock();
         $valueObjectVisitor2 = $this->getValueObjectVisitorMock();
 
@@ -118,7 +120,7 @@ class ValueObjectVisitorDispatcherTest extends TestCase
      */
     private function getValueObjectVisitorMock()
     {
-        return $this->getMockForAbstractClass('\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor');
+        return $this->getMockForAbstractClass(ValueObjectVisitor::class);
     }
 
     /**
@@ -127,9 +129,7 @@ class ValueObjectVisitorDispatcherTest extends TestCase
     private function getOutputVisitorMock()
     {
         if (!isset($this->outputVisitorMock)) {
-            $this->outputVisitorMock = $this->getMockBuilder('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->outputVisitorMock = $this->createMock(Visitor::class);
         }
 
         return $this->outputVisitorMock;
@@ -141,7 +141,7 @@ class ValueObjectVisitorDispatcherTest extends TestCase
     private function getOutputGeneratorMock()
     {
         if (!isset($this->outputGeneratorMock)) {
-            $this->outputGeneratorMock = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
+            $this->outputGeneratorMock = $this->createMock(Generator::class);
         }
 
         return $this->outputGeneratorMock;

@@ -28,13 +28,7 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testConstructor()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $languageServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\LanguageService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $languageServiceMock = $this->createMock('eZ\\Publish\\Core\\Repository\\LanguageService');
         /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler $urlAliasHandler */
         $urlAliasHandler = $this->getPersistenceMockHandler('Content\\UrlAlias\\Handler');
         $settings = array('settings');
@@ -3459,13 +3453,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService(array('createUrlAlias'));
         $location = $this->getLocationStub();
-        $locationServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\LocationService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $locationServiceMock = $this->createMock('eZ\\Publish\\Core\\Repository\\LocationService');
 
         $locationServiceMock->expects(
             $this->exactly(2)
@@ -3549,13 +3537,8 @@ class UrlAliasTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedURLAliasServiceService(array $methods = null)
     {
-        $languageServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\LanguageService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $languageServiceMock = $this->createMock('eZ\\Publish\\Core\\Repository\\LanguageService');
+
         $languageServiceMock->expects(
             $this->once()
         )->method(
@@ -3572,13 +3555,14 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->returnValue($languageServiceMock)
         );
 
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\URLAliasService',
-            $methods,
-            array(
-                $this->getRepositoryMock(),
-                $this->getPersistenceMock()->urlAliasHandler(),
+        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\URLAliasService')
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->getRepositoryMock(),
+                    $this->getPersistenceMock()->urlAliasHandler(),
+                )
             )
-        );
+            ->getMock();
     }
 }

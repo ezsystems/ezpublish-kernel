@@ -6,12 +6,12 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventSubscriber;
 
 use eZ\Bundle\EzPublishCoreBundle\EventSubscriber\CrowdinRequestLocaleSubscriber;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class CrowdinRequestLocaleSubscriberTest extends PHPUnit_Framework_TestCase
+class CrowdinRequestLocaleSubscriberTest extends TestCase
 {
     /**
      * @dataProvider testSetRequestsProvider

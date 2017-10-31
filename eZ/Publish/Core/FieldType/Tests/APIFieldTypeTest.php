@@ -9,6 +9,10 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
+use eZ\Publish\Core\FieldType\Value;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use PHPUnit\Framework\TestCase;
 
 class APIFieldTypeTest extends TestCase
@@ -26,7 +30,7 @@ class APIFieldTypeTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerFieldType = $this->getMock('\eZ\Publish\SPI\FieldType\FieldType');
+        $this->innerFieldType = $this->createMock(SPIFieldType::class);
         $this->fieldType = new FieldType($this->innerFieldType);
     }
 
@@ -47,9 +51,9 @@ class APIFieldTypeTest extends TestCase
     {
         $validatorConfig = ['foo' => 'bar'];
         $validationErrors = [
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
         ];
         $this->innerFieldType
             ->expects($this->once())
@@ -77,9 +81,9 @@ class APIFieldTypeTest extends TestCase
     {
         $fieldSettings = ['foo' => 'bar'];
         $validationErrors = [
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
         ];
         $this->innerFieldType
             ->expects($this->once())
@@ -92,8 +96,8 @@ class APIFieldTypeTest extends TestCase
 
     public function testValidateValueNoError()
     {
-        $fieldDefinition = $this->getMockForAbstractClass('\eZ\Publish\API\Repository\Values\ContentType\FieldDefinition');
-        $value = $this->getMockForAbstractClass('\eZ\Publish\Core\FieldType\Value');
+        $fieldDefinition = $this->getMockForAbstractClass(APIFieldDefinition::class);
+        $value = $this->getMockForAbstractClass(Value::class);
         $validationErrors = [];
         $this->innerFieldType
             ->expects($this->once())
@@ -106,12 +110,12 @@ class APIFieldTypeTest extends TestCase
 
     public function testValidateValue()
     {
-        $fieldDefinition = $this->getMockForAbstractClass('\eZ\Publish\API\Repository\Values\ContentType\FieldDefinition');
-        $value = $this->getMockForAbstractClass('\eZ\Publish\Core\FieldType\Value');
+        $fieldDefinition = $this->getMockForAbstractClass(APIFieldDefinition::class);
+        $value = $this->getMockForAbstractClass(Value::class);
         $validationErrors = [
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
         ];
         $this->innerFieldType
             ->expects($this->once())

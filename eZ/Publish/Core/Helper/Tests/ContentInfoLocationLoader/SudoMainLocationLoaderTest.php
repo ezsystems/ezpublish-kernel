@@ -9,6 +9,13 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Helper\ContentInfoLocationLoader\SudoMainLocationLoader;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\Repository\Repository;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use PHPUnit\Framework\TestCase;
 
 class SudoMainLocationLoaderTest extends TestCase
@@ -98,7 +105,7 @@ class SudoMainLocationLoaderTest extends TestCase
         static $repositoryMock;
 
         if ($repositoryMock === null) {
-            $repositoryClass = 'eZ\Publish\Core\Repository\Repository';
+            $repositoryClass = Repository::class;
 
             $repositoryMock = $this
                 ->getMockBuilder($repositoryClass)
@@ -124,7 +131,7 @@ class SudoMainLocationLoaderTest extends TestCase
 
         if ($mock === null) {
             $mock = $this
-                ->getMockBuilder('eZ\Publish\API\Repository\LocationService')
+                ->getMockBuilder(LocationService::class)
                 ->getMock();
         }
 
@@ -137,22 +144,22 @@ class SudoMainLocationLoaderTest extends TestCase
     private function getPermissionResolverMock()
     {
         return $this
-            ->getMockBuilder('eZ\Publish\Core\Repository\Permission\PermissionResolver')
+            ->getMockBuilder(PermissionResolver::class)
             ->setMethods(null)
             ->setConstructorArgs(
                 [
                     $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
+                        ->getMockBuilder(RoleDomainMapper::class)
                         ->disableOriginalConstructor()
                         ->getMock(),
                     $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
+                        ->getMockBuilder(LimitationService::class)
                         ->getMock(),
                     $this
-                        ->getMockBuilder('eZ\Publish\SPI\Persistence\User\Handler')
+                        ->getMockBuilder(SPIUserHandler::class)
                         ->getMock(),
                     $this
-                        ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
+                        ->getMockBuilder(UserReference::class)
                         ->getMock(),
                 ]
             )

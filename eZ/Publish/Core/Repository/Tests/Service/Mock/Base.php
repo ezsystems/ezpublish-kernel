@@ -128,7 +128,7 @@ abstract class Base extends TestCase
     protected function getRepositoryMock()
     {
         if (!isset($this->repositoryMock)) {
-            $this->repositoryMock = self::getMock('eZ\\Publish\\API\\Repository\\Repository');
+            $this->repositoryMock = self::createMock('eZ\\Publish\\API\\Repository\\Repository');
         }
 
         return $this->repositoryMock;
@@ -142,21 +142,15 @@ abstract class Base extends TestCase
     protected function getPersistenceMock()
     {
         if (!isset($this->persistenceMock)) {
-            $this->persistenceMock = $this->getMock(
-                'eZ\\Publish\\SPI\\Persistence\\Handler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->persistenceMock = $this->createMock('eZ\\Publish\\SPI\\Persistence\\Handler');
 
             $this->persistenceMock->expects($this->any())
                 ->method('contentHandler')
                 ->will($this->returnValue($this->getPersistenceMockHandler('Content\\Handler')));
 
-            $this->persistenceMock->expects($this->any())
-                ->method('searchHandler')
-                ->will($this->returnValue($this->getSPIMockHandler('Search\\Handler')));
+//            $this->persistenceMock->expects($this->any())
+//                ->method('searchHandler')
+//                ->will($this->returnValue($this->getSPIMockHandler('Search\\Handler')));
 
             $this->persistenceMock->expects($this->any())
                 ->method('contentTypeHandler')
@@ -208,13 +202,11 @@ abstract class Base extends TestCase
     protected function getSPIMockHandler($handler)
     {
         if (!isset($this->spiMockHandlers[$handler])) {
-            $this->spiMockHandlers[$handler] = $this->getMock(
-                "eZ\\Publish\\SPI\\{$handler}",
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->spiMockHandlers[$handler] = $this->getMockBuilder("eZ\\Publish\\SPI\\{$handler}")
+                ->setMethods(array())
+                ->disableOriginalConstructor()
+                ->setConstructorArgs(array())
+                ->getMock();
         }
 
         return $this->spiMockHandlers[$handler];

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\API\Repository\Values\Content\Section;
 
 class SectionTest extends BaseTest
 {
@@ -44,10 +45,7 @@ class SectionTest extends BaseTest
      */
     public function testResultIsSection($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section',
-            $result
-        );
+        $this->assertInstanceOf(Section::class, $result);
     }
 
     /**

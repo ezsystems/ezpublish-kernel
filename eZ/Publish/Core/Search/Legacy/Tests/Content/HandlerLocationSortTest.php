@@ -25,6 +25,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandle
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Search\Legacy\Content\Gateway as ContentGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as ContentTypeUpdateHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 
 /**
  * Location Search test case for ContentSearchHandler.
@@ -82,7 +86,7 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
     protected function getContentSearchHandler()
     {
         return new Content\Handler(
-            $this->getMock('eZ\\Publish\\Core\\Search\\Legacy\\Content\\Gateway'),
+            $this->createMock(ContentGateway::class),
             new Content\Location\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 new CriteriaConverter(
@@ -128,7 +132,7 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
                 new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
                 $this->getFullTextSearchConfiguration()
             ),
-            $this->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper')->disableOriginalConstructor()->getMock(),
+            $this->createMock(ContentMapper::class),
             $this->getLocationMapperMock(),
             $this->getLanguageHandler(),
             $this->getFullTextMapper($this->getContentTypeHandler())
@@ -146,7 +150,7 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
                     $this->getLanguageMaskGenerator()
                 ),
                 new ContentTypeMapper($this->getConverterRegistry()),
-                $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler')
+                $this->createMock(ContentTypeUpdateHandler::class)
             );
         }
 
@@ -186,10 +190,9 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
      */
     protected function getLocationMapperMock()
     {
-        $mapperMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
-            array('createLocationsFromRows')
-        );
+        $mapperMock = $this->getMockBuilder(LocationMapper::class)
+            ->setMethods(array('createLocationsFromRows'))
+            ->getMock();
         $mapperMock
             ->expects($this->any())
             ->method('createLocationsFromRows')

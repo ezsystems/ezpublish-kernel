@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnassignUserFromUserGroupSlot;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal;
 
 class UnassignUserFromUserGroupSlotTest extends AbstractPurgeAllSlotTest implements SlotTest
@@ -19,11 +20,11 @@ class UnassignUserFromUserGroupSlotTest extends AbstractPurgeAllSlotTest impleme
 
     public function getSlotClass()
     {
-        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnassignUserFromUserGroupSlot';
+        return UnassignUserFromUserGroupSlot::class;
     }
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal'];
+        return [UnAssignUserFromUserGroupSignal::class];
     }
 }

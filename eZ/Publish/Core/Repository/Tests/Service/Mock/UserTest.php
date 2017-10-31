@@ -24,13 +24,13 @@ class UserTest extends BaseServiceMockTest
     {
         $repository = $this->getRepositoryMock();
         $userService = $this->getPartlyMockedUserService(array('loadUser'));
-        $contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $contentService = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
         $userHandler = $this->getPersistenceMock()->userHandler();
 
-        $user = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $loadedUser = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
-        $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $user = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
+        $loadedUser = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
+        $versionInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
+        $contentInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
 
         $user->expects($this->once())
             ->method('__get')
@@ -86,12 +86,12 @@ class UserTest extends BaseServiceMockTest
     {
         $repository = $this->getRepositoryMock();
         $userService = $this->getPartlyMockedUserService(array('loadUser'));
-        $contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $contentService = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
 
-        $user = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $loadedUser = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
-        $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $user = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
+        $loadedUser = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
+        $versionInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
+        $contentInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
 
         $user->expects($this->once())
             ->method('__get')
@@ -139,13 +139,14 @@ class UserTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedUserService(array $methods = null)
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
-            $methods,
-            array(
-                $this->getRepositoryMock(),
-                $this->getPersistenceMock()->userHandler(),
+        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\UserService')
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->getRepositoryMock(),
+                    $this->getPersistenceMock()->userHandler(),
+                )
             )
-        );
+            ->getMock();
     }
 }

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\Core\Persistence\Legacy\Content as CoreContent;
 
 /**
  * Test case for TrashHandlerTest.
@@ -50,14 +51,10 @@ class TrashHandlerTest extends TestCase
         $dbHandler = $this->getDatabaseHandler();
 
         return new Handler(
-            $this->locationHandler = $this->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler')
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this->locationGateway = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway'),
-            $this->locationMapper = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper'),
-            $this->contentHandler = $this->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler')
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->locationHandler = $this->createMock(CoreContent\Location\Handler::class),
+            $this->locationGateway = $this->createMock(CoreContent\Location\Gateway::class),
+            $this->locationMapper = $this->createMock(CoreContent\Location\Mapper::class),
+            $this->contentHandler = $this->createMock(CoreContent\Handler::class)
         );
     }
 
@@ -131,7 +128,7 @@ class TrashHandlerTest extends TestCase
             ->will($this->returnValue(new Trashed(array('id' => 20))));
 
         $trashedObject = $handler->trashSubtree(20);
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedObject);
+        self::assertInstanceOf(Trashed::class, $trashedObject);
         self::assertSame(20, $trashedObject->id);
     }
 
@@ -285,7 +282,7 @@ class TrashHandlerTest extends TestCase
             ->will($this->returnValue(new Trashed(array('id' => 20))));
 
         $trashedObject = $handler->trashSubtree(20);
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedObject);
+        self::assertInstanceOf(Trashed::class, $trashedObject);
         self::assertSame(20, $trashedObject->id);
     }
 

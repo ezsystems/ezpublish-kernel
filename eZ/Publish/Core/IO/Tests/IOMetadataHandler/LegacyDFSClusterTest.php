@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\IO\Tests\IOMetadataHandler;
 use eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
+use eZ\Publish\Core\IO\UrlDecorator;
 use PHPUnit\Framework\TestCase;
 use DateTime;
 
@@ -27,8 +30,8 @@ class LegacyDFSClusterTest extends TestCase
 
     public function setUp()
     {
-        $this->dbalMock = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
-        $this->urlDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator');
+        $this->dbalMock = $this->createMock(Connection::class);
+        $this->urlDecoratorMock = $this->createMock(UrlDecorator::class);
 
         $this->handler = new LegacyDFSCluster(
             $this->dbalMock,
@@ -65,7 +68,7 @@ class LegacyDFSClusterTest extends TestCase
 
         $spiBinary = $this->handler->create($spiCreateStruct);
 
-        $this->assertInstanceOf('eZ\Publish\SPI\IO\BinaryFile', $spiBinary);
+        $this->assertInstanceOf(SPIBinaryFile::class, $spiBinary);
 
         $this->assertEquals($mtimeExpected, $spiBinary->mtime);
     }
@@ -232,6 +235,6 @@ class LegacyDFSClusterTest extends TestCase
      */
     protected function createDbalStatementMock()
     {
-        return $this->getMock('Doctrine\DBAL\Driver\Statement');
+        return $this->createMock(Statement::class);
     }
 }

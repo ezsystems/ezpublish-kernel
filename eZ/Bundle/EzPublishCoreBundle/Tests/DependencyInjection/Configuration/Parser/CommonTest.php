@@ -23,7 +23,7 @@ class CommonTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        $this->suggestionCollector = $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion\SuggestionCollectorInterface');
+        $this->suggestionCollector = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface');
 
         return array(new EzPublishCoreExtension(array(new Common())));
     }

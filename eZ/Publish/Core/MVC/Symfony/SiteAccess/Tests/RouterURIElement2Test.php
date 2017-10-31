@@ -9,11 +9,13 @@
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Psr\Log\LoggerInterface;
 
 class RouterURIElement2Test extends TestCase
 {
@@ -32,7 +34,7 @@ class RouterURIElement2Test extends TestCase
     {
         return new Router(
             $this->matcherBuilder,
-            $this->getMock('Psr\\Log\\LoggerInterface'),
+            $this->createMock(LoggerInterface::class),
             'default_sa',
             array(
                 'URIElement' => array(
@@ -58,7 +60,7 @@ class RouterURIElement2Test extends TestCase
     public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
     {
         $sa = $router->match($request);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa);
+        $this->assertInstanceOf(SiteAccess::class, $sa);
         $this->assertSame($siteAccess, $sa->name);
         $router->setSiteAccess();
     }
@@ -190,7 +192,7 @@ class RouterURIElement2Test extends TestCase
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => $originalPathinfo)));
 
         $result = $matcher->reverseMatch($siteAccessName);
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement', $result);
+        $this->assertInstanceOf(URIElement::class, $result);
         $this->assertSame("/{$expectedSiteAccessPath}{$originalPathinfo}", $result->getRequest()->pathinfo);
         $this->assertSame("/$expectedSiteAccessPath/some/linked/uri", $result->analyseLink('/some/linked/uri'));
         $this->assertSame('/foo/bar/baz', $result->analyseURI("/$expectedSiteAccessPath/foo/bar/baz"));

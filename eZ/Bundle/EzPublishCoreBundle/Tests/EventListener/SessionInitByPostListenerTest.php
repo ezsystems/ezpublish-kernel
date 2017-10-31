@@ -31,7 +31,7 @@ class SessionInitByPostListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $this->listener = new SessionInitByPostListener($this->session);
     }
 

@@ -8,12 +8,18 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\RichText;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Templating\EngineInterface;
 
 class RendererTest extends TestCase
 {
@@ -769,7 +775,7 @@ class RendererTest extends TestCase
         $isInline = true;
         $isDenied = false;
         $result = 'result';
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -820,7 +826,7 @@ class RendererTest extends TestCase
         $parameters = array('parameters');
         $isInline = true;
         $isDenied = false;
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -868,7 +874,7 @@ class RendererTest extends TestCase
         $parameters = array('parameters');
         $isInline = true;
         $isDenied = false;
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -962,7 +968,7 @@ class RendererTest extends TestCase
         $viewType = 'embedTest';
         $parameters = array('parameters');
         $isInline = true;
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -1202,7 +1208,7 @@ class RendererTest extends TestCase
         $locationId = 42;
         $viewType = 'embedTest';
         $parameters = array('parameters');
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         if (isset($deniedException)) {
             $renderer
@@ -1297,19 +1303,20 @@ class RendererTest extends TestCase
      */
     protected function getMockedRenderer(array $methods = array())
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\RichText\\Renderer',
-            $methods,
-            array(
-                $this->repositoryMock,
-                $this->authorizationCheckerMock,
-                $this->configResolverMock,
-                $this->templateEngineMock,
-                'test.name.space.tag',
-                'test.name.space.embed',
-                $this->loggerMock,
+        return $this->getMockBuilder(Renderer::class)
+            ->setConstructorArgs(
+                array(
+                    $this->repositoryMock,
+                    $this->authorizationCheckerMock,
+                    $this->configResolverMock,
+                    $this->templateEngineMock,
+                    'test.name.space.tag',
+                    'test.name.space.embed',
+                    $this->loggerMock,
+                )
             )
-        );
+            ->setMethods($methods)
+            ->getMock();
     }
 
     /**
@@ -1322,9 +1329,7 @@ class RendererTest extends TestCase
      */
     protected function getRepositoryMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Repository'
-        );
+        return $this->createMock(Repository::class);
     }
 
     /**
@@ -1337,9 +1342,7 @@ class RendererTest extends TestCase
      */
     protected function getAuthorizationCheckerMock()
     {
-        return $this->getMock(
-            'Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface'
-        );
+        return $this->createMock(AuthorizationCheckerInterface::class);
     }
 
     /**
@@ -1352,9 +1355,7 @@ class RendererTest extends TestCase
      */
     protected function getConfigResolverMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'
-        );
+        return $this->createMock(ConfigResolverInterface::class);
     }
 
     /**
@@ -1367,9 +1368,7 @@ class RendererTest extends TestCase
      */
     protected function getTemplateEngineMock()
     {
-        return $this->getMock(
-            'Symfony\\Component\\Templating\\EngineInterface'
-        );
+        return $this->createMock(EngineInterface::class);
     }
 
     /**
@@ -1382,8 +1381,6 @@ class RendererTest extends TestCase
      */
     protected function getLoggerMock()
     {
-        return $this->getMock(
-            'Psr\\Log\\LoggerInterface'
-        );
+        return $this->createMock(LoggerInterface::class);
     }
 }

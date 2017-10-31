@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteContentSlot;
 
 class DeleteContentSlotTest extends AbstractPurgeAllSlotTest implements SlotTest, PurgeAllExpectation
 {
@@ -19,11 +20,11 @@ class DeleteContentSlotTest extends AbstractPurgeAllSlotTest implements SlotTest
 
     public function getSlotClass()
     {
-        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteContentSlot';
+        return DeleteContentSlot::class;
     }
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal'];
+        return [DeleteContentSignal::class];
     }
 }

@@ -21,7 +21,7 @@ class HttpUtilsTest extends TestCase
      */
     public function testGenerateUriStandard($uri, $isUriRouteName, $expected)
     {
-        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $httpUtils = new HttpUtils($urlGenerator);
         $httpUtils->setSiteAccess(new SiteAccess());
         $request = Request::create('http://ezpublish.dev/');
@@ -58,7 +58,7 @@ class HttpUtilsTest extends TestCase
     {
         $siteAccess = new SiteAccess('test', 'test');
         if ($uri[0] === '/') {
-            $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+            $matcher = $this->createMock(SiteAccess\URILexer::class);
             $matcher
                 ->expects($this->once())
                 ->method('analyseLink')
@@ -67,7 +67,7 @@ class HttpUtilsTest extends TestCase
             $siteAccess->matcher = $matcher;
         }
 
-        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $httpUtils = new HttpUtils($urlGenerator);
         $httpUtils->setSiteAccess($siteAccess);
         $request = Request::create('http://ezpublish.dev/');
@@ -113,7 +113,7 @@ class HttpUtilsTest extends TestCase
     {
         $siteAccess = new SiteAccess('test', 'test');
         if ($siteAccessUri !== null) {
-            $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+            $matcher = $this->createMock(SiteAccess\URILexer::class);
             $matcher
                 ->expects($this->once())
                 ->method('analyseLink')

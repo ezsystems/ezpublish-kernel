@@ -11,6 +11,10 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;
 use eZ\Publish\Core\REST\Server\Tests;
 use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 
 abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
@@ -59,13 +63,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected function getVisitorMock()
     {
         if (!isset($this->visitorMock)) {
-            $this->visitorMock = $this->getMock(
-                '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->visitorMock = $this->createMock(Visitor::class);
 
             $this->visitorMock
                 ->expects($this->any())
@@ -82,7 +80,8 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected function getResponseMock()
     {
         if (!isset($this->responseMock)) {
-            $this->responseMock = $this->getMock('Symfony\Component\HttpFoundation\Response');
+            $this->responseMock = $this->getMockBuilder(Response::class)
+                ->getMock();
         }
 
         return $this->responseMock;
@@ -145,7 +144,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected function getRequestParser()
     {
         if (!isset($this->requestParser)) {
-            $this->requestParser = $this->getMock('eZ\\Publish\\Core\\REST\\Common\\RequestParser');
+            $this->requestParser = $this->createMock(RequestParser::class);
         }
 
         return $this->requestParser;
@@ -157,7 +156,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected function getRouterMock()
     {
         if (!isset($this->routerMock)) {
-            $this->routerMock = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
+            $this->routerMock = $this->createMock(RouterInterface::class);
         }
 
         return $this->routerMock;
@@ -197,7 +196,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected function getTemplatedRouterMock()
     {
         if (!isset($this->templatedRouterMock)) {
-            $this->templatedRouterMock = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
+            $this->templatedRouterMock = $this->createMock(RouterInterface::class);
         }
 
         return $this->templatedRouterMock;

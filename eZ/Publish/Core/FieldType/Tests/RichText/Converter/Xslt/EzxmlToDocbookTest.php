@@ -23,7 +23,7 @@ class EzxmlToDocbookTest extends BaseTest
     {
         parent::setUp();
 
-        if (!class_exists('eZ\Publish\Core\FieldType\XmlText\Converter\Expanding')) {
+        if (!class_exists(Expanding::class)) {
             $this->markTestSkipped('This tests requires XmlText field type');
         }
     }

@@ -138,7 +138,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'));
+            ->with($this->isInstanceOf(\eZ\Publish\API\Repository\Values\Content\VersionInfo::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

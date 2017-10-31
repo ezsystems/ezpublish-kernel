@@ -57,10 +57,10 @@ class ViewControllerListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->controllerResolver = $this->getMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
-        $this->viewBuilderRegistry = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry');
-        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->controllerResolver = $this->createMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
+        $this->viewBuilderRegistry = $this->createMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry');
+        $this->eventDispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->logger = $this->createMock('Psr\\Log\\LoggerInterface');
         $this->controllerListener = new ViewControllerListener(
             $this->controllerResolver,
             $this->viewBuilderRegistry,
@@ -78,7 +78,7 @@ class ViewControllerListenerTest extends TestCase
             ->method('getRequest')
             ->will($this->returnValue($this->request));
 
-        $this->viewBuilderMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder');
+        $this->viewBuilderMock = $this->createMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder');
     }
 
     public function testGetSubscribedEvents()

@@ -10,10 +10,12 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Psr\Log\LoggerInterface;
 
 class RouterHostPortURITest extends TestCase
 {
@@ -32,7 +34,7 @@ class RouterHostPortURITest extends TestCase
     {
         return new Router(
             $this->matcherBuilder,
-            $this->getMock('Psr\\Log\\LoggerInterface'),
+            $this->createMock(LoggerInterface::class),
             'default_sa',
             array(
                 'Map\\Host' => array(
@@ -64,7 +66,7 @@ class RouterHostPortURITest extends TestCase
     public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
     {
         $sa = $router->match($request);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa);
+        $this->assertInstanceOf(SiteAccess::class, $sa);
         $this->assertSame($siteAccess, $sa->name);
         $router->setSiteAccess();
     }
@@ -167,7 +169,7 @@ class RouterHostPortURITest extends TestCase
         $this->assertSame('ez.no', $matcher->getMapKey());
 
         $result = $matcher->reverseMatch('ezdemo_site');
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host', $result);
+        $this->assertInstanceOf(Host::class, $result);
         $this->assertSame($request, $matcher->getRequest());
         $this->assertSame('phoenix-rises.fm', $result->getMapKey());
         $this->assertSame('phoenix-rises.fm', $result->getRequest()->host);
@@ -203,7 +205,7 @@ class RouterHostPortURITest extends TestCase
         $this->assertSame(80, $matcher->getMapKey());
 
         $result = $matcher->reverseMatch('ezdemo_site');
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port', $result);
+        $this->assertInstanceOf(Port::class, $result);
         $this->assertSame($request, $matcher->getRequest());
         $this->assertSame(8000, $result->getMapKey());
         $this->assertSame(8000, $result->getRequest()->port);

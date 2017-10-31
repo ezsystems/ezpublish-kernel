@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\RestUserRoleAssignment;
 use eZ\Publish\Core\REST\Server\Values\RoleAssignmentList;
 use eZ\Publish\Core\Repository\Values\User;
 
@@ -110,7 +111,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
              ->method('visitValueObject')
-             ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment'));
+             ->with($this->isInstanceOf(RestUserRoleAssignment::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

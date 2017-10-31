@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Image\Type as ImageType;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -29,13 +31,7 @@ class ImageTest extends FieldTypeTest
     protected function getMimeTypeDetectorMock()
     {
         if (!isset($this->mimeTypeDetectorMock)) {
-            $this->mimeTypeDetectorMock = $this->getMock(
-                'eZ\\Publish\\SPI\\FieldType\\BinaryBase\\MimeTypeDetector',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->mimeTypeDetectorMock = $this->createMock(MimeTypeDetector::class);
         }
 
         return $this->mimeTypeDetectorMock;
@@ -125,7 +121,7 @@ class ImageTest extends FieldTypeTest
         return array(
             array(
                 'foo',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -133,7 +129,7 @@ class ImageTest extends FieldTypeTest
                         'id' => 'non/existent/path',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -142,7 +138,7 @@ class ImageTest extends FieldTypeTest
                         'fileName' => array(),
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -152,7 +148,7 @@ class ImageTest extends FieldTypeTest
                         'fileSize' => 'truebar',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -163,7 +159,7 @@ class ImageTest extends FieldTypeTest
                         'alternativeText' => array(),
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

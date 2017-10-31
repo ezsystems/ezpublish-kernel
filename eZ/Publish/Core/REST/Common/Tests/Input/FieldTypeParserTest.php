@@ -10,7 +10,14 @@ namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\ContentService;
+use eZ\Publish\Core\Repository\ContentTypeService;
+use eZ\Publish\Core\Repository\FieldTypeService;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
+use eZ\Publish\SPI\FieldType\FieldType;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,55 +41,13 @@ class FieldTypeParserTest extends TestCase
 
     public function setUp()
     {
-        $this->contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->fieldTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\FieldTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->contentTypeMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\Values\\ContentType\\ContentType',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->fieldTypeMock = $this->getMock(
-            'eZ\\Publish\\SPI\\FieldType\\FieldType',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->fieldTypeProcessorRegistryMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessorRegistry',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->fieldTypeProcessorMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessor',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->contentServiceMock = $this->createMock(ContentService::class);
+        $this->contentTypeServiceMock = $this->createMock(ContentTypeService::class);
+        $this->fieldTypeServiceMock = $this->createMock(FieldTypeService::class);
+        $this->contentTypeMock = $this->createMock(ContentType::class);
+        $this->fieldTypeMock = $this->createMock(FieldType::class);
+        $this->fieldTypeProcessorRegistryMock = $this->createMock(FieldTypeProcessorRegistry::class);
+        $this->fieldTypeProcessorMock = $this->createMock(FieldTypeProcessor::class);
     }
 
     public function testParseFieldValue()

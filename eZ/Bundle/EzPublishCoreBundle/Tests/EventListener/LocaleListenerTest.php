@@ -37,21 +37,21 @@ class LocaleListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->localeConverter = $this->getMock('eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->localeConverter = $this->createMock('eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface');
+        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
 
         $this->requestStack = new RequestStack();
-        $parameterBagMock = $this->getMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
+        $parameterBagMock = $this->createMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
         $parameterBagMock->expects($this->never())->method($this->anything());
 
-        $requestMock = $this->getMock('Symfony\\Component\\HttpFoundation\\Request');
+        $requestMock = $this->createMock('Symfony\\Component\\HttpFoundation\\Request');
         $requestMock->attributes = $parameterBagMock;
 
-        $requestMock->expects($this->any())
-            ->method('__get')
-            ->with($this->equalTo('attributes'))
-            ->will($this->returnValue($parameterBagMock));
+//        $requestMock->expects($this->any())
+//            ->method('__get')
+//            ->with($this->equalTo('attributes'))
+//            ->will($this->returnValue($parameterBagMock));
 
         $this->requestStack->push($requestMock);
     }
@@ -82,7 +82,7 @@ class LocaleListenerTest extends TestCase
         $request = new Request();
         $localeListener->onKernelRequest(
             new GetResponseEvent(
-                $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+                $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
                 $request,
                 HttpKernelInterface::MASTER_REQUEST
             )

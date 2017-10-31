@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -17,8 +18,12 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as ObjectStateGroup;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
 
 /**
  * Test case for LocationHandlerTest.
@@ -64,10 +69,10 @@ class LocationHandlerTest extends TestCase
     {
         parent::setUp();
 
-        $this->locationGateway = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway');
-        $this->locationMapper = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper');
-        $this->treeHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\TreeHandler', array(), array(), '', false);
-        $this->contentHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false);
+        $this->locationGateway = $this->createMock(Gateway::class);
+        $this->locationMapper = $this->createMock(Mapper::class);
+        $this->treeHandler = $this->createMock(TreeHandler::class);
+        $this->contentHandler = $this->createMock(ContentHandler::class);
     }
 
     protected function getLocationHandler()
@@ -78,7 +83,7 @@ class LocationHandlerTest extends TestCase
             $this->locationGateway,
             $this->locationMapper,
             $this->contentHandler,
-            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false),
+            $this->createMock(ObjectStateHandler::class),
             $this->treeHandler
         );
     }
@@ -583,7 +588,7 @@ class LocationHandlerTest extends TestCase
                 ->with(
                     $contentId + $offset,
                     1,
-                    $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct')
+                    $this->isInstanceOf(Content\MetadataUpdateStruct::class)
                 )
                 ->will(
                     $this->returnValue(
@@ -686,16 +691,17 @@ class LocationHandlerTest extends TestCase
      */
     protected function getPartlyMockedHandler(array $methods)
     {
-        return $this->getMock(
-            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler',
-            $methods,
-            array(
-                $this->locationGateway = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway', array(), array(), '', false),
-                $this->locationMapper = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper', array(), array(), '', false),
-                $this->contentHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false),
-                $this->objectStateHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false),
-                $this->treeHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\TreeHandler', array(), array(), '', false),
+        return $this->getMockBuilder(LocationHandler::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->locationGateway = $this->createMock(Gateway::class),
+                    $this->locationMapper = $this->createMock(Mapper::class),
+                    $this->contentHandler = $this->createMock(ContentHandler::class),
+                    $this->objectStateHandler = $this->createMock(ObjectStateHandler::class),
+                    $this->treeHandler = $this->createMock(TreeHandler::class),
+                )
             )
-        );
+            ->getMock();
     }
 }

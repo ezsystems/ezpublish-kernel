@@ -8,11 +8,13 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\RestContent;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\REST\Server\Values\Version;
 
 class RestContentTest extends ValueObjectVisitorBaseTest
 {
@@ -371,12 +373,12 @@ class RestContentTest extends ValueObjectVisitorBaseTest
         );
         $restContent->relations = array();
         $restContent->contentType = $this->getMockForAbstractClass(
-            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'
+            ContentType::class
         );
 
         $this->getVisitorMock()->expects($this->once())
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\Version'));
+            ->with($this->isInstanceOf(Version::class));
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',

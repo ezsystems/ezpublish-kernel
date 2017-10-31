@@ -9,8 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Translation;
 
 use eZ\Bundle\EzPublishCoreBundle\Translation\GlobCollector;
+use PHPUnit\Framework\TestCase;
 
-class GlobCollectorTest extends \PHPUnit_Framework_TestCase
+class GlobCollectorTest extends TestCase
 {
     public function testCollect()
     {

@@ -55,13 +55,13 @@ class IORepositoryResolverTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->ioService = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->ioService = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
         $this->requestContext = new RequestContext();
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver($this->configResolver);
-        $this->variationPurger = $this->getMock('eZ\Publish\SPI\Variation\VariationPurger');
-        $this->variationPathGenerator = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
+        $this->variationPurger = $this->createMock('eZ\Publish\SPI\Variation\VariationPurger');
+        $this->variationPathGenerator = $this->createMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
         $this->imageResolver = new IORepositoryResolver(
             $this->ioService,
             $this->requestContext,

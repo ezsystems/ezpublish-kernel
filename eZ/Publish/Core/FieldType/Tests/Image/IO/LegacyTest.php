@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\FieldType\Tests\Image\IO;
 
 use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyIOService;
 use eZ\Publish\Core\FieldType\Image\IO\OptionsProvider;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -38,8 +39,8 @@ class LegacyTest extends TestCase
 
     public function setUp()
     {
-        $this->publishedIoServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
-        $this->draftIoServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->publishedIoServiceMock = $this->createMock(IOServiceInterface::class);
+        $this->draftIoServiceMock = $this->createMock(IOServiceInterface::class);
         $optionsProvider = new OptionsProvider(
             array(
                 'var_dir' => 'var/test',

@@ -87,7 +87,7 @@ class SessionSetDynamicNameListenerTest extends TestCase
         $listener = new SessionSetDynamicNameListener(
             $this->configResolver,
             $this->session,
-            $this->getMock('Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface')
+            $this->createMock('Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface')
         );
         $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST));
     }

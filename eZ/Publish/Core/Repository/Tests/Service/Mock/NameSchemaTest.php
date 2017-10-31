@@ -381,16 +381,17 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedNameSchemaService(array $methods = null, array $settings = [])
     {
-        return $this->getMock(
-            NameSchemaService::class,
-            $methods,
-            [
-                $this->getPersistenceMock()->contentTypeHandler(),
-                $this->getContentTypeDomainMapperMock(),
-                $this->getNameableFieldTypeRegistryMock(),
-                $settings,
-            ]
-        );
+        return $this->getMockBuilder(NameSchemaService::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                [
+                    $this->getPersistenceMock()->contentTypeHandler(),
+                    $this->getContentTypeDomainMapperMock(),
+                    $this->getNameableFieldTypeRegistryMock(),
+                    $settings,
+                ]
+            )
+            ->getMock();
     }
 
     protected $contentTypeDomainMapperMock;

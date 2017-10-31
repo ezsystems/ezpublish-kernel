@@ -26,7 +26,7 @@ class CropFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->getMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
         $this->loader = new CropFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -37,7 +37,7 @@ class CropFilterLoaderTest extends TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface'), $options);
     }
 
     public function loadInvalidProvider()
@@ -58,7 +58,7 @@ class CropFilterLoaderTest extends TestCase
         $offsetX = 100;
         $offsetY = 200;
 
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $this->innerLoader
             ->expects($this->once())
             ->method('load')

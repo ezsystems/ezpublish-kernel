@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\SPI\Persistence as SPIPersistence;
+use eZ\Publish\Core\Persistence\Cache;
+
 /**
  * Test case for Persistence\Cache\Handler.
  */
@@ -20,8 +23,8 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testHandler()
     {
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Handler', $this->persistenceCacheHandler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\Handler', $this->persistenceCacheHandler);
+        $this->assertInstanceOf(SPIPersistence\Handler::class, $this->persistenceCacheHandler);
+        $this->assertInstanceOf(Cache\Handler::class, $this->persistenceCacheHandler);
     }
 
     /**
@@ -33,8 +36,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->contentHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\ContentHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\ContentHandler::class, $handler);
     }
 
     /**
@@ -46,8 +49,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->contentLanguageHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\ContentLanguageHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\Language\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\ContentLanguageHandler::class, $handler);
     }
 
     /**
@@ -59,8 +62,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->contentTypeHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\ContentTypeHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\Type\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\ContentTypeHandler::class, $handler);
     }
 
     /**
@@ -72,8 +75,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->locationHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\LocationHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\Location\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\LocationHandler::class, $handler);
     }
 
     /**
@@ -85,8 +88,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\TrashHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\Location\Trash\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\TrashHandler::class, $handler);
     }
 
     /**
@@ -98,8 +101,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->objectStateHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\ObjectStateHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\ObjectState\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\ObjectStateHandler::class, $handler);
     }
 
     /**
@@ -111,8 +114,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->sectionHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\SectionHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\Section\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\SectionHandler::class, $handler);
     }
 
     /**
@@ -124,8 +127,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->userHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\UserHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\User\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\UserHandler::class, $handler);
     }
 
     /**
@@ -137,8 +140,8 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\UrlAliasHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\Content\UrlAlias\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\UrlAliasHandler::class, $handler);
     }
 
     /**
@@ -162,7 +165,7 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
         $handler = $this->persistenceCacheHandler->transactionHandler();
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\TransactionHandler', $handler);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Persistence\\Cache\\TransactionHandler', $handler);
+        $this->assertInstanceOf(SPIPersistence\TransactionHandler::class, $handler);
+        $this->assertInstanceOf(Cache\TransactionHandler::class, $handler);
     }
 }

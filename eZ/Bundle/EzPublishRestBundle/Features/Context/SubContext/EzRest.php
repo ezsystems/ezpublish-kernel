@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Server\Values\SessionInput;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 /**
  * EzRest is the responsible to have all the specific REST actions of eZ Publish.

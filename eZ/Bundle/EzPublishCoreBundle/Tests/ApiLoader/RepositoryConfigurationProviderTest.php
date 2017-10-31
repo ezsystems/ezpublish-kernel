@@ -99,6 +99,6 @@ class RepositoryConfigurationProviderTest extends TestCase
      */
     protected function getConfigResolverMock()
     {
-        return $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        return $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
     }
 }

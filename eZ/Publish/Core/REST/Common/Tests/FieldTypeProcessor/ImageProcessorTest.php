@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor;
 use eZ\Publish\Core\REST\Common\RequestParser;
+use Symfony\Component\Routing\RouterInterface;
 
 class ImageProcessorTest extends BinaryInputProcessorTest
 {
@@ -75,7 +76,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     protected function getRouterMock()
     {
         if (!isset($this->requestParser)) {
-            $this->requestParser = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
+            $this->requestParser = $this->createMock(RouterInterface::class);
         }
 
         return $this->requestParser;

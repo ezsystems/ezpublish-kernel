@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class ContentTest extends TestCase
@@ -48,8 +47,10 @@ class ContentTest extends TestCase
     public function testGetName()
     {
         $name = 'Translated name';
-        $versionInfoMock = Mockery::mock(VersionInfo::class);
-        $versionInfoMock->shouldReceive('getName')->andReturn($name);
+        $versionInfoMock = $this->createMock(VersionInfo::class);
+        $versionInfoMock->expects($this->once())
+            ->method('getName')
+            ->willReturn($name);
 
         $object = new Content(['versionInfo' => $versionInfoMock]);
 

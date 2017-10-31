@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Identifier;
 
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\ContentType as ContentTypeIdentifierMatcher;
 use eZ\Publish\API\Repository\Repository;
@@ -159,15 +161,12 @@ class ContentTypeTest extends BaseTest
     private function generateRepositoryMockForContentTypeIdentifier($contentTypeIdentifier)
     {
         $contentTypeMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType')
+            ->getMockBuilder(ContentType::class)
             ->setConstructorArgs(
                 array(array('identifier' => $contentTypeIdentifier))
             )
             ->getMockForAbstractClass();
-        $contentTypeServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\ContentTypeService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
             ->with(42)

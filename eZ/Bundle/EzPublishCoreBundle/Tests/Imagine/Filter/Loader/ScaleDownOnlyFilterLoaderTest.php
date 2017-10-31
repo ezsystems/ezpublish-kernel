@@ -27,7 +27,7 @@ class ScaleDownOnlyFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->getMock('Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock('Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
         $this->loader = new ScaleDownOnlyFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -38,7 +38,7 @@ class ScaleDownOnlyFilterLoaderTest extends TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface'), $options);
     }
 
     public function loadInvalidProvider()
@@ -53,7 +53,7 @@ class ScaleDownOnlyFilterLoaderTest extends TestCase
     public function testLoad()
     {
         $options = array(123, 456);
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $this->innerLoader
             ->expects($this->once())
             ->method('load')

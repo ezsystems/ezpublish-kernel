@@ -8,6 +8,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Helper;
 
 use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
+use eZ\Publish\SPI\FieldType\FieldType;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,7 @@ class FieldTypeRegistryTest extends TestCase
 
     protected function getFieldTypeMock()
     {
-        return $this->getMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
+        return $this->createMock(FieldType::class);
     }
 
     protected function getClosure($returnValue)
@@ -51,7 +52,7 @@ class FieldTypeRegistryTest extends TestCase
         $fieldType = $registry->getFieldType('one');
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\FieldType',
+            FieldType::class,
             $fieldType
         );
     }
@@ -67,7 +68,7 @@ class FieldTypeRegistryTest extends TestCase
         $fieldType = $registry->getFieldType('one');
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\FieldType',
+            FieldType::class,
             $fieldType
         );
     }
@@ -127,12 +128,12 @@ class FieldTypeRegistryTest extends TestCase
         $this->assertCount(2, $fieldTypes);
         $this->assertArrayHasKey('one', $fieldTypes);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\FieldType',
+            FieldType::class,
             $fieldTypes['one']
         );
         $this->assertArrayHasKey('two', $fieldTypes);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\FieldType',
+            FieldType::class,
             $fieldTypes['two']
         );
     }

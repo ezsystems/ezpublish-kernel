@@ -13,6 +13,7 @@ use eZ\Publish\Core\FieldType\RelationList\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class RelationListTest extends FieldTypeTest
 {
@@ -107,7 +108,7 @@ class RelationListTest extends FieldTypeTest
         return array(
             array(
                 true,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

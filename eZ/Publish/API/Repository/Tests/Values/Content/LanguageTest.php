@@ -10,9 +10,9 @@ namespace eZ\Publish\API\Repository\Tests\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class LanguageTest extends PHPUnit_Framework_TestCase
+class LanguageTest extends TestCase
 {
     use ValueObjectTestTrait;
 

@@ -18,6 +18,9 @@ use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
+use Stash\Interfaces\ItemInterface;
 
 /**
  * Test case for Persistence\Cache\ContentHandler.
@@ -63,7 +66,7 @@ class ContentHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandler = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -93,7 +96,7 @@ class ContentHandlerTest extends HandlerTest
     public function testLoadCacheIsMiss()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -110,7 +113,7 @@ class ContentHandlerTest extends HandlerTest
             ->method('isMiss')
             ->will($this->returnValue(true));
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -139,7 +142,7 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'))
+            ->with($this->isInstanceOf(Content::class))
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -157,7 +160,7 @@ class ContentHandlerTest extends HandlerTest
     public function testLoadHasCache()
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -206,7 +209,7 @@ class ContentHandlerTest extends HandlerTest
     public function testLoadContentInfoCacheIsMiss()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -223,7 +226,7 @@ class ContentHandlerTest extends HandlerTest
             ->method('isMiss')
             ->will($this->returnValue(true));
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -242,7 +245,7 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'))
+            ->with($this->isInstanceOf(ContentInfo::class))
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -260,7 +263,7 @@ class ContentHandlerTest extends HandlerTest
     public function testLoadContentInfoHasCache()
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -300,7 +303,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -329,7 +332,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -364,7 +367,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -373,7 +376,7 @@ class ContentHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('updateMetadata')
-            ->with(2, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct'))
+            ->with(2, $this->isInstanceOf(MetadataUpdateStruct::class))
             ->willReturn(new ContentInfo(array('id' => 2, 'currentVersionNo' => 3, 'remoteId' => 'o34')));
 
         $this->cacheMock
@@ -405,7 +408,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -414,7 +417,7 @@ class ContentHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('updateContent')
-            ->with(2, 1, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct'))
+            ->with(2, 1, $this->isInstanceOf(UpdateStruct::class))
             ->will(
                 $this->returnValue(
                     new Content(
@@ -448,7 +451,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerLocationHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler');
+        $innerLocationHandlerMock = $this->createMock(SPILocationHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->exactly(1))
             ->method('locationHandler')
@@ -460,7 +463,7 @@ class ContentHandlerTest extends HandlerTest
             ->with(2)
             ->willReturn([new Content\Location(array('id' => 58))]);
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->exactly(2))
             ->method('contentHandler')
@@ -531,7 +534,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -578,7 +581,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -587,7 +590,7 @@ class ContentHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('publish')
-            ->with(2, 1, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct'))
+            ->with(2, 1, $this->isInstanceOf(MetadataUpdateStruct::class))
             ->will(
                 $this->returnValue(
                     new Content(
@@ -622,7 +625,7 @@ class ContentHandlerTest extends HandlerTest
             ->with('location', 'subtree')
             ->will($this->returnValue(true));
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->at(3))
             ->method('getItem')
@@ -632,7 +635,7 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'))
+            ->with($this->isInstanceOf(Content::class))
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -644,7 +647,7 @@ class ContentHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method('get');
 
-        $cacheItemMock2 = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock2 = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->at(4))
             ->method('getItem')
@@ -654,7 +657,7 @@ class ContentHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'))
+            ->with($this->isInstanceOf(ContentInfo::class))
             ->will($this->returnValue($cacheItemMock2));
 
         $cacheItemMock2

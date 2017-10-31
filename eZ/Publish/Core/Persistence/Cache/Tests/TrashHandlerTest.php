@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed as SPITrashed;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandler;
 
 /**
  * Test case for Persistence\Cache\SectionHandler.
@@ -26,7 +27,7 @@ class TrashHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandlerMock = $this->createMock(TrashHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('trashHandler')
@@ -57,7 +58,7 @@ class TrashHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandlerMock = $this->createMock(TrashHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('trashHandler')
@@ -104,7 +105,7 @@ class TrashHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandlerMock = $this->createMock(TrashHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('trashHandler')
@@ -147,7 +148,7 @@ class TrashHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandlerMock = $this->createMock(TrashHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('trashHandler')
@@ -178,7 +179,7 @@ class TrashHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandlerMock = $this->createMock(TrashHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('trashHandler')
@@ -204,7 +205,7 @@ class TrashHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandlerMock = $this->createMock(TrashHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('trashHandler')

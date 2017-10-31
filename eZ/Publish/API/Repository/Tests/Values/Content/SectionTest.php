@@ -10,9 +10,9 @@ namespace eZ\Publish\API\Repository\Tests\Values\Content;
 
 use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
 use eZ\Publish\API\Repository\Values\Content\Section;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SectionTest extends PHPUnit_Framework_TestCase
+class SectionTest extends TestCase
 {
     use ValueObjectTestTrait;
 

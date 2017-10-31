@@ -12,6 +12,7 @@ use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
 use eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,7 +26,7 @@ class LanguageSwitchListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->translationHelper = $this->getMockBuilder('eZ\Publish\Core\Helper\TranslationHelper')
+        $this->translationHelper = $this->getMockBuilder(TranslationHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -5,6 +5,7 @@
 namespace eZ\Publish\Core\Helper\Tests\FieldsGroups;
 
 use eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList;
+use Symfony\Component\Translation\TranslatorInterface;
 use PHPUnit\Framework\TestCase;
 
 class ArrayTranslatorFieldsGroupsListTest extends TestCase
@@ -80,7 +81,7 @@ class ArrayTranslatorFieldsGroupsListTest extends TestCase
     private function getTranslatorMock()
     {
         if ($this->translatorMock === null) {
-            $this->translatorMock = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+            $this->translatorMock = $this->createMock(TranslatorInterface::class);
         }
 
         return $this->translatorMock;

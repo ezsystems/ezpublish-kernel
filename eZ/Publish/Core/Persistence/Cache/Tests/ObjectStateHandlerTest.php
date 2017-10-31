@@ -9,14 +9,26 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct as SPIInputStruct;
+use Stash\Interfaces\ItemInterface;
 
 /**
  * Test case for Persistence\Cache\ObjectStateHandler.
  */
 class ObjectStateHandlerTest extends HandlerTest
 {
+    protected function getCacheItemMock()
+    {
+        return $this->createMock(ItemInterface::class);
+    }
+
+    protected function getSPIObjectStateHandler()
+    {
+        return $this->createMock(SPIObjectStateHandler::class);
+    }
+
     /**
      * @covers \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler::createGroup
      */
@@ -34,7 +46,7 @@ class ObjectStateHandlerTest extends HandlerTest
         );
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandler = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -54,7 +66,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->with('objectstategroup', 'all')
             ->will($this->returnValue(null));
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -64,7 +76,7 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group'))
+            ->with($this->isInstanceOf(SPIObjectStateGroup::class))
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -90,7 +102,7 @@ class ObjectStateHandlerTest extends HandlerTest
             )
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -107,7 +119,7 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group'))
+            ->with($this->isInstanceOf(SPIObjectStateGroup::class))
             ->will($this->returnValue($cacheItemMock));
         $cacheItemMock
             ->expects($this->once())
@@ -116,7 +128,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -147,7 +159,7 @@ class ObjectStateHandlerTest extends HandlerTest
             )
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -178,7 +190,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -218,7 +230,7 @@ class ObjectStateHandlerTest extends HandlerTest
     {
         $testGroups = $this->generateObjectGroupsArray();
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('getItem')
@@ -235,7 +247,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -246,6 +258,32 @@ class ObjectStateHandlerTest extends HandlerTest
             ->method('loadAllGroups')
             ->with(0, -1)
             ->will($this->returnValue($testGroups));
+
+//        foreach ($testGroups as $group) {
+//            $this->cacheMock
+//                ->expects($this->at($group->id))
+//                ->method('getItem')
+//                ->with('objectstategroup', $group->id)
+//                ->will(
+//                    $this->returnCallback(
+//                        function ($cachekey, $i) use ($group) {
+//                            $cacheItemMock = $this->getCacheItemMock();
+//                            $cacheItemMock
+//                                ->expects($this->once())
+//                                ->method('set')
+//                                ->with($group)
+//                                ->will($this->returnValue($cacheItemMock));
+//
+//                            $cacheItemMock
+//                                ->expects($this->once())
+//                                ->method('save')
+//                                ->with();
+//
+//                            return $cacheItemMock;
+//                        }
+//                    )
+//                );
+//        }
 
         $cacheItemMock
             ->expects($this->once())
@@ -272,7 +310,7 @@ class ObjectStateHandlerTest extends HandlerTest
     {
         $testGroups = $this->generateObjectGroupsArray($offset, $limit);
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('getItem')
@@ -339,7 +377,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ),
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('getItem')
@@ -356,7 +394,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -413,7 +451,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ),
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('getItem')
@@ -451,7 +489,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -463,7 +501,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->with(1, $inputStruct)
             ->will($this->returnValue($expectedGroup));
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
@@ -481,7 +519,7 @@ class ObjectStateHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -492,7 +530,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->method('deleteGroup')
             ->with(1);
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
@@ -529,7 +567,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -541,7 +579,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->with(1, $inputStruct)
             ->will($this->returnValue($expectedState));
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
@@ -566,7 +604,7 @@ class ObjectStateHandlerTest extends HandlerTest
             )
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -583,7 +621,7 @@ class ObjectStateHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState'))
+            ->with($this->isInstanceOf(SPIObjectState::class))
             ->will($this->returnValue($cacheItemMock));
         $cacheItemMock
             ->expects($this->once())
@@ -592,7 +630,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -624,7 +662,7 @@ class ObjectStateHandlerTest extends HandlerTest
             )
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -656,7 +694,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -693,7 +731,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -705,7 +743,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->with($expectedState->id, $inputStruct)
             ->will($this->returnValue($expectedState));
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
@@ -733,7 +771,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -745,7 +783,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->with($expectedState->id, 1)
             ->will($this->returnValue($expectedState));
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
@@ -763,7 +801,7 @@ class ObjectStateHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -774,7 +812,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->method('delete')
             ->with(1);
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
@@ -795,7 +833,7 @@ class ObjectStateHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -806,7 +844,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->method('setContentState')
             ->with(10, 1, 2);
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
@@ -831,7 +869,7 @@ class ObjectStateHandlerTest extends HandlerTest
             )
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('getItem')
@@ -857,7 +895,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')
@@ -888,7 +926,7 @@ class ObjectStateHandlerTest extends HandlerTest
             )
         );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
             ->expects($this->at(0))
             ->method('getItem')
@@ -911,7 +949,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->will(
                 $this->returnCallback(
                     function ($cachekey, $i) use ($expectedState) {
-                        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+                        $cacheItemMock = $this->getCacheItemMock();
                         $cacheItemMock
                             ->expects($this->once())
                             ->method('get')
@@ -936,7 +974,7 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler');
+        $innerHandlerMock = $this->getSPIObjectStateHandler();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('objectStateHandler')

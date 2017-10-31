@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class UrlStorageTest extends TestCase
 {
@@ -195,14 +196,15 @@ class UrlStorageTest extends TestCase
      */
     protected function getPartlyMockedStorage(StorageGateway $gateway)
     {
-        return $this->getMock(
-            UrlStorage::class,
-            null,
-            array(
-                $gateway,
-                $this->getLoggerMock(),
+        return $this->getMockBuilder(UrlStorage::class)
+            ->setMethods(null)
+            ->setConstructorArgs(
+                array(
+                    $gateway,
+                    $this->getLoggerMock(),
+                )
             )
-        );
+            ->getMock();
     }
 
     /**
@@ -225,7 +227,7 @@ class UrlStorageTest extends TestCase
     {
         if (!isset($this->loggerMock)) {
             $this->loggerMock = $this->getMockForAbstractClass(
-                'Psr\\Log\\LoggerInterface'
+                LoggerInterface::class
             );
         }
 
@@ -243,11 +245,7 @@ class UrlStorageTest extends TestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this
-                ->getMockBuilder(UrlStorage\Gateway::class)
-                ->disableOriginalConstructor()
-                ->getMock()
-            ;
+            $this->gatewayMock = $this->createMock(UrlStorage\Gateway::class);
         }
 
         return $this->gatewayMock;

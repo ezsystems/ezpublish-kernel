@@ -8,8 +8,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
@@ -50,7 +52,7 @@ class UrlAliasHandlerTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_location.php');
 
         $urlAlias = $handler->lookup('jedan');
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
     }
 
     /**
@@ -354,7 +356,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup($url);
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -405,7 +407,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup(strtoupper($url));
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -532,7 +534,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup($url);
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -714,7 +716,7 @@ class UrlAliasHandlerTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_location_custom.php');
 
         $urlAlias = $handler->lookup($url);
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -758,7 +760,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup(strtoupper($url));
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -885,7 +887,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup($url);
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -928,7 +930,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup(strtoupper($url));
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -959,12 +961,12 @@ class UrlAliasHandlerTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_location_iri.php');
 
         $urlAlias = $handler->lookup('ŒÄ');
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
     }
 
     protected function assertVirtualUrlAliasValid(UrlAlias $urlAlias, $id)
     {
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals($id, $urlAlias->id);
         self::assertEquals(UrlAlias::VIRTUAL, $urlAlias->type);
         /*self::assertEquals(
@@ -1206,7 +1208,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup($url);
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -1555,7 +1557,7 @@ class UrlAliasHandlerTest extends TestCase
             $this->countRows()
         );
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $publishedLocationUrlAlias);
+        self::assertInstanceOf(UrlAlias::class, $publishedLocationUrlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -1933,7 +1935,7 @@ class UrlAliasHandlerTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias',
+            UrlAlias::class,
             $handlerMock->createCustomUrlAlias(1, 'path')
         );
     }
@@ -1966,7 +1968,7 @@ class UrlAliasHandlerTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias',
+            UrlAlias::class,
             $handlerMock->createGlobalUrlAlias('module/module', 'path')
         );
     }
@@ -2946,7 +2948,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->loadUrlAlias($id);
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -2985,7 +2987,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->loadUrlAlias($id);
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+        self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -5025,37 +5027,18 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function getPartlyMockedHandler(array $methods)
     {
-        $mock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler',
-            $methods,
-            array(
-                self::getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Gateway'),
-                self::getMock(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Mapper',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                self::getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway'),
-                self::getMock(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Handler',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                self::getMock(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\SlugConverter',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
+        return $this->getMockBuilder(Handler::class)
+            ->setConstructorArgs(
+                array(
+                    $this->createMock(Gateway::class),
+                    $this->createMock(Mapper::class),
+                    $this->createMock(LocationGateway::class),
+                    $this->createMock(LanguageHandler::class),
+                    $this->createMock(SlugConverter::class),
+                )
             )
-        );
-
-        return $mock;
+            ->setMethods($methods)
+            ->getMock();
     }
 
     /**

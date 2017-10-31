@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\TrashSlot;
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal;
 
 class TrashSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
@@ -21,11 +22,11 @@ class TrashSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest,
 
     public function getSlotClass()
     {
-        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\TrashSlot';
+        return TrashSlot::class;
     }
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal'];
+        return [TrashSignal::class];
     }
 }

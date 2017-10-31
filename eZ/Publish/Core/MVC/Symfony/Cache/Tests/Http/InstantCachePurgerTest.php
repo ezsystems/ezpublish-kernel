@@ -9,12 +9,15 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class InstantCachePurgerTest extends TestCase
 {
@@ -36,9 +39,9 @@ class InstantCachePurgerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->purgeClient = $this->getMock('\eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface');
-        $this->contentService = $this->getMock('\eZ\Publish\API\Repository\ContentService');
-        $this->eventDispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->purgeClient = $this->createMock(PurgeClientInterface::class);
+        $this->contentService = $this->createMock(ContentService::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
     }
 
     public function testPurge()

@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage;
 
 use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
+use eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -67,9 +68,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     public function testRegisterExternalStorageHandlerWithGateway()
     {
         $handlerDef = new Definition();
-        $handlerDef->setClass(
-            'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
-        );
+        $handlerDef->setClass(GatewayBasedStorageHandler::class);
         $fieldTypeIdentifier = 'field_type_identifier';
         $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
         $storageHandlerServiceId = 'external_storage_handler_id';
@@ -105,9 +104,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     public function testRegisterExternalStorageHandlerWithoutRegisteredGateway()
     {
         $handlerDef = new Definition();
-        $handlerDef->setClass(
-            'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
-        );
+        $handlerDef->setClass(GatewayBasedStorageHandler::class);
         $fieldTypeIdentifier = 'field_type_identifier';
         $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
         $storageHandlerServiceId = 'external_storage_handler_id';
@@ -128,9 +125,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     public function testRegisterExternalStorageHandlerWithGatewayNoAlias()
     {
         $handlerDef = new Definition();
-        $handlerDef->setClass(
-            'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
-        );
+        $handlerDef->setClass(GatewayBasedStorageHandler::class);
         $fieldTypeIdentifier = 'field_type_identifier';
         $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
         $storageHandlerServiceId = 'external_storage_handler_id';
@@ -157,9 +152,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     public function testRegisterExternalStorageHandlerWithGatewayNoIdentifier()
     {
         $handlerDef = new Definition();
-        $handlerDef->setClass(
-            'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
-        );
+        $handlerDef->setClass(GatewayBasedStorageHandler::class);
         $fieldTypeIdentifier = 'field_type_identifier';
         $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
         $storageHandlerServiceId = 'external_storage_handler_id';

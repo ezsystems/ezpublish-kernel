@@ -8,9 +8,13 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AnonymousAuthenticationProviderTest extends TestCase
 {
@@ -27,8 +31,8 @@ class AnonymousAuthenticationProviderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = $this->getMock('eZ\Publish\API\Repository\Repository');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->repository = $this->createMock(Repository::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
     }
 
     public function testAuthenticate()
@@ -50,8 +54,8 @@ class AnonymousAuthenticationProviderTest extends TestCase
         $authProvider->setRepository($this->repository);
         $authProvider->setConfigResolver($this->configResolver);
         $anonymousToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\AnonymousToken')
-            ->setConstructorArgs(array($key, $this->getMock('Symfony\Component\Security\Core\User\UserInterface')))
+            ->getMockBuilder(AnonymousToken::class)
+            ->setConstructorArgs(array($key, $this->createMock(UserInterface::class)))
             ->getMockForAbstractClass();
         $this->assertSame($anonymousToken, $authProvider->authenticate($anonymousToken));
     }

@@ -11,7 +11,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use EzSystems\BehatBundle\Context\Browser\Context as BrowserContext;
 use EzSystems\PlatformBehatBundle\Context\SubContext\DeprecationNoticeSupressor;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 class ContentPreviewContext extends BrowserContext implements Context, SnippetAcceptingContext
 {

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth as DepthMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Repository;
@@ -131,10 +132,7 @@ class DepthTest extends BaseTest
      */
     private function generateRepositoryMockForDepth($depth)
     {
-        $locationServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\LocationService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $locationServiceMock = $this->createMock(LocationService::class);
         $locationServiceMock->expects($this->once())
             ->method('loadLocation')
             ->with(42)

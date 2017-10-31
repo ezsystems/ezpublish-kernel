@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\ContentService as APIContentService;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -19,14 +20,13 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentService;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService as ContentServiceSignals;
 
 class ContentServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\ContentService'
-        );
+        return $this->createMock(APIContentService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -140,7 +140,7 @@ class ContentServiceTest extends ServiceTest
                 array($contentCreateStruct, array($locationCreateStruct)),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal',
+                ContentServiceSignals\CreateContentSignal::class,
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -151,7 +151,7 @@ class ContentServiceTest extends ServiceTest
                 array($contentInfo, $contentMetadataUpdateStruct),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal',
+                ContentServiceSignals\UpdateContentMetadataSignal::class,
                 array('contentId' => $contentId),
             ),
             array(
@@ -159,7 +159,7 @@ class ContentServiceTest extends ServiceTest
                 array($contentInfo),
                 $contentInfo,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal',
+                ContentServiceSignals\DeleteContentSignal::class,
                 array('contentId' => $contentId),
             ),
             array(
@@ -167,7 +167,7 @@ class ContentServiceTest extends ServiceTest
                 array($contentInfo, $versionInfo, $user),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal',
+                ContentServiceSignals\CreateContentDraftSignal::class,
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -185,7 +185,7 @@ class ContentServiceTest extends ServiceTest
                 array($translationInfo, $translationValues, $user),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\TranslateVersionSignal',
+                ContentServiceSignals\TranslateVersionSignal::class,
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -197,7 +197,7 @@ class ContentServiceTest extends ServiceTest
                 array($versionInfo, $contentUpdateStruct),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentSignal',
+                ContentServiceSignals\UpdateContentSignal::class,
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -208,7 +208,7 @@ class ContentServiceTest extends ServiceTest
                 array($versionInfo),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal',
+                ContentServiceSignals\PublishVersionSignal::class,
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -219,7 +219,7 @@ class ContentServiceTest extends ServiceTest
                 array($versionInfo),
                 $versionInfo,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal',
+                ContentServiceSignals\DeleteVersionSignal::class,
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -236,7 +236,7 @@ class ContentServiceTest extends ServiceTest
                 array($contentInfo, $copyLocationCreateStruct, $versionInfo),
                 $copiedContent,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal',
+                ContentServiceSignals\CopyContentSignal::class,
                 array(
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
@@ -262,7 +262,7 @@ class ContentServiceTest extends ServiceTest
                 array($versionInfo, $relationDestContentInfo),
                 $newRelation,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\AddRelationSignal',
+                ContentServiceSignals\AddRelationSignal::class,
                 array(
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
@@ -274,7 +274,7 @@ class ContentServiceTest extends ServiceTest
                 array($versionInfo, $relationDestContentInfo),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteRelationSignal',
+                ContentServiceSignals\DeleteRelationSignal::class,
                 array(
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
@@ -286,7 +286,7 @@ class ContentServiceTest extends ServiceTest
                 array($translationInfo),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\AddTranslationInfoSignal',
+                ContentServiceSignals\AddTranslationInfoSignal::class,
                 array(),
             ),
             array(

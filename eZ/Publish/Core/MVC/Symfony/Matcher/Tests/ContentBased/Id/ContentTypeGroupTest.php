@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Id;
 
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup as ContentTypeGroupIdMatcher;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
@@ -156,11 +159,8 @@ class ContentTypeGroupTest extends BaseTest
      */
     private function generateRepositoryMockForContentTypeGroupId($contentTypeGroupId)
     {
-        $contentTypeServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\ContentTypeService')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contentTypeMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
+        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
             ->with(42)
@@ -172,9 +172,9 @@ class ContentTypeGroupTest extends BaseTest
                     array(
                         // First a group that will never match, then the right group.
                         // This ensures to test even if the content type belongs to several groups at once.
-                        $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'),
+                        $this->getMockForAbstractClass(ContentTypeGroup::class),
                         $this
-                            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup')
+                            ->getMockBuilder(ContentTypeGroup::class)
                             ->setConstructorArgs(array(array('id' => $contentTypeGroupId)))
                             ->getMockForAbstractClass(),
                     )

@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -20,6 +22,8 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
 
 /**
  * Test Case for LimitationType.
@@ -47,28 +51,9 @@ class ParentContentTypeLimitationTypeTest extends Base
     public function setUp()
     {
         parent::setUp();
-
-        $this->locationHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->contentTypeHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->contentHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->locationHandlerMock = $this->createMock(SPILocation\Handler::class);
+        $this->contentTypeHandlerMock = $this->createMock(SPIContentTypeHandler::class);
+        $this->contentHandlerMock = $this->createMock(SPIContentHandler::class);
     }
 
     /**
@@ -236,20 +221,14 @@ class ParentContentTypeLimitationTypeTest extends Base
         $expected = array('test', 'test' => '1');
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation', $value);
+        self::assertInstanceOf(ParentContentTypeLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
     protected function getTestEvaluateContentMock()
     {
-        $contentMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentMock = $this->createMock(APIContent::class);
 
         $contentMock
             ->expects($this->once())
@@ -261,13 +240,7 @@ class ParentContentTypeLimitationTypeTest extends Base
 
     protected function getTestEvaluateVersionInfoMock()
     {
-        $versionInfoMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock
             ->expects($this->once())

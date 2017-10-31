@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common\Input\Parser;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -102,6 +103,6 @@ class ParsingDispatcherTest extends TestCase
      */
     private function createParserMock()
     {
-        return $this->getMock('eZ\Publish\Core\REST\Common\Input\Parser');
+        return $this->createMock(Parser::class);
     }
 }
