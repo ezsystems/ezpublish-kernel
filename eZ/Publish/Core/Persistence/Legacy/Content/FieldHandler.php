@@ -447,6 +447,31 @@ class FieldHandler
     }
 
     /**
+     * Deletes translated fields and their external storage data for the given Content Versions.
+     *
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo[] $versions
+     * @param string $languageCode
+     */
+    public function deleteTranslationFromContentFields($contentId, array $versions, $languageCode)
+    {
+        foreach ($versions as $versionInfo) {
+            // FT-specific implementations require VersionInfo to delete data
+            $fieldTypeIdsMap = $this->contentGateway->getFieldIdsByType(
+                $versionInfo->contentInfo->id,
+                $versionInfo->versionNo,
+                $languageCode
+            );
+
+            foreach ($fieldTypeIdsMap as $fieldType => $ids) {
+                $this->storageHandler->deleteFieldData($fieldType, $versionInfo, $ids);
+            }
+        }
+
+        $this->contentGateway->deleteTranslatedFields($languageCode, $contentId);
+    }
+
+    /**
      * Deletes translated fields and their external storage data for the given $versionInfo.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo

@@ -1970,11 +1970,8 @@ class DoctrineDatabase extends Gateway
         $this->connection->beginTransaction();
         try {
             $this->deleteTranslationFromContentVersions($contentId, $language->id);
-            $this->deleteTranslationFromContentObject($contentId, $language->id);
-
-            // @todo: move this to field handler when fixing EZP-27949
-            $this->deleteTranslatedFields($languageCode, $contentId);
             $this->deleteTranslationFromContentNames($contentId, $languageCode);
+            $this->deleteTranslationFromContentObject($contentId, $language->id);
 
             $this->connection->commit();
         } catch (DBALException $e) {
