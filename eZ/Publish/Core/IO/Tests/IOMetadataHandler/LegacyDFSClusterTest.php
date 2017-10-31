@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\IO\Tests\IOMetadataHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
@@ -212,19 +213,46 @@ class LegacyDFSClusterTest extends TestCase
 
     public function testDeletedirectory()
     {
-        $statement = $this->createDbalStatementMock();
-        $statement
+        $this->urlDecoratorMock
             ->expects($this->once())
-            ->method('bindValue')
-            ->with(1, 'folder/subfolder/%');
+            ->method('decorate')
+            ->will($this->returnValue('prefix/images/_alias/subfolder'));
+
+        $queryBuilderMock = $this
+            ->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $queryBuilderMock->expects($this->at(0))
+            ->method('delete')
+            ->with('ezdfsfile')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->at(1))
+            ->method('where')
+            ->with('name LIKE :spiPath ESCAPE :esc')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->at(2))
+            ->method('setParameter')
+            ->with(':esc', '\\')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->at(3))
+            ->method('setParameter')
+            ->with(':spiPath', 'prefix/images/\_alias/subfolder/%')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->once())
+            ->method('execute')
+            ->willReturn(1);
 
         $this->dbalMock
             ->expects($this->once())
-            ->method('prepare')
-            ->with($this->anything())
-            ->will($this->returnValue($statement));
+            ->method('createQueryBuilder')
+            ->willReturn($queryBuilderMock);
 
-        $this->handler->deleteDirectory('folder/subfolder/');
+        $this->handler->deleteDirectory('images/_alias/subfolder/');
     }
 
     /**
