@@ -66,8 +66,8 @@
         "_ezplatform_branch_for_behat_tests_comment_": "ezplatform branch to use to run Behat tests",
         "_ezplatform_branch_for_behat_tests": "master",
         "branch-alias": {
-            "dev-master": "6.12.x-dev",
-            "dev-tmp_ci_branch": "6.12.x-dev"
+            "dev-master": "6.13.x-dev",
+            "dev-tmp_ci_branch": "6.13.x-dev"
         }
     }
 }
