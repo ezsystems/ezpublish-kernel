@@ -136,19 +136,19 @@ class Contextualizer implements ContextualizerInterface
                         }
                     } else {
                         $mergedSettings[$key] = array_merge(
-                            isset($defaultSettings[$key]) ? $defaultSettings[$key] : array(),
-                            isset($groupsSettings[$key]) ? $groupsSettings[$key] : array(),
+                            isset($globalSettings[$key]) ? $globalSettings[$key] : array(),
                             isset($scopeSettings[$key]) ? $scopeSettings[$key] : array(),
-                            isset($globalSettings[$key]) ? $globalSettings[$key] : array()
+                            isset($groupsSettings[$key]) ? $groupsSettings[$key] : array(),
+                            isset($defaultSettings[$key]) ? $defaultSettings[$key] : array()
                         );
                     }
                 }
             } else {
                 $mergedSettings = array_merge(
-                    $defaultSettings,
-                    $groupsSettings,
+                    $globalSettings,
                     $scopeSettings,
-                    $globalSettings
+                    $groupsSettings,
+                    $defaultSettings
                 );
             }
 
