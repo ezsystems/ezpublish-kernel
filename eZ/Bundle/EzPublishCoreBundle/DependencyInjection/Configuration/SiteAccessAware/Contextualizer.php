@@ -135,7 +135,7 @@ class Contextualizer implements ContextualizerInterface
                             $mergedSettings[$key] = $defaultSettings[$key];
                         }
                     } else {
-                        $mergedSettings[$key] = array_merge(
+                        $mergedSettings[$key] = $this->array_merge_unshift(
                             isset($defaultSettings[$key]) ? $defaultSettings[$key] : array(),
                             isset($groupsSettings[$key]) ? $groupsSettings[$key] : array(),
                             isset($scopeSettings[$key]) ? $scopeSettings[$key] : array(),
@@ -144,7 +144,7 @@ class Contextualizer implements ContextualizerInterface
                     }
                 }
             } else {
-                $mergedSettings = array_merge(
+                $mergedSettings = $this->array_merge_unshift(
                     $defaultSettings,
                     $groupsSettings,
                     $scopeSettings,
@@ -297,5 +297,32 @@ class Contextualizer implements ContextualizerInterface
     public function getGroupsBySiteAccess()
     {
         return $this->groupsBySiteAccess;
+    }
+
+    /**
+     * Merge one or more arrays pre-pending values.
+     *
+     * If the arrays have the same text keys the latter value will be used.
+     *
+     * If the arrays have numeric keys the values are pre-pended and the keys are renumbered.
+     *
+     * @param array ...$args
+     * @return array
+     */
+    private function array_merge_unshift(...$args)
+    {
+        $array = array();
+        foreach ($args as $arg) {
+            foreach ($arg as $key => $value) {
+                if (is_string($key)) {
+                    $array = [$key => $value] + $array;
+                } else {
+                    $array = array_merge($arg, $array);
+                    break;
+                }
+            }
+        }
+
+        return $array;
     }
 }

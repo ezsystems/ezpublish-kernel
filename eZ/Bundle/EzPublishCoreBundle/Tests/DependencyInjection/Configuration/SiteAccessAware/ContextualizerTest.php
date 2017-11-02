@@ -168,28 +168,28 @@ class ContextualizerTest extends TestCase
 
         $expectedMergedSettings = array(
             'sa1' => array(
-                'foo' => 'bar',
-                'some' => 'thing',
-                'planets' => array('Earth'),
-                'an_integer' => 456,
-                'enabled' => true,
                 'j_adore' => 'la_truite_a_la_vapeur',
+                'enabled' => true,
+                'an_integer' => 456,
+                'some' => 'thing',
+                'foo' => 'bar',
+                'planets' => array('Earth'),
             ),
             'sa2' => array(
+                'j_adore' => 'la_truite_a_la_vapeur',
+                'an_integer' => 789,
+                'planets' => array('Mars', 'Venus'),
                 'foo' => 'baz',
                 'some' => 'thing',
-                'planets' => array('Mars', 'Venus'),
-                'an_integer' => 789,
                 'enabled' => false,
-                'j_adore' => 'la_truite_a_la_vapeur',
             ),
             'sa3' => array(
-                'foo' => 'bar',
-                'some' => 'thing',
-                'planets' => array('Earth'),
-                'an_integer' => 123,
-                'enabled' => false,
                 'j_adore' => 'la_truite_a_la_vapeur',
+                'an_integer' => 123,
+                'some' => 'thing',
+                'foo' => 'bar',
+                'enabled' => false,
+                'planets' => array('Earth'),
             ),
         );
 
@@ -268,23 +268,23 @@ class ContextualizerTest extends TestCase
                 'planets' => array('Earth'),
                 'an_integer' => 456,
                 'enabled' => true,
-                'j_adore' => array('les_sushis', 'le_saucisson', 'la_truite_a_la_vapeur'),
+                'j_adore' => array('la_truite_a_la_vapeur', 'le_saucisson', 'les_sushis'),
             ),
             'sa2' => array(
                 'foo' => 'baz',
                 'some' => 'thing',
-                'planets' => array('Earth', 'Mars', 'Venus'),
+                'planets' => array('Mars', 'Venus', 'Earth'),
                 'an_integer' => 789,
                 'enabled' => false,
-                'j_adore' => array('les_sushis', 'la_truite_a_la_vapeur'),
+                'j_adore' => array('la_truite_a_la_vapeur', 'les_sushis'),
             ),
             'sa3' => array(
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array('Earth', 'Earth', 'Jupiter'),
+                'planets' => array('Earth',  'Jupiter', 'Earth'),
                 'an_integer' => 123,
                 'enabled' => false,
-                'j_adore' => array('les_sushis', 'la_truite_a_la_vapeur'),
+                'j_adore' => array('la_truite_a_la_vapeur', 'les_sushis'),
             ),
         );
 
@@ -332,8 +332,8 @@ class ContextualizerTest extends TestCase
 
         $expectedMergedSettings = array(
             'sa1' => array('Earth', 'Mars'),
-            'sa2' => array('Earth', 'Mars', 'Venus'),
-            'sa3' => array('Earth', 'Mars', 'Jupiter'),
+            'sa2' => array('Mars', 'Venus', 'Earth'),
+            'sa3' => array('Earth', 'Jupiter', 'Mars'),
         );
 
         $this->contextualizer->mapConfigArray('foo_setting', $config, ContextualizerInterface::UNIQUE);
@@ -464,7 +464,7 @@ class ContextualizerTest extends TestCase
         $siteaccess = 'krondor';
         $group1 = 'midkemia';
         $group2 = 'triagia';
-        $all = array('Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William');
+        $all = array('Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black');
         $siteaccessConfig = array(
             'list' => array($siteaccess),
             'groups' => array(
@@ -709,7 +709,7 @@ class ContextualizerTest extends TestCase
                     ),
                 ),
                 0,
-                array('Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'),
+                array('Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William'),
             ),
             array(
                 // default scope + two groups + siteaccess
@@ -727,7 +727,7 @@ class ContextualizerTest extends TestCase
                     ),
                 ),
                 0,
-                $all,
+                array('William', 'Pug', 'Rogen', 'Kulgan', 'Macros the Black'),
             ),
             array(
                 // global scope + two groups + siteaccess
@@ -745,7 +745,7 @@ class ContextualizerTest extends TestCase
                     ),
                 ),
                 0,
-                array('Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'),
+                array('Kulgan', 'Macros the Black', 'William', 'Pug', 'Rogen'),
             ),
             array(
                 // default scope + two groups +  global
@@ -762,7 +762,7 @@ class ContextualizerTest extends TestCase
                     ),
                 ),
                 0,
-                $all,
+                array('William', 'Pug', 'Rogen', 'Kulgan', 'Macros the Black'),
             ),
             array(
                 // default scope + two groups + siteaccess + global
@@ -780,7 +780,7 @@ class ContextualizerTest extends TestCase
                     ),
                 ),
                 0,
-                $all,
+                array('William', 'Rogen', 'Macros the Black', 'Pug', 'Kulgan'),
             ),
             //
             // UNIQUE OPTION TESTS (only suitable for normal array)
@@ -800,7 +800,7 @@ class ContextualizerTest extends TestCase
                     ),
                 ),
                 ContextualizerInterface::UNIQUE,
-                array('Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William'),
+                array('William', 'Rogen', 'Pug', 'Macros the Black', 'Kulgan'),
             ),
             array(
                 $testId,
@@ -817,7 +817,7 @@ class ContextualizerTest extends TestCase
                     ),
                 ),
                 ContextualizerInterface::UNIQUE,
-                array('Kulgan', 'Macros the Black', 'Pug', 'William', 'Rogen'),
+                array('William', 'Kulgan', 'Pug', 'Rogen', 'Macros the Black'),
             ),
             //
             // MERGING HASH TESTS with MERGE_FROM_SECOND_LEVEL
