@@ -363,6 +363,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     {
         $loader->load('cache.yml');
 
+        $purgeService = null;
         if (isset($config['http_cache']['purge_type'])) {
             switch ($config['http_cache']['purge_type']) {
                 case 'local':
@@ -371,15 +372,12 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
                 case 'http':
                     $purgeService = 'ezpublish.http_cache.purge_client.fos';
                     break;
-                default:
-                    if (!$container->has($config['http_cache']['purge_type'])) {
-                        throw new \InvalidArgumentException("Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface.");
-                    }
-
-                    $purgeService = $config['http_cache']['purge_type'];
             }
 
-            $container->setAlias('ezpublish.http_cache.purge_client', $purgeService);
+            $container->setParameter('ezpublish.http_cache.purge_type', $config['http_cache']['purge_type']);
+            if ($purgeService !== null) {
+                $container->setAlias('ezpublish.http_cache.purge_client', $purgeService);
+            }
         }
     }
 
