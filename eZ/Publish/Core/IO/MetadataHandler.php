@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\IO;
 
+/**
+ * @deprecated Not in use anymore by the kernel.
+ */
 interface MetadataHandler
 {
     /**
