@@ -1,0 +1,73 @@
+# skip irrelevant directories
+exclude_paths:
+    - "**/vendor/"
+    - "build/"
+    - "doc/"
+    - "bin/"
+    - "data/"
+    - "var/"
+    - "eZ/Bundle/EzPublishCoreBundle/Tests/"
+    - "eZ/Bundle/EzPublishDebugBundle/Tests/"
+    - "eZ/Bundle/EzPublishIOBundle/Tests/"
+    - "eZ/Bundle/EzPublishRestBundle/Tests/"
+    - "eZ/Publish/API/Repository/Tests/"
+    - "eZ/Publish/Core/Base/Tests/"
+    - "eZ/Publish/Core/FieldType/Tests/"
+    - "eZ/Publish/Core/Helper/Tests/"
+    - "eZ/Publish/Core/IO/Tests/"
+    - "eZ/Publish/Core/Limitation/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Cache/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Controller/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Event/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/EventListener/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/FieldType/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Locale/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Matcher/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Routing/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Security/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/SiteAccess/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/Templating/Tests/"
+    - "eZ/Publish/Core/MVC/Symfony/View/Tests/"
+    - "eZ/Publish/Core/Pagination/Tests/"
+    - "eZ/Publish/Core/Persistence/Tests/"
+    - "eZ/Publish/Core/Persistence/Cache/Tests/"
+    - "eZ/Publish/Core/Persistence/Doctrine/Tests/"
+    - "eZ/Publish/Core/Persistence/Legacy/Tests/"
+    - "eZ/Publish/Core/Repository/Tests/"
+    - "eZ/Publish/Core/REST/Client/Tests/"
+    - "eZ/Publish/Core/REST/Common/Tests/"
+    - "eZ/Publish/Core/REST/Server/Tests/"
+    - "eZ/Publish/Core/Search/Tests/"
+    - "eZ/Publish/Core/Search/Legacy/Tests/"
+    - "eZ/Publish/Core/SignalSlot/Tests/"
+    - "eZ/Publish/SPI/Tests/"
+
+# PHP code anlysis engine
+# PHPCodeSniffer, PHPMD and CodeClimate duplication engine
+engines:
+    phpcodesniffer:
+        enabled: true
+        config:
+            file_extensions: "php"
+            standard: "PSR1,PSR2"
+    phpmd:
+        enabled: true
+        config:
+            file_extensions: "php"
+            rulesets: "cleancode,controversial,design,codesize,unusedcode"
+    checks:
+        Naming/ShortVariable:
+            enabled: false
+        Naming/LongVariable:
+            enabled: false
+    duplication:
+        enabled: true
+        config:
+        languages:
+            php:
+                mass_threshold: 25
+
+# Rate only PHP files
+ratings:
+    paths:
+        - "**.php"

@@ -1,6 +1,6 @@
 # eZ Platform Kernel (a.k.a. *eZ Publish 6.x kernel*)
 [![Build Status](https://travis-ci.org/ezsystems/ezpublish-kernel.png?branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
-
+[![Code Climate](https://img.shields.io/codeclimate/github/ezsystems/ezpublish-kernel.svg?style=flat-square)](https://codeclimate.com/github/ezsystems/ezpublish-kernel)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0/big.png)](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0)
 
 Welcome to the *eZ Platform Kernel* (also known as *eZ Publish 6.x kernel*). The kernel is the heart of *eZ Platform*, a modern
