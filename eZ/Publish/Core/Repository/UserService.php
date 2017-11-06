@@ -77,7 +77,7 @@ class UserService implements UserServiceInterface
             'defaultUserPlacement' => 12,
             'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
-            'hashType' => User::PASSWORD_HASH_PHP_DEFAULT,
+            'hashType' => APIUser::PASSWORD_HASH_PHP_DEFAULT,
             'siteName' => 'ez.no',
         );
     }
@@ -1125,8 +1125,8 @@ class UserService implements UserServiceInterface
     protected function verifyPassword($login, $password, $spiUser)
     {
         // In case of bcrypt let php's password functionality do it's magic
-        if ($spiUser->hashAlgorithm === User::PASSWORD_HASH_BCRYPT ||
-            $spiUser->hashAlgorithm === User::PASSWORD_HASH_PHP_DEFAULT) {
+        if ($spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_BCRYPT ||
+            $spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_PHP_DEFAULT) {
             return password_verify($password, $spiUser->passwordHash);
         }
 
@@ -1156,22 +1156,22 @@ class UserService implements UserServiceInterface
     protected function createPasswordHash($login, $password, $site, $type)
     {
         switch ($type) {
-            case User::PASSWORD_HASH_MD5_PASSWORD:
+            case APIUser::PASSWORD_HASH_MD5_PASSWORD:
                 return md5($password);
 
-            case User::PASSWORD_HASH_MD5_USER:
+            case APIUser::PASSWORD_HASH_MD5_USER:
                 return md5("$login\n$password");
 
-            case User::PASSWORD_HASH_MD5_SITE:
+            case APIUser::PASSWORD_HASH_MD5_SITE:
                 return md5("$login\n$password\n$site");
 
-            case User::PASSWORD_HASH_PLAINTEXT:
+            case APIUser::PASSWORD_HASH_PLAINTEXT:
                 return $password;
 
-            case User::PASSWORD_HASH_BCRYPT:
+            case APIUser::PASSWORD_HASH_BCRYPT:
                 return password_hash($password, PASSWORD_BCRYPT);
 
-            case User::PASSWORD_HASH_PHP_DEFAULT:
+            case APIUser::PASSWORD_HASH_PHP_DEFAULT:
                 return password_hash($password, PASSWORD_DEFAULT);
 
             default:

@@ -13,10 +13,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use Exception;
 use ReflectionClass;
@@ -1627,7 +1626,7 @@ class UserServiceTest extends BaseTest
         $userVersion2 = $userService->updateUser($user, $userUpdate);
         /* END: Use Case */
 
-        $this->assertInstanceOf(APIUser::class, $user);
+        $this->assertInstanceOf(User::class, $user);
 
         $this->assertEquals(
             [
@@ -1683,7 +1682,7 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
-    public function testUpdateUserReturnsPublishedVersion($user)
+    public function testUpdateUserReturnsPublishedVersion(User $user)
     {
         $this->assertEquals(
             APIVersionInfo::STATUS_PUBLISHED,
@@ -1890,7 +1889,7 @@ class UserServiceTest extends BaseTest
         // This array will contain the email of the newly created "Editor" user
         $email = array();
         foreach ($userService->loadUsersOfUserGroup($group) as $user) {
-            $this->assertInstanceOf(APIUser::class, $user);
+            $this->assertInstanceOf(User::class, $user);
             $email[] = $user->email;
         }
         /* END: Use Case */
