@@ -1,36 +1,36 @@
 # skip irrelevant directories
 exclude_paths:
-    - "**/vendor/"
-    - "build/"
-    - "doc/"
-    - "bin/"
-    - "data/"
-    - "var/"
-    - "**/Tests/"
+  - "**/vendor/"
+  - "build/"
+  - "doc/"
+  - "bin/"
+  - "data/"
+  - "var/"
+  - "**/Tests/"
 
 # PHP code anlysis engine
 # PHPCodeSniffer, PHPMD and CodeClimate duplication engine
 engines:
-    phpcodesniffer:
-        enabled: false
-    phpmd:
-        enabled: true
-        config:
-            file_extensions: "php"
-            rulesets: "cleancode,controversial,design,codesize,unusedcode"
-    checks:
-        Naming/ShortVariable:
-            enabled: false
-        Naming/LongVariable:
-            enabled: false
-    duplication:
-        enabled: true
-        config:
-        languages:
-            php:
-                mass_threshold: 25
+  phpcodesniffer:
+    enabled: false
+  phpmd:
+    enabled: true
+    config:
+      file_extensions: "php"
+      rulesets: "cleancode,controversial,design,codesize,unusedcode"
+  checks:
+    Naming/ShortVariable:
+      enabled: false
+    Naming/LongVariable:
+      enabled: false
+  duplication:
+    enabled: true
+    config:
+    languages:
+      php:
+        mass_threshold: 25
 
 # Rate only PHP files
 ratings:
-    paths:
-        - "**.php"
+  paths:
+    - "**.php"
