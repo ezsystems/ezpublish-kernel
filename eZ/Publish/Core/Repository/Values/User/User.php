@@ -18,36 +18,6 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 class User extends APIUser
 {
     /**
-     * @var int MD5 of password, not recommended
-     */
-    const PASSWORD_HASH_MD5_PASSWORD = 1;
-
-    /**
-     * @var int MD5 of user and password
-     */
-    const PASSWORD_HASH_MD5_USER = 2;
-
-    /**
-     * @var int MD5 of site, user and password
-     */
-    const PASSWORD_HASH_MD5_SITE = 3;
-
-    /**
-     * @var int Passwords in plaintext, should not be used for real sites
-     */
-    const PASSWORD_HASH_PLAINTEXT = 5;
-
-    /**
-     * @var int Passwords in bcrypt
-     */
-    const PASSWORD_HASH_BCRYPT = 6;
-
-    /**
-     * @var int Passwords hashed by PHPs default algorithm, which may change over time
-     */
-    const PASSWORD_HASH_PHP_DEFAULT = 7;
-
-    /**
      * Internal content representation.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Content
