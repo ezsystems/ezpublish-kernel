@@ -2,6 +2,7 @@ parameters:
     ezpublish.http_cache.signalslot.http_cache.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\HttpCacheSlot
     ezpublish.http_cache.signalslot.assign_section.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot
     ezpublish.http_cache.signalslot.copy_content.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\CopyContentSlot
+    ezpublish.http_cache.signalslot.copy_subtree.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\CopySubtreeSlot
     ezpublish.http_cache.signalslot.create_location.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\CreateLocationSlot
     ezpublish.http_cache.signalslot.delete_content.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteContentSlot
     ezpublish.http_cache.signalslot.delete_location.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteLocationSlot
@@ -37,6 +38,12 @@ services:
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: ContentService\CopyContentSignal }
+
+    ezpublish.http_cache.signalslot.copy_subtree:
+        class: '%ezpublish.http_cache.signalslot.copy_subtree.class%'
+        parent: ezpublish.http_cache.signalslot.http_cache
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\CopySubtreeSignal }
 
     ezpublish.http_cache.signalslot.create_location:
         class: "%ezpublish.http_cache.signalslot.create_location.class%"
