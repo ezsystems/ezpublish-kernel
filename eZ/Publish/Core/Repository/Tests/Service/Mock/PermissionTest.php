@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
  * Mock test case for PermissionResolver.
+ *
+ * @todo Move to "Tests/Permission/"
  */
 class PermissionTest extends BaseServiceMockTest
 {
@@ -939,7 +941,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         if ($this->permissionResolverMock === null) {
             $this->permissionResolverMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Permission\\PermissionResolver')
+                ->getMockBuilder(PermissionResolver::class)
                 ->setMethods($methods)
                 ->setConstructorArgs(
                     [

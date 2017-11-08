@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
+use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
@@ -177,13 +179,6 @@ class Repository implements RepositoryInterface
     protected $urlWildcardService;
 
     /**
-     * Instance of permission service.
-     *
-     * @var \eZ\Publish\Core\Repository\Permission\PermissionResolver
-     */
-    protected $permissionResolver;
-
-    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -217,11 +212,11 @@ class Repository implements RepositoryInterface
     protected $contentTypeDomainMapper;
 
     /**
-     * Instance of permissions criterion handler.
+     * Instance of permissions-resolver and -criterion resolver.
      *
-     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver|\eZ\Publish\API\Repository\PermissionResolver
      */
-    protected $permissionsCriterionHandler;
+    protected $permissionsHandler;
 
     /**
      * Array of arrays of commit events indexed by the transaction count.
@@ -530,7 +525,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler,
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
-            $this->getPermissionsCriterionHandler(),
+            $this->getPermissionCriterionResolver(),
             $this->serviceSettings['location']
         );
 
@@ -734,7 +729,7 @@ class Repository implements RepositoryInterface
             $this,
             $this->searchHandler,
             $this->getDomainMapper(),
-            $this->getPermissionsCriterionHandler(),
+            $this->getPermissionCriterionResolver(),
             $this->serviceSettings['search']
         );
 
@@ -764,16 +759,7 @@ class Repository implements RepositoryInterface
      */
     public function getPermissionResolver()
     {
-        if ($this->permissionResolver === null) {
-            $this->permissionResolver = new Permission\PermissionResolver(
-                $this->getRoleDomainMapper(),
-                $this->getLimitationService(),
-                $this->persistenceHandler->userHandler(),
-                $this->currentUserRef
-            );
-        }
-
-        return $this->permissionResolver;
+        return $this->getCachedPermissionsResolver();
     }
 
     /**
@@ -896,23 +882,38 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get PermissionsCriterionHandler.
-     *
+     * Get PermissionCriterionResolver.
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @return \eZ\Publish\API\Repository\PermissionCriterionResolver
      */
-    protected function getPermissionsCriterionHandler()
+    protected function getPermissionCriterionResolver()
     {
-        if ($this->permissionsCriterionHandler === null) {
-            $this->permissionsCriterionHandler = new PermissionsCriterionHandler(
-                $this->getPermissionResolver(),
-                $this->getLimitationService()
+        return $this->getCachedPermissionsResolver();
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\PermissionCriterionResolver|\eZ\Publish\API\Repository\PermissionResolver
+     */
+    protected function getCachedPermissionsResolver()
+    {
+        if ($this->permissionsHandler === null) {
+            $this->permissionsHandler = new CachedPermissionService(
+                $permissionResolver = new Permission\PermissionResolver(
+                    $this->getRoleDomainMapper(),
+                    $this->getLimitationService(),
+                    $this->persistenceHandler->userHandler(),
+                    $this->currentUserRef
+                ),
+                new PermissionCriterionResolver(
+                    $permissionResolver,
+                    $this->getLimitationService()
+                )
             );
         }
 
-        return $this->permissionsCriterionHandler;
+        return $this->permissionsHandler;
     }
 
     /**

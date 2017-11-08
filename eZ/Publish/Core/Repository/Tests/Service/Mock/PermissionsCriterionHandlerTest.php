@@ -14,6 +14,8 @@ use eZ\Publish\Core\Repository\Values\User\Policy;
 
 /**
  * Mock test case for PermissionCriterionHandler.
+ *
+ * @deprecated
  */
 class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 {

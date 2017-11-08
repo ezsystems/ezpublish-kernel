@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\PermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -63,9 +64,9 @@ class LocationService implements LocationServiceInterface
     protected $nameSchemaService;
 
     /**
-     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver
      */
-    protected $permissionsCriterionHandler;
+    protected $permissionCriterionResolver;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
@@ -74,7 +75,7 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
-     * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
+     * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param array $settings
      */
     public function __construct(
@@ -82,7 +83,7 @@ class LocationService implements LocationServiceInterface
         Handler $handler,
         Helper\DomainMapper $domainMapper,
         Helper\NameSchemaService $nameSchemaService,
-        PermissionsCriterionHandler $permissionsCriterionHandler,
+        PermissionCriterionResolver $permissionCriterionResolver,
         array $settings = array()
     ) {
         $this->repository = $repository;
@@ -93,7 +94,7 @@ class LocationService implements LocationServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
-        $this->permissionsCriterionHandler = $permissionsCriterionHandler;
+        $this->permissionCriterionResolver = $permissionCriterionResolver;
     }
 
     /**
@@ -127,7 +128,7 @@ class LocationService implements LocationServiceInterface
         /** Check read access to whole source subtree
          * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
          */
-        $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
+        $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion();
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'read');
         } elseif ($contentReadCriterion !== true) {
@@ -590,7 +591,7 @@ class LocationService implements LocationServiceInterface
         /** Check read access to whole source subtree
          * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
          */
-        $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
+        $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion();
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'read');
         } elseif ($contentReadCriterion !== true) {
@@ -669,7 +670,7 @@ class LocationService implements LocationServiceInterface
         /** Check remove access to descendants
          * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
          */
-        $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion('content', 'remove');
+        $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'remove');
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'remove');
         } elseif ($contentReadCriterion !== true) {

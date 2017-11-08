@@ -51,6 +51,9 @@ fi
 if [ "$SYMFONY_VERSION" != "" ] ; then
     echo "> Update symfony/symfony requirement to ${SYMFONY_VERSION}"
     composer require --no-update symfony/symfony="${SYMFONY_VERSION}"
+    # Remove php-cs-fixer as it is not needed for these tests and tends to cause Symfony version conflicts
+    echo "> Remove php-cs-fixer"
+    composer remove --dev --no-update friendsofphp/php-cs-fixer
     COMPOSER_UPDATE="true"
 fi
 
