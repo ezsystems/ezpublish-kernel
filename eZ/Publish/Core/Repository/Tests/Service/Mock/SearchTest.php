@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
+use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -30,7 +31,7 @@ class SearchTest extends BaseServiceMockTest
 
     protected $domainMapperMock;
 
-    protected $permissionsCriterionHandlerMock;
+    protected $permissionsCriterionResolverMock;
 
     /**
      * Test for the __construct() method.
@@ -43,14 +44,14 @@ class SearchTest extends BaseServiceMockTest
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $settings = array('teh setting');
 
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             $settings
         );
 
@@ -73,8 +74,8 @@ class SearchTest extends BaseServiceMockTest
         );
 
         $this->assertAttributeSame(
-            $permissionsCriterionHandlerMock,
-            'permissionsCriterionHandler',
+            $permissionsCriterionResolverMock,
+            'permissionCriterionResolver',
             $service
         );
 
@@ -124,13 +125,13 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
 
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $this->getDomainMapperMock(),
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -171,12 +172,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $this->getDomainMapperMock(),
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -193,8 +194,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
@@ -204,13 +204,13 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
 
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $this->getDomainMapperMock(),
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -221,9 +221,9 @@ class SearchTest extends BaseServiceMockTest
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
 
-        $permissionsCriterionHandlerMock->expects($this->once())
-            ->method('addPermissionsCriterion')
-            ->with($criterionMock)
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
             ->will($this->throwException(new Exception('Handler threw an exception')));
 
         $service->findContent($query, array(), true);
@@ -232,8 +232,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      */
     public function testFindContentNoPermissionsFilter()
@@ -242,12 +241,12 @@ class SearchTest extends BaseServiceMockTest
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -307,8 +306,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      */
     public function testFindContentWithPermission()
@@ -317,12 +315,12 @@ class SearchTest extends BaseServiceMockTest
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -370,9 +368,9 @@ class SearchTest extends BaseServiceMockTest
             ->method('internalLoadContent')
             ->will($this->returnValue($contentMock));
 
-        $permissionsCriterionHandlerMock->expects($this->once())
-            ->method('addPermissionsCriterion')
-            ->with($criterionMock)
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
             ->will($this->returnValue(true));
 
         $result = $service->findContent($query, $languageFilter, true);
@@ -391,8 +389,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      */
     public function testFindContentWithNoPermission()
@@ -400,12 +397,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $this->getDomainMapperMock(),
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -418,9 +415,9 @@ class SearchTest extends BaseServiceMockTest
             ->getMock();
         $query = new Query(array('filter' => $criterionMock));
 
-        $permissionsCriterionHandlerMock->expects($this->once())
-            ->method('addPermissionsCriterion')
-            ->with($criterionMock)
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
             ->will($this->returnValue(false));
 
         $result = $service->findContent($query, array(), true);
@@ -444,7 +441,7 @@ class SearchTest extends BaseServiceMockTest
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $this->getPermissionsCriterionHandlerMock(),
+            $this->getPermissionCriterionResolverMock(),
             array()
         );
 
@@ -511,8 +508,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findSingle() method.
      *
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -525,7 +521,7 @@ class SearchTest extends BaseServiceMockTest
             $repositoryMock,
             $searchHandlerMock,
             $this->getDomainMapperMock(),
-            $this->getPermissionsCriterionHandlerMock(),
+            $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock(),
             array()
         );
 
@@ -535,14 +531,18 @@ class SearchTest extends BaseServiceMockTest
             ->disableOriginalConstructor()
             ->getMock();
 
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
+            ->willReturn(false);
+
         $service->findSingle($criterionMock, array(), true);
     }
 
     /**
      * Test for the findSingle() method.
      *
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
@@ -552,12 +552,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $this->getDomainMapperMock(),
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -567,9 +567,9 @@ class SearchTest extends BaseServiceMockTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $permissionsCriterionHandlerMock->expects($this->once())
-            ->method('addPermissionsCriterion')
-            ->with($criterionMock)
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
             ->will($this->throwException(new Exception('Handler threw an exception')));
 
         $service->findSingle($criterionMock, array(), true);
@@ -578,8 +578,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findSingle() method.
      *
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
-     * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      */
     public function testFindSingle()
@@ -588,12 +587,12 @@ class SearchTest extends BaseServiceMockTest
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -615,9 +614,9 @@ class SearchTest extends BaseServiceMockTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $permissionsCriterionHandlerMock->expects($this->once())
-            ->method('addPermissionsCriterion')
-            ->with($criterionMock)
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
             ->will($this->returnValue(true));
 
         $languageFilter = array();
@@ -652,12 +651,12 @@ class SearchTest extends BaseServiceMockTest
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -689,9 +688,9 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->equalTo($spiLocation))
             ->will($this->returnValue($locationMock));
 
-        $permissionsCriterionHandlerMock->expects($this->once())
-            ->method('addPermissionsCriterion')
-            ->with($criterionMock)
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
             ->will($this->returnValue(true));
 
         $result = $service->findLocations($query, array(), true);
@@ -716,12 +715,12 @@ class SearchTest extends BaseServiceMockTest
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -776,13 +775,13 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
 
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
             $this->getDomainMapperMock(),
-            $permissionsCriterionHandlerMock,
+            $permissionsCriterionResolverMock,
             array()
         );
 
@@ -793,9 +792,9 @@ class SearchTest extends BaseServiceMockTest
             ->getMock();
         $query = new LocationQuery(array('filter' => $criterionMock));
 
-        $permissionsCriterionHandlerMock->expects($this->once())
-            ->method('addPermissionsCriterion')
-            ->with($criterionMock)
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
             ->will($this->throwException(new Exception('Handler threw an exception')));
 
         $service->findLocations($query, array(), true);
@@ -803,10 +802,6 @@ class SearchTest extends BaseServiceMockTest
 
     /**
      * Test for the findLocations() method.
-     */
-
-    /**
-     * Test for the findContent() method.
      */
     public function testFindLocationsWithDefaultQueryValues()
     {
@@ -818,7 +813,7 @@ class SearchTest extends BaseServiceMockTest
             $repositoryMock,
             $searchHandlerMock,
             $domainMapperMock,
-            $this->getPermissionsCriterionHandlerMock(),
+            $this->getPermissionCriterionResolverMock(),
             array()
         );
 
@@ -881,17 +876,17 @@ class SearchTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\PermissionCriterionResolver
      */
-    protected function getPermissionsCriterionHandlerMock()
+    protected function getPermissionCriterionResolverMock()
     {
-        if (!isset($this->permissionsCriterionHandlerMock)) {
-            $this->permissionsCriterionHandlerMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\PermissionsCriterionHandler')
+        if (!isset($this->permissionsCriterionResolverMock)) {
+            $this->permissionsCriterionResolverMock = $this
+                ->getMockBuilder(PermissionCriterionResolver::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         }
 
-        return $this->permissionsCriterionHandlerMock;
+        return $this->permissionsCriterionResolverMock;
     }
 }

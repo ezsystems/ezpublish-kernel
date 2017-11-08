@@ -36,6 +36,7 @@
         "twig/twig": "~1.27|~2.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "~2.7.1",
         "mikey179/vfsStream": "1.1.0",
         "phpunit/phpunit": "^4.8.35",
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
@@ -59,6 +60,9 @@
     },
     "config": {
         "process-timeout": 3000
+    },
+    "scripts": {
+        "fix-cs": "@php ./vendor/bin/php-cs-fixer fix -v --show-progress=estimating"
     },
     "extra": {
         "_ci_branch-comment_": "Keep ci branch up-to-date with master or branch if on stable. ci is never on github but convention used for ci behat testing!",
