@@ -9,12 +9,23 @@
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use eZ\Publish\Core\Search\Legacy\Content\Handler as LegacySearchHandler;
-use RuntimeException;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use Psr\Log\LoggerInterface;
 
 class Indexer extends IncrementalIndexer
 {
+    public function __construct(
+        LoggerInterface $logger,
+        PersistenceHandler $persistenceHandler,
+        DatabaseHandler $databaseHandler,
+        LegacySearchHandler $searchHandler
+    ) {
+        parent::__construct($logger, $persistenceHandler, $databaseHandler, $searchHandler);
+    }
+
     public function getName()
     {
         return 'eZ Platform Legacy (SQL) Search Engine';
@@ -22,7 +33,6 @@ class Indexer extends IncrementalIndexer
 
     public function updateSearchIndex(array $contentIds, $commit)
     {
-        $this->checkSearchEngine();
         $contentHandler = $this->persistenceHandler->contentHandler();
         foreach ($contentIds as $contentId) {
             try {
@@ -31,32 +41,17 @@ class Indexer extends IncrementalIndexer
                     $this->searchHandler->indexContent(
                         $contentHandler->load($info->id, $info->currentVersionNo)
                     );
-                    continue;
+                } else {
+                    $this->searchHandler->deleteContent($contentId);
                 }
             } catch (NotFoundException $e) {
-                // Catch this so we delete the index for this content below
+                $this->searchHandler->deleteContent($contentId);
             }
-
-            $this->searchHandler->deleteContent($contentId);
         }
     }
 
     public function purge()
     {
-        $this->checkSearchEngine();
         $this->searchHandler->purgeIndex();
-    }
-
-    private function checkSearchEngine()
-    {
-        if (!$this->searchHandler instanceof LegacySearchHandler) {
-            throw new RuntimeException(
-                sprintf(
-                    'Expected to find an instance of %s, but found %s',
-                    LegacySearchHandler::class,
-                    get_class($this->searchHandler)
-                )
-            );
-        }
     }
 }

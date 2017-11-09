@@ -36,6 +36,11 @@ class ReindexCommand extends ContainerAwareCommand
     private $connection;
 
     /**
+     * @var string
+     */
+    private $phpPath;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -346,28 +351,39 @@ EOT
      *
      * @return \Symfony\Component\Process\Process
      */
-    private static function getPhpProcess(array $contentIds, $commit)
+    private function getPhpProcess(array $contentIds, $commit)
     {
-        $phpFinder = new PhpExecutableFinder();
-        if (!$phpPath = $phpFinder->find()) {
-            throw new \RuntimeException(
-                'The php executable could not be found, add it to your PATH environment variable and try again'
-            );
-        }
-
         $process = new ProcessBuilder([
             file_exists('bin/console') ? 'bin/console' : 'app/console',
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
         ]);
         $process->setTimeout(null);
-        $process->setPrefix($phpPath);
+        $process->setPrefix($this->getPhpPath());
 
         if (!$commit) {
             $process->add('--no-commit');
         }
 
         return $process->getProcess();
+    }
+
+    /**
+     * @return string
+     */
+    private function getPhpPath()
+    {
+        if ($this->phpPath) {
+            return $this->phpPath;
+        }
+
+        $phpFinder = new PhpExecutableFinder();
+        $this->phpPath = $phpFinder->find();
+        if (!$this->phpPath) {
+            throw new \RuntimeException(
+                'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
+            );
+        }
     }
 
     /**
