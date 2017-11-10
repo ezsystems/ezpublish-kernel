@@ -8,8 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\RichText;
 
-
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
