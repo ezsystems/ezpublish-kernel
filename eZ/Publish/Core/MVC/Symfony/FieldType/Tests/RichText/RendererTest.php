@@ -526,14 +526,14 @@ class RendererTest extends TestCase
         $parameters = array('parameters');
         $isInline = true;
 
-        $contentInfoMock = $this->getMock(ContentInfo::class);
+        $contentInfoMock = $this->createMock(ContentInfo::class);
         $contentInfoMock
             ->expects($this->once())
             ->method('__get')
             ->with('mainLocationId')
             ->willReturn(null);
 
-        $contentMock = $this->getMock(Content::class);
+        $contentMock = $this->createMock(Content::class);
         $contentMock
             ->expects($this->once())
             ->method('__get')
