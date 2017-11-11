@@ -120,7 +120,7 @@ class SearchService implements SearchServiceInterface
                 );
             } catch (APINotFoundException $e) {
                 // Most likely stale data, so we register content for background re-indexing.
-                $this->backgroundIndexer->registerForRefresh($hit->valueObject);
+                $this->backgroundIndexer->registerContent($hit->valueObject);
                 unset($result->searchHits[$key]);
                 --$result->totalCount;
             } catch (APIUnauthorizedException $e) {
@@ -340,7 +340,7 @@ class SearchService implements SearchServiceInterface
                 );
             } catch (APINotFoundException $e) {
                 // Most likely stale data, so we register content for background re-indexing.
-                $this->backgroundIndexer->registerForRefresh($hit->valueObject);
+                $this->backgroundIndexer->registerLocation($hit->valueObject);
                 unset($result->searchHits[$key]);
                 --$result->totalCount;
             } catch (APIUnauthorizedException $e) {
