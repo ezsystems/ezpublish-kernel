@@ -204,11 +204,11 @@ EOT
             $this->searchIndexer->purge();
 
             $output->writeln(
-                "<info>Re-Creating index for {$count} items across $iterations iteration(s), $processMessage:"
+                "<info>Re-Creating index for {$count} items across $iterations iteration(s), $processMessage:</info>"
             );
         } else {
             $output->writeln(
-                "<info>Refreshing index for {$count} items across $iterations iteration(s), $processMessage:"
+                "<info>Refreshing index for {$count} items across $iterations iteration(s), $processMessage:</info>"
             );
         }
 
