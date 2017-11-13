@@ -53,6 +53,15 @@ class BackgroundIndexingTerminateListener implements BackgroundIndexerInterface,
         $this->searchHandler = $searchHandler;
     }
 
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::TERMINATE => 'reindex',
+            KernelEvents::EXCEPTION => 'reindex',
+            ConsoleEvents::TERMINATE => 'reindex',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -69,29 +78,24 @@ class BackgroundIndexingTerminateListener implements BackgroundIndexerInterface,
         $this->locations[] = $location;
     }
 
-    public static function getSubscribedEvents()
-    {
-        return [
-            KernelEvents::TERMINATE => 'reindex',
-            KernelEvents::EXCEPTION => 'reindex',
-            ConsoleEvents::TERMINATE => 'reindex',
-        ];
-    }
-
     public function reindex()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
         $contentIndexed = [];
         $contentRemoved = [];
         foreach ($this->contentInfo as $contentInfo) {
+            if (isset($contentIndexed[$contentInfo->id]) || isset($contentRemoved[$contentInfo->id])) {
+                continue;
+            }
+
             try {
                 // In case version has changed we make sure to fetch fresh ContentInfo
                 $contentInfo = $contentHandler->loadContentInfo($contentInfo->id);
-                if ($contentInfo->isPublished && empty($contentIndexed[$contentInfo->id])) {
+                if ($contentInfo->isPublished) {
                     $this->searchHandler->indexContent(
                         $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
                     );
-                    $contentIndexed[$contentInfo->id] = true;
+                    $contentIndexed[$contentInfo->id] = $contentInfo->id;
                     continue;
                 }
             } catch (NotFoundException $e) {
@@ -102,19 +106,23 @@ class BackgroundIndexingTerminateListener implements BackgroundIndexerInterface,
             if ($contentInfo->mainLocationId) {
                 $this->searchHandler->deleteLocation($contentInfo->mainLocationId, $contentInfo->id);
             }
-            $contentRemoved[] = $contentInfo->id;
+            $contentRemoved[$contentInfo->id] = $contentInfo->id;
         }
         $this->contentInfo = [];
 
         foreach ($this->locations as $location) {
+            if (isset($contentIndexed[$location->contentId]) || isset($contentRemoved[$location->contentId])) {
+                continue;
+            }
+
             try {
                 // In case version has changed we make sure to fetch fresh ContentInfo
                 $contentInfo = $contentHandler->loadContentInfo($location->contentId);
-                if ($contentInfo->isPublished && empty($contentIndexed[$contentInfo->id])) {
+                if ($contentInfo->isPublished) {
                     $this->searchHandler->indexContent(
                         $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
                     );
-                    $contentIndexed[$contentInfo->id] = true;
+                    $contentIndexed[$contentInfo->id] = $contentInfo->id;
                     continue;
                 }
             } catch (NotFoundException $e) {
@@ -123,15 +131,15 @@ class BackgroundIndexingTerminateListener implements BackgroundIndexerInterface,
 
             $this->searchHandler->deleteContent($location->contentId);
             $this->searchHandler->deleteLocation($location->id, $location->contentId);
-            $contentRemoved[] = $location->contentId;
+            $contentRemoved[$location->contentId] = $location->contentId;
         }
         $this->locations = [];
 
-        if ($this->logger instanceof LoggerInterface) {
+        if ($this->logger instanceof LoggerInterface && (!empty($contentIndexed) || !empty($contentRemoved))) {
             $this->logger->warning(
                 sprintf(
                     'Exceptions detected on search index, content %s  was re indexed, & %s was removed from index',
-                    implode(', ', array_keys($contentIndexed)),
+                    implode(', ', $contentIndexed),
                     implode(', ', $contentRemoved)
                 )
             );
