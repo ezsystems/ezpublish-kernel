@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values;
@@ -176,7 +177,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
 
     protected function getUserMock()
     {
-        $user = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
+        $user = $this->createMock(User::class);
         $user->expects($this->any())
             ->method('__get')
             ->with($this->equalTo('id'))

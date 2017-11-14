@@ -8,8 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\Core\REST\Server\Input\Parser\RoleAssignInput;
+use eZ\Publish\Core\REST\Server\Values\RoleAssignment;
 
 class RoleAssignInputTest extends BaseTest
 {
@@ -40,7 +42,7 @@ class RoleAssignInputTest extends BaseTest
         $result = $roleAssignInput->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignment',
+            RoleAssignment::class,
             $result,
             'RoleAssignment not created correctly.'
         );
@@ -52,7 +54,7 @@ class RoleAssignInputTest extends BaseTest
         );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation\\RoleLimitation',
+            RoleLimitation::class,
             $result->limitation,
             'Limitation not created correctly.'
         );

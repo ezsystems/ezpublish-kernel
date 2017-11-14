@@ -7,7 +7,10 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Renderer;
 
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer;
+use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use PHPUnit\Framework\TestCase;
 
 class TemplateRendererTest extends TestCase
@@ -29,8 +32,8 @@ class TemplateRendererTest extends TestCase
 
     public function setUp()
     {
-        $this->templateEngineMock = $this->getMock('Symfony\Component\Templating\EngineInterface');
-        $this->eventDispatcherMock = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->templateEngineMock = $this->createMock(EngineInterface::class);
+        $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $this->renderer = new TemplateRenderer(
             $this->templateEngineMock,
             $this->eventDispatcherMock
@@ -47,7 +50,7 @@ class TemplateRendererTest extends TestCase
             ->method('dispatch')
             ->with(
                 MVCEvents::PRE_CONTENT_VIEW,
-                $this->isInstanceOf('\eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent')
+                $this->isInstanceOf(PreContentViewEvent::class)
             );
 
         $this->templateEngineMock

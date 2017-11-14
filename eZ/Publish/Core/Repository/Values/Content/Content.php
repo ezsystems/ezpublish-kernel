@@ -38,6 +38,17 @@ class Content extends APIContent
      */
     private $internalFields = array();
 
+    /**
+     * The first matched field language among user provided prioritized languages.
+     *
+     * The first matched language among user provided prioritized languages on object retrieval, or null if none
+     * provided (all languages) or on main fallback.
+     *
+     * @internal
+     * @var string|null
+     */
+    protected $prioritizedFieldLanguageCode;
+
     public function __construct(array $data = array())
     {
         foreach ($data as $propertyName => $propertyValue) {
@@ -49,9 +60,7 @@ class Content extends APIContent
     }
 
     /**
-     * Returns the VersionInfo for this version.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     * {@inheritdoc}
      */
     public function getVersionInfo()
     {
@@ -59,21 +68,12 @@ class Content extends APIContent
     }
 
     /**
-     * Returns a field value for the given value
-     * $version->fields[$fieldDefId][$languageCode] is an equivalent call
-     * if no language is given on a translatable field this method returns
-     * the value of the initial language of the version if present, otherwise null.
-     * On non translatable fields this method ignores the languageCode parameter.
-     *
-     * @param string $fieldDefIdentifier
-     * @param string $languageCode
-     *
-     * @return mixed a primitive type or a field type Value object depending on the field type.
+     * {@inheritdoc}
      */
     public function getFieldValue($fieldDefIdentifier, $languageCode = null)
     {
         if (null === $languageCode) {
-            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
+            $languageCode = $this->prioritizedFieldLanguageCode ?: $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
         if (isset($this->fields[$fieldDefIdentifier][$languageCode])) {
@@ -84,9 +84,7 @@ class Content extends APIContent
     }
 
     /**
-     * This method returns the complete fields collection.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
+     * {@inheritdoc}
      */
     public function getFields()
     {
@@ -94,20 +92,14 @@ class Content extends APIContent
     }
 
     /**
-     * This method returns the fields for a given language and non translatable fields.
-     *
-     * If not set the initialLanguage of the content version is used.
-     *
-     * @param string $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} with field identifier as keys
+     * {@inheritdoc}
      */
     public function getFieldsByLanguage($languageCode = null)
     {
         $fields = array();
 
         if (null === $languageCode) {
-            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
+            $languageCode = $this->prioritizedFieldLanguageCode ?: $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
         foreach ($this->getFields() as $field) {
@@ -121,19 +113,12 @@ class Content extends APIContent
     }
 
     /**
-     * This method returns the field for a given field definition identifier and language.
-     *
-     * If not set the initialLanguage of the content version is used.
-     *
-     * @param string $fieldDefIdentifier
-     * @param string|null $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
+     * {@inheritdoc}
      */
     public function getField($fieldDefIdentifier, $languageCode = null)
     {
         if (null === $languageCode) {
-            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
+            $languageCode = $this->prioritizedFieldLanguageCode ?: $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
         foreach ($this->getFields() as $field) {
@@ -147,15 +132,7 @@ class Content extends APIContent
     }
 
     /**
-     * Function where list of properties are returned.
-     *
-     * Override to add dynamic properties
-     *
-     * @uses \parent::getProperties()
-     *
-     * @param array $dynamicProperties
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getProperties($dynamicProperties = array('id', 'contentInfo'))
     {
@@ -163,11 +140,7 @@ class Content extends APIContent
     }
 
     /**
-     * Magic getter for retrieving convenience properties.
-     *
-     * @param string $property The name of the property to retrieve
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function __get($property)
     {
@@ -183,11 +156,7 @@ class Content extends APIContent
     }
 
     /**
-     * Magic isset for signaling existence of convenience properties.
-     *
-     * @param string $property
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function __isset($property)
     {

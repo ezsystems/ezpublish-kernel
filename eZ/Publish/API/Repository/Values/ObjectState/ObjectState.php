@@ -9,6 +9,8 @@
 namespace eZ\Publish\API\Repository\Values\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
 
 /**
  * This class represents a object state value.
@@ -16,10 +18,11 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
  * @property-read int $priority the priority in the group ordering
- * @property-read string $defaultLanguageCode the default language of the object state group names and description used for fallback.
+ * @property-read string $mainLanguageCode the default language of the object state names and descriptions used for fallback.
+ * @property-read string $defaultLanguageCode @deprecated, use $mainLanguageCode
  * @property-read string[] $languageCodes the available languages
  */
-abstract class ObjectState extends ValueObject
+abstract class ObjectState extends ValueObject implements MultiLanguageName, MultiLanguageDescription
 {
     /**
      * Primary key.
@@ -43,61 +46,11 @@ abstract class ObjectState extends ValueObject
     protected $priority;
 
     /**
-     * The default language code.
-     *
-     * @var string
-     */
-    protected $defaultLanguageCode;
-
-    /**
      * The available language codes for names an descriptions.
      *
      * @var string[]
      */
     protected $languageCodes;
-
-    /**
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getNames();
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
-     */
-    abstract public function getName($languageCode);
-
-    /**
-     * This method returns the human readable description of the content type.
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getDescriptions();
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
-     */
-    abstract public function getDescription($languageCode);
 
     /**
      * The object state group this object state belongs to.

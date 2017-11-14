@@ -26,6 +26,10 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
  */
 class SearchServiceLocationTest extends BaseTest
 {
+    const QUERY_CLASS = LocationQuery::class;
+
+    use Common\FacetedSearchProvider;
+
     protected function setUp()
     {
         $setupFactory = $this->getSetupFactory();
@@ -34,6 +38,17 @@ class SearchServiceLocationTest extends BaseTest
         }
 
         parent::setUp();
+    }
+
+    /**
+     * Test for the findLocation() method.
+     *
+     * @dataProvider getFacetedSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLoctions()
+     */
+    public function testFindFacetedLocation(LocationQuery $query, $fixture)
+    {
+        $this->assertQueryFixture($query, $fixture);
     }
 
     /**
@@ -1051,7 +1066,7 @@ class SearchServiceLocationTest extends BaseTest
                 );
                 $this->markTestIncomplete("No fixture available. Result recorded at $record. Result: \n" . $this->printResult($result));
             } else {
-                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate it.");
+                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate:\n " . $fixture);
             }
         }
 
@@ -1075,14 +1090,16 @@ class SearchServiceLocationTest extends BaseTest
             }
         }
 
-        foreach ($result->searchHits as $hit) {
-            $property = new \ReflectionProperty(get_class($hit), 'index');
-            $property->setAccessible(true);
-            $property->setValue($hit, null);
+        foreach (array($fixture, $result) as $set) {
+            foreach ($set->searchHits as $hit) {
+                $property = new \ReflectionProperty(get_class($hit), 'index');
+                $property->setAccessible(true);
+                $property->setValue($hit, null);
 
-            $property = new \ReflectionProperty(get_class($hit), 'matchedTranslation');
-            $property->setAccessible(true);
-            $property->setValue($hit, null);
+                $property = new \ReflectionProperty(get_class($hit), 'matchedTranslation');
+                $property->setAccessible(true);
+                $property->setValue($hit, null);
+            }
         }
 
         $this->assertEquals(

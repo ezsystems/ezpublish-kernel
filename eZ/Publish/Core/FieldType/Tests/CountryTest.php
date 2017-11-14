@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Country\Type as Country;
 use eZ\Publish\Core\FieldType\Country\Value as CountryValue;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\FieldType\Country\Exception\InvalidValue;
 
 /**
  * @group fieldType
@@ -144,19 +146,19 @@ class CountryTest extends FieldTypeTest
         return array(
             array(
                 'LegoLand',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 array('Norway', 'France', 'LegoLand'),
-                'eZ\\Publish\\Core\\FieldType\\Country\\Exception\\InvalidValue',
+                InvalidValue::class,
             ),
             array(
                 array('FR', 'BE', 'LE'),
-                'eZ\\Publish\\Core\\FieldType\\Country\\Exception\\InvalidValue',
+                InvalidValue::class,
             ),
             array(
                 array('FRE', 'BEL', 'LEG'),
-                'eZ\\Publish\\Core\\FieldType\\Country\\Exception\\InvalidValue',
+                InvalidValue::class,
             ),
         );
     }

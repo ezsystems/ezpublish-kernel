@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -248,7 +249,7 @@ class ContentService implements ContentServiceInterface
 
         $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
 
-        if ($versionInfo->status === APIVersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             $function = 'read';
         } else {
             $function = 'versionread';
@@ -262,25 +263,18 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Loads content in a version for the given content info object.
-     *
-     * If no version number is given, the method returns the current version
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if version with the given number does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * {@inheritdoc}
      */
     public function loadContentByContentInfo(ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
         // Change $useAlwaysAvailable to false to avoid contentInfo lookup if we know alwaysAvailable is disabled
         if ($useAlwaysAvailable && !$contentInfo->alwaysAvailable) {
             $useAlwaysAvailable = false;
+        }
+
+        // As we have content info we can avoid that current version is looked up using spi in loadContent() if not set
+        if ($versionNo === null) {
+            $versionNo = $contentInfo->currentVersionNo;
         }
 
         return $this->loadContent(
@@ -292,15 +286,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Loads content in the version given by version info.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * {@inheritdoc}
      */
     public function loadContentByVersionInfo(APIVersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = true)
     {
@@ -318,19 +304,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Loads content in a version of the given content object.
-     *
-     * If no version number is given, the method returns the current version
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
-     *
-     * @param int $contentId
-     * @param array|null $languages A language filter for fields. If not given all languages are returned
-     * @param int|null $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * {@inheritdoc}
      */
     public function loadContent($contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
@@ -339,9 +313,8 @@ class ContentService implements ContentServiceInterface
         if (!$this->repository->canUser('content', 'read', $content)) {
             throw new UnauthorizedException('content', 'read', array('contentId' => $contentId));
         }
-
         if (
-            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+            !$content->getVersionInfo()->isPublished()
             && !$this->repository->canUser('content', 'versionread', $content)
         ) {
             throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentId, 'versionNo' => $versionNo));
@@ -355,10 +328,12 @@ class ContentService implements ContentServiceInterface
      *
      * If no version number is given, the method returns the current version
      *
+     * @internal
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
      *
      * @param mixed $id
-     * @param array|null $languages A language filter for fields. If not given all languages are returned
+     * @param array|null $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
      * @param int|null $versionNo the version number. If not given the current version is returned
      * @param bool $isRemoteId
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
@@ -446,7 +421,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if (
-            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+            !$content->getVersionInfo()->isPublished()
             && !$this->repository->canUser('content', 'versionread', $content)
         ) {
             throw new UnauthorizedException('content', 'versionread', array('remoteId' => $remoteId, 'versionNo' => $versionNo));
@@ -968,6 +943,12 @@ class ContentService implements ContentServiceInterface
                     $updatePathIdentificationString ? $languageCode === $content->contentInfo->mainLanguageCode : false
                 );
             }
+            // archive URL aliases of Translations that got deleted
+            $this->persistenceHandler->urlAliasHandler()->archiveUrlAliasesForDeletedTranslations(
+                $location->id,
+                $location->parentLocationId,
+                $content->versionInfo->languageCodes
+            );
         }
     }
 
@@ -1175,7 +1156,7 @@ class ContentService implements ContentServiceInterface
             null,
             $versionInfo->versionNo
         );
-        if ($content->versionInfo->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$content->versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is not a draft and can not be updated'
@@ -1440,12 +1421,8 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
-        if (!$content->getVersionInfo()->getContentInfo()->published) {
-            if (!$this->repository->canUser('content', 'create', $content)) {
-                throw new UnauthorizedException('content', 'create', array('contentId' => $content->id));
-            }
-        } elseif (!$this->repository->canUser('content', 'edit', $content)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $content->id));
+        if (!$this->repository->canUser('content', 'publish', $content)) {
+            throw new UnauthorizedException('content', 'publish', array('contentId' => $content->id));
         }
 
         $this->repository->beginTransaction();
@@ -1475,7 +1452,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function internalPublishVersion(APIVersionInfo $versionInfo, $publicationDate = null)
     {
-        if ($versionInfo->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new BadStateException('$versionInfo', 'Only versions in draft status can be published.');
         }
 
@@ -1530,7 +1507,7 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteVersion(APIVersionInfo $versionInfo)
     {
-        if ($versionInfo->status === APIVersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is published and can not be removed'
@@ -1675,7 +1652,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadRelations(APIVersionInfo $versionInfo)
     {
-        if ($versionInfo->status === APIVersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             $function = 'read';
         } else {
             $function = 'versionread';
@@ -1768,7 +1745,7 @@ class ContentService implements ContentServiceInterface
             $sourceVersion->versionNo
         );
 
-        if ($sourceVersion->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$sourceVersion->isDraft()) {
             throw new BadStateException(
                 '$sourceVersion',
                 'Relations of type common can only be added to versions of status draft'
@@ -1820,7 +1797,7 @@ class ContentService implements ContentServiceInterface
             $sourceVersion->versionNo
         );
 
-        if ($sourceVersion->status !== APIVersionInfo::STATUS_DRAFT) {
+        if (!$sourceVersion->isDraft()) {
             throw new BadStateException(
                 '$sourceVersion',
                 'Relations of type common can only be removed from versions of status draft'
@@ -1897,6 +1874,179 @@ class ContentService implements ContentServiceInterface
     public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
     {
         throw new NotImplementedException(__METHOD__);
+    }
+
+    /**
+     * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
+     *
+     * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
+     *       a warning before performing it.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
+     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $languageCode
+     *
+     * @since 6.11
+     */
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        if ($contentInfo->mainLanguageCode === $languageCode) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified translation is the main translation of the Content Object'
+            );
+        }
+        // before actual removal, collect information on Versions
+        $versions = [];
+        $singleLangVersions = [];
+        foreach ($this->loadVersions($contentInfo) as $versionInfo) {
+            // check if user is authorized to delete Version
+            if (!$this->repository->canUser('content', 'remove', $versionInfo)) {
+                throw new UnauthorizedException(
+                    'content',
+                    'remove',
+                    [
+                        'contentId' => $contentInfo->id,
+                        'versionNo' => $versionInfo->versionNo,
+                    ]
+                );
+            }
+            // check if the specified translation exists for the Version
+            if (!in_array($languageCode, $versionInfo->languageCodes)) {
+                // if translation does not exist, simply ignore Version (see InvalidArgumentException later on)
+                continue;
+            }
+            // check if the specified translation is the only one
+            if (count($versionInfo->languageCodes) < 2) {
+                $singleLangVersions[] = $versionInfo->versionNo;
+            } else {
+                // otherwise add Version to the list of valid Versions to be processed
+                $versions[] = $versionInfo->versionNo;
+            }
+        }
+
+        if (!empty($singleLangVersions)) {
+            $verList = implode(', ', $singleLangVersions);
+            throw new BadStateException(
+                '$languageCode',
+                "The Version(s): {$verList} of the ContentId={$contentInfo->id} have only one language {$languageCode}. Remove these Version(s) before proceeding.\n" .
+                "Hint: Command 'ezplatform:remove-content-translation' handles this for you, look into it to see how this can be handled in custom code."
+            );
+        }
+
+        // if there are no Versions with the given translation, $languageCode arg is invalid
+        if (empty($versions)) {
+            throw new InvalidArgumentException(
+                '$languageCode',
+                sprintf(
+                    'Specified translation does not exist in the Content Object(id=%d)',
+                     $contentInfo->id
+                )
+            );
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->persistenceHandler->contentHandler()->removeTranslationFromContent($contentInfo->id, $languageCode);
+            $locationIds = array_map(
+                function (Location $location) {
+                    return $location->id;
+                },
+                $this->repository->getLocationService()->loadLocations($contentInfo)
+            );
+            $this->persistenceHandler->urlAliasHandler()->translationRemoved($locationIds, $languageCode);
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            // cover generic unexpected exception to fulfill API promise on @throws
+            throw new BadStateException('$contentInfo', 'Translation removal failed', $e);
+        }
+    }
+
+    /**
+     * Delete specified Translation from a Content Draft.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the only one the Content Draft has or it is the main Translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to edit the Content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given Draft.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if specified Version was not found
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo Content Version Draft
+     * @param string $languageCode Language code of the Translation to be removed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft w/o the specified Translation
+     *
+     * @since 6.12
+     */
+    public function deleteTranslationFromDraft(APIVersionInfo $versionInfo, $languageCode)
+    {
+        if (!$versionInfo->isDraft()) {
+            throw new BadStateException(
+                '$versionInfo',
+                'Version is not a draft, so Translations cannot be modified. Create a Draft before proceeding'
+            );
+        }
+
+        if ($versionInfo->contentInfo->mainLanguageCode === $languageCode) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified Translation is the main Translation of the Content Object. Change it before proceeding.'
+            );
+        }
+
+        if (!$this->repository->canUser('content', 'edit', $versionInfo->contentInfo)) {
+            throw new UnauthorizedException(
+                'content', 'edit', ['contentId' => $versionInfo->contentInfo->id]
+            );
+        }
+
+        if (!in_array($languageCode, $versionInfo->languageCodes)) {
+            throw new InvalidArgumentException(
+                '$languageCode',
+                sprintf(
+                    'The Version (ContentId=%d, VersionNo=%d) is not translated into %s',
+                    $versionInfo->contentInfo->id,
+                    $versionInfo->versionNo,
+                    $languageCode
+                )
+            );
+        }
+
+        if (count($versionInfo->languageCodes) === 1) {
+            throw new BadStateException(
+                '$languageCode',
+                'Specified Translation is the only one Content Object Version has'
+            );
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $spiContent = $this->persistenceHandler->contentHandler()->deleteTranslationFromDraft(
+                $versionInfo->contentInfo->id,
+                $versionInfo->versionNo,
+                $languageCode
+            );
+            $this->repository->commit();
+
+            return $this->domainMapper->buildContentDomainObject($spiContent);
+        } catch (APINotFoundException $e) {
+            // avoid wrapping expected NotFoundException in BadStateException handled below
+            $this->repository->rollback();
+            throw $e;
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            // cover generic unexpected exception to fulfill API promise on @throws
+            throw new BadStateException('$contentInfo', 'Translation removal failed', $e);
+        }
     }
 
     /**

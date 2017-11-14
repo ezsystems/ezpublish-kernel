@@ -13,7 +13,7 @@ use Behat\MinkExtension\Context\RawMinkContext;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use EzSystems\PlatformBehatBundle\Context\RepositoryContext;
-use PHPUnit_Framework_Assert;
+use PHPUnit\Framework\Assert;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
@@ -162,7 +162,7 @@ class QueryControllerContext extends RawMinkContext implements Context
                     $exceptionLines[] = trim($html);
                 }
                 $message = 'An exception occurred during rendering:' . implode("\n", $exceptionLines);
-                PHPUnit_Framework_Assert::assertTrue(false, $message);
+                Assert::assertTrue(false, $message);
             }
         }
         $this->assertSession()->statusCodeEquals(200);
@@ -209,7 +209,7 @@ class QueryControllerContext extends RawMinkContext implements Context
             }
         }
 
-        PHPUnit_Framework_Assert::assertTrue(
+        Assert::assertTrue(
             $variableFound,
             "The $twigVariableName twig variable was not set"
         );

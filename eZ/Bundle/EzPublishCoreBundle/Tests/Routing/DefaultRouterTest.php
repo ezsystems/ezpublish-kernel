@@ -37,8 +37,8 @@ class DefaultRouterTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $this->container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $this->requestContext = new RequestContext();
     }
 
@@ -108,7 +108,7 @@ class DefaultRouterTest extends TestCase
      */
     public function testGenerateNoSiteAccess($url)
     {
-        $generator = $this->getMock('Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface');
+        $generator = $this->createMock('Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface');
         $generator
             ->expects($this->once())
             ->method('generate')
@@ -150,7 +150,7 @@ class DefaultRouterTest extends TestCase
     {
         $routeName = $routeName ?: __METHOD__;
         $nonSiteAccessAwareRoutes = array('_dontwantsiteaccess');
-        $generator = $this->getMock('Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface');
+        $generator = $this->createMock('Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface');
         $generator
             ->expects($this->once())
             ->method('generate')
@@ -166,7 +166,7 @@ class DefaultRouterTest extends TestCase
 
         // If matcher is URILexer, we make it act as it's supposed to, prepending the siteaccess.
         if ($isMatcherLexer) {
-            $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
+            $matcher = $this->createMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
             // Route is siteaccess aware, we're expecting analyseLink() to be called
             if (!in_array($routeName, $nonSiteAccessAwareRoutes)) {
                 $matcher
@@ -181,7 +181,7 @@ class DefaultRouterTest extends TestCase
                     ->method('analyseLink');
             }
         } else {
-            $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher');
+            $matcher = $this->createMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher');
         }
 
         $sa = new SiteAccess($saName, 'test', $matcher);
@@ -231,8 +231,8 @@ class DefaultRouterTest extends TestCase
         $urlGenerated = 'http://phoenix-rises.fm/foo/bar';
 
         $siteAccessName = 'foo_test';
-        $siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
-        $versatileMatcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
+        $siteAccessRouter = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
+        $versatileMatcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
         $simplifiedRequest = new SimplifiedRequest(
             array(
                 'host' => 'phoenix-rises.fm',
@@ -249,7 +249,7 @@ class DefaultRouterTest extends TestCase
             ->with($siteAccessName)
             ->will($this->returnValue(new SiteAccess($siteAccessName, 'foo', $versatileMatcher)));
 
-        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $generator = $this->createMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $generator
             ->expects($this->at(0))
             ->method('setContext')
@@ -266,7 +266,7 @@ class DefaultRouterTest extends TestCase
 
         $router = new DefaultRouter($this->container, 'foo', array(), $this->requestContext);
         $router->setConfigResolver($this->configResolver);
-        $router->setSiteAccess(new SiteAccess('test', 'test', $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher')));
+        $router->setSiteAccess(new SiteAccess('test', 'test', $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher')));
         $router->setSiteAccessRouter($siteAccessRouter);
         $refRouter = new ReflectionObject($router);
         $refGenerator = $refRouter->getProperty('generator');

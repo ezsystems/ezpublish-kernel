@@ -15,6 +15,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\C
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PoliciesConfigBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PolicyProviderInterface;
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -55,6 +56,11 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      * @var array
      */
     private $defaultSettingsCollection = [];
+
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[]
+     */
+    private $siteaccessConfigurationFilters = [];
 
     public function __construct(array $configParsers = array())
     {
@@ -141,7 +147,10 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        return new Configuration($this->getMainConfigParser(), $this->suggestionCollector);
+        $configuration = new Configuration($this->getMainConfigParser(), $this->suggestionCollector);
+        $configuration->setSiteAccessConfigurationFilters($this->siteaccessConfigurationFilters);
+
+        return $configuration;
     }
 
     /**
@@ -306,6 +315,8 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
             new FileLocator(__DIR__ . '/../../../Publish/Core/settings')
         );
         $coreLoader->load('repository.yml');
+        $coreLoader->load('repository/inner.yml');
+        $coreLoader->load('repository/signalslot.yml');
         $coreLoader->load('fieldtype_external_storages.yml');
         $coreLoader->load('fieldtypes.yml');
         $coreLoader->load('indexable_fieldtypes.yml');
@@ -542,5 +553,10 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     public function addDefaultSettings($fileLocation, array $files)
     {
         $this->defaultSettingsCollection[$fileLocation] = $files;
+    }
+
+    public function addSiteAccessConfigurationFilter(SiteAccessConfigurationFilter $filter)
+    {
+        $this->siteaccessConfigurationFilters[] = $filter;
     }
 }

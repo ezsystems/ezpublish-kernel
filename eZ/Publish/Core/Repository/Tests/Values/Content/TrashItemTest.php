@@ -8,42 +8,95 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
+use eZ\Publish\API\Repository\Tests\Values\ValueObjectTestTrait;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use PHPUnit\Framework\TestCase;
 
 class TrashItemTest extends TestCase
 {
-    /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::getProperties
-     */
-    public function testObjectProperties()
-    {
-        $object = new TrashItem();
-        $properties = $object->attributes();
-        //self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
-        self::assertContains('contentInfo', $properties, 'Property not found');
-        self::assertContains('contentId', $properties, 'Property not found');
-        self::assertContains('id', $properties, 'Property not found');
-        self::assertContains('priority', $properties, 'Property not found');
-        self::assertContains('hidden', $properties, 'Property not found');
-        self::assertContains('invisible', $properties, 'Property not found');
-        self::assertContains('remoteId', $properties, 'Property not found');
-        self::assertContains('parentLocationId', $properties, 'Property not found');
-        self::assertContains('pathString', $properties, 'Property not found');
-        self::assertContains('path', $properties, 'Property not found');
-        self::assertContains('depth', $properties, 'Property not found');
-        self::assertContains('sortField', $properties, 'Property not found');
-        self::assertContains('sortOrder', $properties, 'Property not found');
+    use ValueObjectTestTrait;
 
-        // check for duplicates and double check existence of property
-        $propertiesHash = array();
-        foreach ($properties as $property) {
-            if (isset($propertiesHash[$property])) {
-                self::fail("Property '{$property}' exists several times in properties list");
-            } elseif (!isset($object->$property)) {
-                self::fail("Property '{$property}' does not exist on object, even though it was hinted to be there");
-            }
-            $propertiesHash[$property] = 1;
-        }
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::__construct
+     */
+    public function testNewClass()
+    {
+        // create ContentInfo to be able to retrieve the contentId property via magic method
+        $contentInfo = new ContentInfo();
+        $trashItem = new TrashItem(['contentInfo' => $contentInfo]);
+
+        $this->assertPropertiesCorrect(
+            [
+                'contentInfo' => $contentInfo,
+                'contentId' => null,
+                'id' => null,
+                'priority' => null,
+                'hidden' => null,
+                'invisible' => null,
+                'remoteId' => null,
+                'parentLocationId' => null,
+                'pathString' => null,
+                'path' => [],
+                'depth' => null,
+                'sortField' => null,
+                'sortOrder' => null,
+            ],
+            $trashItem
+        );
+    }
+
+    /**
+     * Test retrieving missing property.
+     *
+     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__get
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
+     */
+    public function testMissingProperty()
+    {
+        $trashItem = new TrashItem();
+        $value = $trashItem->notDefined;
+        self::fail('Succeeded getting non existing property');
+    }
+
+    /**
+     * Test setting read only property.
+     *
+     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__set
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
+     */
+    public function testReadOnlyProperty()
+    {
+        $trashItem = new TrashItem();
+        $trashItem->id = 42;
+        self::fail('Succeeded setting read only property');
+    }
+
+    /**
+     * Test if property exists.
+     *
+     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__isset
+     */
+    public function testIsPropertySet()
+    {
+        $trashItem = new TrashItem();
+        $value = isset($trashItem->notDefined);
+        self::assertEquals(false, $value);
+
+        $value = isset($trashItem->id);
+        self::assertEquals(true, $value);
+    }
+
+    /**
+     * Test unsetting a property.
+     *
+     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__unset
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
+     */
+    public function testUnsetProperty()
+    {
+        $trashItem = new TrashItem(['id' => 2]);
+        unset($trashItem->id);
+        self::fail('Unsetting read-only property succeeded');
     }
 }

@@ -9,6 +9,15 @@
 namespace eZ\Publish\Core\Search\Tests;
 
 use ArrayObject;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion as APICriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause as APISortClause;
+use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
+use eZ\Publish\SPI\Search\FieldType as SPIFieldType;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
+use eZ\Publish\Core\Search\Common\FieldRegistry;
+use eZ\Publish\SPI\FieldType\Indexable;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIContentTypeHandler;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
  * Test case for FieldNameResolver.
@@ -91,7 +100,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'
+                    APICriterion::class
                 ),
                 'content_type_identifier_1',
                 'field_definition_identifier_1',
@@ -105,7 +114,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'
+                    APICriterion::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -165,7 +174,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'
+                    APICriterion::class
                 ),
                 'content_type_identifier_1',
                 'field_definition_identifier_1',
@@ -179,7 +188,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'
+                    APICriterion::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -241,7 +250,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'
+                    APICriterion::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -302,7 +311,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'
+                    APICriterion::class
                 ),
                 'content_type_identifier_2',
                 'field_definition_identifier_1',
@@ -353,7 +362,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getIndexFieldName')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\SortClause'
+                    APISortClause::class
                 ),
                 'content_type_identifier',
                 'field_definition_identifier',
@@ -407,9 +416,7 @@ class FieldNameResolverTest extends TestCase
     {
         $mockedFieldNameResolver = $this->getMockedFieldNameResolver(array('getSearchableFieldMap'));
 
-        $customFieldMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\CustomFieldInterface'
-        );
+        $customFieldMock = $this->createMock(CustomFieldInterface::class);
         $customFieldMock
             ->expects($this->once())
             ->method('getCustomField')
@@ -458,7 +465,7 @@ class FieldNameResolverTest extends TestCase
                 )
             );
 
-        $indexFieldType->expects($this->never())->method('getDefaultField');
+        $indexFieldType->expects($this->never())->method('getDefaultSortField');
 
         $this->fieldNameGeneratorMock
             ->expects($this->once())
@@ -477,7 +484,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getTypedName')
             ->with(
                 'generated_field_name',
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Search\\FieldType')
+                $this->isInstanceOf(SPIFieldType::class)
             )
             ->will(
                 $this->returnValue('generated_typed_field_name')
@@ -544,7 +551,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getTypedName')
             ->with(
                 'generated_field_name',
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Search\\FieldType')
+                $this->isInstanceOf(SPIFieldType::class)
             )
             ->will(
                 $this->returnValue('generated_typed_field_name')
@@ -611,7 +618,7 @@ class FieldNameResolverTest extends TestCase
             ->method('getTypedName')
             ->with(
                 'generated_field_name',
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Search\\FieldType')
+                $this->isInstanceOf(SPIFieldType::class)
             )
             ->will(
                 $this->returnValue('generated_typed_field_name')
@@ -724,7 +731,9 @@ class FieldNameResolverTest extends TestCase
      */
     public function testGetIndexFieldNameNamedFieldThrowsRuntimeException()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver(array('getSearchableFieldMap'));
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver(
+            ['getSortFieldName', 'getSearchableFieldMap', 'getFieldNames', 'getFieldTypes', 'getSortFieldName']
+        );
         $indexFieldType = $this->getIndexFieldTypeMock();
         $searchFieldTypeMock = $this->getSearchFieldTypeMock();
 
@@ -767,9 +776,7 @@ class FieldNameResolverTest extends TestCase
     protected function getMockedFieldNameResolver(array $methods = array())
     {
         $fieldNameResolver = $this
-            ->getMockBuilder(
-                'eZ\\Publish\\Core\\Search\\Common\\FieldNameResolver'
-            )
+            ->getMockBuilder(FieldNameResolver::class)
             ->setConstructorArgs(
                 array(
                     $this->getFieldRegistryMock(),
@@ -794,9 +801,7 @@ class FieldNameResolverTest extends TestCase
     protected function getFieldRegistryMock()
     {
         if (!isset($this->fieldRegistryMock)) {
-            $this->fieldRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Search\\Common\\FieldRegistry'
-            );
+            $this->fieldRegistryMock = $this->createMock(FieldRegistry::class);
         }
 
         return $this->fieldRegistryMock;
@@ -807,9 +812,7 @@ class FieldNameResolverTest extends TestCase
      */
     protected function getIndexFieldTypeMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\SPI\\FieldType\\Indexable'
-        );
+        return $this->createMock(Indexable::class);
     }
 
     /**
@@ -817,9 +820,7 @@ class FieldNameResolverTest extends TestCase
      */
     protected function getSearchFieldTypeMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\SPI\\Search\\FieldType'
-        );
+        return $this->createMock(SPIFieldType::class);
     }
 
     /**
@@ -833,9 +834,7 @@ class FieldNameResolverTest extends TestCase
     protected function getContentTypeHandlerMock()
     {
         if (!isset($this->contentTypeHandlerMock)) {
-            $this->contentTypeHandlerMock = $this->getMock(
-                'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler'
-            );
+            $this->contentTypeHandlerMock = $this->createMock(SPIContentTypeHandler::class);
         }
 
         return $this->contentTypeHandlerMock;
@@ -852,10 +851,7 @@ class FieldNameResolverTest extends TestCase
     protected function getFieldNameGeneratorMock()
     {
         if (!isset($this->fieldNameGeneratorMock)) {
-            $this->fieldNameGeneratorMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Search\\Common\\FieldNameGenerator')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->fieldNameGeneratorMock = $this->createMock(FieldNameGenerator::class);
         }
 
         return $this->fieldNameGeneratorMock;
@@ -866,10 +862,7 @@ class FieldNameResolverTest extends TestCase
      */
     protected function getCriterionMock()
     {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(APICriterion::class);
     }
 
     /**
@@ -877,9 +870,6 @@ class FieldNameResolverTest extends TestCase
      */
     protected function getSortClauseMock()
     {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\SortClause')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(APISortClause::class);
     }
 }

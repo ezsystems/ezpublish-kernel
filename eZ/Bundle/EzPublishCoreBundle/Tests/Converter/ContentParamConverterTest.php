@@ -26,7 +26,7 @@ class ContentParamConverterTest extends AbstractParamConverterTest
 
     public function setUp()
     {
-        $this->contentServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $this->contentServiceMock = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
 
         $this->converter = new ContentParamConverter($this->contentServiceMock);
     }
@@ -46,7 +46,7 @@ class ContentParamConverterTest extends AbstractParamConverterTest
     public function testApplyContent()
     {
         $id = 42;
-        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $valueObject = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
 
         $this->contentServiceMock
             ->expects($this->once())

@@ -16,6 +16,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Adds locations from related content to the Http cache clear list, for given content.
  * Both relation and reverse relation are taken into account.
+ *
+ * @deprecated since 6.8. Smart cache is replaced by http-cache multi-tagging from the platform-http-cache package.
  */
 class RelatedLocationsListener implements EventSubscriberInterface
 {

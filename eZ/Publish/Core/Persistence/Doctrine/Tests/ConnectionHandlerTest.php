@@ -60,6 +60,6 @@ class ConnectionHandlerTest extends TestCase
     {
         $handler = ConnectionHandler::createFromDSN('sqlite://:memory:');
 
-        $this->assertInstanceOf('eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\SqliteConnectionHandler', $handler);
+        $this->assertInstanceOf(ConnectionHandler\SqliteConnectionHandler::class, $handler);
     }
 }

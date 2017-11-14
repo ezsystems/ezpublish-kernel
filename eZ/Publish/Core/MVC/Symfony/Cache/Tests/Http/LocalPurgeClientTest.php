@@ -21,6 +21,7 @@ function time()
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\ContentPurger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,7 +33,7 @@ class LocalPurgeClientTest extends TestCase
         $expectedBanRequest = Request::create('http://localhost', 'BAN');
         $expectedBanRequest->headers->set('X-Location-Id', '(' . implode('|', $locationIds) . ')');
 
-        $cacheStore = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger');
+        $cacheStore = $this->createMock(ContentPurger::class);
         $cacheStore
             ->expects($this->once())
             ->method('purgeByRequest')
@@ -44,7 +45,7 @@ class LocalPurgeClientTest extends TestCase
 
     public function testPurgeAll()
     {
-        $cacheStore = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger');
+        $cacheStore = $this->createMock(ContentPurger::class);
         $cacheStore
             ->expects($this->once())
             ->method('purgeAllContent');

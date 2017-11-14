@@ -8,9 +8,11 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentMatcherFactory;
+
 class ContentMatcherFactoryTest extends ContentBasedMatcherFactoryTest
 {
-    protected $matcherFactoryClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentMatcherFactory';
+    protected $matcherFactoryClass = ContentMatcherFactory::class;
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.

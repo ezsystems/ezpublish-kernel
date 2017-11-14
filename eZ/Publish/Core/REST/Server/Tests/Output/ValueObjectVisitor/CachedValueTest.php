@@ -164,7 +164,7 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
     {
         $options = $this->options ?: $this->defaultOptions;
 
-        $mock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $mock = $this->createMock(ConfigResolverInterface::class);
         $mock
             ->expects($this->any())
             ->method('hasParameter')

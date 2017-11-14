@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\IO\Tests;
 
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\IO\UrlRedecorator;
+use eZ\Publish\Core\IO\UrlDecorator;
 
 class UrlRedecoratorTest extends TestCase
 {
@@ -25,8 +26,8 @@ class UrlRedecoratorTest extends TestCase
     public function setUp()
     {
         $this->redecorator = new UrlRedecorator(
-            $this->sourceDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator'),
-            $this->targetDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator')
+            $this->sourceDecoratorMock = $this->createMock(UrlDecorator::class),
+            $this->targetDecoratorMock = $this->createMock(UrlDecorator::class)
         );
     }
 

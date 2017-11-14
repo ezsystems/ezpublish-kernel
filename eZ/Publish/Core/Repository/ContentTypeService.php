@@ -168,35 +168,23 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Get a Content Type Group object by id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     *
-     * @param mixed $contentTypeGroupId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * {@inheritdoc}
      */
-    public function loadContentTypeGroup($contentTypeGroupId)
+    public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = [])
     {
         $spiGroup = $this->contentTypeHandler->loadGroup(
             $contentTypeGroupId
         );
 
-        return $this->contentTypeDomainMapper->buildContentTypeGroupDomainObject($spiGroup);
+        return $this->contentTypeDomainMapper->buildContentTypeGroupDomainObject($spiGroup, $prioritizedLanguages);
     }
 
     /**
-     * Get a Content Type Group object by identifier.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     *
-     * @param string $contentTypeGroupIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * {@inheritdoc}
      */
-    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier)
+    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = [])
     {
-        $groups = $this->loadContentTypeGroups();
+        $groups = $this->loadContentTypeGroups($prioritizedLanguages);
 
         foreach ($groups as $group) {
             if ($group->identifier === $contentTypeGroupIdentifier) {
@@ -208,17 +196,15 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Get all Content Type Groups.
-     *
-     * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup[]
+     * {@inheritdoc}
      */
-    public function loadContentTypeGroups()
+    public function loadContentTypeGroups(array $prioritizedLanguages = [])
     {
         $spiGroups = $this->contentTypeHandler->loadAllGroups();
 
         $groups = array();
         foreach ($spiGroups as $spiGroup) {
-            $groups[] = $this->contentTypeDomainMapper->buildContentTypeGroupDomainObject($spiGroup);
+            $groups[] = $this->contentTypeDomainMapper->buildContentTypeGroupDomainObject($spiGroup, $prioritizedLanguages);
         }
 
         return $groups;
@@ -863,15 +849,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Get a Content Type object by id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
-     *
-     * @param mixed $contentTypeId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * {@inheritdoc}
      */
-    public function loadContentType($contentTypeId)
+    public function loadContentType($contentTypeId, array $prioritizedLanguages = [])
     {
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
@@ -885,21 +865,15 @@ class ContentTypeService implements ContentTypeServiceInterface
                     return $this->contentTypeHandler->loadGroup($id);
                 },
                 $spiContentType->groupIds
-            )
+            ),
+            $prioritizedLanguages
         );
     }
 
     /**
-     * Get a Content Type object by identifier.
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If content type with the given identifier and status DEFINED can not be found
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If given identifier is not a string
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * {@inheritdoc}
      */
-    public function loadContentTypeByIdentifier($identifier)
+    public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = [])
     {
         if (!is_string($identifier)) {
             throw new InvalidArgumentValue('$identifier', $identifier);
@@ -916,20 +890,15 @@ class ContentTypeService implements ContentTypeServiceInterface
                     return $this->contentTypeHandler->loadGroup($id);
                 },
                 $spiContentType->groupIds
-            )
+            ),
+            $prioritizedLanguages
         );
     }
 
     /**
-     * Get a Content Type object by id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content type with the given remote id and status DEFINED can not be found
-     *
-     * @param string $remoteId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * {@inheritdoc}
      */
-    public function loadContentTypeByRemoteId($remoteId)
+    public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = [])
     {
         $spiContentType = $this->contentTypeHandler->loadByRemoteId($remoteId);
 
@@ -940,7 +909,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                     return $this->contentTypeHandler->loadGroup($id);
                 },
                 $spiContentType->groupIds
-            )
+            ),
+            $prioritizedLanguages
         );
     }
 
@@ -978,13 +948,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Get Content Type objects which belong to the given content type group.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] Which have status DEFINED
+     * {@inheritdoc}
      */
-    public function loadContentTypes(APIContentTypeGroup $contentTypeGroup)
+    public function loadContentTypes(APIContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
     {
         $spiContentTypes = $this->contentTypeHandler->loadContentTypes(
             $contentTypeGroup->id,
@@ -1000,7 +966,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                         return $this->contentTypeHandler->loadGroup($id);
                     },
                     $spiContentType->groupIds
-                )
+                ),
+                $prioritizedLanguages
             );
         }
 

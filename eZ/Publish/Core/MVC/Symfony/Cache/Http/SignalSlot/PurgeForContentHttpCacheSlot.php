@@ -15,6 +15,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
  *
  * Will by default use the contentId property of the signal object, as it is the most common. Override the
  * extractContentId() method in your own signal to use a different property.
+ *
+ * @deprecated since 6.8. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
 abstract class PurgeForContentHttpCacheSlot extends HttpCacheSlot
 {

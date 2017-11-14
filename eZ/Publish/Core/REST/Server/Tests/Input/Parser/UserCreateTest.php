@@ -8,10 +8,15 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\ContentTypeService;
+use eZ\Publish\Core\Repository\UserService;
+use eZ\Publish\Core\REST\Client\ContentService;
+use eZ\Publish\Core\REST\Client\FieldTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\UserCreate;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 
 class UserCreateTest extends BaseTest
 {
@@ -47,13 +52,13 @@ class UserCreateTest extends BaseTest
         $result = $userCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserCreateStruct',
+            UserCreateStruct::class,
             $result,
             'UserCreateStruct not created correctly.'
         );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
+            ContentType::class,
             $result->contentType,
             'contentType not created correctly.'
         );
@@ -449,29 +454,17 @@ class UserCreateTest extends BaseTest
      */
     private function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
-            array(),
-            array(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getContentTypeServiceMock(),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-            ),
-            '',
-            false
-        );
+        $fieldTypeParserMock = $this->getMockBuilder(FieldTypeParser::class)
+            ->setMethods(array())
+            ->disableOriginalConstructor()
+            ->setConstructorArgs(
+                array(
+                    $this->createMock(ContentService::class),
+                    $this->getContentTypeServiceMock(),
+                    $this->createMock(FieldTypeService::class),
+                )
+            )
+            ->getMock();
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseValue')
@@ -488,13 +481,7 @@ class UserCreateTest extends BaseTest
      */
     protected function getUserServiceMock()
     {
-        $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $userServiceMock = $this->createMock(UserService::class);
 
         $contentType = $this->getContentType();
         $userServiceMock->expects($this->any())
@@ -527,13 +514,7 @@ class UserCreateTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
 
         $contentTypeServiceMock->expects($this->any())
             ->method('loadContentType')

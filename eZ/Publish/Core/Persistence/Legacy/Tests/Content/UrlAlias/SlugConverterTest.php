@@ -10,9 +10,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
 use eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased;
 use eZ\Publish\Core\Persistence\Utf8Converter;
+use PHPUnit\Framework\TestSuite;
 
 /**
  * Test case for URL slug converter.
@@ -314,14 +316,15 @@ class SlugConverterTest extends TestCase
     protected function getSlugConverterMock(array $methods = array())
     {
         if (!isset($this->slugConverterMock)) {
-            $this->slugConverterMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\SlugConverter',
-                $methods,
-                array(
-                    $this->getTransformationProcessorMock(),
-                    $this->configuration,
+            $this->slugConverterMock = $this->getMockBuilder(SlugConverter::class)
+                ->setMethods($methods)
+                ->setConstructorArgs(
+                    array(
+                        $this->getTransformationProcessorMock(),
+                        $this->configuration,
+                    )
                 )
-            );
+                ->getMock();
         }
 
         return $this->slugConverterMock;
@@ -334,7 +337,7 @@ class SlugConverterTest extends TestCase
     {
         if (!isset($this->transformationProcessorMock)) {
             $this->transformationProcessorMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
+                TransformationProcessor::class,
                 array(),
                 '',
                 false,
@@ -350,10 +353,10 @@ class SlugConverterTest extends TestCase
     /**
      * Returns the test suite with all tests declared in this class.
      *
-     * @return \PHPUnit_Framework_TestSuite
+     * @return TestSuite
      */
     public static function suite()
     {
-        return new \PHPUnit_Framework_TestSuite(__CLASS__);
+        return new TestSuite(__CLASS__);
     }
 }

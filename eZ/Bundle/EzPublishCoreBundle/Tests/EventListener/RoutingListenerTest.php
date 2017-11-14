@@ -36,8 +36,8 @@ class RoutingListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
         $this->urlAliasRouter = $this
             ->getMockBuilder('eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter')
             ->disableOriginalConstructor()

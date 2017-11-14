@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block;
 
 use PHPUnit\Framework\TestCase;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MultipleValued;
 
 class MultipleValuedTest extends TestCase
 {
@@ -54,13 +56,13 @@ class MultipleValuedTest extends TestCase
     public function testInjectRepository()
     {
         $matcher = $this->getMultipleValuedMatcherMock();
-        $repositoryMock = $this->getMock('eZ\\Publish\\API\\Repository\\Repository');
+        $repositoryMock = $this->createMock(Repository::class);
         $matcher->setRepository($repositoryMock);
         $this->assertSame($repositoryMock, $matcher->getRepository());
     }
 
     private function getMultipleValuedMatcherMock()
     {
-        return $this->getMockForAbstractClass('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MultipleValued');
+        return $this->getMockForAbstractClass(MultipleValued::class);
     }
 }

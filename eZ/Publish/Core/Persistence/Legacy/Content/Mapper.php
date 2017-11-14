@@ -107,14 +107,13 @@ class Mapper
         $versionInfo->modificationDate = $struct->modified;
         $versionInfo->names = $struct->name;
 
-        $languageIds = array();
+        $languages = [];
         foreach ($struct->fields as $field) {
-            if (!isset($languageIds[$field->languageCode])) {
-                $languageIds[$field->languageCode] =
-                    $this->languageHandler->loadByLanguageCode($field->languageCode)->id;
+            if (!isset($languages[$field->languageCode])) {
+                $languages[$field->languageCode] = true;
             }
         }
-        $versionInfo->languageIds = array_values($languageIds);
+        $versionInfo->languageCodes = array_keys($languages);
 
         return $versionInfo;
     }
@@ -140,7 +139,7 @@ class Mapper
         $versionInfo->creationDate = time();
         $versionInfo->modificationDate = $versionInfo->creationDate;
         $versionInfo->names = is_object($content->versionInfo) ? $content->versionInfo->names : array();
-        $versionInfo->languageIds = $content->versionInfo->languageIds;
+        $versionInfo->languageCodes = $content->versionInfo->languageCodes;
 
         return $versionInfo;
     }
@@ -302,7 +301,7 @@ class Mapper
         $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
         $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
         $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
-        $versionInfo->languageIds = $this->extractLanguageIdsFromMask($row['ezcontentobject_version_language_mask']);
+        $versionInfo->languageCodes = $this->extractLanguageCodesFromMask($row['ezcontentobject_version_language_mask']);
         $versionInfo->status = (int)$row['ezcontentobject_version_status'];
         $versionInfo->names = $names;
 
@@ -337,7 +336,7 @@ class Mapper
                 $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
                 $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
                 $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
-                $versionInfo->languageIds = $this->extractLanguageIdsFromMask((int)$row['ezcontentobject_version_language_mask']);
+                $versionInfo->languageCodes = $this->extractLanguageCodesFromMask((int)$row['ezcontentobject_version_language_mask']);
                 $versionInfo->status = (int)$row['ezcontentobject_version_status'];
                 $versionInfo->names = $nameData[$versionId];
                 $versionInfoList[$versionId] = $versionInfo;
@@ -348,21 +347,19 @@ class Mapper
     }
 
     /**
-     * @todo use langmask handler for this
-     *
      * @param int $languageMask
      *
-     * @return array
+     * @return string[]
      */
-    public function extractLanguageIdsFromMask($languageMask)
+    public function extractLanguageCodesFromMask($languageMask)
     {
         $exp = 2;
-        $result = array();
+        $result = [];
 
         // Decomposition of $languageMask into its binary components.
         while ($exp <= $languageMask) {
             if ($languageMask & $exp) {
-                $result[] = $exp;
+                $result[] = $this->languageHandler->load($exp)->languageCode;
             }
 
             $exp *= 2;

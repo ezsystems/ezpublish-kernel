@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
  *
- * @see eZ\Publish\API\Repository\ObjectStateService
+ * @see \eZ\Publish\API\Repository\ObjectStateService
  * @group object-state
  */
 class ObjectStateServiceTest extends BaseTest
@@ -229,11 +229,11 @@ class ObjectStateServiceTest extends BaseTest
         $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
         $objectStateGroupCreate->names = array(
             'eng-US' => 'Publishing',
-            'eng-GB' => 'Sindelfingen',
+            'ger-DE' => 'Sindelfingen',
         );
         $objectStateGroupCreate->descriptions = array(
             'eng-US' => 'Put something online',
-            'eng-GB' => 'Put something ton Sindelfingen.',
+            'ger-DE' => 'Put something ton Sindelfingen.',
         );
 
         $createdObjectStateGroup = $objectStateService->createObjectStateGroup(
@@ -260,19 +260,19 @@ class ObjectStateServiceTest extends BaseTest
     public function testCreateObjectStateGroupStructValues(ObjectStateGroup $createdObjectStateGroup)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'publishing',
-                'defaultLanguageCode' => 'eng-US',
-                'languageCodes' => array('eng-US', 'eng-GB'),
-                'names' => array(
+                'mainLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US', 'ger-DE'],
+                'names' => [
                     'eng-US' => 'Publishing',
-                    'eng-GB' => 'Sindelfingen',
-                ),
-                'descriptions' => array(
+                    'ger-DE' => 'Sindelfingen',
+                ],
+                'descriptions' => [
                     'eng-US' => 'Put something online',
-                    'eng-GB' => 'Put something ton Sindelfingen.',
-                ),
-            ),
+                    'ger-DE' => 'Put something ton Sindelfingen.',
+                ],
+            ],
             $createdObjectStateGroup
         );
         $this->assertNotNull($createdObjectStateGroup->id);
@@ -315,8 +315,7 @@ class ObjectStateServiceTest extends BaseTest
     /**
      * Test for the loadObjectStateGroup() method.
      *
-     *
-     * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroup()
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroup
      */
     public function testLoadObjectStateGroup()
     {
@@ -334,11 +333,21 @@ class ObjectStateServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup',
+            ObjectStateGroup::class,
             $loadedObjectStateGroup
         );
 
-        return $loadedObjectStateGroup;
+        $this->assertPropertiesCorrect(
+            [
+                'id' => 2,
+                'identifier' => 'ez_lock',
+                'mainLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US'],
+                'names' => ['eng-US' => 'Lock'],
+                'descriptions' => ['eng-US' => ''],
+            ],
+            $loadedObjectStateGroup
+        );
     }
 
     /**
@@ -406,19 +415,25 @@ class ObjectStateServiceTest extends BaseTest
         $repository = $this->getRepository();
         $objectStateService = $repository->getObjectStateService();
 
-        $identifiersToCreate = array(
+        $identifiersToCreate = [
             'first',
             'second',
             'third',
-        );
+        ];
 
-        $createdStateGroups = array();
+        $createdStateGroups = [];
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('dummy');
 
         $groupCreateStruct->defaultLanguageCode = 'eng-US';
-        $groupCreateStruct->names = array('eng-US' => 'Foo');
-        $groupCreateStruct->descriptions = array('eng-US' => 'Foo Bar');
+        $groupCreateStruct->names = [
+            'eng-US' => 'Foo',
+            'ger-DE' => 'GerFoo',
+        ];
+        $groupCreateStruct->descriptions = [
+            'eng-US' => 'Foo Bar',
+            'ger-DE' => 'GerBar',
+        ];
 
         foreach ($identifiersToCreate as $identifier) {
             $groupCreateStruct->identifier = $identifier;
@@ -429,11 +444,11 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
-     * testLoadObjectStateGroupsLoadedExpectedGroups.
+     * Assert object identifiers.
      *
-     * @param array $loadObjectStateGroups
-     *
-     * @depends testLoadObjectStateGroups
+     * @param array $expectedIdentifiers
+     * @param array $loadedObjects
+     * @param string $class
      */
     protected function assertObjectsLoadedByIdentifiers(array $expectedIdentifiers, array $loadedObjects, $class)
     {
@@ -498,6 +513,7 @@ class ObjectStateServiceTest extends BaseTest
      * Returns a map of the given object state groups.
      *
      * @param array $groups
+     * @return array
      */
     protected function getGroupIdentifierMap(array $groups)
     {
@@ -581,9 +597,8 @@ class ObjectStateServiceTest extends BaseTest
     /**
      * Test for the updateObjectStateGroup() method.
      *
-     *
-     * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup()
-     * @depends testLoadObjectStateGroup
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testLoadObjectStateGroup
      */
     public function testUpdateObjectStateGroup()
     {
@@ -626,6 +641,46 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectStateGroup,
             $groupUpdateStruct,
             $updatedObjectStateGroup,
+        );
+    }
+
+    /**
+     * Test service method for partially updating object state group.
+     *
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testLoadObjectStateGroup
+     */
+    public function testUpdateObjectStateGroupChosenFieldsOnly()
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
+        $groupUpdateStruct->defaultLanguageCode = 'eng-GB';
+        $groupUpdateStruct->names = ['eng-GB' => 'Test'];
+
+        $group = $objectStateService->loadObjectStateGroup(2);
+
+        $updatedGroup = $objectStateService->updateObjectStateGroup($group, $groupUpdateStruct);
+
+        $this->assertInstanceOf(
+            ObjectStateGroup::class,
+            $updatedGroup
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'id' => 2,
+                'identifier' => 'ez_lock',
+                'mainLanguageCode' => 'eng-GB',
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
+                // descriptions array should have an empty value for eng-GB
+                // without the original descriptions
+                // since the descriptions were not in the update struct and we're changing default language
+                'descriptions' => ['eng-GB' => ''],
+            ],
+            $updatedGroup
         );
     }
 
@@ -728,11 +783,13 @@ class ObjectStateServiceTest extends BaseTest
         );
         $objectStateCreateStruct->priority = 23;
         $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
-        $objectStateCreateStruct->names = array(
+        $objectStateCreateStruct->names = [
             'eng-US' => 'Locked and Unlocked',
-        );
+            'ger-DE' => 'geschlossen und ungeschlossen',
+        ];
         $objectStateCreateStruct->descriptions = array(
             'eng-US' => 'A state between locked and unlocked.',
+            'ger-DE' => 'ein Zustand zwischen geschlossen und ungeschlossen.',
         );
 
         // Creates a new object state in the $loadObjectStateGroup with the
@@ -743,18 +800,71 @@ class ObjectStateServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
-            $createdObjectState
-        );
+        $this->assertInstanceOf(ObjectState::class, $createdObjectState);
         // Object sequences are renumbered
         $objectStateCreateStruct->priority = 2;
 
-        return array(
+        return [
             $loadedObjectStateGroup,
             $objectStateCreateStruct,
             $createdObjectState,
+        ];
+    }
+
+    /**
+     * Test service method for creating object state in empty group.
+     *
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::createObjectState
+     */
+    public function testCreateObjectStateInEmptyGroup()
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('test');
+        $groupCreateStruct->defaultLanguageCode = 'eng-GB';
+        $groupCreateStruct->names = ['eng-GB' => 'Test'];
+        $groupCreateStruct->descriptions = ['eng-GB' => 'Test description'];
+
+        $createdGroup = $objectStateService->createObjectStateGroup($groupCreateStruct);
+
+        $stateCreateStruct = $objectStateService->newObjectStateCreateStruct('test');
+        $stateCreateStruct->priority = 2;
+        $stateCreateStruct->defaultLanguageCode = 'eng-GB';
+        $stateCreateStruct->names = ['eng-GB' => 'Test'];
+        $stateCreateStruct->descriptions = ['eng-GB' => 'Test description'];
+
+        $createdState = $objectStateService->createObjectState(
+            $createdGroup,
+            $stateCreateStruct
         );
+
+        $this->assertInstanceOf(
+            ObjectState::class,
+            $createdState
+        );
+
+        $this->assertNotNull($createdState->id);
+        $this->assertPropertiesCorrect(
+            [
+                'identifier' => 'test',
+                'priority' => 0,
+                'mainLanguageCode' => 'eng-GB',
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
+                'descriptions' => ['eng-GB' => 'Test description'],
+            ],
+            $createdState
+        );
+
+        $objectStateGroup = $createdState->getObjectStateGroup();
+        $this->assertInstanceOf(
+            ObjectStateGroup::class,
+            $objectStateGroup
+        );
+
+        $this->assertEquals($createdGroup->id, $objectStateGroup->id);
+        $this->assertGreaterThan(0, $objectStateService->getContentCount($createdState));
     }
 
     /**
@@ -873,7 +983,7 @@ class ObjectStateServiceTest extends BaseTest
                 'id' => 2,
                 'identifier' => 'locked',
                 'priority' => 1,
-                'defaultLanguageCode' => 'eng-US',
+                'mainLanguageCode' => 'eng-US',
                 'languageCodes' => array(0 => 'eng-US'),
                 'names' => array('eng-US' => 'Locked'),
                 'descriptions' => array('eng-US' => ''),
@@ -912,11 +1022,192 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
+     * Data provider for PrioritizedLanguageList tests.
+     *
+     * @return array
+     */
+    public function getPrioritizedLanguagesList()
+    {
+        return [
+            [[], null],
+            [['eng-GB'], null],
+            [['eng-US'], 'eng-US'],
+            [['ger-DE'], 'ger-DE'],
+            [['eng-US', 'ger-DE'], 'eng-US'],
+            [['ger-DE', 'eng-US'], 'ger-DE'],
+            [['eng-GB', 'ger-DE', 'eng-US'], 'ger-DE'],
+        ];
+    }
+
+    /**
+     * Test that multi-language logic for loadObjectStateGroups respects prioritized language list.
+     *
+     * @dataProvider getPrioritizedLanguagesList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode
+     */
+    public function testLoadObjectStateGroupsWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        // cleanup before the actual test
+        $this->deleteExistingObjectStateGroups();
+
+        $repository = $this->getRepository(false);
+        $objectStateService = $repository->getObjectStateService();
+
+        $this->createObjectStateGroups();
+
+        $objectStateGroups = $objectStateService->loadObjectStateGroups(
+            0,
+            -1,
+            $prioritizedLanguages
+        );
+
+        foreach ($objectStateGroups as $objectStateGroup) {
+            $languageCode = $expectedLanguageCode === null ? $objectStateGroup->defaultLanguageCode : $expectedLanguageCode;
+
+            self::assertEquals(
+                $objectStateGroup->getName($languageCode),
+                $objectStateGroup->getName()
+            );
+
+            self::assertEquals(
+                $objectStateGroup->getDescription($languageCode),
+                $objectStateGroup->getDescription()
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for loadObjectStateGroup respects prioritized language list.
+     *
+     * @dataProvider getPrioritizedLanguagesList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode
+     */
+    public function testLoadObjectStateGroupWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroup = $this->testCreateObjectStateGroup();
+        $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $objectStateGroup->id,
+            $prioritizedLanguages
+        );
+
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $loadedObjectStateGroup->defaultLanguageCode;
+        }
+
+        self::assertEquals(
+            $loadedObjectStateGroup->getName($expectedLanguageCode),
+            $loadedObjectStateGroup->getName()
+        );
+
+        self::assertEquals(
+            $loadedObjectStateGroup->getDescription($expectedLanguageCode),
+            $loadedObjectStateGroup->getDescription()
+        );
+    }
+
+    /**
+     * Test that multi-language logic for loadObjectState respects prioritized language list.
+     *
+     * @dataProvider getPrioritizedLanguagesList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode
+     */
+    public function testLoadObjectStateWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateData = $this->testCreateObjectState();
+        /** @see \eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testCreateObjectState */
+        $objectState = $objectStateData[2];
+        /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState */
+        $loadedObjectState = $objectStateService->loadObjectState($objectState->id, $prioritizedLanguages);
+
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $objectState->defaultLanguageCode;
+        }
+
+        self::assertEquals(
+            $loadedObjectState->getName($expectedLanguageCode),
+            $loadedObjectState->getName()
+        );
+
+        self::assertEquals(
+            $loadedObjectState->getDescription($expectedLanguageCode),
+            $loadedObjectState->getDescription()
+        );
+    }
+
+    /**
+     * Test that multi-language logic for loadObjectStates respects prioritized language list.
+     *
+     * @dataProvider getPrioritizedLanguagesList
+     * @param string[] $languageCodes
+     * @param string|null $expectedLanguageCode
+     */
+    public function testLoadObjectStatesWithPrioritizedLanguagesList($languageCodes, $expectedLanguageCode)
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroup = $this->testCreateObjectStateGroup();
+        $this->createObjectState(
+            $objectStateGroup,
+            'state_1',
+            [
+                'eng-US' => 'One',
+                'ger-DE' => 'ein',
+            ],
+            [
+                'eng-US' => 'State one',
+                'ger-DE' => 'ein Zustand',
+            ]
+        );
+        $this->createObjectState(
+            $objectStateGroup,
+            'state_2',
+            [
+                'eng-US' => 'Two',
+                'ger-DE' => 'zwei',
+            ],
+            [
+                'eng-US' => 'State two',
+                'ger-DE' => 'zwei Zustand',
+            ]
+        );
+
+        // Loads all object states in $objectStateGroup
+        $loadedObjectStates = $objectStateService->loadObjectStates($objectStateGroup, $languageCodes);
+
+        foreach ($loadedObjectStates as $objectState) {
+            self::assertEquals(
+                $objectState->getName($expectedLanguageCode),
+                $objectState->getName()
+            );
+
+            self::assertEquals(
+                $objectState->getDescription($expectedLanguageCode),
+                $objectState->getDescription()
+            );
+        }
+    }
+
+    /**
      * Test for the updateObjectState() method.
      *
-     *
-     * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectState()
-     * @depends testLoadObjectState
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::updateObjectState
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testLoadObjectState
      */
     public function testUpdateObjectState()
     {
@@ -950,7 +1241,7 @@ class ObjectStateServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            ObjectState::class,
             $updatedObjectState
         );
 
@@ -959,6 +1250,52 @@ class ObjectStateServiceTest extends BaseTest
             $updateStateStruct,
             $updatedObjectState,
         );
+    }
+
+    /**
+     * Test service method for partially updating object state.
+     *
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::updateObjectState
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testLoadObjectState
+     */
+    public function testUpdateObjectStateChosenFieldsOnly()
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $stateUpdateStruct = $objectStateService->newObjectStateUpdateStruct();
+        $stateUpdateStruct->identifier = 'test';
+        $stateUpdateStruct->names = ['eng-US' => 'Test'];
+
+        $state = $objectStateService->loadObjectState(1);
+
+        $updatedState = $objectStateService->updateObjectState($state, $stateUpdateStruct);
+
+        $this->assertInstanceOf(
+            ObjectState::class,
+            $updatedState
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'id' => 1,
+                'identifier' => 'test',
+                'priority' => 0,
+                'mainLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US'],
+                'names' => ['eng-US' => 'Test'],
+                // Original value of empty description for eng-US should be kept
+                'descriptions' => ['eng-US' => ''],
+            ],
+            $updatedState
+        );
+
+        $this->assertInstanceOf(
+            ObjectStateGroup::class,
+            $updatedState->getObjectStateGroup()
+        );
+
+        $this->assertEquals($state->getObjectStateGroup()->id, $updatedState->getObjectStateGroup()->id);
     }
 
     /**
@@ -1023,7 +1360,7 @@ class ObjectStateServiceTest extends BaseTest
                 'id' => $loadedObjectState->id,
                 'identifier' => $updateStateStruct->identifier,
                 'priority' => $loadedObjectState->priority,
-                'defaultLanguageCode' => $updateStateStruct->defaultLanguageCode,
+                'mainLanguageCode' => $updateStateStruct->defaultLanguageCode,
                 'languageCodes' => array('eng-US', 'ger-DE'),
                 'names' => $updateStateStruct->names,
                 'descriptions' => $updateStateStruct->descriptions,
@@ -1230,12 +1567,11 @@ class ObjectStateServiceTest extends BaseTest
     /**
      * Test for the setContentState() method.
      *
-     *
-     * @see \eZ\Publish\API\Repository\ObjectStateService::setContentState()
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::setContentState
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends testSetContentState
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetContentState
      */
-    public function testSetContentStateThrowsInvalidArgumentExceptioon()
+    public function testSetContentStateThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -1361,5 +1697,52 @@ class ObjectStateServiceTest extends BaseTest
             );
         } catch (NotFoundException $e) {
         }
+    }
+
+    /**
+     * Delete existing (e.g. initial) object state groups.
+     */
+    private function deleteExistingObjectStateGroups()
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        foreach ($objectStateGroups as $objectStateGroup) {
+            $objectStateService->deleteObjectStateGroup($objectStateGroup);
+        }
+    }
+
+    /**
+     * Create Object State within the given Object State Group.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param string $identifier
+     * @param array $names multi-language names
+     * @param array $descriptions multi-language descriptions
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     */
+    private function createObjectState(
+        ObjectStateGroup $objectStateGroup,
+        $identifier,
+        array $names,
+        array $descriptions
+    ) {
+        $objectStateService = $this->getRepository(false)->getObjectStateService();
+        $objectStateCreateStruct = $objectStateService->newObjectStateCreateStruct(
+            $identifier
+        );
+        $objectStateCreateStruct->priority = 23;
+        $objectStateCreateStruct->defaultLanguageCode = array_keys($names)[0];
+        $objectStateCreateStruct->names = $names;
+        $objectStateCreateStruct->descriptions = $descriptions;
+
+        // Create a new object state in the $objectStateGroup with the
+        // data from $objectStateCreateStruct
+        return $objectStateService->createObjectState(
+            $objectStateGroup,
+            $objectStateCreateStruct
+        );
     }
 }

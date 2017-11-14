@@ -8,11 +8,17 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\FieldType\RichText\Converter\Link;
+use eZ\Publish\Core\Repository\ContentService;
+use eZ\Publish\Core\Repository\LocationService;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use DOMDocument;
+use Psr\Log\LoggerInterface;
 
 /**
  * Tests the Link converter
@@ -25,9 +31,7 @@ class LinkTest extends TestCase
      */
     protected function getMockContentService()
     {
-        return $this->getMockBuilder('eZ\Publish\Core\Repository\ContentService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(ContentService::class);
     }
 
     /**
@@ -35,9 +39,7 @@ class LinkTest extends TestCase
      */
     protected function getMockLocationService()
     {
-        return $this->getMockBuilder('eZ\Publish\Core\Repository\LocationService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(LocationService::class);
     }
 
     /**
@@ -45,10 +47,7 @@ class LinkTest extends TestCase
      */
     protected function getMockUrlAliasRouter()
     {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\UrlAliasRouter')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(UrlAliasRouter::class);
     }
 
     /**
@@ -218,7 +217,7 @@ class LinkTest extends TestCase
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $location = $this->getMock('eZ\Publish\API\Repository\Values\Content\Location');
+        $location = $this->createMock(APILocation::class);
 
         $locationService->expects($this->once())
             ->method('loadLocation')
@@ -323,7 +322,7 @@ class LinkTest extends TestCase
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock(LoggerInterface::class);
 
         $logger->expects($this->once())
             ->method($logType)
@@ -422,8 +421,8 @@ class LinkTest extends TestCase
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $contentInfo = $this->getMock('eZ\Publish\API\Repository\Values\Content\ContentInfo');
-        $location = $this->getMock('eZ\Publish\API\Repository\Values\Content\Location');
+        $contentInfo = $this->createMock(APIContentInfo::class);
+        $location = $this->createMock(APILocation::class);
 
         $contentInfo->expects($this->once())
             ->method('__get')
@@ -538,7 +537,7 @@ class LinkTest extends TestCase
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock(LoggerInterface::class);
 
         $logger->expects($this->once())
             ->method($logType)

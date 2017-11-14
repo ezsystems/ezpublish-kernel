@@ -8712,6 +8712,13 @@ Country�</literallayout></para></section>
       'original_id' => '0',
       'role_id' => '5',
     ),
+    51 => array(
+      'function_name' => 'publish',
+      'id' => '378',
+      'module_name' => 'content',
+      'original_id' => '0',
+      'role_id' => '3',
+    ),
   ),
   'ezpolicy_limitation' => array(
     0 => array(
@@ -11462,15 +11469,15 @@ Country�</literallayout></para></section>
       'contentobject_id' => '10',
       'email' => 'nospam@ez.no',
       'login' => 'anonymous',
-      'password_hash' => '4e6f6184135228ccd45f8233d72a0363',
-      'password_hash_type' => '2',
+      'password_hash' => '$2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC',
+      'password_hash_type' => '7',
     ),
     1 => array(
       'contentobject_id' => '14',
       'email' => 'spam@ez.no',
       'login' => 'admin',
-      'password_hash' => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
-      'password_hash_type' => '2',
+      'password_hash' => '$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',
+      'password_hash_type' => '7',
     ),
   ),
   'ezuser_accountkey' => array(

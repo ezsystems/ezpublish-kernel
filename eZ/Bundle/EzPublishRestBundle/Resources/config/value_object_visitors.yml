@@ -42,6 +42,7 @@ parameters:
     ezpublish_rest.output.value_object_visitor.Version.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Version
     ezpublish_rest.output.value_object_visitor.VersionUpdate.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\VersionUpdate
     ezpublish_rest.output.value_object_visitor.RestContentCreateStruct.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\RestContentCreateStruct
+    ezpublish_rest.output.value_object_visitor.VersionTranslationInfo.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\VersionTranslationInfo
 
     # User group
     ezpublish_rest.output.value_object_visitor.RestUserGroup.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUserGroup
@@ -365,6 +366,12 @@ services:
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct }
 
+    ezpublish_rest.output.value_object_visitor.VersionTranslationInfo:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: "%ezpublish_rest.output.value_object_visitor.VersionTranslationInfo.class%"
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\VersionTranslationInfo }
+
     # UserGroup
     ezpublish_rest.output.value_object_visitor.RestUserGroup:
         parent: ezpublish_rest.output.value_object_visitor.base
@@ -475,12 +482,6 @@ services:
         class: "%ezpublish_rest.output.value_object_visitor.ContentTypeGroupList.class%"
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList }
-
-    ezpublish_rest.output.value_object_visitor.ContentTypeGroupCreateStruct:
-        parent: ezpublish_rest.output.value_object_visitor.base
-        class: "%ezpublish_rest.output.value_object_visitor.contenttypegroupcreatestruct.class%"
-        tags:
-            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct }
 
     ezpublish_rest.output.value_object_visitor.ContentTypeGroupRefList:
         parent: ezpublish_rest.output.value_object_visitor.base

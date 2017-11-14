@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
 
 /**
  * This class holds version information data. It also contains the corresponding {@link Content} to
@@ -22,9 +23,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $creatorId the user id of the user which created this version
  * @property-read int $status the status of this version. One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
  * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
- * @property-read array $languageCodes a collection of all languages which exist in this version.
+ * @property-read string[] $languageCodes a collection of all languages which exist in this version.
  */
-abstract class VersionInfo extends ValueObject
+abstract class VersionInfo extends ValueObject implements MultiLanguageName
 {
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
@@ -53,23 +54,6 @@ abstract class VersionInfo extends ValueObject
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     abstract public function getContentInfo();
-
-    /**
-     * Returns the names computed from the name schema in the available languages.
-     *
-     * @return string[]
-     */
-    abstract public function getNames();
-
-    /**
-     * Returns the name computed from the name schema in the given language.
-     * If no language is given the name in initial language of the version if present, otherwise null.
-     *
-     * @param string $languageCode
-     *
-     * @return string
-     */
-    abstract public function getName($languageCode = null);
 
     /**
      * the last modified date of this version.
@@ -114,4 +98,34 @@ abstract class VersionInfo extends ValueObject
      * @var string[]
      */
     protected $languageCodes = array();
+
+    /**
+     * Returns true if version is a draft.
+     *
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->status === self::STATUS_DRAFT;
+    }
+
+    /**
+     * Returns true if version is published.
+     *
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->status === self::STATUS_PUBLISHED;
+    }
+
+    /**
+     * Returns true if version is archived.
+     *
+     * @return bool
+     */
+    public function isArchived()
+    {
+        return $this->status === self::STATUS_ARCHIVED;
+    }
 }

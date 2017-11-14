@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 
 class RoleAssignmentTest extends BaseTest
 {
@@ -46,10 +47,7 @@ class RoleAssignmentTest extends BaseTest
      */
     public function testResultIsRoleAssignment($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleAssignment',
-            $result
-        );
+        $this->assertInstanceOf(RoleAssignment::class, $result);
     }
 
     /**

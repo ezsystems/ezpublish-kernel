@@ -107,10 +107,23 @@ class DomainMapper
             );
         }
 
+        $prioritizedFieldLanguageCode = null;
+        $prioritizedLanguages = $fieldLanguages ?: [];
+        if (!empty($prioritizedLanguages)) {
+            $availableFieldLanguageMap = array_fill_keys($spiContent->versionInfo->languageCodes, true);
+            foreach ($prioritizedLanguages as $prioritizedLanguage) {
+                if (isset($availableFieldLanguageMap[$prioritizedLanguage])) {
+                    $prioritizedFieldLanguageCode = $prioritizedLanguage;
+                    break;
+                }
+            }
+        }
+
         return new Content(
             array(
                 'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldLanguages, $fieldAlwaysAvailableLanguage),
-                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo),
+                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
+                'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             )
         );
     }
@@ -122,7 +135,8 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
      * @param ContentType|SPIType $contentType
-     * @param array|null $languages Language codes to filter fields on
+     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
      * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $languages
      *
      * @return array
@@ -186,16 +200,12 @@ class DomainMapper
      * Builds a VersionInfo domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $spiVersionInfo
+     * @param array $prioritizedLanguages
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\VersionInfo
      */
-    public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo)
+    public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo, array $prioritizedLanguages = [])
     {
-        $languageCodes = array();
-        foreach ($spiVersionInfo->languageIds as $languageId) {
-            $languageCodes[] = $this->contentLanguageHandler->load($languageId)->languageCode;
-        }
-
         // Map SPI statuses to API
         switch ($spiVersionInfo->status) {
             case SPIVersionInfo::STATUS_ARCHIVED:
@@ -211,6 +221,15 @@ class DomainMapper
                 $status = APIVersionInfo::STATUS_DRAFT;
         }
 
+        // Find prioritised language among names
+        $prioritizedNameLanguageCode = null;
+        foreach ($prioritizedLanguages as $prioritizedLanguage) {
+            if (isset($spiVersionInfo->names[$prioritizedLanguage])) {
+                $prioritizedNameLanguageCode = $prioritizedLanguage;
+                break;
+            }
+        }
+
         return new VersionInfo(
             array(
                 'id' => $spiVersionInfo->id,
@@ -220,9 +239,10 @@ class DomainMapper
                 'creationDate' => $this->getDateTime($spiVersionInfo->creationDate),
                 'status' => $status,
                 'initialLanguageCode' => $spiVersionInfo->initialLanguageCode,
-                'languageCodes' => $languageCodes,
+                'languageCodes' => $spiVersionInfo->languageCodes,
                 'names' => $spiVersionInfo->names,
                 'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
+                'prioritizedNameLanguageCode' => $prioritizedNameLanguageCode,
             )
         );
     }

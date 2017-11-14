@@ -33,7 +33,7 @@ class Mapper
         $user->login = $data['login'];
         $user->email = $data['email'];
         $user->passwordHash = $data['password_hash'];
-        $user->hashAlgorithm = $data['password_hash_type'];
+        $user->hashAlgorithm = (int)$data['password_hash_type'];
         $user->isEnabled = (bool)$data['is_enabled'];
         $user->maxLogin = $data['max_login'];
 

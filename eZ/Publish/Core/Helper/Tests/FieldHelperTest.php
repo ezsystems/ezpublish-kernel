@@ -11,10 +11,14 @@ namespace eZ\Publish\Core\Helper\Tests;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType;
 use eZ\Publish\Core\FieldType\TextLine\Value;
 use eZ\Publish\Core\Helper\FieldHelper;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use PHPUnit\Framework\TestCase;
 
 class FieldHelperTest extends TestCase
@@ -42,12 +46,9 @@ class FieldHelperTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->fieldTypeServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\FieldTypeService');
-        $this->contentTypeServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
-        $this->translationHelper = $this
-            ->getMockBuilder('eZ\\Publish\\Core\\Helper\\TranslationHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fieldTypeServiceMock = $this->createMock(FieldTypeService::class);
+        $this->contentTypeServiceMock = $this->createMock(ContentTypeService::class);
+        $this->translationHelper = $this->createMock(TranslationHelper::class);
         $this->fieldHelper = new FieldHelper($this->translationHelper, $this->contentTypeServiceMock, $this->fieldTypeServiceMock);
     }
 
@@ -55,7 +56,7 @@ class FieldHelperTest extends TestCase
     {
         $contentTypeId = 123;
         $contentInfo = new ContentInfo(array('contentTypeId' => $contentTypeId));
-        $content = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $content = $this->createMock(APIContent::class);
         $content
             ->expects($this->any())
             ->method('__get')
@@ -67,8 +68,8 @@ class FieldHelperTest extends TestCase
         $emptyValue = $textLineFT->getEmptyValue();
         $emptyField = new Field(array('fieldDefIdentifier' => $fieldDefIdentifier, 'value' => $emptyValue));
 
-        $contentType = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
-        $fieldDefinition = $this->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition')
+        $contentType = $this->getMockForAbstractClass(ContentType::class);
+        $fieldDefinition = $this->getMockBuilder(FieldDefinition::class)
             ->setConstructorArgs(array(array('fieldTypeIdentifier' => 'ezstring')))
             ->getMockForAbstractClass();
         $contentType
@@ -102,7 +103,7 @@ class FieldHelperTest extends TestCase
     {
         $contentTypeId = 123;
         $contentInfo = new ContentInfo(array('contentTypeId' => $contentTypeId));
-        $content = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $content = $this->createMock(APIContent::class);
         $content
             ->expects($this->any())
             ->method('__get')
@@ -114,8 +115,8 @@ class FieldHelperTest extends TestCase
         $nonEmptyValue = new Value('Vive le sucre !!!');
         $emptyField = new Field(array('fieldDefIdentifier' => 'ezstring', 'value' => $nonEmptyValue));
 
-        $contentType = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
-        $fieldDefinition = $this->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition')
+        $contentType = $this->getMockForAbstractClass(ContentType::class);
+        $fieldDefinition = $this->getMockBuilder(FieldDefinition::class)
             ->setConstructorArgs(array(array('fieldTypeIdentifier' => 'ezstring')))
             ->getMockForAbstractClass();
         $contentType

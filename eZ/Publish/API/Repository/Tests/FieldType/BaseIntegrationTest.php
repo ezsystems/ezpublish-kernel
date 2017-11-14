@@ -535,6 +535,42 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * Create multilingual content of given name and FT-specific data.
+     *
+     * @param array $names Content names in the form of <code>[languageCode => name]</code>
+     * @param array $fieldData FT-specific data in the form of <code>[languageCode => data]</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createMultilingualContent(array $names, array $fieldData)
+    {
+        self::assertEquals(array_keys($names), array_keys($fieldData), 'Languages passed to names and data differ');
+
+        $contentType = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration(),
+            [],
+            ['isTranslatable' => true]
+        );
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        foreach ($names as $languageCode => $name) {
+            $createStruct->setField('name', $name, $languageCode);
+        }
+        foreach ($fieldData as $languageCode => $value) {
+            $createStruct->setField('data', $value, $languageCode);
+        }
+
+        $createStruct->remoteId = md5(uniqid('', true) . microtime());
+        $createStruct->alwaysAvailable = true;
+
+        return $contentService->createContent($createStruct);
+    }
+
+    /**
      * @depends testCreateContent
      */
     public function testCreatedFieldType($content)
@@ -556,7 +592,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $draft = $this->testCreateContent();
 
-        if ($draft->getVersionInfo()->status !== Repository\Values\Content\VersionInfo::STATUS_DRAFT) {
+        if (!$draft->getVersionInfo()->isDraft()) {
             $this->markTestSkipped('Provided content object is not a draft.');
         }
 
@@ -1091,5 +1127,97 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $updateStruct->initialLanguageCode = 'eng-GB';
         $updatedContentDraft = $contentService->updateContent($contentDraft->versionInfo, $updateStruct);
         $contentService->publishVersion($updatedContentDraft->versionInfo);
+    }
+
+    /**
+     * Get proper multilingual FT-specific Values. It Can be overridden by a Field Type test case.
+     *
+     * @param string[] $languageCodes List of languages to create data for
+     *
+     * @return array an array in the form of <code>[languageCode => data]</code>
+     */
+    public function getValidMultilingualFieldData(array $languageCodes)
+    {
+        $data = [];
+        foreach ($languageCodes as $languageCode) {
+            $data[$languageCode] = $this->getValidCreationFieldData();
+        }
+
+        return $data;
+    }
+
+    /**
+     * Test that removing Translation from all Versions works for data from a Field Type.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::removeTranslation
+     */
+    public function testRemoveTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCodes = ['eng-US', 'ger-DE'];
+
+        $fieldName = $this->getFieldName();
+        $names = [];
+        foreach ($languageCodes as $languageCode) {
+            $names[$languageCode] = "{$languageCode} {$fieldName}";
+        }
+
+        $fieldData = $this->getValidMultilingualFieldData($languageCodes);
+
+        $content = $contentService->publishVersion(
+            $this->createMultilingualContent($names, $fieldData)->versionInfo
+        );
+
+        // create one more Version
+        $publishedContent = $contentService->publishVersion(
+            $contentService->createContentDraft($content->contentInfo)->versionInfo
+        );
+
+        // create Draft
+        $contentService->createContentDraft($content->contentInfo);
+
+        // create copy of content in all Versions to use it for comparision later on
+        $contentByVersion = [];
+        foreach ($contentService->loadVersions($content->contentInfo) as $versionInfo) {
+            $contentByVersion[$versionInfo->versionNo] = $contentService->loadContent(
+                $content->id,
+                null,
+                $versionInfo->versionNo
+            );
+        }
+
+        // delete Translation from all available Versions
+        $contentService->removeTranslation($publishedContent->contentInfo, 'ger-DE');
+
+        // check if are Versions have valid Translation
+        foreach ($contentService->loadVersions($publishedContent->contentInfo) as $versionInfo) {
+            // check if deleted Translation does not exist
+            self::assertEquals(['eng-US'], array_keys($versionInfo->getNames()));
+            self::assertEquals(['eng-US'], $versionInfo->languageCodes);
+
+            // load Content of a Version to access other fields data
+            $versionContent = $contentService->loadContent(
+                $content->id,
+                null,
+                $versionInfo->versionNo
+            );
+            // check if deleted Translation for Field Type data does not exist
+            self::assertEmpty($versionContent->getFieldsByLanguage('ger-DE'));
+            self::assertEmpty($versionContent->getField('data', 'ger-DE'));
+
+            // check if the remaining Translation is still valid
+            $expectedContent = $contentByVersion[$versionContent->versionInfo->versionNo];
+            self::assertNotEmpty($versionContent->getFieldsByLanguage('eng-US'));
+            self::assertEquals(
+                $expectedContent->getField('name', 'eng-US'),
+                $versionContent->getField('name', 'eng-US')
+            );
+            self::assertEquals(
+                $expectedContent->getField('data', 'eng-US'),
+                $versionContent->getField('data', 'eng-US')
+            );
+        }
     }
 }

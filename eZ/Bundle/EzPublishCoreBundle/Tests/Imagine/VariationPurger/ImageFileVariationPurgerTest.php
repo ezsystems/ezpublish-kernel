@@ -23,8 +23,8 @@ class ImageFileVariationPurgerTest extends TestCase
 
     public function setUp()
     {
-        $this->ioServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
-        $this->pathGeneratorMock = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
+        $this->ioServiceMock = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->pathGeneratorMock = $this->createMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
     }
 
     public function testIteratesOverItems()

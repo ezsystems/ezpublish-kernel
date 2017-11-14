@@ -6,35 +6,27 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
 
+/**
+ * REST Client ValueObject representing Content Type Group.
+ */
 class ContentTypeGroup extends APIContentTypeGroup
 {
+    /**
+     * @var string[]
+     */
     protected $names;
 
+    /**
+     * @var string[]
+     */
     protected $descriptions;
 
-    public function __construct(array $data = array())
-    {
-        foreach ($data as $propertyName => $propertyValue) {
-            $this->$propertyName = $propertyValue;
-        }
-    }
-
     /**
-     * 5.x only
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -42,27 +34,16 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * 5.x only
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
+     * {@inheritdoc}
      */
-    public function getName($languageCode)
+    public function getName($languageCode = null)
     {
-        return $this->names[$languageCode];
+        // @todo Make this respect language priority list?
+        return isset($this->names[$languageCode]) ? $this->names[$languageCode] : null;
     }
 
     /**
-     * 5.x only
-     * This method returns the human readable description of the content type
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getDescriptions()
     {
@@ -70,15 +51,10 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * 5.x only
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
+     * {@inheritdoc}
      */
-    public function getDescription($languageCode)
+    public function getDescription($languageCode = null)
     {
-        return $this->descriptions[$languageCode];
+        return isset($this->descriptions[$languageCode]) ? $this->descriptions[$languageCode] : null;
     }
 }

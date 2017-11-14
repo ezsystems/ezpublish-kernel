@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\RoleList;
@@ -104,7 +105,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\User\\Role'));
+            ->with($this->isInstanceOf(Role::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

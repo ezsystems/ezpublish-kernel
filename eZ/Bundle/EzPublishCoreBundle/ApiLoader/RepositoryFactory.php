@@ -13,10 +13,8 @@ use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -117,25 +115,5 @@ class RepositoryFactory implements ContainerAwareInterface
     public function registerLimitationType($limitationName, SPILimitationType $limitationType)
     {
         $this->roleLimitations[$limitationName] = $limitationType;
-    }
-
-    /**
-     * Returns a service based on a name string (content => contentService, etc).
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param string $serviceName
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     *
-     * @return mixed
-     */
-    public function buildService(Repository $repository, $serviceName)
-    {
-        $methodName = 'get' . $serviceName . 'Service';
-        if (!method_exists($repository, $methodName)) {
-            throw new InvalidArgumentException($serviceName, 'No such service');
-        }
-
-        return $repository->$methodName();
     }
 }

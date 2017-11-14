@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime;
 use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use DateInterval;
 use stdClass;
 
@@ -107,7 +108,7 @@ class DateAndTimeTest extends FieldTypeTest
         return array(
             array(
                 array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

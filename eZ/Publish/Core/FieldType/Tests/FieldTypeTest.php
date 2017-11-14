@@ -10,7 +10,10 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Exception;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
+use eZ\Publish\SPI\FieldType\ValidationError;
 
 abstract class FieldTypeTest extends TestCase
 {
@@ -27,7 +30,7 @@ abstract class FieldTypeTest extends TestCase
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
+            TransformationProcessor::class,
             array(),
             '',
             false,
@@ -430,7 +433,7 @@ abstract class FieldTypeTest extends TestCase
         return array(
             array(
                 array(),
-                $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
+                $this->createMock(SPIValue::class),
             ),
         );
     }
@@ -504,7 +507,7 @@ abstract class FieldTypeTest extends TestCase
         return array(
             array(
                 array(),
-                $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
+                $this->createMock(SPIValue::class),
                 array(),
             ),
         );
@@ -538,7 +541,7 @@ abstract class FieldTypeTest extends TestCase
     /**
      * @dataProvider provideDataForGetName
      *
-     * @param SPIValue $spiValue
+     * @param SPIValue $value
      * @param string $expected
      */
     public function testGetName(SPIValue $value, $expected)
@@ -764,7 +767,7 @@ abstract class FieldTypeTest extends TestCase
 
         foreach ($validationResult as $actualResultElement) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+                ValidationError::class,
                 $actualResultElement,
                 'Validation result of incorrect type.'
             );
@@ -819,7 +822,7 @@ abstract class FieldTypeTest extends TestCase
 
         foreach ($validationResult as $actualResultElement) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+                ValidationError::class,
                 $actualResultElement,
                 'Validation result of incorrect type.'
             );
@@ -950,9 +953,7 @@ abstract class FieldTypeTest extends TestCase
         $fieldType = $this->getFieldTypeUnderTest();
 
         /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
-        $fieldDefinitionMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition'
-        );
+        $fieldDefinitionMock = $this->createMock(APIFieldDefinition::class);
 
         foreach ($fieldDefinitionData as $method => $data) {
             if ($method === 'validatorConfiguration') {

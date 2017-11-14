@@ -20,7 +20,7 @@ $versionInfo->creatorId = 14;
 $versionInfo->creationDate = 1313061317;
 $versionInfo->status = 1;
 $versionInfo->initialLanguageCode = 'eng-US';
-$versionInfo->languageIds = array( 2 );
+$versionInfo->languageCodes = ['eng-US'];
 
 $versionInfo->contentInfo = new ContentInfo();
 $versionInfo->contentInfo->id = 226;

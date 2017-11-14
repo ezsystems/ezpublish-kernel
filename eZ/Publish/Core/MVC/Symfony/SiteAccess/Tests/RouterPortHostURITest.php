@@ -9,9 +9,11 @@
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use PHPUnit\Framework\TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Psr\Log\LoggerInterface;
 
 class RouterPortHostURITest extends TestCase
 {
@@ -30,7 +32,7 @@ class RouterPortHostURITest extends TestCase
     {
         return new Router(
             $this->matcherBuilder,
-            $this->getMock('Psr\\Log\\LoggerInterface'),
+            $this->createMock(LoggerInterface::class),
             'default_sa',
             array(
                 'Map\\Port' => array(
@@ -62,7 +64,7 @@ class RouterPortHostURITest extends TestCase
     public function testMatch($request, $siteAccess, $router)
     {
         $sa = $router->match($request);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa);
+        $this->assertInstanceOf(SiteAccess::class, $sa);
         $this->assertSame($siteAccess, $sa->name);
         $router->setSiteAccess();
     }

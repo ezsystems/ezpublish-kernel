@@ -29,7 +29,7 @@ class EzPublishCoreCollectorTest extends TestCase
 
     public function testAddGetCollector()
     {
-        $collector = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $name = 'foobar';
         $collector
             ->expects($this->once())
@@ -45,20 +45,20 @@ class EzPublishCoreCollectorTest extends TestCase
      */
     public function testGetInvalidCollector()
     {
-        $collector = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $this->mainCollector->addCollector($collector);
         $this->assertSame($collector, $this->mainCollector->getCollector('foo'));
     }
 
     public function testGetAllCollectors()
     {
-        $collector1 = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector1 = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $nameCollector1 = 'collector1';
         $collector1
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($nameCollector1));
-        $collector2 = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector2 = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $nameCollector2 = 'collector2';
         $collector2
             ->expects($this->once())
@@ -79,7 +79,7 @@ class EzPublishCoreCollectorTest extends TestCase
 
     public function testGetToolbarTemplateNothing()
     {
-        $collector = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $name = 'foobar';
         $collector
             ->expects($this->once())
@@ -91,7 +91,7 @@ class EzPublishCoreCollectorTest extends TestCase
 
     public function testGetToolbarTemplate()
     {
-        $collector = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $name = 'foobar';
         $collector
             ->expects($this->once())
@@ -105,7 +105,7 @@ class EzPublishCoreCollectorTest extends TestCase
 
     public function testGetPanelTemplateNothing()
     {
-        $collector = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $name = 'foobar';
         $collector
             ->expects($this->once())
@@ -117,7 +117,7 @@ class EzPublishCoreCollectorTest extends TestCase
 
     public function testGetPanelTemplate()
     {
-        $collector = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $name = 'foobar';
         $collector
             ->expects($this->once())
@@ -131,13 +131,13 @@ class EzPublishCoreCollectorTest extends TestCase
 
     public function testCollect()
     {
-        $collector1 = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector1 = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $nameCollector1 = 'collector1';
         $collector1
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($nameCollector1));
-        $collector2 = $this->getMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
+        $collector2 = $this->createMock('\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface');
         $nameCollector2 = 'collector2';
         $collector2
             ->expects($this->once())

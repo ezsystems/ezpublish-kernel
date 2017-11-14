@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -25,6 +26,7 @@ class AsseticPass implements CompilerPassInterface
 
         $assetFactoryDef = $container->findDefinition('assetic.asset_factory');
         $assetFactoryDef
+            ->setClass(AssetFactory::class)
             ->addMethodCall('setConfigResolver', array(new Reference('ezpublish.config.resolver')))
             ->addMethodCall(
                 'setDynamicSettingParser',

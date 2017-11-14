@@ -18,7 +18,7 @@ class DefaultSignalDispatcherTest extends TestCase
 {
     public function testEmitSignalNoSlot()
     {
-        $signal = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Signal');
+        $signal = $this->createMock(SignalSlot\Signal::class);
 
         $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher();
         $dispatcher->emit($signal);
@@ -26,8 +26,8 @@ class DefaultSignalDispatcherTest extends TestCase
 
     public function testEmitSignalSingleSlot()
     {
-        $signal = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Signal');
-        $slot = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot');
+        $signal = $this->createMock(SignalSlot\Signal::class);
+        $slot = $this->createMock(SignalSlot\Slot::class);
         $slot
             ->expects($this->once())
             ->method('receive')
@@ -41,7 +41,7 @@ class DefaultSignalDispatcherTest extends TestCase
     public function testEmitSignalSingleSlotRelative()
     {
         $signal = new SignalSlot\Signal\ContentService\PublishVersionSignal();
-        $slot = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot');
+        $slot = $this->createMock(SignalSlot\Slot::class);
         $slot
             ->expects($this->once())
             ->method('receive')
@@ -54,18 +54,18 @@ class DefaultSignalDispatcherTest extends TestCase
 
     public function testEmitSignalMultipleSlots()
     {
-        $signal = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Signal');
-        $slot = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot');
+        $signal = $this->createMock(SignalSlot\Signal::class);
+        $slot = $this->createMock(SignalSlot\Slot::class);
         $slot
             ->expects($this->once())
             ->method('receive')
             ->with($signal);
-        $slot2 = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot');
+        $slot2 = $this->createMock(SignalSlot\Slot::class);
         $slot2
             ->expects($this->once())
             ->method('receive')
             ->with($signal);
-        $slot3 = $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot');
+        $slot3 = $this->createMock(SignalSlot\Slot::class);
         $slot3
             ->expects($this->once())
             ->method('receive')

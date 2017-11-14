@@ -12,6 +12,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList;
 use eZ\Publish\Core\Repository\Values\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
 {
@@ -105,7 +106,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'));
+            ->with($this->isInstanceOf(ContentTypeGroup::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

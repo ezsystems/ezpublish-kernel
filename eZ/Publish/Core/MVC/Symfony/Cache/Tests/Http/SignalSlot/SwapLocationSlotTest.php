@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\SetContentStateSlot;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal;
 
 /**
@@ -27,11 +28,11 @@ class SwapLocationSlotTest extends AbstractPurgeForContentSlotTest implements Sl
 
     public function getSlotClass()
     {
-        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\SetContentStateSlot';
+        return SetContentStateSlot::class;
     }
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal'];
+        return [SetContentStateSignal::class];
     }
 }

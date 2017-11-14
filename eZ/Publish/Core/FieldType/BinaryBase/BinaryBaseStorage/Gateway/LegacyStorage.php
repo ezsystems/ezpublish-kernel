@@ -8,20 +8,31 @@
  */
 namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\InsertQuery;
 
+/**
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\DoctrineStorage} instead.
+ */
 abstract class LegacyStorage extends Gateway
 {
     /**
-     * Connection.
-     *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
+
+    public function __construct(DatabaseHandler $dbHandler)
+    {
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
+        $this->dbHandler = $dbHandler;
+    }
 
     /**
      * Returns the table name to store data in.
@@ -111,47 +122,21 @@ abstract class LegacyStorage extends Gateway
     }
 
     /**
-     * Set database handler for this gateway.
-     *
-     * @param mixed $dbHandler
-     *
-     * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
-     */
-    public function setConnection($dbHandler)
-    {
-        // This obviously violates the Liskov substitution Principle, but with
-        // the given class design there is no sane other option. Actually the
-        // dbHandler *should* be passed to the constructor, and there should
-        // not be the need to post-inject it.
-        if (!$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler) {
-            throw new \RuntimeException('Invalid dbHandler passed');
-        }
-
-        $this->dbHandler = $dbHandler;
-    }
-
-    /**
      * Returns the active connection.
-     *
-     * @throws \RuntimeException if no connection has been set, yet.
      *
      * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
-        if ($this->dbHandler === null) {
-            throw new \RuntimeException('Missing database connection.');
-        }
-
         return $this->dbHandler;
     }
 
     /**
      * Stores the file reference in $field for $versionNo.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @return bool
      */
     public function storeFileReference(VersionInfo $versionInfo, Field $field)
     {

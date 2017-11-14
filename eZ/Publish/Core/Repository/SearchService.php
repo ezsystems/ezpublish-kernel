@@ -9,7 +9,9 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
+use eZ\Publish\API\Repository\PermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location as LocationCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location as LocationSortClause;
@@ -20,6 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Search\Capable;
 use eZ\Publish\SPI\Search\Handler;
 
 /**
@@ -48,9 +51,9 @@ class SearchService implements SearchServiceInterface
     protected $domainMapper;
 
     /**
-     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver
      */
-    protected $permissionsCriterionHandler;
+    protected $permissionCriterionResolver;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
@@ -58,14 +61,14 @@ class SearchService implements SearchServiceInterface
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
+     * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $searchHandler,
         Helper\DomainMapper $domainMapper,
-        PermissionsCriterionHandler $permissionsCriterionHandler,
+        PermissionCriterionResolver $permissionCriterionResolver,
         array $settings = array()
     ) {
         $this->repository = $repository;
@@ -75,7 +78,7 @@ class SearchService implements SearchServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
-        $this->permissionsCriterionHandler = $permissionsCriterionHandler;
+        $this->permissionCriterionResolver = $permissionCriterionResolver;
     }
 
     /**
@@ -177,7 +180,7 @@ class SearchService implements SearchServiceInterface
         $this->validateContentCriteria(array($query->filter), '$query');
         $this->validateContentSortClauses($query);
 
-        if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
+        if ($filterOnUserPermissions && !$this->addPermissionsCriterion($query->filter)) {
             return new SearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
@@ -242,7 +245,7 @@ class SearchService implements SearchServiceInterface
     {
         $this->validateContentCriteria(array($filter), '$filter');
 
-        if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($filter)) {
+        if ($filterOnUserPermissions && !$this->addPermissionsCriterion($filter)) {
             throw new NotFoundException('Content', '*');
         }
 
@@ -303,7 +306,7 @@ class SearchService implements SearchServiceInterface
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
-        if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
+        if ($filterOnUserPermissions && !$this->addPermissionsCriterion($query->filter)) {
             return new SearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
@@ -316,5 +319,45 @@ class SearchService implements SearchServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Adds content, read Permission criteria if needed and return false if no access at all.
+     *
+     * @uses \eZ\Publish\API\Repository\PermissionCriterionResolver::getPermissionsCriterion()
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     */
+    protected function addPermissionsCriterion(Criterion &$criterion)
+    {
+        $permissionCriterion = $this->permissionCriterionResolver->getPermissionsCriterion();
+        if ($permissionCriterion === true || $permissionCriterion === false) {
+            return $permissionCriterion;
+        }
+
+        // Merge with original $criterion
+        if ($criterion instanceof LogicalAnd) {
+            $criterion->criteria[] = $permissionCriterion;
+        } else {
+            $criterion = new LogicalAnd(
+                array(
+                    $criterion,
+                    $permissionCriterion,
+                )
+            );
+        }
+
+        return true;
+    }
+
+    public function supports($capabilityFlag)
+    {
+        if ($this->searchHandler instanceof Capable) {
+            return $this->searchHandler->supports($capabilityFlag);
+        }
+
+        return false;
     }
 }

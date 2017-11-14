@@ -10,8 +10,10 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
+use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -103,7 +105,7 @@ class MapperTest extends LanguageAwareTestCase
                 'creatorId' => 14,
                 'status' => 0,
                 'initialLanguageCode' => 'eng-GB',
-                'languageIds' => array(4),
+                'languageCodes' => ['eng-GB'],
             ),
             $versionInfo
         );
@@ -127,7 +129,7 @@ class MapperTest extends LanguageAwareTestCase
             array(
                 'versionNo' => 1,
                 'initialLanguageCode' => 'eng-GB',
-                'languageIds' => array(4),
+                'languageCodes' => ['eng-GB'],
             )
         );
 
@@ -146,17 +148,15 @@ class MapperTest extends LanguageAwareTestCase
      */
     public function testConvertToStorageValue()
     {
-        $convMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-        );
+        $convMock = $this->createMock(Converter::class);
         $convMock->expects($this->once())
             ->method('toStorageValue')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue'
+                    FieldValue::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
+                    StorageFieldValue::class
                 )
             )->will($this->returnValue(new StorageFieldValue()));
 
@@ -170,7 +170,7 @@ class MapperTest extends LanguageAwareTestCase
         $res = $mapper->convertToStorageValue($field);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue',
+            StorageFieldValue::class,
             $res
         );
     }
@@ -183,14 +183,12 @@ class MapperTest extends LanguageAwareTestCase
      */
     public function testExtractContentFromRows()
     {
-        $convMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-        );
+        $convMock = $this->createMock(Converter::class);
         $convMock->expects($this->exactly(13))
             ->method('toFieldValue')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
+                    StorageFieldValue::class
                 )
             )->will(
                 $this->returnValue(
@@ -230,9 +228,7 @@ class MapperTest extends LanguageAwareTestCase
      */
     public function testExtractContentFromRowsMultipleVersions()
     {
-        $convMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-        );
+        $convMock = $this->createMock(Converter::class);
         $convMock->expects($this->any())
             ->method('toFieldValue')
             ->will($this->returnValue(new FieldValue()));
@@ -287,10 +283,7 @@ class MapperTest extends LanguageAwareTestCase
 
         $struct = $mapper->createCreateStructFromContent($content);
 
-        $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct',
-            $struct
-        );
+        $this->assertInstanceOf(CreateStruct::class, $struct);
 
         return array(
             'original' => $content,
@@ -444,7 +437,7 @@ class MapperTest extends LanguageAwareTestCase
         $mapper = $this->getMapper();
         $relation = $mapper->createRelationFromCreateStruct($struct);
 
-        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Relation', $relation);
+        self::assertInstanceOf(SPIRelation::class, $relation);
         foreach ($struct as $property => $value) {
             self::assertSame($value, $relation->$property);
         }
@@ -579,11 +572,10 @@ class MapperTest extends LanguageAwareTestCase
     protected function getValueConverterRegistryMock()
     {
         if (!isset($this->valueConverterRegistryMock)) {
-            $this->valueConverterRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-                array(),
-                array(array())
-            );
+            $this->valueConverterRegistryMock = $this->getMockBuilder(Registry::class)
+                ->setMethods(array())
+                ->setConstructorArgs(array(array()))
+                ->getMock();
         }
 
         return $this->valueConverterRegistryMock;
@@ -632,7 +624,7 @@ class MapperTest extends LanguageAwareTestCase
         );
 
         if (!isset($this->languageHandler)) {
-            $this->languageHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler');
+            $this->languageHandler = $this->createMock(Language\Handler::class);
             $this->languageHandler->expects($this->any())
                 ->method('load')
                 ->will(

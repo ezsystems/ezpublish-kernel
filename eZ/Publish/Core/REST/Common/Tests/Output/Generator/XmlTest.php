@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\GeneratorTest;
+use eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator;
 use eZ\Publish\Core\REST\Common;
 
 require_once __DIR__ . '/../GeneratorTest.php';
@@ -232,13 +233,7 @@ class XmlTest extends GeneratorTest
     {
         if (!isset($this->generator)) {
             $this->generator = new Common\Output\Generator\Xml(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Xml\\FieldTypeHashGenerator',
-                    array(),
-                    array(),
-                    '',
-                    false
-                )
+                $this->createMock(FieldTypeHashGenerator::class)
             );
         }
         $this->generator->setFormatOutput(true);

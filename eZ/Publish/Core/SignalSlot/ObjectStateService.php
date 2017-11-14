@@ -84,42 +84,27 @@ class ObjectStateService implements ObjectStateServiceInterface
     }
 
     /**
-     * Loads a object state group.
-     *
-     * @param mixed $objectStateGroupId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * {@inheritdoc}
      */
-    public function loadObjectStateGroup($objectStateGroupId)
+    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = [])
     {
-        return $this->service->loadObjectStateGroup($objectStateGroupId);
+        return $this->service->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
     }
 
     /**
-     * Loads all object state groups.
-     *
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
+     * {@inheritdoc}
      */
-    public function loadObjectStateGroups($offset = 0, $limit = -1)
+    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = [])
     {
-        return $this->service->loadObjectStateGroups($offset, $limit);
+        return $this->service->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);
     }
 
     /**
-     * This method returns the ordered list of object states of a group.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
+     * {@inheritdoc}
      */
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup)
+    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = [])
     {
-        return $this->service->loadObjectStates($objectStateGroup);
+        return $this->service->loadObjectStates($objectStateGroup, $prioritizedLanguages);
     }
 
     /**
@@ -198,17 +183,11 @@ class ObjectStateService implements ObjectStateServiceInterface
     }
 
     /**
-     * Loads an object state.
-     *
-     * @param mixed $stateId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     * {@inheritdoc}
      */
-    public function loadObjectState($stateId)
+    public function loadObjectState($stateId, array $prioritizedLanguages = [])
     {
-        return $this->service->loadObjectState($stateId);
+        return $this->service->loadObjectState($stateId, $prioritizedLanguages);
     }
 
     /**

@@ -25,6 +25,11 @@ class TrashItem extends APITrashItem
     protected $contentInfo;
 
     /**
+     * @var array
+     */
+    protected $path;
+
+    /**
      * Returns the content info of the content object of this trash item.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo

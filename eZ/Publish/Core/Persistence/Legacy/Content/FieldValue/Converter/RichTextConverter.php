@@ -13,7 +13,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\FieldType\RichText\Value;
 
 class RichTextConverter implements Converter
@@ -22,6 +21,8 @@ class RichTextConverter implements Converter
      * Factory for current class.
      *
      * Note: Class should instead be configured as service if it gains dependencies.
+     *
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter
      */
@@ -60,7 +61,7 @@ class RichTextConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDefinition, StorageFieldDefinition $storageDefinition)
     {
-        $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
+        // Nothing to store
     }
 
     /**
@@ -71,12 +72,6 @@ class RichTextConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDefinition, FieldDefinition $fieldDefinition)
     {
-        $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'numRows' => $storageDefinition->dataInt1,
-            )
-        );
-
         $fieldDefinition->defaultValue->data = Value::EMPTY_VALUE;
     }
 

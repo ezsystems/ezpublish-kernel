@@ -10,11 +10,10 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter;
 use eZ\Publish\Core\FieldType;
-use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
-use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway;
+use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage as UrlGateway;
 
 /**
  * Integration test for legacy storage field types.
@@ -51,7 +50,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -68,13 +67,16 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
+        $urlGateway = new UrlGateway($this->getDatabaseHandler()->getConnection());
+
         return $this->getHandler(
             'ezrichtext',
             $fieldType,
             new RichTextConverter(),
             new FieldType\RichText\RichTextStorage(
-                array(
-                    'LegacyStorage' => new LegacyStorage(new UrlGateway()),
+                new DoctrineStorage(
+                    $urlGateway,
+                    $this->getDatabaseHandler()->getConnection()
                 )
             )
         );
@@ -106,15 +108,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
             array('fieldType', 'ezrichtext'),
             array(
                 'fieldTypeConstraints',
-                new FieldTypeConstraints(
-                    array(
-                        'fieldSettings' => new FieldSettings(
-                            array(
-                                'numRows' => 0,
-                            )
-                        ),
-                    )
-                ),
+                new FieldTypeConstraints(),
             ),
         );
     }

@@ -20,7 +20,7 @@ class BorderFilterLoaderTest extends TestCase
     public function testLoadInvalidOptions(array $options)
     {
         $loader = new BorderFilterLoader();
-        $loader->load($this->getMock('\Imagine\Image\ImageInterface'), $options);
+        $loader->load($this->createMock('\Imagine\Image\ImageInterface'), $options);
     }
 
     public function loadInvalidProvider()
@@ -34,10 +34,10 @@ class BorderFilterLoaderTest extends TestCase
 
     public function testLoadDefaultColor()
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $options = array(10, 10);
 
-        $palette = $this->getMock('\Imagine\Image\Palette\PaletteInterface');
+        $palette = $this->createMock('\Imagine\Image\Palette\PaletteInterface');
         $image
             ->expects($this->once())
             ->method('palette')
@@ -46,9 +46,9 @@ class BorderFilterLoaderTest extends TestCase
             ->expects($this->once())
             ->method('color')
             ->with(BorderFilterLoader::DEFAULT_BORDER_COLOR)
-            ->will($this->returnValue($this->getMock('\Imagine\Image\Palette\Color\ColorInterface')));
+            ->will($this->returnValue($this->createMock('\Imagine\Image\Palette\Color\ColorInterface')));
 
-        $box = $this->getMock('\Imagine\Image\BoxInterface');
+        $box = $this->createMock('\Imagine\Image\BoxInterface');
         $image
             ->expects($this->once())
             ->method('getSize')
@@ -62,7 +62,7 @@ class BorderFilterLoaderTest extends TestCase
             ->method('getHeight')
             ->will($this->returnValue(100));
 
-        $drawer = $this->getMock('\Imagine\Draw\DrawerInterface');
+        $drawer = $this->createMock('\Imagine\Draw\DrawerInterface');
         $image
             ->expects($this->once())
             ->method('draw')
@@ -81,10 +81,10 @@ class BorderFilterLoaderTest extends TestCase
      */
     public function testLoad($thickX, $thickY, $color)
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $options = array($thickX, $thickY, $color);
 
-        $palette = $this->getMock('\Imagine\Image\Palette\PaletteInterface');
+        $palette = $this->createMock('\Imagine\Image\Palette\PaletteInterface');
         $image
             ->expects($this->once())
             ->method('palette')
@@ -93,9 +93,9 @@ class BorderFilterLoaderTest extends TestCase
             ->expects($this->once())
             ->method('color')
             ->with($color)
-            ->will($this->returnValue($this->getMock('\Imagine\Image\Palette\Color\ColorInterface')));
+            ->will($this->returnValue($this->createMock('\Imagine\Image\Palette\Color\ColorInterface')));
 
-        $box = $this->getMock('\Imagine\Image\BoxInterface');
+        $box = $this->createMock('\Imagine\Image\BoxInterface');
         $image
             ->expects($this->once())
             ->method('getSize')
@@ -109,7 +109,7 @@ class BorderFilterLoaderTest extends TestCase
             ->method('getHeight')
             ->will($this->returnValue(1000));
 
-        $drawer = $this->getMock('\Imagine\Draw\DrawerInterface');
+        $drawer = $this->createMock('\Imagine\Draw\DrawerInterface');
         $image
             ->expects($this->once())
             ->method('draw')

@@ -62,7 +62,7 @@ class ConsoleCommandListenerTest extends TestCase
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess();
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->listener = new ConsoleCommandListener('default', $this->siteAccessList, $this->dispatcher);
         $this->listener->setSiteAccess($this->siteAccess);
         $this->dispatcher->addSubscriber($this->listener);

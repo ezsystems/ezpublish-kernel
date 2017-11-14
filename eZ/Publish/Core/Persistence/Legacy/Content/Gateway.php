@@ -243,13 +243,15 @@ abstract class Gateway
     /**
      * Returns all field IDs of $contentId grouped by their type.
      * If $versionNo is set only field IDs for that version are returned.
+     * If $languageCode is set, only field IDs for that language are returned.
      *
      * @param int $contentId
      * @param int|null $versionNo
+     * @param string|null $languageCode
      *
      * @return int[][]
      */
-    abstract public function getFieldIdsByType($contentId, $versionNo = null);
+    abstract public function getFieldIdsByType($contentId, $versionNo = null, $languageCode = null);
 
     /**
      * Deletes relations to and from $contentId.
@@ -393,4 +395,31 @@ abstract class Gateway
      * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
      */
     abstract public function copyRelations($originalContentId, $copiedContentId, $versionNo = null);
+
+    /**
+     * Remove the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    abstract public function removeTranslationFromContent($contentId, $languageCode);
+
+    /**
+     * Delete Content fields (attributes) for the given Translation.
+     * If $versionNo is given, fields for that Version only will be deleted.
+     *
+     * @param string $languageCode
+     * @param int $contentId
+     * @param int $versionNo (optional) filter by versionNo
+     */
+    abstract public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null);
+
+    /**
+     * Delete the specified Translation from the given Version.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param string $languageCode
+     */
+    abstract public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode);
 }

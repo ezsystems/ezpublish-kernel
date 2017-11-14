@@ -20,13 +20,13 @@ class SymfonyEventConverterSlotTest extends TestCase
      */
     public function testReceive()
     {
-        $eventDispatcher = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
+        $eventDispatcher = $this->createMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
         $eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
             ->with(MVCEvents::API_SIGNAL, $this->isInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\Event\\SignalEvent'));
 
         $slot = new SymfonyEventConverterSlot($eventDispatcher);
-        $slot->receive($this->getMock('eZ\\Publish\\Core\\SignalSlot\\Signal'));
+        $slot->receive($this->createMock('eZ\\Publish\\Core\\SignalSlot\\Signal'));
     }
 }

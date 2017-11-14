@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  * This class holds version information data. It also contains the corresponding {@link Content} to
  * which the version belongs to.
  *
- * @property-read array $names returns an array with language code keys and name values
+ * @property-read string[] $names returns an array with language code keys and name values
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $id the internal id of the version
  * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
@@ -23,14 +23,14 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  * @property-read int $creatorId the user id of the user which created this version
  * @property-read int $status the status of this version. One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
  * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
- * @property-read array $languageCodes a collection of all languages which exist in this version.
+ * @property-read string[] $languageCodes a collection of all languages which exist in this version.
  *
  * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class VersionInfo extends APIVersionInfo
 {
     /**
-     * @var array
+     * @var string[]
      */
     protected $names;
 
@@ -40,9 +40,18 @@ class VersionInfo extends APIVersionInfo
     protected $contentInfo;
 
     /**
-     * Content of the content this version belongs to.
+     * The first matched name language among user provided prioritized languages.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * The first matched language among user provided prioritized languages on object retrieval, or null if none
+     * provided (all languages) or on main fallback.
+     *
+     * @internal
+     * @var string|null
+     */
+    protected $prioritizedNameLanguageCode;
+
+    /**
+     * {@inheritdoc}
      */
     public function getContentInfo()
     {
@@ -50,9 +59,7 @@ class VersionInfo extends APIVersionInfo
     }
 
     /**
-     * Returns the names computed from the name schema in the available languages.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getNames()
     {
@@ -60,23 +67,21 @@ class VersionInfo extends APIVersionInfo
     }
 
     /**
-     * Returns the name computed from the name schema in the given language.
-     * If no language is given the name in initial language of the version if present, otherwise null.
-     *
-     * @param string $languageCode
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName($languageCode = null)
     {
-        if (!isset($languageCode)) {
-            $languageCode = $this->initialLanguageCode;
+        if ($languageCode) {
+            return isset($this->names[$languageCode]) ? $this->names[$languageCode] : null;
         }
 
-        if (isset($this->names[$languageCode])) {
-            return $this->names[$languageCode];
+        if ($this->prioritizedNameLanguageCode) {
+            return $this->names[$this->prioritizedNameLanguageCode];
+        } elseif (!empty($this->contentInfo->alwaysAvailable) && isset($this->names[$this->contentInfo->mainLanguageCode])) {
+            return $this->names[$this->contentInfo->mainLanguageCode];
         }
 
-        return null;
+        // Versioned name should always exists in initial language for a version so we use that as final fallback
+        return $this->names[$this->initialLanguageCode];
     }
 }

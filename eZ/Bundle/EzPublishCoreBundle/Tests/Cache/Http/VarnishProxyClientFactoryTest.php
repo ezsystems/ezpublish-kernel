@@ -33,7 +33,7 @@ class VarnishProxyClientFactoryTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
         $this->proxyClientClass = '\FOS\HttpCache\ProxyClient\Varnish';
         $this->factory = new VarnishProxyClientFactory($this->configResolver, new DynamicSettingParser(), $this->proxyClientClass);
     }

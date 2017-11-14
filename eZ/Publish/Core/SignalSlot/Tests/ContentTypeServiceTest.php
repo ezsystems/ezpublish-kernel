@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\ContentTypeService as APIContentTypeService;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
@@ -20,14 +21,13 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentTypeService;
+use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService as ContentTypeServiceSignals;
 
 class ContentTypeServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\ContentTypeService'
-        );
+        return $this->createMock(APIContentTypeService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -98,24 +98,24 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeGroupCreateStruct),
                 $contentTypeGroup,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeGroupSignal',
+                ContentTypeServiceSignals\CreateContentTypeGroupSignal::class,
                 array('groupId' => $contentTypeGroupId),
             ),
             array(
                 'loadContentTypeGroup',
-                array($contentTypeGroupId),
+                array($contentTypeGroupId, ['eng-GB']),
                 $contentTypeGroup,
                 0,
             ),
             array(
                 'loadContentTypeGroupByIdentifier',
-                array($contentTypeGroupIdentifier),
+                array($contentTypeGroupIdentifier, ['eng-GB']),
                 $contentTypeGroup,
                 0,
             ),
             array(
                 'loadContentTypeGroups',
-                array(),
+                array(['eng-GB']),
                 array($contentTypeGroup),
                 0,
             ),
@@ -124,7 +124,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeGroup, $contentTypeGroupUpdateStruct),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateContentTypeGroupSignal',
+                ContentTypeServiceSignals\UpdateContentTypeGroupSignal::class,
                 array('contentTypeGroupId' => $contentTypeGroupId),
             ),
             array(
@@ -132,7 +132,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeGroup),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\DeleteContentTypeGroupSignal',
+                ContentTypeServiceSignals\DeleteContentTypeGroupSignal::class,
                 array('contentTypeGroupId' => $contentTypeGroupId),
             ),
             array(
@@ -140,24 +140,24 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeCreateStruct, array($contentTypeGroup)),
                 $contentType,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeSignal',
+                ContentTypeServiceSignals\CreateContentTypeSignal::class,
                 array('contentTypeId' => $contentTypeId),
             ),
             array(
                 'loadContentType',
-                array($contentTypeId),
+                array($contentTypeId, ['eng-GB']),
                 array($contentType),
                 0,
             ),
             array(
                 'loadContentTypeByIdentifier',
-                array($contentTypeIdentifier),
+                array($contentTypeIdentifier, ['eng-GB']),
                 array($contentType),
                 0,
             ),
             array(
                 'loadContentTypeByRemoteId',
-                array($contentTypeRemoteId),
+                array($contentTypeRemoteId, ['eng-GB']),
                 array($contentType),
                 0,
             ),
@@ -169,7 +169,7 @@ class ContentTypeServiceTest extends ServiceTest
             ),
             array(
                 'loadContentTypes',
-                array($contentTypeGroup),
+                array($contentTypeGroup, ['eng-GB']),
                 array($contentType),
                 0,
             ),
@@ -178,7 +178,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentType),
                 $contentTypeDraft,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeDraftSignal',
+                ContentTypeServiceSignals\CreateContentTypeDraftSignal::class,
                 array('contentTypeId' => $contentTypeId),
             ),
             array(
@@ -186,7 +186,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeDraft, $contentTypeUpdateStruct),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateContentTypeDraftSignal',
+                ContentTypeServiceSignals\UpdateContentTypeDraftSignal::class,
                 array('contentTypeDraftId' => $contentTypeId),
             ),
             array(
@@ -194,7 +194,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentType),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\DeleteContentTypeSignal',
+                ContentTypeServiceSignals\DeleteContentTypeSignal::class,
                 array('contentTypeId' => $contentTypeId),
             ),
             array(
@@ -202,7 +202,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentType, $user),
                 $copyContentType,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CopyContentTypeSignal',
+                ContentTypeServiceSignals\CopyContentTypeSignal::class,
                 array(
                     'contentTypeId' => $contentTypeId,
                     'userId' => $userId,
@@ -213,7 +213,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentType, $contentTypeGroup),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\AssignContentTypeGroupSignal',
+                ContentTypeServiceSignals\AssignContentTypeGroupSignal::class,
                 array(
                     'contentTypeId' => $contentTypeId,
                     'contentTypeGroupId' => $contentTypeGroupId,
@@ -224,7 +224,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentType, $contentTypeGroup),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UnassignContentTypeGroupSignal',
+                ContentTypeServiceSignals\UnassignContentTypeGroupSignal::class,
                 array(
                     'contentTypeId' => $contentTypeId,
                     'contentTypeGroupId' => $contentTypeGroupId,
@@ -235,7 +235,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeDraft, $fieldDefinitionCreateStruct),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\AddFieldDefinitionSignal',
+                ContentTypeServiceSignals\AddFieldDefinitionSignal::class,
                 array(
                     'contentTypeDraftId' => $contentTypeId,
                 ),
@@ -245,7 +245,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeDraft, $fieldDefinition),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\RemoveFieldDefinitionSignal',
+                ContentTypeServiceSignals\RemoveFieldDefinitionSignal::class,
                 array(
                     'contentTypeDraftId' => $contentTypeId,
                     'fieldDefinitionId' => $fieldDefinitionId,
@@ -256,7 +256,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateFieldDefinitionSignal',
+                ContentTypeServiceSignals\UpdateFieldDefinitionSignal::class,
                 array(
                     'contentTypeDraftId' => $contentTypeId,
                     'fieldDefinitionId' => $fieldDefinitionId,
@@ -267,7 +267,7 @@ class ContentTypeServiceTest extends ServiceTest
                 array($contentTypeDraft),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\PublishContentTypeDraftSignal',
+                ContentTypeServiceSignals\PublishContentTypeDraftSignal::class,
                 array(
                     'contentTypeDraftId' => $contentTypeId,
                 ),

@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Authenticator;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 use eZ\Publish\Core\REST\Server\Authenticator\IntegrationTest;
 use Qafoo\RMF;
@@ -39,7 +42,7 @@ class IntegrationTestTest extends BaseTest
             ->with(23)
             ->will(
                 $this->returnValue(
-                    $user = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User')
+                    $user = $this->createMock(User::class)
                 )
             );
 
@@ -60,13 +63,7 @@ class IntegrationTestTest extends BaseTest
     protected function getRepositoryMock()
     {
         if (!isset($this->repositoryMock)) {
-            $this->repositoryMock = $this->getMock(
-                '\\eZ\\Publish\\API\\Repository\\Repository',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->repositoryMock = $this->createMock(Repository::class);
 
             $userServiceMock = $this->getUserServiceMock();
 
@@ -90,13 +87,7 @@ class IntegrationTestTest extends BaseTest
     protected function getUserServiceMock()
     {
         if (!isset($this->userServiceMock)) {
-            $this->userServiceMock = $this->getMock(
-                '\\eZ\\Publish\\API\\Repository\\UserService',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->userServiceMock = $this->createMock(UserService::class);
         }
 
         return $this->userServiceMock;

@@ -9,9 +9,12 @@
 namespace eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway as UrlGateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use RuntimeException;
 
+/**
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage} instead.
+ */
 class LegacyStorage extends Gateway
 {
     /**
@@ -19,41 +22,23 @@ class LegacyStorage extends Gateway
      */
     protected $dbHandler;
 
-    /**
-     * Set database handler for this gateway.
-     *
-     * @param mixed $dbHandler
-     *
-     * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
-     */
-    public function setConnection($dbHandler)
+    public function __construct(UrlGateway $urlGateway, DatabaseHandler $dbHandler)
     {
-        // This obviously violates the Liskov substitution Principle, but with
-        // the given class design there is no sane other option. Actually the
-        // dbHandler *should* be passed to the constructor, and there should
-        // not be the need to post-inject it.
-        if (!$dbHandler instanceof DatabaseHandler) {
-            throw new RuntimeException('Invalid dbHandler passed');
-        }
-
-        $this->urlGateway->setConnection($dbHandler);
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
+        parent::__construct($urlGateway);
         $this->dbHandler = $dbHandler;
     }
 
     /**
      * Returns the active connection.
      *
-     * @throws \RuntimeException if no connection has been set, yet.
-     *
      * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
-        if ($this->dbHandler === null) {
-            throw new \RuntimeException('Missing database connection.');
-        }
-
         return $this->dbHandler;
     }
 

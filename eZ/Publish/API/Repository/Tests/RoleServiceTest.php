@@ -8,9 +8,12 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 
@@ -205,6 +208,97 @@ class RoleServiceTest extends BaseTest
         $this->assertNotNull($role->id);
 
         return $data;
+    }
+
+    /**
+     * Test creating a role with multiple policies.
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::createRole
+     */
+    public function testCreateRoleWithMultiplePolicies()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        $limitation1 = new Limitation\ContentTypeLimitation();
+        $limitation1->limitationValues = ['1', '3', '13'];
+
+        $limitation2 = new Limitation\SectionLimitation();
+        $limitation2->limitationValues = ['2', '3'];
+
+        $limitation3 = new Limitation\OwnerLimitation();
+        $limitation3->limitationValues = ['1', '2'];
+
+        $limitation4 = new Limitation\UserGroupLimitation();
+        $limitation4->limitationValues = ['1'];
+
+        $policyCreateStruct1 = $roleService->newPolicyCreateStruct('content', 'read');
+        $policyCreateStruct1->addLimitation($limitation1);
+        $policyCreateStruct1->addLimitation($limitation2);
+
+        $policyCreateStruct2 = $roleService->newPolicyCreateStruct('content', 'edit');
+        $policyCreateStruct2->addLimitation($limitation3);
+        $policyCreateStruct2->addLimitation($limitation4);
+
+        $roleCreateStruct = $roleService->newRoleCreateStruct('ultimate_permissions');
+        $roleCreateStruct->addPolicy($policyCreateStruct1);
+        $roleCreateStruct->addPolicy($policyCreateStruct2);
+
+        $createdRole = $roleService->createRole($roleCreateStruct);
+
+        self::assertInstanceOf(Role::class, $createdRole);
+        self::assertGreaterThan(0, $createdRole->id);
+
+        $this->assertPropertiesCorrect(
+            [
+                'identifier' => $roleCreateStruct->identifier,
+            ],
+            $createdRole
+        );
+
+        self::assertCount(2, $createdRole->getPolicies());
+
+        foreach ($createdRole->getPolicies() as $policy) {
+            self::assertInstanceOf(Policy::class, $policy);
+            self::assertGreaterThan(0, $policy->id);
+            self::assertEquals($createdRole->id, $policy->roleId);
+
+            self::assertCount(2, $policy->getLimitations());
+
+            foreach ($policy->getLimitations() as $limitation) {
+                self::assertInstanceOf(Limitation::class, $limitation);
+
+                if ($policy->module == 'content' && $policy->function == 'read') {
+                    switch ($limitation->getIdentifier()) {
+                        case Limitation::CONTENTTYPE:
+                            self::assertEquals($limitation1->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        case Limitation::SECTION:
+                            self::assertEquals($limitation2->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        default:
+                            self::fail('Created role contains limitations not defined with create struct');
+                    }
+                } elseif ($policy->module == 'content' && $policy->function == 'edit') {
+                    switch ($limitation->getIdentifier()) {
+                        case Limitation::OWNER:
+                            self::assertEquals($limitation3->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        case Limitation::USERGROUP:
+                            self::assertEquals($limitation4->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        default:
+                            self::fail('Created role contains limitations not defined with create struct');
+                    }
+                } else {
+                    self::fail('Created role contains policy not defined with create struct');
+                }
+            }
+        }
     }
 
     /**

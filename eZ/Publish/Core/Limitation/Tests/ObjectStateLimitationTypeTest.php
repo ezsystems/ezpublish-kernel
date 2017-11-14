@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Limitation\ObjectStateLimitationType;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
-use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIHandler;
 
 /**
  * Test Case for LimitationType.
@@ -46,13 +46,7 @@ class ObjectStateLimitationTypeTest extends Base
     {
         parent::setUp();
 
-        $this->objectStateHandlerMock = $this->getMock(
-            Handler::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectStateHandlerMock = $this->createMock(SPIHandler::class);
 
         $this->allObjectStateGroups = [
             new Group(['id' => 1]),

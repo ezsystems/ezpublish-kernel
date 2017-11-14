@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
@@ -119,7 +122,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
      */
     public function getLocationServiceMock()
     {
-        return $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        return $this->createMock(LocationService::class);
     }
 
     /**
@@ -127,7 +130,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
      */
     public function getContentServiceMock()
     {
-        return $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        return $this->createMock(ContentService::class);
     }
 
     /**
@@ -135,7 +138,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
      */
     public function getContentTypeServiceMock()
     {
-        return $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
+        return $this->createMock(ContentTypeService::class);
     }
 
     /**

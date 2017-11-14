@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Limitation\Tests;
 
 use PHPUnit\Framework\TestCase;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\SPI\Persistence\Handler as SPIHandler;
 
 abstract class Base extends TestCase
 {
@@ -33,13 +35,7 @@ abstract class Base extends TestCase
             return $this->persistenceHandlerMock;
         }
 
-        return $this->persistenceHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Handler',
-            $mockMethods,
-            array(),
-            '',
-            false
-        );
+        return $this->persistenceHandlerMock = $this->createMock(SPIHandler::class);
     }
 
     /**
@@ -53,13 +49,10 @@ abstract class Base extends TestCase
             return $this->userMock;
         }
 
-        return $this->userMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\User\\User',
-            $mockMethods,
-            array(),
-            '',
-            false
-        );
+        return $this->userMock = $this->getMockBuilder(APIUser::class)
+            ->setConstructorArgs(array())
+            ->setMethods($mockMethods)
+            ->getMock();
     }
 
     /**

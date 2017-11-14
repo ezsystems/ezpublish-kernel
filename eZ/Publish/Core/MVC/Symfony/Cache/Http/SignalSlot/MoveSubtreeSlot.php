@@ -12,6 +12,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * A slot handling MoveSubtreeSignal.
+ *
+ * @deprecated since 6.8. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
 class MoveSubtreeSlot extends PurgeAllHttpCacheSlot
 {

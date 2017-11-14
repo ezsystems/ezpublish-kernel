@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -15,12 +17,15 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
+use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Limitation\SubtreeLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
 
 /**
  * Test Case for LimitationType.
@@ -38,14 +43,7 @@ class SubtreeLimitationTypeTest extends Base
     public function setUp()
     {
         parent::setUp();
-
-        $this->locationHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->locationHandlerMock = $this->createMock(SPILocationHandler::class);
     }
 
     /**
@@ -248,7 +246,7 @@ class SubtreeLimitationTypeTest extends Base
         $expected = array('test', 'test' => '/1/999/');
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation', $value);
+        self::assertInstanceOf(SubtreeLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
@@ -259,21 +257,8 @@ class SubtreeLimitationTypeTest extends Base
     public function providerForTestEvaluate()
     {
         // Mocks for testing Content & VersionInfo objects, should only be used once because of expect rules.
-        $contentMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            array(),
-            array(),
-            '',
-            false
-        );
-
-        $versionInfoMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentMock = $this->createMock(APIContent::class);
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $contentMock
             ->expects($this->once())
@@ -285,13 +270,7 @@ class SubtreeLimitationTypeTest extends Base
             ->method('getContentInfo')
             ->will($this->returnValue(new ContentInfo(array('published' => true))));
 
-        $versionInfoMock2 = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $versionInfoMock2 = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock2
             ->expects($this->once())
@@ -555,11 +534,8 @@ class SubtreeLimitationTypeTest extends Base
         );
 
         // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
-        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\Subtree', $criterion);
-        self::assertInstanceOf(
-            'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
-            $criterion
-        );
+        self::assertInstanceOf(Subtree::class, $criterion);
+        self::assertInstanceOf(PermissionSubtree::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
@@ -579,11 +555,8 @@ class SubtreeLimitationTypeTest extends Base
         );
 
         // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
-        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\Subtree', $criterion);
-        self::assertInstanceOf(
-            'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
-            $criterion
-        );
+        self::assertInstanceOf(Subtree::class, $criterion);
+        self::assertInstanceOf(PermissionSubtree::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);

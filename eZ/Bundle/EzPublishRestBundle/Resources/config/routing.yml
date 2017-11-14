@@ -176,6 +176,15 @@ ezpublish_rest_deleteContentVersion:
         contentId: \d+
         versionNumber: \d+
 
+ezpublish_rest_deleteTranslationFromDraft:
+    path: /content/objects/{contentId}/versions/{versionNumber}/translations/{languageCode}
+    defaults:
+        _controller: ezpublish_rest.controller.content:deleteTranslationFromDraft
+    methods: [DELETE]
+    requirements:
+        contentId: \d+
+        versionNumber: \d+
+
 ezpublish_rest_createDraftFromVersion:
     path: /content/objects/{contentId}/versions/{versionNumber}
     defaults:

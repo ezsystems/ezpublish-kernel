@@ -8,10 +8,17 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use Exception;
+use ReflectionClass;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -87,6 +94,36 @@ class UserServiceTest extends BaseTest
             $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $subUserGroup);
         }
         /* END: Use Case */
+    }
+
+    /**
+     * Test loading sub groups throwing NotFoundException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadSubUserGroups
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadSubUserGroupsThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $parentGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            [
+                                'contentInfo' => new ContentInfo(
+                                ['id' => 123456]
+                            ),
+                            ]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->loadSubUserGroups($parentGroup);
     }
 
     /**
@@ -199,7 +236,7 @@ class UserServiceTest extends BaseTest
 
         $versionInfo = $userGroup->getVersionInfo();
 
-        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $versionInfo->status);
+        $this->assertEquals(APIVersionInfo::STATUS_PUBLISHED, $versionInfo->status);
         $this->assertEquals(1, $versionInfo->versionNo);
 
         return $userGroup;
@@ -428,6 +465,32 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test deleting user group throwing NotFoundException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::deleteUserGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteUserGroupThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            ['contentInfo' => new ContentInfo(['id' => 123456])]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->deleteUserGroup($userGroup);
+    }
+
+    /**
      * Test for the moveUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
@@ -538,9 +601,47 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test moving a user group below another group throws NotFoundException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::moveUserGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testMoveUserGroupThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userGroupToMove = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            ['contentInfo' => new ContentInfo(['id' => 123456])]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $parentUserGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            ['contentInfo' => new ContentInfo(['id' => 123455])]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->moveUserGroup($userGroupToMove, $parentUserGroup);
+    }
+
+    /**
      * Test for the newUserGroupUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::newUserGroupUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\UserService::newUserGroupUpdateStruct
      */
     public function testNewUserGroupUpdateStruct()
     {
@@ -553,9 +654,12 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupUpdateStruct',
+            UserGroupUpdateStruct::class,
             $groupUpdate
         );
+
+        $this->assertNull($groupUpdate->contentUpdateStruct);
+        $this->assertNull($groupUpdate->contentMetadataUpdateStruct);
     }
 
     /**
@@ -627,7 +731,7 @@ class UserServiceTest extends BaseTest
 
         $versionInfo = $userGroup->getVersionInfo();
 
-        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $versionInfo->status);
+        $this->assertEquals(APIVersionInfo::STATUS_PUBLISHED, $versionInfo->status);
         $this->assertEquals(2, $versionInfo->versionNo);
     }
 
@@ -670,7 +774,7 @@ class UserServiceTest extends BaseTest
 
         $versionInfo = $userGroup->getVersionInfo();
 
-        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $versionInfo->status);
+        $this->assertEquals(APIVersionInfo::STATUS_PUBLISHED, $versionInfo->status);
         $this->assertEquals(1, $versionInfo->versionNo);
     }
 
@@ -733,6 +837,26 @@ class UserServiceTest extends BaseTest
         );
 
         return $userCreate;
+    }
+
+    /**
+     * Test updating a user group throws ContentFieldValidationException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::updateUserGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     */
+    public function testUpdateUserGroupThrowsContentFieldValidationExceptionOnRequiredFieldEmpty()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $userGroup = $userService->loadUserGroup(42);
+        $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $userGroupUpdateStruct->contentUpdateStruct->setField('name', '', 'eng-US');
+
+        $userService->updateUserGroup($userGroup, $userGroupUpdateStruct);
     }
 
     /**
@@ -832,17 +956,11 @@ class UserServiceTest extends BaseTest
             array(
                 'login' => 'user',
                 'email' => 'user@example.com',
-                'passwordHash' => $this->createHash(
-                    'user',
-                    'secret',
-                    $user->hashAlgorithm
-                ),
                 'mainLanguageCode' => 'eng-US',
             ),
             array(
                 'login' => $user->login,
                 'email' => $user->email,
-                'passwordHash' => $user->passwordHash,
                 'mainLanguageCode' => $user->contentInfo->mainLanguageCode,
             )
         );
@@ -929,8 +1047,9 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the createUser() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'userCreateStruct' is invalid: User with provided login already exists
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testCreateUserThrowsInvalidArgumentException()
@@ -1002,6 +1121,38 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->fail('User object still exists after rollback.');
+    }
+
+    /**
+     * Test creating a user throwing NotFoundException.
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
+     */
+    public function testCreateUserThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userCreateStruct = $userService->newUserCreateStruct('new_user', 'new_user@ez.no', 'password', 'eng-GB');
+        $userCreateStruct->setField('first_name', 'New');
+        $userCreateStruct->setField('last_name', 'User');
+
+        $parentGroup = new UserGroup(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            [
+                                'contentInfo' => new ContentInfo(['id' => 123456]),
+                            ]
+                        ),
+                        'internalFields' => [],
+                    ]
+                ),
+            ]
+        );
+        $userService->createUser($userCreateStruct, [$parentGroup]);
     }
 
     /**
@@ -1365,7 +1516,20 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserUpdateStruct',
+            UserUpdateStruct::class,
+            $userUpdate
+        );
+
+        $this->assertNull($userUpdate->contentUpdateStruct);
+        $this->assertNull($userUpdate->contentMetadataUpdateStruct);
+
+        $this->assertPropertiesCorrect(
+            [
+                'email' => null,
+                'password' => null,
+                'enabled' => null,
+                'maxLogin' => null,
+            ],
             $userUpdate
         );
     }
@@ -1413,6 +1577,80 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the updateUser() method.
      *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     */
+    public function testUpdateUserNoPassword()
+    {
+        $repository = $this->getRepository();
+        $signalSlotUserService = $repository->getUserService();
+
+        $signalSlotUserServiceReflection = new ReflectionClass($signalSlotUserService);
+        $userServiceProperty = $signalSlotUserServiceReflection->getProperty('service');
+        $userServiceProperty->setAccessible(true);
+        $userService = $userServiceProperty->getValue($signalSlotUserService);
+
+        $userServiceReflection = new ReflectionClass($userService);
+        $settingsProperty = $userServiceReflection->getProperty('settings');
+        $settingsProperty->setAccessible(true);
+        $settingsProperty->setValue(
+            $userService,
+            [
+                'hashType' => User::PASSWORD_HASH_MD5_USER,
+            ] + $settingsProperty->getValue($userService)
+        );
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $settingsProperty->setValue(
+            $userService,
+            [
+                'hashType' => User::PASSWORD_HASH_PHP_DEFAULT,
+            ] + $settingsProperty->getValue($userService)
+        );
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set new values for maxLogin, don't change password
+        $userUpdate->maxLogin = 43;
+        $userUpdate->enabled = false;
+
+        // Updated the user record.
+        $userVersion2 = $userService->updateUser($user, $userUpdate);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(User::class, $user);
+
+        $this->assertEquals(
+            [
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'hashAlgorithm' => $user->hashAlgorithm,
+                'maxLogin' => 43,
+                'enabled' => false,
+            ],
+            [
+                'login' => $userVersion2->login,
+                'email' => $userVersion2->email,
+                'passwordHash' => $userVersion2->passwordHash,
+                'hashAlgorithm' => $userVersion2->hashAlgorithm,
+                'maxLogin' => $userVersion2->maxLogin,
+                'enabled' => $userVersion2->enabled,
+            ]
+        );
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
@@ -1424,18 +1662,12 @@ class UserServiceTest extends BaseTest
             array(
                 'login' => 'user',
                 'email' => 'user@example.com',
-                'passwordHash' => $this->createHash(
-                    'user',
-                    'my-new-password',
-                    $user->hashAlgorithm
-                ),
                 'maxLogin' => 42,
                 'enabled' => false,
             ),
             array(
                 'login' => $user->login,
                 'email' => $user->email,
-                'passwordHash' => $user->passwordHash,
                 'maxLogin' => $user->maxLogin,
                 'enabled' => $user->enabled,
             )
@@ -1450,10 +1682,10 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
-    public function testUpdateUserReturnsPublishedVersion($user)
+    public function testUpdateUserReturnsPublishedVersion(User $user)
     {
         $this->assertEquals(
-            VersionInfo::STATUS_PUBLISHED,
+            APIVersionInfo::STATUS_PUBLISHED,
             $user->getVersionInfo()->status
         );
     }
@@ -1613,7 +1845,7 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the loadUserGroupsOfUser() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadUserGroupsOfUser()
@@ -1626,19 +1858,20 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // This array will contain the "Editors" user group name
-        $userGroupNames = array();
+        $userGroupNames = [];
         foreach ($userService->loadUserGroupsOfUser($user) as $userGroup) {
+            $this->assertInstanceOf(UserGroup::class, $userGroup);
             $userGroupNames[] = $userGroup->getFieldValue('name');
         }
         /* END: Use Case */
 
-        $this->assertEquals(array('Editors'), $userGroupNames);
+        $this->assertEquals(['Editors'], $userGroupNames);
     }
 
     /**
      * Test for the loadUsersOfUserGroup() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()
+     * @covers \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadUsersOfUserGroup()
@@ -1656,6 +1889,7 @@ class UserServiceTest extends BaseTest
         // This array will contain the email of the newly created "Editor" user
         $email = array();
         foreach ($userService->loadUsersOfUserGroup($group) as $user) {
+            $this->assertInstanceOf(User::class, $user);
             $email[] = $user->email;
         }
         /* END: Use Case */
@@ -1707,8 +1941,9 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the assignUserToUserGroup() method.
      *
-     * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
+     * @covers \eZ\Publish\API\Repository\UserService::assignUserToUserGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'user' is invalid: user is already in the given user group
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testAssignUserToUserGroup
      */
     public function testAssignUserToUserGroupThrowsInvalidArgumentException()
@@ -1801,10 +2036,11 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the unAssignUserFromUserGroup() method.
+     * Test for the unAssignUserFromUserGroup() method removing user from the last group.
      *
-     * @see \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup()
+     * @covers \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Argument 'user' has a bad state: user only has one user group, cannot unassign from last group
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUnAssignUserFromUserGroup
      */
     public function testUnAssignUserFromUserGroupThrowsBadStateArgumentException()
@@ -1815,16 +2051,438 @@ class UserServiceTest extends BaseTest
         $editorsGroupId = $this->generateId('group', 13);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
-        // $administratorGroupId is the ID of the "Administrator" group in an
-        // eZ Publish demo installation
 
-        // This call will fail with an "InvalidArgumentException", because the
-        // user is not assigned to the "Administrator" group
+        // This call will fail with an "BadStateException", because the
+        // user has to be assigned to at least one group
         $userService->unAssignUserFromUserGroup(
             $user,
             $userService->loadUserGroup($editorsGroupId)
         );
         /* END: Use Case */
+    }
+
+    /**
+     * Test that multi-language logic for the loadUserGroup method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $userGroup = $this->createMultiLanguageUserGroup();
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $userGroup->contentInfo->mainLanguageCode;
+        }
+
+        $loadedUserGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUserGroup->getName($expectedLanguageCode),
+            $loadedUserGroup->getName()
+        );
+        self::assertEquals(
+            $loadedUserGroup->getFieldValue('description', $expectedLanguageCode),
+            $loadedUserGroup->getFieldValue('description')
+        );
+    }
+
+    /**
+     * Test that multi-language logic works correctly after updating user group main language.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupWithPrioritizedLanguagesListAfterMainLanguageUpdate(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $userGroup = $this->createMultiLanguageUserGroup();
+
+        $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $userGroupUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $userService->updateUserGroup($userGroup, $userGroupUpdateStruct);
+
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = 'eng-GB';
+        }
+
+        $loadedUserGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUserGroup->getName($expectedLanguageCode),
+            $loadedUserGroup->getName()
+        );
+        self::assertEquals(
+            $loadedUserGroup->getFieldValue('description', $expectedLanguageCode),
+            $loadedUserGroup->getFieldValue('description')
+        );
+    }
+
+    /**
+     * Test that multi-language logic for the loadSubUserGroups method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadSubUserGroups
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadSubUserGroupsWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // create main group for subgroups
+        $userGroup = $this->createMultiLanguageUserGroup(4);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $userGroup->contentInfo->mainLanguageCode;
+        }
+
+        // create subgroups
+        $this->createMultiLanguageUserGroup($userGroup->id);
+        $this->createMultiLanguageUserGroup($userGroup->id);
+
+        $userGroup = $userService->loadUserGroup($userGroup->id, $prioritizedLanguages);
+
+        $subUserGroups = $userService->loadSubUserGroups($userGroup, 0, 2, $prioritizedLanguages);
+        foreach ($subUserGroups as $subUserGroup) {
+            self::assertEquals(
+                $subUserGroup->getName($expectedLanguageCode),
+                $subUserGroup->getName()
+            );
+            self::assertEquals(
+                $subUserGroup->getFieldValue('description', $expectedLanguageCode),
+                $subUserGroup->getFieldValue('description')
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUser method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUser
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $user = $this->createMultiLanguageUser();
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $user->contentInfo->mainLanguageCode;
+        }
+
+        $loadedUser = $userService->loadUser($user->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['fist_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUser method works correctly after updating
+     * user content main language.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserWithPrioritizedLanguagesListAfterMainLanguageUpdate(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $user = $this->createMultiLanguageUser();
+        // sanity check
+        self::assertEquals($user->contentInfo->mainLanguageCode, 'eng-US');
+
+        $userUpdateStruct = $userService->newUserUpdateStruct();
+        $userUpdateStruct->contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $userUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $userService->updateUser($user, $userUpdateStruct);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = 'eng-GB';
+        }
+
+        $loadedUser = $userService->loadUser($user->id, $prioritizedLanguages);
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['fist_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUserByLogin method respects prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserByLogin
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserByLoginWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $user = $this->createMultiLanguageUser();
+
+        // load, with prioritized languages, the newly created user
+        $loadedUser = $userService->loadUserByLogin($user->login, $prioritizedLanguages);
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
+        }
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUserByCredentials method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserByCredentials
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserByCredentialsWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $user = $this->createMultiLanguageUser();
+
+        // load, with prioritized languages, the newly created user
+        $loadedUser = $userService->loadUserByCredentials(
+            $user->login,
+            'secret',
+            $prioritizedLanguages
+        );
+        if ($expectedLanguageCode === null) {
+            $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
+        }
+
+        self::assertEquals(
+            $loadedUser->getName($expectedLanguageCode),
+            $loadedUser->getName()
+        );
+
+        foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+            self::assertEquals(
+                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                $loadedUser->getFieldValue($fieldIdentifier)
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUsersByEmail method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUsersByEmail
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUsersByEmailWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $user = $this->createMultiLanguageUser();
+
+        // load, with prioritized languages, users by email
+        $loadedUsers = $userService->loadUsersByEmail($user->email, $prioritizedLanguages);
+
+        foreach ($loadedUsers as $loadedUser) {
+            if ($expectedLanguageCode === null) {
+                $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
+            }
+            self::assertEquals(
+                $loadedUser->getName($expectedLanguageCode),
+                $loadedUser->getName()
+            );
+
+            foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+                self::assertEquals(
+                    $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                    $loadedUser->getFieldValue($fieldIdentifier)
+                );
+            }
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUserGroupsOfUser method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUserGroupsOfUserWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $userGroup = $this->createMultiLanguageUserGroup();
+        $user = $this->createMultiLanguageUser($userGroup->id);
+
+        $userGroups = $userService->loadUserGroupsOfUser($user, 0, 25, $prioritizedLanguages);
+        foreach ($userGroups as $userGroup) {
+            self::assertEquals(
+                $userGroup->getName($expectedLanguageCode),
+                $userGroup->getName()
+            );
+            self::assertEquals(
+                $userGroup->getFieldValue('description', $expectedLanguageCode),
+                $userGroup->getFieldValue('description')
+            );
+        }
+    }
+
+    /**
+     * Test that multi-language logic for the loadUsersOfUserGroup method respects
+     * prioritized language list.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[] $prioritizedLanguages
+     * @param string|null $expectedLanguageCode language code of expected translation
+     */
+    public function testLoadUsersOfUserGroupWithPrioritizedLanguagesList(
+        array $prioritizedLanguages,
+        $expectedLanguageCode
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // create parent user group
+        $userGroup = $this->createMultiLanguageUserGroup();
+        // add two users to the created parent user group
+        $this->createMultiLanguageUser($userGroup->id);
+        $this->createMultiLanguageUser($userGroup->id);
+
+        // test loading of users via user group with prioritized languages list
+        $users = $userService->loadUsersOfUserGroup($userGroup, 0, 25, $prioritizedLanguages);
+        foreach ($users as $user) {
+            if ($expectedLanguageCode === null) {
+                $expectedLanguageCode = $user->contentInfo->mainLanguageCode;
+            }
+            self::assertEquals(
+                $user->getName($expectedLanguageCode),
+                $user->getName()
+            );
+
+            foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
+                self::assertEquals(
+                    $user->getFieldValue($fieldIdentifier, $expectedLanguageCode),
+                    $user->getFieldValue($fieldIdentifier)
+                );
+            }
+        }
+    }
+
+    /**
+     * Get prioritized languages list data.
+     *
+     * Test cases using this data provider should expect the following arguments:
+     * <code>
+     *   array $prioritizedLanguagesList
+     *   string $expectedLanguage (if null - use main language)
+     * </code>
+     *
+     * @return array
+     */
+    public function getPrioritizedLanguageList()
+    {
+        return [
+            [[], null],
+            [['eng-US'], 'eng-US'],
+            [['eng-GB'], 'eng-GB'],
+            [['eng-US', 'eng-GB'], 'eng-US'],
+            [['eng-GB', 'eng-US'], 'eng-GB'],
+            // use non-existent group as the first one
+            [['ger-DE'], null],
+            [['ger-DE', 'eng-GB'], 'eng-GB'],
+        ];
+    }
+
+    /**
+     * @param int $parentGroupId
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     */
+    private function createMultiLanguageUserGroup($parentGroupId = 4)
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // create user group with multiple translations
+        $parentGroupId = $this->generateId('group', $parentGroupId);
+        $parentGroup = $userService->loadUserGroup($parentGroupId);
+
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct('eng-US');
+        $userGroupCreateStruct->setField('name', 'US user group', 'eng-US');
+        $userGroupCreateStruct->setField('name', 'GB user group', 'eng-GB');
+        $userGroupCreateStruct->setField('description', 'US user group description', 'eng-US');
+        $userGroupCreateStruct->setField('description', 'GB user group description', 'eng-GB');
+        $userGroupCreateStruct->alwaysAvailable = true;
+
+        return $userService->createUserGroup($userGroupCreateStruct, $parentGroup);
     }
 
     /**
@@ -1859,24 +2517,40 @@ class UserServiceTest extends BaseTest
         return $userGroup;
     }
 
-    private function createHash($login, $password, $type)
+    /**
+     * Create user with multiple translations of User Content fields.
+     *
+     * @param int $userGroupId User group ID (default 13 - Editors)
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createMultiLanguageUser($userGroupId = 13)
     {
-        switch ($type) {
-            case 2:
-                /* PASSWORD_HASH_MD5_USER */
-                return md5("{$login}\n{$password}");
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
 
-            case 3:
-                /* PASSWORD_HASH_MD5_SITE */
-                $site = null;
+        // Instantiate a create struct with mandatory properties
+        $randomLogin = md5(rand() . time());
+        $userCreateStruct = $userService->newUserCreateStruct(
+            $randomLogin,
+            "{$randomLogin}@example.com",
+            'secret',
+            'eng-US'
+        );
+        $userCreateStruct->enabled = true;
+        $userCreateStruct->alwaysAvailable = true;
 
-                return md5("{$login}\n{$password}\n{$site}");
-
-            case 5:
-                /* PASSWORD_HASH_PLAINTEXT */
-                return $password;
+        // set field for each language
+        foreach (['eng-US', 'eng-GB'] as $languageCode) {
+            $userCreateStruct->setField('first_name', "{$languageCode} Example", $languageCode);
+            $userCreateStruct->setField('last_name', "{$languageCode} User", $languageCode);
+            $userCreateStruct->setField('signature', "{$languageCode} signature", $languageCode);
         }
-        /* PASSWORD_HASH_MD5_PASSWORD (1) */
-        return md5($password);
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup($userGroupId);
+
+        // Create a new user
+        return $userService->createUser($userCreateStruct, [$group]);
     }
 }

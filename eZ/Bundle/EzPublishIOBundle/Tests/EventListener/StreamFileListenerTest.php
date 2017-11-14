@@ -32,9 +32,9 @@ class StreamFileListenerTest extends TestCase
 
     public function setUp()
     {
-        $this->ioServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->ioServiceMock = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
 
-        $this->configResolverMock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolverMock = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
 
         $this->eventListener = new StreamFileListener($this->ioServiceMock, $this->configResolverMock);
     }
@@ -159,7 +159,7 @@ class StreamFileListenerTest extends TestCase
     protected function createEvent($request)
     {
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );

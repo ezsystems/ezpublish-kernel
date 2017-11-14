@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\ObjectStateService as APIObjectStateService;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
@@ -16,14 +17,13 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ObjectStateService;
+use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService as ObjectStateServiceSignals;
 
 class ObjectStateServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\ObjectStateService'
-        );
+        return $this->createMock(APIObjectStateService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -55,145 +55,145 @@ class ObjectStateServiceTest extends ServiceTest
         );
         $contentInfo = $this->getContentInfo($contentId, $contentRemoteId);
 
-        return array(
-            array(
+        return [
+            [
                 'createObjectStateGroup',
-                array($objectStateGroupCreateStruct),
+                [$objectStateGroupCreateStruct],
                 $objectStateGroup,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\CreateObjectStateGroupSignal',
-                array('objectStateGroupId' => $objectStateGroupId),
-            ),
-            array(
+                ObjectStateServiceSignals\CreateObjectStateGroupSignal::class,
+                ['objectStateGroupId' => $objectStateGroupId],
+            ],
+            [
                 'loadObjectStateGroup',
-                array(4),
+                [4, []],
                 $objectStateGroup,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadObjectStateGroups',
-                array(1, 1),
-                array($objectStateGroup),
+                [1, 1, []],
+                [$objectStateGroup],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadObjectStates',
-                array($objectStateGroup),
-                array($objectState),
+                [$objectStateGroup, []],
+                [$objectState],
                 0,
-            ),
-            array(
+            ],
+            [
                 'updateObjectStateGroup',
-                array($objectStateGroup, $objectStateGroupUpdateStruct),
+                [$objectStateGroup, $objectStateGroupUpdateStruct],
                 $objectStateGroup,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\UpdateObjectStateGroupSignal',
-                array('objectStateGroupId' => $objectStateGroupId),
-            ),
-            array(
+                ObjectStateServiceSignals\UpdateObjectStateGroupSignal::class,
+                ['objectStateGroupId' => $objectStateGroupId],
+            ],
+            [
                 'deleteObjectStateGroup',
-                array($objectStateGroup),
+                [$objectStateGroup],
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\DeleteObjectStateGroupSignal',
-                array('objectStateGroupId' => $objectStateGroupId),
-            ),
-            array(
+                ObjectStateServiceSignals\DeleteObjectStateGroupSignal::class,
+                ['objectStateGroupId' => $objectStateGroupId],
+            ],
+            [
                 'createObjectState',
-                array($objectStateGroup, $objectStateCreateStruct),
+                [$objectStateGroup, $objectStateCreateStruct],
                 $objectState,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\CreateObjectStateSignal',
-                array(
+                ObjectStateServiceSignals\CreateObjectStateSignal::class,
+                [
                     'objectStateGroupId' => $objectStateGroupId,
                     'objectStateId' => $objectStateId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'loadObjectState',
-                array($objectStateId),
+                [$objectStateId, []],
                 $objectState,
                 0,
-            ),
-            array(
+            ],
+            [
                 'updateObjectState',
-                array($objectState, $objectStateUpdateStruct),
+                [$objectState, $objectStateUpdateStruct],
                 $objectState,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\UpdateObjectStateSignal',
-                array(
+                ObjectStateServiceSignals\UpdateObjectStateSignal::class,
+                [
                     'objectStateId' => $objectStateId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'setPriorityOfObjectState',
-                array($objectState, $priority),
+                [$objectState, $priority],
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetPriorityOfObjectStateSignal',
-                array(
+                ObjectStateServiceSignals\SetPriorityOfObjectStateSignal::class,
+                [
                     'objectStateId' => $objectStateId,
                     'priority' => $priority,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'deleteObjectState',
-                array($objectState),
+                [$objectState],
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\DeleteObjectStateSignal',
-                array(
+                ObjectStateServiceSignals\DeleteObjectStateSignal::class,
+                [
                     'objectStateId' => $objectStateId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'setContentState',
-                array($contentInfo, $objectStateGroup, $objectState),
+                [$contentInfo, $objectStateGroup, $objectState],
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal',
-                array(
+                ObjectStateServiceSignals\SetContentStateSignal::class,
+                [
                     'objectStateId' => $objectStateId,
                     'contentId' => $contentId,
                     'objectStateGroupId' => $objectStateGroupId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'getContentState',
-                array($contentInfo, $objectStateGroup),
+                [$contentInfo, $objectStateGroup],
                 $objectState,
                 0,
-            ),
-            array(
+            ],
+            [
                 'getContentCount',
-                array($objectState),
+                [$objectState],
                 35,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newObjectStateGroupCreateStruct',
-                array('identifier'),
+                ['identifier'],
                 $objectStateGroupCreateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newObjectStateGroupUpdateStruct',
-                array(),
+                [],
                 $objectStateGroupUpdateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newObjectStateUpdateStruct',
-                array(),
+                [],
                 $objectStateUpdateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newObjectStateCreateStruct',
-                array('identifier'),
+                ['identifier'],
                 $objectStateCreateStruct,
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

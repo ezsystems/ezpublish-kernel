@@ -15,9 +15,14 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\FieldType;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 /**
  * Test case for Content Handler.
@@ -75,9 +80,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $contentGatewayMock->expects($this->exactly(6))
             ->method('insertNewField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Content::class),
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             )->will($this->returnValue(42));
 
         $callNo = 0;
@@ -104,7 +109,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 $storageHandlerMock->expects($this->at($callNo++))
                     ->method('storeFieldData')
                     ->with(
-                        $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                        $this->isInstanceOf(VersionInfo::class),
                         $this->equalTo($field)
                     )->will($this->returnValue($storageHandlerUpdatesFields));
             }
@@ -115,7 +120,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $storageHandlerMock->expects($this->at($callNo))
             ->method('copyFieldData')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                $this->isInstanceOf(VersionInfo::class),
                 $this->equalTo($copyField),
                 $this->equalTo($originalField)
             )->will($this->returnValue($storageHandlerUpdatesFields));
@@ -133,7 +138,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(6))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $fieldHandler->createNewFields(
@@ -155,14 +160,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(12))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $contentGatewayMock->expects($this->exactly(6))
             ->method('updateField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $fieldHandler->createNewFields(
@@ -187,9 +192,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $contentGatewayMock->expects($this->exactly(3))
             ->method('insertNewField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Content::class),
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             )->will($this->returnValue(42));
 
         $callNo = 0;
@@ -208,7 +213,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
             $storageHandlerMock->expects($this->at($callNo++))
                 ->method('storeFieldData')
                 ->with(
-                    $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                    $this->isInstanceOf(VersionInfo::class),
                     $this->equalTo($field)
                 )->will($this->returnValue($storageHandlerUpdatesFields));
         }
@@ -226,7 +231,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(3))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $fieldHandler->createNewFields(
@@ -248,14 +253,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(6))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $contentGatewayMock->expects($this->exactly(3))
             ->method('updateField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $fieldHandler->createNewFields(
@@ -275,9 +280,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $contentGatewayMock->expects($this->exactly(6))
             ->method('insertExistingField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Content::class),
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             )->will($this->returnValue(42));
 
         $callNo = 0;
@@ -298,7 +303,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 $storageHandlerMock->expects($this->at($callNo++))
                     ->method('copyFieldData')
                     ->with(
-                        $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                        $this->isInstanceOf(VersionInfo::class),
                         $this->equalTo($field),
                         $this->equalTo($originalField)
                     )->will($this->returnValue($storageHandlerUpdatesFields));
@@ -318,7 +323,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(6))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $fieldHandler->createExistingFieldsInNewVersion($this->getContentFixture());
@@ -337,14 +342,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(12))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $contentGatewayMock->expects($this->exactly(6))
             ->method('updateField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $fieldHandler->createExistingFieldsInNewVersion($this->getContentFixture());
@@ -362,8 +367,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $storageHandlerMock->expects($this->exactly(6))
             ->method('getFieldData')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field')
+                $this->isInstanceOf(VersionInfo::class),
+                $this->isInstanceOf(Field::class)
             );
 
         $fieldHandler->loadExternalFieldData($this->getContentFixture());
@@ -385,9 +390,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $contentGatewayMock->expects($this->exactly(3))
             ->method('insertNewField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Content::class),
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $callNo = 0;
@@ -413,7 +418,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
             $storageHandlerMock->expects($this->at($callNo++))
                 ->method('storeFieldData')
                 ->with(
-                    $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                    $this->isInstanceOf(VersionInfo::class),
                     $this->equalTo($field)
                 )->will($this->returnValue($storageHandlerUpdatesFields));
         }
@@ -423,7 +428,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $storageHandlerMock->expects($this->at($callNo))
             ->method('copyFieldData')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                $this->isInstanceOf(VersionInfo::class),
                 $this->equalTo($copyField),
                 $this->equalTo($originalField)
             )->will($this->returnValue($storageHandlerUpdatesFields));
@@ -441,7 +446,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(3))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $field = new Field(
@@ -477,14 +482,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(6))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $contentGatewayMock->expects($this->exactly(3))
             ->method('updateField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $field = new Field(
@@ -542,7 +547,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
                     $storageHandlerMock->expects($this->at($callNo++))
                         ->method('storeFieldData')
                         ->with(
-                            $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                            $this->isInstanceOf(VersionInfo::class),
                             $this->equalTo($field)
                         )->will($this->returnValue($storageHandlerUpdatesFields));
                 }
@@ -553,7 +558,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
             $storageHandlerMock->expects($this->at($callNo++))
                 ->method('copyFieldData')
                 ->with(
-                    $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                    $this->isInstanceOf(VersionInfo::class),
                     $this->equalTo($fieldToCopy['copy']),
                     $this->equalTo($fieldToCopy['original'])
                 )->will($this->returnValue($storageHandlerUpdatesFields));
@@ -573,14 +578,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(6))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $contentGatewayMock->expects($this->exactly(6))
             ->method('updateField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $fieldHandler->updateFields(
@@ -603,14 +608,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(12))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $contentGatewayMock->expects($this->exactly(12))
             ->method('updateField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $fieldHandler->updateFields(
@@ -655,7 +660,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
             $storageHandlerMock->expects($this->at($callNo++))
                 ->method('storeFieldData')
                 ->with(
-                    $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                    $this->isInstanceOf(VersionInfo::class),
                     $this->equalTo($field)
                 )->will($this->returnValue($storageHandlerUpdatesFields));
         }
@@ -664,7 +669,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
             $storageHandlerMock->expects($this->at($callNo++))
                 ->method('copyFieldData')
                 ->with(
-                    $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                    $this->isInstanceOf(VersionInfo::class),
                     $this->equalTo($fieldToCopy['copy']),
                     $this->equalTo($fieldToCopy['original'])
                 )->will($this->returnValue($storageHandlerUpdatesFields));
@@ -683,7 +688,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(3))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $struct = new UpdateStruct();
@@ -709,14 +714,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $mapperMock->expects($this->exactly(6))
             ->method('convertToStorageValue')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'))
+            ->with($this->isInstanceOf(Field::class))
             ->will($this->returnValue(new StorageFieldValue()));
 
         $contentGatewayMock->expects($this->exactly(3))
             ->method('updateField')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Field'),
-                $this->isInstanceOf('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue')
+                $this->isInstanceOf(Field::class),
+                $this->isInstanceOf(StorageFieldValue::class)
             );
 
         $struct = new UpdateStruct();
@@ -749,7 +754,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
             ->method('deleteFieldData')
             ->with(
                 $this->equalTo('some-type'),
-                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                $this->isInstanceOf(VersionInfo::class),
                 $this->equalTo(array(2, 3))
             );
 
@@ -773,7 +778,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $content = new Content();
         $content->versionInfo = new VersionInfo();
         $content->versionInfo->versionNo = 1;
-        $content->versionInfo->languageIds = array(2, 4);
+        $content->versionInfo->languageCodes = ['eng-US', 'eng-GB'];
         $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->id = 42;
         $content->versionInfo->contentInfo->contentTypeId = 1;
@@ -811,7 +816,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $content = new Content();
         $content->versionInfo = new VersionInfo();
         $content->versionInfo->versionNo = 1;
-        $content->versionInfo->languageIds = array(2, 4);
+        $content->versionInfo->languageCodes = ['eng-US', 'eng-GB'];
         $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->id = 42;
         $content->versionInfo->contentInfo->contentTypeId = 1;
@@ -831,7 +836,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $content = new Content();
         $content->versionInfo = new VersionInfo();
         $content->versionInfo->versionNo = 1;
-        $content->versionInfo->languageIds = array(4);
+        $content->versionInfo->languageCodes = ['eng-GB'];
         $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->id = 42;
         $content->versionInfo->contentInfo->contentTypeId = 1;
@@ -994,13 +999,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected function getStorageHandlerMock()
     {
         if (!isset($this->storageHandlerMock)) {
-            $this->storageHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->storageHandlerMock = $this->createMock(StorageHandler::class);
         }
 
         return $this->storageHandlerMock;
@@ -1014,13 +1013,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected function getMapperMock()
     {
         if (!isset($this->mapperMock)) {
-            $this->mapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->mapperMock = $this->createMock(Mapper::class);
         }
 
         return $this->mapperMock;
@@ -1034,9 +1027,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected function getContentGatewayMock()
     {
         if (!isset($this->contentGatewayMock)) {
-            $this->contentGatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
-            );
+            $this->contentGatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->contentGatewayMock;
@@ -1048,13 +1039,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected function getFieldTypeRegistryMock()
     {
         if (!isset($this->fieldTypeRegistryMock)) {
-            $this->fieldTypeRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\FieldTypeRegistry',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldTypeRegistryMock = $this->createMock(FieldTypeRegistry::class);
 
             $this->fieldTypeRegistryMock->expects(
                 $this->any()
@@ -1076,9 +1061,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected function getFieldTypeMock()
     {
         if (!isset($this->fieldTypeMock)) {
-            $this->fieldTypeMock = $this->getMock(
-                'eZ\\Publish\\SPI\\FieldType\\FieldType'
-            );
+            $this->fieldTypeMock = $this->createMock(FieldType::class);
         }
 
         return $this->fieldTypeMock;

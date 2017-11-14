@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 class LimitationTest extends BaseTest
 {
@@ -55,10 +56,7 @@ class LimitationTest extends BaseTest
      */
     public function testResultIsLimitation($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
-            $result
-        );
+        $this->assertInstanceOf(Limitation::class, $result);
     }
 
     /**

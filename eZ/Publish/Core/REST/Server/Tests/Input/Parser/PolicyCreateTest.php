@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\Core\Repository\RoleService;
 use eZ\Publish\Core\REST\Server\Input\Parser\PolicyCreate;
 use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
 
@@ -47,7 +49,7 @@ class PolicyCreateTest extends BaseTest
         $result = $policyCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct',
+            PolicyCreateStruct::class,
             $result,
             'PolicyCreateStruct not created correctly.'
         );
@@ -79,7 +81,7 @@ class PolicyCreateTest extends BaseTest
         );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
+            Limitation::class,
             $parsedLimitations['Class'],
             'Limitation not created correctly.'
         );
@@ -249,13 +251,7 @@ class PolicyCreateTest extends BaseTest
      */
     protected function getRoleServiceMock()
     {
-        $roleServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\RoleService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $roleServiceMock = $this->createMock(RoleService::class);
 
         $roleServiceMock->expects($this->any())
             ->method('newPolicyCreateStruct')

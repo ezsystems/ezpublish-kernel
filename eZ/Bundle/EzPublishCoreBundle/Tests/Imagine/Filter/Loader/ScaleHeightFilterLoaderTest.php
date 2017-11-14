@@ -26,7 +26,7 @@ class ScaleHeightFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->getMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
         $this->loader = new ScaleHeightFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -36,13 +36,13 @@ class ScaleHeightFilterLoaderTest extends TestCase
      */
     public function testLoadFail()
     {
-        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface', array()));
+        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface', array()));
     }
 
     public function testLoad()
     {
         $height = 123;
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
         $this->innerLoader
             ->expects($this->once())
             ->method('load')

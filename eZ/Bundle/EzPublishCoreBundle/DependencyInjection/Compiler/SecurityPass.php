@@ -8,6 +8,10 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider;
+use eZ\Publish\Core\MVC\Symfony\Security\Authentication\DefaultAuthenticationSuccessHandler;
+use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider;
+use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -26,15 +30,18 @@ class SecurityPass implements CompilerPassInterface
 
         $configResolverRef = new Reference('ezpublish.config.resolver');
         $repositoryReference = new Reference('ezpublish.api.repository');
-        // Inject the Repository in the authentication provider.
+
+        // Override and inject the Repository in the authentication provider.
         // We need it for checking user credentials
         $daoAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.dao');
+        $daoAuthenticationProviderDef->setClass(RepositoryAuthenticationProvider::class);
         $daoAuthenticationProviderDef->addMethodCall(
             'setRepository',
             array($repositoryReference)
         );
 
         $anonymousAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.anonymous');
+        $anonymousAuthenticationProviderDef->setClass(AnonymousAuthenticationProvider::class);
         $anonymousAuthenticationProviderDef->addMethodCall(
             'setRepository',
             array($repositoryReference)
@@ -50,6 +57,7 @@ class SecurityPass implements CompilerPassInterface
         }
 
         $httpUtilsDef = $container->findDefinition('security.http_utils');
+        $httpUtilsDef->setClass(HttpUtils::class);
         $httpUtilsDef->addMethodCall(
             'setSiteAccess',
             array(new Reference('ezpublish.siteaccess'))
@@ -60,6 +68,7 @@ class SecurityPass implements CompilerPassInterface
         }
 
         $successHandlerDef = $container->getDefinition('security.authentication.success_handler');
+        $successHandlerDef->setClass(DefaultAuthenticationSuccessHandler::class);
         $successHandlerDef->addMethodCall(
             'setConfigResolver',
             array($configResolverRef)

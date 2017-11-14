@@ -44,7 +44,7 @@ class IsMainLocation extends CriterionVisitor
     {
         return array(
             'term' => array(
-                'is_main_location_b' => ($criterion->value[0] === Criterion\Location\IsMainLocation::MAIN ? true : false),
+                'is_main_location_b' => ($criterion->value[0] === Criterion\Location\IsMainLocation::MAIN),
             ),
         );
     }

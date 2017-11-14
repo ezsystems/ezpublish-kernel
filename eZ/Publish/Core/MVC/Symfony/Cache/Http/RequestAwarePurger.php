@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Interface allowing implementor (cache Store) to purge Http cache from a request object.
+ *
+ * @deprecated since 6.8. Use RequestAwarePurger from the platform-http-cache package.
  */
 interface RequestAwarePurger
 {

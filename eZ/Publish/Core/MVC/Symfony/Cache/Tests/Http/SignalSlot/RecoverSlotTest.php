@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RecoverSlot;
 
 class RecoverSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
@@ -21,11 +22,11 @@ class RecoverSlotTest extends AbstractPurgeForContentSlotTest implements SlotTes
 
     public function getSlotClass()
     {
-        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RecoverSlot';
+        return RecoverSlot::class;
     }
 
     public static function getReceivedSignalClasses()
     {
-        return ['eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal'];
+        return [RecoverSignal::class];
     }
 }

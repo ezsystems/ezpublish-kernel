@@ -76,17 +76,18 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $fieldType = new FieldType\Image\Type();
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $urlRedecorator = self::$container->get('ezpublish.core.io.image_fieldtype.legacy_url_redecorator');
-
         $this->ioService = self::$container->get('ezpublish.fieldType.ezimage.io_service');
+        /** @var \eZ\Publish\Core\IO\UrlRedecoratorInterface $urlRedecorator */
+        $urlRedecorator = self::$container->get('ezpublish.core.io.image_fieldtype.legacy_url_redecorator');
 
         return $this->getHandler(
             'ezimage',
             $fieldType,
             new Legacy\Content\FieldValue\Converter\ImageConverter($this->ioService, $urlRedecorator),
             new FieldType\Image\ImageStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage($urlRedecorator),
+                new FieldType\Image\ImageStorage\Gateway\DoctrineStorage(
+                    $urlRedecorator,
+                    $this->getDatabaseHandler()->getConnection()
                 ),
                 $this->ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
@@ -100,7 +101,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getDeprecationWarnerMock()
     {
         if (!isset($this->deprecationWarnerMock)) {
-            $this->deprecationWarnerMock = $this->getMock('eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface');
+            $this->deprecationWarnerMock = $this->createMock('eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface');
         }
 
         return $this->deprecationWarnerMock;
@@ -109,7 +110,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getAliasCleanerMock()
     {
         if (!isset($this->aliasCleanerMock)) {
-            $this->aliasCleanerMock = $this->getMock('\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface');
+            $this->aliasCleanerMock = $this->createMock('\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface');
         }
 
         return $this->aliasCleanerMock;

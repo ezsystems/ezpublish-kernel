@@ -14,6 +14,8 @@ use eZ\Publish\Core\SignalSlot\Slot;
 
 /**
  * A abstract legacy slot covering common functions needed for legacy slots.
+ *
+ * @deprecated since 6.8. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
 abstract class HttpCacheSlot extends Slot
 {

@@ -18,6 +18,6 @@ class UnsupportedFilterTest extends AbstractFilterTest
     public function testLoad()
     {
         $filter = new UnsupportedFilter();
-        $filter->apply($this->getMock('\Imagine\Image\ImageInterface'));
+        $filter->apply($this->createMock('\Imagine\Image\ImageInterface'));
     }
 }

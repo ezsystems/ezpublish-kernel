@@ -8,12 +8,19 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\ContentService;
+use eZ\Publish\Core\Repository\ContentTypeService;
+use eZ\Publish\Core\Repository\FieldTypeService;
+use eZ\Publish\Core\Repository\LocationService;
+use eZ\Publish\Core\Repository\UserService;
 use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+use eZ\Publish\Core\REST\Server\Values\RestUserGroupUpdateStruct;
 
 class UserGroupUpdateTest extends BaseTest
 {
@@ -43,19 +50,19 @@ class UserGroupUpdateTest extends BaseTest
         $result = $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupUpdateStruct',
+            RestUserGroupUpdateStruct::class,
             $result,
             'UserGroupUpdate not created correctly.'
         );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
+            ContentUpdateStruct::class,
             $result->userGroupUpdateStruct->contentUpdateStruct,
             'UserGroupUpdate not created correctly.'
         );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentMetadataUpdateStruct',
+            ContentMetadataUpdateStruct::class,
             $result->userGroupUpdateStruct->contentMetadataUpdateStruct,
             'UserGroupUpdate not created correctly.'
         );
@@ -214,29 +221,17 @@ class UserGroupUpdateTest extends BaseTest
      */
     private function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
-            array(),
-            array(
-                $this->getContentServiceMock(),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\Repository\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\Repository\\FieldTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-            ),
-            '',
-            false
-        );
+        $fieldTypeParserMock = $this->getMockBuilder(FieldTypeParser::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array())
+            ->setConstructorArgs(
+                array(
+                    $this->getContentServiceMock(),
+                    $this->createMock(ContentTypeService::class),
+                    $this->createMock(FieldTypeService::class),
+                )
+            )
+            ->getMock();
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseFieldValue')
@@ -253,13 +248,7 @@ class UserGroupUpdateTest extends BaseTest
      */
     protected function getUserServiceMock()
     {
-        $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $userServiceMock = $this->createMock(UserService::class);
 
         $userServiceMock->expects($this->any())
             ->method('newUserGroupUpdateStruct')
@@ -277,13 +266,7 @@ class UserGroupUpdateTest extends BaseTest
      */
     protected function getLocationServiceMock()
     {
-        $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\LocationService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $userServiceMock = $this->createMock(LocationService::class);
 
         $userServiceMock->expects($this->any())
             ->method('loadLocation')
@@ -312,13 +295,7 @@ class UserGroupUpdateTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        $contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentServiceMock = $this->createMock(ContentService::class);
 
         $contentServiceMock->expects($this->any())
             ->method('newContentUpdateStruct')

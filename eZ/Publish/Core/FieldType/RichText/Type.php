@@ -26,20 +26,6 @@ use RuntimeException;
 class Type extends FieldType
 {
     /**
-     * List of settings available for this FieldType.
-     *
-     * The key is the setting name, and the value is the default value for this setting
-     *
-     * @var array
-     */
-    protected $settingsSchema = array(
-        'numRows' => array(
-            'type' => 'int',
-            'default' => 10,
-        ),
-    );
-
-    /**
      * @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
      */
     protected $internalFormatValidator;
@@ -353,48 +339,6 @@ class Type extends FieldType
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
-     *
-     * @param mixed $fieldSettings
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateFieldSettings($fieldSettings)
-    {
-        $validationErrors = array();
-
-        foreach ($fieldSettings as $name => $value) {
-            if (isset($this->settingsSchema[$name])) {
-                switch ($name) {
-                    case 'numRows':
-                        if (!is_int($value)) {
-                            $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' value must be of integer type",
-                                null,
-                                array(
-                                    '%setting%' => $name,
-                                ),
-                                "[$name]"
-                            );
-                        }
-                        break;
-                }
-            } else {
-                $validationErrors[] = new ValidationError(
-                    "Setting '%setting%' is unknown",
-                    null,
-                    array(
-                        '%setting%' => $name,
-                    ),
-                    "[$name]"
-                );
-            }
-        }
-
-        return $validationErrors;
-    }
-
-    /**
      * Returns relation data extracted from value.
      *
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
@@ -415,7 +359,7 @@ class Type extends FieldType
      *          "contentIds" => array( 12 ),
      *          "locationIds" => array( 24, 45 )
      *      ),
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD => array( 12 )
      *  )
      * </code>
      */

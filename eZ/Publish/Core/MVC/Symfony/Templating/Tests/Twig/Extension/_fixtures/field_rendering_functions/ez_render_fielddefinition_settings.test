@@ -5,6 +5,7 @@
 {{ ez_render_fielddefinition_settings( overrides ) }}
 {{ ez_render_fielddefinition_settings( notdefault ) }}
 {{ ez_render_fielddefinition_settings( withdata ) }}
+{{ ez_render_fielddefinition_settings( notexisting ) }}
 --DATA--
 return array(
     'nooverride' => $this->getFieldDefinition( 'eznooverride' ),
@@ -13,10 +14,12 @@ return array(
     'withdata' => $this->getFieldDefinition(
         'ezwithdata', 42,
         array( 'frameworks' => array( 'YUI3', 'jQuery' ) )
-    )
+    ),
+    'notexisting' => $this->getFieldDefinition( 'eznotexisting' )
 )
 --EXPECT--
 default (no override)
 override2
 not default
 42 ezwithdata YUI3, jQuery
+

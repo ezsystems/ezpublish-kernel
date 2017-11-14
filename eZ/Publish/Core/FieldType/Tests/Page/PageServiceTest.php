@@ -8,12 +8,15 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\Page\PageStorage;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\FieldType\Page\Value;
+use eZ\Publish\Core\FieldType\Page\PageService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +25,7 @@ class PageServiceTest extends TestCase
     /**
      * Class to instantiate to get the page service.
      */
-    const PAGESERVICE_CLASS = 'eZ\\Publish\\Core\\FieldType\\Page\\PageService';
+    const PAGESERVICE_CLASS = PageService::class;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -55,8 +58,8 @@ class PageServiceTest extends TestCase
         $this->zoneDefinition = $this->getZoneDefinition();
         $this->blockDefinition = $this->getBlockDefinition();
 
-        $this->storageGateway = $this->getMockForAbstractClass('eZ\\Publish\\Core\\FieldType\\Page\\PageStorage\\Gateway');
-        $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $this->storageGateway = $this->createMock(PageStorage\Gateway::class);
+        $this->contentService = $this->createMock(ContentService::class);
         $pageServiceClass = static::PAGESERVICE_CLASS;
         $this->pageService = new $pageServiceClass(
             $this->contentService,

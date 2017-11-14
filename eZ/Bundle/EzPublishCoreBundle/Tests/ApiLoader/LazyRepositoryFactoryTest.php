@@ -15,7 +15,7 @@ class LazyRepositoryFactoryTest extends TestCase
 {
     public function testBuildRepository()
     {
-        $repositoryMock = $this->getMock('eZ\\Publish\\API\\Repository\\Repository');
+        $repositoryMock = $this->createMock('eZ\\Publish\\API\\Repository\\Repository');
         $factory = new LazyRepositoryFactory($repositoryMock);
         $lazyRepository = $factory->buildRepository();
         $this->assertInternalType('callable', $lazyRepository);

@@ -2,6 +2,7 @@ parameters:
     ezpublish.http_cache.signalslot.http_cache.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\HttpCacheSlot
     ezpublish.http_cache.signalslot.assign_section.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot
     ezpublish.http_cache.signalslot.copy_content.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\CopyContentSlot
+    ezpublish.http_cache.signalslot.copy_subtree.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\CopySubtreeSlot
     ezpublish.http_cache.signalslot.create_location.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\CreateLocationSlot
     ezpublish.http_cache.signalslot.delete_content.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteContentSlot
     ezpublish.http_cache.signalslot.delete_location.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteLocationSlot
@@ -18,6 +19,7 @@ parameters:
     ezpublish.http_cache.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnassignUserFromUserGroupSlot
     ezpublish.http_cache.signalslot.trash.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\TrashSlot
     ezpublish.http_cache.signalslot.recover.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RecoverSlot
+    ezpublish.http_cache.signalslot.remove_translation.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RemoveTranslationSlot
 
 services:
     ezpublish.http_cache.signalslot.http_cache:
@@ -36,6 +38,12 @@ services:
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: ContentService\CopyContentSignal }
+
+    ezpublish.http_cache.signalslot.copy_subtree:
+        class: '%ezpublish.http_cache.signalslot.copy_subtree.class%'
+        parent: ezpublish.http_cache.signalslot.http_cache
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\CopySubtreeSignal }
 
     ezpublish.http_cache.signalslot.create_location:
         class: "%ezpublish.http_cache.signalslot.create_location.class%"
@@ -132,3 +140,9 @@ services:
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
             - { name: ezpublish.api.slot, signal: TrashService\RecoverSignal }
+
+    ezpublish.http_cache.signalslot.remove_translation:
+        class: "%ezpublish.http_cache.signalslot.remove_translation.class%"
+        parent: ezpublish.http_cache.signalslot.http_cache
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\RemoveTranslationSignal }

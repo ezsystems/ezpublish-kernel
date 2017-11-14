@@ -8,7 +8,10 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,9 +36,9 @@ class ControllerTest extends TestCase
 
     protected function setUp()
     {
-        $this->templateEngineMock = $this->getMock('Symfony\\Component\\Templating\\EngineInterface');
-        $this->containerMock = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $this->controller = $this->getMockForAbstractClass('eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\Controller');
+        $this->templateEngineMock = $this->createMock(EngineInterface::class);
+        $this->containerMock = $this->createMock(ContainerInterface::class);
+        $this->controller = $this->getMockForAbstractClass(Controller::class);
         $this->controller->setContainer($this->containerMock);
         $this->containerMock
             ->expects($this->any())
@@ -58,7 +61,7 @@ class ControllerTest extends TestCase
             ->with($view, $params)
             ->will($this->returnValue($tplResult));
         $response = $this->controller->render($view, $params);
-        self::assertInstanceOf('Symfony\\Component\\HttpFoundation\\Response', $response);
+        self::assertInstanceOf(Response::class, $response);
         self::assertSame($tplResult, $response->getContent());
     }
 

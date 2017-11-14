@@ -9,12 +9,19 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SPISectionHandler;
+use Stash\Interfaces\ItemInterface;
 
 /**
  * Test case for Persistence\Cache\SectionHandler.
  */
 class SectionHandlerTest extends HandlerTest
 {
+    protected function getSPISectionHandlerMock()
+    {
+        return $this->createMock(SPISectionHandler::class);
+    }
+
     /**
      * @covers \eZ\Publish\Core\Persistence\Cache\SectionHandler::assign
      */
@@ -34,7 +41,7 @@ class SectionHandlerTest extends HandlerTest
             ->with('content', 'info', 44)
             ->will($this->returnValue(null));
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandler = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -60,7 +67,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandler = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -86,7 +93,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandler = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -112,7 +119,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandler = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -135,7 +142,7 @@ class SectionHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandlerMock = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -153,7 +160,7 @@ class SectionHandlerTest extends HandlerTest
                 )
             );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -163,7 +170,7 @@ class SectionHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'))
+            ->with($this->isInstanceOf(SPISection::class))
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -186,7 +193,7 @@ class SectionHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandlerMock = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -216,7 +223,7 @@ class SectionHandlerTest extends HandlerTest
     public function testLoadCacheIsMiss()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -228,7 +235,7 @@ class SectionHandlerTest extends HandlerTest
             ->method('isMiss')
             ->will($this->returnValue(true));
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandlerMock = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -249,7 +256,7 @@ class SectionHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'))
+            ->with($this->isInstanceOf(SPISection::class))
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -272,7 +279,7 @@ class SectionHandlerTest extends HandlerTest
     public function testLoadHasCache()
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -317,7 +324,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandler = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -342,7 +349,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandler = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -371,7 +378,7 @@ class SectionHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler');
+        $innerHandler = $this->getSPISectionHandlerMock();
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('sectionHandler')
@@ -389,7 +396,7 @@ class SectionHandlerTest extends HandlerTest
                 )
             );
 
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -399,7 +406,7 @@ class SectionHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Section'))
+            ->with($this->isInstanceOf(SPISection::class))
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock

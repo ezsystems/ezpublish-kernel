@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\IO\Tests;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOService;
+use eZ\Publish\Core\IO\IOBinarydataHandler;
+use eZ\Publish\Core\IO\IOMetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
@@ -39,9 +41,9 @@ class IOServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->binarydataHandlerMock = $this->getMock('eZ\Publish\Core\IO\IOBinarydataHandler');
-        $this->metadataHandlerMock = $this->getMock('eZ\Publish\Core\IO\IOMetadataHandler');
-        $this->mimeTypeDetectorMock = $this->getMock('eZ\\Publish\\SPI\\IO\\MimeTypeDetector');
+        $this->binarydataHandlerMock = $this->createMock(IOBinarydataHandler::class);
+        $this->metadataHandlerMock = $this->createMock(IOMetadataHandler::class);
+        $this->mimeTypeDetectorMock = $this->createMock(MimeTypeDetector::class);
 
         $this->IOService = new IOService(
             $this->metadataHandlerMock,
@@ -103,7 +105,7 @@ class IOServiceTest extends TestCase
             $file
         );
 
-        self::assertInstanceOf('eZ\\Publish\\Core\\IO\\Values\\BinaryFileCreateStruct', $binaryCreateStruct);
+        self::assertInstanceOf(BinaryFileCreateStruct::class, $binaryCreateStruct);
         self::assertNull($binaryCreateStruct->id);
         self::assertTrue(is_resource($binaryCreateStruct->inputStream));
         self::assertEquals(filesize(__FILE__), $binaryCreateStruct->size);
@@ -151,7 +153,7 @@ class IOServiceTest extends TestCase
             ->will($this->returnValue($spiBinaryFile));
 
         $binaryFile = $this->IOService->createBinaryFile($createStruct);
-        self::assertInstanceOf('eZ\Publish\Core\IO\Values\BinaryFile', $binaryFile);
+        self::assertInstanceOf(BinaryFile::class, $binaryFile);
         self::assertEquals($createStruct->id, $binaryFile->id);
         self::assertEquals($createStruct->size, $binaryFile->size);
 

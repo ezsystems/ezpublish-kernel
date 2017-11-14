@@ -25,7 +25,7 @@ class MediaTest extends TestCase
 
     protected function setUp()
     {
-        $this->converter = MediaConverter::create();
+        $this->converter = new MediaConverter();
     }
 
     /**

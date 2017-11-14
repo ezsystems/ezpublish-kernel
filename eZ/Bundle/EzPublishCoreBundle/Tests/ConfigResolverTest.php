@@ -28,7 +28,7 @@ class ConfigResolverTest extends TestCase
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess('test');
-        $this->containerMock = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->containerMock = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
     }
 
     /**

@@ -110,7 +110,7 @@ class ContentListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\Rest\\Server\\Values\\RestContent'));
+            ->with($this->isInstanceOf(RestContent::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\User\UserStorage;
 
-use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 
 abstract class Gateway extends StorageGateway
 {

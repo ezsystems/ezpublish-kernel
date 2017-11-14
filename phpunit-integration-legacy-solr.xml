@@ -49,6 +49,7 @@
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SearchServiceFulltextTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTranslationLanguageFallbackTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceLocationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>

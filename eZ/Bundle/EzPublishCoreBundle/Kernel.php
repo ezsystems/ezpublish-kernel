@@ -10,6 +10,9 @@ namespace eZ\Bundle\EzPublishCoreBundle;
 
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
+/**
+ * @deprecated v6.11 Plain Symfony kernel has been safe to use since v5.4.
+ */
 abstract class Kernel extends BaseKernel
 {
 }

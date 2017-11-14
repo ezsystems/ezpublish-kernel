@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 class InvalidArgumentExceptionTest extends BaseTest
 {
@@ -26,7 +27,7 @@ class InvalidArgumentExceptionTest extends BaseTest
         );
 
         $exception = $parser->parse($inputArray, $this->getParsingDispatcherMock());
-        self::assertInstanceOf('eZ\Publish\API\Repository\Exceptions\InvalidArgumentException', $exception);
+        self::assertInstanceOf(InvalidArgumentException::class, $exception);
         self::assertEquals('Section with ID "23" not found.', $exception->getMessage());
     }
 

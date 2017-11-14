@@ -350,13 +350,38 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status === VersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             throw new ForbiddenException('Version in status PUBLISHED cannot be deleted');
         }
 
         $this->repository->getContentService()->deleteVersion(
             $versionInfo
         );
+
+        return new Values\NoContent();
+    }
+
+    /**
+     * Remove the given Translation from the given Version Draft.
+     *
+     * @param int $contentId
+     * @param int $versionNumber
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNumber, $languageCode)
+    {
+        $contentService = $this->repository->getContentService();
+        $versionInfo = $contentService->loadVersionInfoById($contentId, $versionNumber);
+
+        if (!$versionInfo->isDraft()) {
+            throw new ForbiddenException('Translation can be deleted from DRAFT Version only');
+        }
+
+        $contentService->deleteTranslationFromDraft($versionInfo, $languageCode);
 
         return new Values\NoContent();
     }
@@ -406,7 +431,7 @@ class Content extends RestController
             $contentInfo
         );
 
-        if ($versionInfo->status === VersionInfo::STATUS_DRAFT) {
+        if ($versionInfo->isDraft()) {
             throw new ForbiddenException('Current version is already in status DRAFT');
         }
 
@@ -457,7 +482,7 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Only version in status DRAFT can be updated');
         }
 
@@ -509,7 +534,7 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Only version in status DRAFT can be published');
         }
 
@@ -645,7 +670,7 @@ class Content extends RestController
                     throw new ForbiddenException('Relation is not of type COMMON');
                 }
 
-                if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+                if (!$versionInfo->isDraft()) {
                     throw new ForbiddenException('Relation of type COMMON can only be removed from drafts');
                 }
 
@@ -680,7 +705,7 @@ class Content extends RestController
 
         $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
         $versionInfo = $this->repository->getContentService()->loadVersionInfo($contentInfo, $versionNumber);
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Relation of type COMMON can only be added to drafts');
         }
 

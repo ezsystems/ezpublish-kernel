@@ -28,7 +28,7 @@ class YamlPolicyProviderTest extends TestCase
             ],
         ];
 
-        $configBuilder = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
+        $configBuilder = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
         foreach ($files as $file) {
             $configBuilder
                 ->expects($this->once())
@@ -65,7 +65,7 @@ class YamlPolicyProviderTest extends TestCase
             ],
         ];
 
-        $configBuilder = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
+        $configBuilder = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
         $configBuilder
             ->expects($this->exactly(count($files)))
             ->method('addResource')

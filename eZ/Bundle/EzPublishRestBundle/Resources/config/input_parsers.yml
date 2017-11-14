@@ -67,6 +67,16 @@ parameters:
 
     ezpublish_rest.input.parser.internal.sortclause.data_key_value_object.class: eZ\Publish\Core\REST\Server\Input\Parser\SortClause\DataKeyValueObjectClass
 
+    ezpublish_rest.input.parser.internal.facetbuilder.content_type.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\ContentTypeParser
+    ezpublish_rest.input.parser.internal.facetbuilder.criterion.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\CriterionParser
+    ezpublish_rest.input.parser.internal.facetbuilder.date_range.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\DateRangeParser
+    ezpublish_rest.input.parser.internal.facetbuilder.field.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\FieldParser
+    ezpublish_rest.input.parser.internal.facetbuilder.field_range.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\FieldRangeParser
+    ezpublish_rest.input.parser.internal.facetbuilder.location.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\LocationParser
+    ezpublish_rest.input.parser.internal.facetbuilder.section.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\SectionParser
+    ezpublish_rest.input.parser.internal.facetbuilder.term.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\TermParser
+    ezpublish_rest.input.parser.internal.facetbuilder.user.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\UserParser
+
     ezpublish_rest.input.parser.internal.route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\RouteBasedLimitationParser
     ezpublish_rest.input.parser.internal.path_string_route_based_limitation.class: eZ\Publish\Core\REST\Server\Input\Parser\Limitation\PathStringRouteBasedLimitationParser
 
@@ -650,6 +660,60 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.SectionName }
 
+    ezpublish_rest.input.parser.internal.facetbuilder.content_type:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.content_type.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.ContentType }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.criterion:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.criterion.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.Criterion }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.date_range:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.date_range.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.DateRange }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.field:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.field.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.Field }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.field_range:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.field_range.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.FieldRange }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.location:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.location.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.Location }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.section:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.section.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.Section }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.term:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.term.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.Term }
+
+    ezpublish_rest.input.parser.internal.facetbuilder.user:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.facetbuilder.user.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.facetbuilder.User }
+
     # role limitation parsers
 
     ezpublish_rest.input.parser.internal.limitation.Subtree:
@@ -678,7 +742,7 @@ services:
         arguments:
             - "@ezpublish_rest.parser_tools"
             - "@ezpublish.api.service.content"
-            - "@ezpublish_rest.input.parser.versioninfo"
+            - "@ezpublish_rest.input.parser.VersionInfo"
             - "@ezpublish_rest.field_type_parser"
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Content }

@@ -16,6 +16,8 @@ use FOS\HttpCacheBundle\CacheManager;
  *
  * Only support BAN requests on purpose, to be able to invalidate cache for a
  * collection of Location/Content objects.
+ *
+ * @deprecated since 6.8. Use FOSPurgeClient from the PlatformHttpCache package.
  */
 class FOSPurgeClient implements PurgeClientInterface
 {

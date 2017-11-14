@@ -10,10 +10,14 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\URLAliasService;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
+use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 
 /**
  * Test case for operations in the TrashService using in memory storage.
@@ -165,9 +169,62 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * Test sending a location to trash updates Content mainLocation.
+     *
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     */
+    public function testTrashUpdatesMainLocation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $trashService = $repository->getTrashService();
+
+        $contentInfo = $contentService->loadContentInfo(42);
+
+        // Create additional location that will become new main location
+        $location = $locationService->createLocation(
+            $contentInfo,
+            new LocationCreateStruct(['parentLocationId' => 2])
+        );
+
+        $trashService->trash(
+            $locationService->loadLocation($contentInfo->mainLocationId)
+        );
+
+        self::assertEquals(
+            $location->id,
+            $contentService->loadContentInfo(42)->mainLocationId
+        );
+    }
+
+    /**
+     * Test sending a location to trash.
+     *
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     */
+    public function testTrashReturnsNull()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $trashService = $repository->getTrashService();
+
+        // Create additional location to trash
+        $location = $locationService->createLocation(
+            $contentService->loadContentInfo(42),
+            new LocationCreateStruct(['parentLocationId' => 2])
+        );
+
+        $trashItem = $trashService->trash($location);
+
+        self::assertNull($trashItem);
+    }
+
+    /**
      * Test for the loadTrashItem() method.
      *
-     * @see \eZ\Publish\API\Repository\TrashService::loadTrashItem()
+     * @covers \eZ\Publish\API\Repository\TrashService::loadTrashItem
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
      */
     public function testLoadTrashItem()
@@ -183,13 +240,18 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem',
+            APITrashItem::class,
             $trashItemReloaded
         );
 
         $this->assertEquals(
             $trashItem->pathString,
             $trashItemReloaded->pathString
+        );
+
+        $this->assertEquals(
+            $trashItem,
+            $trashItemReloaded
         );
     }
 
@@ -217,7 +279,7 @@ class TrashServiceTest extends BaseTrashServiceTest
     /**
      * Test for the recover() method.
      *
-     * @see \eZ\Publish\API\Repository\TrashService::recover()
+     * @covers \eZ\Publish\API\Repository\TrashService::recover
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
      */
     public function testRecover()
@@ -241,13 +303,13 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            APILocation::class,
             $location
         );
 
         $this->assertEquals(
-            $location->pathString,
-            $locationReloaded->pathString
+            $location,
+            $locationReloaded
         );
 
         try {
@@ -256,6 +318,21 @@ class TrashServiceTest extends BaseTrashServiceTest
         } catch (NotFoundException $e) {
             // All well
         }
+    }
+
+    /**
+     * Test recovering a non existing trash item results in a NotFoundException.
+     *
+     * @covers \eZ\Publish\API\Repository\TrashService::recover
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testRecoverThrowsNotFoundExceptionForNonExistingTrashItem()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        $trashItem = new TrashItem(['id' => 12364, 'parentLocationId' => 12363]);
+        $trashService->recover($trashItem);
     }
 
     /**
@@ -416,8 +493,8 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'invisible' => $trashItem->invisible,
                 'pathString' => $newParentLocation->pathString . $this->parseId('location', $location->id) . '/',
                 'priority' => 0,
-                'sortField' => Location::SORT_FIELD_NAME,
-                'sortOrder' => Location::SORT_ORDER_ASC,
+                'sortField' => APILocation::SORT_FIELD_NAME,
+                'sortOrder' => APILocation::SORT_ORDER_ASC,
             ),
             $location
         );
@@ -514,6 +591,30 @@ class TrashServiceTest extends BaseTrashServiceTest
         } catch (NotFoundException $e) {
             // All well
         }
+    }
+
+    /**
+     * Test recovering a location from trash to non existing location.
+     *
+     * @covers \eZ\Publish\API\Repository\TrashService::recover
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testRecoverToNonExistingLocation()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation(44);
+        $trashItem = $trashService->trash($location);
+
+        $newParentLocation = new Location(
+            array(
+                'id' => 123456,
+                'parentLocationId' => 123455,
+            )
+        );
+        $trashService->recover($trashItem, $newParentLocation);
     }
 
     /**
@@ -631,8 +732,23 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $this->assertEquals(4, $searchResult->count);
         $this->assertTrue(
-            array_search($demoDesignLocationId, $foundIds) !== false
+            in_array($demoDesignLocationId, $foundIds)
         );
+    }
+
+    /**
+     * Test deleting a non existing trash item.
+     *
+     * @covers \eZ\Publish\API\Repository\TrashService::deleteTrashItem
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteThrowsNotFoundExceptionForNonExistingTrashItem()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        $trashItem = new TrashItem(['id' => 123456]);
+        $trashService->deleteTrashItem($trashItem);
     }
 
     /**

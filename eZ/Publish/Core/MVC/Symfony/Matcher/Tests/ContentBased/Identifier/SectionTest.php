@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Identifier;
 
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section as SectionIdentifierMatcher;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
@@ -34,16 +36,13 @@ class SectionTest extends BaseTest
      */
     private function generateRepositoryMockForSectionIdentifier($sectionIdentifier)
     {
-        $sectionServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\SectionService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sectionServiceMock = $this->createMock(SectionService::class);
         $sectionServiceMock->expects($this->once())
             ->method('loadSection')
             ->will(
                 $this->returnValue(
                     $this
-                        ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Section')
+                        ->getMockBuilder(Section::class)
                         ->setConstructorArgs(
                             array(
                                 array('identifier' => $sectionIdentifier),

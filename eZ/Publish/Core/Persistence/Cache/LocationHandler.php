@@ -14,12 +14,12 @@ use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler
  */
 class LocationHandler extends AbstractHandler implements LocationHandlerInterface
 {
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::load
+     * {@inheritdoc}
      */
     public function load($locationId)
     {
@@ -34,7 +34,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadSubtreeIds
+     * {@inheritdoc}
      */
     public function loadSubtreeIds($locationId)
     {
@@ -52,7 +52,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadLocationsByContent
+     * {@inheritdoc}
      */
     public function loadLocationsByContent($contentId, $rootLocationId = null)
     {
@@ -83,7 +83,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadParentLocationsForDraftContent
+     * {@inheritdoc}
      */
     public function loadParentLocationsForDraftContent($contentId)
     {
@@ -110,7 +110,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadByRemoteId
+     * {@inheritdoc}
      */
     public function loadByRemoteId($remoteId)
     {
@@ -120,7 +120,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::copySubtree
+     * {@inheritdoc}
      */
     public function copySubtree($sourceId, $destinationParentId)
     {
@@ -130,7 +130,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::move
+     * {@inheritdoc}
      */
     public function move($sourceId, $destinationParentId)
     {
@@ -145,7 +145,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::markSubtreeModified
+     * {@inheritdoc}
      */
     public function markSubtreeModified($locationId, $timestamp = null)
     {
@@ -154,7 +154,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::hide
+     * {@inheritdoc}
      */
     public function hide($locationId)
     {
@@ -167,7 +167,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::unhide
+     * {@inheritdoc}
      */
     public function unHide($locationId)
     {
@@ -180,7 +180,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::swap
+     * {@inheritdoc}
      */
     public function swap($locationId1, $locationId2)
     {
@@ -207,7 +207,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::update
+     * {@inheritdoc}
      */
     public function update(UpdateStruct $struct, $locationId)
     {
@@ -218,7 +218,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::create
+     * {@inheritdoc}
      */
     public function create(CreateStruct $locationStruct)
     {
@@ -237,7 +237,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::removeSubtree
+     * {@inheritdoc}
      */
     public function removeSubtree($locationId)
     {
@@ -252,7 +252,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::setSectionForSubtree
+     * {@inheritdoc}
      */
     public function setSectionForSubtree($locationId, $sectionId)
     {
@@ -262,7 +262,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::changeMainLocation
+     * {@inheritdoc}
      */
     public function changeMainLocation($contentId, $locationId)
     {

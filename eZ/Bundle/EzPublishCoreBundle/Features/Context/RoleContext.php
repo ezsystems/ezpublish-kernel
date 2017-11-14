@@ -6,7 +6,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 use EzSystems\PlatformBehatBundle\Context\RepositoryContext;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\RoleService;

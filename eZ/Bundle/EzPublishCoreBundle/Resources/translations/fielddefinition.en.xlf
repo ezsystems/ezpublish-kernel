@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2017-07-12T12:57:32Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="9c2eb5d844a5e2507a5c0f1ba534b5a392b1a40d" resname="fielddefinition.allowed-content-types.any">
+        <source>Any</source>
+        <target>Any</target>
+        <note>key: fielddefinition.allowed-content-types.any</note>
+        <jms:reference-file line="261">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="70d065216b588dd0cf8c624132941a29f1c1459f" resname="fielddefinition.allowed-content-types.label">
+        <source>Allowed content types:</source>
+        <target>Allowed content types:</target>
+        <note>key: fielddefinition.allowed-content-types.label</note>
+        <jms:reference-file line="251">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="403c5c915c461ee1ee00f5c2e193266067672e3a" resname="fielddefinition.default-layout.label">
+        <source>Default layout:</source>
+        <target>Default layout:</target>
+        <note>key: fielddefinition.default-layout.label</note>
+        <jms:reference-file line="273">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="becaad6a0d63182875b2bc7d21b0c6a801ba764f" resname="fielddefinition.default-layout.none">
+        <source>None</source>
+        <target>None</target>
+        <note>key: fielddefinition.default-layout.none</note>
+        <jms:reference-file line="274">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="eb0eeb83b3f40e1293f0edd593a8cce658d9f35d" resname="fielddefinition.default-value.checked">
+        <source>Checked</source>
+        <target>Checked</target>
+        <note>key: fielddefinition.default-value.checked</note>
+        <jms:reference-file line="69">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="3410f38fd1f44cb841ec374c13daca04dcc5910b" resname="fielddefinition.default-value.current_date">
+        <source>Current date</source>
+        <target>Current date</target>
+        <note>key: fielddefinition.default-value.current_date</note>
+        <jms:reference-file line="107">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="d3cda4b47dfae160f1e7f982570b8b544a494701" resname="fielddefinition.default-value.current_datetime">
+        <source>Current datetime</source>
+        <target>Current datetime</target>
+        <note>key: fielddefinition.default-value.current_datetime</note>
+        <jms:reference-file line="83">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="5cdfd0738c76b8fe520f77e56b819fd3a781a514" resname="fielddefinition.default-value.current_datetime_adjust_by">
+        <source>Current datetime adjusted by</source>
+        <target>Current datetime adjusted by</target>
+        <note>key: fielddefinition.default-value.current_datetime_adjust_by</note>
+        <jms:reference-file line="86">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="baf973c669d404a5aa072edce1d84deaaf936a0f" resname="fielddefinition.default-value.current_time">
+        <source>Current time</source>
+        <target>Current time</target>
+        <note>key: fielddefinition.default-value.current_time</note>
+        <jms:reference-file line="118">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="fa5a2f0bf185c7e872f77b81a24867afb9ef0ec7" resname="fielddefinition.default-value.empty">
+        <source>Empty</source>
+        <target>Empty</target>
+        <note>key: fielddefinition.default-value.empty</note>
+        <jms:reference-file line="105">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="116">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="81">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ad6776fd58e0ae4b2ba44ff014986ec6b1ec4de4" resname="fielddefinition.default-value.label">
+        <source>Default value:</source>
+        <target>Default value:</target>
+        <note>key: fielddefinition.default-value.label</note>
+        <jms:reference-file line="347">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="66">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="232dd99b54158ff1f3be77113aae16e691ce406a" resname="fielddefinition.default-value.unchecked">
+        <source>Unchecked</source>
+        <target>Unchecked</target>
+        <note>key: fielddefinition.default-value.unchecked</note>
+        <jms:reference-file line="71">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="908870d411d8599211d188e35d0240bfecb98b5e" resname="fielddefinition.default-value.undefined">
+        <source>No default value</source>
+        <target>No default value</target>
+        <note>key: fielddefinition.default-value.undefined</note>
+        <jms:reference-file line="352">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="34ced944f5d7159b0597b98279e73be045c0ccd9" resname="fielddefinition.interval.day">
+        <source>%default% %day% day(s)</source>
+        <target>%default% %day% day(s)</target>
+        <note>key: fielddefinition.interval.day</note>
+        <jms:reference-file line="89">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4b31f5a6cfde5d347f3ad264daa7db77e704a5e0" resname="fielddefinition.interval.hour">
+        <source>%default% %hour% hour(s)</source>
+        <target>%default% %hour% hour(s)</target>
+        <note>key: fielddefinition.interval.hour</note>
+        <jms:reference-file line="90">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="388ff2c36717a410a72060911657dce61108ed3c" resname="fielddefinition.interval.minute">
+        <source>%default% %minute% minute(s)</source>
+        <target>%default% %minute% minute(s)</target>
+        <note>key: fielddefinition.interval.minute</note>
+        <jms:reference-file line="91">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b93b6a1548ffa873b1ef5a95c727f93d7be2fd0c" resname="fielddefinition.interval.month">
+        <source>%default% %month% month(s)</source>
+        <target>%default% %month% month(s)</target>
+        <note>key: fielddefinition.interval.month</note>
+        <jms:reference-file line="88">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c410f54bc82c293dcce4b252928dc4a020ab1705" resname="fielddefinition.interval.second">
+        <source>%default% %second% second(s)</source>
+        <target>%default% %second% second(s)</target>
+        <note>key: fielddefinition.interval.second</note>
+        <jms:reference-file line="92">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c88fa282a777c6f3a778f513fc9e46800ffe0198" resname="fielddefinition.interval.year">
+        <source>%default% %year% year(s)</source>
+        <target>%default% %year% year(s)</target>
+        <note>key: fielddefinition.interval.year</note>
+        <jms:reference-file line="87">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="fa2595f063cfd4284226372dc99eb3dfbbc36498" resname="fielddefinition.isbn.label">
+        <source>Selected ISBN format:</source>
+        <target>Selected ISBN format:</target>
+        <note>key: fielddefinition.isbn.label</note>
+        <jms:reference-file line="393">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c963dbac20e5526d70d08b17ebffdaaf44e1c2c3" resname="fielddefinition.max-length.label">
+        <source>Max string length:</source>
+        <target>Max string length:</target>
+        <note>key: fielddefinition.max-length.label</note>
+        <jms:reference-file line="28">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c8c3fa9b71c848069950539011a09b45abb1c11f" resname="fielddefinition.max-length.undefined">
+        <source>No defined maximum string length</source>
+        <target>No defined maximum string length</target>
+        <note>key: fielddefinition.max-length.undefined</note>
+        <jms:reference-file line="33">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="9a3d23487e45edf331407c501ead33d70461f9e3" resname="fielddefinition.max-length.value">
+        <source>%max% characters</source>
+        <target>%max% characters</target>
+        <note>key: fielddefinition.max-length.value</note>
+        <jms:reference-file line="31">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="11e7b0a01edea69919ea6191acdbd5ad7c2bf279" resname="fielddefinition.max-value.label">
+        <source>Maximum value:</source>
+        <target>Maximum value:</target>
+        <note>key: fielddefinition.max-value.label</note>
+        <jms:reference-file line="373">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="444423d6eff78ccc1c92077813a212b4e5a002c8" resname="fielddefinition.max-value.undefined">
+        <source>No defined maximum value</source>
+        <target>No defined maximum value</target>
+        <note>key: fielddefinition.max-value.undefined</note>
+        <jms:reference-file line="378">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="63f939a170c5c3675f13ca3e330ea981d4a5540c" resname="fielddefinition.maximum-file-size.label">
+        <source>Maximum file size:</source>
+        <target>Maximum file size:</target>
+        <note>key: fielddefinition.maximum-file-size.label</note>
+        <jms:reference-file line="308">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="e58e37a5cd49fa5884d15ea8af61ad6973f33412" resname="fielddefinition.maximum-file-size.undefined">
+        <source>No defined maximum size</source>
+        <target>No defined maximum size</target>
+        <note>key: fielddefinition.maximum-file-size.undefined</note>
+        <jms:reference-file line="313">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="3e08813722e7959e982f4d8624c98b83d077cd55" resname="fielddefinition.maximum-file-size.value">
+        <source>%max% MB</source>
+        <target>%max% MB</target>
+        <note>key: fielddefinition.maximum-file-size.value</note>
+        <jms:reference-file line="311">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b9bb83913e23ad5a59eb7485ca48386bd7fce66e" resname="fielddefinition.media-player-type.flash">
+        <source>Flash</source>
+        <target>Flash</target>
+        <note>key: fielddefinition.media-player-type.flash</note>
+        <jms:reference-file line="182">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="1c31870437c9baa0d08c67140d35fa54c6223922" resname="fielddefinition.media-player-type.html5_audio">
+        <source>HTML5 Audio</source>
+        <target>HTML5 Audio</target>
+        <note>key: fielddefinition.media-player-type.html5_audio</note>
+        <jms:reference-file line="194">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="22881c3ebee12191bc6f269d943c1140eea4bfb1" resname="fielddefinition.media-player-type.html5_video">
+        <source>HTML5 Video</source>
+        <target>HTML5 Video</target>
+        <note>key: fielddefinition.media-player-type.html5_video</note>
+        <jms:reference-file line="192">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="0aaa90efdf7cc5042723e7500891db70da3f8850" resname="fielddefinition.media-player-type.label">
+        <source>Media player type:</source>
+        <target>Media player type:</target>
+        <note>key: fielddefinition.media-player-type.label</note>
+        <jms:reference-file line="179">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c7a28f2ea418dc17e634bf386d5f1db091582fc8" resname="fielddefinition.media-player-type.quick_time">
+        <source>Quicktime</source>
+        <target>Quicktime</target>
+        <note>key: fielddefinition.media-player-type.quick_time</note>
+        <jms:reference-file line="184">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="edd8db0307e234e095d1788540bd026e48e173f8" resname="fielddefinition.media-player-type.real_player">
+        <source>Real Player</source>
+        <target>Real Player</target>
+        <note>key: fielddefinition.media-player-type.real_player</note>
+        <jms:reference-file line="186">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4ad14874021f1b806f9c93b41ef195b12fe5ab3f" resname="fielddefinition.media-player-type.silverlight">
+        <source>Silverlight</source>
+        <target>Silverlight</target>
+        <note>key: fielddefinition.media-player-type.silverlight</note>
+        <jms:reference-file line="188">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="738ddf9e6b12ae22e5f8e62839f63221c24f1431" resname="fielddefinition.media-player-type.undefined">
+        <source>No defined value</source>
+        <target>No defined value</target>
+        <note>key: fielddefinition.media-player-type.undefined</note>
+        <jms:reference-file line="196">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="61d9fc8a2cbcb067d39496dba7e884caf51cf245" resname="fielddefinition.media-player-type.windows_media_player">
+        <source>Window Media Player</source>
+        <target>Window Media Player</target>
+        <note>key: fielddefinition.media-player-type.windows_media_player</note>
+        <jms:reference-file line="190">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ee5c85f0dae011c10d9d2bfb1fcd86e529c55536" resname="fielddefinition.min-length.label">
+        <source>Min string length:</source>
+        <target state="new">Min string length:</target>
+        <note>key: fielddefinition.min-length.label</note>
+        <jms:reference-file line="18">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="09fff8d9a67512b01bb3e58b5d25cf5d042ba195" resname="fielddefinition.min-length.undefined">
+        <source>No defined minimum string length</source>
+        <target state="new">No defined minimum string length</target>
+        <note>key: fielddefinition.min-length.undefined</note>
+        <jms:reference-file line="23">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="904a83f949dd73a0bed006f8e78a211c80b4816a" resname="fielddefinition.min-length.value">
+        <source>%min% characters</source>
+        <target state="new">%min% characters</target>
+        <note>key: fielddefinition.min-length.value</note>
+        <jms:reference-file line="21">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="1feb12108139bb4d34877c40ade8362c0872b528" resname="fielddefinition.min-value.label">
+        <source>Minimum value:</source>
+        <target>Minimum value:</target>
+        <note>key: fielddefinition.min-value.label</note>
+        <jms:reference-file line="360">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="625d3f00da19e0e839ad54eb5cc6b3504033b882" resname="fielddefinition.min-value.undefined">
+        <source>No defined minimum value</source>
+        <target>No defined minimum value</target>
+        <note>key: fielddefinition.min-value.undefined</note>
+        <jms:reference-file line="365">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="694dc611591facca075a581721e399e272b758fe" resname="fielddefinition.multiple.label">
+        <source>Allow multiple choices:</source>
+        <target>Allow multiple choices:</target>
+        <note>key: fielddefinition.multiple.label</note>
+        <jms:reference-file line="386">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="77c3603526e153eea2b11a851601dabd3bfdbd9a" resname="fielddefinition.multiple.yes_no">
+        <source>{0} No|{1} Yes</source>
+        <target>{0} No|{1} Yes</target>
+        <note>key: fielddefinition.multiple.yes_no</note>
+        <jms:reference-file line="387">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4d59776118124c81734aacab8a71198ee555479c" resname="fielddefinition.options.label">
+        <source>Defined options</source>
+        <target>Defined options</target>
+        <note>key: fielddefinition.options.label</note>
+        <jms:reference-file line="153">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="030aa959f56ae9ba0e1d84a99606995a02c5bd97" resname="fielddefinition.preferred-rows-number.label">
+        <source>Preferred number of rows:</source>
+        <target>Preferred number of rows:</target>
+        <note>key: fielddefinition.preferred-rows-number.label</note>
+        <jms:reference-file line="321">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="f552c76a800b38e41d8b16afa53d3d22d3b37692" resname="fielddefinition.preferred-rows-number.undefined">
+        <source>No preferred number of rows</source>
+        <target>No preferred number of rows</target>
+        <note>key: fielddefinition.preferred-rows-number.undefined</note>
+        <jms:reference-file line="326">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ac0aff5c558fb078621da0f46b2ae5b0e04afcaa" resname="fielddefinition.preferred-rows-number.value">
+        <source>%rows% rows</source>
+        <target>%rows% rows</target>
+        <note>key: fielddefinition.preferred-rows-number.value</note>
+        <jms:reference-file line="324">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b21527196a76acac750d478bfe8137cae7aff914" resname="fielddefinition.selection-method.browse">
+        <source>Browse</source>
+        <target>Browse</target>
+        <note>key: fielddefinition.selection-method.browse</note>
+        <jms:reference-file line="215">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="234">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="02c78e1886bdf844e359ddd54b190eb718286557" resname="fielddefinition.selection-method.checkbox">
+        <source>List with checkboxes</source>
+        <target>List with checkboxes</target>
+        <note>key: fielddefinition.selection-method.checkbox</note>
+        <jms:reference-file line="240">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="a60c81e556aa14c00b3b44ffb6e49f90b882c286" resname="fielddefinition.selection-method.label">
+        <source>Selection method:</source>
+        <target>Selection method:</target>
+        <note>key: fielddefinition.selection-method.label</note>
+        <jms:reference-file line="212">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="231">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="cd94d6146477b427bdc6dbbe19be20bd6db31542" resname="fielddefinition.selection-method.list">
+        <source>Drop-down list</source>
+        <target>Drop-down list</target>
+        <note>key: fielddefinition.selection-method.list</note>
+        <jms:reference-file line="217">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="236">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="7d8f219b8fc1dab2be8b6a82898b0e7a8920c928" resname="fielddefinition.selection-method.multi_template">
+        <source>Template based, multi</source>
+        <target>Template based, multi</target>
+        <note>key: fielddefinition.selection-method.multi_template</note>
+        <jms:reference-file line="244">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="1095b3a335cbfeed0e396f081895affe81e7b7fd" resname="fielddefinition.selection-method.multiple_list">
+        <source>Multiple selection list</source>
+        <target>Multiple selection list</target>
+        <note>key: fielddefinition.selection-method.multiple_list</note>
+        <jms:reference-file line="242">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="60f06115f038572328285e2ca1fc5ad811105c49" resname="fielddefinition.selection-method.radio">
+        <source>List with radio buttons</source>
+        <target>List with radio buttons</target>
+        <note>key: fielddefinition.selection-method.radio</note>
+        <jms:reference-file line="238">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="37121f3c9e8054432510a9f85fd3235e5f549734" resname="fielddefinition.selection-method.single_template">
+        <source>Template based, single</source>
+        <target>Template based, single</target>
+        <note>key: fielddefinition.selection-method.single_template</note>
+        <jms:reference-file line="246">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="e0b6bc6950269d05c7318553912abe4042d6a423" resname="fielddefinition.selection-method.tree">
+        <source>Drop-down tree</source>
+        <target>Drop-down tree</target>
+        <note>key: fielddefinition.selection-method.tree</note>
+        <jms:reference-file line="219">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ccf4d68283a388e6a965caf9e507c6a39fffc46f" resname="fielddefinition.selection-root.label">
+        <source>Selection root:</source>
+        <target>Selection root:</target>
+        <note>key: fielddefinition.selection-root.label</note>
+        <jms:reference-file line="334">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c7b711d3eb6c197d83e064f309bd2e9791a0950d" resname="fielddefinition.selection-root.undefined">
+        <source>No defined root</source>
+        <target>No defined root</target>
+        <note>key: fielddefinition.selection-root.undefined</note>
+        <jms:reference-file line="339">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4c9eb21a084528340d7944eeb0ffe525fc5e5e75" resname="fielddefinition.use-seconds.label">
+        <source>Use seconds:</source>
+        <target>Use seconds:</target>
+        <note>key: fielddefinition.use-seconds.label</note>
+        <jms:reference-file line="122">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="96">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="f875a84fc9f3c1e0610a90197722f04b9442fa01" resname="fielddefinition.use-seconds.yes_no">
+        <source>{0} No|{1} Yes</source>
+        <target>{0} No|{1} Yes</target>
+        <note>key: fielddefinition.use-seconds.yes_no</note>
+        <jms:reference-file line="123">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="97">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

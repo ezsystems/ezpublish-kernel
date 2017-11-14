@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Locale\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class LocaleConverterTest extends TestCase
 {
@@ -37,7 +38,7 @@ class LocaleConverterTest extends TestCase
             'cro-HR' => 'hr_HR',
         );
 
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->localeConverter = new LocaleConverter($this->conversionMap, $this->logger);
     }
 

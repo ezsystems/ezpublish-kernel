@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\HttpClient\Authentication;
 
 use eZ\Publish\Core\REST\Client\HttpClient\Authentication\BasicAuth;
 use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -100,13 +101,7 @@ class BasicAuthTest extends TestCase
     protected function getInnerHttpClientMock()
     {
         if (!isset($this->innerHttpClientMock)) {
-            $this->innerHttpClientMock = $this->getMock(
-                '\\eZ\\Publish\\Core\\REST\\Client\\HttpClient',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->innerHttpClientMock = $this->createMock(HttpClient::class);
         }
 
         return $this->innerHttpClientMock;

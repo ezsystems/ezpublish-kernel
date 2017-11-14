@@ -26,8 +26,8 @@ class CacheFactoryTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $this->container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
     }
 
     /**

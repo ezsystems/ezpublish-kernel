@@ -26,7 +26,9 @@ class IntegerConverter implements Converter
      *
      * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return int
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
+     *
+     * @return static
      */
     public static function create()
     {

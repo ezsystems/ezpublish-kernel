@@ -48,6 +48,28 @@ abstract class Criterion extends BaseParser
     }
 
     /**
+     * Dispatches parsing of a facet builder name + data to its own parser.
+     *
+     * @param string $facetBuilderName
+     * @param mixed $facetBuilderData
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     *
+     * @return \eZ\Publish\API\Repository\Values\ValueObject
+     */
+    public function dispatchFacetBuilder($facetBuilderName, $facetBuilderData, ParsingDispatcher $parsingDispatcher)
+    {
+        $mediaType = $this->getFacetBuilderMediaType($facetBuilderName);
+
+        try {
+            return $parsingDispatcher->parse(array($facetBuilderName => $facetBuilderData), $mediaType);
+        } catch (Exceptions\Parser $e) {
+            throw new Exceptions\Parser("Invalid FacetBuilder id <${facetBuilderName}>", 0, $e);
+        }
+    }
+
+    /**
      * Dispatches parsing of a sort clause name + direction to its own parser.
      *
      * @param string $sortClauseName
@@ -78,5 +100,10 @@ abstract class Criterion extends BaseParser
     protected function getSortClauseMediaType($sortClauseName)
     {
         return 'application/vnd.ez.api.internal.sortclause.' . $sortClauseName;
+    }
+
+    protected function getFacetBuilderMediaType($facetBuilderName)
+    {
+        return 'application/vnd.ez.api.internal.facetbuilder.' . $facetBuilderName;
     }
 }

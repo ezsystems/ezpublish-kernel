@@ -153,7 +153,7 @@ class ConnectionHandler implements DatabaseHandler
             $parsed['driver'] = $str;
         }
 
-        if (!count($dsn)) {
+        if (empty($dsn)) {
             return $parsed;
         }
 
@@ -175,7 +175,7 @@ class ConnectionHandler implements DatabaseHandler
         if (preg_match('|^([^(]+)\((.*?)\)/?(.*?)$|', $dsn, $match)) {
             // $dsn => proto(proto_opts)/database
             $proto = $match[1];
-            $proto_opts = $match[2] ? $match[2] : false;
+            $proto_opts = $match[2] ?: false;
             $dsn = $match[3];
         } else {
             // $dsn => protocol+host/database (old format)

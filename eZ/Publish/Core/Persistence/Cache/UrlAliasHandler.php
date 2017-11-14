@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterf
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
  */
 class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterface
 {
@@ -24,7 +24,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     const NOT_FOUND = 0;
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * {@inheritdoc}
      */
     public function publishUrlAliasForLocation(
         $locationId,
@@ -60,7 +60,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::createCustomUrlAlias
+     * {@inheritdoc}
      */
     public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
     {
@@ -97,7 +97,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::createGlobalUrlAlias
+     * {@inheritdoc}
      */
     public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
     {
@@ -126,7 +126,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::listGlobalURLAliases
+     * {@inheritdoc}
      */
     public function listGlobalURLAliases($languageCode = null, $offset = 0, $limit = -1)
     {
@@ -136,7 +136,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::listURLAliasesForLocation
+     * {@inheritdoc}
      */
     public function listURLAliasesForLocation($locationId, $custom = false)
     {
@@ -169,7 +169,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::removeURLAliases
+     * {@inheritdoc}
      */
     public function removeURLAliases(array $urlAliases)
     {
@@ -191,7 +191,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::lookup
+     * {@inheritdoc}
      */
     public function lookup($url)
     {
@@ -234,7 +234,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::loadUrlAlias
+     * {@inheritdoc}
      */
     public function loadUrlAlias($id)
     {
@@ -251,7 +251,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationMoved
+     * {@inheritdoc}
      */
     public function locationMoved($locationId, $oldParentId, $newParentId)
     {
@@ -271,7 +271,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationCopied
+     * {@inheritdoc}
      */
     public function locationCopied($locationId, $newLocationId, $newParentId)
     {
@@ -295,7 +295,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::locationDeleted
+     * {@inheritdoc}
      */
     public function locationDeleted($locationId)
     {
@@ -305,6 +305,23 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $this->clearLocation($locationId);
 
         return $return;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function translationRemoved(array $locationIds, $languageCode)
+    {
+        $this->logger->logCall(
+            __METHOD__,
+            ['locations' => implode(',', $locationIds), 'language' => $languageCode]
+        );
+
+        $this->persistenceHandler->urlAliasHandler()->translationRemoved($locationIds, $languageCode);
+
+        foreach ($locationIds as $locationId) {
+            $this->clearLocation($locationId);
+        }
     }
 
     /**
@@ -328,7 +345,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::swap
+     * {@inheritdoc}
      */
     public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)
     {
@@ -353,5 +370,28 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $this->clearLocation($location2Id);
 
         return $return;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes)
+    {
+        $this->logger->logCall(
+            __METHOD__,
+            [
+                'locationId' => $locationId,
+                'parentLocationId' => $parentLocationId,
+                'languageCodes' => implode(',', $languageCodes),
+            ]
+        );
+
+        $this->persistenceHandler->urlAliasHandler()->archiveUrlAliasesForDeletedTranslations(
+            $locationId,
+            $parentLocationId,
+            $languageCodes
+        );
+
+        $this->clearLocation($locationId);
     }
 }

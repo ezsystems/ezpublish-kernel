@@ -41,7 +41,7 @@ class Templates extends AbstractParser
     public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
         foreach ($config['siteaccess']['groups'] as $group => $saArray) {
-            if (isset($config['system'][$group][static::NODE_KEY])) {
+            if (!empty($config[$contextualizer->getSiteAccessNodeName()][$group][static::NODE_KEY])) {
                 $contextualizer->setContextualParameter(
                     static::NODE_KEY,
                     $group,

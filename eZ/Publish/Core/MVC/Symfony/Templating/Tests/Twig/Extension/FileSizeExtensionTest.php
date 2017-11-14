@@ -85,7 +85,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
      */
     protected function getConfigResolverInterfaceMock()
     {
-        $configResolverInterfaceMock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $configResolverInterfaceMock = $this->createMock(ConfigResolverInterface::class);
         $configResolverInterfaceMock->expects($this->any())
             ->method('getParameter')
             ->with('languages')
@@ -99,7 +99,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
      */
     protected function getLocaleConverterInterfaceMock()
     {
-        $this->localeConverterInterfaceMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface');
+        $this->localeConverterInterfaceMock = $this->createMock(LocaleConverterInterface::class);
         $this->localeConverterInterfaceMock->expects($this->any())
         ->method('convertToPOSIX')
         ->will(
@@ -120,7 +120,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     protected function getTranslatorInterfaceMock()
     {
         $that = $this;
-        $this->translatorMock = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $this->translatorMock = $this->createMock(TranslatorInterface::class);
         $this->translatorMock
             ->expects($this->any())->method('trans')->will(
                 $this->returnCallback(

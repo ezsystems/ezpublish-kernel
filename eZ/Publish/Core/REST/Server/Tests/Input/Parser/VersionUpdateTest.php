@@ -8,8 +8,12 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\ContentService;
+use eZ\Publish\Core\REST\Client\ContentTypeService;
+use eZ\Publish\Core\REST\Client\FieldTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 
 class VersionUpdateTest extends BaseTest
 {
@@ -35,7 +39,7 @@ class VersionUpdateTest extends BaseTest
         $result = $VersionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
+            ContentUpdateStruct::class,
             $result,
             'VersionUpdate not created correctly.'
         );
@@ -141,29 +145,17 @@ class VersionUpdateTest extends BaseTest
      */
     private function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
-            array(),
-            array(
-                $this->getContentServiceMock(),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-            ),
-            '',
-            false
-        );
+        $fieldTypeParserMock = $this->getMockBuilder(FieldTypeParser::class)
+            ->setMethods(array())
+            ->disableOriginalConstructor()
+            ->setConstructorArgs(
+                array(
+                    $this->getContentServiceMock(),
+                    $this->createMock(ContentTypeService::class),
+                    $this->createMock(FieldTypeService::class),
+                )
+            )
+            ->getMock();
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseFieldValue')
@@ -180,13 +172,7 @@ class VersionUpdateTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        $contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentServiceMock = $this->createMock(ContentService::class);
 
         $contentServiceMock->expects($this->any())
             ->method('newContentUpdateStruct')

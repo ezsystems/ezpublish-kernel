@@ -182,4 +182,17 @@ interface SearchService
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true);
+
+    /**
+     * Query for supported capability of currently configured search engine.
+     *
+     * Will return false if search engine does not implement {@see eZ\Publish\SPI\Search\Capable}.
+     *
+     * @since 6.12
+     *
+     * @param int $capabilityFlag One of CAPABILITY_* constants.
+     *
+     * @return bool
+     */
+    public function supports($capabilityFlag);
 }

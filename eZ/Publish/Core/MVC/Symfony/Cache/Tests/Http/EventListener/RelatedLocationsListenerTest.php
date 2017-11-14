@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\EventListener;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\RelatedLocationsListener;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
@@ -15,6 +17,12 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
+use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\Repository;
 use PHPUnit\Framework\TestCase;
 
 class RelatedLocationsListenerTest extends TestCase
@@ -43,12 +51,12 @@ class RelatedLocationsListenerTest extends TestCase
     {
         parent::setUp();
         $this->repository = $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\Repository')
+            ->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->setMethods(['getContentService', 'getLocationService', 'getPermissionResolver'])
             ->getMock();
-        $this->contentService = $this->getMock('\eZ\Publish\API\Repository\ContentService');
-        $this->locationService = $this->getMock('\eZ\Publish\API\Repository\LocationService');
+        $this->contentService = $this->createMock(ContentService::class);
+        $this->locationService = $this->createMock(LocationService::class);
         $this->repository
             ->expects($this->any())
             ->method('getContentService')
@@ -68,23 +76,14 @@ class RelatedLocationsListenerTest extends TestCase
     private function getPermissionResolverMock()
     {
         return $this
-            ->getMockBuilder('\eZ\Publish\Core\Repository\Permission\PermissionResolver')
+            ->getMockBuilder(PermissionResolver::class)
             ->setMethods(null)
             ->setConstructorArgs(
                 [
-                    $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\RoleDomainMapper')
-                        ->disableOriginalConstructor()
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\SPI\Persistence\User\Handler')
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
-                        ->getMock(),
+                    $this->createMock(RoleDomainMapper::class),
+                    $this->createMock(LimitationService::class),
+                    $this->createMock(SPIUserHandler::class),
+                    $this->createMock(UserReference::class),
                 ]
             )
             ->getMock();

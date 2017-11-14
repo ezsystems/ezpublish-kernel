@@ -13,12 +13,12 @@ use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Language\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler
  */
 class ContentLanguageHandler extends AbstractHandler implements ContentLanguageHandlerInterface
 {
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::create
+     * {@inheritdoc}
      */
     public function create(CreateStruct $struct)
     {
@@ -30,7 +30,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::update
+     * {@inheritdoc}
      */
     public function update(Language $struct)
     {
@@ -43,7 +43,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::load
+     * {@inheritdoc}
      */
     public function load($id)
     {
@@ -58,7 +58,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::loadByLanguageCode
+     * {@inheritdoc}
      */
     public function loadByLanguageCode($languageCode)
     {
@@ -68,7 +68,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::loadAll
+     * {@inheritdoc}
      */
     public function loadAll()
     {
@@ -78,7 +78,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::delete
+     * {@inheritdoc}
      */
     public function delete($id)
     {

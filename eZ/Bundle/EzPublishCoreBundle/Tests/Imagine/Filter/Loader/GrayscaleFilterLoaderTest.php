@@ -15,8 +15,8 @@ class GrayscaleFilterLoaderTest extends TestCase
 {
     public function testLoad()
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
-        $effects = $this->getMock('\Imagine\Effects\EffectsInterface');
+        $image = $this->createMock('\Imagine\Image\ImageInterface');
+        $effects = $this->createMock('\Imagine\Effects\EffectsInterface');
         $image
             ->expects($this->once())
             ->method('effects')

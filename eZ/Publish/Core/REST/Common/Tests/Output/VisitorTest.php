@@ -9,8 +9,11 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
 use eZ\Publish\Core\REST\Common;
-use stdClass;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,7 +25,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
+        $generator = $this->getGeneratorMock();
         $generator
             ->expects($this->at(1))
             ->method('startDocument')
@@ -39,11 +42,10 @@ class VisitorTest extends TestCase
             ->with($data)
             ->will($this->returnValue('Hello world!'));
 
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getMockBuilder(Visitor::class)
+            ->setMethods(array('visitValueObject'))
+            ->setConstructorArgs(array($generator, $this->getValueObjectDispatcherMock()))
+            ->getMock();
 
         $this->assertEquals(
             new Response('Hello world!', 200, array()),
@@ -55,7 +57,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
+        $generator = $this->getGeneratorMock();
         $generator
             ->expects($this->at(1))
             ->method('startDocument')
@@ -70,11 +72,10 @@ class VisitorTest extends TestCase
             ->expects($this->never())
             ->method('endDocument');
 
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getMockBuilder(Visitor::class)
+            ->setMethods(array('visitValueObject'))
+            ->setConstructorArgs(array($generator, $this->getValueObjectDispatcherMock()))
+            ->getMock();
 
         $this->assertEquals(
             new Response(null, 200, array()),
@@ -87,7 +88,7 @@ class VisitorTest extends TestCase
         $data = new stdClass();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|Common\Output\Generator $generatorMock */
-        $generatorMock = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
+        $generatorMock = $this->getGeneratorMock();
 
         $valueObjectDispatcherMock = $this->getValueObjectDispatcherMock();
         $valueObjectDispatcherMock
@@ -103,12 +104,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getVisitorMock();
 
         $visitor->setHeader('Content-Type', 'text/xml');
         $this->assertEquals(
@@ -132,12 +128,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getVisitorMock();
 
         $visitor->setHeader('Content-Type', 'text/xml');
         $visitor->setHeader('Accept-Patch', false);
@@ -157,12 +148,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getVisitorMock();
 
         $visitor->setHeader('Content-Type', 'text/xml');
         $visitor->setHeader('Content-Type', 'text/html');
@@ -182,12 +168,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getVisitorMock();
 
         $visitor->setHeader('Content-Type', 'text/xml');
 
@@ -208,12 +189,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getVisitorMock();
 
         $visitor->setStatus(201);
         $this->assertEquals(
@@ -229,12 +205,7 @@ class VisitorTest extends TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
-        );
+        $visitor = $this->getVisitorMock();
 
         $visitor->setStatus(201);
         $visitor->setStatus(404);
@@ -253,8 +224,24 @@ class VisitorTest extends TestCase
      */
     public function getValueObjectDispatcherMock()
     {
-        return $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitorDispatcher'
-        );
+        return $this->createMock(ValueObjectVisitorDispatcher::class);
+    }
+
+    protected function getGeneratorMock()
+    {
+        return $this->createMock(Generator::class);
+    }
+
+    protected function getVisitorMock()
+    {
+        return $this->getMockBuilder(Visitor::class)
+            ->setMethods(array('visitValueObject'))
+            ->setConstructorArgs(
+                array(
+                    $this->getGeneratorMock(),
+                    $this->getValueObjectDispatcherMock(),
+                )
+            )
+            ->getMock();
     }
 }

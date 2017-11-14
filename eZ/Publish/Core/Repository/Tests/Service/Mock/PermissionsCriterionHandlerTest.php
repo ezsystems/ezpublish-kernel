@@ -14,6 +14,8 @@ use eZ\Publish\Core\Repository\Values\User\Policy;
 
 /**
  * Mock test case for PermissionCriterionHandler.
+ *
+ * @deprecated
  */
 class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 {
@@ -312,8 +314,8 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
     protected function mockServices($criterionMock, $limitationCount, $permissionSets)
     {
-        $userMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $limitationTypeMock = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
+        $userMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
+        $limitationTypeMock = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
         $limitationServiceMock = $this->getLimitationServiceMock(['getLimitationType']);
         $permissionResolverMock = $this->getPermissionResolverMock(
             [

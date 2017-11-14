@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Keyword;
 
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
@@ -22,15 +22,22 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class KeywordStorage extends GatewayBasedStorage
 {
     /**
+     * @var \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway
+     */
+    protected $gateway;
+
+    /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param array $context
+     * @return mixed
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway($context);
+        $contentTypeId = $this->gateway->getContentTypeId($field);
 
-        $contentTypeId = $gateway->getContentTypeId($field);
-
-        return $gateway->storeFieldData($field, $contentTypeId);
+        return $this->gateway->storeFieldData($field, $contentTypeId);
     }
 
     /**
@@ -44,9 +51,8 @@ class KeywordStorage extends GatewayBasedStorage
      */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway($context);
         // @todo: This should already retrieve the ContentType ID
-        return $gateway->getFieldData($field);
+        return $this->gateway->getFieldData($field);
     }
 
     /**
@@ -66,9 +72,8 @@ class KeywordStorage extends GatewayBasedStorage
             return false;
         }
 
-        $gateway = $this->getGateway($context);
         foreach ($fieldIds as $fieldId) {
-            $gateway->deleteFieldData($fieldId);
+            $this->gateway->deleteFieldData($fieldId);
         }
 
         return true;
@@ -85,8 +90,10 @@ class KeywordStorage extends GatewayBasedStorage
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     * @return \eZ\Publish\SPI\Search\Field[]|null
      */
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {

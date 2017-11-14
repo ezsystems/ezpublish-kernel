@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\ContentService as APIContentService;
@@ -218,9 +217,7 @@ class ContentService implements APIContentService, Sessionable
      */
     protected function isErrorResponse(Message $response)
     {
-        return (
-            strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0
-        );
+        return strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0;
     }
 
     /**
@@ -744,6 +741,39 @@ class ContentService implements APIContentService, Sessionable
      * @since 5.0
      */
     public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
+     *
+     * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
+     *       a warning before performing it.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
+     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $languageCode
+     *
+     * @throws \Exception
+     *
+     * @since 6.11
+     */
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode)
     {
         throw new \Exception('@todo: Implement.');
     }

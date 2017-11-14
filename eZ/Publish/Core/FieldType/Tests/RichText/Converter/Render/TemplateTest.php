@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render\Template;
+use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use DOMDocument;
 
 class TemplateTest extends TestCase
@@ -284,8 +285,6 @@ class TemplateTest extends TestCase
      */
     protected function getRendererMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface'
-        );
+        return $this->createMock(RendererInterface::class);
     }
 }

@@ -108,7 +108,9 @@ abstract class Handler
             case Criterion\Operator::CONTAINS:
                 $filter = $query->expr->like(
                     $column,
-                    $query->bindValue('%' . $this->lowercase($criterion->value) . '%')
+                    $query->bindValue(
+                        '%' . $this->prepareLikeString($criterion->value) . '%'
+                    )
                 );
                 break;
 
@@ -117,6 +119,20 @@ abstract class Handler
         }
 
         return $filter;
+    }
+
+    /**
+     * Returns the given $string prepared for use in SQL LIKE clause.
+     *
+     * LIKE clause wildcards '%' and '_' contained in the given $string will be escaped.
+     *
+     * @param $string
+     *
+     * @return string
+     */
+    protected function prepareLikeString($string)
+    {
+        return addcslashes($this->lowercase($string), '%_');
     }
 
     /**

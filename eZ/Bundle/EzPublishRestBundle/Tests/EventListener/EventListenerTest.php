@@ -83,7 +83,7 @@ abstract class EventListenerTest extends TestCase
     protected function getRequestAttributesMock()
     {
         if (!isset($this->requestAttributesMock)) {
-            $this->requestAttributesMock = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
+            $this->requestAttributesMock = $this->createMock('Symfony\Component\HttpFoundation\ParameterBag');
             $this->requestAttributesMock
                 ->expects($this->once())
                 ->method('get')
@@ -100,7 +100,7 @@ abstract class EventListenerTest extends TestCase
     protected function getRequestMock()
     {
         if (!isset($this->requestMock)) {
-            $this->requestMock = $this->getMock('Symfony\Component\HttpFoundation\Request');
+            $this->requestMock = $this->createMock('Symfony\Component\HttpFoundation\Request');
             $this->requestMock->attributes = $this->getRequestAttributesMock();
             $this->requestMock->headers = $this->getRequestHeadersMock();
 
@@ -125,7 +125,7 @@ abstract class EventListenerTest extends TestCase
     protected function getRequestHeadersMock()
     {
         if (!isset($this->requestHeadersMock)) {
-            $this->requestHeadersMock = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
+            $this->requestHeadersMock = $this->createMock('Symfony\Component\HttpFoundation\ParameterBag');
         }
 
         return $this->requestHeadersMock;

@@ -8,12 +8,20 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\RichText;
 
+use eZ\Publish\Core\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Templating\EngineInterface;
 
 class RendererTest extends TestCase
 {
@@ -306,7 +314,7 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbed()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContent', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
@@ -314,11 +322,20 @@ class RendererTest extends TestCase
         $isInline = true;
         $isDenied = false;
         $result = 'result';
+        $mainLocationId = 2;
+
+        $contentMock = $this->getContentMock($mainLocationId);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->once())
-            ->method('checkContent')
-            ->with($contentId);
+            ->method('checkContentPermissions')
+            ->with($contentMock)
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->once())
@@ -350,18 +367,27 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbedNoTemplateConfigured()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContent', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = null;
         $parameters = array('parameters');
         $isInline = true;
         $isDenied = false;
+        $mainLocationId = 2;
+
+        $contentMock = $this->getContentMock($mainLocationId);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->once())
-            ->method('checkContent')
-            ->with($contentId);
+            ->method('checkContentPermissions')
+            ->with($contentMock)
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->never())
@@ -390,18 +416,26 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbedNoTemplateFound()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContent', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
         $parameters = array('parameters');
         $isInline = true;
         $isDenied = false;
+        $mainLocationId = 2;
+
+        $contentMock = $this->getContentMock($mainLocationId);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->once())
-            ->method('checkContent')
-            ->with($contentId);
+            ->method('checkContentPermissions')
+            ->with($contentMock);
 
         $renderer
             ->expects($this->never())
@@ -432,7 +466,7 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbedAccessDenied()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContent', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
@@ -440,11 +474,19 @@ class RendererTest extends TestCase
         $isInline = true;
         $isDenied = true;
         $result = 'result';
+        $mainLocationId = 2;
+
+        $contentMock = $this->getContentMock($mainLocationId);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->once())
-            ->method('checkContent')
-            ->with($contentId)
+            ->method('checkContentPermissions')
+            ->with($contentMock)
             ->will($this->throwException(new AccessDeniedException()));
 
         $renderer
@@ -476,6 +518,44 @@ class RendererTest extends TestCase
         );
     }
 
+    public function testRenderContentEmbedTrashed()
+    {
+        $renderer = $this->getMockedRenderer(['checkContentPermissions']);
+        $contentId = 42;
+        $viewType = 'embedTest';
+        $parameters = array('parameters');
+        $isInline = true;
+
+        $contentInfoMock = $this->createMock(ContentInfo::class);
+        $contentInfoMock
+            ->expects($this->once())
+            ->method('__get')
+            ->with('mainLocationId')
+            ->willReturn(null);
+
+        $contentMock = $this->createMock(Content::class);
+        $contentMock
+            ->expects($this->once())
+            ->method('__get')
+            ->with('contentInfo')
+            ->willReturn($contentInfoMock);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
+
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('error')
+            ->with("Could not render embedded resource: Content #{$contentId} is trashed.");
+
+        $this->assertEquals(
+            null,
+            $renderer->renderContentEmbed($contentId, $viewType, $parameters, $isInline)
+        );
+    }
+
     public function providerForTestRenderContentEmbedNotFound()
     {
         return array(
@@ -489,17 +569,25 @@ class RendererTest extends TestCase
      */
     public function testRenderContentEmbedNotFound(Exception $exception)
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContent', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
         $contentId = 42;
         $viewType = 'embedTest';
         $parameters = array('parameters');
         $isInline = true;
         $result = null;
+        $mainLocationId = 2;
+
+        $contentMock = $this->getContentMock($mainLocationId);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->once())
-            ->method('checkContent')
-            ->with($contentId)
+            ->method('checkContentPermissions')
+            ->with($contentMock)
             ->will($this->throwException($exception));
 
         $renderer
@@ -531,13 +619,21 @@ class RendererTest extends TestCase
      */
     public function testRenderContentEmbedThrowsException()
     {
-        $renderer = $this->getMockedRenderer(array('checkContent'));
+        $renderer = $this->getMockedRenderer(array('checkContentPermissions'));
         $contentId = 42;
+        $mainLocationId = 2;
+
+        $contentMock = $this->getContentMock($mainLocationId);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
 
         $renderer
             ->expects($this->once())
-            ->method('checkContent')
-            ->with($contentId)
+            ->method('checkContentPermissions')
+            ->with($contentMock)
             ->will($this->throwException(new Exception('Something threw up')));
 
         $renderer->renderContentEmbed($contentId, 'embedTest', array('parameters'), true);
@@ -675,22 +771,31 @@ class RendererTest extends TestCase
         $renderTemplate,
         $renderResult
     ) {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContent'));
+        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions'));
         $contentId = 42;
         $viewType = 'embedTest';
         $parameters = array('parameters');
+        $mainLocationId = 2;
+
+        $contentMock = $this->getContentMock($mainLocationId);
+
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($contentMock);
 
         if (isset($deniedException)) {
             $renderer
                 ->expects($this->once())
-                ->method('checkContent')
-                ->with($contentId)
+                ->method('checkContentPermissions')
+                ->with($contentMock)
                 ->will($this->throwException($deniedException));
         } else {
             $renderer
                 ->expects($this->once())
-                ->method('checkContent')
-                ->with($contentId);
+                ->method('checkContentPermissions')
+                ->with($contentMock)
+                ->willReturn($contentMock);
         }
 
         if (!isset($renderTemplate)) {
@@ -769,7 +874,7 @@ class RendererTest extends TestCase
         $isInline = true;
         $isDenied = false;
         $result = 'result';
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -820,7 +925,7 @@ class RendererTest extends TestCase
         $parameters = array('parameters');
         $isInline = true;
         $isDenied = false;
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -868,7 +973,7 @@ class RendererTest extends TestCase
         $parameters = array('parameters');
         $isInline = true;
         $isDenied = false;
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -962,7 +1067,7 @@ class RendererTest extends TestCase
         $viewType = 'embedTest';
         $parameters = array('parameters');
         $isInline = true;
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         $mockLocation
             ->expects($this->once())
@@ -1202,7 +1307,7 @@ class RendererTest extends TestCase
         $locationId = 42;
         $viewType = 'embedTest';
         $parameters = array('parameters');
-        $mockLocation = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $mockLocation = $this->createMock(Location::class);
 
         if (isset($deniedException)) {
             $renderer
@@ -1297,19 +1402,20 @@ class RendererTest extends TestCase
      */
     protected function getMockedRenderer(array $methods = array())
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\RichText\\Renderer',
-            $methods,
-            array(
-                $this->repositoryMock,
-                $this->authorizationCheckerMock,
-                $this->configResolverMock,
-                $this->templateEngineMock,
-                'test.name.space.tag',
-                'test.name.space.embed',
-                $this->loggerMock,
+        return $this->getMockBuilder(Renderer::class)
+            ->setConstructorArgs(
+                array(
+                    $this->repositoryMock,
+                    $this->authorizationCheckerMock,
+                    $this->configResolverMock,
+                    $this->templateEngineMock,
+                    'test.name.space.tag',
+                    'test.name.space.embed',
+                    $this->loggerMock,
+                )
             )
-        );
+            ->setMethods($methods)
+            ->getMock();
     }
 
     /**
@@ -1322,9 +1428,7 @@ class RendererTest extends TestCase
      */
     protected function getRepositoryMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Repository'
-        );
+        return $this->createMock(Repository::class);
     }
 
     /**
@@ -1337,9 +1441,7 @@ class RendererTest extends TestCase
      */
     protected function getAuthorizationCheckerMock()
     {
-        return $this->getMock(
-            'Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface'
-        );
+        return $this->createMock(AuthorizationCheckerInterface::class);
     }
 
     /**
@@ -1352,9 +1454,7 @@ class RendererTest extends TestCase
      */
     protected function getConfigResolverMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'
-        );
+        return $this->createMock(ConfigResolverInterface::class);
     }
 
     /**
@@ -1367,9 +1467,7 @@ class RendererTest extends TestCase
      */
     protected function getTemplateEngineMock()
     {
-        return $this->getMock(
-            'Symfony\\Component\\Templating\\EngineInterface'
-        );
+        return $this->createMock(EngineInterface::class);
     }
 
     /**
@@ -1382,8 +1480,25 @@ class RendererTest extends TestCase
      */
     protected function getLoggerMock()
     {
-        return $this->getMock(
-            'Psr\\Log\\LoggerInterface'
-        );
+        return $this->createMock(LoggerInterface::class);
+    }
+
+    protected function getContentMock($mainLocationId)
+    {
+        $contentInfoMock = $this->createMock(ContentInfo::class);
+        $contentInfoMock
+            ->expects($this->once())
+            ->method('__get')
+            ->with('mainLocationId')
+            ->willReturn($mainLocationId);
+
+        $contentMock = $this->createMock(Content::class);
+        $contentMock
+            ->expects($this->once())
+            ->method('__get')
+            ->with('contentInfo')
+            ->willReturn($contentInfoMock);
+
+        return $contentMock;
     }
 }

@@ -8,9 +8,15 @@
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
+use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\API\Repository\FieldType as APIFieldType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -405,13 +411,7 @@ class FieldTypeSerializerTest extends TestCase
     protected function getFieldTypeServiceMock()
     {
         if (!isset($this->fieldTypeServiceMock)) {
-            $this->fieldTypeServiceMock = $this->getMock(
-                'eZ\\Publish\\API\\Repository\\FieldTypeService',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldTypeServiceMock = $this->createMock(FieldTypeService::class);
         }
 
         return $this->fieldTypeServiceMock;
@@ -420,13 +420,7 @@ class FieldTypeSerializerTest extends TestCase
     protected function getFieldTypeProcessorRegistryMock()
     {
         if (!isset($this->fieldTypeProcessorRegistryMock)) {
-            $this->fieldTypeProcessorRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessorRegistry',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldTypeProcessorRegistryMock = $this->createMock(FieldTypeProcessorRegistry::class);
         }
 
         return $this->fieldTypeProcessorRegistryMock;
@@ -435,13 +429,7 @@ class FieldTypeSerializerTest extends TestCase
     protected function getFieldTypeProcessorMock()
     {
         if (!isset($this->fieldTypeProcessorMock)) {
-            $this->fieldTypeProcessorMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessor',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldTypeProcessorMock = $this->createMock(FieldTypeProcessor::class);
         }
 
         return $this->fieldTypeProcessorMock;
@@ -450,13 +438,7 @@ class FieldTypeSerializerTest extends TestCase
     protected function getContentTypeMock()
     {
         if (!isset($this->contentTypeMock)) {
-            $this->contentTypeMock = $this->getMock(
-                'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentTypeMock = $this->createMock(APIContentType::class);
         }
 
         return $this->contentTypeMock;
@@ -465,13 +447,7 @@ class FieldTypeSerializerTest extends TestCase
     protected function getFieldTypeMock()
     {
         if (!isset($this->fieldTypeMock)) {
-            $this->fieldTypeMock = $this->getMock(
-                'eZ\\Publish\\API\\Repository\\FieldType',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldTypeMock = $this->createMock(APIFieldType::class);
         }
 
         return $this->fieldTypeMock;
@@ -480,13 +456,7 @@ class FieldTypeSerializerTest extends TestCase
     protected function getGeneratorMock()
     {
         if (!isset($this->generatorMock)) {
-            $this->generatorMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->generatorMock = $this->createMock(Generator::class);
         }
 
         return $this->generatorMock;

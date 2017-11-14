@@ -9,93 +9,58 @@
 namespace eZ\Publish\Core\Repository\Values\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup;
+use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
+use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
  * This class represents an object state group value.
  *
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
- * @property-read string $defaultLanguageCode, the default language code of the object state group names and description used for fallback.
+ * @property-read string $mainLanguageCode the default language of the object state group names and description used for fallback.
+ * @property-read string $defaultLanguageCode deprecated, use $mainLanguageCode
  * @property-read string[] $languageCodes the available languages
  *
  * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class ObjectStateGroup extends APIObjectStateGroup
 {
-    /**
-     * Human readable names of object state group.
-     *
-     * @var string[]
-     */
-    protected $names = array();
+    use MultiLanguageTrait;
+    use MultiLanguageNameTrait;
+    use MultiLanguageDescriptionTrait;
 
     /**
-     * Human readable descriptions of object state group.
+     * Magic getter for BC reasons.
      *
-     * @var string[]
+     * @param string $property
+     * @return mixed
      */
-    protected $descriptions = array();
-
-    /**
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    public function getNames()
+    public function __get($property)
     {
-        return $this->names;
-    }
+        if ($property === 'defaultLanguageCode') {
+            @trigger_error(
+                __CLASS__ . '::$defaultLanguageCode is deprecated. Use mainLanguageCode',
+                E_USER_DEPRECATED
+            );
 
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
-     */
-    public function getName($languageCode)
-    {
-        if (!isset($this->names[$languageCode])) {
-            return null;
+            return $this->mainLanguageCode;
         }
 
-        return $this->names[$languageCode];
+        return parent::__get($property);
     }
 
-    /**
-     * This method returns the human readable description of the content type.
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    public function getDescriptions()
+    public function __isset($property)
     {
-        return $this->descriptions;
-    }
+        if ($property === 'defaultLanguageCode') {
+            @trigger_error(
+                __CLASS__ . '::$defaultLanguageCode is deprecated. Use mainLanguageCode',
+                E_USER_DEPRECATED
+            );
 
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
-     */
-    public function getDescription($languageCode)
-    {
-        if (!isset($this->descriptions[$languageCode])) {
-            return null;
+            return true;
         }
 
-        return $this->descriptions[$languageCode];
+        return parent::__isset($property);
     }
 }

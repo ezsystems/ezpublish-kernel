@@ -160,4 +160,21 @@ interface Handler
      * @param mixed $locationId
      */
     public function locationDeleted($locationId);
+
+    /**
+     * Notifies the underlying engine that Locations Content Translation was removed.
+     *
+     * @param int[] $locationIds all Locations of the Content that got Translation removed
+     * @param string $languageCode language code of the removed Translation
+     */
+    public function translationRemoved(array $locationIds, $languageCode);
+
+    /**
+     * Archive UrlAliases for Translations that were removed from the underlying published content.
+     *
+     * @param int $locationId Location of underlying published Content Object
+     * @param int $parentLocationId
+     * @param array $languageCodes Language codes of currently published Content Object Translations
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes);
 }

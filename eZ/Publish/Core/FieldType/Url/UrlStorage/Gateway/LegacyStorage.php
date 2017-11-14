@@ -10,11 +10,12 @@ namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
-use RuntimeException;
 use PDO;
 
 /**
  * Url field type external storage gateway implementation using Zeta Database Component.
+ *
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage} instead.
  */
 class LegacyStorage extends Gateway
 {
@@ -22,46 +23,26 @@ class LegacyStorage extends Gateway
     const URL_LINK_TABLE = 'ezurl_object_link';
 
     /**
-     * Connection.
-     *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
-    /**
-     * Set database handler for this gateway.
-     *
-     * @param mixed $dbHandler
-     *
-     * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
-     */
-    public function setConnection($dbHandler)
+    public function __construct(DatabaseHandler $dbHandler)
     {
-        // This obviously violates the Liskov substitution Principle, but with
-        // the given class design there is no sane other option. Actually the
-        // dbHandler *should* be passed to the constructor, and there should
-        // not be the need to post-inject it.
-        if (!($dbHandler instanceof DatabaseHandler)) {
-            throw new RuntimeException('Invalid dbHandler passed');
-        }
-
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
         $this->dbHandler = $dbHandler;
     }
 
     /**
      * Returns the active connection.
      *
-     * @throws \RuntimeException if no connection has been set, yet.
-     *
      * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
-        if ($this->dbHandler === null) {
-            throw new RuntimeException('Missing database connection.');
-        }
-
         return $this->dbHandler;
     }
 

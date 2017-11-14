@@ -14,6 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
  * A slot handling AssignUserToUserGroupSignal.
  *
  * @todo This might be incomplete: what about the user's own http cache (user hash) ?
+ *
+ * @deprecated since 6.8. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
 class AssignUserToUserGroupSlot extends PurgeForContentHttpCacheSlot
 {

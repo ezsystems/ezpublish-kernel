@@ -25,7 +25,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read bool $alwaysAvailable Indicates if the Content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the Content object
  * @property-read string $mainLanguageCode The main language code of the Content object. If the available flag is set to true the Content is shown in this language if the requested language does not exist.
- * @property-read mixed $mainLocationId Identifier of the main location.
+ * @property-read mixed|null $mainLocationId Identifier of the main location.
  */
 class ContentInfo extends ValueObject
 {
@@ -122,7 +122,7 @@ class ContentInfo extends ValueObject
      * If the Content object has multiple locations,
      * $mainLocationId will point to the main one.
      *
-     * @var mixed
+     * @var mixed|null
      */
     protected $mainLocationId;
 }

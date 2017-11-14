@@ -106,6 +106,8 @@ interface Handler
      * Optionally a time stamp with the modification date may be specified,
      * otherwise the current time is used.
      *
+     * @deprecated As of 6.8, not been used by repository since 5.x.
+     *
      * @param int|string $locationId
      * @param int $timestamp
      */

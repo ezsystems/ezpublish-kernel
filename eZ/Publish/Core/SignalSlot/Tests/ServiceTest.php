@@ -65,7 +65,7 @@ abstract class ServiceTest extends TestCase
                          )
                      );
 
-        $dispatcher = $this->getMock('eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher');
+        $dispatcher = $this->createMock(SignalDispatcher::class);
         $that = $this;
         $d = $dispatcher->expects($this->exactly($emitNr))
                         ->method('emit');

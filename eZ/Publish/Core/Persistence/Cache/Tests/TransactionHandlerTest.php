@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\SPI\Persistence\TransactionHandler;
+
 /**
  * Test case for Persistence\Cache\TransactionHandler.
  */
@@ -26,7 +28,7 @@ class TransactionHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
+        $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('transactionHandler')
@@ -53,7 +55,7 @@ class TransactionHandlerTest extends HandlerTest
             ->expects($this->never())
             ->method($this->anything());
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
+        $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('transactionHandler')
@@ -80,7 +82,7 @@ class TransactionHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('clear');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
+        $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('transactionHandler')

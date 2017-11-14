@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\UpdateHandler;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,10 +46,10 @@ class DoctrineDatabaseTest extends TestCase
             ->method('determineActions')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
+                    Type::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
+                    Type::class
                 )
             )->will($this->returnValue(array()));
 
@@ -144,9 +146,7 @@ class DoctrineDatabaseTest extends TestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
-            );
+            $this->gatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->gatewayMock;
@@ -160,13 +160,7 @@ class DoctrineDatabaseTest extends TestCase
     protected function getContentUpdaterMock()
     {
         if (!isset($this->contentUpdaterMock)) {
-            $this->contentUpdaterMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentUpdaterMock = $this->createMock(ContentUpdater::class);
         }
 
         return $this->contentUpdaterMock;

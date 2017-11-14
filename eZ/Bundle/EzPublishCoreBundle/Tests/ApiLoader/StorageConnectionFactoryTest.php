@@ -28,14 +28,14 @@ class StorageConnectionFactoryTest extends TestCase
             ),
         );
 
-        $configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $configResolver
             ->expects($this->once())
             ->method('getParameter')
             ->with('repository')
             ->will($this->returnValue($repositoryAlias));
 
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container
             ->expects($this->once())
             ->method('has')
@@ -80,7 +80,7 @@ class StorageConnectionFactoryTest extends TestCase
             ),
         );
 
-        $configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -89,7 +89,7 @@ class StorageConnectionFactoryTest extends TestCase
 
         $repositoryConfigurationProvider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $factory = new StorageConnectionFactory($repositoryConfigurationProvider);
-        $factory->setContainer($this->getMock('Symfony\Component\DependencyInjection\ContainerInterface'));
+        $factory->setContainer($this->createMock('Symfony\Component\DependencyInjection\ContainerInterface'));
         $factory->getConnection();
     }
 
@@ -113,7 +113,7 @@ class StorageConnectionFactoryTest extends TestCase
             ->method('getRepositoryConfig')
             ->will($this->returnValue($repositoryConfig));
 
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container
             ->expects($this->once())
             ->method('has')

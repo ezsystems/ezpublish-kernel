@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
@@ -30,7 +31,8 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
 
-        list($content, $contentType) = $this->buildTestObjects();
+        $content = $this->buildTestContentObject();
+        $contentType = $this->buildTestContentType();
 
         $serviceMock->expects(
             $this->once()
@@ -59,7 +61,8 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
 
-        list($content, $contentType) = $this->buildTestObjects('<name_schema>', '');
+        $content = $this->buildTestContentObject();
+        $contentType = $this->buildTestContentType('<name_schema>', '');
 
         $serviceMock->expects(
             $this->once()
@@ -88,7 +91,8 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
 
-        list($content, $contentType) = $this->buildTestObjects();
+        $content = $this->buildTestContentObject();
+        $contentType = $this->buildTestContentType();
 
         $serviceMock->expects(
             $this->once()
@@ -117,7 +121,8 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
 
-        list($content, $contentType) = $this->buildTestObjects();
+        $content = $this->buildTestContentObject();
+        $contentType = $this->buildTestContentType();
 
         $fields = array();
         $fields['text3']['cro-HR'] = new TextLineValue('tri');
@@ -148,6 +153,101 @@ class NameSchemaTest extends BaseServiceMockTest
         $result = $serviceMock->resolveNameSchema($content, $fields, $languages, $contentType);
 
         self::assertEquals(42, $result);
+    }
+
+    /**
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService::resolve method.
+     *
+     * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolve
+     * @dataProvider \eZ\Publish\Core\Repository\Tests\Service\Mock\NameSchemaTest::resolveDataProvider
+     * @param string[] $schemaIdentifiers
+     * @param string $nameSchema
+     * @param string[] $languageFieldValues field value translations
+     * @param string[] $fieldTitles [language => [field_identifier => title]]
+     * @param array $settings NameSchemaService settings
+     */
+    public function testResolve(
+        array $schemaIdentifiers,
+        $nameSchema,
+        $languageFieldValues,
+        $fieldTitles,
+        $settings = []
+    ) {
+        $serviceMock = $this->getPartlyMockedNameSchemaService(['getFieldTitles'], $settings);
+
+        $content = $this->buildTestContentObject();
+        $contentType = $this->buildTestContentType();
+
+        $index = 0;
+        foreach ($languageFieldValues as $languageCode => $fieldValue) {
+            $serviceMock->expects(
+                $this->at($index++)
+            )->method(
+                'getFieldTitles'
+            )->with(
+                $schemaIdentifiers,
+                $contentType,
+                $content->fields,
+                $languageCode
+            )->will(
+                $this->returnValue($fieldTitles[$languageCode])
+            );
+        }
+
+        $result = $serviceMock->resolve($nameSchema, $contentType, $content->fields, $content->versionInfo->languageCodes);
+
+        self::assertEquals($languageFieldValues, $result);
+    }
+
+    /**
+     * Data provider for the @see testResolve method.
+     *
+     * @return array
+     */
+    public function resolveDataProvider()
+    {
+        return [
+            [
+                ['text1'],
+                '<text1>',
+                [
+                    'eng-GB' => 'one',
+                    'cro-HR' => 'jedan',
+                ],
+                [
+                    'eng-GB' => ['text1' => 'one'],
+                    'cro-HR' => ['text1' => 'jedan'],
+                ],
+            ],
+            [
+                ['text2'],
+                '<text2>',
+                [
+                    'eng-GB' => 'two',
+                    'cro-HR' => 'dva',
+                ],
+                [
+                    'eng-GB' => ['text2' => 'two'],
+                    'cro-HR' => ['text2' => 'dva'],
+                ],
+            ],
+            [
+                ['text1', 'text2'],
+                'Hello, <text1> and <text2> and then goodbye and hello again',
+                [
+                    'eng-GB' => 'Hello, one and two and then goodbye...',
+                    'cro-HR' => 'Hello, jedan and dva and then goodb...',
+                ],
+                [
+                    'eng-GB' => ['text1' => 'one', 'text2' => 'two'],
+                    'cro-HR' => ['text1' => 'jedan', 'text2' => 'dva'],
+                ],
+                [
+                    'limit' => 38,
+                    'sequence' => '...',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -232,31 +332,41 @@ class NameSchemaTest extends BaseServiceMockTest
     }
 
     /**
-     * Builds stubbed content for testing purpose.
+     * Build Content Object stub for testing purpose.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function buildTestObjects($nameSchema = '<name_schema>', $urlAliasSchema = '<urlalias_schema>')
+    protected function buildTestContentObject()
     {
-        $content = new Content(
-            array(
+        return new Content(
+            [
                 'internalFields' => $this->getFields(),
                 'versionInfo' => new VersionInfo(
-                    array(
-                        'languageCodes' => array('eng-GB', 'cro-HR'),
-                    )
+                    [
+                        'languageCodes' => ['eng-GB', 'cro-HR'],
+                    ]
                 ),
-            )
+            ]
         );
-        $contentType = new ContentType(
-            array(
+    }
+
+    /**
+     * Build ContentType stub for testing purpose.
+     *
+     * @param string $nameSchema
+     * @param string $urlAliasSchema
+     *
+     * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentType
+     */
+    protected function buildTestContentType($nameSchema = '<name_schema>', $urlAliasSchema = '<urlalias_schema>')
+    {
+        return new ContentType(
+            [
                 'nameSchema' => $nameSchema,
                 'urlAliasSchema' => $urlAliasSchema,
                 'fieldDefinitions' => $this->getFieldDefinitions(),
-            )
+            ]
         );
-
-        return array($content, $contentType);
     }
 
     /**
@@ -265,20 +375,23 @@ class NameSchemaTest extends BaseServiceMockTest
      * Injected Repository comes from {@see getRepositoryMock()}
      *
      * @param string[] $methods
+     * @param array $settings
      *
      * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartlyMockedNameSchemaService(array $methods = null)
+    protected function getPartlyMockedNameSchemaService(array $methods = null, array $settings = [])
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\Helper\\NameSchemaService',
-            $methods,
-            array(
-                $this->getPersistenceMock()->contentTypeHandler(),
-                $this->getContentTypeDomainMapperMock(),
-                $this->getNameableFieldTypeRegistryMock(),
+        return $this->getMockBuilder(NameSchemaService::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                [
+                    $this->getPersistenceMock()->contentTypeHandler(),
+                    $this->getContentTypeDomainMapperMock(),
+                    $this->getNameableFieldTypeRegistryMock(),
+                    $settings,
+                ]
             )
-        );
+            ->getMock();
     }
 
     protected $contentTypeDomainMapperMock;

@@ -110,9 +110,18 @@
         </xsl:element>
       </xsl:when>
       <xsl:when test="@role='strikedthrough'">
-        <xsl:element name="del" namespace="{$outputNamespace}">
-          <xsl:apply-templates/>
-        </xsl:element>
+        <xsl:choose>
+          <xsl:when test="@revisionflag='deleted'">
+            <xsl:element name="del" namespace="{$outputNamespace}">
+              <xsl:apply-templates/>
+            </xsl:element>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:element name="s" namespace="{$outputNamespace}">
+              <xsl:apply-templates/>
+            </xsl:element>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="em" namespace="{$outputNamespace}">
@@ -303,9 +312,25 @@
           <xsl:value-of select="./docbook:caption"/>
         </xsl:element>
       </xsl:if>
-      <xsl:for-each select="./docbook:tr | ./docbook:tbody/docbook:tr">
-        <xsl:apply-templates select="current()"/>
-      </xsl:for-each>
+      <xsl:if test="./docbook:thead">
+        <xsl:element name="thead" namespace="{$outputNamespace}">
+          <xsl:for-each select="./docbook:thead/docbook:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
+      <xsl:element name="tbody" namespace="{$outputNamespace}">
+        <xsl:for-each select="./docbook:tr | ./docbook:tbody/docbook:tr">
+          <xsl:apply-templates select="current()"/>
+        </xsl:for-each>
+      </xsl:element>
+      <xsl:if test="./docbook:tfoot">
+        <xsl:element name="tfoot" namespace="{$outputNamespace}">
+          <xsl:for-each select="./docbook:tfoot/docbook:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
     </xsl:element>
   </xsl:template>
 

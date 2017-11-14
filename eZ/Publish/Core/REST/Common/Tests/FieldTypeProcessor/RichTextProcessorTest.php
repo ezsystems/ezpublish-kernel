@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\RichTextProcessor;
+use eZ\Publish\Core\FieldType\RichText\Converter;
 use PHPUnit\Framework\TestCase;
 use DOMDocument;
 
@@ -62,7 +63,7 @@ EOT;
      */
     protected function getProcessor()
     {
-        $this->converter = $this->getMock('eZ\\Publish\\Core\\FieldType\\RichText\\Converter');
+        $this->converter = $this->createMock(Converter::class);
 
         return new RichTextProcessor($this->converter);
     }

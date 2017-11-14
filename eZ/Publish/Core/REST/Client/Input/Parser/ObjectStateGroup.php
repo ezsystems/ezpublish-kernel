@@ -51,7 +51,7 @@ class ObjectStateGroup extends BaseParser
             array(
                 'id' => $data['_href'],
                 'identifier' => $data['identifier'],
-                'defaultLanguageCode' => $data['defaultLanguageCode'],
+                'mainLanguageCode' => $data['defaultLanguageCode'],
                 'languageCodes' => explode(',', $data['languageCodes']),
                 'names' => $names,
                 'descriptions' => $descriptions,

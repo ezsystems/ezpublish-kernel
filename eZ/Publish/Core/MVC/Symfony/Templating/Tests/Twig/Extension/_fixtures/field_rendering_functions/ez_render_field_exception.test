@@ -1,0 +1,23 @@
+--TEST--
+Exception for "ez_render_field" function
+--TEMPLATE--
+{% extends 'templates/base.html.twig' %}
+{% block content %}
+{{ ez_render_field( notexisting, 'testfield' ) }}
+{% endblock %}
+--DATA--
+return array(
+    'notexisting' => $this->getContent(
+        'notexisting',
+        array(
+            'notexisting' => array(
+                'id' => 2,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            ),
+        )
+    )
+)
+--EXCEPTION--
+Twig_Error_Runtime: An exception has been thrown during the rendering of a template ("Cannot find 'notexisting_field' template block.") in "index.twig" at line 4.

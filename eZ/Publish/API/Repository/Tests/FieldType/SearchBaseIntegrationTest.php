@@ -218,11 +218,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
     public function checkFullTextSupport()
     {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "'{$this->getTypeName()}' field type (any actually, fulltext search is missing) is not searchable with Legacy Search Engine"
-            );
-        }
+        // Does nothing by default, override in a concrete test case as needed
     }
 
     /**
@@ -350,7 +346,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
-                array_push($template, $additionalField[0]);
+                $template[] = $additionalField[0];
                 array_unshift($template, $additionalField[2]);
                 array_unshift($template, $additionalField[1]);
 
@@ -1156,7 +1152,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
-                array_push($template, $additionalField[0]);
+                $template[] = $additionalField[0];
                 $fixture[] = $template;
             }
         }

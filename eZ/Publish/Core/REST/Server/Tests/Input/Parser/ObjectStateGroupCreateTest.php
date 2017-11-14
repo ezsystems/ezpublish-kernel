@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\ObjectStateService;
 use eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupCreate;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 
@@ -43,7 +44,7 @@ class ObjectStateGroupCreateTest extends BaseTest
         $result = $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupCreateStruct',
+            ObjectStateGroupCreateStruct::class,
             $result,
             'ObjectStateGroupCreateStruct not created correctly.'
         );
@@ -208,13 +209,7 @@ class ObjectStateGroupCreateTest extends BaseTest
      */
     protected function getObjectStateServiceMock()
     {
-        $objectStateServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ObjectStateService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $objectStateServiceMock = $this->createMock(ObjectStateService::class);
 
         $objectStateServiceMock->expects($this->any())
             ->method('newObjectStateGroupCreateStruct')

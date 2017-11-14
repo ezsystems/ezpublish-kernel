@@ -8,11 +8,18 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
 
 class GlobalHelperTest extends TestCase
 {
@@ -50,13 +57,11 @@ class GlobalHelperTest extends TestCase
     {
         parent::setUp();
 
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $this->locationService = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->router = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
-        $this->translationHelper = $this->getMockBuilder('eZ\Publish\Core\Helper\TranslationHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->locationService = $this->createMock(LocationService::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->translationHelper = $this->createMock(TranslationHelper::class);
         $this->helper = new GlobalHelper($this->configResolver, $this->locationService, $this->router, $this->translationHelper);
     }
 
@@ -65,7 +70,7 @@ class GlobalHelperTest extends TestCase
         $request = new Request();
         $requestStack = new RequestStack();
         $requestStack->push($request);
-        $siteAccess = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess');
+        $siteAccess = $this->createMock(SiteAccess::class);
         $request->attributes->set('siteaccess', $siteAccess);
         $this->helper->setRequestStack($requestStack);
 
@@ -162,7 +167,7 @@ class GlobalHelperTest extends TestCase
             ->will($this->returnValue($rootLocationId));
 
         $rootLocation = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Location')
+            ->getMockBuilder(Location::class)
             ->setConstructorArgs(array(array('id' => $rootLocationId)));
         $this->locationService
             ->expects($this->once())

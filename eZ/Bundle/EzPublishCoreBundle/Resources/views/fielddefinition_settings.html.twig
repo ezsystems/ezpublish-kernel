@@ -5,6 +5,8 @@
  #  - array settings settings of the field definition
  #}
 
+{% trans_default_domain "fielddefinition" %}
+
 {% block ezstring_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     {% set defaultValue = null %}
@@ -13,22 +15,22 @@
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting min-length">
-        <div class="ez-fielddefinition-setting-name">Min string length:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.min-length.label'|trans|desc("Min string length:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if fielddefinition.validatorConfiguration.StringLengthValidator.minStringLength %}
-            {{ fielddefinition.validatorConfiguration.StringLengthValidator.minStringLength }} characters
+            {{ 'fielddefinition.min-length.value'|trans({'%min%': fielddefinition.validatorConfiguration.StringLengthValidator.minStringLength})|desc("%min% characters")}}
         {% else %}
-            <em>No defined minimum string length</em>
+            <em>{{ 'fielddefinition.min-length.undefined'|trans|desc("No defined minimum string length")}}</em>
         {% endif %}
         </div>
     </li>
     <li class="ez-fielddefinition-setting max-length">
-        <div class="ez-fielddefinition-setting-name">Max string length:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.max-length.label'|trans|desc("Max string length:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if fielddefinition.validatorConfiguration.StringLengthValidator.maxStringLength %}
-            {{ fielddefinition.validatorConfiguration.StringLengthValidator.maxStringLength }} characters
+            {{ 'fielddefinition.max-length.value'|trans({'%max%': fielddefinition.validatorConfiguration.StringLengthValidator.maxStringLength})|desc("%max% characters")}}
         {% else %}
-            <em>No defined maximum string length</em>
+            <em>{{ 'fielddefinition.max-length.undefined'|trans|desc("No defined maximum string length")}}</em>
         {% endif %}
         </div>
     </li>
@@ -42,12 +44,7 @@
 </ul>
 {% endblock %}
 
-{% block ezrichtext_settings %}
-    <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
-        {% set rows = settings.numRows %}
-        {{ block( 'settings_preferredrows' ) }}
-    </ul>
-{% endblock %}
+{% block ezrichtext_settings %}{% endblock %}
 
 {% block ezcountry_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
@@ -66,12 +63,12 @@
 {% block ezboolean_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting default-value">
-        <div class="ez-fielddefinition-setting-name">Default value:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.default-value.label'|trans|desc("Default value:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if fielddefinition.defaultValue.bool %}
-            Checked
+            {{ 'fielddefinition.default-value.checked'|trans|desc("Checked")}}
         {% else %}
-            Unchecked
+            {{ 'fielddefinition.default-value.unchecked'|trans|desc("Unchecked")}}
         {% endif %}
         </div>
     </li>
@@ -81,23 +78,23 @@
 {% block ezdatetime_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Type::DEFAULT_EMPTY' ) %}
-        {% set defaultValue = 'Empty' %}
+        {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
     {% elseif settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Type::DEFAULT_CURRENT_DATE' ) %}
-        {% set defaultValue = 'Current datetime' %}
+        {% set defaultValue = 'fielddefinition.default-value.current_datetime'|trans|desc("Current datetime") %}
     {% else %}
         {% set interval = settings.dateInterval %}
-        {% set defaultValue = 'Current datetime adjusted by ' %}
-        {% set defaultValue = interval.y ? defaultValue ~ ' ' ~ interval.y ~ ' year(s)' : defaultValue %}
-        {% set defaultValue = interval.m ? defaultValue ~ ' ' ~  interval.m ~ ' month(s)' : defaultValue %}
-        {% set defaultValue = interval.d ? defaultValue ~ ' ' ~ interval.d ~ ' day(s)' : defaultValue %}
-        {% set defaultValue = interval.h ? defaultValue ~ ' ' ~ interval.h ~ ' hour(s)' : defaultValue %}
-        {% set defaultValue = interval.i ? defaultValue ~ ' ' ~ interval.i ~ ' minute(s)' : defaultValue %}
-        {% set defaultValue = interval.s and settings.useSeconds ? defaultValue ~ ' ' ~ interval.s ~ ' second(s)' : defaultValue %}
+        {% set defaultValue = 'fielddefinition.default-value.current_datetime_adjust_by'|trans|desc("Current datetime adjusted by") %}
+        {% set defaultValue = interval.y ? 'fielddefinition.interval.year'|trans({'%default%': defaultValue, '%year%': interval.y})|desc("%default% %year% year(s)") : defaultValue %}
+        {% set defaultValue = interval.m ? 'fielddefinition.interval.month'|trans({'%default%': defaultValue, '%month%': interval.m})|desc("%default% %month% month(s)") : defaultValue %}
+        {% set defaultValue = interval.d ? 'fielddefinition.interval.day'|trans({'%default%': defaultValue, '%day%': interval.d})|desc("%default% %day% day(s)") : defaultValue %}
+        {% set defaultValue = interval.h ? 'fielddefinition.interval.hour'|trans({'%default%': defaultValue, '%hour%': interval.h})|desc("%default% %hour% hour(s)") : defaultValue %}
+        {% set defaultValue = interval.i ? 'fielddefinition.interval.minute'|trans({'%default%': defaultValue, '%minute%': interval.i})|desc("%default% %minute% minute(s)") : defaultValue %}
+        {% set defaultValue = interval.s and settings.useSeconds ? 'fielddefinition.interval.second'|trans({'%default%': defaultValue, '%second%': interval.s})|desc("%default% %second% second(s)") : defaultValue %}
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting use-seconds">
-        <div class="ez-fielddefinition-setting-name">Use seconds:</div>
-        <div class="ez-fielddefinition-setting-value">{{ settings.useSeconds ? 'Yes' : 'No' }}</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.use-seconds.label'|trans|desc("Use seconds:")}}</div>
+        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.use-seconds.yes_no'|transchoice(settings.useSeconds)|desc("{0} No|{1} Yes") }}</div>
     </li>
 </ul>
 {% endblock %}
@@ -105,9 +102,9 @@
 {% block ezdate_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Date\\Type::DEFAULT_EMPTY' ) %}
-        {% set defaultValue = 'Empty' %}
+        {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
     {% else %}
-        {% set defaultValue = 'Current date' %}
+        {% set defaultValue = 'fielddefinition.default-value.current_date'|trans|desc("Current date") %}
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
 </ul>
@@ -116,14 +113,14 @@
 {% block eztime_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Time\\Type::DEFAULT_EMPTY' ) %}
-        {% set defaultValue = 'Empty' %}
+        {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
     {% else %}
-        {% set defaultValue = 'Current time' %}
+        {% set defaultValue = 'fielddefinition.default-value.current_time'|trans|desc("Current time") %}
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting use-seconds">
-        <div class="ez-fielddefinition-setting-name">Use seconds:</div>
-        <div class="ez-fielddefinition-setting-value">{{ settings.useSeconds ? 'Yes' : 'No' }}</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.use-seconds.label'|trans|desc("Use seconds:")}}</div>
+        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.use-seconds.yes_no'|transchoice(settings.useSeconds)|desc("{0} No|{1} Yes") }}</div>
     </li>
 </ul>
 {% endblock %}
@@ -153,7 +150,7 @@
 {% block ezselection_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting options">
-        <div class="ez-fielddefinition-setting-name">Defined options</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.options.label'|trans|desc("Defined options")}}</div>
         <div class="ez-fielddefinition-setting-value">
             <ul>
             {% for option in settings.options %}
@@ -179,24 +176,24 @@
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     {{ block( 'settings_maxfilesize' ) }}
     <li class="ez-fielddefinition-setting media-player-type">
-        <div class="ez-fielddefinition-setting-name">Media player type:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.media-player-type.label'|trans|desc("Media player type:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if type == 'flash' %}
-            Flash
+            {{ 'fielddefinition.media-player-type.flash'|trans|desc("Flash")}}
         {% elseif type == 'quick_time' %}
-            Quicktime
+            {{ 'fielddefinition.media-player-type.quick_time'|trans|desc("Quicktime")}}
         {% elseif type == 'real_player' %}
-            Real Player
+            {{ 'fielddefinition.media-player-type.real_player'|trans|desc("Real Player")}}
         {% elseif type == 'silverlight' %}
-            Silverlight
+            {{ 'fielddefinition.media-player-type.silverlight'|trans|desc("Silverlight")}}
         {% elseif type == 'windows_media_player' %}
-            Window Media Player
+            {{ 'fielddefinition.media-player-type.windows_media_player'|trans|desc("Window Media Player")}}
         {% elseif type == 'html5_video' %}
-            HTML5 Video
+            {{ 'fielddefinition.media-player-type.html5_video'|trans|desc("HTML5 Video")}}
         {% elseif type == 'html5_audio' %}
-            HTML5 Audio
+            {{ 'fielddefinition.media-player-type.html5_audio'|trans|desc("HTML5 Audio")}}
         {% else %}
-            <em>No defined value</em>
+            <em>{{ 'fielddefinition.media-player-type.undefined'|trans|desc("No defined value")}}</em>
         {% endif %}
         </div>
     </li>
@@ -212,17 +209,19 @@
 {% block ezobjectrelation_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting selection-method">
-        <div class="ez-fielddefinition-setting-name">Selection method:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.selection-method.label'|trans|desc("Selection method:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if settings.selectionMethod == 0 %}
-            Browse
+            {{ 'fielddefinition.selection-method.browse'|trans|desc("Browse")}}
         {% elseif settings.selectionMethod == 1 %}
-            Drop-down list
+            {{ 'fielddefinition.selection-method.list'|trans|desc("Drop-down list")}}
         {% else %}
-            Drop-down tree
+            {{ 'fielddefinition.selection-method.tree'|trans|desc("Drop-down tree")}}
         {% endif %}
         </div>
     </li>
+    {{ block( 'settings_selection_content_types' ) }}
+
     {% set rootLocationId = settings.selectionRoot %}
     {{ block( 'settings_selectionroot' ) }}
 </ul>
@@ -231,40 +230,28 @@
 {% block ezobjectrelationlist_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting selection-method">
-        <div class="ez-fielddefinition-setting-name">Selection method:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.selection-method.label'|trans|desc("Selection method:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if settings.selectionMethod == 0 %}
-            Browse
+            {{ 'fielddefinition.selection-method.browse'|trans|desc("Browse")}}
         {% elseif settings.selectionMethod == 1 %}
-            Drop-down list
+            {{ 'fielddefinition.selection-method.list'|trans|desc("Drop-down list")}}
         {% elseif settings.selectionMethod == 2 %}
-            List with radio buttons
+            {{ 'fielddefinition.selection-method.radio'|trans|desc("List with radio buttons")}}
         {% elseif settings.selectionMethod == 3 %}
-            List with checkboxes
+            {{ 'fielddefinition.selection-method.checkbox'|trans|desc("List with checkboxes")}}
         {% elseif settings.selectionMethod == 4 %}
-            Multiple selection list
+            {{ 'fielddefinition.selection-method.multiple_list'|trans|desc("Multiple selection list")}}
         {% elseif settings.selectionMethod == 5 %}
-            Template based, multi
+            {{ 'fielddefinition.selection-method.multi_template'|trans|desc("Template based, multi")}}
         {% else %}
-            Template based, single
+            {{ 'fielddefinition.selection-method.single_template'|trans|desc("Template based, single")}}
         {% endif %}
         </div>
     </li>
-    <li class="ez-fielddefinition-setting allowed-content-types">
-        <div class="ez-fielddefinition-setting-name">Allowed content types:</div>
-        <div class="ez-fielddefinition-setting-value">
-        {% if settings.selectionContentTypes %}
-            {# TODO display content type name #}
-            <ul>
-            {% for typeIdentifier in settings.selectionContentTypes %}
-                <li>{{ typeIdentifier }}</li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <em>Any</em>
-        {% endif %}
-        </div>
-    </li>
+
+    {{ block( 'settings_selection_content_types' ) }}
+
     {% set rootLocationId = settings.selectionDefaultLocation %}
     {{ block( 'settings_selectionroot' ) }}
 </ul>
@@ -273,8 +260,8 @@
 {% block ezpage_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting default-layout">
-        <div class="ez-fielddefinition-setting-name">Default layout:</div>
-        <div class="ez-fielddefinition-setting-value">{{ settings.defaultLayout ? settings.defaultLayout : "None" }}</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.default-layout.label'|trans|desc("Default layout:")}}</div>
+        <div class="ez-fielddefinition-setting-value">{{ settings.defaultLayout ? settings.defaultLayout : 'fielddefinition.default-layout.none'|trans|desc("None") }}</div>
     </li>
 </ul>
 {% endblock %}
@@ -308,13 +295,12 @@
 
 {% block settings_maxfilesize %}
     <li class="ez-fielddefinition-setting maximum-file-size">
-        <div class="ez-fielddefinition-setting-name">Maximum file size:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.maximum-file-size.label'|trans|desc("Maximum file size:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if fielddefinition.validatorConfiguration.FileSizeValidator.maxFileSize %}
-            {# TODO l10n / unit #}
-            {{ fielddefinition.validatorConfiguration.FileSizeValidator.maxFileSize }} MB
+            {{ 'fielddefinition.maximum-file-size.value'|trans({'%max%': fielddefinition.validatorConfiguration.FileSizeValidator.maxFileSize})|desc("%max% MB")}}
         {% else %}
-            <em>No defined maximum size</em>
+            <em>{{ 'fielddefinition.maximum-file-size.undefined'|trans|desc("No defined maximum size")}}</em>
         {% endif %}
         </div>
     </li>
@@ -322,12 +308,12 @@
 
 {% block settings_preferredrows %}
     <li class="ez-fielddefinition-setting preferred-rows-number">
-        <div class="ez-fielddefinition-setting-name">Preferred number of rows:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.preferred-rows-number.label'|trans|desc("Preferred number of rows:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if rows %}
-            {{ rows }} rows
+            {{ 'fielddefinition.preferred-rows-number.value'|trans({'%rows%': rows})|desc("%rows% rows")}}
         {% else %}
-            <em>No preferred number of rows</em>
+            <em>{{ 'fielddefinition.preferred-rows-number.undefined'|trans|desc("No preferred number of rows")}}</em>
         {% endif %}
         </div>
     </li>
@@ -335,25 +321,43 @@
 
 {% block settings_selectionroot %}
     <li class="ez-fielddefinition-setting selection-root">
-        <div class="ez-fielddefinition-setting-name">Selection root:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.selection-root.label'|trans|desc("Selection root:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if rootLocationId %}
             {{ render( controller( "ez_content:viewAction", {'locationId': rootLocationId,  'viewType': 'line'} ), {'strategy': 'esi'}) }}
         {% else %}
-            <em>No defined root</em>
+            <em>{{ 'fielddefinition.selection-root.undefined'|trans|desc("No defined root")}}</em>
         {% endif %}
+        </div>
+    </li>
+{% endblock %}
+
+{% block settings_selection_content_types %}
+    <li class="ez-fielddefinition-setting allowed-content-types">
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.allowed-content-types.label'|trans|desc("Allowed content types:")}}</div>
+        <div class="ez-fielddefinition-setting-value">
+            {% if settings.selectionContentTypes %}
+                {# TODO display content type name #}
+                <ul>
+                    {% for typeIdentifier in settings.selectionContentTypes %}
+                        <li>{{ typeIdentifier }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <em>{{ 'fielddefinition.allowed-content-types.any'|trans|desc("Any")}}</em>
+            {% endif %}
         </div>
     </li>
 {% endblock %}
 
 {% block settings_defaultvalue %}
     <li class="ez-fielddefinition-setting default-value">
-        <div class="ez-fielddefinition-setting-name">Default value:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.default-value.label'|trans|desc("Default value:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if defaultValue is not null %}
             {{ defaultValue }}
         {% else %}
-            <em>No default value</em>
+            <em>{{ 'fielddefinition.default-value.undefined'|trans|desc("No default value")}}</em>
         {% endif %}
         </div>
     </li>
@@ -361,12 +365,12 @@
 
 {% block settings_minimumvalue %}
     <li class="ez-fielddefinition-setting min-value">
-        <div class="ez-fielddefinition-setting-name">Minimum value:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.min-value.label'|trans|desc("Minimum value:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if minValue %}
             {{ minValue }}
         {% else %}
-            <em>No defined minimum value</em>
+            <em>{{ 'fielddefinition.min-value.undefined'|trans|desc("No defined minimum value")}}</em>
         {% endif %}
         </div>
     </li>
@@ -374,12 +378,12 @@
 
 {% block settings_maximumvalue %}
     <li class="ez-fielddefinition-setting max-value">
-        <div class="ez-fielddefinition-setting-name">Maximum value:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.max-value.label'|trans|desc("Maximum value:")}}</div>
         <div class="ez-fielddefinition-setting-value">
         {% if maxValue %}
             {{ maxValue }}
         {% else %}
-            <em>No defined maximum value</em>
+            <em>{{ 'fielddefinition.max-value.undefined'|trans|desc("No defined maximum value")}}</em>
         {% endif %}
         </div>
     </li>
@@ -387,14 +391,14 @@
 
 {% block settings_allowmultiple %}
     <li class="ez-fielddefinition-setting multiple">
-        <div class="ez-fielddefinition-setting-name">Allow multiple choices:</div>
-        <div class="ez-fielddefinition-setting-value">{{ isMultiple ? 'Yes' : 'No' }}</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.multiple.label'|trans|desc("Allow multiple choices:")}}</div>
+        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.multiple.yes_no'|transchoice(isMultiple)|desc("{0} No|{1} Yes") }}</div>
     </li>
 {% endblock %}
 
 {% block settings_allowisbn13 %}
     <li class="ez-fielddefinition-setting isbn">
-        <div class="ez-fielddefinition-setting-name">Selected ISBN format:</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.isbn.label'|trans|desc("Selected ISBN format:")}}</div>
         <div class="ez-fielddefinition-setting-value">{{ isISBN13 ? 'ISBN-13' : 'ISBN-10' }}</div>
     </li>
 {% endblock %}

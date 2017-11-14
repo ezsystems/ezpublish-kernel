@@ -46,7 +46,7 @@ class IndexRequestListenerTest extends TestCase
     {
         parent::setUp();
 
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
 
         $this->indexRequestEventListener = new IndexRequestListener($this->configResolver);
 
@@ -55,7 +55,7 @@ class IndexRequestListenerTest extends TestCase
             ->setMethods(array('getSession', 'hasSession'))
             ->getMock();
 
-        $this->httpKernel = $this->getMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
+        $this->httpKernel = $this->createMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
         $this->event = new GetResponseEvent(
             $this->httpKernel,
             $this->request,

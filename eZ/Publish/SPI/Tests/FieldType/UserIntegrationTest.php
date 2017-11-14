@@ -50,7 +50,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -62,8 +62,8 @@ class UserIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\NullConverter(),
             new FieldType\User\UserStorage(
-                array(
-                    'LegacyStorage' => new FieldType\User\UserStorage\Gateway\LegacyStorage(),
+                new FieldType\User\UserStorage\Gateway\DoctrineStorage(
+                    $this->getDatabaseHandler()->getConnection()
                 )
             )
         );

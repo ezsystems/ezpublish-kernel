@@ -10,9 +10,10 @@ namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface as DeprecationWarner;
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
@@ -36,15 +37,18 @@ class ImageStorage extends GatewayBasedStorage
     /** @var \eZ\Publish\Core\FieldType\Image\AliasCleanerInterface */
     protected $aliasCleaner;
 
+    /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $gateway */
+    protected $gateway;
+
     public function __construct(
-        array $gateways,
+        StorageGateway $gateway,
         IOServiceInterface $IOService,
         PathGenerator $pathGenerator,
         MetadataHandler $imageSizeMetadataHandler,
         DeprecationWarner $deprecationWarner,
         AliasCleanerInterface $aliasCleaner = null
     ) {
-        parent::__construct($gateways);
+        parent::__construct($gateway);
         $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
         $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
@@ -122,7 +126,7 @@ class ImageStorage extends GatewayBasedStorage
             $field->value->externalData = null;
         }
 
-        $this->getGateway($context)->storeImageReference($field->value->data['uri'], $field->id);
+        $this->gateway->storeImageReference($field->value->data['uri'], $field->id);
 
         // Data has been updated and needs to be stored!
         return true;
@@ -141,13 +145,10 @@ class ImageStorage extends GatewayBasedStorage
 
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $gateway */
-        $gateway = $this->getGateway($context);
-
-        $fieldXmls = $gateway->getXmlForImages($versionInfo->versionNo, $fieldIds);
+        $fieldXmls = $this->gateway->getXmlForImages($versionInfo->versionNo, $fieldIds);
 
         foreach ($fieldXmls as $fieldId => $xml) {
-            $storedFiles = $gateway->extractFilesFromXml($xml);
+            $storedFiles = $this->gateway->extractFilesFromXml($xml);
             if ($storedFiles === null) {
                 continue;
             }
@@ -157,8 +158,8 @@ class ImageStorage extends GatewayBasedStorage
             }
 
             foreach ($storedFiles as $storedFilePath) {
-                $gateway->removeImageReferences($storedFilePath, $versionInfo->versionNo, $fieldId);
-                if ($gateway->countImageReferences($storedFilePath) === 0) {
+                $this->gateway->removeImageReferences($storedFilePath, $versionInfo->versionNo, $fieldId);
+                if ($this->gateway->countImageReferences($storedFilePath) === 0) {
                     $binaryFile = $this->IOService->loadBinaryFileByUri($storedFilePath);
                     $this->IOService->deleteBinaryFile($binaryFile);
                 }

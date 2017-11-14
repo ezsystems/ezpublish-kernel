@@ -42,7 +42,7 @@ class SiteAccessListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->router = $this
             ->getMockBuilder('eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter')
             ->disableOriginalConstructor()
@@ -96,14 +96,14 @@ class SiteAccessListenerTest extends TestCase
         $semanticPathinfoPos = strpos($uri, $expectedSemanticPathinfo);
         if ($semanticPathinfoPos !== 0) {
             $semanticPathinfo = substr($uri, $semanticPathinfoPos);
-            $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+            $matcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
             $matcher
                 ->expects($this->once())
                 ->method('analyseURI')
                 ->with($uri)
                 ->will($this->returnValue($semanticPathinfo));
         } else {
-            $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher');
+            $matcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher');
         }
 
         $defaultSiteAccess = new SiteAccess('default');
@@ -132,7 +132,7 @@ class SiteAccessListenerTest extends TestCase
     public function testOnSiteAccessMatchSubRequest($uri, $semanticPathinfo, $vpString, $expectedViewParameters)
     {
         $defaultSiteAccess = new SiteAccess('default');
-        $siteAccess = new SiteAccess('test', 'test', $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher'));
+        $siteAccess = new SiteAccess('test', 'test', $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher'));
         $request = Request::create($uri);
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
         if (!empty($vpString)) {

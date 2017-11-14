@@ -10,6 +10,9 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
 use eZ\Publish\Core\FieldType\Validator\FloatValueValidator;
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\Translation\Message;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +43,7 @@ class FloatValueValidatorTest extends TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new FloatValueValidator()
         );
     }
@@ -188,11 +191,11 @@ class FloatValueValidatorTest extends TestCase
         $messages = $validator->getMessage();
         $this->assertCount(1, $messages);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+            ValidationError::class,
             $messages[0]
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+            Message::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -274,7 +277,7 @@ class FloatValueValidatorTest extends TestCase
 
         foreach ($expectedMessages as $index => $expectedMessage) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+                Message::class,
                 $messages[0]->getTranslatableMessage()
             );
             $this->assertEquals(

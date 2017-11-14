@@ -14,15 +14,20 @@ use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
 
 class UrlAliasRouterTest extends TestCase
 {
@@ -61,7 +66,7 @@ class UrlAliasRouterTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = Repository::class;
         $this->repository = $repository = $this
             ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()
@@ -72,16 +77,16 @@ class UrlAliasRouterTest extends TestCase
                 )
             )
             ->getMock();
-        $this->urlAliasService = $this->getMock('eZ\\Publish\\API\\Repository\\URLAliasService');
-        $this->locationService = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
-        $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $this->urlAliasService = $this->createMock(URLAliasService::class);
+        $this->locationService = $this->createMock(LocationService::class);
+        $this->contentService = $this->createMock(ContentService::class);
         $this->urlALiasGenerator = $this
-            ->getMockBuilder('eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\Generator\\UrlAliasGenerator')
+            ->getMockBuilder(UrlAliasGenerator::class)
             ->setConstructorArgs(
                 array(
                     $repository,
-                    $this->getMock('Symfony\\Component\\Routing\\RouterInterface'),
-                    $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface'),
+                    $this->createMock(RouterInterface::class),
+                    $this->createMock(ConfigResolverInterface::class),
                 )
             )
             ->getMock();
@@ -144,7 +149,7 @@ class UrlAliasRouterTest extends TestCase
 
     public function testGetRouteCollection()
     {
-        $this->assertInstanceOf('Symfony\\Component\\Routing\\RouteCollection', $this->router->getRouteCollection());
+        $this->assertInstanceOf(RouteCollection::class, $this->router->getRouteCollection());
     }
 
     /**
@@ -161,7 +166,7 @@ class UrlAliasRouterTest extends TestCase
             new SiteAccess(
                 'test',
                 'fake',
-                $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher')
+                $this->createMock(Matcher::class)
             )
         );
 
@@ -200,7 +205,6 @@ class UrlAliasRouterTest extends TestCase
             'layout' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($destinationId, $request->attributes->get('locationId'));
     }
 
     public function testMatchRequestLocationWithCaseRedirect()
@@ -239,11 +243,10 @@ class UrlAliasRouterTest extends TestCase
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
+            'needsRedirect' => true,
+            'semanticPathinfo' => $urlAliasPath,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($urlAliasPath, $request->attributes->get('semanticPathinfo'));
-        $this->assertSame($destinationId, $request->attributes->get('locationId'));
     }
 
     public function testMatchRequestLocationWrongCaseUriPrefixExcluded()
@@ -282,11 +285,10 @@ class UrlAliasRouterTest extends TestCase
             'locationId' => $destinationId,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
+            'needsRedirect' => true,
+            'semanticPathinfo' => $urlAliasPath,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->has('needsRedirect'));
-        $this->assertSame($urlAliasPath, $request->attributes->get('semanticPathinfo'));
-        $this->assertSame($destinationId, $request->attributes->get('locationId'));
     }
 
     public function testMatchRequestLocationCorrectCaseUriPrefixExcluded()
@@ -328,7 +330,6 @@ class UrlAliasRouterTest extends TestCase
         $this->assertEquals($expected, $this->router->matchRequest($request));
         $this->assertFalse($request->attributes->has('needsRedirect'));
         $this->assertSame($pathInfo, $request->attributes->get('semanticPathinfo'));
-        $this->assertSame($destinationId, $request->attributes->get('locationId'));
     }
 
     public function testMatchRequestLocationHistory()
@@ -336,7 +337,10 @@ class UrlAliasRouterTest extends TestCase
         $pathInfo = '/foo/bar';
         $newPathInfo = '/foo/bar-new';
         $destinationId = 123;
-        $destinationLocation = new Location(array('id' => $destinationId, 'contentInfo' => new ContentInfo(array('id' => 456))));
+        $destinationLocation = new Location(array(
+            'id' => $destinationId,
+            'contentInfo' => new ContentInfo(array('id' => 456)),
+        ));
         $urlAlias = new URLAlias(
             array(
                 'path' => $pathInfo,
@@ -368,11 +372,11 @@ class UrlAliasRouterTest extends TestCase
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
+            'needsRedirect' => true,
+            'semanticPathinfo' => $newPathInfo,
+            'prependSiteaccessOnRedirect' => false,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($newPathInfo, $request->attributes->get('semanticPathinfo'));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertFalse($request->attributes->get('prependSiteaccessOnRedirect'));
     }
 
     public function testMatchRequestLocationCustom()
@@ -409,7 +413,6 @@ class UrlAliasRouterTest extends TestCase
             'layout' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($destinationId, $request->attributes->get('locationId'));
     }
 
     public function testMatchRequestLocationCustomForward()
@@ -417,7 +420,10 @@ class UrlAliasRouterTest extends TestCase
         $pathInfo = '/foo/bar';
         $newPathInfo = '/foo/bar-new';
         $destinationId = 123;
-        $destinationLocation = new Location(array('id' => $destinationId, 'contentInfo' => new ContentInfo(array('id' => 456))));
+        $destinationLocation = new Location(array(
+            'id' => $destinationId,
+            'contentInfo' => new ContentInfo(array('id' => 456)),
+        ));
         $urlAlias = new URLAlias(
             array(
                 'path' => $pathInfo,
@@ -458,11 +464,11 @@ class UrlAliasRouterTest extends TestCase
             'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
+            'needsRedirect' => true,
+            'semanticPathinfo' => $newPathInfo,
+            'prependSiteaccessOnRedirect' => false,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($newPathInfo, $request->attributes->get('semanticPathinfo'));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertFalse($request->attributes->get('prependSiteaccessOnRedirect'));
     }
 
     /**
@@ -500,9 +506,10 @@ class UrlAliasRouterTest extends TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'semanticPathinfo' => $destination,
+            'needsForward' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertSame($destination, $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestResourceWithRedirect()
@@ -526,10 +533,10 @@ class UrlAliasRouterTest extends TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'needsRedirect' => true,
+            'semanticPathinfo' => $destination,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($destination, $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestResourceWithCaseRedirect()
@@ -559,10 +566,10 @@ class UrlAliasRouterTest extends TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'semanticPathinfo' => $urlAliasPath,
+            'needsRedirect' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($urlAliasPath, $request->attributes->get('semanticPathinfo'));
     }
 
     /**
@@ -591,10 +598,10 @@ class UrlAliasRouterTest extends TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'semanticPathinfo' => $destination,
+            'needsRedirect' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($destination, $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestVirtual()
@@ -615,10 +622,10 @@ class UrlAliasRouterTest extends TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'semanticPathinfo' => '/',
+            'needsForward' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsForward'));
-        $this->assertSame('/', $request->attributes->get('semanticPathinfo'));
     }
 
     public function testMatchRequestVirtualWithCaseRedirect()
@@ -645,10 +652,10 @@ class UrlAliasRouterTest extends TestCase
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            'semanticPathinfo' => $urlAliasPath,
+            'needsRedirect' => true,
         );
         $this->assertEquals($expected, $this->router->matchRequest($request));
-        $this->assertTrue($request->attributes->get('needsRedirect'));
-        $this->assertSame($urlAliasPath, $request->attributes->get('semanticPathinfo'));
     }
 
     /**

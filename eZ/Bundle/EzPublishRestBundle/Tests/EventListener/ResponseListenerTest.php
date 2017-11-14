@@ -113,7 +113,7 @@ class ResponseListenerTest extends EventListenerTest
     public function getVisitorDispatcherMock()
     {
         if (!isset($this->visitorDispatcherMock)) {
-            $this->visitorDispatcherMock = $this->getMock(
+            $this->visitorDispatcherMock = $this->createMock(
                 'eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher'
             );
         }

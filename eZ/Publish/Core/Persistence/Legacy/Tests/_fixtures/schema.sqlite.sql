@@ -432,7 +432,7 @@ CREATE TABLE ezuser (
   contentobject_id integer NOT NULL DEFAULT 0,
   email text(150) NOT NULL,
   login text(150) NOT NULL,
-  password_hash text(50),
+  password_hash text(255),
   password_hash_type integer NOT NULL DEFAULT 1,
   PRIMARY KEY (contentobject_id)
 );

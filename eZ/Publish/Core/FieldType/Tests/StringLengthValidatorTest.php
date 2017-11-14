@@ -8,8 +8,12 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\Values\Translation\Message;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\API\Repository\Values\Translation\Plural;
+use eZ\Publish\SPI\FieldType\ValidationError;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +44,7 @@ class StringLengthValidatorTest extends TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new StringLengthValidator()
         );
     }
@@ -187,11 +191,11 @@ class StringLengthValidatorTest extends TestCase
         $messages = $validator->getMessage();
         $this->assertCount(1, $messages);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+            ValidationError::class,
             $messages[0]
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Plural',
+            Plural::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -297,7 +301,7 @@ class StringLengthValidatorTest extends TestCase
 
         foreach ($expectedMessages as $index => $expectedMessage) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+                Message::class,
                 $messages[0]->getTranslatableMessage()
             );
             $this->assertEquals(

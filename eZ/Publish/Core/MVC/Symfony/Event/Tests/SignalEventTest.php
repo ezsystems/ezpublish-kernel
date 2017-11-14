@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Event\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Event\SignalEvent;
+use eZ\Publish\Core\SignalSlot\Signal;
 use PHPUnit\Framework\TestCase;
 
 class SignalEventTest extends TestCase
@@ -19,7 +20,7 @@ class SignalEventTest extends TestCase
      */
     public function testGetSignal()
     {
-        $signal = $this->getMock('eZ\\Publish\\Core\\SignalSlot\\Signal');
+        $signal = $this->createMock(Signal::class);
         $event = new SignalEvent($signal);
         $this->assertSame($signal, $event->getSignal());
     }

@@ -235,6 +235,7 @@ Resource                                                          POST          
                                                                                                                                                              version
 /content/objects/<ID>/versions/<no>                               .                   get a specific version  update a version/draft       delete version    create draft
                                                                                                                                                              from version
+/content/objects/<ID>/versions/<no>/translations/<languageCode>   .                   .                       .                            delete translation
 /content/objects/<ID>/versions/<no>/relations                     create new relation load relations of vers. .                            .
 /content/objects/<ID>/versions/<no>/relations/<ID>                .                   load relation details   .                            delete relation
 /content/objects/<ID>/locations                                   create location     load locations of cont- .                            .
@@ -1453,6 +1454,33 @@ Delete Content Version
     :404: if the content object or version nr was not found
     :401: If the user is not authorized to delete this version
     :403: If the version is in state published
+
+Delete Content Version Draft Translation
+``````````````````````
+:Resource: /content/objects/<ID>/versions/<versionNo>/translations/<languageCode>
+:Method: DELETE
+:Description: Removes a translation from a version draft
+:Response:
+
+.. code:: http
+
+    HTTP/1.1 204 No Content
+
+:Error Codes:
+        :404: if the content item or version number were not found
+        :401: If the user is not authorized to delete this translation
+        :403: If the version is in not draft state
+        :406: if the given translation does not exist for the version
+        :409: if the specified translation is the only one the Version has or is the main translation
+
+Example (workflow) of deleting translation from a published Content
+'''''''''''
+
+.. code:: http
+
+    COPY /content/objects/123/versions/2
+    DELETE /content/objects/123/versions/3/translations/fre-FR
+    PUBLISH /content/objects/123/versions/3
 
 Publish a content version
 `````````````````````````

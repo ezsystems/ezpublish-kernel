@@ -32,7 +32,7 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'));
+            ->with($this->isInstanceOf(Server\Values\RestFieldDefinition::class));
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentTypeFieldDefinitionList',

@@ -161,25 +161,27 @@ class RelationListConverter implements Converter
     /**
      * Converts field definition data in $storageDef into $fieldDef.
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints>
-     *     <allowed-class contentclass-identifier="blog_post"/>
-     *   </constraints>
-     *   <type value="2"/>
-     *   <selection_type value="1"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement node-id="67"/>
-     * </related-objects>
+     * <code>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints>
+     *       <allowed-class contentclass-identifier="blog_post"/>
+     *     </constraints>
+     *     <type value="2"/>
+     *     <selection_type value="1"/>
+     *     <object_class value=""/>
+     *     <contentobject-placement node-id="67"/>
+     *   </related-objects>
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints/>
-     *   <type value="2"/>
-     *   <selection_type value="0"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement/>
-     * </related-objects>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints/>
+     *     <type value="2"/>
+     *     <selection_type value="0"/>
+     *     <object_class value=""/>
+     *     <contentobject-placement/>
+     *   </related-objects>
+     * </code>
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
@@ -187,11 +189,11 @@ class RelationListConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         // default settings
-        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = [
             'selectionMethod' => 0,
             'selectionDefaultLocation' => null,
-            'selectionContentTypes' => array(),
-        );
+            'selectionContentTypes' => [],
+        ];
 
         // default value
         $fieldDef->defaultValue = new FieldValue();
@@ -204,19 +206,22 @@ class RelationListConverter implements Converter
         // read settings from storage
         $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
         $dom = new DOMDocument('1.0', 'utf-8');
-        if ($dom->loadXML($storageDef->dataText5) !== true) {
+        if (empty($storageDef->dataText5) || $dom->loadXML($storageDef->dataText5) !== true) {
             return;
         }
 
-        if ($selectionType = $dom->getElementsByTagName('selection_type')) {
-            $fieldSettings['selectionMethod'] = (int)$selectionType->item(0)->getAttribute('value');
+        if (
+            ($selectionType = $dom->getElementsByTagName('selection_type')->item(0)) &&
+            $selectionType->hasAttribute('value')
+        ) {
+            $fieldSettings['selectionMethod'] = (int)$selectionType->getAttribute('value');
         }
 
         if (
-            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')) &&
-            $defaultLocation->item(0)->hasAttribute('node-id')
+            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')->item(0)) &&
+            $defaultLocation->hasAttribute('node-id')
         ) {
-            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item(0)->getAttribute('node-id');
+            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->getAttribute('node-id');
         }
 
         if (!($constraints = $dom->getElementsByTagName('constraints'))) {
@@ -235,7 +240,7 @@ class RelationListConverter implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return bool
+     * @return string
      */
     public function getIndexColumn()
     {
