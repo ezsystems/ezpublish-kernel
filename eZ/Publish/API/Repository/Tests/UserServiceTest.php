@@ -18,6 +18,7 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use Exception;
+use ReflectionClass;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -1576,6 +1577,80 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the updateUser() method.
      *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     */
+    public function testUpdateUserNoPassword()
+    {
+        $repository = $this->getRepository();
+        $signalSlotUserService = $repository->getUserService();
+
+        $signalSlotUserServiceReflection = new ReflectionClass($signalSlotUserService);
+        $userServiceProperty = $signalSlotUserServiceReflection->getProperty('service');
+        $userServiceProperty->setAccessible(true);
+        $userService = $userServiceProperty->getValue($signalSlotUserService);
+
+        $userServiceReflection = new ReflectionClass($userService);
+        $settingsProperty = $userServiceReflection->getProperty('settings');
+        $settingsProperty->setAccessible(true);
+        $settingsProperty->setValue(
+            $userService,
+            [
+                'hashType' => User::PASSWORD_HASH_MD5_USER,
+            ] + $settingsProperty->getValue($userService)
+        );
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $settingsProperty->setValue(
+            $userService,
+            [
+                'hashType' => User::PASSWORD_HASH_PHP_DEFAULT,
+            ] + $settingsProperty->getValue($userService)
+        );
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set new values for maxLogin, don't change password
+        $userUpdate->maxLogin = 43;
+        $userUpdate->enabled = false;
+
+        // Updated the user record.
+        $userVersion2 = $userService->updateUser($user, $userUpdate);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(User::class, $user);
+
+        $this->assertEquals(
+            [
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'hashAlgorithm' => $user->hashAlgorithm,
+                'maxLogin' => 43,
+                'enabled' => false,
+            ],
+            [
+                'login' => $userVersion2->login,
+                'email' => $userVersion2->email,
+                'passwordHash' => $userVersion2->passwordHash,
+                'hashAlgorithm' => $userVersion2->hashAlgorithm,
+                'maxLogin' => $userVersion2->maxLogin,
+                'enabled' => $userVersion2->enabled,
+            ]
+        );
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
@@ -1607,7 +1682,7 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
-    public function testUpdateUserReturnsPublishedVersion($user)
+    public function testUpdateUserReturnsPublishedVersion(User $user)
     {
         $this->assertEquals(
             APIVersionInfo::STATUS_PUBLISHED,
