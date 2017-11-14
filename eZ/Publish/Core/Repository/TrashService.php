@@ -314,9 +314,16 @@ class TrashService implements TrashServiceInterface
      */
     protected function buildDomainTrashItemObject(Trashed $spiTrashItem)
     {
+        // Use sudo as all trash items should be readable when viewing the trash bin
+        $contentInfo = $this->repository->sudo(
+            function () use ($spiTrashItem) {
+                return $this->repository->getContentService()->loadContentInfo($spiTrashItem->contentId);
+            }
+        );
+
         return new TrashItem(
             array(
-                'contentInfo' => $this->repository->getContentService()->loadContentInfo($spiTrashItem->contentId),
+                'contentInfo' => $contentInfo,
                 'id' => $spiTrashItem->id,
                 'priority' => $spiTrashItem->priority,
                 'hidden' => $spiTrashItem->hidden,
