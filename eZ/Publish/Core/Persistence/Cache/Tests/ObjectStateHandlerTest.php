@@ -505,6 +505,10 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(0))
             ->method('clear')
+            ->with('objectstategroup', 'all');
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('clear')
             ->with('objectstategroup', 1);
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
@@ -748,6 +752,11 @@ class ObjectStateHandlerTest extends HandlerTest
             ->expects($this->at(0))
             ->method('clear')
             ->with('objectstate', $expectedState->id);
+
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('clear')
+            ->with('objectstate', 'byGroup');
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $state = $handler->update($expectedState->id, $inputStruct);
