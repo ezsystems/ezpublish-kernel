@@ -251,8 +251,7 @@ class TrashService implements TrashServiceInterface
     }
 
     /**
-     * Returns a collection of Trashed locations contained in the trash.
-     * Only items that the current user has read access to are included.
+     * Returns a collection of Trashed locations contained in the trash, which are readable by the current user.
      *
      * $query allows to filter/sort the elements to be contained in the collection.
      *
