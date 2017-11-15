@@ -599,6 +599,9 @@ class ObjectStateServiceTest extends BaseTest
             $objectStateGroupId
         );
 
+        // pre populate any kind of cache for all
+        $objectStateService->loadObjectStateGroups();
+
         $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
         $groupUpdateStruct->identifier = 'sindelfingen';
         $groupUpdateStruct->defaultLanguageCode = 'ger-DE';
@@ -615,6 +618,8 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectStateGroup,
             $groupUpdateStruct
         );
+
+        $allObjectGroups = $objectStateService->loadObjectStateGroups();
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -626,6 +631,7 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectStateGroup,
             $groupUpdateStruct,
             $updatedObjectStateGroup,
+            $allObjectGroups,
         );
     }
 
@@ -692,13 +698,17 @@ class ObjectStateServiceTest extends BaseTest
         list(
             $loadedObjectStateGroup,
             $groupUpdateStruct,
-            $updatedObjectStateGroup
+            $updatedObjectStateGroup,
+            $allObjectGroups
         ) = $testData;
 
         $this->assertStructPropertiesCorrect(
             $groupUpdateStruct,
             $updatedObjectStateGroup
         );
+
+        $this->assertContains($updatedObjectStateGroup, $allObjectGroups, '', false, false);
+        $this->assertNotContains($loadedObjectStateGroup, $allObjectGroups, '', false, false);
     }
 
     /**
@@ -931,6 +941,9 @@ class ObjectStateServiceTest extends BaseTest
             $objectStateId
         );
 
+        // pre load any possile cache loading all
+        $objectStateService->loadObjectStates($loadedObjectState->getObjectStateGroup());
+
         $updateStateStruct = $objectStateService->newObjectStateUpdateStruct();
         $updateStateStruct->identifier = 'somehow_locked';
         $updateStateStruct->defaultLanguageCode = 'ger-DE';
@@ -947,6 +960,8 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectState,
             $updateStateStruct
         );
+
+        $allObjectStates = $objectStateService->loadObjectStates($loadedObjectState->getObjectStateGroup());
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -958,6 +973,7 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectState,
             $updateStateStruct,
             $updatedObjectState,
+            $allObjectStates,
         );
     }
 
@@ -1015,7 +1031,8 @@ class ObjectStateServiceTest extends BaseTest
         list(
             $loadedObjectState,
             $updateStateStruct,
-            $updatedObjectState
+            $updatedObjectState,
+            $allObjectStates
         ) = $testData;
 
         $this->assertPropertiesCorrect(
@@ -1035,6 +1052,9 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectState->getObjectStateGroup(),
             $updatedObjectState->getObjectStateGroup()
         );
+
+        $this->assertContains($updatedObjectState, $allObjectStates, '', false, false);
+        $this->assertNotContains($loadedObjectState, $allObjectStates, '', false, false);
     }
 
     /**
