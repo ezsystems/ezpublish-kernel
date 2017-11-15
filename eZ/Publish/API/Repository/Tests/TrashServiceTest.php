@@ -555,8 +555,9 @@ class TrashServiceTest extends BaseTrashServiceTest
     /**
      * Test for the findTrashItems() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @see \eZ\Publish\API\Repository\TrashService::findTrashItems()
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testFindTrashItemsLimitedAccess(User $user)
