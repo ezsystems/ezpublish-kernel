@@ -96,6 +96,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $this->logger->logCall(__METHOD__, array('groupId' => $groupId, 'struct' => $input));
         $return = $this->persistenceHandler->objectStateHandler()->updateGroup($groupId, $input);
 
+        $this->cache->clear('objectstategroup', 'all');
         $this->cache->clear('objectstategroup', $groupId);
 
         return $return;
@@ -163,6 +164,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $return = $this->persistenceHandler->objectStateHandler()->update($stateId, $input);
 
         $this->cache->clear('objectstate', $stateId);
+        $this->cache->clear('objectstate', 'byGroup');
 
         return $return;
     }
