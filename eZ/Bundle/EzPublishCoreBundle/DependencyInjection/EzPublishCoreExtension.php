@@ -365,19 +365,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         $purgeService = null;
         if (isset($config['http_cache']['purge_type'])) {
-            switch ($config['http_cache']['purge_type']) {
-                case 'local':
-                    $purgeService = 'ezpublish.http_cache.purge_client.local';
-                    break;
-                case 'http':
-                    $purgeService = 'ezpublish.http_cache.purge_client.fos';
-                    break;
-            }
-
             $container->setParameter('ezpublish.http_cache.purge_type', $config['http_cache']['purge_type']);
-            if ($purgeService !== null) {
-                $container->setAlias('ezpublish.http_cache.purge_client', $purgeService);
-            }
         }
     }
 
