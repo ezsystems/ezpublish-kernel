@@ -98,7 +98,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadObjectStates($groupId)
     {
-        $cacheItem = $this->cache->getItem('ez-state-list-' . $groupId . '-by-group');
+        $cacheItem = $this->cache->getItem('ez-state-list-by-group-' . $groupId);
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
@@ -151,7 +151,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $this->logger->logCall(__METHOD__, array('groupId' => $groupId, 'struct' => $input));
         $return = $this->persistenceHandler->objectStateHandler()->create($groupId, $input);
 
-        $this->cache->deleteItem('ez-state-list-' . $groupId . '-by-group');
+        $this->cache->deleteItem('ez-state-list-by-group-' . $groupId);
 
         return $return;
     }
