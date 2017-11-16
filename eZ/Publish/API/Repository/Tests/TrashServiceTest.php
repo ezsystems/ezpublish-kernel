@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -549,6 +550,47 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // 4 trashed locations from the sub tree
         $this->assertEquals(4, $searchResult->count);
+    }
+
+    /**
+     * Test for the findTrashItems() method.
+     *
+     * @see \eZ\Publish\API\Repository\TrashService::findTrashItems()
+     * @depends \eZ\Publish\API\Repository\Tests\TrashServiceTest::testFindTrashItems
+     */
+    public function testFindTrashItemsLimitedAccess()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        /* BEGIN: Use Case */
+        $this->createTrashItem();
+
+        // Create a search query for all trashed items
+        $query = new Query();
+        $query->filter = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
+            )
+        );
+
+        // Create a user in the Editor user group.
+        $user = $this->createUserVersion1();
+
+        // Set the Editor user as current user, these users have no access to Trash by default.
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        // Load all trashed locations
+        $searchResult = $trashService->findTrashItems($query);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult',
+            $searchResult
+        );
+
+        // 0 trashed locations found, though 4 exist
+        $this->assertEquals(0, $searchResult->count);
     }
 
     /**
