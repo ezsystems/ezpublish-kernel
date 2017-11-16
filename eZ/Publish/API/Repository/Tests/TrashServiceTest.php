@@ -555,12 +555,10 @@ class TrashServiceTest extends BaseTrashServiceTest
     /**
      * Test for the findTrashItems() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
      * @see \eZ\Publish\API\Repository\TrashService::findTrashItems()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends \eZ\Publish\API\Repository\Tests\TrashServiceTest::testFindTrashItems
      */
-    public function testFindTrashItemsLimitedAccess(User $user)
+    public function testFindTrashItemsLimitedAccess()
     {
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
@@ -576,11 +574,11 @@ class TrashServiceTest extends BaseTrashServiceTest
             )
         );
 
-        // Load user service
-        $userService = $repository->getUserService();
+        // Create a user in the Editor user group.
+        $user = $this->createUserVersion1();
 
-        // Set an Editor user as current user, these users have no access to Trash by default
-        $repository->setCurrentUser($userService->loadUserByLogin($user->login));
+        // Set the Editor user as current user, these users have no access to Trash by default.
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
 
         // Load all trashed locations
         $searchResult = $trashService->findTrashItems($query);
