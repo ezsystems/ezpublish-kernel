@@ -231,56 +231,43 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
      * @dataProvider cacheConfigurationProvider
      *
      * @param array $customCacheConfig
-     * @param string $expectedPurgeService
-     * @param int $expectedTimeout
+     * @param string $expectedPurgeType
      */
-    public function testCacheConfiguration(array $customCacheConfig, $expectedPurgeService)
+    public function testCacheConfiguration(array $customCacheConfig, $expectedPurgeType)
     {
         $this->load($customCacheConfig);
 
-        $this->assertContainerBuilderHasAlias('ezpublish.http_cache.purge_client', $expectedPurgeService);
+        $this->assertContainerBuilderHasParameter('ezpublish.http_cache.purge_type', $expectedPurgeType);
     }
 
     public function cacheConfigurationProvider()
     {
         return array(
-            array(array(), 'ezpublish.http_cache.purge_client.local', 1),
+            array(array(), 'local'),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'local'),
                 ),
-                'ezpublish.http_cache.purge_client.local',
+                'local',
             ),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'multiple_http'),
                 ),
-                'ezpublish.http_cache.purge_client.fos',
+                'http',
             ),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'single_http'),
                 ),
-                'ezpublish.http_cache.purge_client.fos',
+                'http',
             ),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'http'),
                 ),
-                'ezpublish.http_cache.purge_client.fos',
+                'http',
             ),
-        );
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testCacheConfigurationWrongPurgeType()
-    {
-        $this->load(
-            array(
-                'http_cache' => array('purge_type' => 'foobar', 'timeout' => 12),
-            )
         );
     }
 
@@ -293,6 +280,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'http_cache' => array('purge_type' => 'foobar', 'timeout' => 12),
             )
         );
+
+        $this->assertContainerBuilderHasParameter('ezpublish.http_cache.purge_type', 'foobar');
     }
 
     public function testLocaleConfiguration()

@@ -8,6 +8,10 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Repository\ContentService;
+use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
@@ -17,6 +21,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -52,6 +58,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             $settings
         );
 
@@ -132,6 +139,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -178,6 +186,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -211,6 +220,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -227,6 +237,70 @@ class SearchTest extends BaseServiceMockTest
             ->will($this->throwException(new Exception('Handler threw an exception')));
 
         $service->findContent($query, array(), true);
+    }
+
+    public function providerForFindContentWhenContentLoadThrowsException()
+    {
+        return [
+            [
+                new NotFoundException('content', 'id = 33'),
+                true,
+            ],
+            [
+                new UnauthorizedException('content', 'read', ['id' => 33]),
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * Test for the findContent() method when search is out of sync with persistence.
+     *
+     * @dataProvider providerForFindContentWhenContentLoadThrowsException
+     * @covers \eZ\Publish\Core\Repository\SearchService::findContent
+     */
+    public function testFindContentWhenContentLoadThrowsException($e, $index = true)
+    {
+        $indexer = $this->createMock(BackgroundIndexer::class);
+        if ($index) {
+            $indexer->expects($this->once())
+                ->method('registerContent')
+                ->with($this->isInstanceOf(SPIContentInfo::class));
+        } else {
+            $indexer->expects($this->never())->method($this->anything());
+        }
+
+        $service = $this->getMockBuilder(SearchService::class)
+            ->setConstructorArgs([
+                $repo = $this->getRepositoryMock(),
+                $this->getSPIMockHandler('Search\\Handler'),
+                $this->getDomainMapperMock(),
+                $this->getPermissionCriterionResolverMock(),
+                $indexer,
+            ])->setMethods(['internalFindContentInfo'])
+            ->getMock();
+
+        $info = new SPIContentInfo(['id' => 33]);
+        $result = new SearchResult(['searchHits' => [new SearchHit(['valueObject' => $info])], 'totalCount' => 2]);
+        $service->expects($this->once())
+            ->method('internalFindContentInfo')
+            ->with($this->isInstanceOf(Query::class))
+            ->willReturn($result);
+
+        $contentService = $this->createMock(ContentService::class);
+        $contentService->expects($this->once())
+            ->method('internalLoadContent')
+            ->with(33)
+            ->willThrowException($e);
+
+        $repo->expects($this->once())
+            ->method('getContentService')
+            ->willReturn($contentService);
+
+        $finalResult = $service->findContent(new Query());
+
+        $this->assertEmpty($finalResult->searchHits, 'Expected search hits to be empty');
+        $this->assertEquals(1, $finalResult->totalCount, 'Expected total count to be 1');
     }
 
     /**
@@ -247,6 +321,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -321,6 +396,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -403,6 +479,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -442,6 +519,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $this->getPermissionCriterionResolverMock(),
+            new NullIndexer(),
             array()
         );
 
@@ -522,6 +600,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock(),
+            new NullIndexer(),
             array()
         );
 
@@ -558,6 +637,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -593,6 +673,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -657,6 +738,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -721,6 +803,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -764,6 +847,70 @@ class SearchTest extends BaseServiceMockTest
         );
     }
 
+    public function providerForFindLocationsWhenDomainMapperThrowsException()
+    {
+        return [
+            [
+                new NotFoundException('content', 'id = 33'),
+                true,
+            ],
+            [
+                new UnauthorizedException('content', 'read', ['id' => 33]),
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * Test for the findLocations() method when search is out of sync with persistence.
+     *
+     * @dataProvider providerForFindLocationsWhenDomainMapperThrowsException
+     * @covers \eZ\Publish\Core\Repository\SearchService::findLocations
+     */
+    public function testFindLocationsBackgroundIndexerWhenDomainMapperThrowsException($e, $index = true)
+    {
+        $indexer = $this->createMock(BackgroundIndexer::class);
+        if ($index) {
+            $indexer->expects($this->once())
+                ->method('registerLocation')
+                ->with($this->isInstanceOf(SPILocation::class));
+        } else {
+            $indexer->expects($this->never())->method($this->anything());
+        }
+
+        $service = $this->getMockBuilder(SearchService::class)
+            ->setConstructorArgs([
+                $this->getRepositoryMock(),
+                $searchHandler = $this->getSPIMockHandler('Search\\Handler'),
+                $mapper = $this->getDomainMapperMock(),
+                $this->getPermissionCriterionResolverMock(),
+                $indexer,
+            ])->setMethods(['addPermissionsCriterion'])
+            ->getMock();
+
+        $location = new SPILocation(['id' => 44]);
+        $service->expects($this->once())
+            ->method('addPermissionsCriterion')
+            ->with($this->isInstanceOf(Criterion::class))
+            ->willReturn(true);
+
+        $result = new SearchResult(['searchHits' => [new SearchHit(['valueObject' => $location])], 'totalCount' => 2]);
+        $searchHandler->expects($this->once())
+            ->method('findLocations')
+            ->with($this->isInstanceOf(LocationQuery::class), $this->isType('array'))
+            ->willReturn($result);
+
+        $mapper->expects($this->once())
+            ->method('buildLocationDomainObject')
+            ->with($this->isInstanceOf(SPILocation::class))
+            ->willThrowException($e);
+
+        $finalResult = $service->findLocations(new LocationQuery());
+
+        $this->assertEmpty($finalResult->searchHits, 'Expected search hits to be empty');
+        $this->assertEquals(1, $finalResult->totalCount, 'Expected total count to be 1');
+    }
+
     /**
      * Test for the findLocations() method.
      *
@@ -782,6 +929,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
+            new NullIndexer(),
             array()
         );
 
@@ -814,6 +962,7 @@ class SearchTest extends BaseServiceMockTest
             $searchHandlerMock,
             $domainMapperMock,
             $this->getPermissionCriterionResolverMock(),
+            new NullIndexer(),
             array()
         );
 
@@ -867,7 +1016,7 @@ class SearchTest extends BaseServiceMockTest
     {
         if (!isset($this->domainMapperMock)) {
             $this->domainMapperMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\DomainMapper')
+                ->getMockBuilder(DomainMapper::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         }

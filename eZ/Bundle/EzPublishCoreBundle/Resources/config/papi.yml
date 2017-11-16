@@ -100,3 +100,12 @@ services:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "$repository$"
             - "%ezpublish.repositories%"
+
+    # Redefine background indexer to the one provided here which works on kernel/console.terminate.
+    ezpublish.search.background_indexer:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\BackgroundIndexingTerminateListener
+        arguments:
+            - '@ezpublish.api.persistence_handler'
+            - '@ezpublish.spi.search'
+        tags:
+            - { name: kernel.event_subscriber }
