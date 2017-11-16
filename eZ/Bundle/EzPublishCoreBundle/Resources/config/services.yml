@@ -236,8 +236,8 @@ services:
         tags:
             - {name: kernel.event_subscriber}
 
-    ezplatform.core.command.remove_content_translation:
-        class: eZ\Bundle\EzPublishCoreBundle\Command\RemoveContentTranslationCommand
+    ezplatform.core.command.delete_content_translation:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\DeleteContentTranslationCommand
         arguments:
             - '@ezpublish.api.repository'
         tags:

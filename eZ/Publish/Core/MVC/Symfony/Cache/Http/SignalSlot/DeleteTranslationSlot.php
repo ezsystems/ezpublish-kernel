@@ -11,14 +11,14 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * A slot handling RemoveTranslationSignal.
+ * A slot handling DeleteTranslationSignal.
  *
  * @deprecated since 6.11. The platform-http-cache package defines slots for http-cache multi-tagging.
  */
-class RemoveTranslationSlot extends PurgeForContentHttpCacheSlot
+class DeleteTranslationSlot extends PurgeForContentHttpCacheSlot
 {
     protected function supports(Signal $signal)
     {
-        return $signal instanceof Signal\ContentService\RemoveTranslationSignal;
+        return $signal instanceof Signal\ContentService\DeleteTranslationSignal;
     }
 }

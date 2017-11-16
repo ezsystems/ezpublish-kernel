@@ -262,10 +262,20 @@ interface Handler
     /**
      * Remove the specified translation from all the Versions of a Content Object.
      *
+     * @deprecated since 6.13, use {@see deleteTranslationFromContent} instead
+     *
      * @param int $contentId
      * @param string $languageCode language code of the translation
      */
     public function removeTranslationFromContent($contentId, $languageCode);
+
+    /**
+     * Delete the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    public function deleteTranslationFromContent($contentId, $languageCode);
 
     /**
      * Remove the specified Translation from the given Version Draft of a Content Object.

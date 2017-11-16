@@ -19,7 +19,7 @@ parameters:
     ezpublish.http_cache.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnassignUserFromUserGroupSlot
     ezpublish.http_cache.signalslot.trash.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\TrashSlot
     ezpublish.http_cache.signalslot.recover.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RecoverSlot
-    ezpublish.http_cache.signalslot.remove_translation.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\RemoveTranslationSlot
+    ezpublish.http_cache.signalslot.delete_translation.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\DeleteTranslationSlot
 
 services:
     ezpublish.http_cache.signalslot.http_cache:
@@ -141,8 +141,8 @@ services:
         tags:
             - { name: ezpublish.api.slot, signal: TrashService\RecoverSignal }
 
-    ezpublish.http_cache.signalslot.remove_translation:
-        class: "%ezpublish.http_cache.signalslot.remove_translation.class%"
+    ezpublish.http_cache.signalslot.delete_translation:
+        class: "%ezpublish.http_cache.signalslot.delete_translation.class%"
         parent: ezpublish.http_cache.signalslot.http_cache
         tags:
-            - { name: ezpublish.api.slot, signal: ContentService\RemoveTranslationSignal }
+            - { name: ezpublish.api.slot, signal: ContentService\DeleteTranslationSignal }

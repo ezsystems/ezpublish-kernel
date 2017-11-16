@@ -8,24 +8,18 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Signal\ContentService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+@trigger_error(
+    sprintf(
+        'The %s is deprecated since 6.13 and will be removed in 7.0. Use %s instead',
+        RemoveTranslationSignal::class,
+        DeleteTranslationSignal::class
+    ),
+    E_USER_DEPRECATED
+);
 
 /**
- * RemoveTranslationSignal emitted when a Content Object translation gets removed from all Versions.
+ * @deprecated since 6.13, use DeleteTranslationSignal
  */
-class RemoveTranslationSignal extends Signal
+class RemoveTranslationSignal extends DeleteTranslationSignal
 {
-    /**
-     * Content ID.
-     *
-     * @var int
-     */
-    public $contentId;
-
-    /**
-     * Language Code of the removed translation.
-     *
-     * @var string
-     */
-    public $languageCode;
 }

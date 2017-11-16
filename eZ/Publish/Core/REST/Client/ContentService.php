@@ -746,26 +746,17 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
-     * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
-     *
-     * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
-     *       a warning before performing it.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
-     *         is the only one a Version has or it is the main translation of a Content Object.
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
-     *         to delete the content (in one of the locations of the given Content Object).
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
-     *         is invalid for the given content.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param string $languageCode
-     *
-     * @throws \Exception
-     *
-     * @since 6.11
+     * {@inheritdoc}
      */
     public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslation(ContentInfo $contentInfo, $languageCode)
     {
         throw new \Exception('@todo: Implement.');
     }

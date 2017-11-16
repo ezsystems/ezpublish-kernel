@@ -21,9 +21,9 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Exception;
 
 /**
- * Console Command which removes a given Translation from all the Versions of a given Content Object.
+ * Console Command which deletes a given Translation from all the Versions of a given Content Item.
  */
-class RemoveContentTranslationCommand extends Command
+class DeleteContentTranslationCommand extends Command
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -62,12 +62,12 @@ class RemoveContentTranslationCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('ezplatform:remove-content-translation')
+            ->setName('ezplatform:delete-content-translation')
             ->addArgument('content-id', InputArgument::REQUIRED, 'Content Object Id')
             ->addArgument(
                 'language-code',
                 InputArgument::REQUIRED,
-                'Language code of the Translation to be removed'
+                'Language code of the Translation to be deleted'
             )
             ->addOption(
                 'user',
@@ -76,7 +76,7 @@ class RemoveContentTranslationCommand extends Command
                 'eZ Platform username (with Role containing at least Content policies: read, versionread, edit, remove, versionremove)',
                 'admin'
             )
-            ->setDescription('Remove Translation from all the Versions of a Content Object');
+            ->setDescription('Delete Translation from all the Versions of a Content Item');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -115,7 +115,7 @@ class RemoveContentTranslationCommand extends Command
 
         $this->repository->beginTransaction();
         try {
-            $allLanguages = $this->removeAffectedSingularLanguageVersions(
+            $allLanguages = $this->deleteAffectedSingularLanguageVersions(
                 $contentInfo,
                 $languageCode
             );
@@ -130,7 +130,7 @@ class RemoveContentTranslationCommand extends Command
             // Confirm operation
             $contentName = "#{$contentInfo->id} ($contentInfo->name)";
             $question = new ConfirmationQuestion(
-                "Are you sure you want to remove {$languageCode} Translation from the Content {$contentName}? This operation is permanent. [y/N] ",
+                "Are you sure you want to delete {$languageCode} Translation from the Content {$contentName}? This operation is permanent. [y/N] ",
                 false
             );
             if (!$this->questionHelper->ask($this->input, $this->output, $question)) {
@@ -141,13 +141,13 @@ class RemoveContentTranslationCommand extends Command
                 return;
             }
 
-            // Remove Translation
+            // Delete Translation
             $output->writeln(
-                "<info>Removing {$languageCode} Translation of the Content {$contentName}</info>"
+                "<info>Deleting {$languageCode} Translation of the Content {$contentName}</info>"
             );
-            $this->contentService->removeTranslation($contentInfo, $languageCode);
+            $this->contentService->deleteTranslation($contentInfo, $languageCode);
 
-            $output->writeln('<info>Translation removed</info>');
+            $output->writeln('<info>Translation deleted</info>');
 
             $this->repository->commit();
         } catch (Exception $e) {
@@ -164,7 +164,7 @@ class RemoveContentTranslationCommand extends Command
      *
      * @return string[] unique Language codes across all Versions of the Content.
      */
-    private function removeAffectedSingularLanguageVersions(ContentInfo $contentInfo, $languageCode)
+    private function deleteAffectedSingularLanguageVersions(ContentInfo $contentInfo, $languageCode)
     {
         $languages = [];
         foreach ($this->contentService->loadVersions($contentInfo) as $versionInfo) {
@@ -190,7 +190,7 @@ class RemoveContentTranslationCommand extends Command
      * Interact with user to update main Language of a Content Object.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param string $languageCode language code of the Translation to be removed
+     * @param string $languageCode language code of the Translation to be deleted
      * @param string[] $allLanguages all languages Content Object Versions have, w/o $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
