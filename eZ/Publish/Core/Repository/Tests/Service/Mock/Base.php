@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -20,6 +22,8 @@ use eZ\Publish\Core\Repository\Values\User\User;
  */
 abstract class Base extends TestCase
 {
+    use PHPUnit5CompatTrait;
+
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -57,6 +61,7 @@ abstract class Base extends TestCase
             $repository = new Repository(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
+                new NullIndexer(),
                 $serviceSettings,
                 $this->getStubbedUser(14)
             );

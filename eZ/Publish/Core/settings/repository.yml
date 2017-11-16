@@ -58,8 +58,9 @@ services:
         class: "%ezpublish.api.inner_repository.class%"
         factory: ["@ezpublish.api.repository.factory", buildRepository]
         arguments:
-            - "@ezpublish.api.persistence_handler"
-            - "@ezpublish.spi.search"
+            - '@ezpublish.api.persistence_handler'
+            - '@ezpublish.spi.search'
+            - '@ezpublish.search.background_indexer'
         lazy: true
 
     ezpublish.api.service.content:
@@ -159,3 +160,6 @@ services:
         arguments:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "legacy"
+
+    ezpublish.search.background_indexer:
+        class: eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer
