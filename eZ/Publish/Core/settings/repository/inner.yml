@@ -37,6 +37,7 @@ services:
         arguments:
             - "@ezpublish.api.persistence_handler"
             - "@ezpublish.spi.search"
+            - '@ezpublish.search.background_indexer'
         lazy: true
 
     ezpublish.api.service.inner_content:
@@ -114,3 +115,6 @@ services:
         class: "%ezpublish.field_type_nameable_collection.factory.class%"
         calls:
             - [setContainer, ["@service_container"]]
+
+    ezpublish.search.background_indexer:
+        class: eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer

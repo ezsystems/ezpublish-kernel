@@ -239,11 +239,23 @@ SQL
         return $row['datatype'];
     }
 
+    /**
+     * Delete directory and all the content under specified directory.
+     *
+     * @param string $spiPath SPI Path, not prefixed by URL decoration
+     */
     public function deleteDirectory($spiPath)
     {
-        $stmt = $this->db->prepare('DELETE FROM ezdfsfile WHERE name LIKE ?');
-        $stmt->bindValue(1, rtrim($spiPath, '/') . '/%');
-        $stmt->execute();
+        $query = $this->db->createQueryBuilder();
+        $query
+            ->delete('ezdfsfile')
+            ->where('name LIKE :spiPath ESCAPE :esc')
+            ->setParameter(':esc', '\\')
+            ->setParameter(
+                ':spiPath',
+                addcslashes($this->addPrefix(rtrim($spiPath, '/')), '%_') . '/%'
+            );
+        $query->execute();
     }
 
     /**

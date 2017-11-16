@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\DefaultAuthenticationSuccessHandler;
+use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -24,7 +25,9 @@ class SecurityPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!($container->hasDefinition('security.authentication.provider.dao') && $container->hasDefinition('security.authentication.provider.anonymous'))) {
+        if (!($container->hasDefinition('security.authentication.provider.dao') &&
+              $container->hasDefinition('security.authentication.provider.rememberme') &&
+              $container->hasDefinition('security.authentication.provider.anonymous'))) {
             return;
         }
 
@@ -36,6 +39,13 @@ class SecurityPass implements CompilerPassInterface
         $daoAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.dao');
         $daoAuthenticationProviderDef->setClass(RepositoryAuthenticationProvider::class);
         $daoAuthenticationProviderDef->addMethodCall(
+            'setRepository',
+            array($repositoryReference)
+        );
+
+        $rememberMeAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.rememberme');
+        $rememberMeAuthenticationProviderDef->setClass(RememberMeRepositoryAuthenticationProvider::class);
+        $rememberMeAuthenticationProviderDef->addMethodCall(
             'setRepository',
             array($repositoryReference)
         );

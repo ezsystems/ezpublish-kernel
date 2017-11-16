@@ -19,10 +19,13 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Search\Capable;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Search\Handler;
 
 /**
@@ -56,12 +59,18 @@ class SearchService implements SearchServiceInterface
     protected $permissionCriterionResolver;
 
     /**
+     * @var \eZ\Publish\Core\Search\Common\BackgroundIndexer
+     */
+    protected $backgroundIndexer;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
+     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      * @param array $settings
      */
     public function __construct(
@@ -69,6 +78,7 @@ class SearchService implements SearchServiceInterface
         Handler $searchHandler,
         Helper\DomainMapper $domainMapper,
         PermissionCriterionResolver $permissionCriterionResolver,
+        BackgroundIndexer $backgroundIndexer,
         array $settings = array()
     ) {
         $this->repository = $repository;
@@ -79,6 +89,7 @@ class SearchService implements SearchServiceInterface
             //'defaultSetting' => array(),
         );
         $this->permissionCriterionResolver = $permissionCriterionResolver;
+        $this->backgroundIndexer = $backgroundIndexer;
     }
 
     /**
@@ -98,15 +109,26 @@ class SearchService implements SearchServiceInterface
     {
         $contentService = $this->repository->getContentService();
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
-        foreach ($result->searchHits as $hit) {
-            // As we get ContentInfo from SPI, we need to load full content (avoids getting stale content data)
-            $hit->valueObject = $contentService->internalLoadContent(
-                $hit->valueObject->id,
-                (!empty($languageFilter['languages']) ? $languageFilter['languages'] : null),
-                null,
-                false,
-                (isset($languageFilter['useAlwaysAvailable']) ? $languageFilter['useAlwaysAvailable'] : true)
-            );
+        foreach ($result->searchHits as $key => $hit) {
+            try {
+                // As we get ContentInfo from SPI, we need to load full content (avoids getting stale content data)
+                $hit->valueObject = $contentService->internalLoadContent(
+                    $hit->valueObject->id,
+                    (!empty($languageFilter['languages']) ? $languageFilter['languages'] : null),
+                    null,
+                    false,
+                    (isset($languageFilter['useAlwaysAvailable']) ? $languageFilter['useAlwaysAvailable'] : true)
+                );
+            } catch (APINotFoundException $e) {
+                // Most likely stale data, so we register content for background re-indexing.
+                $this->backgroundIndexer->registerContent($hit->valueObject);
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            } catch (APIUnauthorizedException $e) {
+                // Most likely stale cached permission criterion, as ttl is only a few seconds we don't react to this
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            }
         }
 
         return $result;
@@ -312,10 +334,21 @@ class SearchService implements SearchServiceInterface
 
         $result = $this->searchHandler->findLocations($query, $languageFilter);
 
-        foreach ($result->searchHits as $hit) {
-            $hit->valueObject = $this->domainMapper->buildLocationDomainObject(
-                $hit->valueObject
-            );
+        foreach ($result->searchHits as $key => $hit) {
+            try {
+                $hit->valueObject = $this->domainMapper->buildLocationDomainObject(
+                    $hit->valueObject
+                );
+            } catch (APINotFoundException $e) {
+                // Most likely stale data, so we register content for background re-indexing.
+                $this->backgroundIndexer->registerLocation($hit->valueObject);
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            } catch (APIUnauthorizedException $e) {
+                // Most likely stale cached permission criterion, as ttl is only a few seconds we don't react to this
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            }
         }
 
         return $result;
@@ -332,7 +365,7 @@ class SearchService implements SearchServiceInterface
      */
     protected function addPermissionsCriterion(Criterion &$criterion)
     {
-        $permissionCriterion = $this->permissionCriterionResolver->getPermissionsCriterion();
+        $permissionCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'read');
         if ($permissionCriterion === true || $permissionCriterion === false) {
             return $permissionCriterion;
         }

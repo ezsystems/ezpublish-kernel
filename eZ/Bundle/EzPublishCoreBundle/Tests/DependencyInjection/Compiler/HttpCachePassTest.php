@@ -30,7 +30,7 @@ class HttpCachePassTest extends AbstractCompilerPassTestCase
         $this->compile();
     }
 
-    public function testProcess()
+    public function testProcessCacheManager()
     {
         $this->setDefinition('ezpublish.http_cache.cache_manager', new Definition('foo', array(true)));
         $varnishProxyClient = new Definition();
@@ -48,5 +48,44 @@ class HttpCachePassTest extends AbstractCompilerPassTestCase
             0,
             new Reference('fos_http_cache.proxy_client.varnish')
         );
+    }
+
+    public function processPurgeClientProvider()
+    {
+        return [
+            ['local', 'ezpublish.http_cache.purge_client.local'],
+            ['http', 'ezpublish.http_cache.purge_client.fos'],
+        ];
+    }
+
+    /**
+     * @dataProvider processPurgeClientProvider
+     *
+     * @param string $paramValue
+     * @param string $expectedServiceAlias
+     * @param \Symfony\Component\DependencyInjection\Definition|null $customService
+     */
+    public function testProcessPurgeClient($paramValue, $expectedServiceId, Definition $customService = null)
+    {
+        $this->setDefinition('ezpublish.http_cache.purge_client', new Definition());
+        $this->setParameter('ezpublish.http_cache.purge_type', $paramValue);
+        if ($customService) {
+            $this->setDefinition($paramValue, $customService);
+        }
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasAlias('ezpublish.http_cache.purge_client', $expectedServiceId);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testProcessPurgeClientOnInvalidService()
+    {
+        $this->setDefinition('ezpublish.http_cache.purge_client', new Definition());
+        $this->setParameter('ezpublish.http_cache.purge_type', 'foo');
+
+        $this->compile();
     }
 }
