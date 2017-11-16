@@ -151,7 +151,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $this->logger->logCall(__METHOD__, array('groupId' => $groupId, 'struct' => $input));
         $return = $this->persistenceHandler->objectStateHandler()->create($groupId, $input);
 
-        $this->cache->deleteItem('ez-state-list-by-group-' . $groupId);
+        $this->cache->invalidateTags(['state-group-' . $groupId]);
 
         return $return;
     }
