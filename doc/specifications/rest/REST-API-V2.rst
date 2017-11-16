@@ -2046,6 +2046,8 @@ Move Subtree
 :Resource: /content/locations/<path>
 :Method: MOVE or POST with header X-HTTP-Method-Override: MOVE
 :Description: moves the location to another parent. The destination can also be /content/trash where the location is put into the trash.
+    *(NOTE: Be aware that the user might not have access to the item any longer after it has been moved,
+    for example when read access is limited by subtree)*
 :Headers:
     :Destination: A parent location resource to which the location is moved
 :Response:
@@ -2055,7 +2057,9 @@ Move Subtree
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
 
-or if destination is /content/trash and content only has one location
+or if destination is /content/trash and content only has one location *(NOTE: Like on normal subtree
+moves, be aware that the user might not have access to the item any longer after it has been moved
+to trash)*
 
 .. code:: http
 

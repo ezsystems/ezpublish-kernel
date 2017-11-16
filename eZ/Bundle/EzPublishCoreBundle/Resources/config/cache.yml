@@ -27,7 +27,11 @@ services:
 
     ezpublish.http_cache.purger.instant:
         class: "%ezpublish.http_cache.purger.instant.class%"
-        arguments: ["@ezpublish.http_cache.purge_client", "@ezpublish.api.service.content", "@ezpublish.http_cache.event_dispatcher"]
+        arguments:
+            - '@ezpublish.http_cache.purge_client'
+            - '@ezpublish.api.service.content'
+            - '@ezpublish.http_cache.event_dispatcher'
+            - '@ezpublish.api.repository'
         tags:
             - { name: kernel.cache_clearer }
 
