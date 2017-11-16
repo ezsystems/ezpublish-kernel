@@ -20,6 +20,7 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition('security.authentication.provider.dao', new Definition());
+        $this->setDefinition('security.authentication.provider.rememberme', new Definition());
         $this->setDefinition('security.authentication.provider.anonymous', new Definition());
         $this->setDefinition('security.http_utils', new Definition());
         $this->setDefinition('security.authentication.success_handler', new Definition());
@@ -35,6 +36,11 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.dao',
+            'setRepository',
+            array(new Reference('ezpublish.api.repository'))
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'security.authentication.provider.rememberme',
             'setRepository',
             array(new Reference('ezpublish.api.repository'))
         );
