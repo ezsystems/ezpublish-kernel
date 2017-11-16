@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\URLAliasService;
-use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
