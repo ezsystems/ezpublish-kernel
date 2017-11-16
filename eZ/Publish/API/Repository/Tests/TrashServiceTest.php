@@ -580,7 +580,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $userService = $repository->getUserService();
 
         // Set an Editor user as current user, these users have no access to Trash by default
-        $repository->setCurrentUser($userService->loadUser($user->getUserId()));
+        $repository->setCurrentUser($userService->loadUserByLogin($user->login));
 
         // Load all trashed locations
         $searchResult = $trashService->findTrashItems($query);
