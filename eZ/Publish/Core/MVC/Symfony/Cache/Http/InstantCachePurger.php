@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
@@ -37,14 +38,21 @@ class InstantCachePurger implements GatewayCachePurger
      */
     private $eventDispatcher;
 
+    /**
+     * @var \eZ\Publish\API\Repository\Repository|\eZ\Publish\Core\Repository\Repository
+     */
+    protected $repository;
+
     public function __construct(
         PurgeClientInterface $purgeClient,
         ContentService $contentService,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        RepositoryInterface $repository
     ) {
         $this->purgeClient = $purgeClient;
         $this->contentService = $contentService;
         $this->eventDispatcher = $eventDispatcher;
+        $this->repository = $repository;
     }
 
     /**
@@ -70,7 +78,12 @@ class InstantCachePurger implements GatewayCachePurger
      */
     public function purgeForContent($contentId, $locationIds = [])
     {
-        $contentInfo = $this->contentService->loadContentInfo($contentId);
+        // Use sudo as cache clearing should happen regardless of user permissions.
+        $contentInfo = $this->repository->sudo(
+            function () use ($contentId) {
+                return $this->contentService->loadContentInfo($contentId);
+            }
+        );
 
         // Can only gather relevant locations using ContentCacheClearEvent on published content
         if ($contentInfo->published) {

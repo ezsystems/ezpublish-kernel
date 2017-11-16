@@ -109,6 +109,7 @@ class TrashService implements APITrashService, Sessionable
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item.
      *
+     * The current user may not have access to the returned trash item, check before using it.
      * Content is left untouched.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location

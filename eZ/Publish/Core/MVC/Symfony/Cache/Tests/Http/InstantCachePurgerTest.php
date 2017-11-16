@@ -8,37 +8,70 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InstantCachePurgerTest extends TestCase
 {
+    use PHPUnit5CompatTrait;
+
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $purgeClient;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contentService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventDispatcher;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $repository;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->purgeClient = $this->getMock('\eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface');
-        $this->contentService = $this->getMock('\eZ\Publish\API\Repository\ContentService');
-        $this->eventDispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->purgeClient = $this->createMock(PurgeClientInterface::class);
+        $this->contentService = $this->createMock(ContentService::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+
+        $this->repository = $this
+            ->getMockBuilder(Repository::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                array_diff(
+                    get_class_methods(Repository::class),
+                    array('sudo')
+                )
+            )
+            ->getMock();
+
+        $this->repository
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
     }
 
     public function testPurge()
@@ -50,7 +83,7 @@ class InstantCachePurgerTest extends TestCase
             ->with($locationIds)
             ->will($this->returnArgument(0));
 
-        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $this->eventDispatcher);
+        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $this->eventDispatcher, $this->repository);
         $this->assertSame($locationIds, $purger->purge($locationIds));
     }
 
@@ -60,7 +93,7 @@ class InstantCachePurgerTest extends TestCase
             ->expects($this->once())
             ->method('purgeAll');
 
-        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $this->eventDispatcher);
+        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $this->eventDispatcher, $this->repository);
         $purger->purgeAll();
     }
 
@@ -97,7 +130,35 @@ class InstantCachePurgerTest extends TestCase
             ->method('purge')
             ->with($locationIds);
 
-        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $eventDispatcher);
+        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $eventDispatcher, $this->repository);
         $purger->purgeForContent($contentId);
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getPermissionResolverMock()
+    {
+        return $this
+            ->getMockBuilder(PermissionResolver::class)
+            ->setMethods(null)
+            ->setConstructorArgs(
+                [
+                    $this
+                        ->getMockBuilder(RoleDomainMapper::class)
+                        ->disableOriginalConstructor()
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder(LimitationService::class)
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder(UserHandler::class)
+                        ->getMock(),
+                    $this
+                        ->getMockBuilder(UserReference::class)
+                        ->getMock(),
+                ]
+            )
+            ->getMock();
     }
 }
