@@ -53,7 +53,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
             ['loadGroup', [5], 'ez-state-group-5', $group],
             ['loadGroupByIdentifier', ['lock'], 'ez-state-group-lock-by-identifier', $group],
             ['loadAllGroups', [], 'ez-state-group-all', [$group]],
-            ['loadObjectStates', [5], 'ez-state-list-5-by-group', [$state]],
+            ['loadObjectStates', [5], 'ez-state-list-by-group-5', [$state]],
             ['load', [7], 'ez-state-7', $state],
             ['loadByIdentifier', ['lock', 5], 'ez-state-identifier-lock-by-group-5', $state],
             ['getContentState', [4, 5], 'ez-state-by-group-5-on-content-4', $state],
