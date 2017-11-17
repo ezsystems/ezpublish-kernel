@@ -7,6 +7,7 @@ parameters:
     ezpublish.fieldType.ezrichtext.validator.docbook.resources:
         - "%ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/ezpublish.rng"
         - "%ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/docbook.iso.sch.xsl"
+    ezpublish.fieldType.ezrichtext.validator.internal_link.class: eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
     ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\PageService
     ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
     ezpublish.fieldType.ezimage.io_legacy.class: eZ\Publish\Core\FieldType\Image\IO\Legacy
@@ -76,6 +77,12 @@ services:
         arguments:
             -
                 http://docbook.org/ns/docbook: null
+
+    ezpublish.fieldType.ezrichtext.validator.internal_link:
+        class: '%ezpublish.fieldType.ezrichtext.validator.internal_link.class%'
+        arguments:
+            - '@ezpublish.api.service.content'
+            - '@ezpublish.api.service.location'
 
     ezpublish.fieldType.ezrichtext.normalizer.input:
         class: "%ezpublish.fieldType.ezrichtext.normalizer.aggregate.class%"

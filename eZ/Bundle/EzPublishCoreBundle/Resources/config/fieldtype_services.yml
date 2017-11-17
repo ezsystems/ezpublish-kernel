@@ -29,6 +29,7 @@ parameters:
     ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator
     ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
     ezpublish.fieldType.ezrichtext.resources: %ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/RichText/Resources
+    ezpublish.fieldType.ezrichtext.validator.internal_link.class: eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
 
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/xhtml5/edit/docbook.xsl
     ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/docbook/xhtml5/edit/xhtml5.xsl
@@ -189,6 +190,12 @@ services:
                 http://docbook.org/ns/docbook: null
                 http://ez.no/namespaces/ezpublish5/xhtml5/edit: null
                 http://ez.no/namespaces/ezpublish5/xhtml5: "@ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5"
+
+    ezpublish.fieldType.ezrichtext.validator.internal_link:
+        class: '%ezpublish.fieldType.ezrichtext.validator.internal_link.class%'
+        arguments:
+            - '@ezpublish.api.service.content'
+            - '@ezpublish.api.service.location'
 
     # Image
     ezpublish.fieldType.ezimage.io_service:

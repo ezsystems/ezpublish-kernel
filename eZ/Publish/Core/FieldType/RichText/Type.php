@@ -60,21 +60,29 @@ class Type extends FieldType
     protected $inputValidatorDispatcher;
 
     /**
+     * @var null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
+     */
+    protected $internalLinkValidator;
+
+    /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
      * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
      * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
+     * @param null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator $internalLinkValidator
      */
     public function __construct(
         Validator $internalFormatValidator,
         ConverterDispatcher $inputConverterDispatcher,
         Normalizer $inputNormalizer = null,
-        ValidatorDispatcher $inputValidatorDispatcher = null
+        ValidatorDispatcher $inputValidatorDispatcher = null,
+        InternalLinkValidator $internalLinkValidator = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
         $this->inputNormalizer = $inputNormalizer;
         $this->inputValidatorDispatcher = $inputValidatorDispatcher;
+        $this->internalLinkValidator = $internalLinkValidator;
     }
 
     /**
@@ -264,6 +272,13 @@ class Type extends FieldType
             $validationErrors[] = new ValidationError(
                 "Validation of XML content failed:\n" . implode("\n", $errors)
             );
+        }
+
+        if ($this->internalLinkValidator !== null) {
+            $errors = $this->internalLinkValidator->validateDocument($value->xml);
+            foreach ($errors as $error) {
+                $validationErrors[] = new ValidationError($error);
+            }
         }
 
         return $validationErrors;
