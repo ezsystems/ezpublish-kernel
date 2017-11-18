@@ -300,7 +300,6 @@ EOT
             ->innerJoin('c', 'ezcontentobject_tree', 't', 't.contentobject_id = c.id')
             ->where('c.status = :status')
             ->andWhere('t.path_string LIKE :path')
-            ->orderBy('t.path_string')
             ->setParameter('status', ContentInfo::STATUS_PUBLISHED, PDO::PARAM_INT)
             ->setParameter('path', $location->pathString . '%', PDO::PARAM_STR);
 
