@@ -70,4 +70,4 @@ services:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}
 
     ezpublish.fieldType.metadataHandler.imagesize:
-        class: "%ezpublish.core.io.metadataHandler.imagesize.class%"
+        class: "%ezpublish.core.io.metadataHandler.imageSize.class%"
