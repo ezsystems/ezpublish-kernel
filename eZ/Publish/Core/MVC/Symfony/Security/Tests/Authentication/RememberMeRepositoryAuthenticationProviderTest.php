@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\User as ApiUser;
 use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
@@ -25,6 +26,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RememberMeRepositoryAuthenticationProviderTest extends TestCase
 {
+    use PHPUnit5CompatTrait;
+
     /**
      * @var RememberMeRepositoryAuthenticationProvider
      */
@@ -39,9 +42,9 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
     {
         parent::setUp();
 
-        $this->repository = $this->getMock(Repository::class);
+        $this->repository = $this->createMock(Repository::class);
         $this->authProvider = new RememberMeRepositoryAuthenticationProvider(
-            $this->getMock(UserCheckerInterface::class),
+            $this->createMock(UserCheckerInterface::class),
             'my secret',
             'my provider secret'
         );
@@ -56,7 +59,7 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
     {
         $anonymousToken = $this
             ->getMockBuilder(AnonymousToken::class)
-            ->setConstructorArgs(['secret', $this->getMock(UserInterface::class)])
+            ->setConstructorArgs(['secret', $this->createMock(UserInterface::class)])
             ->getMock();
         $this->authProvider->authenticate($anonymousToken);
     }
@@ -67,7 +70,7 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
      */
     public function testAuthenticateWrongProviderKey()
     {
-        $user = $this->getMock(UserInterface::class);
+        $user = $this->createMock(UserInterface::class);
         $user
             ->expects($this->any())
             ->method('getRoles')
@@ -90,7 +93,7 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
      */
     public function testAuthenticateWrongSecret()
     {
-        $user = $this->getMock(UserInterface::class);
+        $user = $this->createMock(UserInterface::class);
         $user
             ->expects($this->any())
             ->method('getRoles')
@@ -119,7 +122,7 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
             ->method('getPermissionResolver')
             ->will($this->returnValue($this->getPermissionResolverMock()));
 
-        $apiUser = $this->getMock(ApiUser::class);
+        $apiUser = $this->createMock(ApiUser::class);
         $apiUser
             ->expects($this->any())
             ->method('getUserId')
