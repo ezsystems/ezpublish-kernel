@@ -25,7 +25,7 @@ class Languages extends AbstractParser
     {
         $nodeBuilder
             ->arrayNode('languages')
-                ->cannotBeEmpty()
+                ->requiresAtLeastOneElement()
                 ->info('Available languages, in order of precedence')
                 ->example(array('fre-FR', 'eng-GB'))
                 ->prototype('scalar')->end()
