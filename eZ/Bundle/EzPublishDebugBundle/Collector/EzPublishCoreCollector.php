@@ -18,11 +18,7 @@ class EzPublishCoreCollector extends DataCollector
 {
     public function __construct()
     {
-        $this->data = [
-            'collectors' => [],
-            'panelTemplates' => [],
-            'toolbarTemplates' => [],
-        ];
+        $this->reset();
     }
 
     public function collect(Request $request, Response $response, \Exception $exception = null)
@@ -103,5 +99,17 @@ class EzPublishCoreCollector extends DataCollector
         }
 
         return $this->data['panelTemplates'][$collectorName];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->data = [
+            'collectors' => [],
+            'panelTemplates' => [],
+            'toolbarTemplates' => [],
+        ];
     }
 }
