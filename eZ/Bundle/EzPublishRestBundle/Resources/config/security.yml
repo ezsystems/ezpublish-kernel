@@ -18,3 +18,5 @@ services:
 
     ezpublish_rest.security.authentication.logout_handler:
         class: "%ezpublish_rest.security.authentication.logout_handler.class%"
+        arguments:
+            - '@ezpublish.config.resolver'
