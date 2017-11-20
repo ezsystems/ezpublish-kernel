@@ -327,7 +327,7 @@ services:
 
     ezpublish_rest.input.parser.URLWildcardCreate:
         parent: ezpublish_rest.input.parser
-        class: "%ezpublish_rest.input.parser.URLWildcardCreate.class%"
+        class: "%ezpublish_rest.input.parser.UrlWildcardCreate.class%"
         arguments:
             - "@ezpublish_rest.parser_tools"
         tags:
