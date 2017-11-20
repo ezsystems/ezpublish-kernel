@@ -86,8 +86,7 @@ class Value extends BaseValue
     public static function fromTimestamp($timestamp)
     {
         try {
-            $dateTime = new DateTime();
-            $dateTime->setTimestamp($timestamp);
+            $dateTime = new DateTime("@{$timestamp}");
 
             return static::fromDateTime($dateTime);
         } catch (Exception $e) {
