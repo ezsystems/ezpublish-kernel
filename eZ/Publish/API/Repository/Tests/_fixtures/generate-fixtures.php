@@ -526,15 +526,8 @@ function generateUserGroupFixture(array $fixture)
         $groups[$data['id']] = array(
             '_id' => $data['id'],
             'parentId' => is_numeric($parentId) ? $parentId : 'null',
-            'subGroupCount' => 0,
             'content' => '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
         );
-    }
-
-    foreach ($groups as $group) {
-        if (isset($groups[$group['parentId']])) {
-            ++$groups[$group['parentId']]['subGroupCount'];
-        }
     }
 
     return generateReturnArray(

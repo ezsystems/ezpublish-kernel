@@ -256,40 +256,11 @@ class UserServiceTest extends BaseTest
         $this->assertEquals(
             array(
                 'parentId' => $this->generateId('group', 4),
-                'subGroupCount' => 0,
             ),
             array(
                 'parentId' => $userGroup->parentId,
-                'subGroupCount' => $userGroup->subGroupCount,
             )
         );
-    }
-
-    /**
-     * Test for the createUserGroup() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
-     */
-    public function testCreateUserGroupIncrementsParentSubGroupCount()
-    {
-        $repository = $this->getRepository();
-        $userService = $repository->getUserService();
-        $mainGroupId = $this->generateId('group', 4);
-
-        $parentUserGroup = $userService->loadUserGroup($mainGroupId);
-        $parentGroupCount = $parentUserGroup->subGroupCount;
-
-        /* BEGIN: Use Case */
-        $this->createUserGroupVersion1();
-
-        $this->refreshSearch($repository);
-
-        // This should be one greater than before
-        $subGroupCount = $userService->loadUserGroup($mainGroupId)->subGroupCount;
-        /* END: Use Case */
-
-        $this->assertEquals($parentGroupCount + 1, $subGroupCount);
     }
 
     /**
@@ -536,69 +507,6 @@ class UserServiceTest extends BaseTest
 
         $this->assertEquals($membersGroupId, $userGroup->parentId);
         $this->assertEquals(array($userGroup->id), $subUserGroupIds);
-    }
-
-    /**
-     * Test for the moveUserGroup() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testMoveUserGroup
-     */
-    public function testMoveUserGroupIncrementsSubGroupCountOnNewParent()
-    {
-        $repository = $this->getRepository();
-        $userService = $repository->getUserService();
-
-        $membersGroupId = $this->generateId('group', 13);
-        /* BEGIN: Use Case */
-        // $membersGroupId is the ID of the "Members" user group in an eZ
-        // Publish demo installation
-
-        $userGroup = $this->createUserGroupVersion1();
-
-        // Load the new parent group
-        $membersUserGroup = $userService->loadUserGroup($membersGroupId);
-
-        // Move user group from "Users" to "Members"
-        $userService->moveUserGroup($userGroup, $membersUserGroup);
-
-        $this->refreshSearch($repository);
-
-        // Reload the user group to get an updated $subGroupCount
-        $membersUserGroupUpdated = $userService->loadUserGroup($membersGroupId);
-        /* END: Use Case */
-
-        $this->assertEquals(1, $membersUserGroupUpdated->subGroupCount);
-    }
-
-    /**
-     * Test for the moveUserGroup() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testMoveUserGroup
-     */
-    public function testMoveUserGroupDecrementsSubGroupCountOnOldParent()
-    {
-        $repository = $this->getRepository();
-        $userService = $repository->getUserService();
-
-        $membersGroupId = $this->generateId('group', 13);
-        /* BEGIN: Use Case */
-        // $membersGroupId is the ID of the "Members" user group in an eZ
-        // Publish demo installation
-
-        $userGroup = $this->createUserGroupVersion1();
-
-        // Load the new parent group
-        $membersUserGroup = $userService->loadUserGroup($membersGroupId);
-
-        // Move user group from "Users" to "Members"
-        $userService->moveUserGroup($userGroup, $membersUserGroup);
-        /* END: Use Case */
-
-        $mainUserGroup = $userService->loadUserGroup($this->generateId('group', 4));
-
-        $this->assertEquals(5, $mainUserGroup->subGroupCount);
     }
 
     /**

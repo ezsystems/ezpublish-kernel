@@ -204,21 +204,6 @@ interface RoleService
     public function addPolicy(Role $role, PolicyCreateStruct $policyCreateStruct);
 
     /**
-     * Removes a policy from the role.
-     *
-     * @deprecated since 5.3, use {@link removePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
-     */
-    public function removePolicy(Role $role, Policy $policy);
-
-    /**
      * Deletes a policy.
      *
      * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.

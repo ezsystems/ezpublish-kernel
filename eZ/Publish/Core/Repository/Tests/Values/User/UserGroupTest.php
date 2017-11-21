@@ -28,12 +28,10 @@ class UserGroupTest extends TestCase
     {
         $group = new UserGroup();
         self::assertEquals(null, $group->parentId);
-        self::assertEquals(null, $group->subGroupCount);
 
         $this->assertPropertiesCorrect(
             [
                 'parentId' => null,
-                'subGroupCount' => null,
             ],
             $group
         );

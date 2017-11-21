@@ -32,12 +32,7 @@ class DynamicSettingsListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        // @deprecated Remove once we are Sf 3.x only, for Symfony 2.x compatibility
-        if (interface_exists('Symfony\\Component\\DependencyInjection\\IntrospectableContainerInterface')) {
-            $this->container = $this->createMock('\Symfony\Component\DependencyInjection\IntrospectableContainerInterface');
-        } else {
-            $this->container = $this->createMock('\Symfony\Component\DependencyInjection\ContainerInterface');
-        }
+        $this->container = $this->createMock('\Symfony\Component\DependencyInjection\ContainerInterface');
         $this->expressionLanguage = $this->createMock('\Symfony\Component\DependencyInjection\ExpressionLanguage');
     }
 
