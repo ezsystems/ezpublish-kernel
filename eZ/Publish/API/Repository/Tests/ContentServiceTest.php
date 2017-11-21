@@ -5281,20 +5281,11 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
-     * Test removal of the last remaining translation throws BadStateException.
-     *
-     * Note: this test case reproduces the following scenario:
-     * 1. Create the Content with a single translation.
-     * 2. Create a new Version with that translation and add to it another translation.
-     * 3. Update mainLanguageCode of the Content Object, to avoid trying to remove the main translation.
-     * 4. Try to remove a translation that is the only one in the first version.
-     * 5. Observe BadStateException with a message about trying to remove the last translation.
+     * Test removal of a Translation is possible when some archived Versions have only this Translation.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessageRegExp /The Version\(s\): \d+ of the ContentId=\d+ have only one language eng-US/
      */
-    public function testDeleteTranslationLastLanguageThrowsBadStateException()
+    public function testDeleteTranslationDeletesSingleTranslationVersions()
     {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -5315,6 +5306,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
 
         $contentService->deleteTranslation($content->contentInfo, 'eng-US');
+
+        $this->assertTranslationDoesNotExist('eng-US', $content->id);
     }
 
     /**
@@ -5354,7 +5347,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$languageCode' is invalid: Specified translation does not exist
+     * @expectedExceptionMessage Argument '$languageCode' is invalid: ger-DE does not exist in the Content item
      */
     public function testDeleteTranslationThrowsInvalidArgumentException()
     {
