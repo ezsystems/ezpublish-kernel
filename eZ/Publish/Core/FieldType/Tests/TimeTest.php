@@ -139,44 +139,44 @@ class TimeTest extends FieldTypeTest
     public function provideValidInputForAcceptValue()
     {
         $dateTime = new DateTime();
-        $secondsInDay = 24 * 60 * 60;
+        // change timezone to UTC (+00:00) to be able to calculate proper TimeValue
+        $timestamp = $dateTime->setTimezone(new \DateTimeZone('UTC'))->getTimestamp();
 
-        return array(
-            array(
+        return [
+            [
                 null,
                 new TimeValue(),
-            ),
-            array(
+            ],
+            [
                 '2012-08-28 12:20',
                 new TimeValue(44400),
-            ),
-            array(
+            ],
+            [
                 '2012-08-28 12:20 Europe/Berlin',
                 new TimeValue(44400),
-            ),
-            array(
+            ],
+            [
                 '2012-08-28 12:20 Asia/Sakhalin',
                 new TimeValue(44400),
-            ),
-            array(
-                // Set $dateTime to proper time for correct offset
-                $dateTime->setTimestamp(1372896001)->getTimestamp(),
-                // Correct for negative offset
-                new TimeValue(($secondsInDay + $dateTime->getOffset() + 1) % $secondsInDay),
-            ),
-            array(
-                TimeValue::fromTimestamp($timestamp = 1346149200),
+            ],
+            [
+                // create new DateTime object from timestamp w/o taking into account server timezone
+                (new DateTime('@1372896001'))->getTimestamp(),
+                new TimeValue(1),
+            ],
+            [
+                TimeValue::fromTimestamp($timestamp),
                 new TimeValue(
-                    $dateTime->setTimestamp($timestamp)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp()
+                    $timestamp - $dateTime->setTime(0, 0, 0)->getTimestamp()
                 ),
-            ),
-            array(
+            ],
+            [
                 clone $dateTime,
                 new TimeValue(
                     $dateTime->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp()
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
