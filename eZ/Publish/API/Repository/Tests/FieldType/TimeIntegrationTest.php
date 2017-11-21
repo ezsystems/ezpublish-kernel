@@ -185,7 +185,7 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
     /**
      * Get update field externals data.
      *
-     * @return array
+     * @return TimeValue
      */
     public function getValidUpdateFieldData()
     {
@@ -206,9 +206,9 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $dateTime = new DateTime();
+        $dateTime = new DateTime('@12345678');
         $expectedData = array(
-            'time' => $dateTime->setTimestamp(12345678)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
+            'time' => $dateTime->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -305,12 +305,13 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        $dateTime = new DateTime();
+        $timestamp = 123456;
+        $dateTime = new DateTime("@{$timestamp}");
 
         return array(
             array(
-                TimeValue::fromTimestamp(123456),
-                $dateTime->setTimestamp(123456)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
+                TimeValue::fromTimestamp($timestamp),
+                $dateTime->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
             ),
         );
     }
