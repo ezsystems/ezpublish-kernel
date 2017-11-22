@@ -1893,10 +1893,10 @@ class ContentService implements ContentServiceInterface
      *
      * NOTE: this operation is risky and permanent, so user interface should provide a warning before performing it.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
-     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the Main Translation of a Content Item.
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
-     *         to delete the content (in one of the locations of the given Content Object).
+     *         to delete the content (in one of the locations of the given Content Item).
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
      *         is invalid for the given content.
      *
