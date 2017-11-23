@@ -134,7 +134,7 @@ Performance tips:
 - Use PHP 7.0 (or better yet PHP 7.1), and make sure opcache is enabled.
 - Dump autoload class map, even in development: <fg=green>composer dump-autoload --optimize</>
 - Follow full install instructions below to setup nginx (or Apache).
-- Further reading: https://doc.ez.no/display/DEVELOPER/Performance
+- Further reading: https://doc.ezplatform.com/en/latest/guide/performance/
 
 For full install instructions, including setting up directory permissions, see install instructions in <fg=green>INSTALL.md</>
 or <fg=green>README.md</>.
