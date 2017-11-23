@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Location service, used for complex subtree operations.
@@ -85,6 +86,15 @@ interface LocationService
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
     public function loadLocationChildren(Location $location, $offset = 0, $limit = 25);
+
+    /**
+     * Load parent Locations for Content Draft.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] List of parent Locations
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo);
 
     /**
      * Returns the number of children which are readable by the current user of a location object.
