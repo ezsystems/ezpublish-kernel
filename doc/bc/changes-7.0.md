@@ -28,6 +28,8 @@ Changes affecting version compatibility with former or future versions.
   taking into account the timezone. The reason for this change is consistency with the behavior of
   `eZ\Publish\Core\FieldType\DateAndTime\Value::fromTimestamp`.
 
+* The Twig block `eztime_field` of `eZ/Bundle/EzPublishCoreBundle/Resources/views/content_fields.html.twig` is rendered using UTC timezone to avoid server timezone-related issues.
+
 ## Deprecations
 
 _7.0 is a major version, hence does not introduce deprecations but rather removes some previously deprecated features,
