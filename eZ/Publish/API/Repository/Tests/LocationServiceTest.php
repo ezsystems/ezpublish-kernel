@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
@@ -715,6 +717,63 @@ class LocationServiceTest extends BaseTest
         }
 
         return $childLocations;
+    }
+
+    /**
+     * Test loading parent Locations for draft Content.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadParentLocationsForDraftContent
+     */
+    public function testLoadParentLocationsForDraftContent()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        // prepare locations
+        $locationCreateStructs = [
+            $locationService->newLocationCreateStruct(2),
+            $locationService->newLocationCreateStruct(5),
+        ];
+
+        // Create new content
+        $folderType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $contentCreate = $contentService->newContentCreateStruct($folderType, 'eng-US');
+        $contentCreate->setField('name', 'New Folder');
+        $contentDraft = $contentService->createContent($contentCreate, $locationCreateStructs);
+
+        // Test loading parent Locations
+        $locations = $locationService->loadParentLocationsForDraftContent($contentDraft->versionInfo);
+
+        self::assertCount(2, $locations);
+        foreach ($locations as $location) {
+            // test it is one of the given parent locations
+            self::assertTrue($location->id === 2 || $location->id === 5);
+        }
+
+        return $contentDraft;
+    }
+
+    /**
+     * Test that trying to load parent Locations throws Exception if Content is not a draft.
+     *
+     * @depends testLoadParentLocationsForDraftContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $contentDraft
+     */
+    public function testLoadParentLocationsForDraftContentThrowsBadStateException(Content $contentDraft)
+    {
+        $this->expectException(BadStateException::class);
+        $this->expectExceptionMessageRegExp('/has been already published/');
+
+        $repository = $this->getRepository(false);
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $locationService->loadParentLocationsForDraftContent($content->versionInfo);
     }
 
     /**
