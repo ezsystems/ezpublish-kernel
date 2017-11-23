@@ -93,9 +93,9 @@
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
-            {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale ) %}
+            {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale, 'UTC' ) %}
         {% else %}
-            {% set field_value = field.value.time|localizeddate( 'none', 'short', parameters.locale ) %}
+            {% set field_value = field.value.time|localizeddate( 'none', 'short', parameters.locale, 'UTC' ) %}
         {% endif %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
