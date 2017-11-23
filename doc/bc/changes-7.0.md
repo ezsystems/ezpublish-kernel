@@ -24,6 +24,9 @@ Changes affecting version compatibility with former or future versions.
 * "cache_pool_name" siteaccess setting has been removed & replaced by "cache_service_name" as the semantic is different.
   The new setting should contain the full service name of a  symfony cache service, by default app_cache.app is used.
 
+* The method `eZ\Publish\Core\FieldType\Time\Value::fromTimestamp` returns `Time\Value` without
+  taking into account the timezone. The reason for this change is consistency with the behavior of
+  `eZ\Publish\Core\FieldType\DateAndTime\Value::fromTimestamp`.
 
 ## Deprecations
 
