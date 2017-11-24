@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\CopySubtreeSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal;
@@ -146,6 +147,14 @@ class LocationService implements LocationServiceInterface
     public function loadLocationChildren(Location $location, $offset = 0, $limit = 25)
     {
         return $this->service->loadLocationChildren($location, $offset, $limit);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo)
+    {
+        return $this->service->loadParentLocationsForDraftContent($versionInfo);
     }
 
     /**

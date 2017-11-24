@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -295,6 +296,37 @@ class LocationService implements LocationServiceInterface
                 'totalCount' => $searchResult->totalCount,
             )
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo)
+    {
+        if (!$versionInfo->isDraft()) {
+            throw new BadStateException(
+                '$contentInfo',
+                sprintf(
+                    'Content [%d] %s has been already published. Use LocationService::loadLocations instead.',
+                    $versionInfo->contentInfo->id,
+                    $versionInfo->contentInfo->name
+                )
+            );
+        }
+        $spiLocations = $this->persistenceHandler
+            ->locationHandler()
+            ->loadParentLocationsForDraftContent($versionInfo->contentInfo->id);
+
+        $locations = [];
+        $permissionResolver = $this->repository->getPermissionResolver();
+        foreach ($spiLocations as $spiLocation) {
+            $location = $this->domainMapper->buildLocationDomainObject($spiLocation);
+            if ($permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
+                $locations[] = $location;
+            }
+        }
+
+        return $locations;
     }
 
     /**
