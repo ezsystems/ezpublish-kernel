@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Message\Response;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
 
 class ContentTest extends RESTFunctionalTestCase
@@ -170,7 +171,7 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
-        // @todo test data
+        $this->assertVersionResponseContainsExpectedFields($response);
         // @todo test filtering (language, fields, etc)
     }
 
@@ -565,5 +566,26 @@ XML;
         }
 
         throw new \RuntimeException("Test internal error: Version with status {$status} not found");
+    }
+
+    /**
+     * Assert that Version REST Response contains proper fields.
+     *
+     * @param \Buzz\Message\Response $response
+     */
+    private function assertVersionResponseContainsExpectedFields(Response $response)
+    {
+        $contentType = $response->getHeader('Content-Type');
+        self::assertNotEmpty($contentType);
+
+        $responseBody = $response->getContent();
+
+        // check if response is of an expected Content-Type
+        self::assertEquals('Version+xml', $this->getMediaFromTypeString($contentType));
+
+        // validate by custom XSD
+        $document = new \DOMDocument();
+        $document->loadXML($responseBody);
+        $document->schemaValidate(__DIR__ . '/xsd/Version.xsd');
     }
 }

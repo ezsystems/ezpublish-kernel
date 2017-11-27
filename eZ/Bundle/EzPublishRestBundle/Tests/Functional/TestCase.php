@@ -184,6 +184,18 @@ EOF;
         return "application/vnd.ez.api.$typeString";
     }
 
+    protected function getMediaFromTypeString($typeString)
+    {
+        $prefix = 'application/vnd.ez.api.';
+        self::assertStringStartsWith(
+            $prefix,
+            $typeString,
+            "Unknown media: {$typeString}"
+        );
+
+        return substr($typeString, strlen($prefix));
+    }
+
     protected function addCreatedElement($href)
     {
         $testCase = $this;
