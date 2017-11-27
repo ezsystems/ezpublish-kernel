@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $fieldDefIdentifier the field definition identifier
  * @property-read $value the value of the field
  * @property-read string $languageCode the language code of the field
+ * @property-read string $typeIdentifier field type identifier
  */
 class Field extends ValueObject
 {
@@ -49,4 +50,11 @@ class Field extends ValueObject
      * @var string
      */
     protected $languageCode;
+
+    /**
+     * Field type identifier.
+     *
+     * @var string
+     */
+    protected $typeIdentifier;
 }
