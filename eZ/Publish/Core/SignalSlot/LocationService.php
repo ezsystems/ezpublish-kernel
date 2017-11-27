@@ -181,6 +181,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'contentId' => $contentInfo->id,
                     'locationId' => $returnValue->id,
+                    'parentLocationId' => $returnValue->parentLocationId,
                 )
             )
         );
@@ -207,6 +208,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'contentId' => $location->contentId,
                     'locationId' => $location->id,
+                    'parentLocationId' => $location->parentLocationId,
                 )
             )
         );
@@ -230,8 +232,10 @@ class LocationService implements LocationServiceInterface
                 array(
                     'location1Id' => $location1->id,
                     'content1Id' => $location1->contentId,
+                    'parentLocation1Id' => $location1->parentLocationId,
                     'location2Id' => $location2->id,
                     'content2Id' => $location2->contentId,
+                    'parentLocation2Id' => $location2->parentLocationId,
                 )
             )
         );
@@ -257,6 +261,7 @@ class LocationService implements LocationServiceInterface
                     'locationId' => $location->id,
                     'contentId' => $location->contentId,
                     'currentVersionNo' => $returnValue->getContentInfo()->currentVersionNo,
+                    'parentLocationId' => $returnValue->parentLocationId,
                 )
             )
         );
@@ -285,6 +290,7 @@ class LocationService implements LocationServiceInterface
                     'locationId' => $location->id,
                     'contentId' => $location->contentId,
                     'currentVersionNo' => $returnValue->getContentInfo()->currentVersionNo,
+                    'parentLocationId' => $returnValue->parentLocationId,
                 )
             )
         );
@@ -311,6 +317,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'locationId' => $location->id,
                     'newParentLocationId' => $newParentLocation->id,
+                    'oldParentLocationId' => $location->parentLocationId,
                 )
             )
         );
