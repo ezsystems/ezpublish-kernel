@@ -10,6 +10,7 @@ namespace EzSystems\PlatformInstallerBundle\Installer;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Filesystem\Filesystem;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class DbBasedInstaller
 {
@@ -19,9 +20,14 @@ class DbBasedInstaller
     /** @var \Symfony\Component\Console\Output\OutputInterface */
     protected $output;
 
+    /** @var string */
+    protected $baseDataDir;
+
     public function __construct(Connection $db)
     {
         $this->db = $db;
+        // parametrized so other installer implementations can override this
+        $this->baseDataDir = __DIR__ . '/../../../../../data';
     }
 
     /**
@@ -66,5 +72,36 @@ class DbBasedInstaller
         foreach ($queries as $query) {
             $this->db->exec($query);
         }
+    }
+
+    /**
+     * Get DBMS-specific SQL data file path.
+     *
+     * @param string $relativeFilePath SQL file path relative to {baseDir}/{dbms} directory
+     *
+     * @return string absolute existing file path
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
+     * @since 6.13
+     */
+    final protected function getKernelSQLFileForDBMS($relativeFilePath)
+    {
+        $databasePlatform = $this->db->getDatabasePlatform()->getName();
+        $filePath = "{$this->baseDataDir}/{$databasePlatform}/{$relativeFilePath}";
+
+        if (!is_readable($filePath)) {
+            throw new InvalidArgumentException(
+                '$relativeFilePath',
+                sprintf(
+                    'DBMS-specific file for %s database platform does not exist or is not readable: %s',
+                    $databasePlatform,
+                    $filePath
+                )
+            );
+        }
+
+        // apply realpath for more user-friendly Console output
+        return realpath($filePath);
     }
 }
