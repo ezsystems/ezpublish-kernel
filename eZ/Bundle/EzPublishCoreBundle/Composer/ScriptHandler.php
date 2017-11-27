@@ -119,24 +119,18 @@ class ScriptHandler extends DistributionBundleScriptHandler
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
 <options=bold>Quick Install:</>
-(Assuming the CLI user you execute commands with below is same that extracted/installed the software)
-<comment>    $  export SYMFONY_ENV="prod"</comment>
+<comment>    $  export SYMFONY_ENV="dev"</comment>
 <comment>    $  php ${consoleDir}/console ezplatform:install <type></comment>
 <comment>    $  php ${consoleDir}/console assetic:dump</comment>
 <comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
 - "ezplatform:install" has different installer <type>s depending on your install, see <fg=green>INSTALL.md</> or <fg=green>README.md</> for which one to use.
-- For development use you can enable full debugging by setting SYMFONY_ENV to "dev".
-- Last command will give you url to frontend of installation, add "/ez" to reach backend.
+- Instructions above assumes the CLI user you execute commands with is same that extracted/installed the software.
+- Last command will give you url to frontend of installation, add "/admin" to reach backend.
 
-Performance tips:
-- Use PHP 7.0 (or better yet PHP 7.1), and make sure opcache is enabled.
-- Dump autoload class map, even in development: <fg=green>composer dump-autoload --optimize</>
-- Follow full install instructions below to setup nginx (or Apache).
-- Further reading: https://doc.ezplatform.com/en/latest/guide/performance/
 
-For full install instructions, including setting up directory permissions, see install instructions in <fg=green>INSTALL.md</>
+For full install instructions, including setting up full web server & directory permissions, see install instructions in <fg=green>INSTALL.md</>
 or <fg=green>README.md</>.
 
 EOT
