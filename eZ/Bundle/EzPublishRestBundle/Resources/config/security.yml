@@ -2,6 +2,7 @@ parameters:
     ezpublish_rest.security.authentication.listener.session.class: eZ\Publish\Core\REST\Server\Security\RestAuthenticator
     ezpublish_rest.security.authentication.logout_handler.class: eZ\Publish\Core\REST\Server\Security\RestLogoutHandler
 
+    ezpublish_rest.security.csrf.token_manager.class: eZ\Publish\Core\REST\Server\Security\CsrfTokenManager
 services:
     # Following service will be aliased at compile time to "ezpublish_rest.session_authenticator" by the Security factory.
     ezpublish_rest.security.authentication.listener.session:
@@ -20,3 +21,10 @@ services:
         class: "%ezpublish_rest.security.authentication.logout_handler.class%"
         arguments:
             - '@ezpublish.config.resolver'
+
+    ezpublish_rest.security.csrf.token_manager:
+        class: '%ezpublish_rest.security.csrf.token_manager.class%'
+        arguments:
+            - '@?security.csrf.token_generator'
+            - '@?security.csrf.token_storage'
+            - '@?request_stack'
