@@ -231,8 +231,7 @@ services:
         arguments:
             - "@ezpublish_rest.session_authenticator"
             - "%ezpublish_rest.csrf_token_intention%"
-            - "@?security.csrf.token_manager"
-            - "@?security.csrf.token_storage"
+            - "@?ezpublish_rest.security.csrf.token_manager"
 
     ezpublish_rest.request_listener:
         class: "%ezpublish_rest.request_listener.class%"
@@ -252,7 +251,7 @@ services:
             - "@event_dispatcher"
             - "%form.type_extension.csrf.enabled%"
             - "%ezpublish_rest.csrf_token_intention%"
-            - "@?security.csrf.token_manager"
+            - "@?ezpublish_rest.security.csrf.token_manager"
         tags:
             - { name: kernel.event_subscriber }
 
