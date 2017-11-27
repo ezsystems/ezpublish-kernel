@@ -157,7 +157,7 @@ class SessionController extends Controller
      */
     private function hasStoredCsrfToken()
     {
-        if (!isset($this->csrfTokenManager)) {
+        if ($this->csrfTokenManager === null) {
             return true;
         }
 
