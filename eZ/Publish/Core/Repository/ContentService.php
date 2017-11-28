@@ -1893,10 +1893,10 @@ class ContentService implements ContentServiceInterface
      *
      * NOTE: this operation is risky and permanent, so user interface should provide a warning before performing it.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
-     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the Main Translation of a Content Item.
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
-     *         to delete the content (in one of the locations of the given Content Object).
+     *         to delete the content (in one of the locations of the given Content Item).
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
      *         is invalid for the given content.
      *
@@ -1913,66 +1913,69 @@ class ContentService implements ContentServiceInterface
                 'Specified translation is the main translation of the Content Object'
             );
         }
-        // before actual removal, collect information on Versions
-        $versions = [];
-        $singleLangVersions = [];
-        foreach ($this->loadVersions($contentInfo) as $versionInfo) {
-            // check if user is authorized to delete Version
-            if (!$this->repository->canUser('content', 'remove', $versionInfo)) {
-                throw new UnauthorizedException(
-                    'content',
-                    'remove',
-                    [
-                        'contentId' => $contentInfo->id,
-                        'versionNo' => $versionInfo->versionNo,
-                    ]
-                );
-            }
-            // check if the specified translation exists for the Version
-            if (!in_array($languageCode, $versionInfo->languageCodes)) {
-                // if translation does not exist, simply ignore Version (see InvalidArgumentException later on)
-                continue;
-            }
-            // check if the specified translation is the only one
-            if (count($versionInfo->languageCodes) < 2) {
-                $singleLangVersions[] = $versionInfo->versionNo;
-            } else {
-                // otherwise add Version to the list of valid Versions to be processed
-                $versions[] = $versionInfo->versionNo;
-            }
-        }
 
-        if (!empty($singleLangVersions)) {
-            $verList = implode(', ', $singleLangVersions);
-            throw new BadStateException(
-                '$languageCode',
-                "The Version(s): {$verList} of the ContentId={$contentInfo->id} have only one language {$languageCode}. Remove these Version(s) before proceeding.\n" .
-                "Hint: Command 'ezplatform:remove-content-translation' handles this for you, look into it to see how this can be handled in custom code."
-            );
-        }
-
-        // if there are no Versions with the given translation, $languageCode arg is invalid
-        if (empty($versions)) {
-            throw new InvalidArgumentException(
-                '$languageCode',
-                sprintf(
-                    'Specified translation does not exist in the Content Object(id=%d)',
-                     $contentInfo->id
-                )
-            );
-        }
-
+        $translationWasFound = false;
         $this->repository->beginTransaction();
         try {
-            $this->persistenceHandler->contentHandler()->deleteTranslationFromContent($contentInfo->id, $languageCode);
+            foreach ($this->loadVersions($contentInfo) as $versionInfo) {
+                if (!$this->repository->canUser('content', 'remove', $versionInfo)) {
+                    throw new UnauthorizedException(
+                        'content',
+                        'remove',
+                        ['contentId' => $contentInfo->id, 'versionNo' => $versionInfo->versionNo]
+                    );
+                }
+
+                if (!in_array($languageCode, $versionInfo->languageCodes)) {
+                    continue;
+                }
+
+                $translationWasFound = true;
+
+                // If the translation is the version's only one, delete the version
+                if (count($versionInfo->languageCodes) < 2) {
+                    $this->persistenceHandler->contentHandler()->deleteVersion(
+                        $versionInfo->getContentInfo()->id,
+                        $versionInfo->versionNo
+                    );
+                }
+            }
+
+            if (!$translationWasFound) {
+                throw new InvalidArgumentException(
+                    '$languageCode',
+                    sprintf(
+                        '%s does not exist in the Content item(id=%d)',
+                        $languageCode,
+                        $contentInfo->id
+                    )
+                );
+            }
+
+            $this->persistenceHandler->contentHandler()->deleteTranslationFromContent(
+                $contentInfo->id,
+                $languageCode
+            );
             $locationIds = array_map(
                 function (Location $location) {
                     return $location->id;
                 },
                 $this->repository->getLocationService()->loadLocations($contentInfo)
             );
-            $this->persistenceHandler->urlAliasHandler()->translationRemoved($locationIds, $languageCode);
+            $this->persistenceHandler->urlAliasHandler()->translationRemoved(
+                $locationIds,
+                $languageCode
+            );
             $this->repository->commit();
+        } catch (InvalidArgumentException $e) {
+            $this->repository->rollback();
+            throw $e;
+        } catch (BadStateException $e) {
+            $this->repository->rollback();
+            throw $e;
+        } catch (UnauthorizedException $e) {
+            $this->repository->rollback();
+            throw $e;
         } catch (Exception $e) {
             $this->repository->rollback();
             // cover generic unexpected exception to fulfill API promise on @throws
