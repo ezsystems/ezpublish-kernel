@@ -121,12 +121,12 @@ class ScriptHandler extends DistributionBundleScriptHandler
 <options=bold>Quick Install:</>
 <comment>    $  export SYMFONY_ENV="dev"</comment>
 <comment>    $  php ${consoleDir}/console ezplatform:install <type></comment>
-<comment>    $  php ${consoleDir}/console assetic:dump</comment>
 <comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
-- "ezplatform:install" has different installer <type>s depending on your install, see <fg=green>INSTALL.md</> or <fg=green>README.md</> for which one to use.
-- The instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software.
+- "ezplatform:install" has different installer <type>s depending on your install, run command with <comment>--help</comment> to see your options.
+- Instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software,
+  otherwise see install instructions for directory permissions.
 - Last command will give you url to frontend of installation, add "/admin" to reach backend.
 
 
