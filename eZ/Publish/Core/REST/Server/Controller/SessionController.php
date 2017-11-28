@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use eZ\Publish\Core\REST\Server\Security\CsrfTokenManager;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
@@ -27,14 +27,9 @@ class SessionController extends Controller
     private $authenticator;
 
     /**
-     * @var \Symfony\Component\Security\Csrf\CsrfTokenManager
+     * @var \eZ\Publish\Core\REST\Server\Security\CsrfTokenManager
      */
     private $csrfTokenManager;
-
-    /**
-     * @var \Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface
-     */
-    private $csrfTokenStorage;
 
     /**
      * @var string
@@ -50,7 +45,6 @@ class SessionController extends Controller
         $this->authenticator = $authenticator;
         $this->csrfTokenIntention = $tokenIntention;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->csrfTokenStorage = $csrfTokenStorage;
     }
 
     /**
@@ -163,11 +157,11 @@ class SessionController extends Controller
      */
     private function hasStoredCsrfToken()
     {
-        if (!isset($this->csrfTokenStorage)) {
+        if ($this->csrfTokenManager === null) {
             return true;
         }
 
-        return $this->csrfTokenStorage->hasToken($this->csrfTokenIntention);
+        return $this->csrfTokenManager->hasToken($this->csrfTokenIntention);
     }
 
     /**
