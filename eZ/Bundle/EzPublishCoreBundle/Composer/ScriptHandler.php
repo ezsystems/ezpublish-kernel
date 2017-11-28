@@ -126,7 +126,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
 
 Note:
 - "ezplatform:install" has different installer <type>s depending on your install, see <fg=green>INSTALL.md</> or <fg=green>README.md</> for which one to use.
-- Instructions above assumes the CLI user you execute commands with is same that extracted/installed the software.
+- The instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software.
 - Last command will give you url to frontend of installation, add "/admin" to reach backend.
 
 
