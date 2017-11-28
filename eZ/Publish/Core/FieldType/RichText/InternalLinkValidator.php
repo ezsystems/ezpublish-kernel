@@ -44,7 +44,7 @@ class InternalLinkValidator
         $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
 
         foreach (['link', 'ezlink'] as $tagName) {
-            $xpathExpression = "//docbook:{$tagName}[starts-with(@xlink:href, 'ezcontent://') or starts-with(@xlink:href, 'ezlocation://')]";
+            $xpathExpression = $this->getXPathForLinkTag($tagName);
             /** @var \DOMElement $element */
             foreach ($xpath->query($xpathExpression) as $element) {
                 $url = $element->getAttribute('xlink:href');
@@ -120,5 +120,16 @@ class InternalLinkValidator
             default:
                 throw new InvalidArgumentException($scheme, "Given scheme '{$scheme}' is not supported.");
         }
+    }
+
+    /**
+     * Generates XPath expression for given link tag.
+     *
+     * @param string $tagName
+     * @return string
+     */
+    private function getXPathForLinkTag($tagName)
+    {
+        return "//docbook:{$tagName}[starts-with(@xlink:href, 'ezcontent://') or starts-with(@xlink:href, 'ezlocation://') or starts-with(@xlink:href, 'ezremote://')]";
     }
 }

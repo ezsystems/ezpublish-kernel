@@ -6,6 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\FieldType\Tests\RichText;
 
 use eZ\Publish\API\Repository\ContentService;
@@ -182,6 +183,24 @@ class InternalLinkValidatorTest extends TestCase
         $this->assertTrue($validator->validate('ezremote', $contentRemoteId));
     }
 
+    public function testValidateDocumentSkipMissingTargetId()
+    {
+        $scheme = 'ezcontent';
+        $contentId = null;
+
+        $validator = $this->getInternalLinkValidator(['validate']);
+        $validator
+            ->expects($this->never())
+            ->method('validate')
+            ->with($scheme, $contentId);
+
+        $errors = $validator->validateDocument(
+            $this->createInputDocument($scheme, $contentId)
+        );
+
+        $this->assertEmpty($errors);
+    }
+
     public function testValidateDocumentEzContentExistingContentId()
     {
         $scheme = 'ezcontent';
@@ -193,24 +212,6 @@ class InternalLinkValidatorTest extends TestCase
             ->method('validate')
             ->with($scheme, $contentId)
             ->willReturn(true);
-
-        $errors = $validator->validateDocument(
-            $this->createInputDocument($scheme, $contentId)
-        );
-
-        $this->assertEmpty($errors);
-    }
-
-    public function testValidateDocumentSkipMissingTargetId()
-    {
-        $scheme = 'ezcontent';
-        $contentId = null;
-
-        $validator = $this->getInternalLinkValidator(['validate']);
-        $validator
-            ->expects($this->never())
-            ->method('validate')
-            ->with($scheme, $contentId);
 
         $errors = $validator->validateDocument(
             $this->createInputDocument($scheme, $contentId)
@@ -278,6 +279,45 @@ class InternalLinkValidatorTest extends TestCase
         $this->assertContainsEzLocationInvalidLinkError($locationId, $errors);
     }
 
+    public function testValidateDocumentEzRemoteExistingId()
+    {
+        $scheme = 'ezremote';
+        $contentRemoteId = '0ba685755118cf95abb0fe25f3f6a1c8';
+
+        $validator = $this->getInternalLinkValidator(['validate']);
+        $validator
+            ->expects($this->once())
+            ->method('validate')
+            ->with($scheme, $contentRemoteId)
+            ->willReturn(true);
+
+        $errors = $validator->validateDocument(
+            $this->createInputDocument($scheme, $contentRemoteId)
+        );
+
+        $this->assertEmpty($errors);
+    }
+
+    public function testValidateDocumentEzRemoteNonExistingId()
+    {
+        $scheme = 'ezremote';
+        $contentRemoteId = '0ba685755118cf95abb0fe25f3f6a1c8';
+
+        $validator = $this->getInternalLinkValidator(['validate']);
+        $validator
+            ->expects($this->once())
+            ->method('validate')
+            ->with($scheme, $contentRemoteId)
+            ->willReturn(false);
+
+        $errors = $validator->validateDocument(
+            $this->createInputDocument($scheme, $contentRemoteId)
+        );
+
+        $this->assertCount(1, $errors);
+        $this->assertContainsEzRemoteInvalidLinkError($contentRemoteId, $errors);
+    }
+
     private function assertContainsEzLocationInvalidLinkError($locationId, array $errors)
     {
         $format = 'Invalid link "ezlocation://%d": target location cannot be found';
@@ -288,6 +328,13 @@ class InternalLinkValidatorTest extends TestCase
     private function assertContainsEzContentInvalidLinkError($contentId, array $errors)
     {
         $format = 'Invalid link "ezcontent://%d": target content cannot be found';
+
+        $this->assertContains(sprintf($format, $contentId), $errors);
+    }
+
+    private function assertContainsEzRemoteInvalidLinkError($contentId, array $errors)
+    {
+        $format = 'Invalid link "ezremote://%s": target content cannot be found';
 
         $this->assertContains(sprintf($format, $contentId), $errors);
     }
