@@ -514,7 +514,8 @@ XML;
      */
     private function createVersionTranslation($restContentVersionHref, $languageCode, $languageName)
     {
-        $this->ensureLanguageExists($languageCode, $languageName);
+        // @todo Implement EZP-21171 to check if Language exists and add it
+        // for now adding is done by ez:behat:create-language command executed in Travis job
 
         $xml = <<< XML
 <VersionUpdate>
@@ -535,17 +536,6 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
-    }
-
-    /**
-     * Make REST API calls to check if the given Language exists and create it if it doesn't.
-     *
-     * @param string $languageCode
-     * @param string $languageName
-     */
-    private function ensureLanguageExists($languageCode, $languageName)
-    {
-        self::markTestIncomplete('@todo: Implement EZP-21171');
     }
 
     /**
