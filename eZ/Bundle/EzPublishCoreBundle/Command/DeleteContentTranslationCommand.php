@@ -111,19 +111,17 @@ class DeleteContentTranslationCommand extends Command
             '<comment>**NOTE**: Make sure to run this command using the same SYMFONY_ENV setting as your eZ Platform installation does</comment>'
         );
 
-        $contentInfo = $this->contentService->loadContentInfo($contentId);
+        $versionInfo = $this->contentService->loadVersionInfoById($contentId);
+        $contentInfo = $versionInfo->contentInfo;
 
         $this->repository->beginTransaction();
         try {
-            $allLanguages = $this->deleteAffectedSingularLanguageVersions(
-                $contentInfo,
-                $languageCode
-            );
             if ($contentInfo->mainLanguageCode === $languageCode) {
                 $contentInfo = $this->promptUserForMainLanguageChange(
                     $contentInfo,
                     $languageCode,
-                    $allLanguages
+                    // allow to change Main Translation to only those existing in the last Version
+                    $versionInfo->languageCodes
                 );
             }
 
@@ -157,62 +155,45 @@ class DeleteContentTranslationCommand extends Command
     }
 
     /**
-     * Cleanup Versions before removing Translation and collect existing Translations languages.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param string $languageCode
-     *
-     * @return string[] unique Language codes across all Versions of the Content.
-     */
-    private function deleteAffectedSingularLanguageVersions(ContentInfo $contentInfo, $languageCode)
-    {
-        $languages = [];
-        foreach ($this->contentService->loadVersions($contentInfo) as $versionInfo) {
-            // if this is the only one Translation, just delete entire Version
-            if (count($versionInfo->languageCodes) === 1 && $versionInfo->languageCodes[0] === $languageCode) {
-                // Note: won't work on published Versions and last remaining Version
-                $this->contentService->deleteVersion($versionInfo);
-                continue;
-            }
-
-            foreach ($versionInfo->languageCodes as $lang) {
-                if ($lang === $languageCode || in_array($lang, $languages)) {
-                    continue;
-                }
-                $languages[] = $lang;
-            }
-        }
-
-        return $languages;
-    }
-
-    /**
      * Interact with user to update main Language of a Content Object.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $languageCode language code of the Translation to be deleted
-     * @param string[] $allLanguages all languages Content Object Versions have, w/o $languageCode
+     * @param string[] $lastVersionLanguageCodes all Translations last Version has.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     private function promptUserForMainLanguageChange(
         ContentInfo $contentInfo,
         $languageCode,
-        array $allLanguages
+        array $lastVersionLanguageCodes
     ) {
         $contentName = "#{$contentInfo->id} ($contentInfo->name)";
         $this->output->writeln(
-            "<comment>The specified language '{$languageCode}' is the main language of the Content {$contentName}. It needs to be changed before removal.</comment>"
+            "<comment>The specified Translation '{$languageCode}' is the Main Translation of the Content {$contentName}. It needs to be changed before removal.</comment>"
         );
 
+        // get main Translation candidates w/o Translation being removed
+        $mainTranslationCandidates = array_filter(
+            $lastVersionLanguageCodes,
+            function ($versionLanguageCode) use ($languageCode) {
+                return $versionLanguageCode !== $languageCode;
+            }
+        );
+        if (empty($mainTranslationCandidates)) {
+            throw new InvalidArgumentException(
+                'language-code',
+                "The last Version of the Content {$contentName} has no other Translations beside the main one"
+            );
+        }
         $question = new ChoiceQuestion(
-            "Set the main language of the Content {$contentName} to:",
-            $allLanguages
+            "Set the Main Translation of the Content {$contentName} to:",
+            array_values($mainTranslationCandidates)
         );
 
         $newMainLanguageCode = $this->questionHelper->ask($this->input, $this->output, $question);
         $this->output->writeln(
-            "<info>Updating Main Language of the Content {$contentName} to {$newMainLanguageCode}</info>"
+            "<info>Updating Main Translation of the Content {$contentName} to {$newMainLanguageCode}</info>"
         );
 
         $contentMetadataUpdateStruct = $this->contentService->newContentMetadataUpdateStruct();
