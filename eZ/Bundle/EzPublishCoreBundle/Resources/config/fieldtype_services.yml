@@ -194,8 +194,8 @@ services:
     ezpublish.fieldType.ezrichtext.validator.internal_link:
         class: '%ezpublish.fieldType.ezrichtext.validator.internal_link.class%'
         arguments:
-            - '@ezpublish.api.service.content'
-            - '@ezpublish.api.service.location'
+            - '@ezpublish.spi.persistence.cache.contentHandler'
+            - '@ezpublish.spi.persistence.cache.locationHandler'
 
     # Image
     ezpublish.fieldType.ezimage.io_service:

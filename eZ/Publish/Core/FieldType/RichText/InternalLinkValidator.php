@@ -9,11 +9,10 @@
 namespace eZ\Publish\Core\FieldType\RichText;
 
 use DOMDocument;
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * Validator for RichText internal format links.
@@ -21,13 +20,24 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 class InternalLinkValidator
 {
     /**
-     * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
-    public function __construct(ContentService $contentService, LocationService $locationService)
+    private $contentHandler;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler;
+     */
+    private $locationHandler;
+
+    /**
+     * InternalLinkValidator constructor.
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     */
+    public function __construct(ContentHandler $contentHandler, LocationHandler $locationHandler)
     {
-        $this->contentService = $contentService;
-        $this->locationService = $locationService;
+        $this->contentHandler = $contentHandler;
+        $this->locationHandler = $locationHandler;
     }
 
     /**
@@ -79,20 +89,17 @@ class InternalLinkValidator
         try {
             switch ($scheme) {
                 case 'ezcontent':
-                    $this->contentService->loadContentInfo($id);
+                    $this->contentHandler->loadContentInfo($id);
                     break;
                 case 'ezremote':
-                    $this->contentService->loadContentByRemoteId($id);
+                    $this->contentHandler->loadContentInfoByRemoteId($id);
                     break;
                 case 'ezlocation':
-                    $this->locationService->loadLocation($id);
+                    $this->locationHandler->load($id);
                     break;
                 default:
                     throw new InvalidArgumentException($scheme, "Given scheme '{$scheme}' is not supported.");
             }
-        } catch (UnauthorizedException $e) {
-            // Editor can link to content/location even if he doesn’t have permissions
-            return true;
         } catch (NotFoundException $e) {
             return false;
         }

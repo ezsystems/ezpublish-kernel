@@ -8,11 +8,10 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\RichText\InternalLinkValidator;
 use PHPUnit\Framework\TestCase;
 
@@ -20,19 +19,19 @@ class InternalLinkValidatorTest extends TestCase
 {
     use PHPUnit5CompatTrait;
 
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject */
-    private $contentService;
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit_Framework_MockObject_MockObject */
+    private $contentHandler;
 
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
-    private $locationService;
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject */
+    private $locationHandler;
 
     /**
      * @before
      */
     public function setupInternalLinkValidator()
     {
-        $this->contentService = $this->createMock(ContentService::class);
-        $this->locationService = $this->createMock(LocationService::class);
+        $this->contentHandler = $this->createMock(ContentHandler::class);
+        $this->locationHandler = $this->createMock(LocationHandler::class);
     }
 
     /**
@@ -50,7 +49,7 @@ class InternalLinkValidatorTest extends TestCase
         $validator = $this->getInternalLinkValidator();
 
         $contentId = 1;
-        $this->contentService
+        $this->contentHandler
             ->expects($this->once())
             ->method('loadContentInfo')
             ->with($contentId);
@@ -65,7 +64,7 @@ class InternalLinkValidatorTest extends TestCase
         $contentId = 1;
         $exception = $this->createMock(NotFoundException::class);
 
-        $this->contentService
+        $this->contentHandler
             ->expects($this->once())
             ->method('loadContentInfo')
             ->with($contentId)
@@ -74,31 +73,15 @@ class InternalLinkValidatorTest extends TestCase
         $this->assertFalse($validator->validate('ezcontent', $contentId));
     }
 
-    public function testValidateEzContentWithoutPermissions()
-    {
-        $validator = $this->getInternalLinkValidator();
-
-        $contentId = 1;
-        $exception = $this->createMock(UnauthorizedException::class);
-
-        $this->contentService
-            ->expects($this->once())
-            ->method('loadContentInfo')
-            ->with($contentId)
-            ->willThrowException($exception);
-
-        $this->assertTrue($validator->validate('ezcontent', $contentId));
-    }
-
     public function testValidateEzLocationWithExistingLocationId()
     {
         $validator = $this->getInternalLinkValidator();
 
         $locationId = 1;
 
-        $this->locationService
+        $this->locationHandler
             ->expects($this->once())
-            ->method('loadLocation')
+            ->method('load')
             ->with($locationId);
 
         $this->assertTrue($validator->validate('ezlocation', $locationId));
@@ -111,29 +94,13 @@ class InternalLinkValidatorTest extends TestCase
         $locationId = 1;
         $exception = $this->createMock(NotFoundException::class);
 
-        $this->locationService
+        $this->locationHandler
             ->expects($this->once())
-            ->method('loadLocation')
+            ->method('load')
             ->with($locationId)
             ->willThrowException($exception);
 
         $this->assertFalse($validator->validate('ezlocation', $locationId));
-    }
-
-    public function testValidateEzLocationWithoutPermissions()
-    {
-        $validator = $this->getInternalLinkValidator();
-
-        $locationId = 1;
-        $exception = $this->createMock(UnauthorizedException::class);
-
-        $this->locationService
-            ->expects($this->once())
-            ->method('loadLocation')
-            ->with($locationId)
-            ->willThrowException($exception);
-
-        $this->assertTrue($validator->validate('ezlocation', $locationId));
     }
 
     public function testValidateEzRemoteWithExistingRemoteId()
@@ -142,9 +109,9 @@ class InternalLinkValidatorTest extends TestCase
 
         $contentRemoteId = '0ba685755118cf95abb0fe25f3f6a1c8';
 
-        $this->contentService
+        $this->contentHandler
             ->expects($this->once())
-            ->method('loadContentByRemoteId')
+            ->method('loadContentInfoByRemoteId')
             ->with($contentRemoteId);
 
         $this->assertTrue($validator->validate('ezremote', $contentRemoteId));
@@ -157,29 +124,13 @@ class InternalLinkValidatorTest extends TestCase
         $contentRemoteId = '0ba685755118cf95abb0fe25f3f6a1c8';
         $exception = $this->createMock(NotFoundException::class);
 
-        $this->contentService
+        $this->contentHandler
             ->expects($this->once())
-            ->method('loadContentByRemoteId')
+            ->method('loadContentInfoByRemoteId')
             ->with($contentRemoteId)
             ->willThrowException($exception);
 
         $this->assertFalse($validator->validate('ezremote', $contentRemoteId));
-    }
-
-    public function testValidateEzRemoteWithoutPermissions()
-    {
-        $validator = $this->getInternalLinkValidator();
-
-        $contentRemoteId = '0ba685755118cf95abb0fe25f3f6a1c8';
-        $exception = $this->createMock(UnauthorizedException::class);
-
-        $this->contentService
-            ->expects($this->once())
-            ->method('loadContentByRemoteId')
-            ->with($contentRemoteId)
-            ->willThrowException($exception);
-
-        $this->assertTrue($validator->validate('ezremote', $contentRemoteId));
     }
 
     public function testValidateDocumentSkipMissingTargetId()
@@ -346,8 +297,8 @@ class InternalLinkValidatorTest extends TestCase
         return $this->getMockBuilder(InternalLinkValidator::class)
             ->setMethods($methods)
             ->setConstructorArgs([
-                $this->contentService,
-                $this->locationService,
+                $this->contentHandler,
+                $this->locationHandler,
             ])
             ->getMock();
     }

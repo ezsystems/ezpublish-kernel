@@ -81,8 +81,8 @@ services:
     ezpublish.fieldType.ezrichtext.validator.internal_link:
         class: '%ezpublish.fieldType.ezrichtext.validator.internal_link.class%'
         arguments:
-            - '@ezpublish.api.service.content'
-            - '@ezpublish.api.service.location'
+            - '@ezpublish.spi.persistence.cache.contentHandler'
+            - '@ezpublish.spi.persistence.cache.locationHandler'
 
     ezpublish.fieldType.ezrichtext.normalizer.input:
         class: "%ezpublish.fieldType.ezrichtext.normalizer.aggregate.class%"
