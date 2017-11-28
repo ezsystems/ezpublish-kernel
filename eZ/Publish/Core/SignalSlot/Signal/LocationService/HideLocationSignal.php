@@ -35,4 +35,13 @@ class HideLocationSignal extends Signal
      * @var int
      */
     public $currentVersionNo;
+
+    /**
+     * Location ID of parent location of the hidden location.
+     *
+     * @since 6.7.7
+     *
+     * @var mixed
+     */
+    public $parentLocationId;
 }
