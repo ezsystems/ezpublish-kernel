@@ -28,4 +28,13 @@ class CreateLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
+
+    /**
+     * Location ID of parent location of the created location.
+     *
+     * @since 6.7.7
+     *
+     * @var mixed
+     */
+    public $parentLocationId;
 }

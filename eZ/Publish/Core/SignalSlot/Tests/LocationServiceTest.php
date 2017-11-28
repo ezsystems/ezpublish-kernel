@@ -49,6 +49,7 @@ class LocationServiceTest extends ServiceTest
                 'path' => $rootPath,
                 'remoteId' => $rootRemoteId,
                 'contentInfo' => $rootContentInfo,
+                'parentLocationId' => 1,
             )
         );
         $locationContentInfo = $this->getContentInfo($locationContentId, $locationContentRemoteId);
@@ -58,6 +59,7 @@ class LocationServiceTest extends ServiceTest
                 'path' => $locationPath,
                 'remoteId' => $locationRemoteId,
                 'contentInfo' => $locationContentInfo,
+                'parentLocationId' => $rootId,
             )
         );
 
@@ -122,6 +124,7 @@ class LocationServiceTest extends ServiceTest
                 array(
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -133,6 +136,7 @@ class LocationServiceTest extends ServiceTest
                 array(
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -144,8 +148,10 @@ class LocationServiceTest extends ServiceTest
                 array(
                     'location1Id' => $locationId,
                     'content1Id' => $locationContentId,
+                    'parentLocation1Id' => $rootId,
                     'location2Id' => $rootId,
                     'content2Id' => $rootContentId,
+                    'parentLocation2Id' => 1,
                 ),
             ),
             array(
@@ -156,6 +162,7 @@ class LocationServiceTest extends ServiceTest
                 LocationServiceSignals\HideLocationSignal::class,
                 array(
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -166,6 +173,7 @@ class LocationServiceTest extends ServiceTest
                 LocationServiceSignals\UnhideLocationSignal::class,
                 array(
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -177,6 +185,7 @@ class LocationServiceTest extends ServiceTest
                 array(
                     'locationId' => $locationId,
                     'newParentLocationId' => $rootId,
+                    'oldParentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -188,6 +197,7 @@ class LocationServiceTest extends ServiceTest
                 array(
                     'locationId' => $locationId,
                     'contentId' => $locationContentId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
