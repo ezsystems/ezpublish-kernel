@@ -62,6 +62,14 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     private $siteaccessConfigurationFilters = [];
 
+    /**
+     * List of disabled ConfigParser classes.
+     * Meant to be used by external packages to turn off parts of the system that have been splitted out
+     * or deprecated.
+     * @var array
+     */
+    private $disabledConfigParsers = [];
+
     public function __construct(array $configParsers = array())
     {
         $this->configParsers = $configParsers;
@@ -159,13 +167,18 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     private function getMainConfigParser()
     {
         if ($this->mainConfigParser === null) {
+            $parsers = [];
             foreach ($this->configParsers as $parser) {
+                if ($this->isConfigParserDisabled($parser)) {
+                    continue;
+                }
                 if ($parser instanceof SuggestionCollectorAwareInterface) {
                     $parser->setSuggestionCollector($this->suggestionCollector);
                 }
+                $parsers[] = $parser;
             }
 
-            $this->mainConfigParser = new ConfigParser($this->configParsers);
+            $this->mainConfigParser = new ConfigParser($parsers);
         }
 
         return $this->mainConfigParser;
@@ -544,5 +557,29 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     public function addSiteAccessConfigurationFilter(SiteAccessConfigurationFilter $filter)
     {
         $this->siteaccessConfigurationFilters[] = $filter;
+    }
+
+    /**
+     * Disables a ConfigParser class.
+     * @param string $class The class the parser must be an instance of to be disabled.
+     */
+    public function disableConfigParser($class)
+    {
+        $this->disabledConfigParsers[$class] = true;
+    }
+
+    /**
+     * @param object $configParser
+     * @return bool
+     */
+    private function isConfigParserDisabled($configParser)
+    {
+        foreach (array_keys($this->disabledConfigParsers) as $disabledConfigParser) {
+            if ($configParser instanceof $disabledConfigParser) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
