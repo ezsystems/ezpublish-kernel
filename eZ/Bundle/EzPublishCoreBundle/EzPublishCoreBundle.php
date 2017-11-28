@@ -123,6 +123,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\FieldEditTemplates(),
                     new ConfigParser\FieldDefinitionSettingsTemplates(),
                     new ConfigParser\FieldDefinitionEditTemplates(),
+                    new ConfigParser\HttpCache(),
                     new ConfigParser\Image(),
                     new ConfigParser\Page(),
                     new ConfigParser\Languages(),

@@ -113,17 +113,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 ->info('The default page to show, e.g. after user login this will be used for default redirection. If provided, will override "default_target_path" from security.yml.')
                 ->example('/Getting-Started')
             ->end()
-            ->arrayNode('http_cache')
-                ->info('Settings related to Http cache')
-                ->children()
-                    ->arrayNode('purge_servers')
-                        ->info('Servers to use for Http PURGE (will NOT be used if ezpublish.http_cache.purge_type is "local").')
-                        ->example(array('http://localhost/', 'http://another.server/'))
-                        ->requiresAtLeastOneElement()
-                        ->prototype('scalar')->end()
-                    ->end()
-                ->end()
-            ->end()
             ->scalarNode('anonymous_user_id')
                 ->cannotBeEmpty()
                 ->example('10')
@@ -187,9 +176,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             $contextualizer->setContextualParameter('session', $currentScope, $sessionOptions);
         }
 
-        if (isset($scopeSettings['http_cache']['purge_servers'])) {
-            $contextualizer->setContextualParameter('http_cache.purge_servers', $currentScope, $scopeSettings['http_cache']['purge_servers']);
-        }
         if (isset($scopeSettings['anonymous_user_id'])) {
             $contextualizer->setContextualParameter('anonymous_user_id', $currentScope, $scopeSettings['anonymous_user_id']);
         }
