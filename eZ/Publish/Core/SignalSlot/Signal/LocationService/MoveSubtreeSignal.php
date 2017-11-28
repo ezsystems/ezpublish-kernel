@@ -23,6 +23,15 @@ class MoveSubtreeSignal extends Signal
     public $locationId;
 
     /**
+     * Location ID of original parent location of the moved location.
+     *
+     * @since 6.7.7
+     *
+     * @var mixed
+     */
+    public $oldParentLocationId;
+
+    /**
      * NewParentLocationId.
      *
      * @var mixed
