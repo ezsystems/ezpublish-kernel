@@ -412,6 +412,7 @@ services:
             - "@ezpublish.fieldType.ezrichtext.converter.input.dispatcher"
             - "@ezpublish.fieldType.ezrichtext.normalizer.input"
             - "@ezpublish.fieldType.ezrichtext.validator.input.dispatcher"
+            - '@ezpublish.fieldType.ezrichtext.validator.internal_link'
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 
