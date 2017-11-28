@@ -1495,6 +1495,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description',
+                    'typeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -1503,6 +1504,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'typeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -1511,6 +1513,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
             new Field(
@@ -1519,6 +1522,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -2589,6 +2593,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'typeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -2597,6 +2602,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -2622,6 +2628,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description',
+                    'typeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -2630,6 +2637,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -2655,6 +2663,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'typeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -2663,6 +2672,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -5749,6 +5759,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => ($field->value !== null ? true : null),
                     'languageCode' => $field->languageCode,
                     'fieldDefIdentifier' => $field->fieldDefIdentifier,
+                    'typeIdentifier' => $field->typeIdentifier,
                 )
             );
         }
@@ -5853,6 +5864,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'Foo',
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'typeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -5861,6 +5873,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'Bar',
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description',
+                    'typeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -5869,6 +5882,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'An awesome multi-lang forum²',
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
             new Field(
@@ -5877,6 +5891,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'An awesome multi-lang forum²³',
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
         );

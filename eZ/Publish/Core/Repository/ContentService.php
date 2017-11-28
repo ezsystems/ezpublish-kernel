@@ -762,15 +762,16 @@ class ContentService implements ContentServiceInterface
      *
      * @return Field
      */
-    private function cloneField(Field $field, array $overrides = array())
+    private function cloneField(Field $field, array $overrides = [])
     {
         $fieldData = array_merge(
-            array(
+            [
                 'id' => $field->id,
                 'value' => $field->value,
                 'languageCode' => $field->languageCode,
                 'fieldDefIdentifier' => $field->fieldDefIdentifier,
-            ),
+                'typeIdentifier' => $field->typeIdentifier,
+            ],
             $overrides
         );
 

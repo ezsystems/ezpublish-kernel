@@ -189,6 +189,7 @@ class DomainMapper
                         ->fromPersistenceValue($spiField->value),
                     'languageCode' => $spiField->languageCode,
                     'fieldDefIdentifier' => $fieldIdentifierMap[$spiField->fieldDefinitionId],
+                    'typeIdentifier' => $spiField->type,
                 )
             );
         }
