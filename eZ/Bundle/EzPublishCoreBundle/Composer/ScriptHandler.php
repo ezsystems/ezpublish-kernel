@@ -127,7 +127,7 @@ Note:
 - "ezplatform:install" has different installer <type>s depending on your install, run command with <comment>--help</comment> to see your options.
 - Instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software,
   otherwise see install instructions for directory permissions.
-- Last command will give you url to frontend of installation, add "/admin" to reach backend.
+- The last command will give you the url to the frontend of the installation, add "/admin" to reach backend.
 
 
 For full install instructions, including setting up full web server & directory permissions, see install instructions in <fg=green>INSTALL.md</>
