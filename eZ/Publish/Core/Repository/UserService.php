@@ -1157,17 +1157,27 @@ class UserService implements UserServiceInterface
      */
     protected function createPasswordHash($login, $password, $site, $type)
     {
+        $deprecationWarningFormat = 'Password hash type %s is deprecated since 6.13.';
+
         switch ($type) {
             case APIUser::PASSWORD_HASH_MD5_PASSWORD:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_PASSWORD'), E_USER_DEPRECATED);
+
                 return md5($password);
 
             case APIUser::PASSWORD_HASH_MD5_USER:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_USER'), E_USER_DEPRECATED);
+
                 return md5("$login\n$password");
 
             case APIUser::PASSWORD_HASH_MD5_SITE:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_SITE'), E_USER_DEPRECATED);
+
                 return md5("$login\n$password\n$site");
 
             case APIUser::PASSWORD_HASH_PLAINTEXT:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_PLAINTEXT'), E_USER_DEPRECATED);
+
                 return $password;
 
             case APIUser::PASSWORD_HASH_BCRYPT:
