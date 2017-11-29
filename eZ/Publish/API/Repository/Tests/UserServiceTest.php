@@ -8,10 +8,12 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
+use ReflectionClass;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -1878,5 +1880,51 @@ class UserServiceTest extends BaseTest
         }
         /* PASSWORD_HASH_MD5_PASSWORD (1) */
         return md5($password);
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     */
+    public function testCreateUserInvalidPasswordHashTypeThrowsException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Argument 'type' is invalid: Password hash type '42424242' is not recognized");
+
+        $repository = $this->getRepository();
+        $signalSlotUserService = $repository->getUserService();
+
+        $signalSlotUserServiceReflection = new ReflectionClass($signalSlotUserService);
+        $userServiceProperty = $signalSlotUserServiceReflection->getProperty('service');
+        $userServiceProperty->setAccessible(true);
+        $userService = $userServiceProperty->getValue($signalSlotUserService);
+
+        $userServiceReflection = new ReflectionClass($userService);
+        $settingsProperty = $userServiceReflection->getProperty('settings');
+        $settingsProperty->setAccessible(true);
+
+        $defaultUserServiceSettings = $settingsProperty->getValue($userService);
+
+        /* BEGIN: Use Case */
+        $settingsProperty->setValue(
+            $userService,
+            [
+                'hashType' => 42424242, // Non-existing hash type
+            ] + $settingsProperty->getValue($userService)
+        );
+
+        try {
+            $this->createUserVersion1();
+        } catch (InvalidArgumentException $e) {
+            // Reset to default settings, so we don't break other tests
+            $settingsProperty->setValue($userService, $defaultUserServiceSettings);
+
+            throw $e;
+        }
+        /* END: Use Case */
+
+        // Reset to default settings, so we don't break other tests
+        $settingsProperty->setValue($userService, $defaultUserServiceSettings);
     }
 }
