@@ -544,6 +544,8 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user for the given login and password.
      *
+     * If the password hash type is deprecated, it will be updated to the hash type configured for the service (if they differ).
+     *
      * {@inheritdoc}
      *
      * @param string $login
@@ -570,7 +572,36 @@ class UserService implements UserServiceInterface
             throw new NotFoundException('user', $login);
         }
 
+        $this->updateDeprecatedPasswordHash($login, $password, $spiUser);
+
         return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
+    }
+
+    /**
+     * Update password hash to the type configured for the service, if the hash is of a deprecated type.
+     *
+     * @param string $login User login
+     * @param string $password User password
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser
+     */
+    private function updateDeprecatedPasswordHash($login, $password, SPIUser $spiUser)
+    {
+        if ($spiUser->hashAlgorithm !== $this->settings['hashType'] &&
+            in_array(
+                $spiUser->hashAlgorithm,
+                [
+                    APIUser::PASSWORD_HASH_MD5_PASSWORD,
+                    APIUser::PASSWORD_HASH_MD5_USER,
+                    APIUser::PASSWORD_HASH_MD5_SITE,
+                    APIUser::PASSWORD_HASH_PLAINTEXT,
+                ],
+                true
+            )
+        ) {
+            $spiUser->passwordHash = $this->createPasswordHash($login, $password, null, $this->settings['hashType']);
+            $spiUser->hashAlgorithm = $this->settings['hashType'];
+            $this->userHandler->update($spiUser);
+        }
     }
 
     /**
