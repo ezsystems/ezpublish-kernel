@@ -57,6 +57,11 @@ abstract class User extends Content implements UserReference
     const PASSWORD_HASH_PHP_DEFAULT = 7;
 
     /**
+     * @var int Default password hash, used when none is specified, may change over time
+     */
+    const DEFAULT_PASSWORD_HASH = self::PASSWORD_HASH_PHP_DEFAULT;
+
+    /**
      * User login.
      *
      * @var string

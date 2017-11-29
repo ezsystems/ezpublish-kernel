@@ -77,7 +77,7 @@ class UserService implements UserServiceInterface
             'defaultUserPlacement' => 12,
             'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
-            'hashType' => APIUser::PASSWORD_HASH_PHP_DEFAULT,
+            'hashType' => APIUser::DEFAULT_PASSWORD_HASH,
             'siteName' => 'ez.no',
         );
     }
