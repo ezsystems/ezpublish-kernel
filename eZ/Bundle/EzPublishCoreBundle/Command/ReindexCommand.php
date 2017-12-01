@@ -257,7 +257,7 @@ EOT
                     $progress->advance(1);
 
                     if (!$process->isSuccessful()) {
-                        $this->logger->error("Child indexer process returned: " . $process->getExitCodeText());
+                        $this->logger->error('Child indexer process returned: ' . $process->getExitCodeText());
                     }
                 }
 
