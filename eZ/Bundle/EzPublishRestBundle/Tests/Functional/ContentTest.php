@@ -503,6 +503,98 @@ XML;
     }
 
     /**
+     * Covers DELETE /content/objects/<contentId>/translations/<languageCode>.
+     */
+    public function testDeleteTranslation()
+    {
+        // create independent Content
+        $content = $this->createContentDraft(
+            '/api/ezp/v2/content/types/1',
+            '/api/ezp/v2/content/locations/1/2',
+            '/api/ezp/v2/content/sections/1',
+            '/api/ezp/v2/user/users/14',
+            [
+                'name' => [
+                    'eng-GB' => $this->addTestSuffix(__FUNCTION__),
+                ],
+            ]
+        );
+        $restContentHref = $content['_href'];
+        $restContentVersionHref = "{$content['Versions']['_href']}/{$content['currentVersionNo']}";
+        $this->publishContentVersionDraft($restContentVersionHref);
+        $restContentVersionHref = $this->createDraftFromVersion($content['CurrentVersion']['_href']);
+
+        // create pol-PL Translation
+        $translationToDelete = 'pol-PL';
+        $this->createVersionTranslation($restContentVersionHref, $translationToDelete, 'Polish');
+        $this->publishContentVersionDraft($restContentVersionHref);
+
+        // delete Translation
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('DELETE', "{$restContentHref}/translations/{$translationToDelete}")
+        );
+        self::assertHttpResponseCodeEquals($response, 204);
+
+        // check that deleted Translation no longer exists
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', "$restContentHref/versions", '', 'VersionList+json')
+        );
+        self::assertHttpResponseCodeEquals($response, 200);
+        $versionList = json_decode($response->getContent(), true);
+        foreach ($versionList['VersionList']['VersionItem'] as $versionItem) {
+            self::assertNotContains($translationToDelete, $versionItem['VersionInfo']['languageCodes']);
+            foreach ($versionItem['VersionInfo']['names']['value'] as $name) {
+                self::assertNotEquals($translationToDelete, $name['_languageCode']);
+            }
+        }
+
+        return $restContentHref;
+    }
+
+    /**
+     * Test that deleting content which has Version(s) with single Translation being deleted is supported.
+     *
+     * Covers DELETE /content/objects/<contentId>/translations/<languageCode>.
+     *
+     * @depends testDeleteTranslation
+     *
+     * @param string $restContentHref
+     */
+    public function testDeleteTranslationOfContentWithSingleTranslationVersion($restContentHref)
+    {
+        // create draft independent from other tests
+        $restContentVersionHref = $this->createDraftFromVersion("$restContentHref/versions/1");
+
+        // create pol-PL Translation to have more than one Translation
+        $this->createVersionTranslation($restContentVersionHref, 'pol-PL', 'Polish');
+        $this->publishContentVersionDraft($restContentVersionHref);
+
+        // change Main Translation to just created pol-PL
+        $this->updateMainTranslation($restContentHref, 'pol-PL');
+
+        // delete eng-GB Translation
+        $translationToDelete = 'eng-GB';
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('DELETE', "{$restContentHref}/translations/{$translationToDelete}")
+        );
+        self::assertHttpResponseCodeEquals($response, 204);
+
+        // check that deleted Translation no longer exists
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', "$restContentHref/versions", '', 'VersionList+json')
+        );
+        self::assertHttpResponseCodeEquals($response, 200);
+        $versionList = json_decode($response->getContent(), true);
+        foreach ($versionList['VersionList']['VersionItem'] as $versionItem) {
+            self::assertNotEmpty($versionItem['VersionInfo']['languageCodes']);
+            self::assertNotContains($translationToDelete, $versionItem['VersionInfo']['languageCodes']);
+            foreach ($versionItem['VersionInfo']['names']['value'] as $name) {
+                self::assertNotEquals($translationToDelete, $name['_languageCode']);
+            }
+        }
+    }
+
+    /**
      * Publish another Version with new Translation.
      *
      * @param string $restContentVersionHref
@@ -514,7 +606,8 @@ XML;
      */
     private function createVersionTranslation($restContentVersionHref, $languageCode, $languageName)
     {
-        $this->ensureLanguageExists($languageCode, $languageName);
+        // @todo Implement EZP-21171 to check if Language exists and add it
+        // for now adding is done by ez:behat:create-language command executed in Travis job
 
         $xml = <<< XML
 <VersionUpdate>
@@ -535,17 +628,6 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
-    }
-
-    /**
-     * Make REST API calls to check if the given Language exists and create it if it doesn't.
-     *
-     * @param string $languageCode
-     * @param string $languageName
-     */
-    private function ensureLanguageExists($languageCode, $languageName)
-    {
-        self::markTestIncomplete('@todo: Implement EZP-21171');
     }
 
     /**
@@ -587,5 +669,128 @@ XML;
         $document = new \DOMDocument();
         $document->loadXML($responseBody);
         $document->schemaValidate(__DIR__ . '/xsd/Version.xsd');
+    }
+
+    /**
+     * Create new Content Draft.
+     *
+     * @param string $restContentTypeHref Content Type REST resource link
+     * @param string $restParentLocationHref Parent Location REST resource link
+     * @param string $restSectionHref Section REST resource link
+     * @param string $restUserHref User REST resource link
+     * @param array $fieldValues multilingual field values <code>['fieldIdentifier' => ['languageCode' => 'value']]</code>
+     *
+     * @return array Content structure decoded from JSON
+     */
+    private function createContentDraft($restContentTypeHref, $restParentLocationHref, $restSectionHref, $restUserHref, array $fieldValues)
+    {
+        $remoteId = md5(microtime() . uniqid());
+        $modificationDate = new \DateTime();
+
+        $fieldsXML = '';
+        foreach ($fieldValues as $fieldIdentifier => $multilingualValues) {
+            foreach ($multilingualValues as $languageCode => $fieldValue) {
+                $fieldsXML .= <<< XML
+<field>
+  <fieldDefinitionIdentifier>{$fieldIdentifier}</fieldDefinitionIdentifier>
+  <languageCode>{$languageCode}</languageCode>
+  <fieldValue>{$fieldValue}</fieldValue>
+</field>
+XML;
+            }
+        }
+
+        $body = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentCreate>
+  <ContentType href="{$restContentTypeHref}" />
+  <mainLanguageCode>eng-GB</mainLanguageCode>
+  <LocationCreate>
+    <ParentLocation href="{$restParentLocationHref}" />
+    <priority>0</priority>
+    <hidden>false</hidden>
+    <sortField>PATH</sortField>
+    <sortOrder>ASC</sortOrder>
+  </LocationCreate>
+  <Section href="{$restSectionHref}" />
+  <alwaysAvailable>true</alwaysAvailable>
+  <remoteId>{$remoteId}</remoteId>
+  <User href="{$restUserHref}" />
+  <modificationDate>{$modificationDate->format('c')}</modificationDate>
+  <fields>
+    {$fieldsXML}
+  </fields>
+</ContentCreate>
+XML;
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/objects', 'ContentCreate+xml', 'ContentInfo+json');
+        $request->setContent($body);
+
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
+
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
+        $content = json_decode($response->getContent(), true);
+        self::assertNotEmpty($content['Content']);
+
+        return $content['Content'];
+    }
+
+    /**
+     * Create Draft of a given Content and versionNo.
+     *
+     * @param string $restContentVersionHref REST resource link of Content Version
+     *
+     * @return string Content Version Draft REST resource link
+     */
+    private function createDraftFromVersion($restContentVersionHref)
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('COPY', "{$restContentVersionHref}")
+        );
+        self::assertHttpResponseCodeEquals($response, 201);
+
+        $href = $response->getHeader('Location');
+        self::assertNotEmpty($href);
+
+        return $href;
+    }
+
+    /**
+     * Publish Content Version Draft given by REST resource link.
+     *
+     * @param string $restContentVersionHref REST resource link of Version Draft
+     */
+    private function publishContentVersionDraft($restContentVersionHref)
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('PUBLISH', $restContentVersionHref)
+        );
+        self::assertHttpResponseCodeEquals($response, 204);
+    }
+
+    /**
+     * Update Main Translation of a Content.
+     *
+     * @param string $restContentHref REST resource link of Content
+     * @param string $languageCode new Main Translation language code
+     */
+    private function updateMainTranslation($restContentHref, $languageCode)
+    {
+        $content = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentUpdate>
+  <mainLanguageCode>{$languageCode}</mainLanguageCode>
+</ContentUpdate>
+XML;
+
+        $request = $this->createHttpRequest('PATCH', $restContentHref, 'ContentUpdate+xml', 'ContentInfo+json');
+        $request->setContent($content);
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 }
