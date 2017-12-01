@@ -41,6 +41,11 @@ class ReindexCommand extends ContainerAwareCommand
     private $phpPath;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -51,6 +56,7 @@ class ReindexCommand extends ContainerAwareCommand
         parent::initialize($input, $output);
         $this->searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
         $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
+        $this->logger = $this->getContainer()->get('logger');
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -105,7 +111,7 @@ class ReindexCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Number of sub processes to spawn in parallel handling iterations, default number is number of CPU cores -1, set to 1 or 0 to disable',
-                $this->getNumberOfCPUCores()
+                $this->getNumberOfCPUCores() - 1
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -148,6 +154,7 @@ Running indexing against an Indexer that has not been updated to use Incremental
 Options that won't be taken into account:
 - since
 - content-ids
+- subtree
 - processes
 - no-purge
 EOT
@@ -169,9 +176,13 @@ EOT
     protected function indexIncrementally(InputInterface $input, OutputInterface $output, $iterationCount, $commit)
     {
         if ($contentIds = $input->getOption('content-ids')) {
-            $output->writeln('Indexing list of content id\'s');
+            $contentIds = explode(',', $contentIds);
+            $output->writeln(sprintf(
+                'Indexing list of content id\'s (%s)' . $commit ? ', with commit' : '',
+                count($contentIds)
+            ));
 
-            return $this->searchIndexer->updateSearchIndex(explode(',', $contentIds), $commit);
+            return $this->searchIndexer->updateSearchIndex($contentIds, $commit);
         }
 
         if ($since = $input->getOption('since')) {
@@ -197,7 +208,7 @@ EOT
         $iterations = ceil($count / $iterationCount);
         $processCount = (int) $input->getOption('processes');
         $processCount = $processCount > $iterations ? $iterations : $processCount;
-        $processMessage = $processCount > 1 ? "using $processCount parallel processes" : 'using single process';
+        $processMessage = $processCount > 1 ? "using $processCount parallel child processes" : 'using single (current) process';
 
         if ($purge) {
             $output->writeln('Purging index...');
@@ -244,6 +255,10 @@ EOT
                 if ($process !== null) {
                     // One of the processes just finished, so we increment progress bar
                     $progress->advance(1);
+
+                    if (!$process->isSuccessful()) {
+                        $this->logger->error('Child indexer process returned: ' . $process->getExitCodeText());
+                    }
                 }
 
                 if (!$generator->valid()) {
@@ -383,6 +398,8 @@ EOT
                 'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
             );
         }
+
+        return $this->phpPath;
     }
 
     /**
