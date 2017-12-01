@@ -111,7 +111,7 @@ class ReindexCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Number of sub processes to spawn in parallel handling iterations, default number is number of CPU cores -1, set to 1 or 0 to disable',
-                $this->getNumberOfCPUCores() -1
+                $this->getNumberOfCPUCores() - 1
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
