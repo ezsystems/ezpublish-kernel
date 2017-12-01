@@ -110,8 +110,8 @@ class ReindexCommand extends ContainerAwareCommand
                 'processes',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Number of sub processes to spawn in parallel handling iterations, default number is number of CPU cores -1, set to 1 or 0 to disable',
-                $this->getNumberOfCPUCores() - 1
+                'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable',
+                'auto'
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -128,8 +128,9 @@ Example usage:
 - Refresh (add/update) index of a subtree:
   <comment>ezplatform:reindex --subtree=45</comment>
 
- - Refresh (add/update) the whole index using 3 processes, & let search engine handle commits itself using auto commit:
-   <comment>ezplatform:reindex --no-purge --no-commit --processes=3</comment>
+- Refresh (add/update) index disabling use of child proccesses and initial purging,
+  & let search engine handle commits using auto commit:
+  <comment>ezplatform:reindex --no-purge --no-commit --processes=0</comment>
 
 EOT
             );
@@ -178,7 +179,7 @@ EOT
         if ($contentIds = $input->getOption('content-ids')) {
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
-                'Indexing list of content id\'s (%s)' . $commit ? ', with commit' : '',
+                'Indexing list of content id\'s (%s)' . ($commit ? ', with commit' : ''),
                 count($contentIds)
             ));
 
@@ -206,8 +207,9 @@ EOT
         }
 
         $iterations = ceil($count / $iterationCount);
-        $processCount = (int) $input->getOption('processes');
-        $processCount = $processCount > $iterations ? $iterations : $processCount;
+        $processes = $input->getOption('processes');
+        $processCount = $processes === 'auto' ? $this->getNumberOfCPUCores() - 1 : (int) $processes;
+        $processCount = min($iterations, $processCount);
         $processMessage = $processCount > 1 ? "using $processCount parallel child processes" : 'using single (current) process';
 
         if ($purge) {
