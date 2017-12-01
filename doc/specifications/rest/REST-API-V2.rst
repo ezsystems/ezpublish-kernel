@@ -226,7 +226,8 @@ Resource                                                          POST          
 /                                                                 .                   list root resources     .                            .
 /content/objects                                                  create new content  .                       .                            .
 /content/objects/<ID>                                             .                   load content            update content meta data     delete content   copy content
-/content/objects/<ID>/<lang_code>                                 .                   .                       .                            delete language
+/content/objects/<ID>/translations/<languageCode>                 .                   .                       .                            delete
+                                                                                                                                           translation
                                                                                                                                            from content
 /content/objects/<ID>/versions                                    .                   load all versions       .                            .
                                                                                       (version infos)
@@ -235,7 +236,9 @@ Resource                                                          POST          
                                                                                                                                                              version
 /content/objects/<ID>/versions/<no>                               .                   get a specific version  update a version/draft       delete version    create draft
                                                                                                                                                              from version
-/content/objects/<ID>/versions/<no>/translations/<languageCode>   .                   .                       .                            delete translation
+/content/objects/<ID>/versions/<no>/translations/<languageCode>   .                   .                       .                            delete
+                                                                                                                                           translation
+                                                                                                                                           from version
 /content/objects/<ID>/versions/<no>/relations                     create new relation load relations of vers. .                            .
 /content/objects/<ID>/versions/<no>/relations/<ID>                .                   load relation details   .                            delete relation
 /content/objects/<ID>/locations                                   create location     load locations of cont- .                            .
@@ -1021,6 +1024,23 @@ Example
     HTTP/1.1 201 Created
     Location: /content/objects/74
 
+Delete (permanently) Translation from all Versions of a Content
+```````````````````````````````````````````````````````````````
+:Resource: /content/objects/<ID>/translations/<languageCode>
+:Method: DELETE
+:Description: Permanently delete a Translation from all Versions of a Content
+:Response:
+
+.. code:: http
+
+    HTTP/1.1 204 No Content
+
+:Error Codes:
+                :404: if the Content item was not found
+                :401: If the user is not authorized to delete Content (content/remove policy)
+                :406: if the given Translation does not exist for the Content
+                :409: if the specified Translation is the only one any Version has or is the Main Translation
+
 
 Managing Versions
 ~~~~~~~~~~~~~~~~~
@@ -1456,7 +1476,7 @@ Delete Content Version
     :403: If the version is in state published
 
 Delete Content Version Draft Translation
-``````````````````````
+````````````````````````````````````````
 :Resource: /content/objects/<ID>/versions/<versionNo>/translations/<languageCode>
 :Method: DELETE
 :Description: Removes a translation from a version draft
@@ -1474,7 +1494,7 @@ Delete Content Version Draft Translation
         :409: if the specified translation is the only one the Version has or is the main translation
 
 Example (workflow) of deleting translation from a published Content
-'''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 .. code:: http
 
