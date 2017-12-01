@@ -208,7 +208,7 @@ EOT
         $iterations = ceil($count / $iterationCount);
         $processCount = (int) $input->getOption('processes');
         $processCount = $processCount > $iterations ? $iterations : $processCount;
-        $processMessage = $processCount > 1 ? "using $processCount parallel processes" : 'using single process';
+        $processMessage = $processCount > 1 ? "using $processCount parallel child processes" : 'using single (current) process';
 
         if ($purge) {
             $output->writeln('Purging index...');
