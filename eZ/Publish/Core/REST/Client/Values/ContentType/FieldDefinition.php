@@ -60,13 +60,6 @@ class FieldDefinition extends APIFieldDefinition
      */
     protected $fieldSettings;
 
-    public function __construct(array $data = array())
-    {
-        foreach ($data as $propertyName => $propertyValue) {
-            $this->$propertyName = $propertyValue;
-        }
-    }
-
     /**
      * {@inheritdoc}
      */
