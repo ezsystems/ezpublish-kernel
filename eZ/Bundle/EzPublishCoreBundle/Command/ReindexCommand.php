@@ -111,7 +111,7 @@ class ReindexCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable',
-                'auto'
+                1
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -128,9 +128,9 @@ Example usage:
 - Refresh (add/update) index of a subtree:
   <comment>ezplatform:reindex --subtree=45</comment>
 
-- Refresh (add/update) index disabling use of child proccesses and initial purging,
-  & let search engine handle commits using auto commit:
-  <comment>ezplatform:reindex --no-purge --no-commit --processes=0</comment>
+- Refresh (add/update) the whole index using 3 processes (if machine has 4 CPU cores),
+  & let search engine handle commits itself using auto commit:
+  <comment>ezplatform:reindex --no-purge --no-commit --processes=auto</comment>
 
 EOT
             );
