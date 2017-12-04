@@ -242,7 +242,7 @@ class ContentTypeDomainMapper
                 'identifier' => $spiFieldDefinition->identifier,
                 'fieldGroup' => $spiFieldDefinition->fieldGroup,
                 'position' => $spiFieldDefinition->position,
-                'fieldTypeIdentifier' => $spiFieldDefinition->fieldType,
+                'typeIdentifier' => $spiFieldDefinition->fieldType,
                 'isTranslatable' => $spiFieldDefinition->isTranslatable,
                 'isRequired' => $spiFieldDefinition->isRequired,
                 'isInfoCollector' => $spiFieldDefinition->isInfoCollector,
@@ -273,9 +273,7 @@ class ContentTypeDomainMapper
     public function buildSPIFieldDefinitionUpdate(APIFieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct, APIFieldDefinition $fieldDefinition)
     {
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-        $fieldType = $this->fieldTypeRegistry->getFieldType(
-            $fieldDefinition->fieldTypeIdentifier
-        );
+        $fieldType = $this->fieldTypeRegistry->getFieldType($fieldDefinition->typeIdentifier);
 
         $validatorConfiguration = $fieldDefinitionUpdateStruct->validatorConfiguration === null
             ? $fieldDefinition->validatorConfiguration
@@ -287,7 +285,7 @@ class ContentTypeDomainMapper
         $validationErrors = array();
         if ($fieldDefinitionUpdateStruct->isSearchable && !$fieldType->isSearchable()) {
             $validationErrors[] = new ValidationError(
-                "FieldType '{$fieldDefinition->fieldTypeIdentifier}' is not searchable"
+                "FieldType '{$fieldDefinition->typeIdentifier}' is not searchable"
             );
         }
         $validationErrors = array_merge(
@@ -363,7 +361,7 @@ class ContentTypeDomainMapper
             array(
                 'id' => null,
                 'identifier' => $fieldDefinitionCreateStruct->identifier,
-                'fieldType' => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
+                'fieldType' => $fieldDefinitionCreateStruct->typeIdentifier,
                 'name' => $fieldDefinitionCreateStruct->names === null ?
                     array() :
                     $fieldDefinitionCreateStruct->names,

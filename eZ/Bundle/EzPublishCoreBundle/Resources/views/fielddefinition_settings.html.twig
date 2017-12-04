@@ -8,7 +8,7 @@
 {% trans_default_domain "fielddefinition" %}
 
 {% block ezstring_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% set defaultValue = null %}
     {% if fielddefinition.defaultValue.text is not same as('') %}
         {% set defaultValue = fielddefinition.defaultValue.text %}
@@ -38,7 +38,7 @@
 {% endblock %}
 
 {% block eztext_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% set rows = settings.textRows %}
     {{ block( 'settings_preferredrows' ) }}
 </ul>
@@ -47,7 +47,7 @@
 {% block ezrichtext_settings %}{% endblock %}
 
 {% block ezcountry_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% set defaultValue = null %}
     {% if fielddefinition.defaultValue.countries %}
         {% for country in fielddefinition.defaultValue.countries %}
@@ -61,7 +61,7 @@
 {% endblock %}
 
 {% block ezboolean_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting default-value">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.default-value.label'|trans|desc("Default value:")}}</div>
         <div class="ez-fielddefinition-setting-value">
@@ -76,7 +76,7 @@
 {% endblock %}
 
 {% block ezdatetime_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Type::DEFAULT_EMPTY' ) %}
         {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
     {% elseif settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Type::DEFAULT_CURRENT_DATE' ) %}
@@ -100,7 +100,7 @@
 {% endblock %}
 
 {% block ezdate_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Date\\Type::DEFAULT_EMPTY' ) %}
         {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
     {% else %}
@@ -111,7 +111,7 @@
 {% endblock %}
 
 {% block eztime_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Time\\Type::DEFAULT_EMPTY' ) %}
         {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
     {% else %}
@@ -126,7 +126,7 @@
 {% endblock %}
 
 {% block ezinteger_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% set defaultValue = fielddefinition.defaultValue.value %}
     {{ block( 'settings_defaultvalue' ) }}
     {% set minValue = fielddefinition.validatorConfiguration.IntegerValueValidator.minIntegerValue %}
@@ -137,7 +137,7 @@
 {% endblock %}
 
 {% block ezfloat_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% set defaultValue = fielddefinition.defaultValue.value %}
     {{ block( 'settings_defaultvalue' ) }}
     {% set minValue = fielddefinition.validatorConfiguration.FloatValueValidator.minFloatValue %}
@@ -148,7 +148,7 @@
 {% endblock %}
 
 {% block ezselection_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting options">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.options.label'|trans|desc("Defined options")}}</div>
         <div class="ez-fielddefinition-setting-value">
@@ -166,14 +166,14 @@
 
 
 {% block ezbinaryfile_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {{ block( 'settings_maxfilesize' ) }}
 </ul>
 {% endblock %}
 
 {% block ezmedia_settings %}
 {% set type = settings.mediaType %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {{ block( 'settings_maxfilesize' ) }}
     <li class="ez-fielddefinition-setting media-player-type">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.media-player-type.label'|trans|desc("Media player type:")}}</div>
@@ -201,13 +201,13 @@
 {% endblock %}
 
 {% block ezimage_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {{ block( 'settings_maxfilesize' ) }}
 </ul>
 {% endblock %}
 
 {% block ezobjectrelation_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting selection-method">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.selection-method.label'|trans|desc("Selection method:")}}</div>
         <div class="ez-fielddefinition-setting-value">
@@ -228,7 +228,7 @@
 {% endblock %}
 
 {% block ezobjectrelationlist_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting selection-method">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.selection-method.label'|trans|desc("Selection method:")}}</div>
         <div class="ez-fielddefinition-setting-value">
@@ -258,7 +258,7 @@
 {% endblock %}
 
 {% block ezpage_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     <li class="ez-fielddefinition-setting default-layout">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.default-layout.label'|trans|desc("Default layout:")}}</div>
         <div class="ez-fielddefinition-setting-value">{{ settings.defaultLayout ? settings.defaultLayout : 'fielddefinition.default-layout.none'|trans|desc("None") }}</div>
@@ -272,7 +272,7 @@
 {% block ezurl_settings %}{% endblock %}
 
 {% block ezisbn_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.typeIdentifier }}-settings">
     {% set defaultValue = null %}
     {% if fielddefinition.defaultValue.isbn %}
         {% set defaultValue = fielddefinition.defaultValue.isbn %}

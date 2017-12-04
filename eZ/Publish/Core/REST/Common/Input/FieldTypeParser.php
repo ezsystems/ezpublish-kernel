@@ -70,7 +70,7 @@ class FieldTypeParser
 
         $fieldDefinition = $contentType->getFieldDefinition($fieldDefIdentifier);
 
-        return $this->parseValue($fieldDefinition->fieldTypeIdentifier, $value);
+        return $this->parseValue($fieldDefinition->typeIdentifier, $value);
     }
 
     /**

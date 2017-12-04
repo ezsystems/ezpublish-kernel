@@ -242,7 +242,7 @@ class FieldDefinitionCreateTest extends BaseTest
                     new FieldDefinitionCreateStruct(
                         array(
                             'identifier' => 'title',
-                            'fieldTypeIdentifier' => 'ezstring',
+                            'typeIdentifier' => 'ezstring',
                         )
                     )
                 )

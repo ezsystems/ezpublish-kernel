@@ -53,7 +53,7 @@ class FieldHelper
 
         return $this
             ->fieldTypeService
-            ->getFieldType($fieldDefinition->fieldTypeIdentifier)
+            ->getFieldType($fieldDefinition->typeIdentifier)
             ->isEmptyValue($field->value);
     }
 

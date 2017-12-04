@@ -1414,7 +1414,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -1516,7 +1516,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId1',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
@@ -1526,7 +1526,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId2',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
@@ -1670,7 +1670,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId1',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
@@ -1680,7 +1680,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId2',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
@@ -1690,7 +1690,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId3',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier3',
                     'isRequired' => false,
@@ -1700,7 +1700,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId4',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier4',
                     'isRequired' => false,
@@ -1980,7 +1980,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId1',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -2158,7 +2158,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => true,
@@ -2402,7 +2402,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -2530,7 +2530,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -2668,7 +2668,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -2766,7 +2766,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -3355,7 +3355,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -3568,7 +3568,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -3838,7 +3838,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId1',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
@@ -3848,7 +3848,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId2',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
@@ -4143,7 +4143,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId1',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
@@ -4153,7 +4153,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId2',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
@@ -4446,7 +4446,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId1',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
@@ -4456,7 +4456,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId2',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
@@ -4466,7 +4466,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId3',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier3',
                     'isRequired' => false,
@@ -4476,7 +4476,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId4',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier4',
                     'isRequired' => false,
@@ -4775,7 +4775,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId1',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
@@ -4961,7 +4961,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => true,
@@ -5194,7 +5194,7 @@ class ContentTest extends BaseServiceMockTest
             new FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId',
-                    'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                    'typeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,

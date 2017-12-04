@@ -511,22 +511,22 @@ class ContentTypeService implements ContentTypeServiceInterface
     ) {
         // Required properties
 
-        if ($fieldDefinitionCreateStruct->fieldTypeIdentifier === null) {
-            throw new InvalidArgumentException($argumentName, "Property 'fieldTypeIdentifier' is required");
+        if ($fieldDefinitionCreateStruct->typeIdentifier === null) {
+            throw new InvalidArgumentException($argumentName, "Field Definition Property 'typeIdentifier' is required");
         }
 
-        if (!is_string($fieldDefinitionCreateStruct->fieldTypeIdentifier)) {
+        if (!is_string($fieldDefinitionCreateStruct->typeIdentifier)) {
             throw new InvalidArgumentType(
-                $argumentName . '->fieldTypeIdentifier',
+                $argumentName . '->typeIdentifier',
                 'string',
-                $fieldDefinitionCreateStruct->fieldTypeIdentifier
+                $fieldDefinitionCreateStruct->typeIdentifier
             );
         }
 
-        if ($fieldDefinitionCreateStruct->fieldTypeIdentifier === '') {
+        if ($fieldDefinitionCreateStruct->typeIdentifier === '') {
             throw new InvalidArgumentValue(
                 $argumentName . '->fieldTypeIdentifier',
-                $fieldDefinitionCreateStruct->fieldTypeIdentifier
+                $fieldDefinitionCreateStruct->typeIdentifier
             );
         }
 
@@ -711,17 +711,17 @@ class ContentTypeService implements ContentTypeServiceInterface
         foreach ($contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct) {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
             $fieldType = $this->fieldTypeRegistry->getFieldType(
-                $fieldDefinitionCreateStruct->fieldTypeIdentifier
+                $fieldDefinitionCreateStruct->typeIdentifier
             );
 
-            if ($fieldType->isSingular() && isset($fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier])) {
+            if ($fieldType->isSingular() && isset($fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->typeIdentifier])) {
                 throw new ContentTypeValidationException(
                     "FieldType '%identifier%' is singular and can't be repeated in a ContentType",
-                    ['%identifier%' => $fieldDefinitionCreateStruct->fieldTypeIdentifier]
+                    ['%identifier%' => $fieldDefinitionCreateStruct->typeIdentifier]
                 );
             }
 
-            $fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier] = true;
+            $fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->typeIdentifier] = true;
 
             $fieldType->applyDefaultSettings($fieldDefinitionCreateStruct->fieldSettings);
             $fieldType->applyDefaultValidatorConfiguration($fieldDefinitionCreateStruct->validatorConfiguration);
@@ -837,7 +837,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($fieldDefinitionCreateStruct->isSearchable && !$fieldType->isSearchable()) {
             $validationErrors[] = new ValidationError(
-                "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is not searchable"
+                "FieldType '{$fieldDefinitionCreateStruct->typeIdentifier}' is not searchable"
             );
         }
 
@@ -1305,7 +1305,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->fieldTypeRegistry->getFieldType(
-            $fieldDefinitionCreateStruct->fieldTypeIdentifier
+            $fieldDefinitionCreateStruct->typeIdentifier
         );
 
         $fieldType->applyDefaultSettings($fieldDefinitionCreateStruct->fieldSettings);
@@ -1318,10 +1318,10 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($fieldType->isSingular()) {
             foreach ($loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition) {
-                if ($fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier) {
+                if ($fieldDefinition->typeIdentifier === $fieldDefinitionCreateStruct->typeIdentifier) {
                     throw new BadStateException(
                         '$contentTypeDraft',
-                        "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->fieldTypeIdentifier}'"
+                        "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->typeIdentifier}'"
                     );
                 }
             }
@@ -1331,7 +1331,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         ) {
             throw new BadStateException(
                 '$contentTypeDraft',
-                "Field definition of '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' field type cannot be added because ContentType has Content instances"
+                "Field definition of '{$fieldDefinitionCreateStruct->typeIdentifier}' field type cannot be added because ContentType has Content instances"
             );
         }
 
@@ -1599,7 +1599,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         return new FieldDefinitionCreateStruct(
             array(
                 'identifier' => $identifier,
-                'fieldTypeIdentifier' => $fieldTypeIdentifier,
+                'typeIdentifier' => $fieldTypeIdentifier,
             )
         );
     }

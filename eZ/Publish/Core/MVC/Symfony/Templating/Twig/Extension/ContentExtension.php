@@ -291,7 +291,7 @@ class ContentExtension extends Twig_Extension
             $fieldTypeIdentifier = $this->fieldHelper->getFieldDefinition(
                 $content->contentInfo,
                 $field->fieldDefIdentifier
-            )->fieldTypeIdentifier;
+            )->typeIdentifier;
 
             if ($fieldTypeIdentifier !== 'ezimage') {
                 continue;

@@ -123,21 +123,21 @@ class FieldDefinitionUpdate extends BaseParser
         // @todo XSD says that defaultValue is mandatory, but content type can be created without it
         if (array_key_exists('defaultValue', $data)) {
             $fieldDefinitionUpdate->defaultValue = $this->fieldTypeParser->parseValue(
-                $fieldDefinition->fieldTypeIdentifier,
+                $fieldDefinition->typeIdentifier,
                 $data['defaultValue']
             );
         }
 
         if (array_key_exists('validatorConfiguration', $data)) {
             $fieldDefinitionUpdate->validatorConfiguration = $this->fieldTypeParser->parseValidatorConfiguration(
-                $fieldDefinition->fieldTypeIdentifier,
+                $fieldDefinition->typeIdentifier,
                 $data['validatorConfiguration']
             );
         }
 
         if (array_key_exists('fieldSettings', $data)) {
             $fieldDefinitionUpdate->fieldSettings = $this->fieldTypeParser->parseFieldSettings(
-                $fieldDefinition->fieldTypeIdentifier,
+                $fieldDefinition->typeIdentifier,
                 $data['fieldSettings']
             );
         }

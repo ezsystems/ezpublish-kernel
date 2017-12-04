@@ -414,7 +414,7 @@ class UserIntegrationTest extends BaseIntegrationTest
 
         $userFieldDefinition = null;
         foreach ($contentTypeDraft->getFieldDefinitions() as $fieldDefinition) {
-            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
+            if ($fieldDefinition->typeIdentifier === 'ezuser') {
                 $userFieldDefinition = $fieldDefinition;
                 break;
             }

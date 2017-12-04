@@ -256,7 +256,7 @@ class NameSchemaService
                 }
 
                 $nameableFieldTypeService = $this->nameableFieldTypeRegistry->getFieldType(
-                    $fieldDefinition->fieldTypeIdentifier
+                    $fieldDefinition->typeIdentifier
                 );
 
                 $fieldTitles[$fieldDefinitionIdentifier] = $nameableFieldTypeService->getFieldName(

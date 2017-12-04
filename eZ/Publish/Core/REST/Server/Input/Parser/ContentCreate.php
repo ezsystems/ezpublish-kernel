@@ -163,8 +163,10 @@ class ContentCreate extends BaseParser
                 throw new Exceptions\Parser("Missing 'fieldValue' element for '{$fieldData['fieldDefinitionIdentifier']}' identifier in ContentCreate.");
             }
 
-            $fieldValue = $this->fieldTypeParser->parseValue($fieldDefinition->fieldTypeIdentifier,
-                $fieldData['fieldValue']);
+            $fieldValue = $this->fieldTypeParser->parseValue(
+                $fieldDefinition->typeIdentifier,
+                $fieldData['fieldValue']
+            );
 
             $languageCode = null;
             if (array_key_exists('languageCode', $fieldData)) {

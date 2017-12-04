@@ -55,7 +55,7 @@ class FieldTypeSerializerTest extends TestCase
                 $this->returnValue(
                     new FieldDefinition(
                         array(
-                            'fieldTypeIdentifier' => 'myFancyFieldType',
+                            'typeIdentifier' => 'myFancyFieldType',
                         )
                     )
                 )
@@ -109,7 +109,7 @@ class FieldTypeSerializerTest extends TestCase
                 $this->returnValue(
                     new FieldDefinition(
                         array(
-                            'fieldTypeIdentifier' => 'myFancyFieldType',
+                            'typeIdentifier' => 'myFancyFieldType',
                         )
                     )
                 )

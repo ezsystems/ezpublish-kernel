@@ -70,7 +70,7 @@ class FieldHelperTest extends TestCase
 
         $contentType = $this->getMockForAbstractClass(ContentType::class);
         $fieldDefinition = $this->getMockBuilder(FieldDefinition::class)
-            ->setConstructorArgs(array(array('fieldTypeIdentifier' => 'ezstring')))
+            ->setConstructorArgs(array(array('typeIdentifier' => 'ezstring')))
             ->getMockForAbstractClass();
         $contentType
             ->expects($this->once())
@@ -117,7 +117,7 @@ class FieldHelperTest extends TestCase
 
         $contentType = $this->getMockForAbstractClass(ContentType::class);
         $fieldDefinition = $this->getMockBuilder(FieldDefinition::class)
-            ->setConstructorArgs(array(array('fieldTypeIdentifier' => 'ezstring')))
+            ->setConstructorArgs(array(array('typeIdentifier' => 'ezstring')))
             ->getMockForAbstractClass();
         $contentType
             ->expects($this->once())

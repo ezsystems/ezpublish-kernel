@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
@@ -48,7 +47,7 @@ class FieldDefinitionCreateStruct extends ValueObjectVisitor
         $generator->startValueElement('identifier', $fieldDefinitionCreateStruct->identifier);
         $generator->endValueElement('identifier');
 
-        $generator->startValueElement('fieldType', $fieldDefinitionCreateStruct->fieldTypeIdentifier);
+        $generator->startValueElement('fieldType', $fieldDefinitionCreateStruct->typeIdentifier);
         $generator->endValueElement('fieldType');
 
         $generator->startValueElement('fieldGroup', $fieldDefinitionCreateStruct->fieldGroup);
@@ -71,19 +70,19 @@ class FieldDefinitionCreateStruct extends ValueObjectVisitor
 
         $this->fieldTypeSerializer->serializeFieldDefaultValue(
             $generator,
-            $fieldDefinitionCreateStruct->fieldTypeIdentifier,
+            $fieldDefinitionCreateStruct->typeIdentifier,
             $fieldDefinitionCreateStruct->defaultValue
         );
 
         $this->fieldTypeSerializer->serializeFieldSettings(
             $generator,
-            $fieldDefinitionCreateStruct->fieldTypeIdentifier,
+            $fieldDefinitionCreateStruct->typeIdentifier,
             $fieldDefinitionCreateStruct->fieldSettings
         );
 
         $this->fieldTypeSerializer->serializeValidatorConfiguration(
             $generator,
-            $fieldDefinitionCreateStruct->fieldTypeIdentifier,
+            $fieldDefinitionCreateStruct->typeIdentifier,
             $fieldDefinitionCreateStruct->validatorConfiguration
         );
 

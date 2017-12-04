@@ -208,4 +208,18 @@ abstract class ValueObject
     {
         return $this->__isset($property);
     }
+
+    /**
+     * Trigger uniform deprecation warning for a deprecated property name, pointing to a new one.
+     *
+     * @param string $oldPropertyName
+     * @param string $newPropertyName
+     */
+    public function triggerDeprecatedPropertyWarning($oldPropertyName, $newPropertyName)
+    {
+        @trigger_error(
+            "The {$oldPropertyName} property is deprecated, use {$newPropertyName} instead",
+            E_USER_DEPRECATED
+        );
+    }
 }

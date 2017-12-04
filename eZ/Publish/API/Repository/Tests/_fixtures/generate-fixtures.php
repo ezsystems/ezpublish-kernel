@@ -133,7 +133,7 @@ function getContentTypeFieldDefinition(array $fixture)
             'identifier' => $data['identifier'],
             'fieldGroup' => $data['category'],
             'position' => (int)$data['placement'],
-            'fieldTypeIdentifier' => $data['data_type_string'],
+            'typeIdentifier' => $data['data_type_string'],
             'isTranslatable' => (boolean)$data['can_translate'],
             'isRequired' => (boolean)$data['is_required'],
             'isInfoCollector' => (boolean)$data['is_information_collector'],
