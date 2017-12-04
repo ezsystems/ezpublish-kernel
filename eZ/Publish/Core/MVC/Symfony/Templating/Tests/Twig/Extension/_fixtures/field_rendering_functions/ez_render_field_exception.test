@@ -14,6 +14,7 @@ return array(
                 'id' => 2,
                 'fieldDefIdentifier' => 'testfield',
                 'value' => 'foo2',
+                'typeIdentifier' => 'notexisting',
                 'languageCode' => 'fre-FR'
             ),
         )

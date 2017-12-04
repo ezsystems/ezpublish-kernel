@@ -22,6 +22,7 @@ return array(
                 'id' => 2,
                 'fieldDefIdentifier' => 'testfield',
                 'value' => 'foo2',
+                'typeIdentifier' => 'eznooverride',
                 'languageCode' => 'fre-FR'
             ),
         )
@@ -33,6 +34,7 @@ return array(
                 'id' => 3,
                 'fieldDefIdentifier' => 'testfield',
                 'value' => 'foo2',
+                'typeIdentifier' => 'ezoverride',
                 'languageCode' => 'fre-FR'
             ),
         )
@@ -44,6 +46,7 @@ return array(
                 'id' => 4,
                 'fieldDefIdentifier' => 'testfield',
                 'value' => 'foo2',
+                'typeIdentifier' => 'eznotdefault',
                 'languageCode' => 'fre-FR'
             ),
         )
@@ -55,6 +58,7 @@ return array(
                 'id' => 5,
                 'fieldDefIdentifier' => 'testfield',
                 'value' => 'foo2',
+                'typeIdentifier' => 'ezdata',
                 'languageCode' => 'fre-FR'
             ),
         )

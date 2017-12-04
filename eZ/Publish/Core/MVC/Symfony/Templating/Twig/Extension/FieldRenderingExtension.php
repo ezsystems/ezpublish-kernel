@@ -45,13 +45,6 @@ class FieldRenderingExtension extends Twig_Extension
      */
     private $translationHelper;
 
-    /**
-     * Hash of field type identifiers (i.e. "ezstring"), indexed by field definition identifier.
-     *
-     * @var array
-     */
-    private $fieldTypeIdentifiers = [];
-
     public function __construct(
         FieldBlockRendererInterface $fieldBlockRenderer,
         ContentTypeService $contentTypeService,
@@ -128,9 +121,8 @@ class FieldRenderingExtension extends Twig_Extension
         }
 
         $params = $this->getRenderFieldBlockParameters($content, $field, $params);
-        $fieldTypeIdentifier = $this->getFieldTypeIdentifier($content, $field);
 
-        return $this->fieldBlockRenderer->renderContentFieldView($field, $fieldTypeIdentifier, $params);
+        return $this->fieldBlockRenderer->renderContentFieldView($field, $field->typeIdentifier, $params);
     }
 
     /**
@@ -165,43 +157,20 @@ class FieldRenderingExtension extends Twig_Extension
         ];
 
         // Adding field type specific parameters if any.
-        if ($this->parameterProviderRegistry->hasParameterProvider($fieldDefinition->fieldTypeIdentifier)) {
+        if ($this->parameterProviderRegistry->hasParameterProvider($fieldDefinition->typeIdentifier)) {
             $params['parameters'] += $this->parameterProviderRegistry
-                ->getParameterProvider($fieldDefinition->fieldTypeIdentifier)
+                ->getParameterProvider($fieldDefinition->typeIdentifier)
                 ->getViewParameters($field);
         }
 
         // make sure we can easily add class="<fieldtypeidentifier>-field" to the
         // generated HTML
         if (isset($params['attr']['class'])) {
-            $params['attr']['class'] .= ' ' . $this->getFieldTypeIdentifier($content, $field) . '-field';
+            $params['attr']['class'] .= ' ' . $field->typeIdentifier . '-field';
         } else {
-            $params['attr']['class'] = $this->getFieldTypeIdentifier($content, $field) . '-field';
+            $params['attr']['class'] = $field->typeIdentifier . '-field';
         }
 
         return $params;
-    }
-
-    /**
-     * Returns the field type identifier for $field.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     *
-     * @return string
-     */
-    private function getFieldTypeIdentifier(Content $content, Field $field)
-    {
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $key = $contentInfo->contentTypeId . '  ' . $field->fieldDefIdentifier;
-
-        if (!isset($this->fieldTypeIdentifiers[$key])) {
-            $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
-            $this->fieldTypeIdentifiers[$key] = $contentType
-                ->getFieldDefinition($field->fieldDefIdentifier)
-                ->fieldTypeIdentifier;
-        }
-
-        return $this->fieldTypeIdentifiers[$key];
     }
 }
