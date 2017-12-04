@@ -211,7 +211,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
             'fielddefinition' => $fieldDefinition,
             'settings' => $fieldDefinition->getFieldSettings(),
         ];
-        $blockName = $this->getRenderFieldDefinitionBlockName($fieldDefinition->fieldTypeIdentifier, $type);
+        $blockName = $this->getRenderFieldDefinitionBlockName($fieldDefinition->typeIdentifier, $type);
         $context = $this->twig->mergeGlobals($params);
         $blocks = $this->getBlocksByFieldDefinition($fieldDefinition, $type);
 
@@ -286,7 +286,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     private function getBlocksByFieldDefinition(FieldDefinition $definition, $type)
     {
         return $this->getBlockByName(
-            $this->getRenderFieldDefinitionBlockName($definition->fieldTypeIdentifier, $type),
+            $this->getRenderFieldDefinitionBlockName($definition->typeIdentifier, $type),
             $type === self::EDIT ? 'fieldDefinitionEditResources' : 'fieldDefinitionViewResources'
         );
     }

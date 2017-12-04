@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -58,7 +57,7 @@ class FieldDefinition extends BaseParser
             array(
                 'id' => $data['_href'],
                 'identifier' => $data['identifier'],
-                'fieldTypeIdentifier' => $data['fieldType'],
+                'typeIdentifier' => $data['fieldType'],
                 'fieldGroup' => $data['fieldGroup'],
                 'position' => (int)$data['position'],
                 'isTranslatable' => $this->parserTools->parseBooleanValue($data['isTranslatable']),

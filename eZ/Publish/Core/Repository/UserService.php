@@ -415,7 +415,7 @@ class UserService implements UserServiceInterface
         // Search for the first ezuser field type in content type
         $userFieldDefinition = null;
         foreach ($userCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition) {
-            if ($fieldDefinition->fieldTypeIdentifier == 'ezuser') {
+            if ($fieldDefinition->typeIdentifier == 'ezuser') {
                 $userFieldDefinition = $fieldDefinition;
                 break;
             }

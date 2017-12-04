@@ -224,7 +224,7 @@ EOT
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
 
             // Match API field by field type
-            if ($fieldDefinition->fieldTypeIdentifier != $fieldTypeIdentifier) {
+            if ($fieldDefinition->typeIdentifier != $fieldTypeIdentifier) {
                 continue;
             }
 

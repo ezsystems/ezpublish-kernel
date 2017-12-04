@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\ContentTypeService as APIContentTypeService;
@@ -27,7 +26,8 @@ use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\Message; use eZ\Publish\Core\REST\Client\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Client\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Client\Exceptions\BadStateException;
@@ -358,9 +358,9 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     protected function isErrorResponse(Message $response)
     {
-        return (
+        return
             strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0
-        );
+        ;
     }
 
     /**
@@ -817,7 +817,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
         return new FieldDefinitionCreateStruct(
             array(
                 'identifier' => $identifier,
-                'fieldTypeIdentifier' => $fieldTypeIdentifier,
+                'typeIdentifier' => $fieldTypeIdentifier,
             )
         );
     }

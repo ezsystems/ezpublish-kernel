@@ -73,7 +73,7 @@ class RestFieldDefinition extends RestContentTypeBase
         $generator->startValueElement('identifier', $fieldDefinition->identifier);
         $generator->endValueElement('identifier');
 
-        $generator->startValueElement('fieldType', $fieldDefinition->fieldTypeIdentifier);
+        $generator->startValueElement('fieldType', $fieldDefinition->typeIdentifier);
         $generator->endValueElement('fieldType');
 
         $generator->startValueElement('fieldGroup', $fieldDefinition->fieldGroup);
@@ -102,7 +102,7 @@ class RestFieldDefinition extends RestContentTypeBase
 
         $this->fieldTypeSerializer->serializeFieldDefaultValue(
             $generator,
-            $fieldDefinition->fieldTypeIdentifier,
+            $fieldDefinition->typeIdentifier,
             $fieldDefinition->defaultValue
         );
 
@@ -121,13 +121,13 @@ class RestFieldDefinition extends RestContentTypeBase
 
         $this->fieldTypeSerializer->serializeFieldSettings(
             $generator,
-            $fieldDefinition->fieldTypeIdentifier,
+            $fieldDefinition->typeIdentifier,
             $fieldDefinition->getFieldSettings()
         );
 
         $this->fieldTypeSerializer->serializeValidatorConfiguration(
             $generator,
-            $fieldDefinition->fieldTypeIdentifier,
+            $fieldDefinition->typeIdentifier,
             $fieldDefinition->getValidatorConfiguration()
         );
 

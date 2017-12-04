@@ -531,9 +531,7 @@ class ContentService implements ContentServiceInterface
 
         foreach ($contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition) {
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
-            $fieldType = $this->fieldTypeRegistry->getFieldType(
-                $fieldDefinition->fieldTypeIdentifier
-            );
+            $fieldType = $this->fieldTypeRegistry->getFieldType($fieldDefinition->typeIdentifier);
 
             foreach ($languageCodes as $languageCode) {
                 $isEmptyValue = false;
@@ -589,7 +587,7 @@ class ContentService implements ContentServiceInterface
                         array(
                             'id' => null,
                             'fieldDefinitionId' => $fieldDefinition->id,
-                            'type' => $fieldDefinition->fieldTypeIdentifier,
+                            'type' => $fieldDefinition->typeIdentifier,
                             'value' => $fieldType->toPersistenceValue($fieldValue),
                             'languageCode' => $languageCode,
                             'versionNo' => null,
@@ -1187,9 +1185,7 @@ class ContentService implements ContentServiceInterface
 
         foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-            $fieldType = $this->fieldTypeRegistry->getFieldType(
-                $fieldDefinition->fieldTypeIdentifier
-            );
+            $fieldType = $this->fieldTypeRegistry->getFieldType($fieldDefinition->typeIdentifier);
 
             foreach ($languageCodes as $languageCode) {
                 $isCopied = $isEmpty = $isRetained = false;
@@ -1255,7 +1251,7 @@ class ContentService implements ContentServiceInterface
                             null :
                             $content->getField($fieldDefinition->identifier, $languageCode)->id,
                         'fieldDefinitionId' => $fieldDefinition->id,
-                        'type' => $fieldDefinition->fieldTypeIdentifier,
+                        'type' => $fieldDefinition->typeIdentifier,
                         'value' => $fieldType->toPersistenceValue($fieldValue),
                         'languageCode' => $languageCode,
                         'versionNo' => $versionInfo->versionNo,
