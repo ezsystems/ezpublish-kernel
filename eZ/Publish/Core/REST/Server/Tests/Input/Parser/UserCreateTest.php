@@ -540,7 +540,7 @@ class UserCreateTest extends BaseTest
                         array(
                             'id' => 42,
                             'identifier' => 'name',
-                            'fieldTypeIdentifier' => 'ezstring',
+                            'typeIdentifier' => 'ezstring',
                         )
                     ),
                 ),

@@ -395,7 +395,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $this->assertSame(
             $this->getTypeName(),
-            $contentType->fieldDefinitions[1]->fieldTypeIdentifier
+            $contentType->fieldDefinitions[1]->typeIdentifier
         );
     }
 
@@ -420,7 +420,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $this->assertSame(
             $this->getTypeName(),
-            $contentType->fieldDefinitions[1]->fieldTypeIdentifier
+            $contentType->fieldDefinitions[1]->typeIdentifier
         );
 
         return $contentType->fieldDefinitions[1];
@@ -445,8 +445,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $this->assertEquals(
             $this->getTypeName(),
-            $fieldDefinition->fieldTypeIdentifier,
-            'Loaded fieldTypeIdentifier does not match.'
+            $fieldDefinition->typeIdentifier,
+            'Loaded Field Type Identifier does not match.'
         );
         $this->assertEquals(
             $this->getValidFieldSettings(),

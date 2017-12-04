@@ -219,7 +219,7 @@ class FieldDefinitionUpdateTest extends BaseTest
                                 new FieldDefinition(
                                     array(
                                         'id' => 24,
-                                        'fieldTypeIdentifier' => 'ezstring',
+                                        'typeIdentifier' => 'ezstring',
                                     )
                                 ),
                             ),

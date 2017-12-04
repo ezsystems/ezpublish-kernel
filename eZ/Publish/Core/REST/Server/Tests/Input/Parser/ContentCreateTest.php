@@ -633,14 +633,14 @@ class ContentCreateTest extends BaseTest
                         array(
                             'id' => 42,
                             'identifier' => 'subject',
-                            'fieldTypeIdentifier' => 'ezstring',
+                            'typeIdentifier' => 'ezstring',
                         )
                     ),
                     new FieldDefinition(
                         array(
                             'id' => 43,
                             'identifier' => 'author',
-                            'fieldTypeIdentifier' => 'ezstring',
+                            'typeIdentifier' => 'ezstring',
                         )
                     ),
                 ),

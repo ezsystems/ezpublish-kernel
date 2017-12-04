@@ -88,7 +88,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
                     'identifier' => 'title',
                     'fieldGroup' => 'abstract-field-group',
                     'position' => 2,
-                    'fieldTypeIdentifier' => 'my-field-type',
+                    'typeIdentifier' => 'my-field-type',
                     'isTranslatable' => true,
                     'isRequired' => false,
                     'isSearchable' => true,

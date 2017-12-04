@@ -83,7 +83,7 @@ class FieldTypeParserTest extends TestCase
                 $this->returnValue(
                     new FieldDefinition(
                         array(
-                            'fieldTypeIdentifier' => 'some-fancy-field-type',
+                            'typeIdentifier' => 'some-fancy-field-type',
                         )
                     )
                 )

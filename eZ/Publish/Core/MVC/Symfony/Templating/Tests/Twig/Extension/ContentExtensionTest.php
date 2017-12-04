@@ -81,7 +81,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
                     array(
                         'identifier' => $fieldInfo['fieldDefIdentifier'],
                         'id' => $fieldInfo['id'],
-                        'fieldTypeIdentifier' => $fieldTypeIdentifier,
+                        'typeIdentifier' => $fieldTypeIdentifier,
                         'names' => isset($fieldInfo['fieldDefNames']) ? $fieldInfo['fieldDefNames'] : array(),
                         'descriptions' => isset($fieldInfo['fieldDefDescriptions']) ? $fieldInfo['fieldDefDescriptions'] : array(),
                     )

@@ -311,21 +311,21 @@ class NameSchemaTest extends BaseServiceMockTest
                 array(
                     'id' => '1',
                     'identifier' => 'text1',
-                    'fieldTypeIdentifier' => 'ezstring',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
             new FieldDefinition(
                 array(
                     'id' => '2',
                     'identifier' => 'text2',
-                    'fieldTypeIdentifier' => 'ezstring',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
             new FieldDefinition(
                 array(
                     'id' => '3',
                     'identifier' => 'text3',
-                    'fieldTypeIdentifier' => 'ezstring',
+                    'typeIdentifier' => 'ezstring',
                 )
             ),
         );
