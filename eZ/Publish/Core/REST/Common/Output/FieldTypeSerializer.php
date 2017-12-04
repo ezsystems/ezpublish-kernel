@@ -50,12 +50,15 @@ class FieldTypeSerializer
      */
     public function serializeFieldValue(Generator $generator, ContentType $contentType, Field $field)
     {
+        // BC layer
+        $typeIdentifier = null !== $field->typeIdentifier
+            ? $field->typeIdentifier
+            : $contentType->getFieldDefinition($field->fieldDefIdentifier)->typeIdentifier;
+
         $this->serializeValue(
             'fieldValue',
             $generator,
-            $this->fieldTypeService->getFieldType(
-                $contentType->getFieldDefinition($field->fieldDefIdentifier)->fieldTypeIdentifier
-            ),
+            $this->fieldTypeService->getFieldType($typeIdentifier),
             $field->value
         );
     }
