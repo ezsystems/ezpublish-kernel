@@ -22,7 +22,7 @@ class FieldDefinitionCreateStruct extends ValueObject
      *
      * @var string
      */
-    public $fieldTypeIdentifier;
+    public $typeIdentifier;
 
     /**
      * Readable string identifier of a field definition.
@@ -112,4 +112,35 @@ class FieldDefinitionCreateStruct extends ValueObject
      * @var bool
      */
     public $isSearchable;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(array $properties = array())
+    {
+        if (array_key_exists('fieldTypeIdentifier', $properties)) {
+            $this->triggerDeprecatedPropertyWarning('fieldTypeIdentifier', 'typeIdentifier');
+
+            $properties['typeIdentifier'] = $properties['fieldTypeIdentifier'];
+
+            // avoid setting non-existent property by the parent constructor
+            unset($properties['fieldTypeIdentifier']);
+        }
+
+        parent::__construct($properties);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($property)
+    {
+        if ('fieldTypeIdentifier' === $property) {
+            $this->triggerDeprecatedPropertyWarning('fieldTypeIdentifier', 'typeIdentifier');
+
+            return $this->typeIdentifier;
+        }
+
+        return parent::__get($property);
+    }
 }
