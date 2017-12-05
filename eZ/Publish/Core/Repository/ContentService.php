@@ -1699,7 +1699,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadReverseRelations(ContentInfo $contentInfo)
     {
-        if ($this->repository->hasAccess('content', 'reverserelatedlist') !== true) {
+        if (!$this->repository->canUser('content', 'reverserelatedlist', $contentInfo)) {
             throw new UnauthorizedException('content', 'reverserelatedlist', array('contentId' => $contentInfo->id));
         }
 
