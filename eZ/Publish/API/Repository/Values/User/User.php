@@ -24,21 +24,25 @@ abstract class User extends Content implements UserReference
 {
     /**
      * @var int MD5 of password, not recommended
+     * @deprecated since 6.13
      */
     const PASSWORD_HASH_MD5_PASSWORD = 1;
 
     /**
      * @var int MD5 of user and password
+     * @deprecated since 6.13
      */
     const PASSWORD_HASH_MD5_USER = 2;
 
     /**
      * @var int MD5 of site, user and password
+     * @deprecated since 6.13
      */
     const PASSWORD_HASH_MD5_SITE = 3;
 
     /**
      * @var int Passwords in plaintext, should not be used for real sites
+     * @deprecated since 6.13
      */
     const PASSWORD_HASH_PLAINTEXT = 5;
 
@@ -51,6 +55,11 @@ abstract class User extends Content implements UserReference
      * @var int Passwords hashed by PHPs default algorithm, which may change over time
      */
     const PASSWORD_HASH_PHP_DEFAULT = 7;
+
+    /**
+     * @var int Default password hash, used when none is specified, may change over time
+     */
+    const DEFAULT_PASSWORD_HASH = self::PASSWORD_HASH_PHP_DEFAULT;
 
     /**
      * User login.
