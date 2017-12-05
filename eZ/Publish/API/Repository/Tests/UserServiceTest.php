@@ -1886,12 +1886,10 @@ class UserServiceTest extends BaseTest
      * Test for the createUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateUserInvalidPasswordHashTypeThrowsException()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Argument 'type' is invalid: Password hash type '42424242' is not recognized");
-
         $repository = $this->getRepository();
         $signalSlotUserService = $repository->getUserService();
 
@@ -1917,6 +1915,8 @@ class UserServiceTest extends BaseTest
         try {
             $this->createUserVersion1();
         } catch (InvalidArgumentException $e) {
+            $this->assertEquals("Argument 'type' is invalid: Password hash type '42424242' is not recognized", $e->getMessage());
+
             // Reset to default settings, so we don't break other tests
             $settingsProperty->setValue($userService, $defaultUserServiceSettings);
 
@@ -1926,5 +1926,7 @@ class UserServiceTest extends BaseTest
 
         // Reset to default settings, so we don't break other tests
         $settingsProperty->setValue($userService, $defaultUserServiceSettings);
+
+        $this->fail('InvalidArgumentException was not raised.');
     }
 }
