@@ -347,6 +347,7 @@ class ContentService implements ContentServiceInterface
             if ($isRemoteId) {
                 $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($id);
                 $id = $spiContentInfo->id;
+                // Set $isRemoteId to false as the next loads will be for content id now that we have it (for exception use now)
                 $isRemoteId = false;
             }
 
