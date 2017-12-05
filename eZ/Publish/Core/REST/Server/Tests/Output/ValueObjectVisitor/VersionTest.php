@@ -59,7 +59,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
                                 'id' => 1,
                                 'languageCode' => 'eng-US',
                                 'fieldDefIdentifier' => 'ezauthor',
-                                'typeIdentifier' => 'ezauthor',
+                                'fieldTypeIdentifier' => 'ezauthor',
                             )
                         ),
                         new Field(
@@ -67,7 +67,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
                                 'id' => 2,
                                 'languageCode' => 'eng-US',
                                 'fieldDefIdentifier' => 'ezimage',
-                                'typeIdentifier' => 'ezauthor',
+                                'fieldTypeIdentifier' => 'ezauthor',
                             )
                         ),
                     ),

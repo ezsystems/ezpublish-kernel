@@ -770,7 +770,7 @@ class ContentService implements ContentServiceInterface
                 'value' => $field->value,
                 'languageCode' => $field->languageCode,
                 'fieldDefIdentifier' => $field->fieldDefIdentifier,
-                'typeIdentifier' => $field->typeIdentifier,
+                'fieldTypeIdentifier' => $field->fieldTypeIdentifier,
             ],
             $overrides
         );

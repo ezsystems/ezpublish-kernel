@@ -6995,7 +6995,7 @@ Version
           <xsd:element name="id" type="xsd:integer" />
           <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
-          <xsd:element name="typeIdentifier" type="xsd:string" />
+          <xsd:element name="fieldTypeIdentifier" type="xsd:string" />
           <xsd:element name="fieldValue" type="fieldValueType" />
         </xsd:all>
       </xsd:complexType>
