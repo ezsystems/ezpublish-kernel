@@ -108,8 +108,8 @@ class Version extends ValueObjectVisitor
         $generator->startValueElement('languageCode', $field->languageCode);
         $generator->endValueElement('languageCode');
 
-        $generator->startValueElement('typeIdentifier', $field->typeIdentifier);
-        $generator->endValueElement('typeIdentifier');
+        $generator->startValueElement('fieldTypeIdentifier', $field->fieldTypeIdentifier);
+        $generator->endValueElement('fieldTypeIdentifier');
 
         $this->fieldTypeSerializer->serializeFieldValue(
             $generator,
