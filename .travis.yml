@@ -33,9 +33,9 @@ matrix:
     - php: 7.1
       env: TEST_CONFIG="phpunit.xml"
     - php: 7.1
-      env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
+      env: REST_TEST_CONFIG="phpunit-functional-rest.xml" SYMFONY_ENV=behat SYMFONY_DEBUG=1
     - php: 7.1
-      env: BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" RUN_INSTALL=1 SYMFONY_ENV=behat
+      env: BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" SYMFONY_ENV=behat
     - php: 7.1
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
     - php: 7.1
@@ -61,8 +61,7 @@ before_script:
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Prepare system
   - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
-  - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
-  - if [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
+  - if [ "$BEHAT_OPTS" != "" ] || [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
   # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
