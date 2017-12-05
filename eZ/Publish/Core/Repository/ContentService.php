@@ -347,6 +347,8 @@ class ContentService implements ContentServiceInterface
             if ($isRemoteId) {
                 $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($id);
                 $id = $spiContentInfo->id;
+                // Set $isRemoteId to false as the next loads will be for content id now that we have it (for exception use now)
+                $isRemoteId = false;
             }
 
             // Get current version if $versionNo is not defined
@@ -770,7 +772,7 @@ class ContentService implements ContentServiceInterface
                 'value' => $field->value,
                 'languageCode' => $field->languageCode,
                 'fieldDefIdentifier' => $field->fieldDefIdentifier,
-                'typeIdentifier' => $field->typeIdentifier,
+                'fieldTypeIdentifier' => $field->fieldTypeIdentifier,
             ],
             $overrides
         );
@@ -1700,7 +1702,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadReverseRelations(ContentInfo $contentInfo)
     {
-        if ($this->repository->hasAccess('content', 'reverserelatedlist') !== true) {
+        if (!$this->repository->canUser('content', 'reverserelatedlist', $contentInfo)) {
             throw new UnauthorizedException('content', 'reverserelatedlist', array('contentId' => $contentInfo->id));
         }
 

@@ -74,7 +74,7 @@
                     <xsd:element type="xsd:short" name="id"/>
                     <xsd:element type="xsd:string" name="fieldDefinitionIdentifier"/>
                     <xsd:element type="xsd:string" name="languageCode"/>
-                    <xsd:element type="xsd:string" name="typeIdentifier"/>
+                    <xsd:element type="xsd:string" name="fieldTypeIdentifier"/>
                     <xsd:element name="fieldValue">
                       <xsd:complexType mixed="true">
                         <xsd:sequence>

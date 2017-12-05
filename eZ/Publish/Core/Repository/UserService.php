@@ -76,7 +76,7 @@ class UserService implements UserServiceInterface
             'defaultUserPlacement' => 12,
             'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
-            'hashType' => APIUser::PASSWORD_HASH_PHP_DEFAULT,
+            'hashType' => APIUser::DEFAULT_PASSWORD_HASH,
             'siteName' => 'ez.no',
         );
     }
@@ -543,6 +543,8 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user for the given login and password.
      *
+     * If the password hash type differs from that configured for the service, it will be updated to the configured one.
+     *
      * {@inheritdoc}
      *
      * @param string $login
@@ -569,7 +571,25 @@ class UserService implements UserServiceInterface
             throw new NotFoundException('user', $login);
         }
 
+        $this->updatePasswordHash($login, $password, $spiUser);
+
         return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
+    }
+
+    /**
+     * Update password hash to the type configured for the service, if they differ.
+     *
+     * @param string $login User login
+     * @param string $password User password
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser
+     */
+    private function updatePasswordHash($login, $password, SPIUser $spiUser)
+    {
+        if ($spiUser->hashAlgorithm !== $this->settings['hashType']) {
+            $spiUser->passwordHash = $this->createPasswordHash($login, $password, null, $this->settings['hashType']);
+            $spiUser->hashAlgorithm = $this->settings['hashType'];
+            $this->userHandler->update($spiUser);
+        }
     }
 
     /**
@@ -1151,20 +1171,32 @@ class UserService implements UserServiceInterface
      * @param int $type Type of password to generate
      *
      * @return string Generated password hash
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the type is not recognized
      */
     protected function createPasswordHash($login, $password, $site, $type)
     {
+        $deprecationWarningFormat = 'Password hash type %s is deprecated since 6.13.';
+
         switch ($type) {
             case APIUser::PASSWORD_HASH_MD5_PASSWORD:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_PASSWORD'), E_USER_DEPRECATED);
+
                 return md5($password);
 
             case APIUser::PASSWORD_HASH_MD5_USER:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_USER'), E_USER_DEPRECATED);
+
                 return md5("$login\n$password");
 
             case APIUser::PASSWORD_HASH_MD5_SITE:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_SITE'), E_USER_DEPRECATED);
+
                 return md5("$login\n$password\n$site");
 
             case APIUser::PASSWORD_HASH_PLAINTEXT:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_PLAINTEXT'), E_USER_DEPRECATED);
+
                 return $password;
 
             case APIUser::PASSWORD_HASH_BCRYPT:
@@ -1174,7 +1206,7 @@ class UserService implements UserServiceInterface
                 return password_hash($password, PASSWORD_DEFAULT);
 
             default:
-                return md5($password);
+                throw new InvalidArgumentException('type', "Password hash type '$type' is not recognized");
         }
     }
 }
