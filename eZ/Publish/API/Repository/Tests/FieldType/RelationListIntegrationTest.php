@@ -120,6 +120,10 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 'type' => 'array',
                 'default' => array(),
             ),
+            'selectionLimit' => array(
+                'type' => 'int',
+                'default' => 0,
+            ),
         );
     }
 
@@ -144,6 +148,7 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             'selectionMethod' => 1,
             'selectionDefaultLocation' => '2',
             'selectionContentTypes' => array('blog_post'),
+            'selectionLimit' => 1,
         );
     }
 

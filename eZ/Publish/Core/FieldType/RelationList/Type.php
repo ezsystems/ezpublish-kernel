@@ -45,6 +45,10 @@ class Type extends FieldType
             'type' => 'array',
             'default' => array(),
         ),
+        'selectionLimit' => array(
+            'type' => 'int',
+            'default' => 0,
+        ),
     );
 
     /**
@@ -102,6 +106,28 @@ class Type extends FieldType
                     if (!is_array($value)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of array type",
+                            null,
+                            array(
+                                '%setting%' => $name,
+                            ),
+                            "[$name]"
+                        );
+                    }
+                    break;
+                case 'selectionLimit':
+                    if (!is_int($value)) {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of integer type",
+                            null,
+                            array(
+                                '%setting%' => $name,
+                            ),
+                            "[$name]"
+                        );
+                    }
+                    if ($value < 0) {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value cannot be lower than 0",
                             null,
                             array(
                                 '%setting%' => $name,

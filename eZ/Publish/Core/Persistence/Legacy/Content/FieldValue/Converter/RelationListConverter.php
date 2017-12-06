@@ -148,6 +148,14 @@ class RelationListConverter implements Converter
         }
         $root->appendChild($selectionType);
 
+        $selectionLimit = $doc->createElement('selection_limit');
+        if (isset($fieldSettings['selectionLimit'])) {
+            $selectionLimit->setAttribute('value', (int)$fieldSettings['selectionLimit']);
+        } else {
+            $selectionLimit->setAttribute('value', 0);
+        }
+        $root->appendChild($selectionLimit);
+
         $defaultLocation = $doc->createElement('contentobject-placement');
         if (!empty($fieldSettings['selectionDefaultLocation'])) {
             $defaultLocation->setAttribute('node-id', (int)$fieldSettings['selectionDefaultLocation']);
@@ -169,6 +177,7 @@ class RelationListConverter implements Converter
      *     </constraints>
      *     <type value="2"/>
      *     <selection_type value="1"/>
+     *     <selection_limit value="5"/>
      *     <object_class value=""/>
      *     <contentobject-placement node-id="67"/>
      *   </related-objects>
@@ -193,6 +202,7 @@ class RelationListConverter implements Converter
             'selectionMethod' => 0,
             'selectionDefaultLocation' => null,
             'selectionContentTypes' => [],
+            'selectionLimit' => 0,
         ];
 
         // default value
@@ -215,6 +225,13 @@ class RelationListConverter implements Converter
             $selectionType->hasAttribute('value')
         ) {
             $fieldSettings['selectionMethod'] = (int)$selectionType->getAttribute('value');
+        }
+
+        if (
+            ($selectionLimit = $dom->getElementsByTagName('selection_limit')->item(0)) &&
+            $selectionLimit->hasAttribute('value')
+        ) {
+            $fieldSettings['selectionLimit'] = (int)$selectionLimit->getAttribute('value');
         }
 
         if (

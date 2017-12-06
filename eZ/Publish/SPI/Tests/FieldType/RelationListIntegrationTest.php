@@ -77,6 +77,7 @@ class RelationListIntegrationTest extends BaseIntegrationTest
                     'selectionMethod' => 0,
                     'selectionDefaultLocation' => '',
                     'selectionContentTypes' => array(),
+                    'selectionLimit' => 0,
                 ),
             )
         );
@@ -95,6 +96,7 @@ class RelationListIntegrationTest extends BaseIntegrationTest
             'selectionMethod' => 0,
             'selectionDefaultLocation' => '',
             'selectionContentTypes' => array(),
+            'selectionLimit' => 0,
         );
 
         return array(

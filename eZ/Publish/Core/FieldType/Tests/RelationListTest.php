@@ -66,6 +66,10 @@ class RelationListTest extends FieldTypeTest
                 'type' => 'array',
                 'default' => array(),
             ),
+            'selectionLimit' => array(
+                'type' => 'int',
+                'default' => 0,
+            ),
         );
     }
 
@@ -291,12 +295,14 @@ class RelationListTest extends FieldTypeTest
                 array(
                     'selectionMethod' => RelationList::SELECTION_BROWSE,
                     'selectionDefaultLocation' => 23,
+                    'selectionLimit' => 0,
                 ),
             ),
             array(
                 array(
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 'foo',
+                    'selectionLimit' => 1,
                 ),
             ),
             array(
@@ -304,6 +310,7 @@ class RelationListTest extends FieldTypeTest
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 'foo',
                     'selectionContentTypes' => array(1, 2, 3),
+                    'selectionLimit' => 2,
                 ),
             ),
         );
@@ -358,6 +365,14 @@ class RelationListTest extends FieldTypeTest
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 23,
                     'selectionContentTypes' => true,
+                ),
+            ),
+            array(
+                // Invalid value for 'selectionLimit'
+                array(
+                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
+                    'selectionDefaultLocation' => 23,
+                    'selectionLimit' => 'string',
                 ),
             ),
         );
