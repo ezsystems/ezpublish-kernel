@@ -812,15 +812,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw $e;
         }
 
-        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
-            $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
-        );
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($spiContentType);
     }
 
     /**
@@ -860,12 +852,6 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            ),
             $prioritizedLanguages
         );
     }
@@ -885,12 +871,6 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            ),
             $prioritizedLanguages
         );
     }
@@ -904,12 +884,6 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            ),
             $prioritizedLanguages
         );
     }
@@ -936,15 +910,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new NotFoundException('ContentType owned by someone else', $contentTypeId);
         }
 
-        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
-            $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
-        );
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($spiContentType);
     }
 
     /**
@@ -961,12 +927,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         foreach ($spiContentTypes as $spiContentType) {
             $contentTypes[] = $this->contentTypeDomainMapper->buildContentTypeDomainObject(
                 $spiContentType,
-                array_map(
-                    function ($id) {
-                        return $this->contentTypeHandler->loadGroup($id);
-                    },
-                    $spiContentType->groupIds
-                ),
                 $prioritizedLanguages
             );
         }
@@ -1017,15 +977,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
-        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
-            $spiContentType,
-            array_map(
-                function ($id) {
-                    return $this->contentTypeHandler->loadGroup($id);
-                },
-                $spiContentType->groupIds
-            )
-        );
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($spiContentType);
     }
 
     /**
