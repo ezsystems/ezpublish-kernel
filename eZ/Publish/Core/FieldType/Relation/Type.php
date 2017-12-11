@@ -23,6 +23,8 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  *
  * hash format ({@see fromhash()}, {@see toHash()}):
  * array( 'destinationContentId' => (int)$destinationContentId );
+ *
+ * @deprecated Since 7.0 and will be removed in 8.0. Use `RelationList\Type` instead.
  */
 class Type extends FieldType
 {
