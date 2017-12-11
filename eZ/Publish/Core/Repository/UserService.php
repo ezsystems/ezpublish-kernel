@@ -1152,6 +1152,8 @@ class UserService implements UserServiceInterface
      * @param int $type Type of password to generate
      *
      * @return string Generated password hash
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the type is not recognized
      */
     protected function createPasswordHash($login, $password, $site, $type)
     {
@@ -1175,7 +1177,7 @@ class UserService implements UserServiceInterface
                 return password_hash($password, PASSWORD_DEFAULT);
 
             default:
-                return md5($password);
+                throw new InvalidArgumentException('type', "Password hash type '$type' is not recognized");
         }
     }
 }

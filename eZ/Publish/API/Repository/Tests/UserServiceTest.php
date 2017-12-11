@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
@@ -2552,5 +2553,50 @@ class UserServiceTest extends BaseTest
 
         // Create a new user
         return $userService->createUser($userCreateStruct, [$group]);
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument 'type' is invalid: Password hash type '42424242' is not recognized
+     */
+    public function testCreateUserInvalidPasswordHashTypeThrowsException()
+    {
+        $repository = $this->getRepository();
+        $signalSlotUserService = $repository->getUserService();
+
+        $signalSlotUserServiceReflection = new ReflectionClass($signalSlotUserService);
+        $userServiceProperty = $signalSlotUserServiceReflection->getProperty('service');
+        $userServiceProperty->setAccessible(true);
+        $userService = $userServiceProperty->getValue($signalSlotUserService);
+
+        $userServiceReflection = new ReflectionClass($userService);
+        $settingsProperty = $userServiceReflection->getProperty('settings');
+        $settingsProperty->setAccessible(true);
+
+        $defaultUserServiceSettings = $settingsProperty->getValue($userService);
+
+        /* BEGIN: Use Case */
+        $settingsProperty->setValue(
+            $userService,
+            [
+                'hashType' => 42424242, // Non-existing hash type
+            ] + $settingsProperty->getValue($userService)
+        );
+
+        try {
+            $this->createUserVersion1();
+        } catch (InvalidArgumentException $e) {
+            // Reset to default settings, so we don't break other tests
+            $settingsProperty->setValue($userService, $defaultUserServiceSettings);
+
+            throw $e;
+        }
+        /* END: Use Case */
+
+        // Reset to default settings, so we don't break other tests
+        $settingsProperty->setValue($userService, $defaultUserServiceSettings);
     }
 }
