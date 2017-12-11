@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 
-
 class InstallPlatformCommand extends Command
 {
     /** @var \Doctrine\DBAL\Connection */
