@@ -5,20 +5,29 @@ namespace eZ\Publish\API\Repository\Values\URL;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
+/**
+ * Structure used to update URL data.
+ */
 class URLUpdateStruct extends ValueObject
 {
     /**
-     * @var string
+     * URL itself e.g. "http://ez.no".
+     *
+     * @var string|null
      */
     public $url;
 
     /**
-     * @var bool
+     * Is URL valid ?
+     *
+     * @var bool|null
      */
     public $isValid;
 
     /**
-     * @var \DateTimeInterface
+     * Modified date.
+     *
+     * @var \DateTimeInterface|null
      */
     public $lastChecked;
 }

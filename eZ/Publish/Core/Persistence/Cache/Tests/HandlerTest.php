@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
+use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
@@ -82,6 +83,7 @@ abstract class HandlerTest extends TestCase
             new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUrlAliasHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheObjectStateHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             $this->loggerMock,
             $this->cacheMock
         );

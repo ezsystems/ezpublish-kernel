@@ -5,6 +5,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use eZ\Publish\SPI\Persistence\URL\Handler as URLHandlerInterface;
 use eZ\Publish\SPI\Persistence\URL\URLUpdateStruct;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
  * SPI cache for URL Handler.
@@ -19,7 +20,7 @@ class URLHandler implements URLHandlerInterface
     protected $cache;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\URL\Handler
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
 
@@ -32,12 +33,12 @@ class URLHandler implements URLHandlerInterface
      * Setups current handler with everything needed.
      *
      * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
-     * @param \eZ\Publish\SPI\Persistence\URL\Handler $persistenceHandler
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
         CacheServiceDecorator $cache,
-        URLHandlerInterface $persistenceHandler,
+        PersistenceHandler $persistenceHandler,
         PersistenceLogger $logger)
     {
         $this->cache = $cache;
@@ -55,7 +56,7 @@ class URLHandler implements URLHandlerInterface
             'struct' => $struct,
         ]);
 
-        $url = $this->persistenceHandler->updateUrl($id, $struct);
+        $url = $this->persistenceHandler->urlHandler()->updateUrl($id, $struct);
 
         $this->cache->clear('url', $id);
         $this->cache->clear('content');
@@ -72,7 +73,7 @@ class URLHandler implements URLHandlerInterface
             'query' => $query,
         ]);
 
-        return $this->persistenceHandler->find($query);
+        return $this->persistenceHandler->urlHandler()->find($query);
     }
 
     /**
@@ -85,7 +86,7 @@ class URLHandler implements URLHandlerInterface
         $url = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, ['url' => $id]);
-            $url = $this->persistenceHandler->loadById($id);
+            $url = $this->persistenceHandler->urlHandler()->loadById($id);
             $cache->set($url)->save();
         }
 
@@ -97,7 +98,7 @@ class URLHandler implements URLHandlerInterface
      */
     public function loadByUrl($url)
     {
-        return $this->persistenceHandler->loadByUrl($url);
+        return $this->persistenceHandler->urlHandler()->loadByUrl($url);
     }
 
     /**
@@ -110,7 +111,7 @@ class URLHandler implements URLHandlerInterface
         $usages = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, ['url' => $id]);
-            $usages = $this->persistenceHandler->findUsages($id);
+            $usages = $this->persistenceHandler->urlHandler()->findUsages($id);
             $cache->set($usages)->save();
         }
 

@@ -5,8 +5,9 @@ namespace eZ\Publish\Tests\Core\Persistence\Cache;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
-use eZ\Publish\Core\Persistence\Cache\URLHandler;
-use eZ\Publish\SPI\Persistence\URL\Handler;
+use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\SPI\Persistence\URL\Handler as UrlHandler;
 use eZ\Publish\SPI\Persistence\URL\URL;
 use eZ\Publish\SPI\Persistence\URL\URLUpdateStruct;
 use PHPUnit\Framework\TestCase;
@@ -38,9 +39,16 @@ class URLHandlerTest extends TestCase
     {
         parent::setUp();
         $this->cache = $this->createMock(CacheServiceDecorator::class);
-        $this->persistenceHandler = $this->createMock(Handler::class);
+        $this->persistenceHandler = $this->createMock(UrlHandler::class);
+
+        $persistence = $this->createMock(Handler::class);
+        $persistence
+            ->expects($this->any())
+            ->method('urlHandler')
+            ->willReturn($this->persistenceHandler);
+
         $this->logger = $this->createMock(PersistenceLogger::class);
-        $this->urlHandler = new URLHandler($this->cache, $this->persistenceHandler, $this->logger);
+        $this->urlHandler = new CacheUrlHandler($this->cache, $persistence, $this->logger);
     }
 
     public function testUpdateUrl()

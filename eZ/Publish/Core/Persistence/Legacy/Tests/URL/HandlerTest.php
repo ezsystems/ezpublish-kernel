@@ -59,7 +59,7 @@ class HandlerTest extends TestCase
     public function testFind()
     {
         $query = new URLQuery();
-        $query->filter = new Criterion\Validity();
+        $query->filter = new Criterion\Validity(true);
         $query->sortClauses = [
             new SortClause\Id(),
         ];

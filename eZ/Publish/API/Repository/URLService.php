@@ -34,7 +34,7 @@ interface URLService
      * @param \eZ\Publish\API\Repository\Values\URL\URL $url
      * @param int $offset
      * @param int $limit
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\URL\UsageSearchResult
      */
     public function findUsages(URL $url, $offset = 0, $limit = -1);
 

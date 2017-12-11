@@ -8,16 +8,18 @@ namespace eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 class Validity extends Matcher
 {
     /**
-     * @var bool|null
+     * If true the matcher will selects only valid URLs.
+     *
+     * @var bool
      */
     public $isValid;
 
     /**
      * Validity constructor.
      *
-     * @param bool|null $isValid
+     * @param bool $isValid
      */
-    public function __construct($isValid = null)
+    public function __construct($isValid)
     {
         $this->isValid = $isValid;
     }

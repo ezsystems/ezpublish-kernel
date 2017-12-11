@@ -30,7 +30,7 @@ class VisibleOnly implements CriterionHandler
      * Generate query that selects ids of visible URLs.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @return string
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function getVisibleOnlySubQuery(SelectQuery $query)
     {

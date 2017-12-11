@@ -5,10 +5,10 @@ namespace eZ\Publish\API\Repository\Values\URL;
 use ArrayIterator;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-class SearchResult extends ValueObject implements \IteratorAggregate
+class UsageSearchResult extends ValueObject implements \IteratorAggregate
 {
     /**
-     * The total number of URLs.
+     * The total number of content objects using URL.
      *
      * @var int
      */
@@ -17,7 +17,7 @@ class SearchResult extends ValueObject implements \IteratorAggregate
     /**
      * The value objects found for the query.
      *
-     * @var \eZ\Publish\API\Repository\Values\URL\URL[]
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[]
      */
     public $items = [];
 

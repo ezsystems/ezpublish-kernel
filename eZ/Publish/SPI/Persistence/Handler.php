@@ -64,6 +64,11 @@ interface Handler
     public function urlWildcardHandler();
 
     /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\URL\Handler
+     */
+    public function urlHandler();
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler
      */
     public function transactionHandler();

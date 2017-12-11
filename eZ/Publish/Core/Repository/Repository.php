@@ -180,6 +180,13 @@ class Repository implements RepositoryInterface
     protected $urlWildcardService;
 
     /**
+     * Instance of URL service.
+     *
+     * @var \eZ\Publish\Core\Repository\URLService
+     */
+    protected $urlService;
+
+    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -646,6 +653,25 @@ class Repository implements RepositoryInterface
         );
 
         return $this->urlWildcardService;
+    }
+
+    /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService()
+    {
+        if ($this->urlService !== null) {
+            return $this->urlService;
+        }
+
+        $this->urlService = new URLService(
+            $this,
+            $this->persistenceHandler->urlHandler()
+        );
+
+        return $this->urlService;
     }
 
     /**

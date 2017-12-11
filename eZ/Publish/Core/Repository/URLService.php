@@ -4,7 +4,7 @@ namespace eZ\Publish\Core\Repository;
 
 use DateTime;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion as ContentCriterion;
@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\URL\SearchResult;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
+use eZ\Publish\API\Repository\Values\URL\UsageSearchResult;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
@@ -37,7 +38,7 @@ class URLService implements URLServiceInterface
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\URL\Handler $urlHandler
      */
-    public function __construct(Repository $repository, URLHandler $urlHandler)
+    public function __construct(RepositoryInterface $repository, URLHandler $urlHandler)
     {
         $this->repository = $repository;
         $this->urlHandler = $urlHandler;
@@ -68,7 +69,7 @@ class URLService implements URLServiceInterface
         }
 
         return new SearchResult([
-            'count' => $results['count'],
+            'totalCount' => $results['count'],
             'items' => $items,
         ]);
     }
@@ -141,32 +142,44 @@ class URLService implements URLServiceInterface
      */
     public function findUsages(URL $url, $offset = 0, $limit = -1)
     {
-        $usages = $this->urlHandler->findUsages($url->id);
+        $contentIds = $this->urlHandler->findUsages($url->id);
+        if (empty($contentIds)) {
+            return new UsageSearchResult();
+        }
 
         $query = new Query();
-        if (!empty($usages)) {
-            $query->filter = new ContentCriterion\LogicalAnd([
-                new ContentCriterion\ContentId($usages),
-                new ContentCriterion\Visibility(ContentCriterion\Visibility::VISIBLE),
-            ]);
-        } else {
-            $query->filter = new ContentCriterion\MatchNone();
-        }
+        $query->filter = new ContentCriterion\LogicalAnd([
+            new ContentCriterion\ContentId($contentIds),
+            new ContentCriterion\Visibility(ContentCriterion\Visibility::VISIBLE),
+        ]);
 
         $query->offset = $offset;
         if ($limit > -1) {
             $query->limit = $limit;
         }
 
-        return $this->repository->getSearchService()->findContentInfo($query);
+        $searchResults = $this->repository->getSearchService()->findContentInfo($query);
+
+        $usageResults = new UsageSearchResult();
+        $usageResults->totalCount = $searchResults->totalCount;
+        foreach ($searchResults->searchHits as $hit) {
+            $usageResults->items[] = $hit->valueObject;
+        }
+
+        return $usageResults;
     }
 
+    /**
+     * Builds domain object from ValueObject returned by Persistence API.
+     *
+     * @param \eZ\Publish\SPI\Persistence\URL\URL $data
+     * @return \eZ\Publish\API\Repository\Values\URL\URL
+     */
     protected function buildDomainObject(SPIUrl $data)
     {
         return new URL([
             'id' => $data->id,
             'url' => $data->url,
-            'originalUrlMd5' => $data->originalUrlMd5,
             'isValid' => $data->isValid,
             'lastChecked' => $this->createDateTime($data->lastChecked),
             'created' => $this->createDateTime($data->created),
@@ -174,6 +187,13 @@ class URLService implements URLServiceInterface
         ]);
     }
 
+    /**
+     * Builds SPI update structure used by Persistence API.
+     *
+     * @param \eZ\Publish\API\Repository\Values\URL\URL $url
+     * @param \eZ\Publish\API\Repository\Values\URL\URLUpdateStruct $data
+     * @return \eZ\Publish\SPI\Persistence\URL\URLUpdateStruct
+     */
     protected function buildUpdateStruct(URL $url, URLUpdateStruct $data)
     {
         $updateStruct = new SPIUrlUpdateStruct();
