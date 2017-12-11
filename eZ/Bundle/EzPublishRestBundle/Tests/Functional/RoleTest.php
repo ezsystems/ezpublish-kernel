@@ -717,7 +717,10 @@ XML;
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
+        $href = $response->getHeader('Location');
 
-        return $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
+        return $href;
     }
 }

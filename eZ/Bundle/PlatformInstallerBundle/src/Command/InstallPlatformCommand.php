@@ -10,13 +10,14 @@ namespace EzSystems\PlatformInstallerBundle\Command;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\ConnectionException;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
+
 
 class InstallPlatformCommand extends Command
 {
@@ -26,11 +27,8 @@ class InstallPlatformCommand extends Command
     /** @var \Symfony\Component\Console\Output\OutputInterface */
     private $output;
 
-    /** @var \Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface */
-    private $cacheClearer;
-
-    /** @var string */
-    private $cacheDir;
+    /** @var \Psr\Cache\CacheItemPoolInterface */
+    private $cachePool;
 
     /** @var string */
     private $environment;
@@ -47,14 +45,12 @@ class InstallPlatformCommand extends Command
     public function __construct(
         Connection $db,
         array $installers,
-        CacheClearerInterface $cacheClearer,
-        $cacheDir,
+        CacheItemPoolInterface $cachePool,
         $environment
     ) {
         $this->db = $db;
         $this->installers = $installers;
-        $this->cacheClearer = $cacheClearer;
-        $this->cacheDir = $cacheDir;
+        $this->cachePool = $cachePool;
         $this->environment = $environment;
         parent::__construct();
     }
@@ -150,19 +146,14 @@ class InstallPlatformCommand extends Command
         }
     }
 
+    /**
+     * Clear all content related cache (persistence cache).
+     *
+     * @param OutputInterface $output
+     */
     private function cacheClear(OutputInterface $output)
     {
-        if (!is_writable($this->cacheDir)) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Unable to write in the "%s" directory, check install doc on disk permissions before you continue.',
-                    $this->cacheDir
-                )
-            );
-        }
-
-        $output->writeln(sprintf('Clearing cache for directory <info>%s</info>', $this->cacheDir));
-        $this->cacheClearer->clear($this->cacheDir);
+        $this->cachePool->clear();
     }
 
     /**
