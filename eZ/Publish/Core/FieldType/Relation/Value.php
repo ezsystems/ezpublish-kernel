@@ -12,6 +12,8 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Value for Relation field type.
+ *
+ * @deprecated Since 7.0 and will be removed in 8.0. Use `RelationList\Value` instead.
  */
 class Value extends BaseValue
 {

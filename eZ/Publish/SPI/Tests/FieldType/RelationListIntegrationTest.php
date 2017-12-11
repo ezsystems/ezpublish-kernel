@@ -78,6 +78,11 @@ class RelationListIntegrationTest extends BaseIntegrationTest
                     'selectionDefaultLocation' => '',
                     'selectionContentTypes' => array(),
                 ),
+                'validators' => array(
+                    'RelationListValueValidator' => array(
+                        'selectionLimit' => 3,
+                    ),
+                ),
             )
         );
     }
@@ -97,9 +102,18 @@ class RelationListIntegrationTest extends BaseIntegrationTest
             'selectionContentTypes' => array(),
         );
 
+        $validators = array(
+            'RelationListValueValidator' => array(
+                'selectionLimit' => 3,
+            ),
+        );
+
         return array(
             array('fieldType', 'ezobjectrelationlist'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array('fieldSettings' => $fieldSettings))),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array(
+                'fieldSettings' => $fieldSettings,
+                'validators' => $validators,
+            ))),
         );
     }
 

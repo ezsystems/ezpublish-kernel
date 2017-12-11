@@ -128,7 +128,14 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return array(
+            'RelationListValueValidator' => array(
+                'selectionLimit' => array(
+                    'type' => 'int',
+                    'default' => 0,
+                ),
+            ),
+        );
     }
 
     /**
@@ -156,7 +163,11 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return array(
+            'RelationListValueValidator' => array(
+                'selectionLimit' => 0,
+            ),
+        );
     }
 
     /**
