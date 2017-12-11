@@ -98,7 +98,7 @@ class SessionTest extends TestCase
         self::assertGreaterThan(0, $csrfDomElements->length);
         $csrfTokenValue = $csrfDomElements->item(0)->nodeValue;
 
-        $loginPostRequest = new FormRequest('POST', '/login', $this->getHttpHost());
+        $loginPostRequest = new FormRequest('POST', '/login_check', $this->getHttpHost());
         $loginPostRequest->addFields([
             '_username' => $this->getLoginUsername(),
             '_password' => $this->getLoginPassword(),
@@ -115,7 +115,8 @@ class SessionTest extends TestCase
         $this->setSessionInput($request);
         $request->addHeader("Cookie: $sessionCookie");
         $response = $this->sendHttpRequest($request);
-        self::assertHttpResponseCodeEquals($response, 201);
+        // Since Session is reused, not created, expect 200 instead of 201
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**

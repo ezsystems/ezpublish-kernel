@@ -226,6 +226,7 @@ EOF;
     protected function createFolder($string, $parentLocationId)
     {
         $string = $this->addTestSuffix($string);
+        $remoteId = md5(uniqid($string, true));
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
@@ -240,7 +241,7 @@ EOF;
   </LocationCreate>
   <Section href="/api/ezp/v2/content/sections/1" />
   <alwaysAvailable>true</alwaysAvailable>
-  <remoteId>{$string}</remoteId>
+  <remoteId>{$remoteId}</remoteId>
   <User href="/api/ezp/v2/user/users/14" />
   <modificationDate>2012-09-30T12:30:00</modificationDate>
   <fields>
