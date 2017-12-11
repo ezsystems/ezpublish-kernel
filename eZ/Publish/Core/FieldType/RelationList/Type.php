@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\RelationList;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -45,9 +46,14 @@ class Type extends FieldType
             'type' => 'array',
             'default' => array(),
         ),
-        'selectionLimit' => array(
-            'type' => 'int',
-            'default' => 0,
+    );
+
+    protected $validatorConfigurationSchema = array(
+        'RelationListValueValidator' => array(
+            'selectionLimit' => array(
+                'type' => 'int',
+                'default' => 0,
+            ),
         ),
     );
 
@@ -137,6 +143,109 @@ class Type extends FieldType
                     }
                     break;
             }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration($validatorConfiguration)
+    {
+        $validationErrors = array();
+
+        foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
+            if ($validatorIdentifier !== 'RelationListValueValidator') {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        '%validator%' => $validatorIdentifier,
+                    ),
+                    "[$validatorIdentifier]"
+                );
+
+                continue;
+            }
+
+            foreach ($constraints as $name => $value) {
+                if ($name === 'selectionLimit') {
+                    if (!is_int($value) && !ctype_digit($value)) {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be an integer",
+                            null,
+                            array(
+                                '%parameter%' => $name,
+                            ),
+                            "[$validatorIdentifier][$name]"
+                        );
+                    }
+                    if ($value < 0) {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be equal to/greater than 0",
+                            null,
+                            array(
+                                '%parameter%' => $name,
+                            ),
+                            "[$validatorIdentifier][$name]"
+                        );
+                    }
+                } else {
+                    $validationErrors[] = new ValidationError(
+                        "Validator parameter '%parameter%' is unknown",
+                        null,
+                        array(
+                            '%parameter%' => $name,
+                        ),
+                        "[$validatorIdentifier][$name]"
+                    );
+                }
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\RelationList\Value $fieldValue The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    {
+        $validationErrors = array();
+
+        if ($this->isEmptyValue($fieldValue)) {
+            return $validationErrors;
+        }
+
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $constraints = isset($validatorConfiguration['RelationListValueValidator']) ?
+            $validatorConfiguration['RelationListValueValidator'] :
+            array();
+
+        $validationErrors = array();
+
+        if (isset($constraints['selectionLimit']) &&
+            $constraints['selectionLimit'] > 0 && count($fieldValue->destinationContentIds) > $constraints['selectionLimit']) {
+            $validationErrors[] = new ValidationError(
+                'The selected content items number cannot be higher than %limit%.',
+                null,
+                array(
+                    '%limit%' => $constraints['selectionLimit'],
+                ),
+                'destinationContentIds'
+            );
         }
 
         return $validationErrors;

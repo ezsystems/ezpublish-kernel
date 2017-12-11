@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
 use eZ\Publish\Core\FieldType\RelationList\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -43,7 +44,14 @@ class RelationListTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return array(
+            'RelationListValueValidator' => array(
+                'selectionLimit' => array(
+                    'type' => 'int',
+                    'default' => 0,
+                ),
+            ),
+        );
     }
 
     /**
@@ -65,10 +73,6 @@ class RelationListTest extends FieldTypeTest
             'selectionContentTypes' => array(
                 'type' => 'array',
                 'default' => array(),
-            ),
-            'selectionLimit' => array(
-                'type' => 'int',
-                'default' => 0,
             ),
         );
     }
@@ -295,14 +299,12 @@ class RelationListTest extends FieldTypeTest
                 array(
                     'selectionMethod' => RelationList::SELECTION_BROWSE,
                     'selectionDefaultLocation' => 23,
-                    'selectionLimit' => 0,
                 ),
             ),
             array(
                 array(
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 'foo',
-                    'selectionLimit' => 1,
                 ),
             ),
             array(
@@ -310,7 +312,6 @@ class RelationListTest extends FieldTypeTest
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 'foo',
                     'selectionContentTypes' => array(1, 2, 3),
-                    'selectionLimit' => 2,
                 ),
             ),
         );
@@ -367,12 +368,310 @@ class RelationListTest extends FieldTypeTest
                     'selectionContentTypes' => true,
                 ),
             ),
+        );
+    }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * valid by the {@link validateValidatorConfiguration()} method.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array(
+     *              'IntegerValueValidator' => array(
+     *                  'minIntegerValue' => 0,
+     *                  'maxIntegerValue' => 23,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidValidatorConfiguration()
+    {
+        return array(
             array(
-                // Invalid value for 'selectionLimit'
+                array(),
+            ),
+            array(
                 array(
-                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
-                    'selectionDefaultLocation' => 23,
-                    'selectionLimit' => 'string',
+                    'RelationListValueValidator' => array(
+                        'selectionLimit' => 0,
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'RelationListValueValidator' => array(
+                        'selectionLimit' => 14,
+                    ),
+                ),
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * invalid by the {@link validateValidatorConfiguration()} method. The
+     * method must return a non-empty array of validation errors when receiving
+     * one of the provided values.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              'NonExistentValidator' => array(),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              // Typos
+     *              'InTEgervALUeVALIdator' => array(
+     *                  'iinIntegerValue' => 0,
+     *                  'maxIntegerValue' => 23,
+     *              )
+     *          )
+     *      ),
+     *      array(
+     *          array(
+     *              'IntegerValueValidator' => array(
+     *                  // Incorrect value types
+     *                  'minIntegerValue' => true,
+     *                  'maxIntegerValue' => false,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidValidatorConfiguration()
+    {
+        return array(
+            array(
+                array(
+                    'NonExistentValidator' => array(),
+                ),
+            ),
+            array(
+                array(
+                    'RelationListValueValidator' => array(
+                        'nonExistentValue' => 14,
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'RelationListValueValidator' => array(
+                        'selectionLimit' => 'foo',
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'RelationListValueValidator' => array(
+                        'selectionLimit' => -10,
+                    ),
+                ),
+            ),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings and
+     * field value which are considered valid by the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten if
+     * a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "StringLengthValidator" => array(
+     *                      "minStringLength" => 2,
+     *                      "maxStringLength" => 10,
+     *                  ),
+     *              ),
+     *          ),
+     *          new TextLineValue( "lalalala" ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  'isMultiple' => true
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              array(
+     *                  "BE" => array(
+     *                      "Name" => "Belgium",
+     *                      "Alpha2" => "BE",
+     *                      "Alpha3" => "BEL",
+     *                      "IDC" => 32,
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'RelationListValueValidator' => array(
+                            'selectionLimit' => 0,
+                        ),
+                    ),
+                ),
+                new Value([5, 6, 7]),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'RelationListValueValidator' => array(
+                            'selectionLimit' => 1,
+                        ),
+                    ),
+                ),
+                new Value([5]),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'RelationListValueValidator' => array(
+                            'selectionLimit' => 3,
+                        ),
+                    ),
+                ),
+                new Value([5, 6]),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'RelationListValueValidator' => array(
+                            'selectionLimit' => 3,
+                        ),
+                    ),
+                ),
+                new Value([]),
+            ),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings,
+     * field value and corresponding validation errors returned by
+     * the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "IntegerValueValidator" => array(
+     *                      "minIntegerValue" => 5,
+     *                      "maxIntegerValue" => 10
+     *                  ),
+     *              ),
+     *          ),
+     *          new IntegerValue( 3 ),
+     *          array(
+     *              new ValidationError(
+     *                  "The value can not be lower than %size%.",
+     *                  null,
+     *                  array(
+     *                      "%size%" => 5
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  "isMultiple" => false
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              "BE" => array(
+     *                  "Name" => "Belgium",
+     *                  "Alpha2" => "BE",
+     *                  "Alpha3" => "BEL",
+     *                  "IDC" => 32,
+     *              ),
+     *              "FR" => array(
+     *                  "Name" => "France",
+     *                  "Alpha2" => "FR",
+     *                  "Alpha3" => "FRA",
+     *                  "IDC" => 33,
+     *              ),
+     *          )
+     *      ),
+     *      array(
+     *          new ValidationError(
+     *              "Field definition does not allow multiple countries to be selected."
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'RelationListValueValidator' => array(
+                            'selectionLimit' => 3,
+                        ),
+                    ),
+                ),
+                new Value([1, 2, 3, 4]),
+                array(
+                    new ValidationError(
+                        'The selected content items number cannot be higher than %limit%.',
+                        null,
+                        array(
+                            '%limit%' => 3,
+                        ),
+                        'destinationContentIds'
+                    ),
                 ),
             ),
         );

@@ -207,7 +207,11 @@ EOT;
                             'selectionMethod' => Type::SELECTION_BROWSE,
                             'selectionDefaultLocation' => 12345,
                             'selectionContentTypes' => array('article', 'blog_post'),
-                            'selectionLimit' => 5,
+                        ),
+                        'validators' => array(
+                            'RelationListValueValidator' => array(
+                                'selectionLimit' => 5,
+                            ),
                         ),
                     )
                 ),
@@ -217,7 +221,7 @@ EOT;
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
         $expectedStorageFieldDefinition->dataText5 = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
-<related-objects><constraints><allowed-class contentclass-identifier="article"/><allowed-class contentclass-identifier="blog_post"/></constraints><type value="2"/><object_class value=""/><selection_type value="0"/><selection_limit value="5"/><contentobject-placement node-id="12345"/></related-objects>
+<related-objects><constraints><allowed-class contentclass-identifier="article"/><allowed-class contentclass-identifier="blog_post"/></constraints><type value="2"/><object_class value=""/><selection_type value="0"/><contentobject-placement node-id="12345"/><selection_limit value="5"/></related-objects>
 
 EOT;
 
@@ -261,7 +265,11 @@ EOT;
                             'selectionMethod' => Type::SELECTION_DROPDOWN,
                             'selectionDefaultLocation' => 54321,
                             'selectionContentTypes' => array('forum', 'folder'),
-                            'selectionLimit' => 1,
+                        ),
+                        'validators' => array(
+                            'RelationListValueValidator' => array(
+                                'selectionLimit' => 1,
+                            ),
                         ),
                     )
                 ),

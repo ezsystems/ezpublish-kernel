@@ -117,6 +117,7 @@ class RelationListConverter implements Converter
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
         $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+        $validators = $fieldDef->fieldTypeConstraints->validators;
         $doc = new DOMDocument('1.0', 'utf-8');
         $root = $doc->createElement('related-objects');
         $doc->appendChild($root);
@@ -148,19 +149,19 @@ class RelationListConverter implements Converter
         }
         $root->appendChild($selectionType);
 
-        $selectionLimit = $doc->createElement('selection_limit');
-        if (isset($fieldSettings['selectionLimit'])) {
-            $selectionLimit->setAttribute('value', (int)$fieldSettings['selectionLimit']);
-        } else {
-            $selectionLimit->setAttribute('value', 0);
-        }
-        $root->appendChild($selectionLimit);
-
         $defaultLocation = $doc->createElement('contentobject-placement');
         if (!empty($fieldSettings['selectionDefaultLocation'])) {
             $defaultLocation->setAttribute('node-id', (int)$fieldSettings['selectionDefaultLocation']);
         }
         $root->appendChild($defaultLocation);
+
+        $selectionLimit = $doc->createElement('selection_limit');
+        if (isset($validators['RelationListValueValidator']['selectionLimit'])) {
+            $selectionLimit->setAttribute('value', (int)$validators['RelationListValueValidator']['selectionLimit']);
+        } else {
+            $selectionLimit->setAttribute('value', 0);
+        }
+        $root->appendChild($selectionLimit);
 
         $doc->appendChild($root);
         $storageDef->dataText5 = $doc->saveXML();
@@ -202,7 +203,12 @@ class RelationListConverter implements Converter
             'selectionMethod' => 0,
             'selectionDefaultLocation' => null,
             'selectionContentTypes' => [],
-            'selectionLimit' => 0,
+        ];
+
+        $fieldDef->fieldTypeConstraints->validators = [
+            'RelationListValueValidator' => [
+                'selectionLimit' => 0,
+            ],
         ];
 
         // default value
@@ -213,25 +219,18 @@ class RelationListConverter implements Converter
             return;
         }
 
-        // read settings from storage
-        $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
         $dom = new DOMDocument('1.0', 'utf-8');
         if (empty($storageDef->dataText5) || $dom->loadXML($storageDef->dataText5) !== true) {
             return;
         }
 
+        // read settings from storage
+        $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
         if (
             ($selectionType = $dom->getElementsByTagName('selection_type')->item(0)) &&
             $selectionType->hasAttribute('value')
         ) {
             $fieldSettings['selectionMethod'] = (int)$selectionType->getAttribute('value');
-        }
-
-        if (
-            ($selectionLimit = $dom->getElementsByTagName('selection_limit')->item(0)) &&
-            $selectionLimit->hasAttribute('value')
-        ) {
-            $fieldSettings['selectionLimit'] = (int)$selectionLimit->getAttribute('value');
         }
 
         if (
@@ -247,6 +246,15 @@ class RelationListConverter implements Converter
 
         foreach ($constraints->item(0)->getElementsByTagName('allowed-class') as $allowedClass) {
             $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute('contentclass-identifier');
+        }
+
+        // read validators configuration from storage
+        $validators = &$fieldDef->fieldTypeConstraints->validators;
+        if (
+            ($selectionLimit = $dom->getElementsByTagName('selection_limit')->item(0)) &&
+            $selectionLimit->hasAttribute('value')
+        ) {
+            $validators['RelationListValueValidator']['selectionLimit'] = (int)$selectionLimit->getAttribute('value');
         }
     }
 
