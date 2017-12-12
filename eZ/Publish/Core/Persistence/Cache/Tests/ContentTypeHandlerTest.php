@@ -65,7 +65,6 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
             ['removeFieldDefinition', [5, 1, 7], null, 'ez-content-type-5-1'],
             ['updateFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['type-5', 'type-map', 'content-fields-type-5']],
             ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()], [], 'ez-content-type-5-1'],
-            ['publish', [5], ['type-5', 'type-map', 'content-fields-type-5']],
         ];
     }
 
@@ -88,5 +87,55 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
             ['loadByRemoteId', ['f34tg45gf'], 'ez-content-type-f34tg45gf-by-remote', $type],
             ['getSearchableFieldMap', [], 'ez-content-type-field-map', [$type]],
         ];
+    }
+
+    /**
+     * Test cache invalidation when publishing Content Type.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::publish
+     */
+    public function testPublish()
+    {
+        $tags = ['type-5', 'type-map', 'content-fields-type-5'];
+        $method = 'publish';
+        $arguments = [5];
+        $type = new SPIType(['id' => 5, 'groupIds' => [3, 4]]);
+        $cacheItem = $this->getCacheItem('ez-content-type-5-0', $type);
+
+        $handlerMethodName = $this->getHandlerMethodName();
+
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandler = $this->createMock($this->getHandlerClassName());
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method($handlerMethodName)
+            ->will($this->returnValue($innerHandler));
+
+        $innerHandler
+            ->expects($this->once())
+            ->method($method)
+            ->with(...$arguments)
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects(!empty($tags) ? $this->once() : $this->never())
+            ->method('invalidateTags')
+            ->with($tags);
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('getItem')
+            ->with($cacheItem->getKey())
+            ->willReturn($cacheItem);
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('deleteItems')
+            ->with(['ez-content-type-group-3', 'ez-content-type-group-4'])
+            ->willReturn(true);
+
+        $handler = $this->persistenceCacheHandler->$handlerMethodName();
+        call_user_func_array(array($handler, $method), $arguments);
     }
 }
