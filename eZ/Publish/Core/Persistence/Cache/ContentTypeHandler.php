@@ -428,6 +428,17 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
 
         // Clear type cache, map cache, and content cache which contains fields.
         $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+
+        // Clear Content Type Groups list cache
+        $contentType = $this->load($typeId, Type::STATUS_DEFINED);
+        $this->cache->deleteItems(
+            array_map(
+                function ($groupId) {
+                    return 'ez-content-type-group-' . $groupId;
+                },
+                $contentType->groupIds
+            )
+        );
     }
 
     /**
