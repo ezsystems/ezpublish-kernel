@@ -18,7 +18,7 @@
         "ext-xsl": "*",
         "zetacomponents/mail": "~1.8",
         "symfony/symfony": "~2.7.38 | ~2.8.31 | ^3.3.13",
-        "symfony-cmf/routing": "~1.1",
+        "symfony-cmf/routing": "^1.1|^2.0",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": ">=0.9",
         "tedivm/stash-bundle": "~0.6.1",
