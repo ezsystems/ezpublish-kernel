@@ -19,9 +19,10 @@ class LocationView extends View
     public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
         $scopes = array_merge(
-            [ConfigResolver::SCOPE_DEFAULT, ConfigResolver::SCOPE_GLOBAL],
+            [ConfigResolver::SCOPE_GLOBAL],
             $config['siteaccess']['list'],
-            array_keys($config['siteaccess']['groups'])
+            array_keys($config['siteaccess']['groups']),
+            [ConfigResolver::SCOPE_DEFAULT]
         );
 
         foreach ($scopes as $scope) {
