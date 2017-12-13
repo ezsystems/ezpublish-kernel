@@ -132,7 +132,7 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('deleteItems')
-            ->with(['ez-content-type-group-3', 'ez-content-type-group-4'])
+            ->with(['ez-content-type-list-by-group-3', 'ez-content-type-list-by-group-4'])
             ->willReturn(true);
 
         $handler = $this->persistenceCacheHandler->$handlerMethodName();

@@ -434,7 +434,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $this->cache->deleteItems(
             array_map(
                 function ($groupId) {
-                    return 'ez-content-type-group-' . $groupId;
+                    return 'ez-content-type-list-by-group-' . $groupId;
                 },
                 $contentType->groupIds
             )
