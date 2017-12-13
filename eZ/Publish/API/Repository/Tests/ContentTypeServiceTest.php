@@ -2337,6 +2337,52 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test that publishing Content Type Draft refreshes list of Content Types in Content Type Groups.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft
+     */
+    public function testPublishContentTypeDraftRefreshesContentTypesList()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $contentTypeGroups = $contentTypeDraft->getContentTypeGroups();
+        // load Content Types for Groups of the new Content Type Draft to populate cache before publishing
+        foreach ($contentTypeGroups as $contentTypeGroup) {
+            $contentTypes = $contentTypeService->loadContentTypes($contentTypeGroup);
+            // check if not published Content Type does not exist on published Content Types list
+            self::assertNotContains(
+                $contentTypeDraft->id,
+                array_map(
+                    function (ContentType $contentType) {
+                        return $contentType->id;
+                    },
+                    $contentTypes
+                )
+            );
+        }
+
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        // load Content Types for the Groups of the new Content Type
+        foreach ($contentTypeGroups as $contentTypeGroup) {
+            $contentTypes = $contentTypeService->loadContentTypes($contentTypeGroup);
+            // check if published Content is available in published Content Types list
+            self::assertContains(
+                $contentTypeDraft->id,
+                array_map(
+                    function (ContentType $contentType) {
+                        return $contentType->id;
+                    },
+                    $contentTypes
+                )
+            );
+        }
+    }
+
+    /**
      * Test for the publishContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
