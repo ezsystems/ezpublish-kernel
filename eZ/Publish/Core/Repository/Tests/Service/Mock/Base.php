@@ -192,6 +192,10 @@ abstract class Base extends TestCase
             $this->persistenceMock->expects($this->any())
                 ->method('urlWildcardHandler')
                 ->will($this->returnValue($this->getPersistenceMockHandler('Content\\UrlWildcard\\Handler')));
+
+            $this->persistenceMock->expects($this->any())
+                ->method('urlWildcardHandler')
+                ->will($this->returnValue($this->getPersistenceMockHandler('URL\\Handler')));
         }
 
         return $this->persistenceMock;
