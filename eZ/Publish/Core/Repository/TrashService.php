@@ -314,7 +314,6 @@ class TrashService implements TrashServiceInterface
         $searchResult = new SearchResult();
         $searchResult->totalCount = $searchResult->count = count($trashItems);
         $searchResult->items = $trashItems;
-        $searchResult->query = $query;
 
         return $searchResult;
     }

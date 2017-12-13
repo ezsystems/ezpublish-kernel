@@ -380,34 +380,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Removes a policy from the role.
-     *
-     * @deprecated since 5.3, use {@link removePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
-     */
-    public function removePolicy(Role $role, Policy $policy)
-    {
-        $returnValue = $this->service->removePolicy($role, $policy);
-        $this->signalDispatcher->emit(
-            new RemovePolicySignal(
-                array(
-                    'roleId' => $role->id,
-                    'policyId' => $policy->id,
-                )
-            )
-        );
-
-        return $returnValue;
-    }
-
-    /**
      * Delete a policy.
      *
      * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.

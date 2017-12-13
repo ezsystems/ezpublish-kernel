@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -5616,28 +5615,6 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $this->createMultipleLanguageContentVersion2();
         $draft = $contentService->createContentDraft($content->contentInfo);
         $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
-    }
-
-    /**
-     * Test for the newTranslationInfo() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo
-     */
-    public function testNewTranslationInfo()
-    {
-        $repository = $this->getRepository();
-        $contentService = $repository->getContentService();
-
-        $translationInfo = $contentService->newTranslationInfo();
-
-        $this->assertInstanceOf(
-            TranslationInfo::class,
-            $translationInfo
-        );
-
-        foreach ($translationInfo as $propertyName => $propertyValue) {
-            $this->assertNull($propertyValue, "Property '{$propertyName}' initial value should be null'");
-        }
     }
 
     /**
