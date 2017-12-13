@@ -1,11 +1,13 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Bundle\EzPublishCoreBundle\URLChecker;
 
-use DateTime;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\SearchResult;
-use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -52,10 +54,7 @@ class URLChecker implements URLCheckerInterface
             }
 
             $handler = $this->handlerRegistry->getHandler($scheme);
-            $handler->validate($urls, function (URL $url, $isValid) {
-                $this->logger->info(sprintf('URL id = %d (%s) was checked (valid = %s)', $url->id, $url->url, (int) $isValid));
-                $this->setUrlStatus($url, $isValid);
-            });
+            $handler->validate($urls);
         }
     }
 
@@ -70,21 +69,6 @@ class URLChecker implements URLCheckerInterface
         return $this->groupByScheme(
             $this->urlService->findUrls($query)
         );
-    }
-
-    /**
-     * Sets URL status.
-     *
-     * @param \eZ\Publish\API\Repository\Values\URL\URL $url
-     * @param bool $isValid
-     */
-    protected function setUrlStatus(URL $url, $isValid)
-    {
-        $updateStruct = $this->urlService->createUpdateStruct();
-        $updateStruct->isValid = $isValid;
-        $updateStruct->lastChecked = new DateTime();
-
-        $this->urlService->updateUrl($url, $updateStruct);
     }
 
     /**

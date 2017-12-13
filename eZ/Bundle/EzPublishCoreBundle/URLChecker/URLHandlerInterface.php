@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Bundle\EzPublishCoreBundle\URLChecker;
 
 interface URLHandlerInterface
@@ -8,9 +12,8 @@ interface URLHandlerInterface
      * Validates given list of URLs.
      *
      * @param \eZ\Publish\API\Repository\Values\URL\URL[] $urls
-     * @param callable $doUpdateStatus Callable executed to update URL status
      */
-    public function validate(array $urls, callable $doUpdateStatus);
+    public function validate(array $urls);
 
     /**
      * Set handler options.

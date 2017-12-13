@@ -75,7 +75,7 @@ class CheckURLsCommand extends ContainerAwareCommand
         $query->limit = 0;
 
         return $repository->sudo(function () use ($query, $urlService) {
-            return $urlService->findUrls($query)->count;
+            return $urlService->findUrls($query)->totalCount;
         });
     }
 

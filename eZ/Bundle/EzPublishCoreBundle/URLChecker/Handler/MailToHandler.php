@@ -1,31 +1,22 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler;
 
 use eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MailToHandler implements URLHandlerInterface
+class MailToHandler extends AbstractURLHandler
 {
     const MAILTO_PATTERN = '/^mailto:(.+)@([^?]+)(\\?.*)?$/';
 
     /**
-     * @var array
-     */
-    private $options;
-
-    /**
-     * MailToHandler constructor.
-     */
-    public function __construct()
-    {
-        $this->options = $this->getOptionsResolver()->resolve();
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function validate(array $urls, callable $doUpdateStatus)
+    public function validate(array $urls)
     {
         if (!$this->options['enabled']) {
             return;
@@ -35,17 +26,9 @@ class MailToHandler implements URLHandlerInterface
             if (preg_match(self::MAILTO_PATTERN, $url->url, $matches)) {
                 $host = trim($matches[2]);
 
-                $doUpdateStatus($url, checkdnsrr($host, 'MX'));
+                $this->setUrlStatus($url, checkdnsrr($host, 'MX'));
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setOptions(array $options = null)
-    {
-        $this->options = $this->getOptionsResolver()->resolve($options);
     }
 
     /**

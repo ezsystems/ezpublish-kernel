@@ -120,6 +120,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->handleLocale($config, $container, $loader);
         $this->handleHelpers($config, $container, $loader);
         $this->handleImage($config, $container, $loader);
+        $this->handleUrlChecker($config, $container, $loader);
 
         // Map settings
         $processor = new ConfigurationProcessor($container, 'ezsettings');
@@ -455,6 +456,11 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     private function handleImage(array $config, ContainerBuilder $container, FileLoader $loader)
     {
         $loader->load('image.yml');
+    }
+
+    private function handleUrlChecker($config, ContainerBuilder $container, FileLoader $loader)
+    {
+        $loader->load('url_checker.yml');
     }
 
     private function buildPolicyMap(ContainerBuilder $container)

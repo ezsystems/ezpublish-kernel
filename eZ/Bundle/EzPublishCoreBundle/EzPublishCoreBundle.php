@@ -46,6 +46,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\RoleLimitationConvert
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\URLHandlerPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -81,6 +82,8 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new ComplexSettingsPass(new ComplexSettingParser()));
         $container->addCompilerPass(new ConfigResolverParameterPass(new DynamicSettingParser()));
         $container->addCompilerPass(new AsseticPass());
+        $container->addCompilerPass(new URLHandlerPass());
+
         $container->addCompilerPass(
             new RegisterListenersPass(
                 'ezpublish.http_cache.event_dispatcher',
@@ -127,6 +130,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\Page(),
                     new ConfigParser\Languages(),
                     new ConfigParser\IO(new ComplexSettingParser()),
+                    new ConfigParser\UrlChecker(),
                 )
             );
 
