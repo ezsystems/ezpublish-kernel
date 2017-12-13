@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\TrashService as APITrashService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\REST\Common\RequestParser;
@@ -202,7 +203,7 @@ class TrashService implements APITrashService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\SearchResult
      */
     public function findTrashItems(Query $query)
     {
@@ -221,7 +222,11 @@ class TrashService implements APITrashService, Sessionable
             $trashItems[] = $this->buildTrashItem($location);
         }
 
-        return $trashItems;
+
+        return new SearchResult([
+            'items' => $trashItems,
+            'totalCount' => count($trashItems),
+        ]);
     }
 
     /**

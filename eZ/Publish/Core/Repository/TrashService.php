@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use DateTime;
@@ -267,7 +267,7 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\SearchResult
      */
     public function findTrashItems(Query $query)
     {
@@ -312,7 +312,7 @@ class TrashService implements TrashServiceInterface
         }
 
         $searchResult = new SearchResult();
-        $searchResult->count = count($trashItems);
+        $searchResult->totalCount = $searchResult->count = count($trashItems);
         $searchResult->items = $trashItems;
         $searchResult->query = $query;
 
