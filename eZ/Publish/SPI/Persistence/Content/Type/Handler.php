@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\SPI\Persistence\Content\Type;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
@@ -281,11 +282,11 @@ interface Handler
      *
      * Flags the content type as updated.
      *
-     * @param mixed $contentTypeId
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with $contentTypeId and Type::STATUS_DRAFT is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the given Content Type Draft was not found
      */
-    public function publish($contentTypeId);
+    public function publish(ContentTypeDraft $contentTypeDraft);
 
     /**
      * Returns content type, field definition and field type mapping information
