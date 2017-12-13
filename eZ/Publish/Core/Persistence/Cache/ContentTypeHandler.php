@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
@@ -421,13 +422,21 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     /**
      * {@inheritdoc}
      */
-    public function publish($typeId)
+    public function publish(ContentTypeDraft $contentTypeDraft)
     {
-        $this->logger->logCall(__METHOD__, array('type' => $typeId));
-        $this->persistenceHandler->contentTypeHandler()->publish($typeId);
+        $this->logger->logCall(__METHOD__, array('type' => $contentTypeDraft->id));
+        $this->persistenceHandler->contentTypeHandler()->publish($contentTypeDraft);
 
-        // Clear type cache, map cache, and content cache which contains fields.
-        $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+        // Clear type cache, map cache, content cache which contains fields and group cache
+        $cacheTags = [
+            'type-' . $contentTypeDraft->id,
+            'type-map',
+            'content-fields-type-' . $contentTypeDraft->id,
+        ];
+        foreach ($contentTypeDraft->getContentTypeGroups() as $contentTypeGroup) {
+            $cacheTags[] = 'type-group-' . $contentTypeGroup->id;
+        }
+        $this->cache->invalidateTags($cacheTags);
     }
 
     /**

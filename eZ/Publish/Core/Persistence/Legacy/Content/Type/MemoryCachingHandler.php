@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as BaseContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
@@ -451,13 +452,13 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      *
      * Flags the content type as updated.
      *
-     * @param mixed $contentTypeId
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
-    public function publish($contentTypeId)
+    public function publish(ContentTypeDraft $contentTypeDraft)
     {
         $this->clearCache();
 
-        return $this->innerHandler->publish($contentTypeId);
+        $this->innerHandler->publish($contentTypeDraft);
     }
 
     /**

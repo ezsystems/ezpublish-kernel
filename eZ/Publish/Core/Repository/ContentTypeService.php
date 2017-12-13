@@ -1466,9 +1466,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                 );
             }
 
-            $this->contentTypeHandler->publish(
-                $loadedContentTypeDraft->id
-            );
+            $this->contentTypeHandler->publish($loadedContentTypeDraft);
+
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
