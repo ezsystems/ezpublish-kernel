@@ -30,6 +30,9 @@ Changes affecting version compatibility with former or future versions.
 
 * The Twig block `eztime_field` of `eZ/Bundle/EzPublishCoreBundle/Resources/views/content_fields.html.twig` is rendered using UTC timezone to avoid server timezone-related issues.
 
+* SPI Layer: The method `\eZ\Publish\SPI\Persistence\Content\Type\Handler::publish` expects now
+  `\eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft` instead of numeric Content Type Id.
+
 ## Deprecations
 
 _7.0 is a major version, hence does not introduce deprecations but rather removes some previously deprecated features,
