@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIType;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPITypeCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPITypeUpdateStruct;
@@ -16,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group as SPITypeGroup;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPITypeGroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPITypeGroupUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIContentTypeHandler;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 
 /**
  * Test case for Persistence\Cache\ContentTypeHandler.
@@ -65,7 +68,7 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
             ['removeFieldDefinition', [5, 1, 7], null, 'ez-content-type-5-1'],
             ['updateFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['type-5', 'type-map', 'content-fields-type-5']],
             ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()], [], 'ez-content-type-5-1'],
-            ['publish', [5], ['type-5', 'type-map', 'content-fields-type-5']],
+            ['publish', [$this->buildContentTypeDraft(5, [3, 4])], ['type-5', 'type-map', 'content-fields-type-5', 'type-group-3', 'type-group-4']],
         ];
     }
 
@@ -88,5 +91,30 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
             ['loadByRemoteId', ['f34tg45gf'], 'ez-content-type-f34tg45gf-by-remote', $type],
             ['getSearchableFieldMap', [], 'ez-content-type-field-map', [$type]],
         ];
+    }
+
+    /**
+     * Build proper ContentTypeDraft instance for tests.
+     *
+     * @param int $contentTypeId
+     * @param int[] $contentTypeGroupIds
+     *
+     * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft
+     */
+    private function buildContentTypeDraft($contentTypeId, array $contentTypeGroupIds)
+    {
+        $innerContentType = new ContentType(
+            [
+                'id' => $contentTypeId,
+                'contentTypeGroups' => array_map(
+                    function ($contentTypeGroupId) {
+                        return new ContentTypeGroup(['id' => $contentTypeGroupId]);
+                    },
+                    $contentTypeGroupIds
+                ),
+            ]
+        );
+
+        return new ContentTypeDraft(['id' => 23, 'innerContentType' => $innerContentType]);
     }
 }

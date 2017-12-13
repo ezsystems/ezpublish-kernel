@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
@@ -21,6 +22,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -1066,7 +1068,9 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(0)
             );
 
-        $handler->publish(23);
+        $handler->publish(
+            new ContentTypeDraft(['innerContentType' => new ContentType(['id' => 23])])
+        );
     }
 
     /**
@@ -1106,7 +1110,9 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(0)
             );
 
-        $handler->publish(23);
+        $handler->publish(
+            new ContentTypeDraft(['innerContentType' => new ContentType(['id' => 23])])
+        );
     }
 
     /**
