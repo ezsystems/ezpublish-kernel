@@ -81,6 +81,10 @@ class Legacy extends SetupFactory
             self::$dsn = 'sqlite://:memory:';
         }
 
+        if ($repositoryReference = getenv('REPOSITORY_SERVICE_ID')) {
+            $this->repositoryReference = $repositoryReference;
+        }
+
         self::$db = preg_replace('(^([a-z]+).*)', '\\1', self::$dsn);
 
         if (!isset(self::$ioRootDir)) {
