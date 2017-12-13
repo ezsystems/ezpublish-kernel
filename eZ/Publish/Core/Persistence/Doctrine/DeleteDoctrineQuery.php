@@ -12,7 +12,7 @@ use eZ\Publish\Core\Persistence\Database\QueryException;
 use eZ\Publish\Core\Persistence\Database\DeleteQuery;
 
 /**
- * Class DeleteDoctrineQuery
+ * Class DeleteDoctrineQuery.
  *
  * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
  *             it provides richer and more powerful DB abstraction which is also easier to use.

@@ -15,7 +15,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\DBALException;
 
 /**
- * Class ConnectionHandler
+ * Class ConnectionHandler.
  *
  * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
  *             it provides richer and more powerful DB abstraction which is also easier to use.

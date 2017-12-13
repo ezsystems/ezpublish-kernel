@@ -13,7 +13,7 @@ use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Persistence\Database\QueryException;
 
 /**
- * Class DoctrineExpression
+ * Class DoctrineExpression.
  *
  * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
  *             it provides richer and more powerful DB abstraction which is also easier to use.

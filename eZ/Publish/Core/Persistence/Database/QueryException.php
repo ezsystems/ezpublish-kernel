@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Database;
 use InvalidArgumentException;
 
 /**
- * Class QueryException
+ * Class QueryException.
  *
  * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
  *             it provides richer and more powerful DB abstraction which is also easier to use.
