@@ -11,6 +11,12 @@ namespace eZ\Publish\Core\Persistence\Doctrine;
 use eZ\Publish\Core\Persistence\Database\InsertQuery;
 use eZ\Publish\Core\Persistence\Database\QueryException;
 
+/**
+ * Class InsertDoctrineQuery
+ *
+ * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
+ *             it provides richer and more powerful DB abstraction which is also easier to use.
+ */
 class InsertDoctrineQuery extends AbstractDoctrineQuery implements InsertQuery
 {
     /**

@@ -12,6 +12,9 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
  * Interface for relational database abstractions supported by eZ.
+ *
+ * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
+ *             it provides richer and more powerful DB abstraction which is also easier to use.
  */
 interface DatabaseHandler extends EzcDbHandler
 {

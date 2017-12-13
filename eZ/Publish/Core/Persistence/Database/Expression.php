@@ -10,6 +10,9 @@ namespace eZ\Publish\Core\Persistence\Database;
 
 /**
  * Interface for generation of all the expressions for database abstractions.
+ *
+ * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
+ *             it provides richer and more powerful DB abstraction which is also easier to use.
  */
 interface Expression
 {

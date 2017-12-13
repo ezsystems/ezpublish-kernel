@@ -28,6 +28,7 @@ services:
     # Useful if you need to reuse it in order to access resources not related to eZ Publish, but stored in your backend (e.g. foreign DB tables)
     ezpublish.connection:
         alias: ezpublish.api.storage_engine.legacy.dbhandler
+        deprecated: 'The "%service_id%" service is deprecated. Use "ezpublish.persistence.connection" instead'
 
     ezpublish.api.storage_engine.legacy:
         alias: ezpublish.spi.persistence.legacy

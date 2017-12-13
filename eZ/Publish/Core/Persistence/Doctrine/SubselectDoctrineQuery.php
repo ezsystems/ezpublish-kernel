@@ -10,6 +10,12 @@ namespace eZ\Publish\Core\Persistence\Doctrine;
 
 use PDO;
 
+/**
+ * Class SubselectDoctrineQuery
+ *
+ * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
+ *             it provides richer and more powerful DB abstraction which is also easier to use.
+ */
 class SubselectDoctrineQuery extends SelectDoctrineQuery
 {
     /**
