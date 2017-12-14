@@ -75,7 +75,8 @@ class RelationIntegrationTest extends BaseIntegrationTest
             array(
                 'fieldSettings' => array(
                     'selectionMethod' => 0,
-                    'selectionRoot' => '',
+                    'selectionRoot' => null,
+                    'selectionContentTypes' => array(),
                 ),
             )
         );
@@ -92,7 +93,8 @@ class RelationIntegrationTest extends BaseIntegrationTest
     {
         $fieldSettings = array(
             'selectionMethod' => 0,
-            'selectionRoot' => '',
+            'selectionRoot' => null,
+            'selectionContentTypes' => array(),
         );
 
         return array(

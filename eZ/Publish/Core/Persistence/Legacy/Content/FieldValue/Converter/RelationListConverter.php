@@ -161,25 +161,27 @@ class RelationListConverter implements Converter
     /**
      * Converts field definition data in $storageDef into $fieldDef.
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints>
-     *     <allowed-class contentclass-identifier="blog_post"/>
-     *   </constraints>
-     *   <type value="2"/>
-     *   <selection_type value="1"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement node-id="67"/>
-     * </related-objects>
+     * <code>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints>
+     *       <allowed-class contentclass-identifier="blog_post"/>
+     *     </constraints>
+     *     <type value="2"/>
+     *     <selection_type value="1"/>
+     *     <object_class value=""/>
+     *     <contentobject-placement node-id="67"/>
+     *   </related-objects>
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints/>
-     *   <type value="2"/>
-     *   <selection_type value="0"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement/>
-     * </related-objects>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints/>
+     *     <type value="2"/>
+     *     <selection_type value="0"/>
+     *     <object_class value=""/>
+     *     <contentobject-placement/>
+     *   </related-objects>
+     * </code>
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
