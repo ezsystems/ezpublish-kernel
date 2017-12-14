@@ -30,7 +30,7 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
     public function testSearchContentSubtree($pathString, $expectedException = null)
     {
         if ($expectedException) {
-            $this->setExpectedException($expectedException);
+            $this->expectException($expectedException);
         }
 
         $query = new Query(

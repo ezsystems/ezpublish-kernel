@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the class GlobCollectorTest extends \PHPUnit_Framework_TestCase class.
+ * File containing the class GlobCollectorTest
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.

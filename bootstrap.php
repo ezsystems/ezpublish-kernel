@@ -20,4 +20,6 @@ if (!($settings = include(__DIR__ . '/config.php'))) {
     throw new \RuntimeException('Could not read config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!');
 }
 
+class_alias('PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase');
+
 require_once __DIR__ . '/vendor/autoload.php';

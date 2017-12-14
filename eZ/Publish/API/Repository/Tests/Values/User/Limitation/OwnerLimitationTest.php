@@ -82,7 +82,7 @@ class OwnerLimitationTest extends BaseLimitationTest
         );
         /* END: Use Case */
 
-        $this->setExpectedException(
+        $this->expectException(
             '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'
         );
         $contentService->loadContent($content->id);
