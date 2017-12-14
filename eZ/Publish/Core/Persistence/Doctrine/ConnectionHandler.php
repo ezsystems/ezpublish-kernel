@@ -14,6 +14,12 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\DBALException;
 
+/**
+ * Class ConnectionHandler.
+ *
+ * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
+ *             it provides richer and more powerful DB abstraction which is also easier to use.
+ */
 class ConnectionHandler implements DatabaseHandler
 {
     /**
@@ -34,6 +40,9 @@ class ConnectionHandler implements DatabaseHandler
             $parsed = $dsn;
         }
 
+        /**
+         * @todo retry connection here.
+         */
         return DriverManager::getConnection($parsed);
     }
 

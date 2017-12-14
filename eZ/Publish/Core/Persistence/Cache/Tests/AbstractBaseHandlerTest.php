@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains Test class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -19,6 +17,7 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
+use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -78,6 +77,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
             new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUrlAliasHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheObjectStateHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             $this->loggerMock,
             $this->cacheMock
         );

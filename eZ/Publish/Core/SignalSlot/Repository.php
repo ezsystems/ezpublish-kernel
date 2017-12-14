@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Repository class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -124,6 +122,13 @@ class Repository implements RepositoryInterface
     protected $urlWildcardService;
 
     /**
+     * Instance of URL service.
+     *
+     * @var \eZ\Publish\API\Repository\URLService
+     */
+    protected $urlService;
+
+    /**
      * Constructor.
      *
      * Construct repository object from aggregated repository and signal
@@ -144,6 +149,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\SignalSlot\TrashService $trashService
      * @param \eZ\Publish\Core\SignalSlot\LocationService $locationService
      * @param \eZ\Publish\Core\SignalSlot\LanguageService $languageService
+     * @param \eZ\Publish\Core\SignalSlot\URLService $urlService
      */
     public function __construct(
         RepositoryInterface $repository,
@@ -160,7 +166,8 @@ class Repository implements RepositoryInterface
         SectionService $sectionService,
         TrashService $trashService,
         LocationService $locationService,
-        LanguageService $languageService
+        LanguageService $languageService,
+        URLService $urlService
     ) {
         $this->signalDispatcher = $signalDispatcher;
         $this->repository = $repository;
@@ -177,6 +184,7 @@ class Repository implements RepositoryInterface
         $this->trashService = $trashService;
         $this->locationService = $locationService;
         $this->languageService = $languageService;
+        $this->urlService = $urlService;
     }
 
     /**
@@ -387,6 +395,16 @@ class Repository implements RepositoryInterface
     public function getURLWildcardService()
     {
         return $this->urlWildcardService;
+    }
+
+    /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService()
+    {
+        return $this->urlService;
     }
 
     /**

@@ -1,5 +1,5 @@
 -- Set storage engine schema version number
-UPDATE ezsite_data SET value='6.11.0' WHERE name='ezpublish-version';
+UPDATE ezsite_data SET value='6.13.0' WHERE name='ezpublish-version';
 
 --
 -- EZP-25880: Make ezuser.login case in-sensitive across databases, using case in-sensitive index
@@ -46,3 +46,9 @@ INSERT INTO "ezpolicy_limitation_value" ("limitation_id", "value")
     AND "p1"."role_id" = "p0"."role_id";
 
 -- END script for EZP-26070
+
+--
+-- EZP-24744: Increase password security
+--
+
+ALTER TABLE ezuser ALTER COLUMN password_hash TYPE VARCHAR(255);
