@@ -1,11 +1,10 @@
 <?php
 
 /**
- * File contains: Abstract Base service test class for Mock testing.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
