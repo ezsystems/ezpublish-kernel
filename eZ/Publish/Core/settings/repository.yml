@@ -41,3 +41,6 @@ services:
 
     ezpublish.api.service.language:
         alias: ezpublish.signalslot.service.language
+
+    ezpublish.api.service.url:
+        alias: ezpublish.signalslot.service.url

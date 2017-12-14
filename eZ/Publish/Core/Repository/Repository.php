@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Repository class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -178,6 +176,13 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\Core\Repository\URLWildcardService
      */
     protected $urlWildcardService;
+
+    /**
+     * Instance of URL service.
+     *
+     * @var \eZ\Publish\Core\Repository\URLService
+     */
+    protected $urlService;
 
     /**
      * Service settings, first level key is service name.
@@ -646,6 +651,25 @@ class Repository implements RepositoryInterface
         );
 
         return $this->urlWildcardService;
+    }
+
+    /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService()
+    {
+        if ($this->urlService !== null) {
+            return $this->urlService;
+        }
+
+        $this->urlService = new URLService(
+            $this,
+            $this->persistenceHandler->urlHandler()
+        );
+
+        return $this->urlService;
     }
 
     /**

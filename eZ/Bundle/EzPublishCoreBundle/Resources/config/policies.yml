@@ -52,3 +52,7 @@ user:
     register: ~
     selfedit: ~
     activation: ~
+
+url:
+    view: ~
+    update: ~

@@ -14,6 +14,7 @@ parameters:
     ezpublish.api.service.trash.class: eZ\Publish\Core\Repository\TrashService
     ezpublish.api.service.location.class: eZ\Publish\Core\Repository\LocationService
     ezpublish.api.service.language.class: eZ\Publish\Core\Repository\LanguageService
+    ezpublish.api.service.url.class: eZ\Publish\Core\Repository\URLService
 
     ezpublish.field_type_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
     ezpublish.field_type_nameable_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
@@ -103,6 +104,11 @@ services:
     ezpublish.api.service.inner_language:
         class: "%ezpublish.api.service.language.class%"
         factory: ["@ezpublish.api.inner_repository", getContentLanguageService]
+        lazy: true
+
+    ezpublish.api.service.inner_url:
+        class: '%ezpublish.api.service.url.class%'
+        factory: ["@ezpublish.api.inner_repository", getUrlService]
         lazy: true
 
     # Factories
