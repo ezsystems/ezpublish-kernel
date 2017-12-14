@@ -489,30 +489,4 @@ class Repository implements RepositoryInterface
 
         return $this->repository->rollback();
     }
-
-    /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started.
-     *
-     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
-     *
-     * @param callable $event
-     */
-    public function commitEvent($event)
-    {
-        return $this->repository->commitEvent($event);
-    }
-
-    /**
-     * Only for internal use.
-     *
-     * Creates a \DateTime object for $timestamp in the current time zone
-     *
-     * @param int $timestamp
-     *
-     * @return \DateTime
-     */
-    public function createDateTime($timestamp = null)
-    {
-        return $this->repository->createDateTime($timestamp);
-    }
 }

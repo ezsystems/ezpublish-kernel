@@ -18,7 +18,6 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
  * @property-read string $mainLanguageCode the default language of the object state group names and description used for fallback.
- * @property-read string $defaultLanguageCode @deprecated, use $mainLanguageCode
  * @property-read string[] $languageCodes the available languages
  */
 abstract class ObjectStateGroup extends ValueObject implements MultiLanguageName, MultiLanguageDescription

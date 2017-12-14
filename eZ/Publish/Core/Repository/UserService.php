@@ -1078,21 +1078,17 @@ class UserService implements UserServiceInterface
     {
         $locationService = $this->repository->getLocationService();
 
-        $subGroupCount = 0;
         if ($content->getVersionInfo()->getContentInfo()->mainLocationId !== null) {
             $mainLocation = $locationService->loadLocation(
                 $content->getVersionInfo()->getContentInfo()->mainLocationId
             );
             $parentLocation = $locationService->loadLocation($mainLocation->parentLocationId);
-            $subGroups = $this->searchSubGroups($mainLocation, 0, 0);
-            $subGroupCount = $subGroups->totalCount;
         }
 
         return new UserGroup(
             array(
                 'content' => $content,
                 'parentId' => isset($parentLocation) ? $parentLocation->contentId : null,
-                'subGroupCount' => $subGroupCount,
             )
         );
     }

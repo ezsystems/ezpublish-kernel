@@ -269,17 +269,27 @@ class RoleServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
-        $role = $this->createRole();
+        $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // Get first role policy
-        $policies = $role->getPolicies();
-        $policy = reset($policies);
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        // Create a new role with two policies
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'create')
+        );
+        $roleDraft = $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'delete')
+        );
 
         // Set "Editor" user as current user.
         $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
-        $roleService->removePolicy($role, $policy);
+        $roleService->removePolicyByRoleDraft($roleDraft, $roleDraft->getPolicies()[0]);
         /* END: Use Case */
     }
 

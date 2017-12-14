@@ -223,13 +223,4 @@ interface Repository
      * @throws \RuntimeException If no transaction has been started
      */
     public function rollback();
-
-    /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started.
-     *
-     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
-     *
-     * @param callable $event
-     */
-    public function commitEvent($event);
 }

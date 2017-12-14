@@ -13,8 +13,6 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteTranslationSignal;
@@ -63,12 +61,6 @@ class ContentServiceTest extends ServiceTest
         $contentInfo = $this->getContentInfo($contentId, $remoteId);
         $versionInfo = $this->getVersionInfo($contentInfo, $versionNo);
         $content = $this->getContent($versionInfo);
-        $translationInfo = new TranslationInfo(
-            array(
-                'srcVersionInfo' => $versionInfo,
-            )
-        );
-        $translationValues = new TranslationValues();
 
         $user = $this->getUser($userId, md5('Sauron'), $userVersionNo);
         $usersDraft = array($versionInfo);
@@ -181,18 +173,6 @@ class ContentServiceTest extends ServiceTest
                 0,
             ),
             array(
-                'translateVersion',
-                array($translationInfo, $translationValues, $user),
-                $content,
-                1,
-                ContentServiceSignals\TranslateVersionSignal::class,
-                array(
-                    'contentId' => $contentId,
-                    'versionNo' => $versionNo,
-                    'userId' => $userId,
-                ),
-            ),
-            array(
                 'updateContent',
                 array($versionInfo, $contentUpdateStruct),
                 $content,
@@ -282,20 +262,6 @@ class ContentServiceTest extends ServiceTest
                 ),
             ),
             array(
-                'addTranslationInfo',
-                array($translationInfo),
-                null,
-                1,
-                ContentServiceSignals\AddTranslationInfoSignal::class,
-                array(),
-            ),
-            array(
-                'loadTranslationInfos',
-                array($contentInfo, $translationInfoFilter),
-                array($translationInfo),
-                0,
-            ),
-            array(
                 'deleteTranslation',
                 array($contentInfo, $language),
                 null,
@@ -319,18 +285,6 @@ class ContentServiceTest extends ServiceTest
                 'newContentUpdateStruct',
                 array(),
                 array($contentUpdateStruct),
-                0,
-            ),
-            array(
-                'newTranslationInfo',
-                array(),
-                array($translationInfo),
-                0,
-            ),
-            array(
-                'newTranslationValues',
-                array(),
-                array($translationValues),
                 0,
             ),
         );

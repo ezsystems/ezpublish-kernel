@@ -1700,47 +1700,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the removePolicy() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::removePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
-     */
-    public function testRemovePolicy()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        // Instantiate a new role create
-        $roleCreate = $roleService->newRoleCreateStruct('newRole');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        // Create a new role with two policies
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'create')
-        );
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'delete')
-        );
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        // Delete all policies from the new role
-        foreach ($role->getPolicies() as $policy) {
-            $role = $roleService->removePolicy($role, $policy);
-        }
-        /* END: Use Case */
-
-        $this->assertSame(array(), $role->getPolicies());
-    }
-
-    /**
      * Test for the removePolicyByRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::removePolicyByRoleDraft()

@@ -189,11 +189,6 @@ class RepositoryTest extends TestCase
                 [],
                 true,
             ],
-            [
-                'createDateTime',
-                [$ts],
-                $dt,
-            ],
         ];
     }
 }

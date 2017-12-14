@@ -61,7 +61,7 @@ class CacheFactoryTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with($expected)
-            ->will($this->returnValue($this->getMock(AdapterInterface::class)));
+            ->will($this->returnValue($this->createMock(AdapterInterface::class)));
 
         $factory = new CacheFactory();
         $factory->setContainer($this->container);

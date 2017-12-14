@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * This class represents a user group.
  *
  * @property-read mixed $parentId
- * @property-read int $subGroupCount
  */
 abstract class UserGroup extends Content
 {
@@ -24,13 +23,4 @@ abstract class UserGroup extends Content
      * @var mixed
      */
     protected $parentId;
-
-    /**
-     * The number of sub groups.
-     *
-     * @deprecated As of eZ Publish 5.3.3, count can be obtained on demand using location service.
-     *
-     * @var int
-     */
-    protected $subGroupCount;
 }

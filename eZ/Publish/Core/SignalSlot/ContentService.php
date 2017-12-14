@@ -730,24 +730,4 @@ class ContentService implements ContentServiceInterface
     {
         return $this->service->newContentUpdateStruct();
     }
-
-    /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo()
-    {
-        return $this->service->newTranslationInfo();
-    }
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
-    {
-        return $this->service->newTranslationValues();
-    }
 }

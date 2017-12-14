@@ -225,23 +225,6 @@ class Repository implements RepositoryInterface
     protected $backgroundIndexer;
 
     /**
-     * Array of arrays of commit events indexed by the transaction count.
-     *
-     * @var array
-     */
-    protected $commitEventsQueue = array();
-
-    /**
-     * @var int
-     */
-    protected $transactionDepth = 0;
-
-    /**
-     * @var int
-     */
-    private $transactionCount = 0;
-
-    /**
      * Constructor.
      *
      * Construct repository object with provided storage engine
@@ -934,9 +917,6 @@ class Repository implements RepositoryInterface
     public function beginTransaction()
     {
         $this->persistenceHandler->beginTransaction();
-
-        ++$this->transactionDepth;
-        $this->commitEventsQueue[++$this->transactionCount] = array();
     }
 
     /**
@@ -950,27 +930,6 @@ class Repository implements RepositoryInterface
     {
         try {
             $this->persistenceHandler->commit();
-
-            --$this->transactionDepth;
-
-            if ($this->transactionDepth === 0) {
-                $queueCountDown = count($this->commitEventsQueue);
-                foreach ($this->commitEventsQueue as $eventsQueue) {
-                    --$queueCountDown;
-                    if (empty($eventsQueue)) {
-                        continue;
-                    }
-
-                    $eventCountDown = count($eventsQueue);
-                    foreach ($eventsQueue as $event) {
-                        --$eventCountDown;
-                        // event expects a boolean param, if true it means it is last event (for commit use)
-                        $event($queueCountDown === 0 && $eventCountDown === 0);
-                    }
-                }
-
-                $this->commitEventsQueue = array();
-            }
         } catch (Exception $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
@@ -987,45 +946,8 @@ class Repository implements RepositoryInterface
     {
         try {
             $this->persistenceHandler->rollback();
-
-            --$this->transactionDepth;
-            unset($this->commitEventsQueue[$this->transactionCount]);
         } catch (Exception $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
-    }
-
-    /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started.
-     *
-     * @param callable $event
-     */
-    public function commitEvent($event)
-    {
-        if ($this->transactionDepth !== 0) {
-            $this->commitEventsQueue[$this->transactionCount][] = $event;
-        } else {
-            // event expects a boolean param, if true it means it is last event (for commit use)
-            $event(true);
-        }
-    }
-
-    /**
-     * Only for internal use.
-     *
-     * Creates a \DateTime object for $timestamp in the current time zone
-     *
-     * @param int $timestamp
-     *
-     * @return \DateTime
-     */
-    public function createDateTime($timestamp = null)
-    {
-        $dateTime = new \DateTime();
-        if ($timestamp !== null) {
-            $dateTime->setTimestamp($timestamp);
-        }
-
-        return $dateTime;
     }
 }

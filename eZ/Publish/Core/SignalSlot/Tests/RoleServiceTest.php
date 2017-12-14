@@ -145,17 +145,6 @@ class RoleServiceTest extends ServiceTest
                 ),
             ),
             array(
-                'removePolicy',
-                array($role, $policy),
-                $role,
-                1,
-                RoleServiceSignals\RemovePolicySignal::class,
-                array(
-                    'roleId' => $roleId,
-                    'policyId' => $policyId,
-                ),
-            ),
-            array(
                 'removePolicyByRoleDraft',
                 array($roleDraft, $policyDraft),
                 $roleDraft,

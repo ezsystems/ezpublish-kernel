@@ -10,8 +10,6 @@ namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -233,29 +231,6 @@ interface ContentService
     public function loadContentDrafts(User $user = null);
 
     /**
-     * Translate a version.
-     *
-     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $modifier Taken as modifier of the version, otherwise current-user is used
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     *
-     * @since 5.0
-     * @deprecated Never implemented, and might be redesigned if it ever is.
-     */
-    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $modifier = null);
-
-    /**
      * Updates the fields of a draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
@@ -376,37 +351,6 @@ interface ContentService
     public function deleteRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent);
 
     /**
-     * Adds translation information to the content object.
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     *
-     * @since 5.0
-     * @deprecated Never implemented, and might be redesigned if it ever is.
-     */
-    public function addTranslationInfo(TranslationInfo $translationInfo);
-
-    /**
-     * lists the translations done on this content object.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
-     *
-     * @todo TBD - filter by sourceversion destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
-     *
-     * @since 5.0
-     * @deprecated Never implemented, and might be redesigned if it ever is.
-     */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array());
-
-    /**
      * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
      *
      * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
@@ -492,18 +436,4 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct();
-
-    /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo();
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues();
 }
