@@ -98,7 +98,7 @@ class URLServiceTest extends BaseURLServiceTest
             [
                 'name' => 'Apache',
                 'url' => 'http://www.apache.org/',
-                'published' => true
+                'published' => true,
             ],
             [
                 'name' => 'Nginx',
@@ -130,7 +130,7 @@ class URLServiceTest extends BaseURLServiceTest
         $locationService = $repository->getLocationService();
 
         $contentType = $repository->getContentTypeService()->loadContentTypeByIdentifier('url');
-        foreach($urls as $data) {
+        foreach ($urls as $data) {
             $struct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
             $struct->setField('name', $data['name']);
             $struct->setField('url', $data['url']);
@@ -143,7 +143,7 @@ class URLServiceTest extends BaseURLServiceTest
             }
         }
     }
-    
+
     /**
      * Test for URLService::findUrls() method.
      *
@@ -261,7 +261,7 @@ class URLServiceTest extends BaseURLServiceTest
     public function testFindUrlsUsingValidityCriterionInvalid()
     {
         $expectedUrls = [
-            '/content/view/tagcloud/2'
+            '/content/view/tagcloud/2',
         ];
 
         $query = new URLQuery();
