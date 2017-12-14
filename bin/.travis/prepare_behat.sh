@@ -9,7 +9,4 @@ echo "> Cloning ezsystems/ezplatform:${EZPLATFORM_BRANCH}"
 git clone --depth 1 --single-branch --branch "$EZPLATFORM_BRANCH" https://github.com/ezsystems/ezplatform.git ${EZPLATFORM_BUILD_DIR}
 cd ${EZPLATFORM_BUILD_DIR}
 
-# Update docker to supported version
-${EZPLATFORM_BUILD_DIR}/bin/.travis/trusty/update_docker.sh
-
 /bin/bash ./bin/.travis/trusty/setup_ezplatform.sh "${PACKAGE_BUILD_DIR}"
