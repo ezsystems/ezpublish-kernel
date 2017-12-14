@@ -32,10 +32,10 @@ matrix:
 # 7.1
     - php: 7.1
       env: TEST_CONFIG="phpunit.xml"
-    #- php: 7.1
-    #  env: REST_TEST_CONFIG="phpunit-functional-rest.xml" SYMFONY_ENV=behat SYMFONY_DEBUG=1 SF_CMD="ez:behat:create-language 'pol-PL' 'Polish (polski)'"
-    #- php: 7.1
-    #  env: BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" SYMFONY_ENV=behat
+    - php: 7.1
+      env: REST_TEST_CONFIG="phpunit-functional-rest.xml" SYMFONY_ENV=behat SYMFONY_DEBUG=1 SF_CMD="ez:behat:create-language 'pol-PL' 'Polish (polski)'"
+    - php: 7.1
+      env: BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" SYMFONY_ENV=behat
     - php: 7.1
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
     - php: 7.1
