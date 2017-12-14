@@ -27,7 +27,7 @@ class EnvTest extends BaseTest
 
         $this->assertInstanceOf(TagAwareAdapter::class, $pool);
 
-        $reflectionPool = new \ReflectionProperty($pool, 'itemsAdapter');
+        $reflectionPool = new \ReflectionProperty($pool, 'pool');
         $reflectionPool->setAccessible(true);
         $innerPool = $reflectionPool->getValue($pool);
 

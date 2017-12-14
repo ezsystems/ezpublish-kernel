@@ -23,6 +23,7 @@ Feature: users can be manipulated using the Content API
          Then response status code is "204"
           And the User this Content referred to is deleted
 
+    @broken
     Scenario: Editing a User Content with the Content API works
         Given there is a User Content
          When I create a draft of this content
