@@ -25,6 +25,125 @@ use eZ\Publish\API\Repository\Values\URL\UsageSearchResult;
  */
 class URLServiceTest extends BaseURLServiceTest
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $urls = [
+            [
+                'name' => 'Twitter',
+                'url' => 'http://twitter.com/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Facebook',
+                'url' => 'http://www.facebook.com/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Google',
+                'url' => 'http://www.google.com/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Vimeo',
+                'url' => 'http://vimeo.com/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Facebook Sharer',
+                'url' => 'http://www.facebook.com/sharer.php',
+                'published' => true,
+            ],
+            [
+                'name' => 'Youtube',
+                'url' => 'http://www.youtube.com/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Googel support',
+                'url' => 'http://support.google.com/chrome/answer/95647?hl=es',
+                'published' => true,
+            ],
+            [
+                'name' => 'Instagram',
+                'url' => 'http://instagram.com/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Discuz',
+                'url' => 'http://www.discuz.net/forum.php',
+                'published' => true,
+            ],
+            [
+                'name' => 'Google calendar',
+                'url' => 'http://calendar.google.com/calendar/render',
+                'published' => true,
+            ],
+            [
+                'name' => 'Wikipedia',
+                'url' => 'http://www.wikipedia.org/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Google Analytics',
+                'url' => 'http://www.google.com/analytics/',
+                'published' => true,
+            ],
+            [
+                'name' => 'nazwa.pl',
+                'url' => 'http://www.nazwa.pl/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Apache',
+                'url' => 'http://www.apache.org/',
+                'published' => true
+            ],
+            [
+                'name' => 'Nginx',
+                'url' => 'http://www.nginx.com/',
+                'published' => true,
+            ],
+            [
+                'name' => 'Microsoft.com',
+                'url' => 'http://windows.microsoft.com/en-US/internet-explorer/products/ie/home',
+                'published' => true,
+            ],
+            [
+                'name' => 'Dropbox',
+                'url' => 'http://www.dropbox.com/',
+                'published' => false,
+            ],
+            [
+                'name' => 'Google [DE]',
+                'url' => 'http://www.google.de/',
+                'published' => true,
+            ],
+        ];
+
+        $repository = $this->getRepository();
+
+        $parentLocationId = $this->generateId('location', 2);
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $repository->getContentTypeService()->loadContentTypeByIdentifier('url');
+        foreach($urls as $data) {
+            $struct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+            $struct->setField('name', $data['name']);
+            $struct->setField('url', $data['url']);
+
+            $location = $locationService->newLocationCreateStruct($parentLocationId);
+
+            $draft = $contentService->createContent($struct, [$location]);
+            if ($data['published']) {
+                $contentService->publishVersion($draft->versionInfo);
+            }
+        }
+    }
+    
     /**
      * Test for URLService::findUrls() method.
      *
@@ -121,8 +240,10 @@ class URLServiceTest extends BaseURLServiceTest
             'http://www.apache.org/',
             'http://www.dropbox.com/',
             'http://www.facebook.com/',
-            '/content/view/tagcloud/2',
             'http://www.youtube.com/',
+            'http://calendar.google.com/calendar/render',
+            'http://vimeo.com/',
+            'http://windows.microsoft.com/en-US/internet-explorer/products/ie/home',
         ];
 
         $query = new URLQuery();
@@ -140,9 +261,7 @@ class URLServiceTest extends BaseURLServiceTest
     public function testFindUrlsUsingValidityCriterionInvalid()
     {
         $expectedUrls = [
-            'http://calendar.google.com/calendar/render',
-            'http://vimeo.com/',
-            'http://windows.microsoft.com/en-US/internet-explorer/products/ie/home',
+            '/content/view/tagcloud/2'
         ];
 
         $query = new URLQuery();
@@ -160,8 +279,25 @@ class URLServiceTest extends BaseURLServiceTest
     public function testFindUrlsUsingVisibleOnlyCriterion()
     {
         $expectedUrls = [
-            '/content/view/sitemap/2',
+            'http://vimeo.com/',
+            'http://calendar.google.com/calendar/render',
+            'http://www.facebook.com/',
+            'http://www.google.com/',
+            'http://www.google.com/analytics/',
+            'http://www.facebook.com/sharer.php',
+            'http://www.apache.org/',
+            'http://www.nginx.com/',
+            'http://www.wikipedia.org/',
+            'http://www.youtube.com/',
+            'http://windows.microsoft.com/en-US/internet-explorer/products/ie/home',
+            'http://www.google.de/',
+            'http://instagram.com/',
+            'http://www.nazwa.pl/',
             '/content/view/tagcloud/2',
+            'http://www.discuz.net/forum.php',
+            'http://support.google.com/chrome/answer/95647?hl=es',
+            'http://twitter.com/',
+            '/content/view/sitemap/2',
         ];
 
         $query = new URLQuery();
@@ -338,26 +474,26 @@ class URLServiceTest extends BaseURLServiceTest
     {
         $repository = $this->getRepository();
 
-        $id = $this->generateId('url', 28);
+        $id = $this->generateId('url', 23);
 
         /* BEGIN: Use Case */
         $urlService = $repository->getURLService();
 
         $urlBeforeUpdate = $urlService->loadById($id);
         $updateStruct = $urlService->createUpdateStruct();
-        $updateStruct->url = 'https://vimeo.com/';
+        $updateStruct->url = 'https://someurl.com/';
 
         $urlAfterUpdate = $urlService->updateUrl($urlBeforeUpdate, $updateStruct);
         /* END: Use Case */
 
         $this->assertInstanceOf(URL::class, $urlAfterUpdate);
         $this->assertPropertiesCorrect([
-            'id' => 28,
-            'url' => 'https://vimeo.com/',
+            'id' => 23,
+            'url' => 'https://someurl.com/',
             // (!) URL status should be reset to valid nad never checked
             'isValid' => true,
             'lastChecked' => null,
-            'created' => new DateTime('@1512230697'),
+            'created' => new DateTime('@1343140541'),
         ], $urlAfterUpdate);
         $this->assertGreaterThanOrEqual($urlBeforeUpdate->modified, $urlAfterUpdate->modified);
     }
@@ -371,7 +507,7 @@ class URLServiceTest extends BaseURLServiceTest
     {
         $repository = $this->getRepository();
 
-        $id = $this->generateId('url', 26);
+        $id = $this->generateId('url', 23);
         $checked = new DateTime('@' . time());
 
         /* BEGIN: Use Case */
@@ -387,12 +523,12 @@ class URLServiceTest extends BaseURLServiceTest
 
         $this->assertInstanceOf(URL::class, $urlAfterUpdate);
         $this->assertPropertiesCorrect([
-            'id' => 26,
-            'url' => 'http://www.facebook.com/',
+            'id' => $id,
+            'url' => '/content/view/sitemap/2',
             // (!) URL status should be reset to valid nad never checked
             'isValid' => false,
             'lastChecked' => $checked,
-            'created' => new DateTime('@1512230697'),
+            'created' => new DateTime('@1343140541'),
         ], $urlAfterUpdate);
         $this->assertGreaterThanOrEqual($urlBeforeUpdate->modified, $urlAfterUpdate->modified);
     }
@@ -408,7 +544,7 @@ class URLServiceTest extends BaseURLServiceTest
     {
         $repository = $this->getRepository();
 
-        $id = $this->generateId('url', 28);
+        $id = $this->generateId('url', 23);
 
         /* BEGIN: Use Case */
         $urlService = $repository->getURLService();
@@ -597,11 +733,10 @@ class URLServiceTest extends BaseURLServiceTest
     {
         $repository = $this->getRepository();
 
-        $urlIdUsedOnlyInDraft = $this->generateId('url', 36);
         /* BEGIN: Use Case */
         $urlService = $repository->getURLService();
 
-        $loadedUrl = $urlService->loadById($urlIdUsedOnlyInDraft);
+        $loadedUrl = $urlService->loadByUrl('http://www.dropbox.com/');
 
         $usagesSearchResults = $urlService->findUsages($loadedUrl);
         /* END: Use Case */

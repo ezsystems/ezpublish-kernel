@@ -52,7 +52,7 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
-        $urlId = $this->generateId('url', 28);
+        $urlId = $this->generateId('url', 23);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -82,7 +82,7 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
-        $urlId = $this->generateId('url', 28);
+        $urlId = $this->generateId('url', 23);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
