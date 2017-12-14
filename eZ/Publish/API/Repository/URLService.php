@@ -31,6 +31,8 @@ interface URLService
     /**
      * Find content objects using URL.
      *
+     * Content is filter by user permissions.
+     *
      * @param \eZ\Publish\API\Repository\Values\URL\URL $url
      * @param int $offset
      * @param int $limit
@@ -63,6 +65,7 @@ interface URLService
     /**
      * Updates URL.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the url already exists
      *

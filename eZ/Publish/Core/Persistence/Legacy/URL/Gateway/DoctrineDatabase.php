@@ -163,7 +163,7 @@ class DoctrineDatabase extends Gateway
             $query->bindValue($url->modified, null, PDO::PARAM_INT)
         )->set(
             $this->handler->quoteColumn(self::COLUMN_IS_VALID),
-            $query->bindValue($url->isValid, null, PDO::PARAM_BOOL)
+            $query->bindValue((int) $url->isValid, null, PDO::PARAM_INT)
         )->set(
             $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED),
             $query->bindValue($url->lastChecked, null, PDO::PARAM_INT)

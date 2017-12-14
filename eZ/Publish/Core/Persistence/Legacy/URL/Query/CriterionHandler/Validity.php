@@ -25,7 +25,7 @@ class Validity implements CriterionHandler
         /** @var Criterion\Validity $criterion */
         return $query->expr->eq(
             'is_valid',
-            $query->bindValue($criterion->isValid)
+            $query->bindValue((int) $criterion->isValid)
         );
     }
 }

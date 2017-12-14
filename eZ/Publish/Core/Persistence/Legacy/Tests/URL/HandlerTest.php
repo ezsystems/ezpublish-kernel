@@ -155,7 +155,8 @@ class HandlerTest extends TestCase
         $this->mapper
             ->expects($this->once())
             ->method('extractURLsFromRows')
-            ->with([]);
+            ->with([])
+            ->willReturn([]);
 
         $this->handler->loadByUrl($url);
     }

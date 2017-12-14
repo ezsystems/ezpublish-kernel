@@ -84,15 +84,15 @@ class Handler implements HandlerInterface
      */
     public function loadByUrl($url)
     {
-        $url = $this->urlMapper->extractURLsFromRows(
+        $urls = $this->urlMapper->extractURLsFromRows(
             $this->urlGateway->loadUrlDataByUrl($url)
         );
 
-        if (count($url) < 1) {
+        if (count($urls) < 1) {
             throw new NotFoundException('URL', $url);
         }
 
-        return reset($url);
+        return reset($urls);
     }
 
     /**
