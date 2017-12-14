@@ -5,7 +5,7 @@ content:
     create: [Class, Section, ParentOwner, ParentGroup, ParentClass, ParentDepth, Node, Subtree, Language]
     edit: [Class, Section, Owner, Group, Node, Subtree, Language, State]
     publish: [Class, Section, Owner, Group, Node, Subtree, Language, State]
-    manage_locations: [Class, Section, Owner, Subtree]
+    manage_locations: [Class, Section, Owner, Subtree, State]
     hide: [Class, Section, Owner, Group, Node, Subtree, Language]
     reverserelatedlist: ~
     translate: [Class, Section, Owner, Node, Subtree, Language]

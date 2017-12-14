@@ -83,3 +83,6 @@ services:
             # Using preprocessed files:
             - "@ezpublish.api.storage_engine.pcre_compiler"
             - "%ezpublish.api.storage_engine.preprocessed_transformation_rules.resources%"
+
+    ezpublish.persistence.connection:
+        alias: ezpublish.api.storage_engine.legacy.connection
