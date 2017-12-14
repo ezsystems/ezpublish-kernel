@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Legacy Storage Handler.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -20,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandler;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use eZ\Publish\SPI\Persistence\TransactionHandler as SPITransactionHandler;
+use eZ\Publish\Core\Persistence\Legacy\URL\Handler as UrlHandler;
 
 /**
  * The main handler for Legacy Storage Engine.
@@ -81,6 +80,11 @@ class Handler implements HandlerInterface
      */
     protected $userHandler;
 
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\URL\Handler
+     */
+    protected $urlHandler;
+
     public function __construct(
         ContentHandler $contentHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -92,7 +96,8 @@ class Handler implements HandlerInterface
         TrashHandler $trashHandler,
         UrlAliasHandler $urlAliasHandler,
         UrlWildcardHandler $urlWildcardHandler,
-        UserHandler $userHandler
+        UserHandler $userHandler,
+        UrlHandler $urlHandler
     ) {
         $this->contentHandler = $contentHandler;
         $this->contentTypeHandler = $contentTypeHandler;
@@ -105,6 +110,7 @@ class Handler implements HandlerInterface
         $this->urlAliasHandler = $urlAliasHandler;
         $this->urlWildcardHandler = $urlWildcardHandler;
         $this->userHandler = $userHandler;
+        $this->urlHandler = $urlHandler;
     }
 
     public function contentHandler()
@@ -155,6 +161,11 @@ class Handler implements HandlerInterface
     public function userHandler()
     {
         return $this->userHandler;
+    }
+
+    public function urlHandler()
+    {
+        return $this->urlHandler;
     }
 
     /**

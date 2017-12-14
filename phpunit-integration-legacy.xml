@@ -28,6 +28,7 @@
             <file>eZ/Publish/API/Repository/Tests/UserServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/RoleServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/TrashServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLAliasServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceTest.php</file>
@@ -39,6 +40,7 @@
             <file>eZ/Publish/API/Repository/Tests/UserServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/RoleServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/TrashServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>

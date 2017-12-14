@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the RepositoryTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -17,6 +15,7 @@ use eZ\Publish\Core\SignalSlot\ContentTypeService;
 use eZ\Publish\Core\SignalSlot\FieldTypeService;
 use eZ\Publish\Core\SignalSlot\RoleService;
 use eZ\Publish\Core\SignalSlot\ObjectStateService;
+use eZ\Publish\Core\SignalSlot\URLService;
 use eZ\Publish\Core\SignalSlot\URLWildcardService;
 use eZ\Publish\Core\SignalSlot\URLAliasService;
 use eZ\Publish\Core\SignalSlot\UserService;
@@ -51,6 +50,7 @@ class RepositoryTest extends TestCase
         $trashServiceMock = $this->getMockBuilder(TrashService::class)->disableOriginalConstructor()->getMock();
         $locationServiceMock = $this->getMockBuilder(LocationService::class)->disableOriginalConstructor()->getMock();
         $languageServiceMock = $this->getMockBuilder(LanguageService::class)->disableOriginalConstructor()->getMock();
+        $urlServiceMock = $this->getMockBuilder(URLService::class)->disableOriginalConstructor()->getMock();
 
         $repository = new Repository(
             $innerRepositoryMock,
@@ -67,7 +67,8 @@ class RepositoryTest extends TestCase
             $sectionServiceMock,
             $trashServiceMock,
             $locationServiceMock,
-            $languageServiceMock
+            $languageServiceMock,
+            $urlServiceMock
         );
 
         $service = $repository->{$method}();
@@ -116,6 +117,7 @@ class RepositoryTest extends TestCase
         $trashServiceMock = $this->getMockBuilder(TrashService::class)->disableOriginalConstructor()->getMock();
         $locationServiceMock = $this->getMockBuilder(LocationService::class)->disableOriginalConstructor()->getMock();
         $languageServiceMock = $this->getMockBuilder(LanguageService::class)->disableOriginalConstructor()->getMock();
+        $urlServiceMock = $this->getMockBuilder(URLService::class)->disableOriginalConstructor()->getMock();
 
         $innerRepositoryMock->expects($this->once())
             ->method($method)
@@ -140,7 +142,8 @@ class RepositoryTest extends TestCase
             $sectionServiceMock,
             $trashServiceMock,
             $locationServiceMock,
-            $languageServiceMock
+            $languageServiceMock,
+            $urlServiceMock
         );
 
         $result = call_user_func_array([$repository, $method], $parameters);

@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Persistence Cache Handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -19,6 +17,7 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
+use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 
 /**
  * Persistence Cache Handler class.
@@ -81,6 +80,11 @@ class Handler implements PersistenceHandlerInterface
     protected $transactionHandler;
 
     /**
+     * @var URLHandler
+     */
+    protected $urlHandler;
+
+    /**
      * @var PersistenceLogger
      */
     protected $logger;
@@ -99,6 +103,7 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\TrashHandler $trashHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
      * @param \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler $objectStateHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\URLHandler $urlHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
@@ -113,6 +118,7 @@ class Handler implements PersistenceHandlerInterface
         CacheTrashHandler $trashHandler,
         CacheUrlAliasHandler $urlAliasHandler,
         CacheObjectStateHandler $objectStateHandler,
+        CacheUrlHandler $urlHandler,
         PersistenceLogger $logger
     ) {
         $this->persistenceHandler = $persistenceHandler;
@@ -126,6 +132,7 @@ class Handler implements PersistenceHandlerInterface
         $this->trashHandler = $trashHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->objectStateHandler = $objectStateHandler;
+        $this->urlHandler = $urlHandler;
         $this->logger = $logger;
     }
 
@@ -219,6 +226,14 @@ class Handler implements PersistenceHandlerInterface
     public function transactionHandler()
     {
         return $this->transactionHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Cache\URLHandler
+     */
+    public function urlHandler()
+    {
+        return $this->urlHandler;
     }
 
     /**
