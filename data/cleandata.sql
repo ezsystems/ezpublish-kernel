@@ -1351,6 +1351,7 @@ INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `ro
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('login',331,'user',0,1);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',332,'*',0,2);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('read',333,'content',0,4);
+INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',340,'url',0,3);
 
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (251,'Section',328);
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (252,'Section',329);
