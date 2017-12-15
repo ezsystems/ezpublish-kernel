@@ -482,6 +482,16 @@ class Repository implements APIRepository
     }
 
     /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService()
+    {
+        throw new \RuntimeException('@todo: Implement');
+    }
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
