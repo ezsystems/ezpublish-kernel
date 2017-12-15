@@ -10,6 +10,8 @@ imports:
     - {resource: storage_engines/legacy/trash.yml}
     - {resource: storage_engines/legacy/url_alias.yml}
     - {resource: storage_engines/legacy/url_wildcard.yml}
+    - {resource: storage_engines/legacy/url.yml}
+    - {resource: storage_engines/legacy/url_criterion_handlers.yml}
     - {resource: storage_engines/legacy/user.yml}
 
 parameters:
@@ -34,6 +36,7 @@ services:
             - "@ezpublish.spi.persistence.legacy.url_alias.handler"
             - "@ezpublish.spi.persistence.legacy.url_wildcard.handler"
             - "@ezpublish.spi.persistence.legacy.user.handler"
+            - "@ezpublish.spi.persistence.legacy.url.handler"
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
         lazy: true

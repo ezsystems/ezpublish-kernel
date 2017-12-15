@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Repository class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -197,6 +195,13 @@ interface Repository
      * @return \eZ\Publish\API\Repository\PermissionResolver
      */
     public function getPermissionResolver();
+
+    /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService();
 
     /**
      * Begin transaction.
