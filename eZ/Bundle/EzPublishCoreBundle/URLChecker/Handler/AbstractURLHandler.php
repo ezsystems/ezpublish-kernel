@@ -36,7 +36,7 @@ abstract class AbstractURLHandler implements URLHandlerInterface
      *
      * @return \Symfony\Component\OptionsResolver\OptionsResolver
      */
-    protected abstract function getOptionsResolver();
+    abstract protected function getOptionsResolver();
 
     /**
      * {@inheritdoc}
@@ -66,7 +66,7 @@ abstract class AbstractURLHandler implements URLHandlerInterface
             $this->urlService->updateUrl($url, $updateStruct);
 
             $this->logger->info(sprintf('URL id = %d (%s) was checked (valid = %s)', $url->id, $url->url, (int) $isValid));
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error(sprintf('Cannot update URL id = %d status: %s', $url->id, $url->url));
         }
     }

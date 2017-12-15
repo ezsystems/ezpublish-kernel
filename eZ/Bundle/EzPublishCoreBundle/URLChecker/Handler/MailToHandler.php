@@ -6,7 +6,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler;
 
-use eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MailToHandler extends AbstractURLHandler
