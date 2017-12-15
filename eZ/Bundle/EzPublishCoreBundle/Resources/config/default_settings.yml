@@ -289,6 +289,18 @@ parameters:
         GMapItems:
             name: Google Map Items
 
+    ezsettings.default.url_handler.http.options:
+        timeout: 10
+        connection_timeout: 5
+        batch_size: 25
+        ignore_certificate: false
+    ezsettings.default.url_handler.https.options:
+        timeout: 10
+        connection_timeout: 5
+        batch_size: 25
+        ignore_certificate: false
+    ezsettings.default.url_handler.mailto.options: {}
+
     ###
     # Internal settings
     ###
@@ -302,3 +314,4 @@ parameters:
     ezpublish.siteaccess.relation_map: {}
     # SiteAccesses, indexed by language.
     ezpublish.siteaccesses_by_language: {}
+
