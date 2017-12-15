@@ -16,6 +16,7 @@
         "ext-PDO": "*",
         "ext-SPL": "*",
         "ext-xsl": "*",
+        "ext-curl": "*",
         "symfony/symfony": "^3.4",
         "symfony-cmf/routing": "^1.1|^2.0",
         "kriswallsmith/buzz": ">=0.9",
