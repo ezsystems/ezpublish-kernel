@@ -1,0 +1,43 @@
+services:
+    ezpublish.url_checker:
+        class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\URLChecker'
+        arguments:
+            - '@ezpublish.api.service.inner_url'
+            - '@ezpublish.url_checker.handler_registry'
+        calls:
+            - ['setLogger', ['@?logger']]
+        lazy: true
+
+    ezpublish.url_checker.handler_registry:
+        class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerRegistry'
+
+    ezpublish.url_checker.handler.base:
+        abstract: true
+        arguments:
+            - '@ezpublish.api.service.inner_url'
+        calls:
+            - ['setLogger', ['@?logger']]
+
+    ezpublish.url_checker.handler.http:
+        class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler\HTTPHandler'
+        parent: ezpublish.url_checker.handler.base
+        calls:
+            - ['setOptions', ['$url_handler.http.options;ezsettings$']]
+        tags:
+            - { name: ezpublish.url_handler, scheme: http }
+
+    ezpublish.url_checker.handler.https:
+        class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler\HTTPHandler'
+        parent: ezpublish.url_checker.handler.base
+        calls:
+            - ['setOptions', ['$url_handler.https.options;ezsettings$']]
+        tags:
+            - { name: ezpublish.url_handler, scheme: https }
+
+    ezpublish.url_checker.handler.mailto:
+        class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler\MailToHandler'
+        parent: ezpublish.url_checker.handler.base
+        calls:
+            - ['setOptions', ['$url_handler.mailto.options;ezsettings$']]
+        tags:
+            - { name: ezpublish.url_handler, scheme: mailto }
