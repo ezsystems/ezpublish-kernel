@@ -53,7 +53,7 @@ class UrlAliasHandlerTest extends AbstractCacheHandlerTest
         return [
             ['listURLAliasesForLocation', [5], 'ez-urlAlias-location-list-5', [$object]],
             ['listURLAliasesForLocation', [5, true], 'ez-urlAlias-location-list-5-custom', [$object]],
-            ['lookup', ['/Home'], 'ez-urlAlias-url-_Home', $object],
+            ['lookup', ['/Home'], 'ez-urlAlias-url-_SHome', $object],
             ['loadUrlAlias', [5], 'ez-urlAlias-5', $object],
         ];
     }
