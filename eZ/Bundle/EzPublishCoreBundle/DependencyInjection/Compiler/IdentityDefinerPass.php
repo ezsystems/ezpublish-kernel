@@ -12,6 +12,11 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Class IdentityDefinerPass
+ *
+Use FOSHttpCacheBundle user context feature instead. Will be removed in future 7.x FT release.
+ */
 class IdentityDefinerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)

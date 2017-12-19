@@ -14,7 +14,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 /**
  * Factory for Varnish proxy client.
  *
- * @deprecated since 6.8. Use the VarnishProxyClientFactory from the platform-http-cache package.
+ * @deprecated since 6.8. Use the VarnishProxyClientFactory from the platform-http-cache package, will be removed in future 7.x FT release.
  */
 class VarnishProxyClientFactory
 {
