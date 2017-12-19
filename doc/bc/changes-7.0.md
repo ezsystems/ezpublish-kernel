@@ -7,8 +7,7 @@ Changes affecting version compatibility with former or future versions.
 * Requirements for PHP has been increased to PHP 7.1 as it is by now supported by all platforms,
   and provide substantial improved experience developing and working  with PHP compared to PHP 5.
 
-* Requirement for Symfony has been lifted to 3.3, and will be further lifted to 3.4LTS once that is out and all our own
-  thrirdpart libraries are known to work correctly with it.
+* Requirement for Symfony has been lifted to 3.4 (LTS).
 
 * SPI: eZ\Publish\SPI\Persistence\User::deletePolicy adds role id argument
   Id of Role is added on deletePolicy() to be able to properly clear cache
