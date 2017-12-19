@@ -15,6 +15,8 @@ use FOS\HttpCache\UserContext\UserContext;
 
 /**
  * Identity definer based on current user role ids and role limitations.
+ *
+ * @deprecated ezplatform-http-cache used instead now, will be removed in a future 7.x FT release.
  */
 class RoleContextProvider implements ContextProviderInterface
 {

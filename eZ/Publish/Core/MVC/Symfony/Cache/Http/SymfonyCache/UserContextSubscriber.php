@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Extends UserContextSubscriber from FOSHttpCache to include original request.
  *
  * {@inheritdoc}
+ *
+ * @deprecated since 5.4. Will be removed in future 7.x FT release. Use FOSHttpCacheBundle user context feature instead.
  */
 class UserContextSubscriber extends BaseUserContextSubscriber
 {

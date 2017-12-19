@@ -18,6 +18,8 @@ use Symfony\Component\DependencyInjection\Reference;
  * HttpCache related compiler pass.
  *
  * Ensures Varnish proxy client is correctly configured.
+ *
+ * @deprecated replaced by ezplatform-http-cache package, will be removed in future 7.x FT release.
  */
 class HttpCachePass implements CompilerPassInterface
 {
