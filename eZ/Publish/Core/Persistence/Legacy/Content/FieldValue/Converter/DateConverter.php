@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\FieldType\Date\Type as DateType;
 use eZ\Publish\Core\FieldType\FieldSettings;
-use DateTime;
 
 /**
  * Date field value converter class.
@@ -95,11 +94,10 @@ class DateConverter implements Converter
         // Building default value
         switch ($fieldDef->fieldTypeConstraints->fieldSettings['defaultType']) {
             case DateType::DEFAULT_CURRENT_DATE:
-                $dateTime = new DateTime();
-                $dateTime->setTime(0, 0, 0);
                 $data = array(
-                    'timestamp' => $dateTime->getTimestamp(),
+                    'timestamp' => time(), // @deprecated timestamp is no longer used and will be removed in a future version.
                     'rfc850' => null,
+                    'timestring' => 'now',
                 );
                 break;
             default:
