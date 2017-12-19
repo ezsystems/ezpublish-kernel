@@ -203,6 +203,35 @@ class LegacyTest extends TestCase
         );
     }
 
+    /**
+     * Load from external draft binary file path.
+     */
+    public function testLoadBinaryFileDraftExternalPath()
+    {
+        $id = 'path/file.jpg';
+        $binaryFile = new BinaryFile(array('id' => $id));
+
+        $this->draftIoServiceMock->expects($this->never())->method('getExternalPath');
+        $this->publishedIoServiceMock->expects($this->never())->method('getExternalPath');
+
+        $this->publishedIoServiceMock
+            ->expects($this->once())
+            ->method('loadBinaryFile')
+            ->with($id)
+            ->will($this->throwException(new InvalidArgumentException('binaryFileId', "Can't find file with id $id}")));
+
+        $this->draftIoServiceMock
+            ->expects($this->once())
+            ->method('loadBinaryFile')
+            ->with($id)
+            ->will($this->returnValue($binaryFile));
+
+        self::assertSame(
+            $binaryFile,
+            $this->service->loadBinaryFile($id)
+        );
+    }
+
     public function testLoadBinaryFileByUriWithPublishedFile()
     {
         $binaryFileUri = 'var/test/images/an/image.png';
@@ -244,8 +273,15 @@ class LegacyTest extends TestCase
 
     public function testGetFileContents()
     {
-        $binaryFile = new BinaryFile();
         $contents = 'some contents';
+        $path = 'path/file.png';
+        $binaryFile = new BinaryFile(['id' => $path]);
+
+        $this->draftIoServiceMock
+            ->expects($this->once())
+            ->method('exists')
+            ->with($path)
+            ->will($this->returnValue(false));
 
         $this->publishedIoServiceMock
             ->expects($this->once())
@@ -258,6 +294,82 @@ class LegacyTest extends TestCase
         self::assertSame(
             $contents,
             $this->service->getFileContents($binaryFile)
+        );
+    }
+
+    public function testGetFileContentsOfDraft()
+    {
+        $contents = 'some contents';
+        $path = 'path/file.png';
+        $binaryFile = new BinaryFile(['id' => $path]);
+
+        $this->draftIoServiceMock
+            ->expects($this->once())
+            ->method('exists')
+            ->with($path)
+            ->will($this->returnValue(true));
+
+        $this->draftIoServiceMock
+            ->expects($this->once())
+            ->method('getFileContents')
+            ->with($binaryFile)
+            ->will($this->returnValue($contents));
+
+        $this->publishedIoServiceMock->expects($this->never())->method('getFileContents');
+
+        self::assertSame(
+            $contents,
+            $this->service->getFileContents($binaryFile)
+        );
+    }
+
+    public function testGetMimeType()
+    {
+        $path = 'path/file.png';
+        $mimeType = 'image/png';
+
+        $this->draftIoServiceMock
+            ->expects($this->once())
+            ->method('exists')
+            ->with($path)
+            ->will($this->returnValue(false));
+
+        $this->publishedIoServiceMock
+            ->expects($this->once())
+            ->method('getMimeType')
+            ->with($path)
+            ->will($this->returnValue($mimeType));
+
+        $this->draftIoServiceMock->expects($this->never())->method('getMimeType');
+
+        self::assertSame(
+            $mimeType,
+            $this->service->getMimeType($path)
+        );
+    }
+
+    public function testGetMimeTypeOfDraft()
+    {
+        $path = 'path/file.png';
+        $mimeType = 'image/png';
+
+        $this->draftIoServiceMock
+            ->expects($this->once())
+            ->method('exists')
+            ->with($path)
+            ->will($this->returnValue(true));
+
+        $this->draftIoServiceMock
+            ->expects($this->once())
+            ->method('getMimeType')
+            ->with($path)
+            ->will($this->returnValue($mimeType));
+
+        $this->publishedIoServiceMock->expects($this->never())->method('getMimeType');
+
+        self::assertSame(
+            $mimeType,
+            $this->service->getMimeType($path)
         );
     }
 
