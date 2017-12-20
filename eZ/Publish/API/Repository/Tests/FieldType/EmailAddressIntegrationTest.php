@@ -363,4 +363,14 @@ class EmailAddressIntegrationTest extends SearchBaseIntegrationTest
         // ensure case-insensitivity
         return strtoupper($this->getValidSearchValueTwo());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFullTextIndexedFieldData()
+    {
+        return [
+            ['holmes4', 'wyoming'],
+        ];
+    }
 }
