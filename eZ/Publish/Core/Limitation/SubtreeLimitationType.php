@@ -170,12 +170,14 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $targets does not contain
      *         objects of type LocationCreateStruct
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param array $targets
      *
      * @return bool
      */
-    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets)
+    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets = null)
     {
         // If targets is empty/null return false as user does not have access
         // to content w/o location with this limitation
