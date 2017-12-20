@@ -28,13 +28,18 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'value',
                 $field->value->data,
                 new Search\FieldType\StringField()
             ),
-        );
+            new Search\Field(
+                'fulltext',
+                $field->value->data,
+                new Search\FieldType\FullTextField()
+            ),
+        ];
     }
 
     /**
