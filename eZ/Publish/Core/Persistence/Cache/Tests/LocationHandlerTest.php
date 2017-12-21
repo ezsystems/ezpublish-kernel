@@ -37,7 +37,7 @@ class LocationHandlerTest extends AbstractCacheHandlerTest
             ['markSubtreeModified', [12]],
             ['hide', [12], ['location-path-data-12']],
             ['unHide', [12], ['location-path-data-12']],
-            ['swap', [12, 45], ['location-data-12', 'location-data-45']],
+            ['swap', [12, 45], ['location-12', 'location-45']],
             ['update', [new UpdateStruct(), 12], ['location-data-12']],
             ['create', [new CreateStruct(['contentId' => 4, 'mainLocationId' => true])], ['content-4', 'role-assignment-group-list-4']],
             ['create', [new CreateStruct(['contentId' => 4, 'mainLocationId' => false])], ['content-4', 'role-assignment-group-list-4']],
