@@ -157,8 +157,7 @@ class DateTest extends TestCase
      */
     public function testToFieldDefinitionDefaultCurrentDate()
     {
-        $dateTime = new DateTime();
-        $timestamp = $dateTime->setTime(0, 0, 0)->getTimestamp();
+        $timestamp = time();
         $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
             array(
@@ -168,8 +167,9 @@ class DateTest extends TestCase
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertSame($timestamp, $fieldDef->defaultValue->data['timestamp']);
+        self::assertSame('now', $fieldDef->defaultValue->data['timestring']);
     }
 }

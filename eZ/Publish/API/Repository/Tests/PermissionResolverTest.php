@@ -6,6 +6,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 
 /**
@@ -754,5 +756,102 @@ class PermissionResolverTest extends BaseTest
         $this->markTestIncomplete(
             'Cannot be tested on current fixture since policy with unsupported limitation value is not available.'
         );
+    }
+
+    /**
+     * Test PermissionResolver::canUser for Users with different Limitations.
+     *
+     * @covers       \eZ\Publish\API\Repository\PermissionResolver::canUser
+     *
+     * @dataProvider getDataForTestCanUserWithLimitations
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     * @param string $module
+     * @param string $function
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
+     * @param array $targets
+     * @param bool $expectedResult expected result of canUser check
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCanUserWithLimitations(
+        Limitation $limitation,
+        $module,
+        $function,
+        ValueObject $object,
+        array $targets,
+        $expectedResult
+    ) {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $role = $this->createRoleWithPolicies(
+            'role_' . __FUNCTION__,
+            [
+                ['module' => $module, 'function' => $function, 'limitations' => [$limitation]],
+            ]
+        );
+        // create user in root user group to avoid overlapping of existing policies and limitations
+        $user = $this->createUser('user', 'John', 'Doe', $userService->loadUserGroup(4));
+        $roleLimitation = $limitation instanceof Limitation\RoleLimitation ? $limitation : null;
+        $roleService->assignRoleToUser($role, $user, $roleLimitation);
+
+        $permissionResolver->setCurrentUserReference($user);
+
+        self::assertEquals(
+            $expectedResult,
+            $permissionResolver->canUser($module, $function, $object, $targets)
+        );
+    }
+
+    /**
+     * Data provider for testCanUserWithLimitations.
+     * @see testCanUserWithLimitations
+     *
+     * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function getDataForTestCanUserWithLimitations()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->sectionId = 2;
+
+        // return data sets, numbered for readability and debugging
+        return [
+            0 => [
+                new Limitation\SubtreeLimitation(['limitationValues' => ['/1/2/']]),
+                'content',
+                'create',
+                $contentCreateStruct,
+                [],
+                false,
+            ],
+            1 => [
+                new Limitation\SectionLimitation(['limitationValues' => [2]]),
+                'content',
+                'create',
+                $contentCreateStruct,
+                [],
+                true,
+            ],
+            2 => [
+                new Limitation\ParentContentTypeLimitation(['limitationValues' => [1]]),
+                'content',
+                'create',
+                $contentCreateStruct,
+                [],
+                false,
+            ],
+        ];
     }
 }
