@@ -5618,27 +5618,6 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
-     * Simplify creating custom role with limited set of policies.
-     *
-     * @param $roleName
-     * @param array $policies e.g. [ ['content', 'create'], ['content', 'edit'], ]
-     */
-    private function createRoleWithPolicies($roleName, array $policies)
-    {
-        $repository = $this->getRepository();
-        $roleService = $repository->getRoleService();
-
-        $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
-        foreach ($policies as $policy) {
-            $policyCreateStruct = $roleService->newPolicyCreateStruct($policy[0], $policy[1]);
-            $roleCreateStruct->addPolicy($policyCreateStruct);
-        }
-
-        $roleDraft = $roleService->createRole($roleCreateStruct);
-        $roleService->publishRoleDraft($roleDraft);
-    }
-
-    /**
      * Asserts that all aliases defined in $expectedAliasProperties with the
      * given properties are available in $actualAliases and not more.
      *
