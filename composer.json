@@ -68,7 +68,7 @@
     "extra": {
         "_ci_branch-comment_": "Keep ci branch up-to-date with master or branch if on stable. ci is never on github but convention used for ci behat testing!",
         "_ezplatform_branch_for_behat_tests_comment_": "ezplatform branch to use to run Behat tests",
-        "_ezplatform_branch_for_behat_tests": "master",
+        "_ezplatform_branch_for_behat_tests": "1.12",
         "branch-alias": {
             "dev-master": "6.12.x-dev",
             "dev-tmp_ci_branch": "6.12.x-dev"
