@@ -13,9 +13,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class IdentityDefinerPass
+ * Class IdentityDefinerPass.
  *
-Use FOSHttpCacheBundle user context feature instead. Will be removed in future 7.x FT release.
+ * @deprecated Use FOSHttpCacheBundle user context feature instead. Will be removed in future 7.x FT release.
  */
 class IdentityDefinerPass implements CompilerPassInterface
 {
