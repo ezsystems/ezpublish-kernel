@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\REST\Client\Sessionable;
 use DateTime;
 use ArrayObject;
@@ -416,14 +417,18 @@ abstract class BaseTest extends TestCase
      * @param string $login
      * @param string $firstName
      * @param string $lastName
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup|null $userGroup optional user group, Editor by default
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function createUser($login, $firstName, $lastName)
+    protected function createUser($login, $firstName, $lastName, UserGroup $userGroup = null)
     {
         $repository = $this->getRepository();
 
         $userService = $repository->getUserService();
-        $userGroup = $userService->loadUserGroup(13);
+        if (null === $userGroup) {
+            $userGroup = $userService->loadUserGroup(13);
+        }
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
@@ -497,5 +502,46 @@ abstract class BaseTest extends TestCase
         $searchHandler = $searchHandlerProperty->getValue($repository);
 
         $searchHandler->commit();
+    }
+
+    /**
+     * Create role of a given name with the given policies described by an array.
+     *
+     * @param $roleName
+     * @param array $policiesData [['module' => 'content', 'function' => 'read', 'limitations' => []]
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function createRoleWithPolicies($roleName, array $policiesData)
+    {
+        $repository = $this->getRepository(false);
+        $roleService = $repository->getRoleService();
+
+        $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
+        foreach ($policiesData as $policyData) {
+            $policyCreateStruct = $roleService->newPolicyCreateStruct(
+                $policyData['module'],
+                $policyData['function']
+            );
+
+            if (isset($policyData['limitations'])) {
+                foreach ($policyData['limitations'] as $limitation) {
+                    $policyCreateStruct->addLimitation($limitation);
+                }
+            }
+
+            $roleCreateStruct->addPolicy($policyCreateStruct);
+        }
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+
+        $roleService->publishRoleDraft($roleDraft);
+
+        return $roleService->loadRole($roleDraft->id);
     }
 }
