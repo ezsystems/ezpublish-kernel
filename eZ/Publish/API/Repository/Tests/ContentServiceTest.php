@@ -5109,14 +5109,14 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         $this->createRoleWithPolicies('Publisher', [
-            ['content', 'read'],
-            ['content', 'create'],
-            ['content', 'publish'],
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'publish'],
         ]);
 
         $this->createRoleWithPolicies('Writer', [
-            ['content', 'read'],
-            ['content', 'create'],
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'create'],
         ]);
 
         $writerUser = $this->createCustomUserWithLogin(
@@ -5153,9 +5153,9 @@ class ContentServiceTest extends BaseContentServiceTest
         $repository = $this->getRepository();
 
         $this->createRoleWithPolicies('Writer', [
-            ['content', 'read'],
-            ['content', 'create'],
-            ['content', 'edit'],
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'edit'],
         ]);
         $writerUser = $this->createCustomUserWithLogin(
             'writer',
@@ -5341,10 +5341,10 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // create user that can read/create/edit but cannot delete content
         $this->createRoleWithPolicies('Writer', [
-            ['content', 'read'],
-            ['content', 'versionread'],
-            ['content', 'create'],
-            ['content', 'edit'],
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'versionread'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'edit'],
         ]);
         $writerUser = $this->createCustomUserWithLogin(
             'writer',
@@ -5583,10 +5583,10 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // create user that can read/create/delete but cannot edit or content
         $this->createRoleWithPolicies('Writer', [
-            ['content', 'read'],
-            ['content', 'versionread'],
-            ['content', 'create'],
-            ['content', 'delete'],
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'versionread'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'delete'],
         ]);
         $writerUser = $this->createCustomUserWithLogin(
             'user',
