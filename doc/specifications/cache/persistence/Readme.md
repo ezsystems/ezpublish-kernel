@@ -30,7 +30,7 @@ List of tags and their meaning:
   _Same as above, additional tags for all parents, for operations that changes the tree itself, like move/remove/(..)._
 
 - `location-data-<location-id>` :
-  _Used on location, and invalidated when operations affect the properties on location only, e.g. swap/update._
+  _Used on location, and invalidated when operations affect the properties on location only, e.g. update._
 
 - `location-path-data-<location-id>` :
   _Same as above, but for operations affecting data in the tree, e.g. hide/unhide._

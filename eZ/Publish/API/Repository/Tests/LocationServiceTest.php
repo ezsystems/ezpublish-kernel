@@ -1210,6 +1210,43 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test swapping Main Location of a Content with another one updates Content item Main Location.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
+     */
+    public function testSwapLocationUpdatesMainLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        $mainLocationParentId = 60;
+        $secondaryLocationId = 43;
+
+        $publishedContent = $this->publishContentWithParentLocation(
+            'Content for Swap Location Test', $mainLocationParentId
+        );
+
+        // sanity check
+        $mainLocation = $locationService->loadLocation($publishedContent->contentInfo->mainLocationId);
+        self::assertEquals($mainLocationParentId, $mainLocation->parentLocationId);
+
+        // load another pre-existing location
+        $secondaryLocation = $locationService->loadLocation($secondaryLocationId);
+
+        // swap the Main Location with a secondary one
+        $locationService->swapLocation($mainLocation, $secondaryLocation);
+
+        // check if Main Location has been updated
+        $mainLocation = $locationService->loadLocation($secondaryLocation->id);
+        self::assertEquals($publishedContent->contentInfo->id, $mainLocation->contentInfo->id);
+        self::assertEquals($mainLocation->id, $mainLocation->contentInfo->mainLocationId);
+
+        $reloadedContent = $contentService->loadContentByContentInfo($publishedContent->contentInfo);
+        self::assertEquals($mainLocation->id, $reloadedContent->contentInfo->mainLocationId);
+    }
+
+    /**
      * Test for the hideLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
@@ -2247,5 +2284,36 @@ class LocationServiceTest extends BaseTest
                 $this->assertTrue(true); // OK - alias was not found
             }
         }
+    }
+
+    /**
+     * Create and publish Content with the given parent Location.
+     *
+     * @param string $contentName
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content published Content
+     */
+    private function publishContentWithParentLocation($contentName, $parentLocationId)
+    {
+        $repository = $this->getRepository(false);
+        $locationService = $repository->getLocationService();
+
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            'eng-US'
+        );
+        $contentCreateStruct->setField('name', $contentName);
+        $contentDraft = $contentService->createContent(
+            $contentCreateStruct,
+            [
+                $locationService->newLocationCreateStruct($parentLocationId),
+            ]
+        );
+
+        return $contentService->publishVersion($contentDraft->versionInfo);
     }
 }
