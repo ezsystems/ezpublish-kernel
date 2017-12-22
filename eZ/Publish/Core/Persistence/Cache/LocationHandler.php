@@ -205,7 +205,12 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $return = $locationHandler->swap($locationId1, $locationId2);
 
-        $this->cache->invalidateTags(['location-data-' . $locationId1, 'location-data-' . $locationId2]);
+        $this->cache->invalidateTags(
+            [
+                'location-' . $locationId1,
+                'location-' . $locationId2,
+            ]
+        );
 
         return $return;
     }
