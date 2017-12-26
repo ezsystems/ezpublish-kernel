@@ -19,6 +19,7 @@ class TestInitDbCommand extends ContainerAwareCommand
     {
         $this
             ->setName('ezpublish:test:init_db')
+            ->setHidden(true)
             ->setDescription('Inits the configured database for test use based on existing fixtures for eZ Demo install (4.7 atm)')
             ->setHelp(
                 <<<EOT
