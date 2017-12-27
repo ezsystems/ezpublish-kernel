@@ -39,14 +39,14 @@ class SiteAccessMatchListener implements EventSubscriberInterface
     /**
      * Request matcher for user context hash requests.
      *
-     * @var RequestMatcherInterface
+     * @var RequestMatcherInterface|null
      */
     private $userContextRequestMatcher;
 
     public function __construct(
         SiteAccessRouter $siteAccessRouter,
         EventDispatcherInterface $eventDispatcher,
-        RequestMatcherInterface $userContextRequestMatcher
+        RequestMatcherInterface $userContextRequestMatcher = null
     ) {
         $this->siteAccessRouter = $siteAccessRouter;
         $this->eventDispatcher = $eventDispatcher;
@@ -69,7 +69,11 @@ class SiteAccessMatchListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // Don't try to match when it's a user hash request. SiteAccess is irrelevant in this case.
-        if ($this->userContextRequestMatcher->matches($request) && !$request->attributes->has('_ez_original_request')) {
+        if (
+            $this->userContextRequestMatcher instanceof RequestMatcherInterface &&
+            $this->userContextRequestMatcher->matches($request) &&
+            !$request->attributes->has('_ez_original_request')
+        ) {
             return;
         }
 

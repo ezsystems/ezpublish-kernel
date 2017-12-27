@@ -32,7 +32,7 @@ services:
 
     ezpublish.siteaccess_match_listener:
         class: "%ezpublish.siteaccess_match_listener.class%"
-        arguments: ["@ezpublish.siteaccess_router", "@event_dispatcher", "@fos_http_cache.user_context.request_matcher"]
+        arguments: ["@ezpublish.siteaccess_router", "@event_dispatcher", "@?fos_http_cache.user_context.request_matcher"]
         tags:
             - { name: kernel.event_subscriber }
 
