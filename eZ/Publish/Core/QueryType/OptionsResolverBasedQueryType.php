@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * In addition, you must implement the `configureOptions` abstract method. It receives an OptionsResolver, and configures
  * it for the QueryType's supported parameters.
  */
-abstract class OptionsResolverBasedQueryType
+abstract class OptionsResolverBasedQueryType implements QueryType
 {
     /** @var OptionsResolver */
     private $resolver;
