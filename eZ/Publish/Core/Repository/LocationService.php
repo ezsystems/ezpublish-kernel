@@ -458,6 +458,10 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue('priority', $locationUpdateStruct->priority, 'LocationUpdateStruct');
         }
 
+        if (!$this->domainMapper->isValidLocationPriority($locationUpdateStruct->priority)) {
+            throw new InvalidArgumentValue('priority', $locationUpdateStruct->priority, 'LocationUpdateStruct');
+        }
+
         if ($locationUpdateStruct->remoteId !== null && (!is_string($locationUpdateStruct->remoteId) || empty($locationUpdateStruct->remoteId))) {
             throw new InvalidArgumentValue('remoteId', $locationUpdateStruct->remoteId, 'LocationUpdateStruct');
         }

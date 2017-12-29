@@ -41,6 +41,9 @@ use DateTime;
  */
 class DomainMapper
 {
+    const MAX_LOCATION_PRIORITY = 2147483647;
+    const MIN_LOCATION_PRIORITY = -2147483648;
+
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
@@ -394,6 +397,10 @@ class DomainMapper
             throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
         }
 
+        if (!$this->isValidLocationPriority($locationCreateStruct->priority)) {
+            throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
+        }
+
         if (!is_bool($locationCreateStruct->hidden)) {
             throw new InvalidArgumentValue('hidden', $locationCreateStruct->hidden, 'LocationCreateStruct');
         }
@@ -491,6 +498,18 @@ class DomainMapper
         }
 
         return false;
+    }
+
+    /**
+     * Checks if given $priority is valid.
+     *
+     * @param int $priority
+     *
+     * @return bool
+     */
+    public function isValidLocationPriority($priority)
+    {
+        return $priority >= self::MIN_LOCATION_PRIORITY && $priority <= self::MAX_LOCATION_PRIORITY;
     }
 
     /**
