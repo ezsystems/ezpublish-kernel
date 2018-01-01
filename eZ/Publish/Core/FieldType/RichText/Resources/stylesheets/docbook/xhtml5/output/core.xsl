@@ -92,6 +92,19 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="docbook:emphasis/text()">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[local-name() = 'literallayout']">
+        <xsl:call-template name="breakLine">
+          <xsl:with-param name="text" select="."/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="docbook:emphasis">
     <xsl:choose>
       <xsl:when test="@role='strong'">
