@@ -25,6 +25,15 @@ class RecoverSignal extends Signal
     public $trashItemId;
 
     /**
+     * Content id.
+     *
+     * @since 5.4.12/6.3.2
+     *
+     * @var mixed
+     */
+    public $contentId;
+
+    /**
      * NewParentLocationId.
      *
      * @var mixed

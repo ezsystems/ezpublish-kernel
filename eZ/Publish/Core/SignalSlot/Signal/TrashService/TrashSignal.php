@@ -25,6 +25,15 @@ class TrashSignal extends Signal
     public $locationId;
 
     /**
+     * Location ID of parent location of the deleted location.
+     *
+     * @since 5.4.12/6.3.2
+     *
+     * @var mixed
+     */
+    public $parentLocationId;
+
+    /**
      * Content id.
      *
      * @var mixed
