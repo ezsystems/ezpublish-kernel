@@ -64,7 +64,7 @@ class Configuration implements ConfigurationInterface
      * @param string $info block info line
      * @param ConfigurationFactory[]|ArrayObject $factories
      */
-    private function addHandlersSection(NodeDefinition $node, $name, $info, ArrayObject &$factories)
+    private function addHandlersSection(NodeDefinition $node, $name, $info, ArrayObject $factories)
     {
         $handlersNodeBuilder = $node
             ->children()

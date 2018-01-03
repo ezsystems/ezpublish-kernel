@@ -145,7 +145,7 @@ class Legacy implements IOServiceInterface
             $image = $this->publishedIOService->loadBinaryFile($binaryFileId);
 
             if ($image instanceof MissingBinaryFile) {
-                throw new InvalidArgumentException('binaryFileId', sprintf("Can't find file with id {0}", $binaryFileId));
+                throw new InvalidArgumentException('binaryFileId', sprintf("Can't find file with id %s", $binaryFileId));
             }
 
             return $image;

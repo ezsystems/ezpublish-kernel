@@ -6,8 +6,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Values\URL\Query\Criterion as Criterion;
-use eZ\Publish\API\Repository\Values\URL\Query\SortClause as SortClause;
+use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
+use eZ\Publish\API\Repository\Values\URL\Query\SortClause;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;

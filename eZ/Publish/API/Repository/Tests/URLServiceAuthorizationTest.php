@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Values\URL\Query\Criterion as Criterion;
+use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 
 class URLServiceAuthorizationTest extends BaseURLServiceTest

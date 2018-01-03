@@ -1146,7 +1146,7 @@ class UserService implements UserServiceInterface
         }
 
         // Randomize login time to protect against timing attacks
-        usleep(mt_rand(0, 30000));
+        usleep(random_int(0, 30000));
 
         $passwordHash = $this->createPasswordHash(
             $login,

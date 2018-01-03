@@ -95,7 +95,7 @@ class ParsingDispatcher
         if (count($contentType) > 1) {
             $mediaType = $contentType[0];
             foreach (array_slice($contentType, 1) as $parameterString) {
-                if (($equalPos = strpos($contentType[1], '=')) === false) {
+                if (strpos($contentType[1], '=') === false) {
                     throw new Exceptions\Parser("Unknown parameter format: '{$parameterString}'");
                 }
                 list($parameterName, $parameterValue) = explode('=', $parameterString);

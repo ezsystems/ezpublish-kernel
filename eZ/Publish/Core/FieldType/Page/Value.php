@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\Value as BaseValue;
-use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
+use eZ\Publish\Core\FieldType\Page\Parts\Page;
 
 class Value extends BaseValue
 {

@@ -2439,7 +2439,7 @@ class UserServiceTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Instantiate a create struct with mandatory properties
-        $randomLogin = md5(rand() . time());
+        $randomLogin = md5(mt_rand() . time());
         $userCreateStruct = $userService->newUserCreateStruct(
             $randomLogin,
             "{$randomLogin}@example.com",

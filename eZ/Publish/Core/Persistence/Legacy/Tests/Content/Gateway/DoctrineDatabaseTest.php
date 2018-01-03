@@ -807,9 +807,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $res = $gateway->load(226, 2);
-
-        $res = array_merge($res);
+        $res = array_merge($gateway->load(226, 2));
 
         $orig = include __DIR__ . '/../_fixtures/extract_content_from_rows.php';
 

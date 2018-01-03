@@ -89,7 +89,7 @@ trait Authentication
             throw new \RuntimeException(
                 $message ?: 'UserSession value expected, got ' . get_class($this->userSession),
                 0,
-                isset($exceptionValue) ? $exceptionValue : null
+                null
             );
         }
 

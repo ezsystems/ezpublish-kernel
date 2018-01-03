@@ -296,10 +296,10 @@ class TrashService implements TrashServiceInterface
         }
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
-            $query->filter !== null ? $query->filter : null,
+            $query->filter,
             $query->offset !== null && $query->offset > 0 ? (int)$query->offset : 0,
             $query->limit !== null && $query->limit >= 1 ? (int)$query->limit : null,
-            $query->sortClauses !== null ? $query->sortClauses : null
+            $query->sortClauses
         );
 
         $trashItems = array();
