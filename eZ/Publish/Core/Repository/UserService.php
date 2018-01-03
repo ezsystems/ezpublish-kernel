@@ -572,6 +572,7 @@ class UserService implements UserServiceInterface
             throw new NotFoundException('user', $login);
         }
 
+        // Don't catch BadStateException, on purpose, to avoid broken hashes.
         $this->updatePasswordHash($login, $password, $spiUser);
 
         return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
@@ -583,13 +584,31 @@ class UserService implements UserServiceInterface
      * @param string $login User login
      * @param string $password User password
      * @param \eZ\Publish\SPI\Persistence\User $spiUser
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException if the password is not correctly saved, in which case the update is reverted
      */
     private function updatePasswordHash($login, $password, SPIUser $spiUser)
     {
-        if ($spiUser->hashAlgorithm !== $this->settings['hashType']) {
-            $spiUser->passwordHash = $this->createPasswordHash($login, $password, null, $this->settings['hashType']);
-            $spiUser->hashAlgorithm = $this->settings['hashType'];
-            $this->userHandler->update($spiUser);
+        if ($spiUser->hashAlgorithm === $this->settings['hashType']) {
+            return;
+        }
+
+        $spiUser->passwordHash = $this->createPasswordHash($login, $password, null, $this->settings['hashType']);
+        $spiUser->hashAlgorithm = $this->settings['hashType'];
+
+        $this->repository->beginTransaction();
+        $this->userHandler->update($spiUser);
+        $reloadedSpiUser = $this->userHandler->load($spiUser->id);
+
+        if ($reloadedSpiUser->passwordHash === $spiUser->passwordHash) {
+            $this->repository->commit();
+        } else {
+            // Password hash was not correctly saved, possible cause: EZP-28692
+            $this->repository->rollback();
+            throw new BadStateException(
+                'user',
+                'Could not save updated password hash, reverting to previous hash. Please verify that your database schema is up to date.'
+            );
         }
     }
 
