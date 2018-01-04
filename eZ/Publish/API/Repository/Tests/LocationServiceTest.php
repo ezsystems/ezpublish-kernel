@@ -299,7 +299,7 @@ class LocationServiceTest extends BaseTest
     {
         return [
             [DomainMapper::MIN_LOCATION_PRIORITY - 1],
-            [DomainMapper::MAX_LOCATION_PRIORITY + 1]
+            [DomainMapper::MAX_LOCATION_PRIORITY + 1],
         ];
     }
 
