@@ -98,7 +98,6 @@ class Repository implements RepositoryInterface
         $this->trashService = $trashService;
         $this->locationService = $locationService;
         $this->languageService = $languageService;
-
     }
 
     public function getCurrentUser()

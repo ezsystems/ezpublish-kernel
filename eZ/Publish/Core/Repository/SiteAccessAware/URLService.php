@@ -30,12 +30,11 @@ class URLService implements URLServiceInterface
      */
     public function __construct(
         URLServiceInterface $service
-    )
-    {
+    ) {
         $this->service = $service;
     }
 
-    function createUpdateStruct()
+    public function createUpdateStruct()
     {
         return $this->service->createUpdateStruct();
     }
