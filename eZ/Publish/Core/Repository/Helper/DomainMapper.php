@@ -393,10 +393,6 @@ class DomainMapper
         $contentId,
         $contentVersionNo
     ) {
-        if ($locationCreateStruct->priority !== null && !is_int($locationCreateStruct->priority)) {
-            throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
-        }
-
         if (!$this->isValidLocationPriority($locationCreateStruct->priority)) {
             throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
         }
@@ -509,7 +505,11 @@ class DomainMapper
      */
     public function isValidLocationPriority($priority)
     {
-        return $priority >= self::MIN_LOCATION_PRIORITY && $priority <= self::MAX_LOCATION_PRIORITY;
+        if ($priority === null) {
+            return true;
+        }
+
+        return is_int($priority) && $priority >= self::MIN_LOCATION_PRIORITY && $priority <= self::MAX_LOCATION_PRIORITY;
     }
 
     /**

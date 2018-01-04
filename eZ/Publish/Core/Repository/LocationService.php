@@ -454,10 +454,6 @@ class LocationService implements LocationServiceInterface
      */
     public function updateLocation(APILocation $location, LocationUpdateStruct $locationUpdateStruct)
     {
-        if ($locationUpdateStruct->priority !== null && !is_int($locationUpdateStruct->priority)) {
-            throw new InvalidArgumentValue('priority', $locationUpdateStruct->priority, 'LocationUpdateStruct');
-        }
-
         if (!$this->domainMapper->isValidLocationPriority($locationUpdateStruct->priority)) {
             throw new InvalidArgumentValue('priority', $locationUpdateStruct->priority, 'LocationUpdateStruct');
         }

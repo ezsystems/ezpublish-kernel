@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\Core\Repository\Helper\DomainMapper;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -259,7 +260,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @dataProvider dataProviderForOutOfRangeLocationPriority
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
@@ -296,7 +297,10 @@ class LocationServiceTest extends BaseTest
 
     public function dataProviderForOutOfRangeLocationPriority()
     {
-        return [[-2147483649], [2147483648]];
+        return [
+            [DomainMapper::MIN_LOCATION_PRIORITY - 1],
+            [DomainMapper::MAX_LOCATION_PRIORITY + 1]
+        ];
     }
 
     /**
@@ -1165,7 +1169,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the updateLocation() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @covers \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @dataProvider dataProviderForOutOfRangeLocationPriority
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
