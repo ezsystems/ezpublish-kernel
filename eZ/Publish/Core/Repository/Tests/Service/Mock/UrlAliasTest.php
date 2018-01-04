@@ -3046,7 +3046,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->equalTo($location),
             $this->equalTo(false),
             $this->equalTo(null),
-            $this->equalTo($showAllTranslations = 'HELLO!'),
+            $this->equalTo($showAllTranslations = true),
             $this->equalTo($prioritizedLanguageList = array('LANGUAGES!'))
         )->will(
             $this->returnValue(array())

@@ -137,6 +137,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         $loader->load('repository.yml');
         $loader->load('repository/inner.yml');
         $loader->load('repository/signalslot.yml');
+        $loader->load('repository/siteaccessaware.yml');
         $loader->load('fieldtype_external_storages.yml');
         $loader->load('storage_engines/common.yml');
         $loader->load('storage_engines/shortcuts.yml');
