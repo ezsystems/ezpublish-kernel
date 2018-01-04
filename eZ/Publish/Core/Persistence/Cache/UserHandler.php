@@ -60,7 +60,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadByLogin($login)
     {
-        $cacheItem = $this->cache->getItem("ez-user-${login}-by-login");
+        $cacheItem = $this->cache->getItem('ez-user-' . str_replace('@', '§', $login) . '-by-login');
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
