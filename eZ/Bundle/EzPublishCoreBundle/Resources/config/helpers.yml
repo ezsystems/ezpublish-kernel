@@ -60,4 +60,5 @@ services:
             - "@ezpublish.api.repository"
 
     ezpublish.helper.language_resolver:
+        class: eZ\Publish\Core\Repository\Helper\LanguageResolver
         arguments: ['$languages$']
