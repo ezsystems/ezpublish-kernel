@@ -1339,6 +1339,29 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadUserByLogin() method.
+     *
+     * In some cases people use email as login name, make sure system works as exepcted when asking for user by email.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::loadUserByLogin()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByLogin
+     */
+    public function testLoadUserByLoginThrowsNotFoundExceptionForUnknownLoginByEmail()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Lookup by user login by email should behave as normal
+        $userService->loadUserByLogin('user@example.com');
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadUsersByEmail() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUsersByEmail()
