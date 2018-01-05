@@ -92,6 +92,19 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="docbook:emphasis/text()">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[local-name() = 'literallayout']">
+        <xsl:call-template name="breakLine">
+          <xsl:with-param name="text" select="."/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="docbook:emphasis">
     <xsl:choose>
       <xsl:when test="@role='strong'">
@@ -157,30 +170,37 @@
   </xsl:template>
 
   <xsl:template match="docbook:link[@xlink:href]">
-    <xsl:element name="a" namespace="{$outputNamespace}">
-      <xsl:attribute name="href">
-        <xsl:value-of select="@xlink:href"/>
-      </xsl:attribute>
-      <xsl:if test="@xlink:show = 'new'">
-        <xsl:attribute name="target">_blank</xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@xml:id">
-        <xsl:attribute name="id">
-          <xsl:value-of select="@xml:id"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@xlink:title">
-        <xsl:attribute name="title">
-          <xsl:value-of select="@xlink:title"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@ezxhtml:class">
-        <xsl:attribute name="class">
-          <xsl:value-of select="@ezxhtml:class"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:apply-templates/>
-    </xsl:element>
+    <xsl:choose>
+      <xsl:when test="@xlink:href != '#'">
+        <xsl:element name="a" namespace="{$outputNamespace}">
+          <xsl:attribute name="href">
+            <xsl:value-of select="@xlink:href"/>
+          </xsl:attribute>
+          <xsl:if test="@xlink:show = 'new'">
+            <xsl:attribute name="target">_blank</xsl:attribute>
+          </xsl:if>
+          <xsl:if test="@xml:id">
+            <xsl:attribute name="id">
+              <xsl:value-of select="@xml:id"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:if test="@xlink:title">
+            <xsl:attribute name="title">
+              <xsl:value-of select="@xlink:title"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:if test="@ezxhtml:class">
+            <xsl:attribute name="class">
+              <xsl:value-of select="@ezxhtml:class"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="docbook:title">

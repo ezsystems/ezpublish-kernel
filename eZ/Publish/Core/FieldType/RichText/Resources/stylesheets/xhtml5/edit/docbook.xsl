@@ -25,6 +25,27 @@
     </section>
   </xsl:template>
 
+  <xsl:template name="breakline">
+    <xsl:param name="node"/>
+    <xsl:choose>
+      <xsl:when test="descendant::ezxhtml5:br">
+        <xsl:for-each select="$node">
+          <xsl:choose>
+            <xsl:when test="local-name( current() ) = 'br'">
+              <xsl:text>&#xA;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="current()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="ezxhtml5:p">
     <para>
       <xsl:if test="@class">
@@ -46,7 +67,7 @@
         </xsl:if>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="child::ezxhtml5:br">
+        <xsl:when test="descendant::ezxhtml5:br">
           <literallayout class="normal">
             <xsl:for-each select="node()">
               <xsl:choose>
@@ -80,7 +101,9 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
@@ -92,21 +115,27 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:u">
     <emphasis>
       <xsl:attribute name="role">underlined</xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:s">
     <emphasis>
       <xsl:attribute name="role">strikedthrough</xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
@@ -114,7 +143,9 @@
     <emphasis>
       <xsl:attribute name="role">strikedthrough</xsl:attribute>
       <xsl:attribute name="revisionflag">deleted</xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
