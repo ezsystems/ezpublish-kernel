@@ -259,6 +259,49 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
+     * @dataProvider dataProviderForOutOfRangeLocationPriority
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateLocationThrowsInvalidArgumentExceptionPriorityIsOutOfRange($priority)
+    {
+        $repository = $this->getRepository();
+
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $contentId is the ID of an existing content object
+        // $parentLocationId is the ID of an existing location
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo($contentId);
+
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+        $locationCreate->priority = $priority;
+        $locationCreate->hidden = true;
+        $locationCreate->remoteId = 'sindelfingen';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Throws exception, since priority is out of range
+        $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
+    }
+
+    public function dataProviderForOutOfRangeLocationPriority()
+    {
+        return [[-2147483649], [2147483648]];
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
@@ -1113,6 +1156,35 @@ class LocationServiceTest extends BaseTest
 
         // Remote ID of an existing location with a different locationId
         $updateStruct->remoteId = 'f3e90596361e31d496d4026eb624c983';
+
+        // Throws exception, since remote ID is already taken
+        $locationService->updateLocation($originalLocation, $updateStruct);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     * @dataProvider dataProviderForOutOfRangeLocationPriority
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateLocationThrowsInvalidArgumentExceptionPriorityIsOutOfRange($priority)
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $locationId and remoteId is the IDs of an existing, but not the same, location
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation($locationId);
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+
+        // Priority value is out of range
+        $updateStruct->priority = $priority;
 
         // Throws exception, since remote ID is already taken
         $locationService->updateLocation($originalLocation, $updateStruct);
