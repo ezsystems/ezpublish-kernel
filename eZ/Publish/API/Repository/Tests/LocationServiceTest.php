@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use eZ\Publish\Core\Repository\Helper\DomainMapper;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -297,10 +296,7 @@ class LocationServiceTest extends BaseTest
 
     public function dataProviderForOutOfRangeLocationPriority()
     {
-        return [
-            [DomainMapper::MIN_LOCATION_PRIORITY - 1],
-            [DomainMapper::MAX_LOCATION_PRIORITY + 1],
-        ];
+        return [[-2147483649], [2147483648]];
     }
 
     /**
