@@ -38,6 +38,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use ezcMailTools;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 /**
  * This service provides methods for managing users and user groups.
@@ -60,6 +61,14 @@ class UserService implements UserServiceInterface
      * @var array
      */
     protected $settings;
+
+    /** @var \Psr\Log\LoggerInterface */
+    protected $logger;
+
+    public function setLogger(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
@@ -605,6 +614,10 @@ class UserService implements UserServiceInterface
         } else {
             // Password hash was not correctly saved, possible cause: EZP-28692
             $this->repository->rollback();
+            if (isset($this->logger)) {
+                $this->logger->error('Password hash could not be updated. Please verify that your database schema is up to date.');
+            }
+
             throw new BadStateException(
                 'user',
                 'Could not save updated password hash, reverting to previous hash. Please verify that your database schema is up to date.'
