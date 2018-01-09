@@ -62,7 +62,7 @@ class UserService implements UserServiceInterface
      */
     protected $settings;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /** @var \Psr\Log\LoggerInterface|null */
     protected $logger;
 
     public function setLogger(LoggerInterface $logger = null)
