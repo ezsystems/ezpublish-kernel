@@ -2905,7 +2905,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeDraft = $data['typeDraft'];
 
         // Names and descriptions tested in corresponding language test
-        $this->assertEquals(
+        $this->assertPropertiesCorrect(
             array(
                 'id' => $originalType->id,
                 'names' => $originalType->names,
@@ -2924,24 +2924,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'contentTypeGroups' => $originalType->contentTypeGroups,
                 'fieldDefinitions' => $originalType->fieldDefinitions,
             ),
-            array(
-                'id' => $typeDraft->id,
-                'names' => $typeDraft->names,
-                'descriptions' => $typeDraft->descriptions,
-                'identifier' => $typeDraft->identifier,
-                'creatorId' => $typeDraft->creatorId,
-                'modifierId' => $typeDraft->modifierId,
-                'remoteId' => $typeDraft->remoteId,
-                'urlAliasSchema' => $typeDraft->urlAliasSchema,
-                'nameSchema' => $typeDraft->nameSchema,
-                'isContainer' => $typeDraft->isContainer,
-                'mainLanguageCode' => $typeDraft->mainLanguageCode,
-                'defaultAlwaysAvailable' => $typeDraft->defaultAlwaysAvailable,
-                'defaultSortField' => $typeDraft->defaultSortField,
-                'defaultSortOrder' => $typeDraft->defaultSortOrder,
-                'contentTypeGroups' => $typeDraft->contentTypeGroups,
-                'fieldDefinitions' => $typeDraft->fieldDefinitions,
-            )
+            $typeDraft
         );
 
         $this->assertInstanceOf(

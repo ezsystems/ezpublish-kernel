@@ -190,7 +190,19 @@ abstract class BaseTest extends TestCase
     protected function assertPropertiesCorrect(array $expectedValues, ValueObject $actualObject)
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
-            $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            if ($propertyValue instanceof ValueObject) {
+                $this->assertStructPropertiesCorrect($propertyValue, $actualObject->$propertyName);
+            } elseif (is_array($propertyValue)) {
+                foreach ($propertyValue as $key => $value) {
+                    if ($value instanceof ValueObject) {
+                        $this->assertStructPropertiesCorrect($value, $actualObject->$propertyName[$key]);
+                    } else {
+                        $this->assertPropertiesEqual("$propertyName\[$key\]", $value, $actualObject->$propertyName[$key]);
+                    }
+                }
+            } else {
+                $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            }
         }
     }
 
@@ -208,7 +220,11 @@ abstract class BaseTest extends TestCase
     protected function assertPropertiesCorrectUnsorted(array $expectedValues, ValueObject $actualObject)
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
-            $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName, true);
+            if ($propertyValue instanceof ValueObject) {
+                $this->assertStructPropertiesCorrect($propertyValue, $actualObject->$propertyName);
+            } else {
+                $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName, true);
+            }
         }
     }
 
@@ -224,7 +240,12 @@ abstract class BaseTest extends TestCase
     protected function assertStructPropertiesCorrect(ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = array())
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
-            $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            if ($propertyValue instanceof ValueObject) {
+                $this->assertStructPropertiesCorrect($propertyValue, $actualObject->$propertyName);
+            } else {
+                $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            }
+
         }
 
         foreach ($additionalProperties as $propertyName) {
