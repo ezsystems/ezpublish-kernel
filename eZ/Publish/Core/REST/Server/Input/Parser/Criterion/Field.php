@@ -49,7 +49,7 @@ class Field extends BaseParser
         }
 
         $fieldData = $data['Field'];
-        if (empty($fieldData['name']) || empty($fieldData['operator']) || empty($fieldData['value'])) {
+        if (empty($fieldData['name']) || empty($fieldData['operator']) || !array_key_exists('value', $fieldData)) {
             throw new Exceptions\Parser('<Field> format expects name, operator and value keys');
         }
 
