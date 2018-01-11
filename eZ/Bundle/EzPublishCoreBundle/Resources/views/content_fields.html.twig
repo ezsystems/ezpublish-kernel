@@ -166,7 +166,7 @@
             <li>{{ fieldSettings.options[selectedIndex] }}</li>
         {% endfor %}
         </ul>
-    {% elseif not fieldSettings.isMultiple %}
+    {% elseif field.value.selection|length() > 0 %}
         {% set field_value = fieldSettings.options[field.value.selection.0] %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
