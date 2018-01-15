@@ -112,6 +112,11 @@ class ReindexCommand extends ContainerAwareCommand
                 InputOption::VALUE_OPTIONAL,
                 'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable',
                 'auto'
+            )->addOption(
+                'continue-on-error',
+                null,
+                InputOption::VALUE_NONE,
+                'Continue indexing even if some content could not get properly indexed. Instead output info on items that could not be indexed at the end. Only applicable with --process=0 and --iteration-count=1'
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -158,6 +163,7 @@ Options that won't be taken into account:
 - subtree
 - processes
 - no-purge
+- continue-on-error
 EOT
             );
             $this->searchIndexer->createSearchIndex($output, (int) $iterationCount, !$commit);
@@ -176,6 +182,9 @@ EOT
 
     protected function indexIncrementally(InputInterface $input, OutputInterface $output, $iterationCount, $commit)
     {
+        $continueOnError = $input->getOption('continue-on-error');
+        $unindexableContentIds = [];
+
         if ($contentIds = $input->getOption('content-ids')) {
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
@@ -183,7 +192,8 @@ EOT
                 count($contentIds)
             ));
 
-            return $this->searchIndexer->updateSearchIndex($contentIds, $commit);
+            $unindexableContentIds += $this->searchIndexer->updateSearchIndex($contentIds, $commit, $continueOnError);
+            return $this->printUnindexableContentIds($output, $unindexableContentIds);
         }
 
         if ($since = $input->getOption('since')) {
@@ -233,12 +243,16 @@ EOT
         } else {
             // if we only have one process, or less iterations to warrant running several, we index it all inline
             foreach ($this->fetchIteration($stmt, $iterationCount) as $contentIds) {
-                $this->searchIndexer->updateSearchIndex($contentIds, $commit);
+                $unindexableContentIds += $this->searchIndexer->updateSearchIndex($contentIds, $commit, $continueOnError);
                 $progress->advance(1);
             }
         }
 
         $progress->finish();
+
+        if ($unindexableContentIds) {
+            $this->printUnindexableContentIds($output, $unindexableContentIds);
+        }
     }
 
     private function runParallelProcess(ProgressBar $progress, Statement $stmt, $processCount, $iterationCount, $commit)
@@ -432,5 +446,18 @@ EOT
         }
 
         return $cores;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param array $unindexableContentIds
+     */
+    private function printUnindexableContentIds(OutputInterface $output, $unindexableContentIds)
+    {
+        $output->writeln('');
+        $output->writeln(sprintf(
+            '<error>Indexing failed on some content items, try running command with "--iteration-count=1 --content-ids=<ids>": %s</error>',
+            implode(', ', $unindexableContentIds)
+        ));
     }
 }

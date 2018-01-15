@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use eZ\Publish\Core\Search\Legacy\Content\Handler as LegacySearchHandler;
@@ -31,8 +32,9 @@ class Indexer extends IncrementalIndexer
         return 'eZ Platform Legacy (SQL) Search Engine';
     }
 
-    public function updateSearchIndex(array $contentIds, $commit)
+    public function updateSearchIndex(array $contentIds, $commit, $continueOnError = false)
     {
+        $unindexableContentIds = [];
         $contentHandler = $this->persistenceHandler->contentHandler();
         foreach ($contentIds as $contentId) {
             try {
@@ -46,8 +48,16 @@ class Indexer extends IncrementalIndexer
                 }
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
+            } catch (InvalidArgumentValue $argumentException) {
+                $this->logger->warning($argumentException->getMessage());
+                $unindexableContentIds[] = $contentId;
+                if (!$continueOnError) {
+                    break;
+                }
             }
         }
+
+        return $unindexableContentIds;
     }
 
     public function purge()
