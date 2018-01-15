@@ -259,7 +259,7 @@ EOT
             ->from('ezcontentobject_tree')
             ->where($queryBuilder->expr()->neq('node_id', 1))
             ->orderBy('depth', 'ASC')
-            ->orderBy('node_id', 'ASC');
+            ->addOrderBy('node_id', 'ASC');
 
         $this->output->writeln("Backing up custom URL alias(es) for {$totalCount} Location(s).");
 
@@ -586,7 +586,7 @@ EOT
             ->from('ezcontentobject_tree')
             ->where($queryBuilder->expr()->neq('node_id', 1))
             ->orderBy('depth', 'ASC')
-            ->orderBy('node_id', 'ASC');
+            ->addOrderBy('node_id', 'ASC');
 
         $this->output->writeln(
             "Publishing URL aliases for {$totalLocationCount} Location(s) " .
