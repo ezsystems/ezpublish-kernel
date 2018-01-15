@@ -245,7 +245,6 @@ abstract class BaseTest extends TestCase
             } else {
                 $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
             }
-
         }
 
         foreach ($additionalProperties as $propertyName) {
