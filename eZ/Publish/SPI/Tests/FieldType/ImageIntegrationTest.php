@@ -11,6 +11,8 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\IO;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface;
+use eZ\Publish\Core\FieldType\Image\AliasCleanerInterface;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use RecursiveIteratorIterator;
@@ -101,7 +103,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getDeprecationWarnerMock()
     {
         if (!isset($this->deprecationWarnerMock)) {
-            $this->deprecationWarnerMock = $this->createMock('eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface');
+            $this->deprecationWarnerMock = $this->createMock(DeprecationWarnerInterface::class);
         }
 
         return $this->deprecationWarnerMock;
@@ -110,7 +112,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getAliasCleanerMock()
     {
         if (!isset($this->aliasCleanerMock)) {
-            $this->aliasCleanerMock = $this->createMock('\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface');
+            $this->aliasCleanerMock = $this->createMock(AliasCleanerInterface::class);
         }
 
         return $this->aliasCleanerMock;

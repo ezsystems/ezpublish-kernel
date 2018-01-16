@@ -12,6 +12,7 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\Core\Repository\ContentService;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
@@ -58,8 +59,7 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $contentService = $this->getMockBuilder('eZ\Publish\Core\Repository\ContentService')
-            ->disableOriginalConstructor()->getMock();
+        $contentService = $this->createMock(ContentService::class);
         $pageService = new FieldType\Page\PageService($contentService);
         $hashConverter = new FieldType\Page\HashConverter();
         $fieldType = new FieldType\Page\Type($pageService, $hashConverter);
