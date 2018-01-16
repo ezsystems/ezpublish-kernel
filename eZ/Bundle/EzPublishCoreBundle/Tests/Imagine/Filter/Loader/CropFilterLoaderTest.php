@@ -9,6 +9,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\CropFilterLoader;
+use Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use PHPUnit\Framework\TestCase;
 
 class CropFilterLoaderTest extends TestCase
@@ -26,7 +28,7 @@ class CropFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->createMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock(LoaderInterface::class);
         $this->loader = new CropFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -37,7 +39,7 @@ class CropFilterLoaderTest extends TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock(ImageInterface::class), $options);
     }
 
     public function loadInvalidProvider()
@@ -58,7 +60,7 @@ class CropFilterLoaderTest extends TestCase
         $offsetX = 100;
         $offsetY = 200;
 
-        $image = $this->createMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $this->innerLoader
             ->expects($this->once())
             ->method('load')

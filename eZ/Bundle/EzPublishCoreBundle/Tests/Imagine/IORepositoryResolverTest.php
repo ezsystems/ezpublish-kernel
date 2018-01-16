@@ -10,10 +10,14 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\SPI\Variation\VariationPurger;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,13 +59,13 @@ class IORepositoryResolverTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->ioService = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->ioService = $this->createMock(IOServiceInterface::class);
         $this->requestContext = new RequestContext();
-        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver($this->configResolver);
-        $this->variationPurger = $this->createMock('eZ\Publish\SPI\Variation\VariationPurger');
-        $this->variationPathGenerator = $this->createMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
+        $this->variationPurger = $this->createMock(VariationPurger::class);
+        $this->variationPathGenerator = $this->createMock(VariationPathGenerator::class);
         $this->imageResolver = new IORepositoryResolver(
             $this->ioService,
             $this->requestContext,

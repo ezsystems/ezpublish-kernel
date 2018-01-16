@@ -13,6 +13,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSetti
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
 {
@@ -34,7 +35,7 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
         $expressionString = 'service("ezpublish.config.complex_setting_value.resolver").resolveSetting("/mnt/nfs/$var_dir$/$storage_dir$", "var_dir", service("ezpublish.config.resolver").getParameter("var_dir", null, null), "storage_dir", service("ezpublish.config.resolver").getParameter("storage_dir", null, null))';
         $arguments = $definition->getArguments();
         self::assertSame(1, count($arguments));
-        self::assertInstanceOf('\Symfony\Component\ExpressionLanguage\Expression', $arguments[0]);
+        self::assertInstanceOf(Expression::class, $arguments[0]);
         self::assertSame($expressionString, (string)$arguments[0]);
     }
 }

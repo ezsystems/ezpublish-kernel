@@ -9,12 +9,16 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener;
+use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RoutingListenerTest extends TestCase
 {
@@ -36,16 +40,10 @@ class RoutingListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->urlAliasRouter = $this
-            ->getMockBuilder('eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlAliasGenerator = $this
-            ->getMockBuilder('eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->urlAliasRouter = $this->createMock(UrlAliasRouter::class);
+        $this->urlAliasGenerator = $this->createMock(UrlAliasGenerator::class);
     }
 
     public function testGetSubscribedEvents()

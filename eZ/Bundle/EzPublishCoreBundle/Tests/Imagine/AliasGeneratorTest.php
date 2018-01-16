@@ -10,14 +10,20 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\Value as FieldTypeValue;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
+use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class AliasGeneratorTest extends TestCase
 {
@@ -54,14 +60,11 @@ class AliasGeneratorTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->dataLoader = $this->createMock('\Liip\ImagineBundle\Binary\Loader\LoaderInterface');
-        $this->filterManager = $this
-            ->getMockBuilder('\Liip\ImagineBundle\Imagine\Filter\FilterManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->ioResolver = $this->createMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+        $this->dataLoader = $this->createMock(LoaderInterface::class);
+        $this->filterManager = $this->createMock(FilterManager::class);
+        $this->ioResolver = $this->createMock(ResolverInterface::class);
         $this->filterConfiguration = new FilterConfiguration();
-        $this->logger = $this->createMock('\Psr\Log\LoggerInterface');
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->aliasGenerator = new AliasGenerator(
             $this->dataLoader,
             $this->filterManager,
@@ -82,10 +85,10 @@ class AliasGeneratorTest extends TestCase
     public function supportsValueProvider()
     {
         return array(
-            array($this->createMock('\eZ\Publish\Core\FieldType\Value'), false),
+            array($this->createMock(FieldTypeValue::class), false),
             array(new TextLineValue(), false),
             array(new ImageValue(), true),
-            array($this->createMock('\eZ\Publish\Core\FieldType\Image\Value'), true),
+            array($this->createMock(ImageValue::class), true),
         );
     }
 
@@ -94,7 +97,7 @@ class AliasGeneratorTest extends TestCase
      */
     public function testGetVariationWrongValue()
     {
-        $field = new Field(array('value' => $this->createMock('eZ\Publish\Core\FieldType\Value')));
+        $field = new Field(array('value' => $this->createMock(FieldTypeValue::class)));
         $this->aliasGenerator->getVariation($field, new VersionInfo(), 'foo');
     }
 
@@ -118,7 +121,7 @@ class AliasGeneratorTest extends TestCase
             ->expects($this->once())
             ->method('debug');
 
-        $binary = $this->createMock('\Liip\ImagineBundle\Binary\BinaryInterface');
+        $binary = $this->createMock(BinaryInterface::class);
         $this->dataLoader
             ->expects($this->once())
             ->method('find')
@@ -215,7 +218,7 @@ class AliasGeneratorTest extends TestCase
             ->expects($this->once())
             ->method('debug');
 
-        $binary = $this->createMock('\Liip\ImagineBundle\Binary\BinaryInterface');
+        $binary = $this->createMock(BinaryInterface::class);
         $this->dataLoader
             ->expects($this->once())
             ->method('find')

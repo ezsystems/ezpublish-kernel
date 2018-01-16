@@ -19,7 +19,7 @@ class CrowdinRequestLocaleSubscriberTest extends TestCase
     public function testSetLocale(Request $request, $shouldHaveCustomLocale)
     {
         $event = new GetResponseEvent(
-            $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(),
+            $this->getMockBuilder(HttpKernelInterface::class)->getMock(),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );

@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit\Framework\TestCase;
 
 class FilterConfigurationTest extends TestCase
@@ -26,7 +27,7 @@ class FilterConfigurationTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->createMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver($this->configResolver);
     }

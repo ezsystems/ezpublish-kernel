@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class CommonTest extends AbstractParserTestCase
@@ -23,7 +24,7 @@ class CommonTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        $this->suggestionCollector = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface');
+        $this->suggestionCollector = $this->createMock(SuggestionCollectorInterface::class);
 
         return array(new EzPublishCoreExtension(array(new Common())));
     }

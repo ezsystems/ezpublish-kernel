@@ -9,14 +9,16 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\GrayscaleFilterLoader;
+use Imagine\Effects\EffectsInterface;
+use Imagine\Image\ImageInterface;
 use PHPUnit\Framework\TestCase;
 
 class GrayscaleFilterLoaderTest extends TestCase
 {
     public function testLoad()
     {
-        $image = $this->createMock('\Imagine\Image\ImageInterface');
-        $effects = $this->createMock('\Imagine\Effects\EffectsInterface');
+        $image = $this->createMock(ImageInterface::class);
+        $effects = $this->createMock(EffectsInterface::class);
         $image
             ->expects($this->once())
             ->method('effects')

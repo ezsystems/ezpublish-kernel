@@ -38,7 +38,7 @@ class HttpCachePassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $factoryArray = $varnishProxyClient->getFactory();
-        $this->assertInstanceOf('Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0]);
+        $this->assertInstanceOf(Reference::class, $factoryArray[0]);
         $this->assertEquals('buildProxyClient', $factoryArray[1]);
         $this->assertEquals('ezpublish.http_cache.proxy_client.varnish.factory', $factoryArray[0]);
         $this->assertTrue($varnishProxyClient->isLazy());

@@ -11,11 +11,13 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
 class BinaryLoaderTest extends TestCase
 {
@@ -37,8 +39,8 @@ class BinaryLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->ioService = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
-        $this->extensionGuesser = $this->createMock('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+        $this->ioService = $this->createMock(IOServiceInterface::class);
+        $this->extensionGuesser = $this->createMock(ExtensionGuesserInterface::class);
         $this->binaryLoader = new BinaryLoader($this->ioService, $this->extensionGuesser);
     }
 

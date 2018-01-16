@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractParamConverterTest extends TestCase
@@ -15,7 +16,7 @@ abstract class AbstractParamConverterTest extends TestCase
     public function createConfiguration($class = null, $name = null)
     {
         $config = $this
-            ->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter')
+            ->getMockBuilder(ParamConverter::class)
             ->setMethods(['getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray', 'isOptional'])
             ->disableOriginalConstructor()
             ->getMock();

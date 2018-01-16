@@ -13,6 +13,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\ExpressionLanguage\Expression;
 use PHPUnit\Framework\TestCase;
 
 class ConfigResolverParameterPassTest extends TestCase
@@ -75,27 +76,27 @@ class ConfigResolverParameterPassTest extends TestCase
 
         // Check that concerned services arguments have been correctly transformed.
         $def2arg1 = $def2->getArgument(0);
-        self::assertInstanceOf('Symfony\Component\ExpressionLanguage\Expression', $def2arg1);
+        self::assertInstanceOf(Expression::class, $def2arg1);
         self::assertSame('service("ezpublish.config.resolver").getParameter("bar", "some_namespace", null)', (string)$def2arg1);
         // Also check 2nd argument
         self::assertSame(array(), $def2->getArgument(1));
 
         $def3arg1 = $def3->getArgument(0);
-        self::assertInstanceOf('Symfony\Component\ExpressionLanguage\Expression', $def3arg1);
+        self::assertInstanceOf(Expression::class, $def3arg1);
         self::assertSame('service("ezpublish.config.resolver").getParameter("content.default_ttl", "ezsettings", "ezdemo_site_admin")', (string)$def3arg1);
 
         $def4arg1 = $def4->getArgument(0);
-        self::assertInstanceOf('Symfony\Component\ExpressionLanguage\Expression', $def4arg1);
+        self::assertInstanceOf(Expression::class, $def4arg1);
         self::assertSame('service("ezpublish.config.resolver").getParameter("languages", null, null)', (string)$def4arg1);
 
         $def8Calls = $def8->getMethodCalls();
         self::assertSame(count($def8MethodCalls), count($def8Calls));
         self::assertSame($def8MethodCalls[0][0], $def8Calls[0][0]);
-        self::assertInstanceOf('Symfony\Component\ExpressionLanguage\Expression', $def8Calls[0][1][0]);
+        self::assertInstanceOf(Expression::class, $def8Calls[0][1][0]);
         $exprSetFoo = 'service("ezpublish.config.resolver").getParameter("foo", null, null)';
         self::assertSame($exprSetFoo, (string)$def8Calls[0][1][0]);
         self::assertSame($def8MethodCalls[1][0], $def8Calls[1][0]);
-        self::assertInstanceOf('Symfony\Component\ExpressionLanguage\Expression', $def8Calls[1][1][0]);
+        self::assertInstanceOf(Expression::class, $def8Calls[1][1][0]);
         $exprSetBar = 'service("ezpublish.config.resolver").getParameter("bar", "baz", null)';
         self::assertSame($exprSetBar, (string)$def8Calls[1][1][0]);
         $updateableServices['def8'] = array(

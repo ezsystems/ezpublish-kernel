@@ -15,6 +15,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionInitByPostListenerTest extends TestCase
 {
@@ -31,7 +32,7 @@ class SessionInitByPostListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session = $this->createMock(SessionInterface::class);
         $this->listener = new SessionInitByPostListener($this->session);
     }
 

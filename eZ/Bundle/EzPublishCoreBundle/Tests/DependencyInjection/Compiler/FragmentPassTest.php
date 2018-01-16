@@ -47,7 +47,7 @@ class FragmentPassTest extends AbstractCompilerPassTestCase
         $fragmentListenerDef = $this->container->getDefinition('fragment.listener');
 
         $factoryArray = $fragmentListenerDef->getFactory();
-        $this->assertInstanceOf('Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0]);
+        $this->assertInstanceOf(Reference::class, $factoryArray[0]);
         $this->assertEquals('buildFragmentListener', $factoryArray[1]);
         $this->assertEquals('ezpublish.fragment_listener.factory', $factoryArray[0]);
 

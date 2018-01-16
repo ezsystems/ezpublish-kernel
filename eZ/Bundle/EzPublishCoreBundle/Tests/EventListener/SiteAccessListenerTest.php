@@ -9,13 +9,16 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener;
+use eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SiteAccessListenerTest extends TestCase
 {
@@ -42,15 +45,9 @@ class SiteAccessListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->router = $this
-            ->getMockBuilder('eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->generator = $this
-            ->getMockBuilder('eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->router = $this->createMock(DefaultRouter::class);
+        $this->generator = $this->createMock(UrlAliasGenerator::class);
         $this->listener = new SiteAccessListener($this->router, $this->generator, new HttpUtils());
         $this->listener->setContainer($this->container);
     }
@@ -96,14 +93,14 @@ class SiteAccessListenerTest extends TestCase
         $semanticPathinfoPos = strpos($uri, $expectedSemanticPathinfo);
         if ($semanticPathinfoPos !== 0) {
             $semanticPathinfo = substr($uri, $semanticPathinfoPos);
-            $matcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+            $matcher = $this->createMock(SiteAccess\URILexer::class);
             $matcher
                 ->expects($this->once())
                 ->method('analyseURI')
                 ->with($uri)
                 ->will($this->returnValue($semanticPathinfo));
         } else {
-            $matcher = $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher');
+            $matcher = $this->createMock(SiteAccess\Matcher::class);
         }
 
         $defaultSiteAccess = new SiteAccess('default');
@@ -132,7 +129,7 @@ class SiteAccessListenerTest extends TestCase
     public function testOnSiteAccessMatchSubRequest($uri, $semanticPathinfo, $vpString, $expectedViewParameters)
     {
         $defaultSiteAccess = new SiteAccess('default');
-        $siteAccess = new SiteAccess('test', 'test', $this->createMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher'));
+        $siteAccess = new SiteAccess('test', 'test', $this->createMock(SiteAccess\Matcher::class));
         $request = Request::create($uri);
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
         if (!empty($vpString)) {

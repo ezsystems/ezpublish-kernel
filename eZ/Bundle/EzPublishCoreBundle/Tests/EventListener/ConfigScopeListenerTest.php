@@ -9,6 +9,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener;
+use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager;
+use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider;
+use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
@@ -34,11 +37,11 @@ class ConfigScopeListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface');
-        $this->viewManager = $this->createMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager');
+        $this->configResolver = $this->createMock(VersatileScopeInterface::class);
+        $this->viewManager = $this->createMock(ViewManager::class);
         $this->viewProviders = array(
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
+            $this->createMock(ViewProvider::class),
+            $this->createMock(ViewProvider::class),
         );
     }
 

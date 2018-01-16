@@ -9,8 +9,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\SiteAccessAware;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationMapperInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\HookableConfigurationMapperInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use stdClass;
 
 class ConfigurationProcessorTest extends TestCase
@@ -19,7 +22,7 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $siteAccessNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $siteAccessList = array('test', 'bar');
         $groupsBySa = array('test' => array('group1', 'group2'), 'bar' => array('group1', 'group3'));
         ConfigurationProcessor::setAvailableSiteAccesses($siteAccessList);
@@ -27,10 +30,7 @@ class ConfigurationProcessorTest extends TestCase
         $processor = new ConfigurationProcessor($container, $namespace, $siteAccessNodeName);
 
         $contextualizer = $processor->getContextualizer();
-        $this->assertInstanceOf(
-            'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface',
-            $contextualizer
-        );
+        $this->assertInstanceOf(ContextualizerInterface::class, $contextualizer);
         $this->assertSame($container, $contextualizer->getContainer());
         $this->assertSame($namespace, $contextualizer->getNamespace());
         $this->assertSame($siteAccessNodeName, $contextualizer->getSiteAccessNodeName());
@@ -42,15 +42,15 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $siteAccessNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $siteAccessNodeName);
 
         $this->assertInstanceOf(
-            'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface',
+            ContextualizerInterface::class,
             $processor->getContextualizer()
         );
 
-        $newContextualizer = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
+        $newContextualizer = $this->getContextualizerMock();
         $processor->setContextualizer($newContextualizer);
         $this->assertSame($newContextualizer, $processor->getContextualizer());
     }
@@ -62,7 +62,7 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $siteAccessNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $siteAccessNodeName);
 
         $processor->mapConfig(array(), new stdClass());
@@ -72,7 +72,7 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $saNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $saNodeName);
         $expectedContextualizer = $processor->getContextualizer();
 
@@ -112,7 +112,7 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $saNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $saNodeName);
         $contextualizer = $processor->getContextualizer();
 
@@ -138,7 +138,7 @@ class ConfigurationProcessorTest extends TestCase
             ),
         );
 
-        $mapper = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationMapperInterface');
+        $mapper = $this->createMock(ConfigurationMapperInterface::class);
         $mapper
             ->expects($this->exactly(count($config[$saNodeName])))
             ->method('mapConfig')
@@ -158,7 +158,7 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $saNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $saNodeName);
         $contextualizer = $processor->getContextualizer();
 
@@ -184,7 +184,7 @@ class ConfigurationProcessorTest extends TestCase
             ),
         );
 
-        $mapper = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\HookableConfigurationMapperInterface');
+        $mapper = $this->createMock(HookableConfigurationMapperInterface::class);
         $mapper
             ->expects($this->once())
             ->method('preMap')
@@ -212,9 +212,9 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $saNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $saNodeName);
-        $contextualizer = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
+        $contextualizer = $this->getContextualizerMock();
         $processor->setContextualizer($contextualizer);
 
         $sa1Config = array(
@@ -248,9 +248,9 @@ class ConfigurationProcessorTest extends TestCase
     {
         $namespace = 'ez_test';
         $saNodeName = 'foo';
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $saNodeName);
-        $contextualizer = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
+        $contextualizer = $this->getContextualizerMock();
         $processor->setContextualizer($contextualizer);
 
         $sa1Config = array(
@@ -278,5 +278,15 @@ class ConfigurationProcessorTest extends TestCase
             ->method('mapConfigArray')
             ->with('hello', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
         $processor->mapConfigArray('hello', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
+    }
+
+    protected function getContainerMock()
+    {
+        return $this->createMock(ContainerInterface::class);
+    }
+
+    protected function getContextualizerMock()
+    {
+        return $this->createMock(ContextualizerInterface::class);
     }
 }

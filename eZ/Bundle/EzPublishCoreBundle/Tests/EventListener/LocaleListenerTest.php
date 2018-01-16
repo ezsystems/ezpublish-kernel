@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LocaleListenerTest extends TestCase
 {
@@ -37,15 +39,15 @@ class LocaleListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->localeConverter = $this->createMock('eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface');
-        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->localeConverter = $this->createMock(LocaleConverterInterface::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
 
         $this->requestStack = new RequestStack();
-        $parameterBagMock = $this->createMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
+        $parameterBagMock = $this->createMock(ParameterBag::class);
         $parameterBagMock->expects($this->never())->method($this->anything());
 
-        $requestMock = $this->createMock('Symfony\\Component\\HttpFoundation\\Request');
+        $requestMock = $this->createMock(Request::class);
         $requestMock->attributes = $parameterBagMock;
 
 //        $requestMock->expects($this->any())
@@ -82,7 +84,7 @@ class LocaleListenerTest extends TestCase
         $request = new Request();
         $localeListener->onKernelRequest(
             new GetResponseEvent(
-                $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+                $this->createMock(HttpKernelInterface::class),
                 $request,
                 HttpKernelInterface::MASTER_REQUEST
             )

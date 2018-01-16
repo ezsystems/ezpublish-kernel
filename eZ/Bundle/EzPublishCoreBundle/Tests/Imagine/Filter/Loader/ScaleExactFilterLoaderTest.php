@@ -9,6 +9,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleExactFilterLoader;
+use Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use PHPUnit\Framework\TestCase;
 
 class ScaleExactFilterLoaderTest extends TestCase
@@ -26,7 +28,7 @@ class ScaleExactFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->createMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock(LoaderInterface::class);
         $this->loader = new ScaleExactFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -37,7 +39,7 @@ class ScaleExactFilterLoaderTest extends TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock(ImageInterface::class), $options);
     }
 
     public function loadInvalidProvider()
@@ -52,7 +54,7 @@ class ScaleExactFilterLoaderTest extends TestCase
     public function testLoad()
     {
         $options = array(123, 456);
-        $image = $this->createMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $this->innerLoader
             ->expects($this->once())
             ->method('load')

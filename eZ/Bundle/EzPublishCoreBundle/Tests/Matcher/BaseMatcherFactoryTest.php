@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
@@ -24,7 +25,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
      */
     protected function getResolverMock($matcherServiceIdentifier)
     {
-        $resolverMock = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolverMock = $this->createMock(ConfigResolverInterface::class);
         $resolverMock
         ->expects($this->atLeastOnce())
         ->method('getParameter')

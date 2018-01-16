@@ -9,6 +9,7 @@ use eZ\Bundle\EzPublishCoreBundle\EventListener\ContentDownloadRouteReferenceLis
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -24,10 +25,7 @@ class ContentDownloadRouteReferenceListenerTest extends TestCase
 
     public function setUp()
     {
-        $this->translationHelperMock = $this
-            ->getMockBuilder('eZ\Publish\Core\Helper\TranslationHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->translationHelperMock = $this->createMock(TranslationHelper::class);
     }
 
     public function testIgnoresOtherRoutes()

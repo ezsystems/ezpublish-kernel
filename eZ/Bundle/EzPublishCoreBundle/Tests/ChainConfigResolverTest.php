@@ -3,6 +3,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
 
@@ -54,7 +55,7 @@ class ChainConfigResolverTest extends TestCase
         list($low, $medium, $high) = $this->createResolverMocks();
         // We're using a mock here and not $this->chainResolver because we need to ensure that the sorting operation is done only once.
         $resolver = $this->buildMock(
-            'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\ChainConfigResolver',
+            ChainConfigResolver::class,
             array('sortResolvers')
         );
         $resolver
@@ -89,7 +90,7 @@ class ChainConfigResolverTest extends TestCase
         $highest = clone $high;
         // We're using a mock here and not $this->chainResolver because we need to ensure that the sorting operation is done only once.
         $resolver = $this->buildMock(
-            'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\ChainConfigResolver',
+            ChainConfigResolver::class,
             array('sortResolvers')
         );
         $resolver
@@ -185,7 +186,7 @@ class ChainConfigResolverTest extends TestCase
      */
     public function testGetParameter($paramName, $namespace, $scope, $expectedValue)
     {
-        $resolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolver = $this->createMock(ConfigResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('getParameter')
@@ -216,7 +217,7 @@ class ChainConfigResolverTest extends TestCase
         $namespace = 'yetAnotherNamespace';
         $scope = 'mySiteaccess';
 
-        $resolver1 = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolver1 = $this->createMock(ConfigResolverInterface::class);
         $resolver1
             ->expects($this->once())
             ->method('hasParameter')
@@ -224,7 +225,7 @@ class ChainConfigResolverTest extends TestCase
             ->will($this->returnValue(false));
         $this->chainResolver->addResolver($resolver1);
 
-        $resolver2 = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolver2 = $this->createMock(ConfigResolverInterface::class);
         $resolver2
             ->expects($this->once())
             ->method('hasParameter')
@@ -232,7 +233,7 @@ class ChainConfigResolverTest extends TestCase
             ->will($this->returnValue(true));
         $this->chainResolver->addResolver($resolver2);
 
-        $resolver3 = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolver3 = $this->createMock(ConfigResolverInterface::class);
         $resolver3
             ->expects($this->never())
             ->method('hasParameter');
@@ -247,7 +248,7 @@ class ChainConfigResolverTest extends TestCase
         $namespace = 'yetAnotherNamespace';
         $scope = 'mySiteaccess';
 
-        $resolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolver = $this->createMock(ConfigResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('hasParameter')
@@ -264,9 +265,9 @@ class ChainConfigResolverTest extends TestCase
     private function createResolverMocks()
     {
         return array(
-            $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
-            $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
-            $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
+            $this->createMock(ConfigResolverInterface::class),
+            $this->createMock(ConfigResolverInterface::class),
+            $this->createMock(ConfigResolverInterface::class),
         );
     }
 

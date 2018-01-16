@@ -9,8 +9,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\SignalSlot;
 
 use eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot;
+use eZ\Publish\Core\MVC\Symfony\Event\SignalEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\SignalSlot\Signal;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SymfonyEventConverterSlotTest extends TestCase
 {
@@ -20,13 +23,13 @@ class SymfonyEventConverterSlotTest extends TestCase
      */
     public function testReceive()
     {
-        $eventDispatcher = $this->createMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::API_SIGNAL, $this->isInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\Event\\SignalEvent'));
+            ->with(MVCEvents::API_SIGNAL, $this->isInstanceOf(SignalEvent::class));
 
         $slot = new SymfonyEventConverterSlot($eventDispatcher);
-        $slot->receive($this->createMock('eZ\\Publish\\Core\\SignalSlot\\Signal'));
+        $slot->receive($this->createMock(Signal::class));
     }
 }

@@ -9,10 +9,16 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
+use eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder;
+use eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ViewControllerListenerTest extends TestCase
@@ -57,10 +63,10 @@ class ViewControllerListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->controllerResolver = $this->createMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
-        $this->viewBuilderRegistry = $this->createMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry');
-        $this->eventDispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->logger = $this->createMock('Psr\\Log\\LoggerInterface');
+        $this->controllerResolver = $this->createMock(ControllerResolverInterface::class);
+        $this->viewBuilderRegistry = $this->createMock(ViewBuilderRegistry::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->controllerListener = new ViewControllerListener(
             $this->controllerResolver,
             $this->viewBuilderRegistry,
@@ -69,16 +75,13 @@ class ViewControllerListenerTest extends TestCase
         );
 
         $this->request = new Request();
-        $this->event = $this
-            ->getMockBuilder('Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->event = $this->createMock(FilterControllerArgumentsEvent::class);
         $this->event
             ->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
 
-        $this->viewBuilderMock = $this->createMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder');
+        $this->viewBuilderMock = $this->createMock(ViewBuilder::class);
     }
 
     public function testGetSubscribedEvents()

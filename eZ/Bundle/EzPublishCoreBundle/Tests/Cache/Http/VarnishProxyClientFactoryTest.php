@@ -10,6 +10,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Cache\Http;
 
 use eZ\Bundle\EzPublishCoreBundle\Cache\Http\VarnishProxyClientFactory;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use FOS\HttpCache\ProxyClient\Varnish;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
@@ -33,8 +35,8 @@ class VarnishProxyClientFactoryTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->createMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->proxyClientClass = '\FOS\HttpCache\ProxyClient\Varnish';
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->proxyClientClass = Varnish::class;
         $this->factory = new VarnishProxyClientFactory($this->configResolver, new DynamicSettingParser(), $this->proxyClientClass);
     }
 

@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 use ReflectionObject;
 
 class FragmentListenerFactoryTest extends TestCase
@@ -22,7 +23,7 @@ class FragmentListenerFactoryTest extends TestCase
      */
     public function testBuildFragmentListener($requestUri, $isFragmentCandidate)
     {
-        $listenerClass = 'Symfony\Component\HttpKernel\EventListener\FragmentListener';
+        $listenerClass = FragmentListener::class;
         $uriSigner = new UriSigner('my_precious_secret');
         $baseFragmentPath = '/_fragment';
         $request = Request::create($requestUri);
@@ -64,7 +65,7 @@ class FragmentListenerFactoryTest extends TestCase
         $listener = $factory->buildFragmentListener(
             new UriSigner('my_precious_secret'),
             '/_fragment',
-            'Symfony\Component\HttpKernel\EventListener\FragmentListener'
+            FragmentListener::class
         );
 
         $this->assertNull($listener);
