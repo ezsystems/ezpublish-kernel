@@ -37,7 +37,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "~2.7.1",
         "mikey179/vfsStream": "1.1.0",
-        "phpunit/phpunit": "~6.0",
+        "phpunit/phpunit": "^6.0",
         "matthiasnoback/symfony-dependency-injection-test": "~2.0",
         "symfony/assetic-bundle": "~2.3",
         "ezsystems/behatbundle": "^6.1"
