@@ -193,6 +193,7 @@ EOT
             ));
 
             $unindexableContentIds += $this->searchIndexer->updateSearchIndex($contentIds, $commit, $continueOnError);
+
             return $this->printUnindexableContentIds($output, $unindexableContentIds);
         }
 

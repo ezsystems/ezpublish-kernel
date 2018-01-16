@@ -28,7 +28,7 @@ class SearchField implements Indexable
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
-     * 
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue if XML is corrupted
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
