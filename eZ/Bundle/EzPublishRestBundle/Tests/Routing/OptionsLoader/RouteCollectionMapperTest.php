@@ -44,12 +44,12 @@ class RouteCollectionMapperTest extends TestCase
         );
 
         self::assertInstanceOf(
-            'Symfony\Component\Routing\Route',
+            Route::class,
             $optionsRouteCollection->get('ezpublish_rest_options_route_one')
         );
 
         self::assertInstanceOf(
-            'Symfony\Component\Routing\Route',
+            Route::class,
             $optionsRouteCollection->get('ezpublish_rest_options_route_two')
         );
 

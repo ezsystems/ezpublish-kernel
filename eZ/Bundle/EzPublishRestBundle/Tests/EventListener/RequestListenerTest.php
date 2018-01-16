@@ -113,9 +113,7 @@ class RequestListenerTest extends EventListenerTest
      */
     public function getVisitorDispatcherMock()
     {
-        return $this->createMock(
-            'eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher'
-        );
+        return $this->createMock(AcceptHeaderVisitorDispatcher::class);
     }
 
     /**
@@ -124,7 +122,7 @@ class RequestListenerTest extends EventListenerTest
     protected function performFakeRequest($uri, $type = HttpKernelInterface::MASTER_REQUEST)
     {
         $event = new GetResponseEvent(
-            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             Request::create($uri),
             $type
         );

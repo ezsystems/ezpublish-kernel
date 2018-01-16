@@ -115,7 +115,7 @@ class RestProviderTest extends TestCase
      */
     protected function getRequestMatcherMock()
     {
-        $mock = $this->createMock('Symfony\Component\Routing\Matcher\RequestMatcherInterface');
+        $mock = $this->createMock(RequestMatcherInterface::class);
 
         if ($this->matchRequestResult instanceof Exception) {
             $mock->expects($this->any())

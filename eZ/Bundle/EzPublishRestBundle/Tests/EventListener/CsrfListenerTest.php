@@ -12,11 +12,13 @@ use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CsrfListenerTest extends EventListenerTest
 {
@@ -170,7 +172,7 @@ class CsrfListenerTest extends EventListenerTest
      */
     protected function getCsrfProviderMock()
     {
-        $provider = $this->createMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface');
+        $provider = $this->createMock(CsrfTokenManagerInterface::class);
         $provider->expects($this->any())
             ->method('isTokenValid')
             ->will(
@@ -194,7 +196,7 @@ class CsrfListenerTest extends EventListenerTest
     protected function getEventMock($class = null)
     {
         if (!isset($this->eventMock)) {
-            parent::getEventMock('Symfony\Component\HttpKernel\Event\GetResponseEvent');
+            parent::getEventMock(GetResponseEvent::class);
 
             $this->eventMock
                 ->expects($this->any())
@@ -211,7 +213,7 @@ class CsrfListenerTest extends EventListenerTest
     protected function getSessionMock()
     {
         if (!isset($this->sessionMock)) {
-            $this->sessionMock = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+            $this->sessionMock = $this->createMock(SessionInterface::class);
             $this->sessionMock
                 ->expects($this->atLeastOnce())
                 ->method('isStarted')
@@ -296,9 +298,7 @@ class CsrfListenerTest extends EventListenerTest
     protected function getEventDispatcherMock()
     {
         if (!isset($this->eventDispatcherMock)) {
-            $this->eventDispatcherMock = $this->createMock(
-                'Symfony\Component\EventDispatcher\EventDispatcherInterface'
-            );
+            $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         }
 
         return $this->eventDispatcherMock;
