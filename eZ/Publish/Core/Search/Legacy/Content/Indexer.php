@@ -49,11 +49,12 @@ class Indexer extends IncrementalIndexer
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
             } catch (InvalidArgumentValue $argumentException) {
-                $this->logger->warning($argumentException->getMessage());
                 $unindexableContentIds[] = $contentId;
                 if (!$continueOnError) {
+                    $this->logger->error($argumentException->getMessage());
                     break;
                 }
+                $this->logger->warning($argumentException->getMessage());
             }
         }
 

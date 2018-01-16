@@ -453,12 +453,12 @@ EOT
      * @param OutputInterface $output
      * @param array $unindexableContentIds
      */
-    private function printUnindexableContentIds(OutputInterface $output, $unindexableContentIds)
+    private function printUnindexableContentIds(OutputInterface $output, array $unindexableContentIds)
     {
         $output->writeln('');
         $output->writeln(sprintf(
             '<error>Indexing failed on some content items, try running command with "--iteration-count=1 --content-ids=<ids>": %s</error>',
-            implode(', ', $unindexableContentIds)
+            implode(',', $unindexableContentIds)
         ));
     }
 }
