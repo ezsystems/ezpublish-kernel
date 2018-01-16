@@ -35,8 +35,8 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 
     protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $this->metadataConfigurationFactoryMock = $this->createMock('\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory');
-        $this->binarydataConfigurationFactoryMock = $this->createMock('\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory');
+        $this->metadataConfigurationFactoryMock = $this->createMock(ConfigurationFactory::class);
+        $this->binarydataConfigurationFactoryMock = $this->createMock(ConfigurationFactory::class);
 
         $container->addCompilerPass(
             new IOConfigurationPass(
