@@ -84,7 +84,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $contentService->deleteContent($draft->contentInfo);
         /* END: Use Case */
 
-        $this->setExpectedException('\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException');
+        $this->expectException('\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException');
         $contentService->loadContent($draft->id);
     }
 
