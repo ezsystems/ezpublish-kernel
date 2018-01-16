@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\SiteAccess;
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher as CoreMatcher;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -68,7 +69,7 @@ class MatcherBuilderTest extends TestCase
     public function testBuildMatcherService()
     {
         $serviceId = 'foo';
-        $matcher = $this->createMock(Matcher::class);
+        $matcher = $this->createMock(CoreMatcher::class);
         $this->container
             ->expects($this->once())
             ->method('get')
