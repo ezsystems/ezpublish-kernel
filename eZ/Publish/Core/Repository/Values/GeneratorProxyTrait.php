@@ -27,9 +27,11 @@ trait GeneratorProxyTrait
     protected $object;
 
     /**
+     * Needs to be protected as value objects often define this as well.
+     *
      * @var mixed
      */
-    private $id;
+    protected $id;
 
     /**
      * @var Generator|null
