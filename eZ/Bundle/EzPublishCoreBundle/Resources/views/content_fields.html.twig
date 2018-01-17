@@ -160,13 +160,14 @@
 
 {% block ezselection_field %}
 {% spaceless %}
-    {% if fieldSettings.isMultiple and field.value.selection|length() > 0  %}
+    {% if field.value.selection|length() <= 0 %}
+    {% elseif fieldSettings.isMultiple %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for selectedIndex in field.value.selection %}
             <li>{{ fieldSettings.options[selectedIndex] }}</li>
         {% endfor %}
         </ul>
-    {% elseif not fieldSettings.isMultiple %}
+    {% else %}
         {% set field_value = fieldSettings.options[field.value.selection.0] %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
