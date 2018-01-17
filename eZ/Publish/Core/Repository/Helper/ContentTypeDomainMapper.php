@@ -77,7 +77,7 @@ class ContentTypeDomainMapper
     public function buildContentTypeDomainObject(
         SPIContentType $spiContentType,
         array $prioritizedLanguages = []
-    ) : APIContentType {
+    ): APIContentType {
         $mainLanguageCode = $this->contentLanguageHandler->load(
             $spiContentType->initialLanguageId
         )->languageCode;
@@ -183,7 +183,7 @@ class ContentTypeDomainMapper
      *
      * Decorates ContentType.
      */
-    public function buildContentTypeDraftDomainObject(SPIContentType $spiContentType) : APIContentTypeDraft
+    public function buildContentTypeDraftDomainObject(SPIContentType $spiContentType): APIContentTypeDraft
     {
         return new ContentTypeDraft(
             array(
@@ -195,7 +195,7 @@ class ContentTypeDomainMapper
     /**
      * Builds a ContentTypeGroup domain object from value object returned by persistence.
      */
-    public function buildContentTypeGroupDomainObject(SPIContentTypeGroup $spiGroup, array $prioritizedLanguages = []) : APIContentTypeGroup
+    public function buildContentTypeGroupDomainObject(SPIContentTypeGroup $spiGroup, array $prioritizedLanguages = []): APIContentTypeGroup
     {
         return new ContentTypeGroup(
             array(
@@ -215,7 +215,7 @@ class ContentTypeDomainMapper
     /**
      * Builds a list of ContentTypeGroup proxy objects (lazy loaded, loads all as soon as one of them loads).
      */
-    public function buildContentTypeGroupProxyList(array $ids, array $prioritizedLanguages = []) : array
+    public function buildContentTypeGroupProxyList(array $ids, array $prioritizedLanguages = []): array
     {
         $groups = [];
         $generator = $this->generatorForContentTypeGroupList($ids, $prioritizedLanguages);
@@ -226,7 +226,7 @@ class ContentTypeDomainMapper
         return $groups;
     }
 
-    private function generatorForContentTypeGroupList(array $ids, array $prioritizedLanguages = []) : \Generator
+    private function generatorForContentTypeGroupList(array $ids, array $prioritizedLanguages = []): \Generator
     {
         $groups = $this->contentTypeHandler->loadGroups($ids);
 
@@ -420,7 +420,7 @@ class ContentTypeDomainMapper
         return $spiFieldDefinition;
     }
 
-    protected function getDateTime(int $timestamp) : DateTime
+    protected function getDateTime(int $timestamp): DateTime
     {
         // Instead of using DateTime(ts) we use setTimeStamp() so timezone does not get set to UTC
         $dateTime = new DateTime();
