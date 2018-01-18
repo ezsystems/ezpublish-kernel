@@ -16,17 +16,17 @@ use Exception;
 class InvalidIndexDataException extends Exception
 {
     /**
-     * @var mixed $fieldId
+     * @var mixed
      */
     protected $fieldId;
 
     /**
-     * @var int|null $versionNo
+     * @var int|null
      */
     protected $versionNo;
 
     /**
-     * @var string $languageCode
+     * @var string
      */
     protected $languageCode;
 

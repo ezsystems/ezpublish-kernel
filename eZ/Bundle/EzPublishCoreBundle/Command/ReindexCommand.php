@@ -253,6 +253,7 @@ EOT
 
         if ($unindexableContentIds) {
             $this->printUnindexableContentIds($output, $unindexableContentIds);
+
             return 1;
         }
     }
