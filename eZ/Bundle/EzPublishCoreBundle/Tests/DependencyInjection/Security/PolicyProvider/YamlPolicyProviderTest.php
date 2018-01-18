@@ -8,6 +8,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Security\PolicyProvider;
 
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubYamlPolicyProvider;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
 
@@ -28,7 +29,7 @@ class YamlPolicyProviderTest extends TestCase
             ],
         ];
 
-        $configBuilder = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
+        $configBuilder = $this->createMock(ConfigBuilderInterface::class);
         foreach ($files as $file) {
             $configBuilder
                 ->expects($this->once())
@@ -65,7 +66,7 @@ class YamlPolicyProviderTest extends TestCase
             ],
         ];
 
-        $configBuilder = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
+        $configBuilder = $this->createMock(ConfigBuilderInterface::class);
         $configBuilder
             ->expects($this->exactly(count($files)))
             ->method('addResource')

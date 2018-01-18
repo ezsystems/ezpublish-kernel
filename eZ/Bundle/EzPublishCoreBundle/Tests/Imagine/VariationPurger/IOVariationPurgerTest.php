@@ -6,13 +6,14 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\IOVariationPurger;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 class IOVariationPurgerTest extends TestCase
 {
     public function testPurgesAliasList()
     {
-        $ioService = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $ioService = $this->createMock(IOServiceInterface::class);
         $ioService
             ->expects($this->exactly(2))
             ->method('deleteDirectory')

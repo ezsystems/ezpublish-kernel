@@ -9,6 +9,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
+use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType;
+use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -16,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class QueryTypePassTest extends AbstractCompilerPassTestCase
 {
-    private static $queryTypeClass = 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType';
+    private static $queryTypeClass = TestQueryType::class;
 
     protected function setUp()
     {
@@ -64,7 +66,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
 
     public function testConventionQueryType()
     {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle']);
+        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
 
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
@@ -76,7 +78,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
 
     public function testConventionSkippedIfTagged()
     {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle']);
+        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
 
         $def = new Definition();
         $def->addTag('ezpublish.query_type');
@@ -102,7 +104,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
      */
     public function testTaggedOverride()
     {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => 'eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryTypeBundle']);
+        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
 
         $def = new Definition();
         $def->addTag('ezpublish.query_type', ['alias' => 'overridden_type']);

@@ -9,6 +9,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
@@ -22,7 +24,7 @@ class ConfigParserTest extends TestCase
     {
         new ConfigParser(
             array(
-                $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+                $this->getConfigurationParserMock(),
                 new stdClass(),
             )
         );
@@ -31,9 +33,9 @@ class ConfigParserTest extends TestCase
     public function testConstruct()
     {
         $innerParsers = array(
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->getConfigurationParserMock(),
+            $this->getConfigurationParserMock(),
+            $this->getConfigurationParserMock(),
         );
         $configParser = new ConfigParser($innerParsers);
         $this->assertSame($innerParsers, $configParser->getConfigParsers());
@@ -45,9 +47,9 @@ class ConfigParserTest extends TestCase
         $this->assertSame(array(), $configParser->getConfigParsers());
 
         $innerParsers = array(
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->getConfigurationParserMock(),
+            $this->getConfigurationParserMock(),
+            $this->getConfigurationParserMock(),
         );
         $configParser->setConfigParsers($innerParsers);
         $this->assertSame($innerParsers, $configParser->getConfigParsers());
@@ -56,8 +58,8 @@ class ConfigParserTest extends TestCase
     public function testMapConfig()
     {
         $parsers = array(
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->getConfigurationParserMock(),
+            $this->getConfigurationParserMock(),
         );
         $configParser = new ConfigParser($parsers);
 
@@ -66,7 +68,7 @@ class ConfigParserTest extends TestCase
             'some' => 'thing',
         );
         $currentScope = 'the_current_scope';
-        $contextualizer = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
+        $contextualizer = $this->createMock(ContextualizerInterface::class);
 
         foreach ($parsers as $parser) {
             /* @var \PHPUnit_Framework_MockObject_MockObject $parser */
@@ -82,8 +84,8 @@ class ConfigParserTest extends TestCase
     public function testPrePostMap()
     {
         $parsers = array(
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->getConfigurationParserMock(),
+            $this->getConfigurationParserMock(),
         );
         $configParser = new ConfigParser($parsers);
 
@@ -91,7 +93,7 @@ class ConfigParserTest extends TestCase
             'foo' => 'bar',
             'some' => 'thing',
         );
-        $contextualizer = $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface');
+        $contextualizer = $this->createMock(ContextualizerInterface::class);
 
         foreach ($parsers as $parser) {
             /* @var \PHPUnit_Framework_MockObject_MockObject $parser */
@@ -112,8 +114,8 @@ class ConfigParserTest extends TestCase
     public function testAddSemanticConfig()
     {
         $parsers = array(
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
-            $this->createMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface'),
+            $this->getConfigurationParserMock(),
+            $this->getConfigurationParserMock(),
         );
         $configParser = new ConfigParser($parsers);
 
@@ -128,5 +130,10 @@ class ConfigParserTest extends TestCase
         }
 
         $configParser->addSemanticConfig($nodeBuilder);
+    }
+
+    protected function getConfigurationParserMock()
+    {
+        return $this->createMock(ParserInterface::class);
     }
 }

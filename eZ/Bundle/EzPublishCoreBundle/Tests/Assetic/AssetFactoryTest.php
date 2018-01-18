@@ -9,7 +9,14 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Assetic;
 
 use eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParserInterface;
 use Symfony\Bundle\AsseticBundle\Tests\Factory\AssetFactoryTest as BaseTest;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Assetic\Asset\AssetCollectionInterface;
+use Assetic\Asset\AssetInterface;
 use ReflectionObject;
 
 class AssetFactoryTest extends BaseTest
@@ -27,18 +34,16 @@ class AssetFactoryTest extends BaseTest
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->createMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->parser = $this->createMock(
-            '\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParserInterface'
-        );
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->parser = $this->createMock(DynamicSettingParserInterface::class);
     }
 
     protected function getAssetFactory()
     {
         $assetFactory = new AssetFactory(
-            $this->createMock('\Symfony\Component\HttpKernel\KernelInterface'),
-            $this->createMock('\Symfony\Component\DependencyInjection\ContainerInterface'),
-            $this->createMock('\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface'),
+            $this->createMock(KernelInterface::class),
+            $this->createMock(ContainerInterface::class),
+            $this->createMock(ParameterBagInterface::class),
             '/root/dir/'
         );
         $assetFactory->setConfigResolver($this->configResolver);
@@ -80,7 +85,7 @@ class AssetFactoryTest extends BaseTest
         $refMethod->setAccessible(true);
         $parseInputResult = $refMethod->invoke($assetFactory, $input, array('vars' => array()));
 
-        $this->assertInstanceOf('\Assetic\Asset\AssetCollectionInterface', $parseInputResult);
+        $this->assertInstanceOf(AssetCollectionInterface::class, $parseInputResult);
         $this->assertCount(count($fooValues), $parseInputResult->all());
     }
 
@@ -116,6 +121,6 @@ class AssetFactoryTest extends BaseTest
         $refMethod->setAccessible(true);
         $parseInputResult = $refMethod->invoke($assetFactory, $input, array('vars' => array()));
 
-        $this->assertInstanceOf('\Assetic\Asset\AssetInterface', $parseInputResult);
+        $this->assertInstanceOf(AssetInterface::class, $parseInputResult);
     }
 }

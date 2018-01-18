@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\DynamicSettingsListener;
+use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
@@ -16,6 +17,8 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ExpressionLanguage;
 
 class DynamicSettingsListenerTest extends TestCase
 {
@@ -32,8 +35,8 @@ class DynamicSettingsListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->createMock('\Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->expressionLanguage = $this->createMock('\Symfony\Component\DependencyInjection\ExpressionLanguage');
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->expressionLanguage = $this->createMock(ExpressionLanguage::class);
     }
 
     public function testGetSubscribedEvents()
@@ -95,7 +98,7 @@ class DynamicSettingsListenerTest extends TestCase
             ->method('set')
             ->with('bar.baz', null);
 
-        $updateableService1 = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService1 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting1 = 'foo';
         $this->container
             ->expects($this->at(4))
@@ -111,7 +114,7 @@ class DynamicSettingsListenerTest extends TestCase
             ->method('someMethod')
             ->with($dynamicSetting1);
 
-        $updateableService2 = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService2 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting2 = array('foo' => 'bar');
         $this->container
             ->expects($this->at(6))
@@ -169,7 +172,7 @@ class DynamicSettingsListenerTest extends TestCase
             ->method('set')
             ->with('bar.baz', null);
 
-        $updateableService1 = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService1 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting1 = 'foo';
         $this->container
             ->expects($this->at(4))
@@ -185,7 +188,7 @@ class DynamicSettingsListenerTest extends TestCase
             ->method('someMethod')
             ->with($dynamicSetting1);
 
-        $updateableService2 = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService2 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting2 = array('foo' => 'bar');
         $this->container
             ->expects($this->at(6))

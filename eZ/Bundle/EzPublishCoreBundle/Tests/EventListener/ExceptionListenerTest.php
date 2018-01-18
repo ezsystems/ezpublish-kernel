@@ -28,7 +28,13 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class ExceptionListenerTest extends TestCase
 {
@@ -45,7 +51,7 @@ class ExceptionListenerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->translator = $this->createMock('\Symfony\Component\Translation\TranslatorInterface');
+        $this->translator = $this->createMock(TranslatorInterface::class);
         $this->listener = new ExceptionListener($this->translator);
     }
 
@@ -64,7 +70,7 @@ class ExceptionListenerTest extends TestCase
     private function generateExceptionEvent(Exception $exception)
     {
         return new GetResponseForExceptionEvent(
-            $this->createMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             new Request(),
             'master',
             $exception
@@ -89,7 +95,7 @@ class ExceptionListenerTest extends TestCase
 
         $this->listener->onKernelException($event);
         $convertedException = $event->getException();
-        self::assertInstanceOf('\Symfony\Component\HttpKernel\Exception\NotFoundHttpException', $convertedException);
+        self::assertInstanceOf(NotFoundHttpException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame($translatedMessage, $convertedException->getMessage());
     }
@@ -112,7 +118,7 @@ class ExceptionListenerTest extends TestCase
 
         $this->listener->onKernelException($event);
         $convertedException = $event->getException();
-        self::assertInstanceOf('\Symfony\Component\Security\Core\Exception\AccessDeniedException', $convertedException);
+        self::assertInstanceOf(AccessDeniedException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame($translatedMessage, $convertedException->getMessage());
     }
@@ -139,7 +145,7 @@ class ExceptionListenerTest extends TestCase
 
         $this->listener->onKernelException($event);
         $convertedException = $event->getException();
-        self::assertInstanceOf('\Symfony\Component\HttpKernel\Exception\BadRequestHttpException', $convertedException);
+        self::assertInstanceOf(BadRequestHttpException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame($translatedMessage, $convertedException->getMessage());
     }
@@ -176,7 +182,7 @@ class ExceptionListenerTest extends TestCase
 
         $this->listener->onKernelException($event);
         $convertedException = $event->getException();
-        self::assertInstanceOf('\Symfony\Component\HttpKernel\Exception\HttpException', $convertedException);
+        self::assertInstanceOf(HttpException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame(get_class($exception) . ': ' . $translatedMessage, $convertedException->getMessage());
         self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $convertedException->getStatusCode());

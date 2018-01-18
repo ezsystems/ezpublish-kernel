@@ -8,7 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ReduceNoiseFilterLoader;
+use Imagine\Image\ImageInterface;
 use PHPUnit\Framework\TestCase;
 
 class ReduceNoiseFilterLoaderTest extends TestCase
@@ -26,7 +28,7 @@ class ReduceNoiseFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->filter = $this->createMock('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface');
+        $this->filter = $this->createMock(FilterInterface::class);
         $this->loader = new ReduceNoiseFilterLoader($this->filter);
     }
 
@@ -35,6 +37,6 @@ class ReduceNoiseFilterLoaderTest extends TestCase
      */
     public function testLoadInvalidDriver()
     {
-        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface'));
+        $this->loader->load($this->createMock(ImageInterface::class));
     }
 }

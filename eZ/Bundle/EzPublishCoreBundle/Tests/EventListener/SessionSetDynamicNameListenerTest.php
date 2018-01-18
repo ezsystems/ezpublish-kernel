@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface as SymfonySessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -87,7 +88,7 @@ class SessionSetDynamicNameListenerTest extends TestCase
         $listener = new SessionSetDynamicNameListener(
             $this->configResolver,
             $this->session,
-            $this->createMock('Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface')
+            $this->createMock(SessionStorageInterface::class)
         );
         $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST));
     }

@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter;
 use PHPUnit\Framework\TestCase;
 
 class AbstractFilterTest extends TestCase
@@ -25,7 +26,7 @@ class AbstractFilterTest extends TestCase
 
     protected function getFilter()
     {
-        return $this->getMockForAbstractClass('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter');
+        return $this->getMockForAbstractClass(AbstractFilter::class);
     }
 
     public function testGetSetOptions()

@@ -5,6 +5,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,7 @@ class LegacyStorageImageFileListTest extends TestCase
 
     public function setUp()
     {
-        $this->rowReaderMock = $this->createMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader');
+        $this->rowReaderMock = $this->createMock(ImageFileRowReader::class);
         $this->fileList = new LegacyStorageImageFileList(
             $this->rowReaderMock,
             'var/ezdemo_site/storage',

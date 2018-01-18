@@ -6,7 +6,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
 use ArrayIterator;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use PHPUnit\Framework\TestCase;
 
@@ -23,8 +25,8 @@ class ImageFileVariationPurgerTest extends TestCase
 
     public function setUp()
     {
-        $this->ioServiceMock = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
-        $this->pathGeneratorMock = $this->createMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
+        $this->ioServiceMock = $this->createMock(IOServiceInterface::class);
+        $this->pathGeneratorMock = $this->createMock(VariationPathGenerator::class);
     }
 
     public function testIteratesOverItems()
@@ -73,7 +75,7 @@ class ImageFileVariationPurgerTest extends TestCase
         $this->ioServiceMock
             ->expects($this->once())
             ->method('deleteBinaryFile')
-            ->with($this->isInstanceOf('eZ\Publish\Core\IO\Values\BinaryFile'));
+            ->with($this->isInstanceOf(BinaryFile::class));
 
         $purger->purge(array('large'));
     }

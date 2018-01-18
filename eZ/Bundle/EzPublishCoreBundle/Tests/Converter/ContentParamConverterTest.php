@@ -8,6 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +17,7 @@ class ContentParamConverterTest extends AbstractParamConverterTest
 {
     const PROPERTY_NAME = 'contentId';
 
-    const CONTENT_CLASS = 'eZ\Publish\API\Repository\Values\Content\Content';
+    const CONTENT_CLASS = Content::class;
 
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter
@@ -26,8 +28,7 @@ class ContentParamConverterTest extends AbstractParamConverterTest
 
     public function setUp()
     {
-        $this->contentServiceMock = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
-
+        $this->contentServiceMock = $this->createMock(ContentService::class);
         $this->converter = new ContentParamConverter($this->contentServiceMock);
     }
 
@@ -46,7 +47,7 @@ class ContentParamConverterTest extends AbstractParamConverterTest
     public function testApplyContent()
     {
         $id = 42;
-        $valueObject = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $valueObject = $this->createMock(Content::class);
 
         $this->contentServiceMock
             ->expects($this->once())

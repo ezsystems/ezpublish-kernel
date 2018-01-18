@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 
 class ConfigResolverTest extends TestCase
@@ -28,7 +29,7 @@ class ConfigResolverTest extends TestCase
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess('test');
-        $this->containerMock = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->containerMock = $this->createMock(ContainerInterface::class);
     }
 
     /**

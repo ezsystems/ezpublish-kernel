@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\IndexRequestListener;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -46,16 +47,16 @@ class IndexRequestListenerTest extends TestCase
     {
         parent::setUp();
 
-        $this->configResolver = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
 
         $this->indexRequestEventListener = new IndexRequestListener($this->configResolver);
 
         $this->request = $this
-            ->getMockBuilder('Symfony\\Component\\HttpFoundation\\Request')
+            ->getMockBuilder(Request::class)
             ->setMethods(array('getSession', 'hasSession'))
             ->getMock();
 
-        $this->httpKernel = $this->createMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
+        $this->httpKernel = $this->createMock(HttpKernelInterface::class);
         $this->event = new GetResponseEvent(
             $this->httpKernel,
             $this->request,

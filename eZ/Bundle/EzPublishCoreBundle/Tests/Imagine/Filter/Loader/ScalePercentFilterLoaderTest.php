@@ -9,6 +9,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScalePercentFilterLoader;
+use Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Imagine\Image\Box;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +29,7 @@ class ScalePercentFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->createMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock(LoaderInterface::class);
         $this->loader = new ScalePercentFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -38,7 +40,7 @@ class ScalePercentFilterLoaderTest extends TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock(ImageInterface::class), $options);
     }
 
     public function loadInvalidProvider()
@@ -60,7 +62,7 @@ class ScalePercentFilterLoaderTest extends TestCase
         $expectedHeight = ($origHeight * $heightPercent) / 100;
 
         $box = new Box($origWidth, $origHeight);
-        $image = $this->createMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('getSize')

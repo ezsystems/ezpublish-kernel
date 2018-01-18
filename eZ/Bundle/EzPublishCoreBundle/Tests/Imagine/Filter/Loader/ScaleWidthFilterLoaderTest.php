@@ -9,6 +9,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthFilterLoader;
+use Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use PHPUnit\Framework\TestCase;
 
 class ScaleWidthFilterLoaderTest extends TestCase
@@ -26,7 +28,7 @@ class ScaleWidthFilterLoaderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->createMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock(LoaderInterface::class);
         $this->loader = new ScaleWidthFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -36,13 +38,13 @@ class ScaleWidthFilterLoaderTest extends TestCase
      */
     public function testLoadFail()
     {
-        $this->loader->load($this->createMock('\Imagine\Image\ImageInterface', array()));
+        $this->loader->load($this->createMock(ImageInterface::class, array()));
     }
 
     public function testLoad()
     {
         $width = 123;
-        $image = $this->createMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $this->innerLoader
             ->expects($this->once())
             ->method('load')

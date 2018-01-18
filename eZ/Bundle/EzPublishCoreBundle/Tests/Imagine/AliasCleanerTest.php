@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use PHPUnit\Framework\TestCase;
 
 class AliasCleanerTest extends TestCase
@@ -26,7 +27,7 @@ class AliasCleanerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resolver = $this->createMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+        $this->resolver = $this->createMock(ResolverInterface::class);
         $this->aliasCleaner = new AliasCleaner($this->resolver);
     }
 

@@ -12,7 +12,9 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RequestContext;
 use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -29,7 +31,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
     protected function setUp()
     {
-        $this->configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
         $this->configResolver
             ->expects($this->any())
             ->method('getParameter')
@@ -58,8 +60,8 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
      */
     protected function resetConfigResolver()
     {
-        $this->configResolver = $this->createMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
         $this->router->setConfigResolver($this->configResolver);
     }
 

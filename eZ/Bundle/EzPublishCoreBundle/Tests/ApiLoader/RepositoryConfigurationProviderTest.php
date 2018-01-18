@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryConfigurationProviderTest extends TestCase
@@ -99,6 +100,6 @@ class RepositoryConfigurationProviderTest extends TestCase
      */
     protected function getConfigResolverMock()
     {
-        return $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        return $this->createMock(ConfigResolverInterface::class);
     }
 }

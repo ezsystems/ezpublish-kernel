@@ -31,7 +31,7 @@ class OriginalRequestListenerTest extends TestCase
     {
         $request = new Request();
         $event = new GetResponseEvent(
-            $this->createMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::SUB_REQUEST
         );
@@ -45,7 +45,7 @@ class OriginalRequestListenerTest extends TestCase
     {
         $request = new Request();
         $event = new GetResponseEvent(
-            $this->createMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -71,7 +71,7 @@ class OriginalRequestListenerTest extends TestCase
         $request->headers->set('x-fos-original-url', $originalUri);
         $request->headers->set('x-fos-original-accept', $originalAccept);
         $event = new GetResponseEvent(
-            $this->createMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );

@@ -10,7 +10,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\SiteAccess;
 
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher as CoreMatcher;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MatcherBuilderTest extends TestCase
 {
@@ -22,7 +25,7 @@ class MatcherBuilderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->createMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->container = $this->createMock(ContainerInterface::class);
     }
 
     /**
@@ -36,7 +39,7 @@ class MatcherBuilderTest extends TestCase
             ->expects($this->never())
             ->method('get');
         $matcherBuilder = new MatcherBuilder($this->container);
-        $matcher = $this->createMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher');
+        $matcher = $this->createMock(Matcher::class);
         $builtMatcher = $matcherBuilder->buildMatcher('\\' . get_class($matcher), array(), new SimplifiedRequest());
         $this->assertInstanceOf(get_class($matcher), $builtMatcher);
     }
@@ -54,7 +57,7 @@ class MatcherBuilderTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with($serviceId)
-            ->will($this->returnValue($this->createMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher')));
+            ->will($this->returnValue($this->createMock(Matcher::class)));
         $matcherBuilder = new MatcherBuilder($this->container);
         $matcherBuilder->buildMatcher("@$serviceId", array(), new SimplifiedRequest());
     }
@@ -66,7 +69,7 @@ class MatcherBuilderTest extends TestCase
     public function testBuildMatcherService()
     {
         $serviceId = 'foo';
-        $matcher = $this->createMock('eZ\\Bundle\\EzPublishCoreBundle\\SiteAccess\\Matcher');
+        $matcher = $this->createMock(CoreMatcher::class);
         $this->container
             ->expects($this->once())
             ->method('get')
