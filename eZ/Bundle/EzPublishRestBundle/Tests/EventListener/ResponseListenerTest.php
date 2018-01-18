@@ -113,9 +113,7 @@ class ResponseListenerTest extends EventListenerTest
     public function getVisitorDispatcherMock()
     {
         if (!isset($this->visitorDispatcherMock)) {
-            $this->visitorDispatcherMock = $this->createMock(
-                'eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher'
-            );
+            $this->visitorDispatcherMock = $this->createMock(AcceptHeaderVisitorDispatcher::class);
         }
 
         return $this->visitorDispatcherMock;
@@ -137,7 +135,7 @@ class ResponseListenerTest extends EventListenerTest
     protected function getControllerResultEventMock()
     {
         if (!isset($this->eventMock)) {
-            $this->eventMock = parent::getEventMock('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent');
+            $this->eventMock = parent::getEventMock(GetResponseForControllerResultEvent::class);
             $this->eventMock
                 ->expects($this->any())
                 ->method('getControllerResult')
@@ -153,7 +151,7 @@ class ResponseListenerTest extends EventListenerTest
     protected function getExceptionEventMock()
     {
         if (!isset($this->eventMock)) {
-            $this->eventMock = parent::getEventMock('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent');
+            $this->eventMock = parent::getEventMock(GetResponseForExceptionEvent::class);
 
             $this->eventMock
                 ->expects($this->any())

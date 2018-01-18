@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\RequestParser;
 
 use PHPUnit\Framework\TestCase;
 use eZ\Bundle\EzPublishRestBundle\RequestParser\Router as RouterRequestParser;
+use Symfony\Cmf\Component\Routing\ChainRouter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RequestContext;
@@ -152,7 +153,7 @@ class RouterTest extends TestCase
     private function getRouterMock()
     {
         if (!isset($this->router)) {
-            $this->router = $this->createMock('Symfony\\Cmf\\Component\\Routing\\ChainRouter');
+            $this->router = $this->createMock(ChainRouter::class);
 
             $this->router
                 ->expects($this->any())

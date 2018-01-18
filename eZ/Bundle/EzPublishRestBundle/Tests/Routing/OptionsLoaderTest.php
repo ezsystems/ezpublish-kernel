@@ -61,7 +61,7 @@ class OptionsLoaderTest extends TestCase
      */
     protected function getOptionsLoader()
     {
-        $mock = $this->getMockBuilder('eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader')
+        $mock = $this->getMockBuilder(OptionsLoader::class)
             ->setConstructorArgs(array($this->getRouteCollectionMapperMock()))
             ->setMethods(array('import'))
             ->getMock();
@@ -80,9 +80,7 @@ class OptionsLoaderTest extends TestCase
     protected function getRouteCollectionMapperMock()
     {
         if (!isset($this->routeCollectionMapperMock)) {
-            $this->routeCollectionMapperMock = $this->getMockBuilder('eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->routeCollectionMapperMock = $this->createMock(OptionsLoader\RouteCollectionMapper::class);
         }
 
         return $this->routeCollectionMapperMock;
