@@ -10,7 +10,9 @@ namespace eZ\Bundle\EzPublishIOBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -32,9 +34,9 @@ class StreamFileListenerTest extends TestCase
 
     public function setUp()
     {
-        $this->ioServiceMock = $this->createMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->ioServiceMock = $this->createMock(IOServiceInterface::class);
 
-        $this->configResolverMock = $this->createMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolverMock = $this->createMock(ConfigResolverInterface::class);
 
         $this->eventListener = new StreamFileListener($this->ioServiceMock, $this->configResolverMock);
     }
@@ -159,7 +161,7 @@ class StreamFileListenerTest extends TestCase
     protected function createEvent($request)
     {
         $event = new GetResponseEvent(
-            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
