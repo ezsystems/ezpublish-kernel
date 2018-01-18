@@ -25,7 +25,7 @@ interface Indexable
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @throws \eZ\Publish\SPI\FieldType\Exceptions\InvalidIndexDataException
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition);
 

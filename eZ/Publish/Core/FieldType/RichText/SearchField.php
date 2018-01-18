@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\RichText;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\SPI\FieldType\Exceptions\InvalidIndexDataException;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
@@ -29,13 +29,13 @@ class SearchField implements Indexable
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue if XML is corrupted
+     * @throws \eZ\Publish\SPI\FieldType\Exceptions\InvalidIndexDataException if XML is corrupted
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
         $document = new DOMDocument();
         if ($document->loadXML($field->value->data) === false) {
-            throw new InvalidArgumentValue($field->type, 'Unable to load XML', self::class);
+            throw new InvalidIndexDataException($field->id, $field->versionNo, $field->languageCode);
         }
 
         return array(

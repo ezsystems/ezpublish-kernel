@@ -9,10 +9,10 @@
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use eZ\Publish\Core\Search\Legacy\Content\Handler as LegacySearchHandler;
+use eZ\Publish\SPI\FieldType\Exceptions\InvalidIndexDataException;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Psr\Log\LoggerInterface;
 
@@ -48,13 +48,13 @@ class Indexer extends IncrementalIndexer
                 }
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
-            } catch (InvalidArgumentValue $argumentException) {
+            } catch (InvalidIndexDataException $indexDataException) {
                 $unindexableContentIds[] = $contentId;
                 if (!$continueOnError) {
-                    $this->logger->error($argumentException->getMessage());
+                    $this->logger->error($indexDataException->getMessage());
                     break;
                 }
-                $this->logger->warning($argumentException->getMessage());
+                $this->logger->warning($indexDataException->getMessage());
             }
         }
 
