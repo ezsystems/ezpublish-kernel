@@ -13,7 +13,12 @@ use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\FieldTypeService;
+use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry;
+use eZ\Publish\SPI\Persistence\Handler;
 
 /**
  * Base test case for tests on services using Mock testing.
@@ -82,10 +87,7 @@ abstract class Base extends TestCase
     protected function getFieldTypeServiceMock()
     {
         if (!isset($this->fieldTypeServiceMock)) {
-            $this->fieldTypeServiceMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\FieldTypeService')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->fieldTypeServiceMock = $this->createMock(FieldTypeService::class);
         }
 
         return $this->fieldTypeServiceMock;
@@ -99,10 +101,7 @@ abstract class Base extends TestCase
     protected function getFieldTypeRegistryMock()
     {
         if (!isset($this->fieldTypeRegistryMock)) {
-            $this->fieldTypeRegistryMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\FieldTypeRegistry')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->fieldTypeRegistryMock = $this->createMock(FieldTypeRegistry::class);
         }
 
         return $this->fieldTypeRegistryMock;
@@ -116,10 +115,7 @@ abstract class Base extends TestCase
     protected function getNameableFieldTypeRegistryMock()
     {
         if (!isset($this->nameableFieldTypeRegistryMock)) {
-            $this->nameableFieldTypeRegistryMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\NameableFieldTypeRegistry')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->nameableFieldTypeRegistryMock = $this->createMock(NameableFieldTypeRegistry::class);
         }
 
         return $this->nameableFieldTypeRegistryMock;
@@ -131,7 +127,7 @@ abstract class Base extends TestCase
     protected function getRepositoryMock()
     {
         if (!isset($this->repositoryMock)) {
-            $this->repositoryMock = self::createMock('eZ\\Publish\\API\\Repository\\Repository');
+            $this->repositoryMock = self::createMock(APIRepository::class);
         }
 
         return $this->repositoryMock;
@@ -145,15 +141,11 @@ abstract class Base extends TestCase
     protected function getPersistenceMock()
     {
         if (!isset($this->persistenceMock)) {
-            $this->persistenceMock = $this->createMock('eZ\\Publish\\SPI\\Persistence\\Handler');
+            $this->persistenceMock = $this->createMock(Handler::class);
 
             $this->persistenceMock->expects($this->any())
                 ->method('contentHandler')
                 ->will($this->returnValue($this->getPersistenceMockHandler('Content\\Handler')));
-
-//            $this->persistenceMock->expects($this->any())
-//                ->method('searchHandler')
-//                ->will($this->returnValue($this->getSPIMockHandler('Search\\Handler')));
 
             $this->persistenceMock->expects($this->any())
                 ->method('contentTypeHandler')
