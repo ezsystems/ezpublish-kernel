@@ -33,7 +33,7 @@ class DomainMapperTest extends BaseServiceMockTest
         $languageHandlerMock->expects($this->never())->method('load');
 
         $versionInfo = $this->getDomainMapper()->buildVersionInfoDomainObject($spiVersionInfo);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Repository\\Values\\Content\\VersionInfo', $versionInfo);
+        $this->assertInstanceOf(APIVersionInfo::class, $versionInfo);
 
         foreach ($expected as $expectedProperty => $expectedValue) {
             $this->assertAttributeSame(

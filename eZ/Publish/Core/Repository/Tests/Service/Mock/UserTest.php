@@ -8,7 +8,12 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\API\Repository\ContentService as APIContentService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\UserService;
 
 /**
  * Mock test case for User Service.
@@ -24,13 +29,13 @@ class UserTest extends BaseServiceMockTest
     {
         $repository = $this->getRepositoryMock();
         $userService = $this->getPartlyMockedUserService(array('loadUser'));
-        $contentService = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $contentService = $this->createMock(APIContentService::class);
         $userHandler = $this->getPersistenceMock()->userHandler();
 
-        $user = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $loadedUser = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $versionInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
-        $contentInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $user = $this->createMock(APIUser::class);
+        $loadedUser = $this->createMock(APIUser::class);
+        $versionInfo = $this->createMock(APIVersionInfo::class);
+        $contentInfo = $this->createMock(APIContentInfo::class);
 
         $user->expects($this->once())
             ->method('__get')
@@ -86,12 +91,12 @@ class UserTest extends BaseServiceMockTest
     {
         $repository = $this->getRepositoryMock();
         $userService = $this->getPartlyMockedUserService(array('loadUser'));
-        $contentService = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $contentService = $this->createMock(APIContentService::class);
 
-        $user = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $loadedUser = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $versionInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
-        $contentInfo = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $user = $this->createMock(APIUser::class);
+        $loadedUser = $this->createMock(APIUser::class);
+        $versionInfo = $this->createMock(APIVersionInfo::class);
+        $contentInfo = $this->createMock(APIContentInfo::class);
 
         $user->expects($this->once())
             ->method('__get')
@@ -139,7 +144,7 @@ class UserTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedUserService(array $methods = null)
     {
-        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\UserService')
+        return $this->getMockBuilder(UserService::class)
             ->setMethods($methods)
             ->setConstructorArgs(
                 array(

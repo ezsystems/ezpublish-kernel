@@ -9,8 +9,12 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\PermissionsCriterionHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\Values\User\Limitation as APILimitation;
 use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
 
 /**
  * Mock test case for PermissionCriterionHandler.
@@ -56,10 +60,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     public function testAddPermissionsCriterionWithBooleanPermission($permissionsCriterion)
     {
         $handler = $this->getPermissionsCriterionHandlerMock(array('getPermissionsCriterion'));
-        $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $criterionMock = $this->createMock(Criterion::class);
 
         $handler
             ->expects($this->once())
@@ -74,10 +75,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
     public function providerForTestAddPermissionsCriterion()
     {
-        $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $criterionMock = $this->createMock(Criterion::class);
 
         return array(
             array(
@@ -115,12 +113,9 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
     public function providerForTestGetPermissionsCriterion()
     {
-        $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $criterionMock = $this->createMock(Criterion::class);
         $limitationMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation')
+            ->getMockBuilder(APILimitation::class)
             ->getMockForAbstractClass();
         $limitationMock
             ->expects($this->any())
@@ -328,7 +323,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ->expects($this->any())
             ->method('getCriterion')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'),
+                $this->isInstanceOf(APILimitation::class),
                 $this->equalTo($userMock)
             )
             ->will($this->returnValue($criterionMock));
@@ -408,7 +403,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     protected function getPermissionsCriterionHandlerMock($methods = [])
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\Repository\\PermissionsCriterionHandler')
+            ->getMockBuilder(PermissionsCriterionHandler::class)
             ->setMethods($methods)
             ->setConstructorArgs(
                 [
@@ -425,7 +420,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     {
         if ($this->permissionResolverMock === null) {
             $this->permissionResolverMock = $this
-                ->getMockBuilder('eZ\Publish\API\Repository\PermissionResolver')
+                ->getMockBuilder(PermissionResolver::class)
                 ->setMethods($methods)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
@@ -440,7 +435,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     {
         if ($this->limitationServiceMock === null) {
             $this->limitationServiceMock = $this
-                ->getMockBuilder('eZ\Publish\Core\Repository\Helper\LimitationService')
+                ->getMockBuilder(LimitationService::class)
                 ->setMethods($methods)
                 ->disableOriginalConstructor()
                 ->getMock();
