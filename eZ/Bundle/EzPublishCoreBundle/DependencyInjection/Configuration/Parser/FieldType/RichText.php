@@ -10,8 +10,11 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\AbstractFieldTypeParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configuration parser handling RichText field type related config.
@@ -157,6 +160,13 @@ class RichText extends AbstractFieldTypeParser
                     ->end()
                 ->end()
             ->end();
+
+        // RichText Custom Tags configuration (list of Custom Tags enabled for current SiteAccess scope)
+        $nodeBuilder
+            ->arrayNode('custom_tags')
+                ->info('List of RichText Custom Tags enabled for the current scope. The Custom Tags must be defined in ezpublish.ezrichtext.custom_tags Node.')
+                ->scalarPrototype()->end()
+            ->end();
     }
 
     /**
@@ -196,6 +206,18 @@ class RichText extends AbstractFieldTypeParser
                 unset($scopeSettings['fieldtypes']['ezrichtext']['input_custom_tags']);
             }
 
+            if (isset($scopeSettings['fieldtypes']['ezrichtext']['custom_tags'])) {
+                $this->validateCustomTagsConfiguration(
+                    $contextualizer->getContainer(),
+                    $scopeSettings['fieldtypes']['ezrichtext']['custom_tags']
+                );
+                $contextualizer->setContextualParameter(
+                    'fieldtypes.ezrichtext.custom_tags',
+                    $currentScope,
+                    $scopeSettings['fieldtypes']['ezrichtext']['custom_tags']
+                );
+            }
+
             if (isset($scopeSettings['fieldtypes']['ezrichtext']['tags'])) {
                 foreach ($scopeSettings['fieldtypes']['ezrichtext']['tags'] as $name => $tagSettings) {
                     $contextualizer->setContextualParameter(
@@ -223,6 +245,28 @@ class RichText extends AbstractFieldTypeParser
         $contextualizer->mapConfigArray('fieldtypes.ezrichtext.output_custom_xsl', $config);
         $contextualizer->mapConfigArray('fieldtypes.ezrichtext.edit_custom_xsl', $config);
         $contextualizer->mapConfigArray('fieldtypes.ezrichtext.input_custom_xsl', $config);
+    }
+
+    /**
+     * Validate SiteAccess-defined Custom Tags configuration against global one.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param array $enabledCustomTags List of Custom Tags enabled for the current scope/SiteAccess
+     */
+    private function validateCustomTagsConfiguration(
+        ContainerInterface $container,
+        array $enabledCustomTags
+    ) {
+        $definedCustomTags = array_keys(
+            $container->getParameter(EzPublishCoreExtension::RICHTEXT_CUSTOM_TAGS_PARAMETER)
+        );
+        foreach ($enabledCustomTags as $customTagName) {
+            if (!in_array($customTagName, $definedCustomTags)) {
+                throw new InvalidConfigurationException(
+                    "Unknown RichText Custom Tag '{$customTagName}'"
+                );
+            }
+        }
     }
 
     /**

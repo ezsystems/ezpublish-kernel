@@ -22,6 +22,8 @@ parameters:
 
     # Rich Text Custom Tags global configuration
     ezplatform.ezrichtext.custom_tags: {}
+    # Rich Text Custom Tags default scope (for SiteAccess) configuration
+    ezsettings.default.fieldtypes.ezrichtext.custom_tags: []
 
     ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
 
