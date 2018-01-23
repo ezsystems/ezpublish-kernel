@@ -31,14 +31,23 @@ class TrashServiceTest extends ServiceTest
 
     public function serviceProvider()
     {
-        $rootId = 2;
+        $newParentLocationId = 2;
         $trashItemId = $locationId = 60;
         $trashItemContentInfo = $this->getContentInfo(59, md5('trash'));
+        $trashItemParentLocationId = 17;
 
         $trashItem = new TrashItem(
             array(
                 'id' => $trashItemId,
                 'contentInfo' => $trashItemContentInfo,
+                'parentLocationId' => $trashItemParentLocationId
+            )
+        );
+
+        $newParentLocation = new Location(
+            array(
+                'id' => $newParentLocationId,
+                'contentInfo' => $this->getContentInfo(53, md5('root')),
             )
         );
 
@@ -46,12 +55,15 @@ class TrashServiceTest extends ServiceTest
             array(
                 'id' => $locationId,
                 'contentInfo' => $trashItemContentInfo,
+                'parentLocationId' => $trashItemParentLocationId
             )
         );
-        $root = new Location(
+
+        $locationWithNewParent = new Location(
             array(
-                'id' => $rootId,
-                'contentInfo' => $this->getContentInfo(53, md5('root')),
+                'id' => $locationId,
+                'contentInfo' => $trashItemContentInfo,
+                'parentLocationId' => $newParentLocationId
             )
         );
 
@@ -72,13 +84,25 @@ class TrashServiceTest extends ServiceTest
             ),
             array(
                 'recover',
-                array($trashItem, $root),
+                array($trashItem, $newParentLocation),
+                $locationWithNewParent,
+                1,
+                'eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal',
+                array(
+                    'trashItemId' => $trashItemId,
+                    'newParentLocationId' => $newParentLocationId,
+                    'newLocationId' => $locationId,
+                ),
+            ),
+            array(
+                'recover',
+                array($trashItem, null),
                 $location,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal',
                 array(
                     'trashItemId' => $trashItemId,
-                    'newParentLocationId' => $rootId,
+                    'newParentLocationId' => $trashItemParentLocationId,
                     'newLocationId' => $locationId,
                 ),
             ),

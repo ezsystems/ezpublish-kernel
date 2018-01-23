@@ -117,7 +117,7 @@ class TrashService implements TrashServiceInterface
                 array(
                     'trashItemId' => $trashItem->id,
                     'contentId' => $trashItem->contentId,
-                    'newParentLocationId' => $newParentLocation !== null ? $newParentLocation->id : null,
+                    'newParentLocationId' => $newLocation->parentLocationId,
                     'newLocationId' => $newLocation->id,
                 )
             )
