@@ -40,7 +40,7 @@ class TrashServiceTest extends ServiceTest
             array(
                 'id' => $trashItemId,
                 'contentInfo' => $trashItemContentInfo,
-                'parentLocationId' => $trashItemParentLocationId
+                'parentLocationId' => $trashItemParentLocationId,
             )
         );
 
@@ -55,7 +55,7 @@ class TrashServiceTest extends ServiceTest
             array(
                 'id' => $locationId,
                 'contentInfo' => $trashItemContentInfo,
-                'parentLocationId' => $trashItemParentLocationId
+                'parentLocationId' => $trashItemParentLocationId,
             )
         );
 
@@ -63,7 +63,7 @@ class TrashServiceTest extends ServiceTest
             array(
                 'id' => $locationId,
                 'contentInfo' => $trashItemContentInfo,
-                'parentLocationId' => $newParentLocationId
+                'parentLocationId' => $newParentLocationId,
             )
         );
 
