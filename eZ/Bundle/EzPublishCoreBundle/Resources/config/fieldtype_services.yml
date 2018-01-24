@@ -131,6 +131,7 @@ services:
             - "%ezpublish.fieldType.ezrichtext.tag.namespace%"
             - "%ezpublish.fieldType.ezrichtext.embed.namespace%"
             - "@?logger"
+            - "%ezplatform.ezrichtext.custom_tags%"
 
     ezpublish.fieldType.ezrichtext.converter.template:
         class: "%ezpublish.fieldType.ezrichtext.converter.template.class%"
