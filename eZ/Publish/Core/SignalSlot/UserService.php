@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\MoveUserGroupSignal;
@@ -79,10 +80,20 @@ class UserService implements UserServiceInterface
     public function createUserGroup(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup)
     {
         $returnValue = $this->service->createUserGroup($userGroupCreateStruct, $parentGroup);
+
         $this->signalDispatcher->emit(
             new CreateUserGroupSignal(
                 array(
                     'userGroupId' => $returnValue->id,
+                )
+            )
+        );
+
+        $this->signalDispatcher->emit(
+            new PublishVersionSignal(
+                array(
+                    'contentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
+                    'versionNo' => $returnValue->getVersionInfo()->versionNo,
                 )
             )
         );
@@ -187,10 +198,20 @@ class UserService implements UserServiceInterface
     public function updateUserGroup(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct)
     {
         $returnValue = $this->service->updateUserGroup($userGroup, $userGroupUpdateStruct);
+
         $this->signalDispatcher->emit(
             new UpdateUserGroupSignal(
                 array(
                     'userGroupId' => $userGroup->id,
+                )
+            )
+        );
+
+        $this->signalDispatcher->emit(
+            new PublishVersionSignal(
+                array(
+                    'contentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
+                    'versionNo' => $returnValue->getVersionInfo()->versionNo,
                 )
             )
         );
@@ -215,10 +236,20 @@ class UserService implements UserServiceInterface
     public function createUser(UserCreateStruct $userCreateStruct, array $parentGroups)
     {
         $returnValue = $this->service->createUser($userCreateStruct, $parentGroups);
+
         $this->signalDispatcher->emit(
             new CreateUserSignal(
                 array(
                     'userId' => $returnValue->id,
+                )
+            )
+        );
+
+        $this->signalDispatcher->emit(
+            new PublishVersionSignal(
+                array(
+                    'contentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
+                    'versionNo' => $returnValue->getVersionInfo()->versionNo,
                 )
             )
         );
@@ -343,10 +374,20 @@ class UserService implements UserServiceInterface
     public function updateUser(User $user, UserUpdateStruct $userUpdateStruct)
     {
         $returnValue = $this->service->updateUser($user, $userUpdateStruct);
+
         $this->signalDispatcher->emit(
             new UpdateUserSignal(
                 array(
                     'userId' => $user->id,
+                )
+            )
+        );
+
+        $this->signalDispatcher->emit(
+            new PublishVersionSignal(
+                array(
+                    'contentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
+                    'versionNo' => $returnValue->getVersionInfo()->versionNo,
                 )
             )
         );
