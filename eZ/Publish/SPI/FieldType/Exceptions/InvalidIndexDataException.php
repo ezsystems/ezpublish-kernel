@@ -32,7 +32,11 @@ class InvalidIndexDataException extends Exception
 
     public function __construct($fieldId, $versionNo, $languageCode, Exception $previous = null)
     {
-        $message = sprintf('Field %d in the version %d for %s language can not be indexed', $fieldId, $versionNo, $languageCode);
+        $this->fieldId = $fieldId;
+        $this->versionNo = $versionNo;
+        $this->languageCode = $languageCode;
+
+        $message = sprintf('Field %d in the version %d for %s language can not be indexed', $this->fieldId, $this->versionNo, $this->languageCode);
         parent::__construct($message, 0, $previous);
     }
 
