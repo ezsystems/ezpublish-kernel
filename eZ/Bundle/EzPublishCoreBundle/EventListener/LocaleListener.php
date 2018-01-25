@@ -47,15 +47,17 @@ class LocaleListener extends BaseRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+
         if (!$request->attributes->has('_locale')) {
+            $convertedLocales = [];
             foreach ($this->configResolver->getParameter('languages') as $locale) {
                 $convertedLocale = $this->localeConverter->convertToPOSIX($locale);
                 if ($convertedLocale !== null) {
-                    // Setting the converted locale to the _locale request attribute, so that it can be properly processed by parent listener.
-                    $request->attributes->set('_locale', $convertedLocale);
-                    break;
+                    $convertedLocales[] = $convertedLocale;
                 }
             }
+
+            $request->attributes->set('_locale', $request->getPreferredLanguage($convertedLocales));
         }
 
         parent::onKernelRequest($event);
