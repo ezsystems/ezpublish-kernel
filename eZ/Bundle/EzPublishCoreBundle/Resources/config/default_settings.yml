@@ -20,6 +20,9 @@ parameters:
     ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
 
+    # Rich Text Custom Tags global configuration
+    ezplatform.ezrichtext.custom_tags: {}
+
     ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
 
     # List of content type identifiers to display as image when embedded

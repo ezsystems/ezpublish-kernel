@@ -11,11 +11,14 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SiteAccessConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class Configuration extends SiteAccessConfiguration
 {
+    const CUSTOM_TAG_ATTRIBUTE_TYPES = ['number', 'string', 'boolean', 'choice'];
+
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
      */
@@ -25,6 +28,7 @@ class Configuration extends SiteAccessConfiguration
      * @var Configuration\Suggestion\Collector\SuggestionCollectorInterface
      */
     private $suggestionCollector;
+
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[]
      */
@@ -57,6 +61,7 @@ class Configuration extends SiteAccessConfiguration
         $this->addHttpCacheSection($rootNode);
         $this->addPageSection($rootNode);
         $this->addRouterSection($rootNode);
+        $this->addRichTextSection($rootNode);
 
         // Delegate SiteAccess config to configuration parsers
         $this->mainConfigParser->addSemanticConfig($this->generateScopeBaseNode($rootNode));
@@ -463,5 +468,103 @@ EOT;
                     ->info('Router related settings')
                 ->end()
             ->end();
+    }
+
+    /**
+     * Define global Semantic Configuration for RichText.
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
+     */
+    private function addRichTextSection(ArrayNodeDefinition $rootNode)
+    {
+        $this->addCustomTagsSection(
+            $rootNode->children()->arrayNode('ezrichtext')->children()
+        )->end()->end()->end();
+    }
+
+    /**
+     * Define RichText Custom Tags Semantic Configuration.
+     *
+     * The configuration is available at:
+     * <code>
+     * ezpublish:
+     *     ezrichtext:
+     *         custom_tags:
+     * </code>
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $ezRichTextNode
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    private function addCustomTagsSection(NodeBuilder $ezRichTextNode)
+    {
+        return $ezRichTextNode
+                ->arrayNode('custom_tags')
+                // workaround: take into account Custom Tag names when merging configs
+                ->useAttributeAsKey('tag')
+                ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('template')
+                            ->isRequired()
+                        ->end()
+                        ->scalarNode('icon')
+                            ->defaultNull()
+                        ->end()
+                        ->arrayNode('attributes')
+                            ->useAttributeAsKey('attribute')
+                            ->isRequired()
+                            ->arrayPrototype()
+                                ->beforeNormalization()
+                                    ->always(
+                                        function ($v) {
+                                            // Workaround: set empty value to be able to unset it later on (see validation for "choices")
+                                            if (!isset($v['choices'])) {
+                                                $v['choices'] = [];
+                                            }
+
+                                            return $v;
+                                        }
+                                    )
+                                ->end()
+                                ->validate()
+                                    ->ifTrue(
+                                        function ($v) {
+                                            return $v['type'] === 'choice' && !empty($v['required']) && empty($v['choices']);
+                                        }
+                                    )
+                                    ->thenInvalid('List of choices for required choice type attribute has to be non-empty')
+                                ->end()
+                                ->validate()
+                                    ->ifTrue(
+                                        function ($v) {
+                                            return !empty($v['choices']) && $v['type'] !== 'choice';
+                                        }
+                                    )
+                                    ->thenInvalid('List of choices is supported by choices type only.')
+                                ->end()
+                                ->children()
+                                    ->enumNode('type')
+                                        ->isRequired()
+                                        ->values(static::CUSTOM_TAG_ATTRIBUTE_TYPES)
+                                    ->end()
+                                    ->booleanNode('required')
+                                        ->defaultFalse()
+                                    ->end()
+                                    ->scalarNode('default_value')
+                                        ->defaultNull()
+                                    ->end()
+                                    ->arrayNode('choices')
+                                        ->scalarPrototype()->end()
+                                        ->validate()
+                                            ->ifEmpty()->thenUnset()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 }
