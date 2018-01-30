@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\Core\Repository\URLWildcardService;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIURLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
@@ -790,7 +791,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedURLWildcardService(array $methods = null)
     {
-        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\URLWildcardService')
+        return $this->getMockBuilder(URLWildcardService::class)
             ->setMethods($methods)
             ->setConstructorArgs(
                 array(

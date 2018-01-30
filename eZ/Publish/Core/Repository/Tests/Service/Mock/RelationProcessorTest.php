@@ -9,10 +9,14 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\FieldTypeService;
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\SPI\FieldType\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
 
@@ -137,8 +141,8 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $locationHandler = $this->getPersistenceMock()->locationHandler();
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
-        $fieldValueMock = $this->getMockForAbstractClass('eZ\\Publish\\Core\\FieldType\\Value');
-        $fieldTypeMock = $this->createMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
+        $fieldValueMock = $this->getMockForAbstractClass(Value::class);
+        $fieldTypeMock = $this->createMock(FieldType::class);
         $locationCallCount = 0;
 
         $fieldTypeMock->expects($this->once())
@@ -205,8 +209,8 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $locationHandler = $this->getPersistenceMock()->locationHandler();
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
-        $fieldValueMock = $this->getMockForAbstractClass('eZ\\Publish\\Core\\FieldType\\Value');
-        $fieldTypeMock = $this->createMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
+        $fieldValueMock = $this->getMockForAbstractClass(Value::class);
+        $fieldTypeMock = $this->createMock(FieldType::class);
 
         $fieldTypeMock->expects($this->once())
             ->method('getRelations')
@@ -268,7 +272,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
-        $contentTypeMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
+        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
 
         $contentTypeMock->expects($this->once())
             ->method('getFieldDefinition')
@@ -333,7 +337,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
-        $contentTypeMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
+        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
 
         $existingRelations = array(
             $this->getStubbedRelation(1, Relation::COMMON, null, 10),
@@ -428,7 +432,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
-        $contentTypeMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
+        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
 
         $existingRelations = array(
             $this->getStubbedRelation(1, Relation::COMMON, null, 10),
@@ -550,7 +554,7 @@ class RelationProcessorTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedRelationProcessor(array $methods = null)
     {
-        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\RelationProcessor')
+        return $this->getMockBuilder(RelationProcessor::class)
             ->setMethods($methods)
             ->setConstructorArgs(
                 array(
@@ -565,6 +569,6 @@ class RelationProcessorTest extends BaseServiceMockTest
      */
     protected function getFieldTypeServiceMock()
     {
-        return $this->createMock('eZ\\Publish\\Core\\Repository\\FieldTypeService');
+        return $this->createMock(FieldTypeService::class);
     }
 }

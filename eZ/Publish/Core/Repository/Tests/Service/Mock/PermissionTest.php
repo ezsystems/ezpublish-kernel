@@ -7,10 +7,16 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\Repository as CoreRepository;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\SPI\Limitation\Type;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\Policy;
@@ -508,7 +514,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $limitationTypeMock = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
+        $limitationTypeMock = $this->createMock(Type::class);
         $limitationService = $this->getLimitationServiceMock();
         $roleDomainMapper = $this->getRoleDomainMapperMock();
         $permissionResolverMock = $this->getPermissionResolverMock(['getCurrentUserReference']);
@@ -623,7 +629,7 @@ class PermissionTest extends BaseServiceMockTest
             ->will($this->returnValue($permissionSets));
 
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
-        $valueObject = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ValueObject');
+        $valueObject = $this->getMockForAbstractClass(ValueObject::class);
 
         self::assertEquals(
             $result,
@@ -645,7 +651,7 @@ class PermissionTest extends BaseServiceMockTest
             ]
         );
 
-        $policyMock = $this->getMockBuilder('eZ\\Publish\\SPI\\Persistence\\User\\Policy')
+        $policyMock = $this->getMockBuilder(Policy::class)
             ->setMethods(array('getLimitations'))
             ->setConstructorArgs(array())
             ->disableOriginalConstructor()
@@ -673,9 +679,7 @@ class PermissionTest extends BaseServiceMockTest
             ->will($this->returnValue(new UserReference(14)));
 
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
-        $valueObject = $this->getMockForAbstractClass(
-            'eZ\\Publish\\API\\Repository\\Values\\ValueObject'
-        );
+        $valueObject = $this->getMockForAbstractClass(ValueObject::class);
 
         self::assertTrue(
             $permissionResolverMock->canUser(
@@ -692,19 +696,19 @@ class PermissionTest extends BaseServiceMockTest
      */
     private function getPermissionSetsMock()
     {
-        $roleLimitationMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation');
+        $roleLimitationMock = $this->createMock(Limitation::class);
         $roleLimitationMock
             ->expects($this->any())
             ->method('getIdentifier')
             ->will($this->returnValue('test-role-limitation-identifier'));
 
-        $policyLimitationMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation');
+        $policyLimitationMock = $this->createMock(Limitation::class);
         $policyLimitationMock
             ->expects($this->any())
             ->method('getIdentifier')
             ->will($this->returnValue('test-policy-limitation-identifier'));
 
-        $policyMock = $this->getMockBuilder('eZ\\Publish\\SPI\\Persistence\\User\\Policy')
+        $policyMock = $this->getMockBuilder(Policy::class)
             ->setMethods(array('getLimitations'))
             ->setConstructorArgs(array())
             ->getMock();
@@ -815,7 +819,7 @@ class PermissionTest extends BaseServiceMockTest
     public function testCanUserComplex(array $roleLimitationEvaluations, array $policyLimitationEvaluations, $userCan)
     {
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
-        $valueObject = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\ValueObject');
+        $valueObject = $this->createMock(ValueObject::class);
         $limitationServiceMock = $this->getLimitationServiceMock();
         $permissionResolverMock = $this->getPermissionResolverMock(
             [
@@ -839,7 +843,7 @@ class PermissionTest extends BaseServiceMockTest
 
         $invocation = 0;
         for ($i = 0; $i < count($permissionSets); ++$i) {
-            $limitation = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
+            $limitation = $this->createMock(Type::class);
             $limitation
                 ->expects($this->once())
                 ->method('evaluate')
@@ -861,7 +865,7 @@ class PermissionTest extends BaseServiceMockTest
                 $limitations = $policy->getLimitations();
                 for ($k = 0; $k < count($limitations); ++$k) {
                     $limitationsPass = true;
-                    $limitation = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
+                    $limitation = $this->createMock(Type::class);
                     $limitation
                         ->expects($this->once())
                         ->method('evaluate')
@@ -962,9 +966,7 @@ class PermissionTest extends BaseServiceMockTest
     protected function getUserReferenceMock()
     {
         if ($this->userReferenceMock === null) {
-            $this->userReferenceMock = $this
-                ->getMockBuilder('eZ\Publish\API\Repository\Values\User\UserReference')
-                ->getMock();
+            $this->userReferenceMock = $this->createMock(UserReference::class);
         }
 
         return $this->userReferenceMock;
@@ -979,7 +981,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         if ($this->repositoryMock === null) {
             $this->repositoryMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
+                ->getMockBuilder(CoreRepository::class)
                 ->setMethods(['getPermissionResolver'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -997,7 +999,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         if ($this->roleDomainMapperMock === null) {
             $this->roleDomainMapperMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper')
+                ->getMockBuilder(RoleDomainMapper::class)
                 ->setMethods($methods)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -1015,7 +1017,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         if ($this->limitationServiceMock === null) {
             $this->limitationServiceMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\LimitationService')
+                ->getMockBuilder(LimitationService::class)
                 ->setMethods($methods)
                 ->disableOriginalConstructor()
                 ->getMock();
