@@ -8,11 +8,14 @@
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use DirectoryIterator;
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use DOMDocument;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\SPI\FieldType\ValidationError;
 
 /**
  * Integration test for use field type.
@@ -616,6 +619,107 @@ EOT;
             str_replace('[ObjectId]', $objectId, $expected),
             $test->getField('description')->value->xml->saveXML()
         );
+    }
+
+    /**
+     * @param string $xmlDocumentPath
+     * @dataProvider providerForTestCreateContentWithValidCustomTag
+     */
+    public function testCreateContentWithValidCustomTag($xmlDocumentPath)
+    {
+        $validXmlDocument = $this->createDocument($xmlDocumentPath);
+        $this->createContent(new RichTextValue($validXmlDocument));
+    }
+
+    /**
+     * Data provider for testCreateContentWithValidCustomTag.
+     *
+     * @return array
+     */
+    public function providerForTestCreateContentWithValidCustomTag()
+    {
+        $data = [];
+        $iterator = new DirectoryIterator(__DIR__ . '/_fixtures/ezrichtext/custom_tags/valid');
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isFile() && $fileInfo->getExtension() === 'xml') {
+                $data[] = [
+                    $fileInfo->getRealPath(),
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param string $xmlDocumentPath
+     * @param string $expectedValidationMessage
+     *
+     * @dataProvider providerForTestCreateContentWithInvalidCustomTag
+     */
+    public function testCreateContentWithInvalidCustomTag(
+        $xmlDocumentPath,
+        $expectedValidationMessage
+    ) {
+        try {
+            $invalidXmlDocument = $this->createDocument($xmlDocumentPath);
+            $this->createContent(new RichTextValue($invalidXmlDocument));
+        } catch (ContentFieldValidationException $e) {
+            // get first nested ValidationError
+            /** @var \eZ\Publish\SPI\FieldType\ValidationError $error */
+            $error = current(current(current($e->getFieldErrors())));
+
+            self::assertEquals(
+                $expectedValidationMessage,
+                $error->getTranslatableMessage()->message
+            );
+
+            return;
+        }
+
+        self::fail("Expected ValidationError '{$expectedValidationMessage}' did not occur.");
+    }
+
+    /**
+     * Data provider for testCreateContentWithInvalidCustomTag.
+     *
+     * @return array
+     */
+    public function providerForTestCreateContentWithInvalidCustomTag()
+    {
+        $data = [
+            [
+                __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/unknown_tag.xml',
+                "Unknown RichText Custom Tag 'unknown_tag'",
+            ],
+            [
+                __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/equation.xml',
+                "The attribute 'processor' of RichText Custom Tag 'equation' cannot be empty",
+            ],
+            [
+                __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/video.xml',
+                "Unknown attribute 'unknown_attribute' of RichText Custom Tag 'video'",
+            ],
+        ];
+
+        return $data;
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @return \DOMDocument
+     */
+    protected function createDocument($filename)
+    {
+        $document = new DOMDocument();
+
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = false;
+
+        $document->loadXml(file_get_contents($filename), LIBXML_NOENT);
+
+        return $document;
     }
 
     protected function checkSearchEngineSupport()

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <eztemplate name="video">
+    <ezcontent>
+      <para>Title: Test</para>
+      <para>Width: 640</para>
+      <para>Autoplay: false</para>
+    </ezcontent>
+    <ezconfig>
+      <ezvalue key="title">Test</ezvalue>
+      <ezvalue key="width">640</ezvalue>
+      <ezvalue key="autoplay">false</ezvalue>
+    </ezconfig>
+  </eztemplate>
+</section>

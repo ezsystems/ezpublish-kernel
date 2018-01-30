@@ -266,3 +266,8 @@ services:
         class: "%ezpublish.fieldType.ezselection.nameable_field.class%"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezselection}
+
+    # Symfony 3.4+ service definitions:
+    eZ\Publish\Core\FieldType\RichText\CustomTagsValidator:
+        public: false
+        arguments: ['%ezplatform.ezrichtext.custom_tags%']
