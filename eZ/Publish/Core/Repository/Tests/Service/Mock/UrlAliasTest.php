@@ -2683,7 +2683,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $urlAliases = $urlAliasService->listGlobalAliases();
 
         self::assertCount(1, $urlAliases);
-        self::assertInstanceOf(URLAlias::class,$urlAliases[0]);
+        self::assertInstanceOf(URLAlias::class, $urlAliases[0]);
     }
 
     /**
@@ -2984,7 +2984,7 @@ class UrlAliasTest extends BaseServiceMockTest
 
         $urlAlias = $urlAliasService->lookup('jedan/two', $languageCode);
 
-        self::assertInstanceOf(URLAlias::class,$urlAlias);
+        self::assertInstanceOf(URLAlias::class, $urlAlias);
     }
 
     /**
@@ -3330,7 +3330,7 @@ class UrlAliasTest extends BaseServiceMockTest
             'alwaysAvailable'
         );
 
-        self::assertInstanceOf(URLAlias::class,$urlAlias);
+        self::assertInstanceOf(URLAlias::class, $urlAlias);
     }
 
     /**
