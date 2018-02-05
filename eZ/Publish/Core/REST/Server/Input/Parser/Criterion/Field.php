@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field as FieldCriterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
@@ -40,7 +39,7 @@ class Field extends BaseParser
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
@@ -55,17 +54,11 @@ class Field extends BaseParser
 
         $operator = $this->getOperator($fieldData['operator']);
 
-        $values = is_array($fieldData['value']) ? $fieldData['value'] : [$fieldData['value']];
-        $criteria = [];
-        foreach ($values as $value) {
-            $criteria[] = new FieldCriterion(
-                $fieldData['name'],
-                $operator,
-                $value
-            );
-        }
-
-        return new LogicalAnd($criteria);
+        return new FieldCriterion(
+            $fieldData['name'],
+            $operator,
+            $fieldData['value']
+        );
     }
 
     /**

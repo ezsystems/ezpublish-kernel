@@ -30,6 +30,10 @@ class LogicalNot extends CriterionParser
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
+        if (array_key_exists('LogicalNot', $data) && is_array($data['LogicalNot'])) {
+            $data['NOT'] = $data['LogicalNot'];
+        }
+
         if (!array_key_exists('NOT', $data) && !is_array($data['NOT'])) {
             throw new Exceptions\Parser('Invalid <NOT> format');
         }
