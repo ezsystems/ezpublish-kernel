@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\Core\Repository\LanguageService;
+use eZ\Publish\Core\Repository\LocationService;
 use eZ\Publish\Core\Repository\URLAliasService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias as SPIUrlAlias;
@@ -28,7 +30,7 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testConstructor()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $languageServiceMock = $this->createMock('eZ\\Publish\\Core\\Repository\\LanguageService');
+        $languageServiceMock = $this->createMock(LanguageService::class);
         /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler $urlAliasHandler */
         $urlAliasHandler = $this->getPersistenceMockHandler('Content\\UrlAlias\\Handler');
         $settings = array('settings');
@@ -90,15 +92,12 @@ class UrlAliasTest extends BaseServiceMockTest
         $mockedService
             ->expects($this->once())
             ->method('extractPath')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias'), null)
+            ->with($this->isInstanceOf(SPIUrlAlias::class), null)
             ->will($this->returnValue('path'));
 
         $urlAlias = $mockedService->load(42);
 
-        self::assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
-            $urlAlias
-        );
+        self::assertInstanceOf(URLAlias::class, $urlAlias);
     }
 
     /**
@@ -779,7 +778,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $urlAliases = $urlAliasService->listLocationAliases($location, false, null);
 
         self::assertCount(1, $urlAliases);
-        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias', $urlAliases[0]);
+        self::assertInstanceOf(URLAlias::class, $urlAliases[0]);
         self::assertEquals('/jedan/dva/tri', $urlAliases[0]->path);
     }
 
@@ -847,7 +846,7 @@ class UrlAliasTest extends BaseServiceMockTest
         );
 
         self::assertCount(1, $urlAliases);
-        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias', $urlAliases[0]);
+        self::assertInstanceOf(URLAlias::class, $urlAliases[0]);
         self::assertEquals('/jedan/dva/tri', $urlAliases[0]->path);
     }
 
@@ -2684,10 +2683,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $urlAliases = $urlAliasService->listGlobalAliases();
 
         self::assertCount(1, $urlAliases);
-        self::assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
-            $urlAliases[0]
-        );
+        self::assertInstanceOf(URLAlias::class, $urlAliases[0]);
     }
 
     /**
@@ -2988,10 +2984,7 @@ class UrlAliasTest extends BaseServiceMockTest
 
         $urlAlias = $urlAliasService->lookup('jedan/two', $languageCode);
 
-        self::assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
-            $urlAlias
-        );
+        self::assertInstanceOf(URLAlias::class, $urlAlias);
     }
 
     /**
@@ -3216,10 +3209,7 @@ class UrlAliasTest extends BaseServiceMockTest
             'alwaysAvailable'
         );
 
-        self::assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
-            $urlAlias
-        );
+        self::assertInstanceOf(URLAlias::class, $urlAlias);
     }
 
     /**
@@ -3340,10 +3330,7 @@ class UrlAliasTest extends BaseServiceMockTest
             'alwaysAvailable'
         );
 
-        self::assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
-            $urlAlias
-        );
+        self::assertInstanceOf(URLAlias::class, $urlAlias);
     }
 
     /**
@@ -3453,7 +3440,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService(array('createUrlAlias'));
         $location = $this->getLocationStub();
-        $locationServiceMock = $this->createMock('eZ\\Publish\\Core\\Repository\\LocationService');
+        $locationServiceMock = $this->createMock(LocationService::class);
 
         $locationServiceMock->expects(
             $this->exactly(2)
@@ -3537,7 +3524,7 @@ class UrlAliasTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedURLAliasServiceService(array $methods = null)
     {
-        $languageServiceMock = $this->createMock('eZ\\Publish\\Core\\Repository\\LanguageService');
+        $languageServiceMock = $this->createMock(LanguageService::class);
 
         $languageServiceMock->expects(
             $this->once()
@@ -3555,7 +3542,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->returnValue($languageServiceMock)
         );
 
-        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\URLAliasService')
+        return $this->getMockBuilder(URLAliasService::class)
             ->setMethods($methods)
             ->setConstructorArgs(
                 array(
