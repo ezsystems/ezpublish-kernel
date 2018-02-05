@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ScaleExactFilterLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $innerLoader;
 

@@ -22,17 +22,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LocaleListenerTest extends TestCase
 {
     /**
-     * @var LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeConverter;
 
     /**
-     * @var ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestStack;
 

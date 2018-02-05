@@ -22,12 +22,12 @@ use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 class BinaryLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $ioService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionGuesser;
 

@@ -20,7 +20,7 @@ class AliasCleanerTest extends TestCase
     private $aliasCleaner;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resolver;
 

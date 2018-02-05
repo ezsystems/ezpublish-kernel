@@ -26,7 +26,7 @@ use Symfony\Component\Routing\RequestContext;
 class IORepositoryResolverTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $ioService;
 
@@ -36,7 +36,7 @@ class IORepositoryResolverTest extends TestCase
     private $requestContext;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
@@ -50,10 +50,10 @@ class IORepositoryResolverTest extends TestCase
      */
     private $filterConfiguration;
 
-    /** @var \eZ\Publish\SPI\Variation\VariationPurger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\SPI\Variation\VariationPurger|\PHPUnit\Framework\MockObject\MockObject */
     protected $variationPurger;
 
-    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $variationPathGenerator;
 
     protected function setUp()

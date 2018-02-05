@@ -24,17 +24,17 @@ use PHPUnit\Framework\TestCase;
 class RequestEventListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     private $logger;
 
@@ -54,7 +54,7 @@ class RequestEventListenerTest extends TestCase
     private $event;
 
     /**
-     * @var HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpKernel;
 

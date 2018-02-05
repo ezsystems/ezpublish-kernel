@@ -39,7 +39,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class ExceptionListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Translation\TranslatorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Translation\TranslatorInterface
      */
     private $translator;
 

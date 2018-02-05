@@ -21,7 +21,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
     /**
      * @param string $matcherServiceIdentifier
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getResolverMock($matcherServiceIdentifier)
     {
@@ -59,7 +59,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLocationMock(array $properties = array())
     {
@@ -72,7 +72,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     protected function getContentInfoMock(array $properties = array())
     {
@@ -85,7 +85,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getBlockMock(array $properties = array())
     {

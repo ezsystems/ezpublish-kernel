@@ -24,12 +24,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class ViewControllerListenerTest extends TestCase
 {
     /**
-     * @var \Symfony\Component\HttpKernel\Controller\ControllerResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\HttpKernel\Controller\ControllerResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $controllerResolver;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -39,7 +39,7 @@ class ViewControllerListenerTest extends TestCase
     private $controllerListener;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Event\FilterControllerEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\HttpKernel\Event\FilterControllerEvent|\PHPUnit\Framework\MockObject\MockObject
      */
     private $event;
 
@@ -48,16 +48,16 @@ class ViewControllerListenerTest extends TestCase
      */
     private $request;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry|\PHPUnit\Framework\MockObject\MockObject */
     private $viewBuilderRegistry;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject */
     private $viewConfigurator;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $viewBuilderMock;
 
-    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $eventDispatcher;
 
     protected function setUp()

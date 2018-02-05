@@ -28,12 +28,12 @@ class BackgroundIndexingTerminateListenerTest extends TestCase
     protected $listener;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistenceMock;
 
     /**
-     * @var \eZ\Publish\SPI\Search\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Search\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchMock;
 
@@ -87,7 +87,7 @@ class BackgroundIndexingTerminateListenerTest extends TestCase
      * @dataProvider indexingProvider
      *
      * @param array|null $value
-     * @param \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject|null $logger
+     * @param \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject|null $logger
      */
     public function testIndexing(array $values = null, $logger = null)
     {

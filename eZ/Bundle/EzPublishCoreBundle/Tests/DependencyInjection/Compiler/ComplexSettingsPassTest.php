@@ -17,7 +17,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 
 class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
 {
-    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParserInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParserInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $parserMock;
 
     protected function registerCompilerPass(ContainerBuilder $container)
