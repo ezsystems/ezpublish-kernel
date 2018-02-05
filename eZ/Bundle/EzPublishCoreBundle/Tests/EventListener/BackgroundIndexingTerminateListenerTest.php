@@ -171,8 +171,8 @@ class BackgroundIndexingTerminateListenerTest extends TestCase
      * @dataProvider indexDeleteProvider
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo|\eZ\Publish\SPI\Persistence\Content\Location $value
-     * @param \PHPUnit_Framework_MockObject_Stub $infoReturn
-     * @param \PHPUnit_Framework_MockObject_Stub|null $contentReturn
+     * @param \PHPUnit\Framework\MockObject\Stub $infoReturn
+     * @param \PHPUnit\Framework\MockObject\Stub|null $contentReturn
      */
     public function testIndexDelete($value, $infoReturn, $contentReturn = null)
     {
