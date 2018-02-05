@@ -14,13 +14,14 @@ use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 {
-    /** @var ConfigurationFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigurationFactory|MockObject */
     protected $metadataConfigurationFactoryMock;
 
-    /** @var ConfigurationFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigurationFactory|MockObject */
     protected $binarydataConfigurationFactoryMock;
 
     public function setUp()
