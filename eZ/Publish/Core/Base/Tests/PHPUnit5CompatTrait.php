@@ -9,6 +9,8 @@ namespace eZ\Publish\Core\Base\Tests;
 
 /**
  * Trait for PHPUnit 5 Forward Compatibility, for PHPUnit 4.8 use and up.
+ *
+ * @deprecated since 7.1, will be removed in 8.0. We are using PHPUnit 6, so this trait is obsolete.
  */
 trait PHPUnit5CompatTrait
 {
