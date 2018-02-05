@@ -30,17 +30,17 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     protected $suffixes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB');
 
     /**
-     * @param TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translatorMock;
 
     /**
-     * @param ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configResolverInterfaceMock;
 
     /**
-     * @param LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param LocaleConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeConverterInterfaceMock;
 
@@ -81,7 +81,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     }
 
     /**
-     * @return ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getConfigResolverInterfaceMock()
     {
@@ -95,7 +95,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     }
 
     /**
-     * @return LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocaleConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLocaleConverterInterfaceMock()
     {
@@ -115,7 +115,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     }
 
     /**
-     * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTranslatorInterfaceMock()
     {

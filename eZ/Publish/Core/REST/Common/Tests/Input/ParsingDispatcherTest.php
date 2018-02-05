@@ -99,7 +99,7 @@ class ParsingDispatcherTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\Input\Parser|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\REST\Common\Input\Parser|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createParserMock()
     {

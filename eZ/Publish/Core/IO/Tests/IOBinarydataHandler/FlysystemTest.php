@@ -17,10 +17,10 @@ use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 
 class FlysystemTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\IO\IOBinarydataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOBinarydataHandler|\PHPUnit\Framework\MockObject\MockObject */
     private $handler;
 
-    /** @var \League\Flysystem\FilesystemInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \League\Flysystem\FilesystemInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $filesystem;
 
     public function setUp()

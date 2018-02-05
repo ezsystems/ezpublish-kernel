@@ -14,13 +14,13 @@ use eZ\Publish\Core\IO\UrlDecorator;
 
 class UrlRedecoratorTest extends TestCase
 {
-    /** @var UrlRedecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRedecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $redecorator;
 
-    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $sourceDecoratorMock;
 
-    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $targetDecoratorMock;
 
     public function setUp()

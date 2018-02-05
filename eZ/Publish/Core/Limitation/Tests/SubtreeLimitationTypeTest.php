@@ -33,7 +33,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
 class SubtreeLimitationTypeTest extends Base
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $locationHandlerMock;
 

@@ -72,7 +72,7 @@ class SectionTest extends BaseTest
      *
      * @param int $sectionId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateLocationForSectionId($sectionId)
     {

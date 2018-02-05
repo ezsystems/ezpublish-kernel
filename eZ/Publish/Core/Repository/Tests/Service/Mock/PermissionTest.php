@@ -104,7 +104,7 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function testHasAccessReturnsTrue(array $roles, array $roleAssignments)
     {
-        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $userReferenceMock = $this->getUserReferenceMock();
         $mockedService = $this->getPermissionResolverMock(null);
@@ -181,7 +181,7 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function testHasAccessReturnsFalse(array $roles, array $roleAssignments)
     {
-        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $userReferenceMock = $this->getUserReferenceMock();
         $service = $this->getPermissionResolverMock(null);
@@ -215,7 +215,7 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function testHasAccessReturnsFalseButSudoSoTrue()
     {
-        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $service = $this->getPermissionResolverMock(null);
         $repositoryMock = $this->getRepositoryMock();
@@ -299,7 +299,7 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function testHasAccessReturnsPermissionSets(array $roles, array $roleAssignments)
     {
-        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $roleDomainMapper = $this->getRoleDomainMapperMock(['buildDomainPolicyObject']);
         $permissionResolverMock = $this->getPermissionResolverMock(['getCurrentUserReference']);
@@ -414,7 +414,7 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function testHasAccessReturnsException(array $roles, array $roleAssignments)
     {
-        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $roleDomainMapper = $this->getRoleDomainMapperMock();
         $permissionResolverMock = $this->getPermissionResolverMock(['getCurrentUserReference']);
@@ -512,7 +512,7 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function testHasAccessReturnsPermissionSetsWithRoleLimitation(array $roles, array $roleAssignments)
     {
-        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $limitationTypeMock = $this->createMock(Type::class);
         $limitationService = $this->getLimitationServiceMock();
@@ -939,7 +939,7 @@ class PermissionTest extends BaseServiceMockTest
     protected $permissionResolverMock;
 
     /**
-     * @return \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPermissionResolverMock($methods = [])
     {
@@ -975,7 +975,7 @@ class PermissionTest extends BaseServiceMockTest
     protected $repositoryMock;
 
     /**
-     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock($methods = [])
     {
@@ -993,7 +993,7 @@ class PermissionTest extends BaseServiceMockTest
     protected $roleDomainMapperMock;
 
     /**
-     * @return \eZ\Publish\Core\Repository\Helper\RoleDomainMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\RoleDomainMapper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRoleDomainMapperMock($methods = [])
     {
@@ -1011,7 +1011,7 @@ class PermissionTest extends BaseServiceMockTest
     protected $limitationServiceMock;
 
     /**
-     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLimitationServiceMock($methods = [])
     {

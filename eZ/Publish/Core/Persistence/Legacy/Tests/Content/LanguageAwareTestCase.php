@@ -81,12 +81,12 @@ abstract class LanguageAwareTestCase extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fieldNameGeneratorMock;
 
     /**
-     * @return \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldNameGeneratorMock()
     {

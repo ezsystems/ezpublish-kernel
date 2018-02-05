@@ -70,7 +70,7 @@ class UserTest extends BaseServiceMockTest
             ->method('getContentService')
             ->will($this->returnValue($contentService));
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $userHandler */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $userHandler */
         $userHandler->expects($this->once())
             ->method('delete')
             ->with(42);
@@ -140,7 +140,7 @@ class UserTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\UserService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\UserService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedUserService(array $methods = null)
     {

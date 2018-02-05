@@ -32,7 +32,7 @@ class SectionTest extends BaseTest
      *
      * @param string $sectionIdentifier
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForSectionIdentifier($sectionIdentifier)
     {

@@ -28,7 +28,7 @@ class PageServiceTest extends TestCase
     const PAGESERVICE_CLASS = PageService::class;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storageGateway;
 
@@ -48,7 +48,7 @@ class PageServiceTest extends TestCase
     protected $blockDefinition;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\ContentService
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
 

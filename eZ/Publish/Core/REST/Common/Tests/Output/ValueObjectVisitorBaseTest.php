@@ -40,12 +40,12 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected $requestParser;
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $routerMock;
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templatedRouterMock;
 
@@ -58,7 +58,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     /**
      * Gets the visitor mock.
      *
-     * @return \eZ\Publish\Core\REST\Common\Output\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\REST\Common\Output\Visitor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getVisitorMock()
     {
@@ -75,7 +75,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Symfony\Component\HttpFoundation\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getResponseMock()
     {
@@ -139,7 +139,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRequestParser()
     {
@@ -151,7 +151,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
-     * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRouterMock()
     {
@@ -191,7 +191,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
-     * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTemplatedRouterMock()
     {

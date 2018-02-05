@@ -28,13 +28,13 @@ class IOServiceTest extends TestCase
     /** @var IOService */
     protected $IOService;
 
-    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataHandlerMock;
 
-    /** @var \eZ\Publish\Core\IO\IOBinarydataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOBinarydataHandler|\PHPUnit\Framework\MockObject\MockObject */
     protected $binarydataHandlerMock;
 
-    /** @var MimeTypeDetector|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MimeTypeDetector|\PHPUnit\Framework\MockObject\MockObject */
     protected $mimeTypeDetectorMock;
 
     public function setUp()

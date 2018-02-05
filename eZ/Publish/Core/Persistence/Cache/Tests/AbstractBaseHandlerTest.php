@@ -30,12 +30,12 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractBaseHandlerTest extends TestCase
 {
     /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistenceHandlerMock;
 
@@ -45,7 +45,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
     protected $persistenceCacheHandler;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 

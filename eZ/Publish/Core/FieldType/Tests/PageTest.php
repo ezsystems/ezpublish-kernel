@@ -28,7 +28,7 @@ class PageTest extends FieldTypeTest
      *
      * @see getPageServiceMock()
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $pageServiceMock;
 

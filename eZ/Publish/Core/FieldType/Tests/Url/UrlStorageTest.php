@@ -192,7 +192,7 @@ class UrlStorageTest extends TestCase
 
     /**
      * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
-     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedStorage(StorageGateway $gateway)
     {
@@ -216,12 +216,12 @@ class UrlStorageTest extends TestCase
     }
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @return \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLoggerMock()
     {
@@ -235,12 +235,12 @@ class UrlStorageTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $gatewayMock;
 
     /**
-     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getGatewayMock()
     {

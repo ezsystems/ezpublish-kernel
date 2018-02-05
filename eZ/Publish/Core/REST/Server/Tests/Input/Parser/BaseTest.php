@@ -19,12 +19,12 @@ use eZ\Publish\Core\REST\Common\RequestParser;
 abstract class BaseTest extends ParentBaseTest
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $parsingDispatcherMock;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestParserMock;
 
@@ -63,7 +63,7 @@ abstract class BaseTest extends ParentBaseTest
     /**
      * Get the Request parser.
      *
-     * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRequestParserMock()
     {

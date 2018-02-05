@@ -80,7 +80,7 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testLoad()
     {
         $mockedService = $this->getPartlyMockedURLAliasServiceService(array('extractPath'));
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
 
         $urlAliasHandlerMock
@@ -108,7 +108,7 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testLoadThrowsNotFoundException()
     {
         $mockedService = $this->getPartlyMockedURLAliasServiceService(array('extractPath'));
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
 
         $urlAliasHandlerMock
@@ -201,7 +201,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $spiAliasList = array(new SPIUrlAlias(array('isCustom' => true)));
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
 
         $repositoryMock
@@ -231,7 +231,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $spiAliasList = array(new SPIUrlAlias(array('isCustom' => true)));
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
 
         $repositoryMock
@@ -3176,7 +3176,7 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
         $location = $this->getLocationStub();
 
@@ -3222,7 +3222,7 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
         $location = $this->getLocationStub();
 
@@ -3298,7 +3298,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $resource = 'module:content/search';
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
 
         $repositoryMock
@@ -3344,7 +3344,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $resource = 'module:content/search';
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
 
         $repositoryMock
@@ -3520,7 +3520,7 @@ class UrlAliasTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\URLAliasService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\URLAliasService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedURLAliasServiceService(array $methods = null)
     {

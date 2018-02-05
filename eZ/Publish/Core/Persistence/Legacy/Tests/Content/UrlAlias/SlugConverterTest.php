@@ -284,12 +284,12 @@ class SlugConverterTest extends TestCase
     protected $slugConverter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $slugConverterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transformationProcessorMock;
 
@@ -311,7 +311,7 @@ class SlugConverterTest extends TestCase
     /**
      * @param array $methods
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSlugConverterMock(array $methods = array())
     {
@@ -331,7 +331,7 @@ class SlugConverterTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTransformationProcessorMock()
     {

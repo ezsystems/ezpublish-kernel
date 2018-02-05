@@ -398,7 +398,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
      *
      * @param string[]|null $methods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\PermissionsCriterionHandler
      */
     protected function getPermissionsCriterionHandlerMock($methods = [])
     {

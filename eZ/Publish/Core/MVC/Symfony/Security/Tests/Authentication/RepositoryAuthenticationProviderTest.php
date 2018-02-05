@@ -24,7 +24,7 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 class RepositoryAuthenticationProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface
      */
     private $encoderFactory;
 
@@ -34,7 +34,7 @@ class RepositoryAuthenticationProviderTest extends TestCase
     private $authProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\Repository
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
      */
     private $repository;
 

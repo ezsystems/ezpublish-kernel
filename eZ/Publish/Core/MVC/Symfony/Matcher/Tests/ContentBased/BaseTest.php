@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 abstract class BaseTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
@@ -35,7 +35,7 @@ abstract class BaseTest extends TestCase
     /**
      * @param array $matchingConfig
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartiallyMockedViewProvider(array $matchingConfig = array())
     {
@@ -52,7 +52,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
@@ -73,7 +73,7 @@ abstract class BaseTest extends TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLocationMock(array $properties = array())
     {
@@ -86,7 +86,7 @@ abstract class BaseTest extends TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentInfoMock(array $properties = array())
     {

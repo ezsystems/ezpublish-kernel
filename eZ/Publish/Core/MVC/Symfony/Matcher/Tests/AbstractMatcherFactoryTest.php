@@ -161,7 +161,7 @@ abstract class AbstractMatcherFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
@@ -171,7 +171,7 @@ abstract class AbstractMatcherFactoryTest extends TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     protected function getContentView(array $contentInfoProperties = [], array $locationProperties = [])
     {
@@ -195,7 +195,7 @@ abstract class AbstractMatcherFactoryTest extends TestCase
     /**
      * @param array $blockProperties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\BlockView
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\BlockView
      */
     protected function getBlockView(array $blockProperties = array())
     {

@@ -69,7 +69,7 @@ class HashGeneratorTest extends TestCase
             $this->createMock(IdentityAware::class),
         );
 
-        /** @var $definer \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $definer \PHPUnit\Framework\MockObject\MockObject */
         foreach ($identityDefiners as $definer) {
             $hashGenerator->setIdentityDefiner($definer);
             $definer

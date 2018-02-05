@@ -15,19 +15,19 @@ use eZ\Publish\SPI\Persistence\Handler as SPIHandler;
 abstract class Base extends TestCase
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $persistenceHandlerMock;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\User\User|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\Values\User\User|\PHPUnit\Framework\MockObject\MockObject
      */
     private $userMock;
 
     /**
      * @param array $mockMethods For specifying the methods to mock, all by default
      *
-     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getPersistenceMock(array $mockMethods = array())
     {
@@ -41,7 +41,7 @@ abstract class Base extends TestCase
     /**
      * @param array $mockMethods For specifying the methods to mock, all by default
      *
-     * @return \eZ\Publish\API\Repository\Values\User\User|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\Values\User\User|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getUserMock(array $mockMethods = array())
     {

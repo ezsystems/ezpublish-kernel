@@ -339,7 +339,7 @@ class RichTextStorageTest extends TestCase
 
     /**
      * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
-     * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedStorage(StorageGateway $gateway)
     {
@@ -363,12 +363,12 @@ class RichTextStorageTest extends TestCase
     }
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @return \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLoggerMock()
     {
@@ -382,12 +382,12 @@ class RichTextStorageTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $gatewayMock;
 
     /**
-     * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getGatewayMock()
     {

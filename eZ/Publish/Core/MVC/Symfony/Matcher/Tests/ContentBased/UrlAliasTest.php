@@ -61,7 +61,7 @@ class UrlAliasTest extends BaseTest
      *
      * @param string $path
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForUrlAlias($path)
     {

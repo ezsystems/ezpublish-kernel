@@ -28,22 +28,22 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 class InstantCachePurgerTest extends TestCase
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $purgeClient;
 
     /**
-     * @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentService;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repository;
 
@@ -132,7 +132,7 @@ class InstantCachePurgerTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getPermissionResolverMock()
     {

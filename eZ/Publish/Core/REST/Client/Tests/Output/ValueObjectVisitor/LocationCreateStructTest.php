@@ -17,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 
 class LocationCreateStructTest extends ValueObjectVisitorBaseTest
 {
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject */
     private $locationServiceMock;
 
     /**

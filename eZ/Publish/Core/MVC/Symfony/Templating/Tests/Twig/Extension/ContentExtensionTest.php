@@ -31,7 +31,7 @@ use Psr\Log\LoggerInterface;
 class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 {
     /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldHelperMock;
 
@@ -149,7 +149,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
@@ -163,7 +163,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentTypeServiceMock()
     {

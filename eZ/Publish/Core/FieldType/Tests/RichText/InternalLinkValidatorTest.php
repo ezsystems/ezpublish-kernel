@@ -16,10 +16,10 @@ use PHPUnit\Framework\TestCase;
 
 class InternalLinkValidatorTest extends TestCase
 {
-    /** @var \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $contentHandler;
 
-    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $locationHandler;
 
     /**
@@ -287,7 +287,7 @@ class InternalLinkValidatorTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\FieldType\RichText\InternalLinkValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\FieldType\RichText\InternalLinkValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getInternalLinkValidator(array $methods = null)
     {

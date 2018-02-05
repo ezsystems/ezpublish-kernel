@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class ContentSearchHitAdapterTest extends TestCase
 {
     /**
-     * @var \eZ\Publish\API\Repository\SearchService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\SearchService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchService;
 

@@ -771,7 +771,7 @@ class FieldNameResolverTest extends TestCase
     /**
      * @param array $methods
      *
-     * @return \eZ\Publish\Core\Search\Common\FieldNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Common\FieldNameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockedFieldNameResolver(array $methods = array())
     {
@@ -791,12 +791,12 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fieldRegistryMock;
 
     /**
-     * @return \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldRegistryMock()
     {
@@ -808,7 +808,7 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\SPI\FieldType\Indexable|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\FieldType\Indexable|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getIndexFieldTypeMock()
     {
@@ -816,7 +816,7 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\SPI\Search\FieldType|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Search\FieldType|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSearchFieldTypeMock()
     {
@@ -824,12 +824,12 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentTypeHandlerMock;
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentTypeHandlerMock()
     {
@@ -841,12 +841,12 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fieldNameGeneratorMock;
 
     /**
-     * @return \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldNameGeneratorMock()
     {
@@ -858,7 +858,7 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCriterionMock()
     {
@@ -866,7 +866,7 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSortClauseMock()
     {

@@ -32,7 +32,7 @@ use eZ\Publish\SPI\Persistence\Content\Section\Handler as SPISectionHandler;
 class SectionLimitationTypeTest extends Base
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sectionHandlerMock;
 

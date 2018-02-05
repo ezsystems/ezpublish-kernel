@@ -81,7 +81,7 @@ class ContentTypeTest extends BaseTest
     /**
      * Generates a Location object in respect of a given content type identifier.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateLocationMock()
     {
@@ -156,7 +156,7 @@ class ContentTypeTest extends BaseTest
      *
      * @param int $contentTypeIdentifier
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForContentTypeIdentifier($contentTypeIdentifier)
     {

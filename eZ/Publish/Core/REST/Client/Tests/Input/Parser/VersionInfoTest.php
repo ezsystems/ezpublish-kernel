@@ -211,7 +211,7 @@ class VersionInfoTest extends BaseTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\REST\Common\RequestParser
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\REST\Common\RequestParser
      */
     protected function getRequestParserMock()
     {

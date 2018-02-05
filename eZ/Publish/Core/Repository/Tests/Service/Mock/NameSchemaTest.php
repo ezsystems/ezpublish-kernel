@@ -378,7 +378,7 @@ class NameSchemaTest extends BaseServiceMockTest
      * @param string[] $methods
      * @param array $settings
      *
-     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedNameSchemaService(array $methods = null, array $settings = [])
     {
@@ -398,7 +398,7 @@ class NameSchemaTest extends BaseServiceMockTest
     protected $contentTypeDomainMapperMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
      */
     protected function getContentTypeDomainMapperMock()
     {

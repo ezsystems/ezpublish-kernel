@@ -25,7 +25,7 @@ abstract class FieldTypeTest extends TestCase
     private $fieldTypeUnderTest;
 
     /**
-     * @return \eZ\Publish\Core\Persistence\TransformationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTransformationProcessorMock()
     {
@@ -952,7 +952,7 @@ abstract class FieldTypeTest extends TestCase
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
+        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit\Framework\MockObject\MockObject $fieldDefinitionMock */
         $fieldDefinitionMock = $this->createMock(APIFieldDefinition::class);
 
         foreach ($fieldDefinitionData as $method => $data) {
