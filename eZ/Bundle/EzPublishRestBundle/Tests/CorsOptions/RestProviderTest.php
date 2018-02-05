@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Exception;
 
@@ -111,7 +111,7 @@ class RestProviderTest extends TestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|RequestMatcherInterface
+     * @return MockObject|RequestMatcherInterface
      */
     protected function getRequestMatcherMock()
     {

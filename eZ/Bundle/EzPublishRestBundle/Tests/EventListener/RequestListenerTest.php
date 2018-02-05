@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use eZ\Bundle\EzPublishRestBundle\EventListener\RequestListener;
 use Symfony\Component\HttpKernel\KernelEvents;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RequestListenerTest extends EventListenerTest
 {
@@ -109,7 +110,7 @@ class RequestListenerTest extends EventListenerTest
     }
 
     /**
-     * @return AcceptHeaderVisitorDispatcher|\PHPUnit_Framework_MockObject_MockObject
+     * @return AcceptHeaderVisitorDispatcher|MockObject
      */
     public function getVisitorDispatcherMock()
     {
