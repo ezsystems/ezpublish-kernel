@@ -10,6 +10,8 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\Response as HttpResponse;
+use Buzz\Converter\RequestConverter;
+use Buzz\Converter\ResponseConverter;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
@@ -87,10 +89,9 @@ class TestCase extends BaseTestCase
      */
     public function sendHttpRequest(HttpRequest $request)
     {
-        $response = new HttpResponse();
-        $this->httpClient->send($request, $response);
+        $request = RequestConverter::psr7($request);
 
-        return $response;
+        return ResponseConverter::buzz($this->httpClient->sendRequest($request));
     }
 
     protected function getHttpHost()
