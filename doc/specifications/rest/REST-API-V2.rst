@@ -7456,7 +7456,7 @@ View XML Schema
 
       <xsd:complexType name="queryType">
         <xsd:all>
-          <!-- Criteria is deprecated since 6.6.0. Use 'Filter' instead. -->
+          <!-- Criteria is deprecated since 6.6.0. Use 'Filter' instead, or 'Query' for criteria that should affect scoring. -->
           <xsd:element name="Criteria" type="criterionType" />
           <xsd:element name="Filter" type="criterionType" />
           <xsd:element name="Query" type="criterionType" />
