@@ -10,7 +10,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\BackgroundIndexingTerminateListener;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -23,8 +22,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class BackgroundIndexingTerminateListenerTest extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\EventListener\BackgroundIndexingTerminateListener
      */

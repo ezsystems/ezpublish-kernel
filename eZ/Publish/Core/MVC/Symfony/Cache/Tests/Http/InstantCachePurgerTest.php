@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\User\UserReference;
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger;
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
@@ -28,8 +27,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InstantCachePurgerTest extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface|\PHPUnit_Framework_MockObject_MockObject
      */

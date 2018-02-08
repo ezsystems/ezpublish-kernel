@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Security;
 
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\REST\Server\Security\RestLogoutHandler;
 use PHPUnit\Framework\TestCase;
@@ -20,8 +19,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class RestLogoutHandlerTest extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
