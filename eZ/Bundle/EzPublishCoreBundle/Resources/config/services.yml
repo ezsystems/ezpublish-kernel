@@ -242,3 +242,9 @@ services:
             - '@ezpublish.api.repository'
         tags:
             - { name: console.command }
+
+    ezplatform.core.session.handler.native_redis:
+        class: eZ\Bundle\EzPublishCoreBundle\Session\Handler\NativeSessionHandler
+        arguments:
+         - '%session.save_path%'
+         - 'redis'
