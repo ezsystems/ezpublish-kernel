@@ -71,7 +71,7 @@ class ConfigParserTest extends TestCase
         $contextualizer = $this->createMock(ContextualizerInterface::class);
 
         foreach ($parsers as $parser) {
-            /* @var \PHPUnit_Framework_MockObject_MockObject $parser */
+            /* @var \PHPUnit\Framework\MockObject\MockObject $parser */
             $parser
                 ->expects($this->once())
                 ->method('mapConfig')
@@ -96,7 +96,7 @@ class ConfigParserTest extends TestCase
         $contextualizer = $this->createMock(ContextualizerInterface::class);
 
         foreach ($parsers as $parser) {
-            /* @var \PHPUnit_Framework_MockObject_MockObject $parser */
+            /* @var \PHPUnit\Framework\MockObject\MockObject $parser */
             $parser
                 ->expects($this->once())
                 ->method('preMap')
@@ -122,7 +122,7 @@ class ConfigParserTest extends TestCase
         $nodeBuilder = new NodeBuilder();
 
         foreach ($parsers as $parser) {
-            /* @var \PHPUnit_Framework_MockObject_MockObject $parser */
+            /* @var \PHPUnit\Framework\MockObject\MockObject $parser */
             $parser
                 ->expects($this->once())
                 ->method('addSemanticConfig')

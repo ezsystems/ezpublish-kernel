@@ -525,12 +525,12 @@ class EmbedTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRendererMock()
     {
@@ -538,12 +538,12 @@ class EmbedTest extends TestCase
     }
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLoggerMock()
     {

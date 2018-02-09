@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 class LanguageSwitchListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $translationHelper;
 

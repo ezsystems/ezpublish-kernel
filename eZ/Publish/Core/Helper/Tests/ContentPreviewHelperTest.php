@@ -21,12 +21,12 @@ use PHPUnit\Framework\TestCase;
 class ContentPreviewHelperTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eventDispatcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $siteAccessRouter;
 

@@ -5023,7 +5023,7 @@ class UrlAliasHandlerTest extends TestCase
     /**
      * @param array $methods
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedHandler(array $methods)
     {

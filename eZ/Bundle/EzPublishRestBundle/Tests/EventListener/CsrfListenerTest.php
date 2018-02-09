@@ -8,7 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\EventListener;
 
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -168,7 +168,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return CsrfProviderInterface|PHPUnit_Framework_MockObject_MockObject
+     * @return CsrfProviderInterface|MockObject
      */
     protected function getCsrfProviderMock()
     {
@@ -191,7 +191,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|GetResponseEvent
+     * @return MockObject|GetResponseEvent
      */
     protected function getEventMock($class = null)
     {
@@ -208,7 +208,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Session\SessionInterface|PHPUnit_Framework_MockObject_MockObject
+     * @return \Symfony\Component\HttpFoundation\Session\SessionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSessionMock()
     {
@@ -224,7 +224,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return ParameterBag|PHPUnit_Framework_MockObject_MockObject
+     * @return ParameterBag|MockObject
      */
     protected function getRequestHeadersMock()
     {
@@ -258,7 +258,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|Request
+     * @return MockObject|Request
      */
     protected function getRequestMock()
     {
@@ -293,7 +293,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @return MockObject|EventDispatcherInterface
      */
     protected function getEventDispatcherMock()
     {

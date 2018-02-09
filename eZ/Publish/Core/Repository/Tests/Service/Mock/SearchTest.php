@@ -347,7 +347,7 @@ class SearchTest extends BaseServiceMockTest
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass(Content::class);
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findContent')
             ->with($this->equalTo($handlerQuery), $this->equalTo($languageFilter))
@@ -423,7 +423,7 @@ class SearchTest extends BaseServiceMockTest
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass(Content::class);
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findContent')
             ->with($this->equalTo($query), $this->equalTo($languageFilter))
@@ -485,7 +485,7 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->never())->method('findContent');
 
         $criterionMock = $this
@@ -548,7 +548,7 @@ class SearchTest extends BaseServiceMockTest
             ->method('internalLoadContent')
             ->will($this->returnValue($contentMock));
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock
             ->expects($this->once())
             ->method('findContent')
@@ -706,7 +706,7 @@ class SearchTest extends BaseServiceMockTest
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass(Content::class);
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findSingle')
             ->with($this->equalTo($criterionMock), $this->equalTo($languageFilter))
@@ -752,7 +752,7 @@ class SearchTest extends BaseServiceMockTest
         $spiLocation = new SPILocation();
         $locationMock = $this->getMockForAbstractClass(Location::class);
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findLocations')
             ->with($this->equalTo($query))
@@ -822,7 +822,7 @@ class SearchTest extends BaseServiceMockTest
         $spiLocation = new SPILocation();
         $locationMock = $this->getMockForAbstractClass(Location::class);
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findLocations')
             ->with($this->equalTo($handlerQuery))
@@ -971,7 +971,7 @@ class SearchTest extends BaseServiceMockTest
         $spiLocation = new SPILocation();
         $locationMock = $this->getMockForAbstractClass(Location::class);
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock
             ->expects($this->once())
             ->method('findLocations')
@@ -1019,7 +1019,7 @@ class SearchTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\DomainMapper
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected function getDomainMapperMock()
     {
@@ -1034,7 +1034,7 @@ class SearchTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\PermissionCriterionResolver
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\PermissionCriterionResolver
      */
     protected function getPermissionCriterionResolverMock()
     {

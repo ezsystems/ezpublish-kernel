@@ -33,7 +33,7 @@ class ParentContentTypeTest extends BaseTest
      *
      * @param string $contentTypeIdentifier
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForContentTypeIdentifier($contentTypeIdentifier)
     {

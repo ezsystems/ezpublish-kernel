@@ -19,9 +19,9 @@ class CsrfTokenManagerTest extends TestCase
 {
     const CSRF_TOKEN_INTENTION = 'csrf';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface */
     private $tokenStorage;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\HttpFoundation\RequestStack */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\RequestStack */
     private $requestStack;
 
     protected function setUp()

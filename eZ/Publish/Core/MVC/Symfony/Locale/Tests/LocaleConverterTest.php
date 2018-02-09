@@ -20,7 +20,7 @@ class LocaleConverterTest extends TestCase
     private $localeConverter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 

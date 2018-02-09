@@ -82,7 +82,7 @@ class ContentTypeGroupTest extends BaseTest
     /**
      * Generates a Location mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateLocationMock()
     {
@@ -155,7 +155,7 @@ class ContentTypeGroupTest extends BaseTest
      *
      * @param int $contentTypeGroupId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForContentTypeGroupId($contentTypeGroupId)
     {

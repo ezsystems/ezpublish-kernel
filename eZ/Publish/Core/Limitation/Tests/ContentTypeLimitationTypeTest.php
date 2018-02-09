@@ -29,7 +29,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIHandler;
 class ContentTypeLimitationTypeTest extends Base
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contentTypeHandlerMock;
 

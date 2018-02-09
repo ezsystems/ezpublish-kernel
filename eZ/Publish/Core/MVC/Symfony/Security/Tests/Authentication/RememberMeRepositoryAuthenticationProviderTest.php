@@ -31,7 +31,7 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
     private $authProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\Repository
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
      */
     private $repository;
 
@@ -136,7 +136,7 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getPermissionResolverMock()
     {

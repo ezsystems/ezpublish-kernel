@@ -155,7 +155,7 @@ class EzPublishCoreCollectorTest extends TestCase
         $exception = new Exception();
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject
+         * @var \PHPUnit\Framework\MockObject\MockObject
          */
         foreach ($allCollectors as $name => $collector) {
             $this->mainCollector->addCollector($collector);

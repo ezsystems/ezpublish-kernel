@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ConsoleCommandListener;
 use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\TestOutput;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\ConsoleEvents;
@@ -34,7 +35,7 @@ class ConsoleCommandListenerTest extends TestCase
     private $siteAccess;
 
     /**
-     * @var EventDispatcherInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var EventDispatcherInterface|MockObject
      */
     private $dispatcher;
 

@@ -128,7 +128,7 @@ class DepthTest extends BaseTest
      *
      * @param int $depth
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForDepth($depth)
     {

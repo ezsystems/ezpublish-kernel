@@ -335,7 +335,7 @@ class PermissionCriterionResolverTest extends TestCase
      *
      * @param string[]|null $methods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver
      */
     protected function getPermissionCriterionResolverMock($methods = [])
     {

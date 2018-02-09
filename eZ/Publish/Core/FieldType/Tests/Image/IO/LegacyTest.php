@@ -26,14 +26,14 @@ class LegacyTest extends TestCase
     /**
      * Internal IOService instance for published images.
      *
-     * @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $publishedIoServiceMock;
 
     /**
      * Internal IOService instance for draft images.
      *
-     * @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $draftIoServiceMock;
 

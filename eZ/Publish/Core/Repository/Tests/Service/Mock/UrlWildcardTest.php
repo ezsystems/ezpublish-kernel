@@ -68,7 +68,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testCreateThrowsInvalidArgumentException()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
         $repositoryMock = $this->getRepositoryMock();
 
@@ -118,7 +118,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testCreateThrowsContentValidationException($sourceUrl, $destinationUrl, $forward)
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
         $repositoryMock = $this->getRepositoryMock();
 
@@ -167,7 +167,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testCreate($sourceUrl, $destinationUrl, $forward)
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
         $repositoryMock = $this->getRepositoryMock();
 
@@ -242,7 +242,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testCreateWithRollback()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
         $repositoryMock = $this->getRepositoryMock();
 
@@ -321,7 +321,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testRemove()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
         $repositoryMock = $this->getRepositoryMock();
 
@@ -360,7 +360,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testRemoveWithRollback()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
         $repositoryMock = $this->getRepositoryMock();
 
@@ -401,7 +401,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testLoadThrowsException()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
         $handlerMock->expects(
@@ -426,7 +426,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testLoad()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
         $handlerMock->expects(
@@ -472,7 +472,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testLoadAll()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
         $handlerMock->expects(
@@ -498,7 +498,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testLoadAllWithLimitAndOffset()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
         $handlerMock->expects(
@@ -592,7 +592,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testTranslateThrowsNotFoundException($createArray, $url)
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
         $handlerMock->expects(
@@ -700,7 +700,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testTranslate($createArray, $url, $uri)
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
         $handlerMock->expects(
@@ -736,7 +736,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     public function testTranslateUsesLongestMatchingWildcard()
     {
         $mockedService = $this->getPartlyMockedURLWildcardService();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
         $handlerMock->expects(
@@ -787,7 +787,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\URLWildcardService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\URLWildcardService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedURLWildcardService(array $methods = null)
     {

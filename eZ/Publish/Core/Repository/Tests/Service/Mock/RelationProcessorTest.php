@@ -550,7 +550,7 @@ class RelationProcessorTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedRelationProcessor(array $methods = null)
     {
@@ -565,7 +565,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldTypeServiceMock()
     {

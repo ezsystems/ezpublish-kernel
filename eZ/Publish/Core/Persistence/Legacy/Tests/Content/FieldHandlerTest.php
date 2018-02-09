@@ -994,7 +994,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     /**
      * Returns a StorageHandler mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getStorageHandlerMock()
     {
@@ -1008,7 +1008,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     /**
      * Returns a Mapper mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMapperMock()
     {
@@ -1022,7 +1022,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentGatewayMock()
     {
@@ -1034,7 +1034,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldTypeRegistryMock()
     {
@@ -1056,7 +1056,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return \eZ\Publish\SPI\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldTypeMock()
     {

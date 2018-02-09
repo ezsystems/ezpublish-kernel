@@ -31,17 +31,17 @@ use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
 class ParentContentTypeLimitationTypeTest extends Base
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $locationHandlerMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contentTypeHandlerMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contentHandlerMock;
 

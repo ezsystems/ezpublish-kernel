@@ -9,7 +9,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\Tests\EventListener;
 
 use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ResponseListenerTest extends EventListenerTest
 {
-    /** @var AcceptHeaderVisitorDispatcher|PHPUnit_Framework_MockObject_MockObject */
+    /** @var AcceptHeaderVisitorDispatcher|MockObject */
     protected $visitorDispatcherMock;
 
     protected $eventValue;
@@ -108,7 +108,7 @@ class ResponseListenerTest extends EventListenerTest
     }
 
     /**
-     * @return AcceptHeaderVisitorDispatcher|PHPUnit_Framework_MockObject_MockObject
+     * @return AcceptHeaderVisitorDispatcher|MockObject
      */
     public function getVisitorDispatcherMock()
     {
@@ -130,7 +130,7 @@ class ResponseListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|GetResponseForControllerResultEvent
+     * @return MockObject|GetResponseForControllerResultEvent
      */
     protected function getControllerResultEventMock()
     {
@@ -146,7 +146,7 @@ class ResponseListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|GetResponseForExceptionEvent
+     * @return MockObject|GetResponseForExceptionEvent
      */
     protected function getExceptionEventMock()
     {

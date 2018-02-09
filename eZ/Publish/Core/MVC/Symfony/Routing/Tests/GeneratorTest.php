@@ -21,17 +21,17 @@ use Symfony\Component\Routing\RequestContext;
 class GeneratorTest extends TestCase
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $siteAccessRouter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 

@@ -25,12 +25,12 @@ use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 class ProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $userService;
 

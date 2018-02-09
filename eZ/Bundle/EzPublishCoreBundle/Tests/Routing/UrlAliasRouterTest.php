@@ -25,7 +25,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 

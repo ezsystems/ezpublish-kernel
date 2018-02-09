@@ -98,7 +98,7 @@ class SudoMainLocationLoaderTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getRepositoryMock()
     {
@@ -123,7 +123,7 @@ class SudoMainLocationLoaderTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getLocationServiceMock()
     {
@@ -139,7 +139,7 @@ class SudoMainLocationLoaderTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getPermissionResolverMock()
     {

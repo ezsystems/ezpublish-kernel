@@ -23,17 +23,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SiteAccessListenerTest extends TestCase
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $container;
 
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $router;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generator;
 

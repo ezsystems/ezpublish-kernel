@@ -27,17 +27,17 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     protected $transactionHandler;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dbHandlerMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentTypeHandlerMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $languageHandlerMock;
 
@@ -189,7 +189,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getDatabaseHandlerMock()
     {
@@ -203,7 +203,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Returns a mock object for the Content Type Handler.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentTypeHandlerMock()
     {
@@ -217,7 +217,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Returns a mock object for the Content Language Gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLanguageHandlerMock()
     {

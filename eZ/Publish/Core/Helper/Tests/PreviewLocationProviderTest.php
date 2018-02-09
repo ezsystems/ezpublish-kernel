@@ -19,13 +19,13 @@ use PHPUnit\Framework\TestCase;
 
 class PreviewLocationProviderTest extends TestCase
 {
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentService;
 
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject */
     private $locationService;
 
-    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $locationHandler;
 
     /** @var \eZ\Publish\Core\Helper\PreviewLocationProvider */

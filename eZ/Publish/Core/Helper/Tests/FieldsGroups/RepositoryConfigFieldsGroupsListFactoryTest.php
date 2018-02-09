@@ -35,7 +35,7 @@ class RepositoryConfigFieldsGroupsListFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
     protected function getRepositoryConfigMock()
     {
@@ -47,7 +47,7 @@ class RepositoryConfigFieldsGroupsListFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Translation\TranslatorInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Translation\TranslatorInterface
      */
     protected function getTranslatorMock()
     {

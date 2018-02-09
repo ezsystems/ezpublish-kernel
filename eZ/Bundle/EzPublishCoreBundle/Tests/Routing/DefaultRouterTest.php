@@ -23,12 +23,12 @@ use PHPUnit\Framework\TestCase;
 class DefaultRouterTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     protected $configResolver;
 
@@ -53,11 +53,11 @@ class DefaultRouterTest extends TestCase
     /**
      * @param array $mockedMethods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DefaultRouter
+     * @return \PHPUnit\Framework\MockObject\MockObject|DefaultRouter
      */
     protected function generateRouter(array $mockedMethods = array())
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultRouter $router */
         $router = $this
             ->getMockBuilder($this->getRouterClass())
             ->setConstructorArgs(array($this->container, 'foo', array(), $this->requestContext))
@@ -75,7 +75,7 @@ class DefaultRouterTest extends TestCase
         $request = Request::create($pathinfo);
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultRouter $router */
         $router = $this->generateRouter(array('match'));
 
         $matchedParameters = array('_controller' => 'AcmeBundle:myAction');
@@ -96,7 +96,7 @@ class DefaultRouterTest extends TestCase
 
         $this->configResolver->expects($this->never())->method('getParameter');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultRouter $router */
         $router = $this->generateRouter(array('match'));
         $router
             ->expects($this->once())
@@ -118,7 +118,7 @@ class DefaultRouterTest extends TestCase
             ->with(__METHOD__)
             ->will($this->returnValue($url));
 
-        /** @var DefaultRouter|\PHPUnit_Framework_MockObject_MockObject $router */
+        /** @var DefaultRouter|\PHPUnit\Framework\MockObject\MockObject $router */
         $router = $this->generateRouter(array('getGenerator'));
         $router
             ->expects($this->any())
@@ -160,7 +160,7 @@ class DefaultRouterTest extends TestCase
             ->with($routeName)
             ->will($this->returnValue($urlGenerated));
 
-        /** @var DefaultRouter|\PHPUnit_Framework_MockObject_MockObject $router */
+        /** @var DefaultRouter|\PHPUnit\Framework\MockObject\MockObject $router */
         $router = $this->generateRouter(array('getGenerator'));
         $router
             ->expects($this->any())

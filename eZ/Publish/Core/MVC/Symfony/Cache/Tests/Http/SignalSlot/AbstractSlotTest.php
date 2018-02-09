@@ -16,7 +16,7 @@ abstract class AbstractSlotTest extends TestCase implements SlotTest
     /** @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot */
     protected $slot;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit\Framework\MockObject\MockObject */
     protected $cachePurgerMock;
 
     private $contentId = 42;
@@ -38,7 +38,7 @@ abstract class AbstractSlotTest extends TestCase implements SlotTest
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCachePurger()
     {

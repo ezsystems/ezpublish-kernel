@@ -18,7 +18,7 @@ class FieldTypeMockTest extends TestCase
      */
     public function testApplyDefaultSettingsThrowsInvalidArgumentException()
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
             array(),
@@ -38,7 +38,7 @@ class FieldTypeMockTest extends TestCase
      */
     public function testApplyDefaultSettings($initialSettings, $expectedSettings)
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
             array(),
@@ -167,7 +167,7 @@ class FieldTypeMockTest extends TestCase
      */
     public function testApplyDefaultValidatorConfigurationEmptyThrowsInvalidArgumentException()
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
             array(),
@@ -182,7 +182,7 @@ class FieldTypeMockTest extends TestCase
 
     public function testApplyDefaultValidatorConfigurationEmpty()
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
             array(),
@@ -213,7 +213,7 @@ class FieldTypeMockTest extends TestCase
      */
     public function testApplyDefaultValidatorConfiguration($initialConfiguration, $expectedConfiguration)
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
             array(),

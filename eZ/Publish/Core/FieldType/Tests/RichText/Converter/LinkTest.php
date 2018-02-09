@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
 class LinkTest extends TestCase
 {
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockContentService()
     {
@@ -35,7 +35,7 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockLocationService()
     {
@@ -43,7 +43,7 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockUrlAliasRouter()
     {

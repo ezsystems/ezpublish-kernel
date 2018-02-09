@@ -119,7 +119,7 @@ class ParentLocationTest extends BaseTest
      *
      * @param int $parentLocationId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForParentLocationId($parentLocationId)
     {

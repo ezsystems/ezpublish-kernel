@@ -14,10 +14,10 @@ use PHPUnit\Framework\TestCase;
 
 class ImageFileVariationPurgerTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $ioServiceMock;
 
-    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $pathGeneratorMock;
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger */

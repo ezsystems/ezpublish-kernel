@@ -24,12 +24,12 @@ class StreamFileListenerTest extends TestCase
     /** @var StreamFileListener */
     private $eventListener;
 
-    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $ioServiceMock;
 
     private $ioUriPrefix = 'var/test/storage';
 
-    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configResolverMock;
 
     public function setUp()

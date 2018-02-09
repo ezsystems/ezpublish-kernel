@@ -72,7 +72,7 @@ class ContentTest extends BaseTest
      *
      * @param int $contentId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateLocationForContentId($contentId)
     {

@@ -77,12 +77,12 @@ class RoleTest extends BaseServiceMockTest
             ->with($this->equalTo('mockIdentifier'))
             ->will($this->throwException(new NotFoundException('Role', 'mockIdentifier')));
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $roleCreateStructMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $roleCreateStructMock */
         $roleCreateStructMock->expects($this->once())
             ->method('getPolicies')
             ->will($this->returnValue(array($policyCreateStructMock)));
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $policyCreateStructMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $policyCreateStructMock */
         $policyCreateStructMock->expects($this->once())
             ->method('getLimitations')
             ->will($this->returnValue(array($limitationMock)));
@@ -147,7 +147,7 @@ class RoleTest extends BaseServiceMockTest
             ->with($this->equalTo(42))
             ->will($this->returnValue($roleMock));
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $policyCreateStructMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $policyCreateStructMock */
         $policyCreateStructMock->expects($this->once())
             ->method('getLimitations')
             ->will($this->returnValue(array($limitationMock)));
@@ -217,7 +217,7 @@ class RoleTest extends BaseServiceMockTest
                 )
             );
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $policyCreateStructMock */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $policyCreateStructMock */
         $policyUpdateStructMock->expects($this->once())
             ->method('getLimitations')
             ->will($this->returnValue(array($limitationMock)));
@@ -1020,7 +1020,7 @@ class RoleTest extends BaseServiceMockTest
      * @param string[] $methods
      * @param array $settings
      *
-     * @return \eZ\Publish\Core\Repository\RoleService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\RoleService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedRoleService(array $methods = null, array $settings = array())
     {
@@ -1056,7 +1056,7 @@ class RoleTest extends BaseServiceMockTest
      * @param string[] $methods
      * @param array $settings
      *
-     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedLimitationService(array $methods = null, array $settings = array())
     {

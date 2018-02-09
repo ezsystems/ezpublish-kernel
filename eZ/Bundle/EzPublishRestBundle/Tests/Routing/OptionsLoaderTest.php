@@ -9,7 +9,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -57,7 +57,7 @@ class OptionsLoaderTest extends TestCase
     /**
      * Returns a partially mocked OptionsLoader, with the import method mocked.
      *
-     * @return OptionsLoader|PHPUnit_Framework_MockObject_MockObject
+     * @return OptionsLoader|MockObject
      */
     protected function getOptionsLoader()
     {
@@ -75,7 +75,7 @@ class OptionsLoaderTest extends TestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getRouteCollectionMapperMock()
     {

@@ -177,7 +177,7 @@ class DomainMapperTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentHandlerMock()
     {
@@ -185,7 +185,7 @@ class DomainMapperTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLanguageHandlerMock()
     {
@@ -193,7 +193,7 @@ class DomainMapperTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTypeHandlerMock()
     {

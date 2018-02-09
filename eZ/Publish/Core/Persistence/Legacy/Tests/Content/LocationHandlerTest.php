@@ -54,14 +54,14 @@ class LocationHandlerTest extends TestCase
     /**
      * Mocked object state handler instance.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectStateHandler;
 
     /**
      * Mocked Tree handler instance.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $treeHandler;
 

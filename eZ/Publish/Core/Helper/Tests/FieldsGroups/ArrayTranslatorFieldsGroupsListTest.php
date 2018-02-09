@@ -76,7 +76,7 @@ class ArrayTranslatorFieldsGroupsListTest extends TestCase
     }
 
     /**
-     * @return \Symfony\Component\Translation\TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Symfony\Component\Translation\TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getTranslatorMock()
     {

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class LegacyStorageImageFileListTest extends TestCase
 {
-    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader|\PHPUnit\Framework\MockObject\MockObject */
     protected $rowReaderMock;
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList */

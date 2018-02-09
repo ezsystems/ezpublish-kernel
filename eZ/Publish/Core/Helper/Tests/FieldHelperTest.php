@@ -29,17 +29,17 @@ class FieldHelperTest extends TestCase
     private $fieldHelper;
 
     /**
-     * @var FieldTypeService|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldTypeService|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldTypeServiceMock;
 
     /**
-     * @var ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentTypeService|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contentTypeServiceMock;
 
     /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Helper\TranslationHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $translationHelper;
 

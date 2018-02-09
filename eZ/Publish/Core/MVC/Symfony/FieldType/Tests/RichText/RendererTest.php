@@ -1398,7 +1398,7 @@ class RendererTest extends TestCase
     /**
      * @param array $methods
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockedRenderer(array $methods = array())
     {
@@ -1419,12 +1419,12 @@ class RendererTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
@@ -1432,12 +1432,12 @@ class RendererTest extends TestCase
     }
 
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationCheckerMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAuthorizationCheckerMock()
     {
@@ -1445,12 +1445,12 @@ class RendererTest extends TestCase
     }
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configResolverMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getConfigResolverMock()
     {
@@ -1458,12 +1458,12 @@ class RendererTest extends TestCase
     }
 
     /**
-     * @var \Symfony\Component\Templating\EngineInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Templating\EngineInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $templateEngineMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTemplateEngineMock()
     {
@@ -1471,12 +1471,12 @@ class RendererTest extends TestCase
     }
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLoggerMock()
     {

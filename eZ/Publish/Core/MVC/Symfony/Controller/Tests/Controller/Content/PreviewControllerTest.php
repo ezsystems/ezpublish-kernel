@@ -29,26 +29,26 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class PreviewControllerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpKernel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $previewHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationChecker;
 
-    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker */
+    /** @var PreviewLocationProvider|\PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker */
     protected $locationProvider;
 
     protected $controllerChecker;

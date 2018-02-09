@@ -20,13 +20,13 @@ use DateTime;
 
 class LegacyDFSClusterTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit\Framework\MockObject\MockObject */
     private $handler;
 
-    /** @var \Doctrine\DBAL\Connection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Doctrine\DBAL\Connection|\PHPUnit\Framework\MockObject\MockObject */
     private $dbalMock;
 
-    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $urlDecoratorMock;
 
     public function setUp()
@@ -259,7 +259,7 @@ class LegacyDFSClusterTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createDbalStatementMock()
     {

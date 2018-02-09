@@ -71,7 +71,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     }
 
     /**
-     * @returns \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @returns \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRouterMock()
     {

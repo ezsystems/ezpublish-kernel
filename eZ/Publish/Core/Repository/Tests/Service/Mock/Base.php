@@ -30,19 +30,19 @@ abstract class Base extends TestCase
     private $repository;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $persistenceMock;
 
     /**
      * The Content / Location / Search ... handlers for the persistence / Search / .. handler mocks.
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject[] Key is relative to "\eZ\Publish\SPI\"
+     * @var \PHPUnit\Framework\MockObject\MockObject[] Key is relative to "\eZ\Publish\SPI\"
      *
      * @see getPersistenceMockHandler()
      */
@@ -79,7 +79,7 @@ abstract class Base extends TestCase
     protected $fieldTypeServiceMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\FieldTypeService
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\FieldTypeService
      */
     protected function getFieldTypeServiceMock()
     {
@@ -93,7 +93,7 @@ abstract class Base extends TestCase
     protected $fieldTypeRegistryMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
      */
     protected function getFieldTypeRegistryMock()
     {
@@ -107,7 +107,7 @@ abstract class Base extends TestCase
     protected $nameableFieldTypeRegistryMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry
      */
     protected function getNameableFieldTypeRegistryMock()
     {
@@ -119,7 +119,7 @@ abstract class Base extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
@@ -133,7 +133,7 @@ abstract class Base extends TestCase
     /**
      * Returns a persistence Handler mock.
      *
-     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPersistenceMock()
     {
@@ -193,7 +193,7 @@ abstract class Base extends TestCase
      *
      * @param string $handler For instance "Content\\Type\\Handler" or "Search\\Handler", must be relative to "eZ\Publish\SPI"
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSPIMockHandler($handler)
     {
@@ -213,7 +213,7 @@ abstract class Base extends TestCase
      *
      * @param string $handler For instance "Content\\Type\\Handler", must be relative to "eZ\Publish\SPI\Persistence"
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPersistenceMockHandler($handler)
     {

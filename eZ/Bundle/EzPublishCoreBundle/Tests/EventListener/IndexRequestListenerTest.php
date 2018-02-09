@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class IndexRequestListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
@@ -39,7 +39,7 @@ class IndexRequestListenerTest extends TestCase
     private $event;
 
     /**
-     * @var HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpKernel;
 

@@ -19,13 +19,13 @@ use Psr\Log\LoggerInterface;
 
 class URLCheckerTest extends TestCase
 {
-    /** @var \eZ\Publish\API\Repository\URLService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\URLService|\PHPUnit\Framework\MockObject\MockObject */
     private $urlService;
 
-    /** @var \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerRegistryInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $handlerRegistry;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
     protected function setUp()
