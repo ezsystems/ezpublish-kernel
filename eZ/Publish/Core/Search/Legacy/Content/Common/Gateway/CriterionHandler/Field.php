@@ -14,7 +14,6 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldV
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -148,10 +147,19 @@ class Field extends FieldBase
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();
+
         $subSelect->select(
             $this->dbHandler->quoteColumn('contentobject_id')
         )->from(
             $this->dbHandler->quoteTable('ezcontentobject_attribute')
+        )->leftJoin(
+            $this->dbHandler->quoteTable('ezkeyword_attribute_link'),
+            'ezcontentobject_attribute.id',
+           'ezkeyword_attribute_link.objectattribute_id'
+        )->leftJoin(
+            $this->dbHandler->quoteTable('ezkeyword'),
+            'ezkeyword.id',
+            'ezkeyword_attribute_link.keyword_id'
         );
 
         $whereExpressions = array();
@@ -161,7 +169,7 @@ class Field extends FieldBase
                     "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
                 );
             }
-
+            $fieldsInfo['column'] = $fieldTypeIdentifier === 'ezkeyword' ? 'keyword' : $fieldsInfo['column'];
             $filter = $this->fieldValueConverter->convertCriteria(
                 $fieldTypeIdentifier,
                 $subSelect,
