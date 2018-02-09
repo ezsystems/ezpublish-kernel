@@ -6,7 +6,6 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Repository\Repository;
@@ -25,8 +24,6 @@ use eZ\Publish\SPI\Persistence\Handler;
  */
 abstract class Base extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
