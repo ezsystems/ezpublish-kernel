@@ -4,7 +4,7 @@
 
 DROP TABLE IF EXISTS `ezdfsfile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE ezdfsfile (
   `name` text NOT NULL,
   `name_trunk` text NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE ezdfsfile (
   KEY `ezdfsfile_name_trunk` (`name_trunk`(250)),
   KEY `ezdfsfile_mtime` (`mtime`),
   KEY `ezdfsfile_expired_name` (`expired`,`name`(250))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
