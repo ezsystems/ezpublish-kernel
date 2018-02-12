@@ -27,5 +27,29 @@ Example:
     For API features deprecated in 6.x series, they can earliest be removed in v8.0.0. In
     contrast, under Semantic Versioning it could have been removed in 7.0.0.
 
+Exceptions:
+- Major releases: Taking advantage of improvements in PHP, like native type hinting. This does not need prior
+  deprecation as long as type is same or similar (e.g. array vs iterable vs generics) as previously documented.
+- As API has BC promise for consumption, and official extension point is via SPI layer:
+-- Patch releases: Extending the API _implementation_ can break as implementation changes.
+-- Feature releases: Implementation the API interfaces is possible, however optional arguments or new methods might be
+   added as long as it is possible to have implementation working across new and prior releases at the same time.
+- Patch releases: Smaller bug fixes, where doc and implementation has been inconsistent or wrong.
+
 
 The point of this is to secure a stable foundation for everyone to build upon for all provided Public API's.
+
+
+### SPI BC promise
+
+As of 7.0, SPI _(Service Provider Interface)_, being the official way to extend the Repository, follows the same
+extended BC rules as Symfony Framework is following:
+http://symfony.com/doc/current/contributing/code/bc.html
+
+Example:
+
+    This means when we need to add or change methods to SPI in patch or feature releases, we need to add new interfaces,
+    and in next major (if needed) deprecated the introduced interface and move over to main interface.
+
+This covers interfaces and classes in `eZ\Publish\SPI\*` namespace, and not implementation classes found in
+`eZ\Publish\Core\*` or other namespaces.
