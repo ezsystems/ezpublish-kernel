@@ -555,6 +555,7 @@ EOT;
                                     ->end()
                                     ->arrayNode('choices')
                                         ->scalarPrototype()->end()
+                                        ->performNoDeepMerging()
                                         ->validate()
                                             ->ifEmpty()->thenUnset()
                                         ->end()
