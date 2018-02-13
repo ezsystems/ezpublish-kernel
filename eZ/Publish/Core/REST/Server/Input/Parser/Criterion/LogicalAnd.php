@@ -30,10 +30,6 @@ class LogicalAnd extends CriterionParser
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if (array_key_exists('LogicalAnd', $data) && is_array($data['LogicalAnd'])) {
-            $data['AND'] = $data['LogicalAnd'];
-        }
-
         if (!array_key_exists('AND', $data) && !is_array($data['AND'])) {
             throw new Exceptions\Parser('Invalid <AND> format');
         }

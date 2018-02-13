@@ -1,10 +1,17 @@
 <?php
 
+/**
+ * File containing the Functional\SearchViewTest class.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
-class ContentQueryTest extends RESTFunctionalTestCase
+class SearchViewTest extends RESTFunctionalTestCase
 {
     /**
      * @var string
@@ -33,51 +40,10 @@ class ContentQueryTest extends RESTFunctionalTestCase
     }
 
     /**
-     * Covers POST with basic ContentQuery Logic on /api/ezp/v2/views.
-     */
-    public function testSimpleContentQuery()
-    {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/views', 'ViewInput+xml; version=1.1', 'ContentInfo+json');
-        $body = <<< XML
-<?xml version="1.0" encoding="UTF-8"?>
-<ViewInput>
-<identifier>your-query-id</identifier>
-<public>false</public>
-<ContentQuery>
-  <Query>
-    <LogicalAnd>
-      <Field>
-        <name>tags</name> 
-        <operator>CONTAINS</operator>
-        <value>foo</value>
-      </Field>
-    </LogicalAnd>
-    <LogicalAnd>
-      <Field>
-        <name>tags</name>
-        <operator>CONTAINS</operator>
-        <value>bar</value>
-      </Field>
-    </LogicalAnd>
-  </Query>  
-  <limit>10</limit>  
-  <offset>0</offset> 
-</ContentQuery>
-</ViewInput>
-XML;
-
-        $request->setContent($body);
-
-        $response = $this->sendHttpRequest($request);
-        self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getContent());
-        self::assertEquals(1, $jsonResponse->View->Result->count);
-    }
-
-    /**
+     * @dataProvider xmlProvider
      * Covers POST with ContentQuery Logic on /api/ezp/v2/views.
      */
-    public function testCombinedAndWithOrContentQuery()
+    public function testSimpleContentQuery(string $xmlQueryBody, int $expectedCount)
     {
         $request = $this->createHttpRequest('POST', '/api/ezp/v2/views', 'ViewInput+xml; version=1.1', 'ContentInfo+json');
         $body = <<< XML
@@ -87,38 +53,7 @@ XML;
 <public>false</public>
 <ContentQuery>
   <Query>
-    <LogicalOr>
-      <LogicalAnd>
-        <Field>
-          <name>tags</name> 
-          <operator>CONTAINS</operator>
-          <value>foo</value>
-        </Field>
-      </LogicalAnd>
-      <LogicalAnd>
-        <Field>
-          <name>tags</name>
-          <operator>CONTAINS</operator>
-          <value>bar</value>
-        </Field>
-      </LogicalAnd>    
-    </LogicalOr>
-    <LogicalOr>
-      <LogicalAnd>
-        <Field>
-          <name>tags</name> 
-          <operator>CONTAINS</operator>
-          <value>baz</value>
-        </Field>
-      </LogicalAnd>
-      <LogicalAnd>
-        <Field>
-          <name>tags</name>
-          <operator>CONTAINS</operator>
-          <value>foobaz</value>
-        </Field>
-      </LogicalAnd>     
-    </LogicalOr>
+    $xmlQueryBody
   </Query>  
   <limit>10</limit>  
   <offset>0</offset> 
@@ -131,131 +66,7 @@ XML;
         $response = $this->sendHttpRequest($request);
         self::assertHttpResponseCodeEquals($response, 200);
         $jsonResponse = json_decode($response->getContent());
-        self::assertEquals(2, $jsonResponse->View->Result->count);
-    }
-
-    /**
-     * Covers POST with LogicNot ContentQuery Logic on /api/ezp/v2/views.
-     */
-    public function testCombinedAndWithNotContentQuery()
-    {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/views', 'ViewInput+xml; version=1.1', 'ContentInfo+json');
-        $body = <<< XML
-<?xml version="1.0" encoding="UTF-8"?>
-<ViewInput>
-<identifier>your-query-id</identifier>
-<public>false</public>
-<ContentQuery>
-  <Query>
-    <LogicalAnd>
-      <LogicalNot>
-        <Field>
-          <name>tags</name> 
-          <operator>CONTAINS</operator>
-          <value>foo</value>
-        </Field>
-      </LogicalNot>
-    </LogicalAnd>
-    <LogicalAnd>
-      <Field>
-        <name>tags</name> 
-        <operator>CONTAINS</operator>
-        <value>bar</value>
-      </Field>
-    </LogicalAnd>
-  </Query>  
-  <limit>10</limit>  
-  <offset>0</offset> 
-</ContentQuery>
-</ViewInput>
-XML;
-
-        $request->setContent($body);
-
-        $response = $this->sendHttpRequest($request);
-        self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getContent());
-        self::assertEquals(1, $jsonResponse->View->Result->count);
-    }
-
-    /**
-     * Covers POST with operator IN on ezkeywords filed types ContentQuery Logic on /api/ezp/v2/views.
-     */
-    public function testInOperatorOnKeywordContentQuery()
-    {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/views', 'ViewInput+xml; version=1.1', 'ContentInfo+json');
-        $body = <<< XML
-<?xml version="1.0" encoding="UTF-8"?>
-<ViewInput>
-<identifier>your-query-id</identifier>
-<public>false</public>
-<ContentQuery>
-  <Query>
-      <Field>
-        <name>tags</name> 
-        <operator>IN</operator>
-        <value>foo</value>
-        <value>bar</value>
-      </Field>
-  </Query>  
-  <limit>10</limit>  
-  <offset>0</offset> 
-</ContentQuery>
-</ViewInput>
-XML;
-
-        $request->setContent($body);
-
-        $response = $this->sendHttpRequest($request);
-        self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getContent());
-        self::assertEquals(2, $jsonResponse->View->Result->count);
-    }
-
-    /**
-     * Covers POST with operator IN on ezkeywords filed types ContentQuery Logic on /api/ezp/v2/views.
-     */
-    public function testLogicWithInOperatorOnKeywordContentQuery()
-    {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/views', 'ViewInput+xml; version=1.1', 'ContentInfo+json');
-        $body = <<< XML
-<?xml version="1.0" encoding="UTF-8"?>
-<ViewInput>
-<identifier>your-query-id</identifier>
-<public>false</public>
-<ContentQuery>
-  <Query>
-    <LogicalOr>
-      <Field>
-        <name>tags</name> 
-        <operator>IN</operator>
-        <value>
-            <value1>foobaz</value1>
-        </value>      
-      </Field>
-    </LogicalOr>
-    <LogicalOr>
-      <Field>
-        <name>tags</name> 
-        <operator>IN</operator>
-        <value>
-            <value1>bazfoo</value1>
-        </value> 
-      </Field>
-    </LogicalOr>
-  </Query>  
-  <limit>10</limit>  
-  <offset>0</offset> 
-</ContentQuery>
-</ViewInput>
-XML;
-
-        $request->setContent($body);
-
-        $response = $this->sendHttpRequest($request);
-        self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getContent());
-        self::assertEquals(2, $jsonResponse->View->Result->count);
+        self::assertEquals($expectedCount, $jsonResponse->View->Result->count);
     }
 
     private function createTestContentType(): string
@@ -376,5 +187,96 @@ XML;
         $this->sendHttpRequest(
             $this->createHttpRequest('DELETE', $href)
         );
+    }
+
+    public function xmlProvider()
+    {
+        $fooTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'foo');
+        $barTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'bar');
+        $bazTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'baz');
+        $foobazTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'foobaz');
+
+        return [
+            [
+                $this->getXmlString(
+                    $this->wrapIn('AND', [$fooTag, $barTag])
+                ),
+                1,
+            ],
+            [
+                $this->getXmlString(
+                    $this->wrapIn('OR', [
+                        $this->wrapIn('AND', [$fooTag, $barTag]),
+                        $this->wrapIn('AND', [$bazTag, $foobazTag]),
+                    ])
+                ),
+                2,
+            ],
+            [
+                $this->getXmlString(
+                    $this->wrapIn('AND', [
+                        $this->wrapIn('NOT', $fooTag),
+                        $barTag,
+                    ])
+                ),
+                1,
+            ],
+        ];
+    }
+
+    /**
+     * @param string $name
+     * @param string $operator
+     * @param string|string[] $value
+     * @return \DomElement
+     */
+    private function buildFieldXml(string $name, string $operator, $value): \DomElement
+    {
+        $xml = new \DOMDocument();
+        $element = $xml->createElement('Field');
+        $element->appendChild(new \DOMElement('name', $name));
+        $element->appendChild(new \DOMElement('operator', $operator));
+        if (is_array($value)) {
+            $valueWrapper = $xml->createElement('value');
+            foreach ($value as $key => $singleValue) {
+                $valueWrapper->appendChild(new \DOMElement('value' . $key, $singleValue));
+            }
+            $element->appendChild($valueWrapper);
+
+            return $element;
+        }
+
+        $element->appendChild(new \DOMElement('value', $value));
+
+        return $element;
+    }
+
+    /**
+     * @param string $logicalOperator
+     * @param \DomElement|\DomElement[] $toWrap
+     * @return \DomElement
+     */
+    private function wrapIn(string $logicalOperator, $toWrap): \DomElement
+    {
+        $xml = new \DOMDocument();
+        $wrapper = $xml->createElement($logicalOperator);
+        if ($toWrap instanceof \DOMElement) {
+            $wrapper->appendChild($xml->importNode($toWrap, true));
+
+            return $wrapper;
+        }
+
+        foreach ($toWrap as $key => $field) {
+            $innerWrapper = $xml->createElement($logicalOperator . $key);
+            $innerWrapper->appendChild($xml->importNode($field, true));
+            $wrapper->appendChild($innerWrapper);
+        }
+
+        return $wrapper;
+    }
+
+    private function getXmlString(\DomElement $simpleXMLElement): string
+    {
+        return $simpleXMLElement->ownerDocument->saveXML($simpleXMLElement);
     }
 }

@@ -147,19 +147,10 @@ class Field extends FieldBase
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();
-
         $subSelect->select(
             $this->dbHandler->quoteColumn('contentobject_id')
         )->from(
             $this->dbHandler->quoteTable('ezcontentobject_attribute')
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezkeyword_attribute_link'),
-            'ezcontentobject_attribute.id',
-           'ezkeyword_attribute_link.objectattribute_id'
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezkeyword'),
-            'ezkeyword.id',
-            'ezkeyword_attribute_link.keyword_id'
         );
 
         $whereExpressions = array();
@@ -169,7 +160,7 @@ class Field extends FieldBase
                     "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
                 );
             }
-            $fieldsInfo['column'] = $fieldTypeIdentifier === 'ezkeyword' ? 'keyword' : $fieldsInfo['column'];
+
             $filter = $this->fieldValueConverter->convertCriteria(
                 $fieldTypeIdentifier,
                 $subSelect,

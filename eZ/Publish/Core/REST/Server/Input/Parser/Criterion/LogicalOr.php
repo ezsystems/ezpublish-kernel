@@ -30,10 +30,6 @@ class LogicalOr extends CriterionParser
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if (array_key_exists('LogicalOr', $data) && is_array($data['LogicalOr'])) {
-            $data['OR'] = $data['LogicalOr'];
-        }
-
         if (!array_key_exists('OR', $data) && !is_array($data['OR'])) {
             throw new Exceptions\Parser('Invalid <OR> format');
         }

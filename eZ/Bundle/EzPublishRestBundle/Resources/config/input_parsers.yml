@@ -496,12 +496,14 @@ services:
         class: "%ezpublish_rest.input.parser.internal.criterion.LogicalAnd.class%"
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.LogicalAnd }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.And }
 
     ezpublish_rest.input.parser.internal.criterion.LogicalNot:
         parent: ezpublish_rest.input.parser
         class: "%ezpublish_rest.input.parser.internal.criterion.LogicalNot.class%"
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.LogicalNot }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Not }
 
     ezpublish_rest.input.parser.internal.criterion.LogicalOperator:
         parent: ezpublish_rest.input.parser
@@ -514,6 +516,7 @@ services:
         class: "%ezpublish_rest.input.parser.internal.criterion.LogicalOr.class%"
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.LogicalOr }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Or }
 
     ezpublish_rest.input.parser.internal.criterion.MoreLikeThis:
         parent: ezpublish_rest.input.parser
