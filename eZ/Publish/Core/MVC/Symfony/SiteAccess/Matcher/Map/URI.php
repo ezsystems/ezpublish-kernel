@@ -47,7 +47,11 @@ class URI extends Map implements URILexer
             return '/';
         }
 
-        return substr($uri, strlen($siteaccessPart));
+        if (mb_strpos($uri, $siteaccessPart) === 0) {
+            return mb_substr($uri, mb_strlen($siteaccessPart));
+        }
+
+        return $uri;
     }
 
     /**
