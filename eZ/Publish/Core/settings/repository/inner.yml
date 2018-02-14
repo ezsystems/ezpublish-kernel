@@ -79,6 +79,8 @@ services:
     ezpublish.api.service.inner_user:
         class: "%ezpublish.api.service.user.class%"
         factory: ["@ezpublish.api.inner_repository", getUserService]
+        calls:
+            - [setLogger, ["@?logger"]]
         lazy: true
 
     ezpublish.api.service.inner_search:
