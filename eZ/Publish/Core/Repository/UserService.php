@@ -615,7 +615,7 @@ class UserService implements UserServiceInterface
             // Password hash was not correctly saved, possible cause: EZP-28692
             $this->repository->rollback();
             if (isset($this->logger)) {
-                $this->logger->error('Password hash could not be updated. Please verify that your database schema is up to date.');
+                $this->logger->critical('Password hash could not be updated. Please verify that your database schema is up to date.');
             }
 
             throw new BadStateException(
