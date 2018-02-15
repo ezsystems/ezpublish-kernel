@@ -17,7 +17,7 @@ parameters:
     ezpublish.http_cache.signalslot.unhide_location.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnhideLocationSlot
     ezpublish.http_cache.signalslot.update_location.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UpdateLocationSlot
     ezpublish.http_cache.signalslot.update_user.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UpdateUserSlot
-    ezpublish.http_cache.signalslot.update_user_group.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UpdateUserSlot
+    ezpublish.http_cache.signalslot.update_user_group.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UpdateUserGroupSlot
     ezpublish.http_cache.signalslot.assign_user_to_user_group.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignUserToUserGroupSlot
     ezpublish.http_cache.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\UnassignUserFromUserGroupSlot
     ezpublish.http_cache.signalslot.trash.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\TrashSlot
