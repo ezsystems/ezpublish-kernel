@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;
 use eZ\Publish\Core\REST\Server\Tests;
 use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;

@@ -449,7 +449,7 @@ class AuthorTest extends FieldTypeTest
     {
         $existingIds = array();
         foreach ($this->authors as $author) {
-            $id = mt_rand(1, 100);
+            $id = random_int(1, 100);
             if (in_array($id, $existingIds)) {
                 continue;
             }

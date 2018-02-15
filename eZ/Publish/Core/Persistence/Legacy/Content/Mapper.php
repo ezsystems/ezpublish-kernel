@@ -249,7 +249,7 @@ class Mapper
         $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
         $contentInfo->sectionId = (int)$row["{$prefix}section_id"];
         $contentInfo->currentVersionNo = (int)$row["{$prefix}current_version"];
-        $contentInfo->isPublished = (bool)($row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED);
+        $contentInfo->isPublished = ($row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED);
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];

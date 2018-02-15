@@ -176,7 +176,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data' => null,
                 'externalData' => array(
-                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                    'inputUri' => __DIR__ . '/_fixtures/image.jpg',
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),
@@ -219,7 +219,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 'externalData' => array(
                     // should be ignored
                     'id' => 'some/value',
-                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
+                    'inputUri' => __DIR__ . '/_fixtures/image.png',
                     'fileName' => 'Blueish-Blue.jpg',
                     'alternativeText' => 'This blue is so blueish.',
                 ),
@@ -305,7 +305,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data' => null,
                 'externalData' => array(
-                    'id' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                    'id' => __DIR__ . '/_fixtures/image.jpg',
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),

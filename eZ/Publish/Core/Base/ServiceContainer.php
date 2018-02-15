@@ -225,7 +225,7 @@ class ServiceContainer implements Container
     protected function prepareDirectory($directory, $name)
     {
         if (!is_dir($directory)) {
-            if (false === @mkdir($directory, 0777, true)) {
+            if (!@mkdir($directory, 0777, true) && !is_dir($directory)) {
                 throw new RuntimeException(
                     sprintf(
                         "Unable to create the %s directory (%s)\n",
