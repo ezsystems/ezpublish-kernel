@@ -101,11 +101,11 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         return $this->getMultipleCacheItems(
             $contentIds,
             'ez-content-info-',
-            function(array $cacheMissIds) {
+            function (array $cacheMissIds) {
                 $this->logger->logCall(__METHOD__, ['content' => $cacheMissIds]);
                 return $this->persistenceHandler->contentHandler()->loadContentInfoList($cacheMissIds);
             },
-            function(ContentInfo $info) {
+            function (ContentInfo $info) {
                 return $this->getCacheTags($info);
             }
         );
