@@ -8,13 +8,17 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\SPI\FieldType\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
+use Psr\Log\LoggerInterface;
 
 /**
  * Mock Test case for RelationProcessor service.
@@ -256,6 +260,58 @@ class RelationProcessorTest extends BaseServiceMockTest
                 Relation::EMBED => array(100 => 0, 200 => true),
             ),
             $relations
+        );
+    }
+
+    public function testAppendFieldRelationsLogMissingLocations()
+    {
+        $fieldValueMock = $this->getMockForAbstractClass(Value::class);
+        $fieldTypeMock = $this->getMock(FieldType::class);
+
+        $locationId = 123465;
+        $fieldDefinitionId = 42;
+
+        $fieldTypeMock
+            ->expects($this->once())
+            ->method('getRelations')
+            ->with($this->equalTo($fieldValueMock))
+            ->will(
+                $this->returnValue(
+                    [
+                        Relation::LINK => [
+                            'locationIds' => [$locationId],
+                        ],
+                    ]
+                )
+            );
+
+        $locationHandler = $this->getPersistenceMock()->locationHandler();
+        $locationHandler
+            ->expects($this->any())
+            ->method('load')
+            ->with($locationId)
+            ->willThrowException($this->getMock(NotFoundException::class));
+
+        $logger = $this->getMock(LoggerInterface::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with('Invalid relation: destination location not found', [
+                'fieldDefinitionId' => $fieldDefinitionId,
+                'locationId' => $locationId,
+            ]);
+
+        $relations = [];
+        $locationIdToContentIdMapping = [];
+
+        $relationProcessor = $this->getPartlyMockedRelationProcessor();
+        $relationProcessor->setLogger($logger);
+        $relationProcessor->appendFieldRelations(
+            $relations,
+            $locationIdToContentIdMapping,
+            $fieldTypeMock,
+            $fieldValueMock,
+            $fieldDefinitionId
         );
     }
 
