@@ -91,6 +91,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
             'ez-content-type-group-',
             function (array $cacheMissIds) {
                 $this->logger->logCall(__METHOD__, ['groups' => $cacheMissIds]);
+
                 return $this->persistenceHandler->contentTypeHandler()->loadGroups($cacheMissIds);
             },
             function (Type\Group $group) {
