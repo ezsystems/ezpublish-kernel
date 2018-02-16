@@ -86,26 +86,17 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadGroups(array $groupIds)
     {
-        list($cacheMissIds, $list) = $this->getMultipleCacheItems($groupIds, 'ez-content-type-group-');
-        if (empty($cacheMissIds)) {
-            return $list;
-        }
-
-        // Load cache misses
-        $this->logger->logCall(__METHOD__, array('groups' => $cacheMissIds));
-        $cacheMissList = $this->persistenceHandler->contentTypeHandler()->loadGroups($cacheMissIds);
-
-        // Populate cache misses with data and set final group data instead on list
-        foreach ($cacheMissList as $id => $group) {
-            $this->cache->save(
-                $list[$id]
-                    ->set($group)
-                    ->tag('type-group-' . $id)
-            );
-            $list[$id] = $group;
-        }
-
-        return $list;
+        return $this->getMultipleCacheItems(
+            $groupIds,
+            'ez-content-type-group-',
+            function(array $cacheMissIds) {
+                $this->logger->logCall(__METHOD__, ['groups' => $cacheMissIds]);
+                return $this->persistenceHandler->contentTypeHandler()->loadGroups($cacheMissIds);
+            },
+            function(Type\Group $group) {
+                return ['type-group-' . $group->id];
+            }
+        );
     }
 
     /**
