@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
@@ -84,13 +85,15 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
+     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function buildRepository(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
-        BackgroundIndexer $backgroundIndexer
+        BackgroundIndexer $backgroundIndexer,
+        RelationProcessor $relationProcessor
     ) {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -98,6 +101,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $persistenceHandler,
             $searchHandler,
             $backgroundIndexer,
+            $relationProcessor,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),

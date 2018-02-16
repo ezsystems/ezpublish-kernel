@@ -1187,7 +1187,16 @@ class ContentService implements ContentServiceInterface
         }
 
         $mainLanguageCode = $content->contentInfo->mainLanguageCode;
-        $languageCodes = $this->getLanguageCodesForUpdate($contentUpdateStruct, $content);
+        if ($contentUpdateStruct->initialLanguageCode === null) {
+            $contentUpdateStruct->initialLanguageCode = $mainLanguageCode;
+        }
+
+        $allLanguageCodes = $this->getLanguageCodesForUpdate($contentUpdateStruct, $content);
+        foreach ($allLanguageCodes as $languageCode) {
+            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+        }
+
+        $updatedLanguageCodes = $this->getUpdatedLanguageCodes($contentUpdateStruct);
         $contentType = $this->repository->getContentTypeService()->loadContentType(
             $content->contentInfo->contentTypeId
         );
@@ -1209,9 +1218,10 @@ class ContentService implements ContentServiceInterface
                 $fieldDefinition->fieldTypeIdentifier
             );
 
-            foreach ($languageCodes as $languageCode) {
+            foreach ($allLanguageCodes as $languageCode) {
                 $isCopied = $isEmpty = $isRetained = false;
                 $isLanguageNew = !in_array($languageCode, $content->versionInfo->languageCodes);
+                $isLanguageUpdated = in_array($languageCode, $updatedLanguageCodes);
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $mainLanguageCode;
                 $isFieldUpdated = isset($fields[$fieldDefinition->identifier][$valueLanguageCode]);
                 $isProcessed = isset($fieldValues[$fieldDefinition->identifier][$valueLanguageCode]);
@@ -1232,7 +1242,7 @@ class ContentService implements ContentServiceInterface
 
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmpty = true;
-                    if ($fieldDefinition->isRequired) {
+                    if ($isLanguageUpdated && $fieldDefinition->isRequired) {
                         $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
                             "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
                             null,
@@ -1240,7 +1250,7 @@ class ContentService implements ContentServiceInterface
                             'empty'
                         );
                     }
-                } else {
+                } elseif ($isLanguageUpdated) {
                     $fieldErrors = $fieldType->validate(
                         $fieldDefinition,
                         $fieldValue
@@ -1291,7 +1301,7 @@ class ContentService implements ContentServiceInterface
                 'name' => $this->nameSchemaService->resolveNameSchema(
                     $content,
                     $fieldValues,
-                    $languageCodes,
+                    $allLanguageCodes,
                     $contentType
                 ),
                 'creatorId' => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUserReference()->getUserId(),
@@ -1331,6 +1341,34 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Returns only updated language codes.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     *
+     * @return array
+     */
+    private function getUpdatedLanguageCodes(APIContentUpdateStruct $contentUpdateStruct)
+    {
+        $languageCodes = [
+            $contentUpdateStruct->initialLanguageCode => true,
+        ];
+
+        foreach ($contentUpdateStruct->fields as $field) {
+            if ($field->languageCode === null || isset($languageCodes[$field->languageCode])) {
+                continue;
+            }
+
+//            dump($field->fieldDefIdentifier, $field->languageCode);
+
+            $languageCodes[$field->languageCode] = true;
+        }
+
+//        dump(array_keys($languageCodes));
+
+        return array_keys($languageCodes);
+    }
+
+    /**
      * Returns all language codes used in given $fields.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if no field value exists in initial language
@@ -1342,26 +1380,12 @@ class ContentService implements ContentServiceInterface
      */
     protected function getLanguageCodesForUpdate(APIContentUpdateStruct $contentUpdateStruct, APIContent $content)
     {
-        if ($contentUpdateStruct->initialLanguageCode !== null) {
-            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-                $contentUpdateStruct->initialLanguageCode
-            );
-        } else {
-            $contentUpdateStruct->initialLanguageCode = $content->contentInfo->mainLanguageCode;
-        }
-
         $languageCodes = array_fill_keys($content->versionInfo->languageCodes, true);
         $languageCodes[$contentUpdateStruct->initialLanguageCode] = true;
 
-        foreach ($contentUpdateStruct->fields as $field) {
-            if ($field->languageCode === null || isset($languageCodes[$field->languageCode])) {
-                continue;
-            }
-
-            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-                $field->languageCode
-            );
-            $languageCodes[$field->languageCode] = true;
+        $updatedLanguageCodes = $this->getUpdatedLanguageCodes($contentUpdateStruct);
+        foreach ($updatedLanguageCodes as $languageCode) {
+            $languageCodes[$languageCode] = true;
         }
 
         return array_keys($languageCodes);

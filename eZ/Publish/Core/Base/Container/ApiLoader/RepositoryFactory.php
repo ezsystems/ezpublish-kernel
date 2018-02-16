@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
@@ -73,12 +74,14 @@ class RepositoryFactory implements ContainerAwareInterface
     public function buildRepository(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
-        BackgroundIndexer $backgroundIndexer
+        BackgroundIndexer $backgroundIndexer,
+        RelationProcessor $relationProcessor
     ) {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             $searchHandler,
             $backgroundIndexer,
+            $relationProcessor,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),

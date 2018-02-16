@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
@@ -255,12 +256,14 @@ class Repository implements RepositoryInterface
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
+        RelationProcessor $relationProcessor,
         array $serviceSettings = array(),
         APIUserReference $user = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
         $this->backgroundIndexer = $backgroundIndexer;
+        $this->relationProcessor = $relationProcessor;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
             'contentType' => array(),
@@ -836,12 +839,6 @@ class Repository implements RepositoryInterface
      */
     protected function getRelationProcessor()
     {
-        if ($this->relationProcessor !== null) {
-            return $this->relationProcessor;
-        }
-
-        $this->relationProcessor = new Helper\RelationProcessor($this->persistenceHandler);
-
         return $this->relationProcessor;
     }
 
