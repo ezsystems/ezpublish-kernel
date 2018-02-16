@@ -11,11 +11,11 @@ Prior to this feature this is only possible by:
 - Resort to query type which is limited to one set of objects, and mainly suitable to load for instance child objects.
 - Use of third party solutions which in varying degree diverges from the official supported API.
 
-While relevant for all domain objects, the most pressing need is for the eZ content model to get:
+While relevant for all domain objects, the most pressing need is for the eZ content model to get _for instance_:
 - content info -> content type
 - content info -> section
-- content info -> main location _(just meta info\*)_
-- content info -> locations _(just meta info\*)_
+- content info -> main location _(just meta info\*, TBD if it should follow permission rules)_
+- content info -> locations _(just meta info\*, should be filtered by permissions like API, then what about visibility?)_
 - location -> content
 - ...
 
