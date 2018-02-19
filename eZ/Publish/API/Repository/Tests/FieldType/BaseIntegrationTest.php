@@ -309,8 +309,16 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        $contentTypeIdentifier = 'test-' . $this->getTypeName();
+
+        try {
+            return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+        } catch (Repository\Exceptions\NotFoundException $e) {
+            // Move on to creating Content Type
+        }
+
         $createStruct = $contentTypeService->newContentTypeCreateStruct(
-            'test-' . $this->getTypeName()
+            $contentTypeIdentifier
         );
         $createStruct->mainLanguageCode = $this->getOverride('mainLanguageCode', $typeCreateOverride, 'eng-GB');
         $createStruct->remoteId = $this->getTypeName();
