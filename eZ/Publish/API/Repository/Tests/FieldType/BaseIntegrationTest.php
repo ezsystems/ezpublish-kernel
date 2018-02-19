@@ -543,6 +543,47 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * Create multilingual content of given name and FT-specific data.
+     *
+     * @param array $names Content names in the form of <code>[languageCode => name]</code>
+     * @param array $fieldData FT-specific data in the form of <code>[languageCode => data]</code>
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function createMultilingualContent(array $names, array $fieldData, array $locationCreateStructs = [])
+    {
+        self::assertEquals(array_keys($names), array_keys($fieldData), 'Languages passed to names and data differ');
+
+        $contentType = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration(),
+            [],
+            ['isTranslatable' => true]
+        );
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        foreach ($names as $languageCode => $name) {
+            $createStruct->setField('name', $name, $languageCode);
+        }
+        foreach ($fieldData as $languageCode => $value) {
+            $createStruct->setField('data', $value, $languageCode);
+        }
+
+        $createStruct->remoteId = md5(uniqid('', true) . microtime());
+        $createStruct->alwaysAvailable = true;
+
+        return $contentService->createContent($createStruct, $locationCreateStructs);
+    }
+
+    /**
      * @depends testCreateContent
      */
     public function testCreatedFieldType($content)
