@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use DOMDocument;
@@ -623,6 +626,157 @@ EOT;
             str_replace('[ObjectId]', $objectId, $expected),
             $test->getField('description')->value->xml->saveXML()
         );
+    }
+
+    /**
+     * Prepare Content structure with link to deleted Location.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     *
+     * @return array [$deletedLocation, $brokenContent]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function prepareInternalLinkValidatorBrokenLinksTestCase(Repository $repository)
+    {
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // Create first content with single Language
+        $primaryContent = $contentService->publishVersion(
+            $this->createMultilingualContent(
+                ['eng-US' => 'ContentA'],
+                ['eng-US' => $this->getValidCreationFieldData()],
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+        // Create secondary Location (to be deleted) for the first Content
+        $deletedLocation = $locationService->createLocation(
+            $primaryContent->contentInfo,
+            $locationService->newLocationCreateStruct(60)
+        );
+
+        // Create second Content with two Languages, one of them linking to secondary Location
+        $brokenContent = $contentService->publishVersion(
+            $this->createMultilingualContent(
+                [
+                    'eng-US' => 'ContentB',
+                    'eng-GB' => 'ContentB',
+                ],
+                [
+                    'eng-US' => $this->getValidCreationFieldData(),
+                    'eng-GB' => $this->getDocumentWithLocationLink($deletedLocation),
+                ],
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        // delete Location making second Content broken
+        $locationService->deleteLocation($deletedLocation);
+
+        return [$deletedLocation, $brokenContent];
+    }
+
+    /**
+     * Test updating Content which contains links to deleted Location doesn't fail when updating not broken field only.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testInternalLinkValidatorIgnoresMissingRelationOnNotUpdatedField()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        list(, $contentB) = $this->prepareInternalLinkValidatorBrokenLinksTestCase($repository);
+
+        // update field w/o erroneous link to trigger validation
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('data', $this->getValidUpdateFieldData(), 'eng-US');
+
+        $contentDraftB = $contentService->updateContent(
+            $contentService->createContentDraft($contentB->contentInfo)->versionInfo,
+            $contentUpdateStruct
+        );
+
+        $contentService->publishVersion($contentDraftB->versionInfo);
+    }
+
+    /**
+     * Test updating Content which contains links to deleted Location fails when updating broken field.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     */
+    public function testInternalLinkValidatorReturnsErrorOnMissingRelationInUpdatedField()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        list($deletedLocation, $brokenContent) = $this->prepareInternalLinkValidatorBrokenLinksTestCase(
+            $repository
+        );
+
+        // update field containing erroneous link to trigger validation
+        /** @var \DOMDocument $document */
+        $document = $brokenContent->getField('data', 'eng-GB')->value->xml;
+        $newParagraph = $document->createElement('para', 'Updated content');
+        $document
+            ->getElementsByTagName('section')->item(0)
+            ->appendChild($newParagraph);
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('data', new RichTextValue($document), 'eng-GB');
+
+        $expectedValidationErrorMessage = sprintf(
+            'Invalid link "ezlocation://%s": target location cannot be found',
+            $deletedLocation->id
+        );
+        try {
+            $contentDraftB = $contentService->updateContent(
+                $contentService->createContentDraft($brokenContent->contentInfo)->versionInfo,
+                $contentUpdateStruct
+            );
+
+            $contentService->publishVersion($contentDraftB->versionInfo);
+        } catch (ContentFieldValidationException $e) {
+            $this->assertValidationErrorOccurs($e, $expectedValidationErrorMessage);
+
+            return;
+        }
+
+        self::fail("Expected ValidationError '{$expectedValidationErrorMessage}' didn't occur");
+    }
+
+    /**
+     * Get XML Document in DocBook format, containing link to the given Location.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \DOMDocument
+     */
+    private function getDocumentWithLocationLink(Location $location)
+    {
+        $document = new DOMDocument();
+        $document->loadXML(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para><link xlink:href="ezlocation://{$location->id}" xlink:show="none">link1</link></para>
+</section>
+XML
+        );
+
+        return $document;
     }
 
     protected function checkSearchEngineSupport()
