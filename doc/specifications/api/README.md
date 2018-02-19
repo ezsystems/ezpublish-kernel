@@ -1,7 +1,7 @@
 # API
 
-API in eZ context refers to its Public API's. This folder covering specifically the PHP API, and specifications for
-REST API can be found in `doc/specifications/rest` folder.
+API in eZ context refers to its Public API's. This folder covers the PHP API specifically.
+Specifications for REST API can be found in `doc/specifications/rest` folder.
 
 Common for them both is the Public API BC promise and the underlying modeling of the eZ Content Repository.
 
