@@ -53,7 +53,7 @@ class Provider implements APIUserProviderInterface
                 return $user;
             }
 
-            return new User($this->repository->getUserService()->loadUserByLogin($user), array('ROLE_USER'));
+            return new User($this->repository->getUserService()->loadUserByLogin($user), ['ROLE_USER']);
         } catch (NotFoundException $e) {
             throw new UsernameNotFoundException($e->getMessage(), 0, $e);
         }
@@ -113,6 +113,6 @@ class Provider implements APIUserProviderInterface
      */
     public function loadUserByAPIUser(APIUser $apiUser)
     {
-        return new User($apiUser);
+        return new User($apiUser, ['ROLE_USER']);
     }
 }
