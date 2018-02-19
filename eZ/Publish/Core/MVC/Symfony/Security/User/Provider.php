@@ -118,6 +118,6 @@ class Provider implements APIUserProviderInterface
      */
     public function loadUserByAPIUser(APIUser $apiUser)
     {
-        return new User($apiUser);
+        return new User($apiUser, array('ROLE_USER'));
     }
 }
