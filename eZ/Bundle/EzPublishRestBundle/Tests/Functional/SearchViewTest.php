@@ -215,7 +215,7 @@ XML;
             [
                 $this->getXmlString(
                     $this->wrapIn('AND', [
-                        $this->wrapIn('NOT', $fooTag),
+                        $this->wrapIn('NOT', [$fooTag]),
                         $barTag,
                     ])
                 ),
@@ -239,7 +239,7 @@ XML;
         if (is_array($value)) {
             $valueWrapper = $xml->createElement('value');
             foreach ($value as $key => $singleValue) {
-                $valueWrapper->appendChild(new \DOMElement('value' . $key, $singleValue));
+                $valueWrapper->appendChild(new \DOMElement('value', $singleValue));
             }
             $element->appendChild($valueWrapper);
 
@@ -256,18 +256,13 @@ XML;
      * @param \DomElement|\DomElement[] $toWrap
      * @return \DomElement
      */
-    private function wrapIn(string $logicalOperator, $toWrap): \DomElement
+    private function wrapIn(string $logicalOperator, array $toWrap): \DomElement
     {
         $xml = new \DOMDocument();
         $wrapper = $xml->createElement($logicalOperator);
-        if ($toWrap instanceof \DOMElement) {
-            $wrapper->appendChild($xml->importNode($toWrap, true));
-
-            return $wrapper;
-        }
 
         foreach ($toWrap as $key => $field) {
-            $innerWrapper = $xml->createElement($logicalOperator . $key);
+            $innerWrapper = $xml->createElement($logicalOperator);
             $innerWrapper->appendChild($xml->importNode($field, true));
             $wrapper->appendChild($innerWrapper);
         }

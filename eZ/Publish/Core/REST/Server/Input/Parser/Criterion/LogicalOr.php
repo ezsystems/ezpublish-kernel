@@ -36,7 +36,7 @@ class LogicalOr extends CriterionParser
 
         $criteria = array();
         foreach ($data['OR'] as $criterionName => $criterionData) {
-            if (is_array($criterionData)) {
+            if (is_array($criterionData) && !array_key_exists(0, $criterionData)) {
                 $criterionName = key($criterionData);
                 $criterionData = current($criterionData);
             }
