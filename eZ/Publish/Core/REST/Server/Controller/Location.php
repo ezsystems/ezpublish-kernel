@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
@@ -47,17 +48,30 @@ class Location extends RestController
     protected $trashService;
 
     /**
+     * URLAlias Service.
+     *
+     * @var \eZ\Publish\API\Repository\URLAliasService
+     */
+    protected $urlAliasService;
+
+    /**
      * Construct controller.
      *
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\TrashService $trashService
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
      */
-    public function __construct(LocationService $locationService, ContentService $contentService, TrashService $trashService)
-    {
+    public function __construct(
+        LocationService $locationService,
+        ContentService $contentService,
+        TrashService $trashService,
+        URLAliasService $urlAliasService
+    ) {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->trashService = $trashService;
+        $this->urlAliasService = $urlAliasService;
     }
 
     /**
@@ -69,14 +83,15 @@ class Location extends RestController
      */
     public function redirectLocation(Request $request)
     {
-        if (!$request->query->has('id') && !$request->query->has('remoteId')) {
-            throw new BadRequestException("At least one of 'id' or 'remoteId' parameters is required.");
-        }
-
         if ($request->query->has('id')) {
             $location = $this->locationService->loadLocation($request->query->get('id'));
-        } else {
+        } elseif ($request->query->has('remoteId')) {
             $location = $this->locationService->loadLocationByRemoteId($request->query->get('remoteId'));
+        } elseif ($request->query->has('urlAlias')) {
+            $urlAlias = $this->urlAliasService->lookup($request->query->get('urlAlias'));
+            $location = $this->locationService->loadLocation($urlAlias->destination);
+        } else {
+            throw new BadRequestException("At least one of 'id', 'remoteId' or 'urlAlias' parameters is required.");
         }
 
         return new Values\TemporaryRedirect(
