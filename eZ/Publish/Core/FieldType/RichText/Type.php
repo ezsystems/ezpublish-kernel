@@ -51,24 +51,32 @@ class Type extends FieldType
     protected $internalLinkValidator;
 
     /**
+     * @var null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator
+     */
+    private $customTagsValidator;
+
+    /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
      * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
      * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
      * @param null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator $internalLinkValidator
+     * @param null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator $customTagsValidator
      */
     public function __construct(
         Validator $internalFormatValidator,
         ConverterDispatcher $inputConverterDispatcher,
         Normalizer $inputNormalizer = null,
         ValidatorDispatcher $inputValidatorDispatcher = null,
-        InternalLinkValidator $internalLinkValidator = null
+        InternalLinkValidator $internalLinkValidator = null,
+        CustomTagsValidator $customTagsValidator = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
         $this->inputNormalizer = $inputNormalizer;
         $this->inputValidatorDispatcher = $inputValidatorDispatcher;
         $this->internalLinkValidator = $internalLinkValidator;
+        $this->customTagsValidator = $customTagsValidator;
     }
 
     /**
@@ -262,6 +270,13 @@ class Type extends FieldType
 
         if ($this->internalLinkValidator !== null) {
             $errors = $this->internalLinkValidator->validateDocument($value->xml);
+            foreach ($errors as $error) {
+                $validationErrors[] = new ValidationError($error);
+            }
+        }
+
+        if ($this->customTagsValidator !== null) {
+            $errors = $this->customTagsValidator->validateDocument($value->xml);
             foreach ($errors as $error) {
                 $validationErrors[] = new ValidationError($error);
             }

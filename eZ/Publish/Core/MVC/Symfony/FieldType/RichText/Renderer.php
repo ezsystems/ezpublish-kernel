@@ -65,6 +65,11 @@ class Renderer implements RendererInterface
     protected $logger;
 
     /**
+     * @var array
+     */
+    private $customTagsConfiguration;
+
+    /**
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
@@ -72,6 +77,7 @@ class Renderer implements RendererInterface
      * @param string $tagConfigurationNamespace
      * @param string $embedConfigurationNamespace
      * @param null|\Psr\Log\LoggerInterface $logger
+     * @param array $customTagsConfiguration
      */
     public function __construct(
         Repository $repository,
@@ -80,7 +86,8 @@ class Renderer implements RendererInterface
         EngineInterface $templateEngine,
         $tagConfigurationNamespace,
         $embedConfigurationNamespace,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        array $customTagsConfiguration = []
     ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
@@ -89,6 +96,7 @@ class Renderer implements RendererInterface
         $this->tagConfigurationNamespace = $tagConfigurationNamespace;
         $this->embedConfigurationNamespace = $embedConfigurationNamespace;
         $this->logger = $logger;
+        $this->customTagsConfiguration = $customTagsConfiguration;
     }
 
     public function renderTag($name, array $parameters, $isInline)
@@ -281,6 +289,11 @@ class Renderer implements RendererInterface
      */
     protected function getTagTemplateName($identifier, $isInline)
     {
+        if (isset($this->customTagsConfiguration[$identifier])) {
+            return $this->customTagsConfiguration[$identifier]['template'];
+        }
+
+        // BC layer:
         $configurationReference = $this->tagConfigurationNamespace . '.' . $identifier;
 
         if ($this->configResolver->hasParameter($configurationReference)) {
@@ -288,6 +301,7 @@ class Renderer implements RendererInterface
 
             return $configuration['template'];
         }
+        // End of BC layer --/
 
         if (isset($this->logger)) {
             $this->logger->warning(
