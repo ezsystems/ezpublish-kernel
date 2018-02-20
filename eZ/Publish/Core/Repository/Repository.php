@@ -890,6 +890,7 @@ class Repository implements RepositoryInterface
         }
 
         $this->contentTypeDomainMapper = new Helper\ContentTypeDomainMapper(
+            $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->contentLanguageHandler(),
             $this->getFieldTypeRegistry()
         );

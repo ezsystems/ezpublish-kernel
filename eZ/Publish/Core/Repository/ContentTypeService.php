@@ -812,10 +812,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw $e;
         }
 
-        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
-            $spiContentType,
-            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
-        );
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($spiContentType);
     }
 
     /**
@@ -855,7 +852,6 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            $this->contentTypeHandler->loadGroups($spiContentType->groupIds),
             $prioritizedLanguages
         );
     }
@@ -875,7 +871,6 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            $this->contentTypeHandler->loadGroups($spiContentType->groupIds),
             $prioritizedLanguages
         );
     }
@@ -889,7 +884,6 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $this->contentTypeDomainMapper->buildContentTypeDomainObject(
             $spiContentType,
-            $this->contentTypeHandler->loadGroups($spiContentType->groupIds),
             $prioritizedLanguages
         );
     }
@@ -916,10 +910,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new NotFoundException('ContentType owned by someone else', $contentTypeId);
         }
 
-        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
-            $spiContentType,
-            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
-        );
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($spiContentType);
     }
 
     /**
@@ -936,7 +927,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         foreach ($spiContentTypes as $spiContentType) {
             $contentTypes[] = $this->contentTypeDomainMapper->buildContentTypeDomainObject(
                 $spiContentType,
-                $this->contentTypeHandler->loadGroups($spiContentType->groupIds),
                 $prioritizedLanguages
             );
         }
@@ -987,10 +977,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
-        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject(
-            $spiContentType,
-            $this->contentTypeHandler->loadGroups($spiContentType->groupIds)
-        );
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($spiContentType);
     }
 
     /**
