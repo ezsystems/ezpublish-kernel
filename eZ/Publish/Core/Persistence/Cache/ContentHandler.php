@@ -98,26 +98,18 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
     public function loadContentInfoList(array $contentIds)
     {
-        list($cacheMisses, $list) = $this->getMultipleCacheItems($contentIds, 'ez-content-info-');
-        if (empty($cacheMisses)) {
-            return $list;
-        }
+        return $this->getMultipleCacheItems(
+            $contentIds,
+            'ez-content-info-',
+            function (array $cacheMissIds) {
+                $this->logger->logCall(__METHOD__, ['content' => $cacheMissIds]);
 
-        // Load cache misses
-        $this->logger->logCall(__METHOD__, array('content' => $cacheMisses));
-        $cacheMissList = $this->persistenceHandler->contentHandler()->loadContentInfoList($cacheMisses);
-
-        // Populate cache misses with data and set final info data instead on list
-        foreach ($cacheMissList as $id => $contentInfo) {
-            $this->cache->save(
-                $list[$id]
-                    ->set($contentInfo)
-                    ->tag($this->getCacheTags($contentInfo))
-            );
-            $list[$id] = $contentInfo;
-        }
-
-        return $list;
+                return $this->persistenceHandler->contentHandler()->loadContentInfoList($cacheMissIds);
+            },
+            function (ContentInfo $info) {
+                return $this->getCacheTags($info);
+            }
+        );
     }
 
     /**

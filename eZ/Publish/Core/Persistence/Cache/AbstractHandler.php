@@ -58,20 +58,29 @@ abstract class AbstractHandler
      *
      * @param array $ids
      * @param string $keyPrefix
+     * @param callable $missingLoader Function for loading missing objects, gets array with missing id's as argument,
+     *                                expects return value to be array with id as key. Missing items should be missing.
+     * @param callable $loadedTagger Function for tagging loaded object, gets object as argument, return array of tags.
      *
-     * @return array Format [id[] $cacheMisses, CacheItem[<id>] $list], list contains hits & misses (if there where any).
+     * @return array
      */
-    final protected function getMultipleCacheItems(array $ids, string $keyPrefix): array
-    {
+    final protected function getMultipleCacheItems(
+        array $ids,
+        string $keyPrefix,
+        callable $missingLoader,
+        callable $loadedTagger
+    ): array {
         if (empty($ids)) {
-            return [[], []];
+            return [];
         }
 
+        // Generate unique cache keys
         $cacheKeys = [];
         foreach (array_unique($ids) as $id) {
             $cacheKeys[] = $keyPrefix . $id;
         }
 
+        // Load cache items by cache keys (will contain hits and misses)
         $list = [];
         $cacheMisses = [];
         $keyPrefixLength = strlen($keyPrefix);
@@ -79,13 +88,32 @@ abstract class AbstractHandler
             $id = substr($key, $keyPrefixLength);
             if ($cacheItem->isHit()) {
                 $list[$id] = $cacheItem->get();
-                continue;
+            } else {
+                $cacheMisses[] = $id;
+                $list[$id] = $cacheItem;
             }
-
-            $cacheMisses[] = $id;
-            $list[$id] = $cacheItem;
         }
 
-        return [$cacheMisses, $list];
+        // No misses, return completely cached list
+        if (empty($cacheMisses)) {
+            return $list;
+        }
+
+        // Load missing items, save to cache & apply to list if found
+        $loadedList = $missingLoader($cacheMisses);
+        foreach ($cacheMisses as $id) {
+            if (isset($loadedList[$id])) {
+                $this->cache->save(
+                    $list[$id]
+                        ->set($loadedList[$id])
+                        ->tag($loadedTagger($loadedList[$id]))
+                );
+                $list[$id] = $loadedList[$id];
+            } else {
+                unset($list[$id]);
+            }
+        }
+
+        return $list;
     }
 }
