@@ -10,6 +10,8 @@
  #              containing <fieldtypeidentifier>-field
  #}
 
+{% trans_default_domain "content_fields" %}
+
 {% block ezstring_field %}
 {% spaceless %}
     {% set field_value = field.value.text %}
@@ -280,8 +282,7 @@
 {% block ezgmaplocation_field %}
 {##
  # This field type block accepts the following parameters:
- # - string mapType the Google map type (ROADMAP, SATELLITE, HYBRID or TERRAIN), default is ROADMAP
- # - boolean showMap whether to show the Google map or not, default is true
+ # - boolean showMap whether to show the map or not, default is true
  # - boolean showInfo whether to show the latitude, longitude and address or not, default is true
  # - integer zoom the default zoom level, default is 13
  # - boolean draggable whether to enable or not draggable map (useful on mobile / responsive layout), default is true
@@ -291,7 +292,9 @@
  #                         set to false to not set any height style inline, default is 200px
  # - boolean scrollWheel If false, disables scrollwheel zooming on the map. Enabled by default.
  #
- # For further reading: https://developers.google.com/maps/documentation/javascript/reference
+ # For further reading:
+ # - https://wiki.openstreetmap.org
+ # - http://leafletjs.com/reference-1.3.0.html
  #}
 {% spaceless %}
 <div {{ block( 'field_attributes' ) }}>
@@ -299,19 +302,18 @@
     {% set defaultHeight = '200px' %}
     {% set defaultShowMap = true %}
     {% set defaultShowInfo = true %}
-    {% set defaultZoom = 13 %}
-    {% set defaultMapType = 'ROADMAP' %}
     {% set defaultDraggable = 'true' %}
     {% set defaultScrollWheel = 'true' %}
 
     {% set hasContent = field.value is not null %}
-    {% set latitude = field.value.latitude|default( 0 ) %}
-    {% set longitude = field.value.longitude|default( 0 ) %}
+    {% set latitude = field.value.latitude %}
+    {% set longitude = field.value.longitude %}
     {% set address = field.value.address|default( "" ) %}
     {% set mapId = "maplocation-map-" ~ field.id %}
 
+    {% set defaultZoom = latitude is null and longitude is null ? 1 : 15 %}
+
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
-    {% set mapType = parameters.mapType|default( defaultMapType ) %}
 
     {% set mapWidth, mapHeight = defaultWidth, defaultHeight %}
     {% if parameters.width is defined %}
@@ -345,9 +347,9 @@
     {% if showInfo %}
     <dl>
         <dt>Latitude</dt>
-        <dd>{{ hasContent ? latitude : "Not set" }}</dd>
+        <dd>{{ latitude is not null ? latitude : 'content-field.latitude.not_set'|trans|desc("Not set") }}</dd>
         <dt>Longitude</dt>
-        <dd>{{ longitude ? longitude : "Not set" }}</dd>
+        <dd>{{ longitude is not null ? longitude : 'content-field.longitude.not_set'|trans|desc("Not set") }}</dd>
         {% if address %}
         <dt>Address</dt>
         <dd>{{ address }}</dd>
@@ -356,37 +358,40 @@
     {% endif %}
 
     {% if hasContent and showMap %}
-    {% set apiKey = ezpublish.configResolver.hasParameter('api_keys.google_maps') ? ezpublish.configResolver.getParameter('api_keys.google_maps'): "" %}
+    {% set latitude = latitude|default(0) %}
+    {% set longitude = longitude|default(0) %}
         <script>
             if (typeof(window.ezgmaplocationMapsScriptLoaded) == 'undefined') {
                 (function (win, doc) {
                     var myScript = document.createElement('script');
-                    myScript.src = '//maps.googleapis.com/maps/api/js{% if apiKey %}?key={{ apiKey }}{% endif %}';
+                    var myCss = document.createElement('link');
+                    myScript.src = 'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js';
+                    myCss.rel = "stylesheet";
+                    myCss.href = "https://unpkg.com/leaflet@1.3.1/dist/leaflet.css";
                     win.ezgmaplocationMapsScriptLoaded = true;
+                    doc.body.appendChild(myCss);
                     doc.body.appendChild(myScript);
                 })(window, document)
             }
         </script>
         <script type="text/javascript">
-        (function(win, doc) {
-            var mapView = function (mapId, latitude, longitude) {
-                var mapElt = doc.getElementById("{{ mapId }}"),
-                    startPoint = new google.maps.LatLng(latitude, longitude),
-                    zoom = {{ zoom }},
-                    draggable = {{ draggable }};
+            (function (win) {
+                var mapView = function (mapId, latitude, longitude) {
+                    var coordinates = [latitude, longitude];
+                    var mapConfig = {
+                        dragging: {{ draggable }},
+                        scrollWheelZoom: {{ scrollWheel }},
+                        zoom: {{ zoom }},
+                        center: coordinates
+                    };
+                    var map = L.map(mapId, mapConfig);
 
-                new google.maps.Marker({
-                    map: new google.maps.Map(mapElt, {
-                        center: startPoint,
-                        zoom: zoom,
-                        draggable: draggable,
-                        scrollwheel: {{ scrollWheel }},
-                        mapTypeId: google.maps.MapTypeId.{{ mapType }}
-                    }),
-                    position: startPoint
-                });
-            }
-            if ( win.addEventListener ) {
+                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    L.marker(coordinates).addTo(map);
+                };
                 win.addEventListener(
                     'load',
                     function () {
@@ -394,18 +399,10 @@
                     },
                     false
                 );
-            } else if ( win.attachEvent ) {
-                win.attachEvent(
-                    'onload',
-                    function () {
-                        mapView("{{ mapId }}", {{ latitude }}, {{ longitude }});
-                    }
-                );
-            }
-        })(window, document);
+            })(window);
         </script>
         {% set mapStyle = mapWidth ? "width:" ~ mapWidth  ~ ";": "" %}
-        {% set mapStyle =  mapHeight ? mapStyle ~ " height:" ~ mapHeight : mapStyle %}
+        {% set mapStyle = mapHeight ? mapStyle ~ " height:" ~ mapHeight : mapStyle %}
         <div class="maplocation-map" id="{{ mapId }}" style="{{ mapStyle }}"></div>
     {% endif %}
 </div>

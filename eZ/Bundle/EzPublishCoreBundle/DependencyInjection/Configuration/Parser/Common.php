@@ -71,6 +71,7 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('google_maps')
+                        ->setDeprecated('The child node "%node%" at path "%path%" is no longer used and deprecated.')
                         ->info('Google Maps API Key, required as of Google Maps v3 to make sure maps show up correctly.')
                         ->defaultNull()
                     ->end()
