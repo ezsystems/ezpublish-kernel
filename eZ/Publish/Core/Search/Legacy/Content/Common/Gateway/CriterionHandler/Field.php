@@ -14,7 +14,6 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldV
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
