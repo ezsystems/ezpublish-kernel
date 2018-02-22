@@ -78,6 +78,23 @@ XML;
 
     /**
      * @depends testCreateLocation
+     * Covers GET /content/locations?urlAlias=<Path/To-Content>
+     */
+    public function testRedirectLocationByURLAlias($locationHref)
+    {
+        $testUrlAlias = 'firstPart/secondPart/testUrlAlias';
+        $this->createUrlAlias($locationHref, $testUrlAlias);
+
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest('GET', "/api/ezp/v2/content/locations?urlAlias={$testUrlAlias}")
+        );
+
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertHttpResponseHasHeader($response, 'Location', $locationHref);
+    }
+
+    /**
+     * @depends testCreateLocation
      * Covers GET /content/locations/{locationPath}
      */
     public function testLoadLocation($locationHref)
@@ -193,5 +210,33 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 204);
+    }
+
+    private function createUrlAlias(string $locationHref, string $urlAlias): string
+    {
+        $xml = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<UrlAliasCreate type="LOCATION">
+  <location href="{$locationHref}" />
+  <path>/{$urlAlias}</path>
+  <languageCode>eng-GB</languageCode>
+  <alwaysAvailable>false</alwaysAvailable>
+  <forward>true</forward>
+</UrlAliasCreate>
+XML;
+
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/urlaliases',
+            'UrlAliasCreate+xml',
+            'UrlAlias+json'
+        );
+        $request->setContent($xml);
+
+        $response = $this->sendHttpRequest($request);
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
+        return $href;
     }
 }

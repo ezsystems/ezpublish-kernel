@@ -1874,13 +1874,14 @@ XML Example
       <Location href="/content/locations/1/4/73/133" media-type="application/vnd.ez.api.Location+xml"/>
     </LocationList>
 
-Load locations by id
+Load locations by id/remoteId/urlAlias
 ````````````````````
 :Resource: /content/locations
 :Method: GET
-:Description: loads the location for a given id (x)or remote id
+:Description: loads the location for a given id (x), remote id or url alias.
 :Parameters: :id: the id of the location. If present the location is with the given id is returned.
              :remoteId: the remoteId of the location. If present the location with the given remoteId is returned
+             :urlAlias: one of the url Aliases of the location. If present the location with given url Alias is returned
 :Response:
 
 .. code:: http
@@ -1889,7 +1890,7 @@ Load locations by id
           Location: /content/locations/<path>
 
 :Error Codes:
-    :404: If the  location with the given id (remoteId) does not exist
+    :404: If the  location with the given id (remoteId or urlAlias) does not exist
 
 Load location
 `````````````

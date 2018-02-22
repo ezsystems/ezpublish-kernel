@@ -178,6 +178,7 @@ services:
             - "@ezpublish.api.service.location"
             - "@ezpublish.api.service.content"
             - "@ezpublish.api.service.trash"
+            - "@ezpublish.api.service.url_alias"
 
     ezpublish_rest.controller.object_state:
         class: "%ezpublish_rest.controller.object_state.class%"
