@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Integration test for use field type.
@@ -526,5 +528,80 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $fieldType->isEmptyValue($fieldValue),
             'Field value is not empty: ' . var_export($fieldValue, true)
         );
+    }
+
+    /**
+     * Create test Content with ezkeyword type.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    protected function createKeywordContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct('content-keyword');
+        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->remoteId = 'content-keyword-123';
+        $createStruct->names = ['eng-GB' => 'Keywords'];
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('tags', 'ezkeyword');
+        $fieldCreate->names = ['eng-GB' => 'Tags'];
+        $fieldCreate->fieldGroup = 'main';
+        $fieldCreate->position = 1;
+        $fieldCreate->isTranslatable = false;
+        $fieldCreate->isSearchable = true;
+
+        $createStruct->addFieldDefinition($fieldCreate);
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentGroup]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+
+        $toCreate = [
+            'content-keyword-456' => ['foo', 'bar'],
+            'content-keyword-789' => ['bar', 'foobar'],
+        ];
+        $createdContent = [];
+        foreach ($toCreate as $remoteId => $tagsString) {
+            $createStruct->remoteId = $remoteId;
+            $createStruct->alwaysAvailable = false;
+            $createStruct->setField(
+                'tags',
+                $tagsString
+            );
+
+            $draft = $contentService->createContent($createStruct);
+            $createdContent[] = $contentService->publishVersion($draft->getVersionInfo());
+        }
+
+        $this->refreshSearch($repository);
+
+        return $createdContent;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFindContentFieldCriterion()
+    {
+        $this->createKeywordContent();
+        $repository = $this->getRepository();
+
+        $criterion = new Criterion\Field('tags', Criterion\Operator::IN, ['foo']);
+        $query = new Query(['query' => $criterion]);
+
+        $searchService = $repository->getSearchService();
+        $searchResult = $searchService->findContent($query);
+
+        $this->assertEquals(1, $searchResult->totalCount);
     }
 }

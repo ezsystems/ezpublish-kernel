@@ -8,6 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use DOMDocument;
+use DOMElement;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
@@ -195,6 +197,9 @@ XML;
         $barTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'bar');
         $bazTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'baz');
         $foobazTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'foobaz');
+        $foobazInTag = $this->buildFieldXml('tags', Operator::IN, ['foobaz']);
+        $bazfooInTag = $this->buildFieldXml('tags', Operator::IN, ['bazfoo']);
+        $fooAndBarInTag = $this->buildFieldXml('tags', Operator::IN, ['foo', 'bar']);
 
         return [
             [
@@ -221,6 +226,19 @@ XML;
                 ),
                 1,
             ],
+            [
+                $this->getXmlString(
+                    $this->wrapIn('OR', [
+                        $foobazInTag,
+                        $bazfooInTag,
+                    ])
+                ),
+                2,
+            ],
+            [
+                $this->getXmlString($fooAndBarInTag),
+                2,
+            ],
         ];
     }
 
@@ -228,37 +246,36 @@ XML;
      * @param string $name
      * @param string $operator
      * @param string|string[] $value
-     * @return \DomElement
+     * @return DOMElement
      */
-    private function buildFieldXml(string $name, string $operator, $value): \DomElement
+    private function buildFieldXml(string $name, string $operator, $value): DOMElement
     {
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
         $element = $xml->createElement('Field');
-        $element->appendChild(new \DOMElement('name', $name));
-        $element->appendChild(new \DOMElement('operator', $operator));
+        $element->appendChild(new DOMElement('name', $name));
+        $element->appendChild(new DOMElement('operator', $operator));
+
+        //Force xml array with one value
         if (is_array($value)) {
-            $valueWrapper = $xml->createElement('value');
-            foreach ($value as $key => $singleValue) {
-                $valueWrapper->appendChild(new \DOMElement('value', $singleValue));
+            if (count($value) === 1) {
+                $valueWrapper = $xml->createElement('value');
+                $valueWrapper->appendChild(new DOMElement('value', $value[0]));
+                $element->appendChild($valueWrapper);
+            } else {
+                foreach ($value as $key => $singleValue) {
+                    $element->appendChild(new DOMElement('value', $singleValue));
+                }
             }
-            $element->appendChild($valueWrapper);
-
-            return $element;
+        } else {
+            $element->appendChild(new DOMElement('value', $value));
         }
-
-        $element->appendChild(new \DOMElement('value', $value));
 
         return $element;
     }
 
-    /**
-     * @param string $logicalOperator
-     * @param \DomElement|\DomElement[] $toWrap
-     * @return \DomElement
-     */
-    private function wrapIn(string $logicalOperator, array $toWrap): \DomElement
+    private function wrapIn(string $logicalOperator, array $toWrap): DOMElement
     {
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
         $wrapper = $xml->createElement($logicalOperator);
 
         foreach ($toWrap as $key => $field) {
@@ -270,7 +287,7 @@ XML;
         return $wrapper;
     }
 
-    private function getXmlString(\DomElement $simpleXMLElement): string
+    private function getXmlString(DOMElement $simpleXMLElement): string
     {
         return $simpleXMLElement->ownerDocument->saveXML($simpleXMLElement);
     }
