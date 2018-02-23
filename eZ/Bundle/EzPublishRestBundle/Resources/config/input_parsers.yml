@@ -462,7 +462,7 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.DateMetadata }
 
-    ezpublish_rest.input.parser.internal.cgriterion.Field:
+    ezpublish_rest.input.parser.internal.criterion.Field:
         parent: ezpublish_rest.input.parser
         class: "%ezpublish_rest.input.parser.internal.criterion.Field.class%"
         tags:
