@@ -27,6 +27,7 @@ parameters:
     ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection
     ezpublish.search.legacy.gateway.criterion_field_value_handler.composite.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
     ezpublish.search.legacy.gateway.criterion_field_value_handler.simple.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.keyword.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Keyword
 
     # Full text search configuration options.
     ezpublish.search.legacy.criterion_handler.full_text.configuration:
@@ -251,6 +252,11 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezcountry}
             - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezobjectrelationlist}
+
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.keyword:
+        parent: ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.comma_separated
+        class: '%ezpublish.search.legacy.gateway.criterion_field_value_handler.keyword.class%'
+        tags:
             - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezkeyword}
 
     ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.hypen_separated:
