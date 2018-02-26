@@ -23,7 +23,7 @@ class ViewProvider implements ViewProviderInterface, SiteAccessAware
     }
 
     /**
-     * @return View
+     * @return View|null
      */
     public function getView(View $view)
     {

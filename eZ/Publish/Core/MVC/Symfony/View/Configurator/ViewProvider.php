@@ -32,17 +32,22 @@ class ViewProvider implements Configurator
     public function configure(View $view)
     {
         foreach ($this->providerRegistry->getViewProviders($view) as $viewProvider) {
-            if ($providerView = $viewProvider->getView($view)) {
-                $view->setConfigHash($providerView->getConfigHash());
-                if (($templateIdentifier = $providerView->getTemplateIdentifier()) !== null) {
+            if ($view2 = $viewProvider->getView($view)) {
+                $configHash = $view2->getConfigHash();
+                $view->setConfigHash($configHash);
+                if (($templateIdentifier = $view2->getTemplateIdentifier()) !== null) {
                     $view->setTemplateIdentifier($templateIdentifier);
                 }
 
-                if (($controllerReference = $providerView->getControllerReference()) !== null) {
+                if (($controllerReference = $view2->getControllerReference()) !== null) {
                     $view->setControllerReference($controllerReference);
                 }
 
-                $view->addParameters($providerView->getParameters());
+                if (isset($configHash['params']) && is_array($configHash['params'])) {
+                    $view->addParameters($configHash['params']);
+                }
+
+                $view->addParameters($view2->getParameters());
 
                 return;
             }
