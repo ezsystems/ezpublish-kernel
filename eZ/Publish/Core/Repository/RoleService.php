@@ -47,6 +47,57 @@ use Exception;
  */
 class RoleService implements RoleServiceInterface
 {
+    const DEFAULT_CORE_POLICYMAP = [
+        'content' => [
+            'read' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true],
+            'diff' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true],
+            'view_embed' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true],
+            'create' => ['Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
+            'edit' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true],
+            'manage_locations' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true],
+            'hide' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
+            'reverserelatedlist' => null,
+            'translate' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
+            'remove' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true],
+            'versionread' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true],
+            'versionremove' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true],
+            'translations' =>  null,
+            'urltranslator' =>  null,
+            'pendinglist' =>  null,
+            'restore' =>  null,
+            'cleantrash' =>  null,
+        ],
+        'class' => [
+            'update' => null,
+            'create' => null,
+            'delete' => null,
+        ],
+        'state' => [
+            'assign' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true],
+            'administrate' => null,
+        ],
+        'role' => [
+            'assign' => null,
+            'update' => null,
+            'create' => null,
+            'delete' => null,
+            'read' => null,
+        ],
+        'section' => [
+            'assign' => ['Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true],
+            'edit' => null,
+            'view' => null,
+        ],
+        'user' => [
+            'login' => ['SiteAccess' => true],
+            'password' => null,
+            'preferences' => null,
+            'register' => null,
+            'selfedit' => null,
+            'activation' => null,
+        ],
+    ];
+
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -92,35 +143,11 @@ class RoleService implements RoleServiceInterface
         $this->userHandler = $userHandler;
         $this->limitationService = $limitationService;
         $this->roleDomainMapper = $roleDomainMapper;
+        $this->settings = $settings;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
-            'policyMap' => array(
-                'content' => array(
-                    'read' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'diff' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'view_embed' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'create' => array('Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'edit' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true),
-                    'publish' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true),
-                    'manage_locations' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true),
-                    'hide' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'translate' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'remove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'versionread' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'versionremove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'pdf' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                ),
-                'section' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true),
-                ),
-                'state' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true),
-                ),
-                'user' => array(
-                    'login' => array('SiteAccess' => true),
-                ),
-            ),
-        );
+        $this->settings['policyMap'] = isset($settings['policyMap']) ?
+            $settings['policyMap'] + self::DEFAULT_CORE_POLICYMAP :
+            self::DEFAULT_CORE_POLICYMAP;
     }
 
     /**

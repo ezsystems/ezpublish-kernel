@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\RoleService;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use Exception;
@@ -52,22 +53,29 @@ class PermissionResolver implements PermissionResolverInterface
      */
     private $currentUserRef;
 
+    /** @var array */
+    private $policyMap;
+
     /**
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
+     * @param array $policyMap Map of system configured policies, for validation usage.
      */
     public function __construct(
         RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService,
         UserHandler $userHandler,
-        APIUserReference $userReference
+        APIUserReference $userReference,
+        array $policyMap = []
     ) {
         $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
         $this->currentUserRef = $userReference;
+        // Union makes sure default settings are ignored if provided in argument
+        $this->policyMap = $policyMap + RoleService::DEFAULT_CORE_POLICYMAP;
     }
 
     public function getCurrentUserReference()
@@ -87,6 +95,12 @@ class PermissionResolver implements PermissionResolverInterface
 
     public function hasAccess($module, $function, APIUserReference $userReference = null)
     {
+        if (!isset($this->policyMap[$module])) {
+            throw new InvalidArgumentValue('module', "module: {$module}/ function: {$function}");
+        } elseif (!array_key_exists($function, $this->policyMap[$module])) {
+            throw new InvalidArgumentValue('function', "module: {$module}/ function: {$function}");
+        }
+
         // Full access if sudo nesting level is set by {@see sudo()}
         if ($this->sudoNestingLevel > 0) {
             return true;

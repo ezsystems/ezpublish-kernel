@@ -34,6 +34,8 @@ interface PermissionResolver
      *
      * Note: boolean value describes full access (true) or no access at all (false).
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If module or function is invalid.
+     *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $userReference User for
