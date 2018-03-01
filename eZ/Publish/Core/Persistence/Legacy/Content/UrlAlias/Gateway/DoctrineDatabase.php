@@ -1256,8 +1256,8 @@ class DoctrineDatabase extends Gateway
         ;
 
         $statement = $query->execute();
-        while (false !== ($row = $statement->fetch(\PDO::FETCH_ASSOC))) {
-            yield $row;
-        }
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $rows ?: [];
     }
 }
