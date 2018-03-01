@@ -107,6 +107,24 @@ class ViewControllerListenerTest extends TestCase
         $this->controllerListener->getController($this->event);
     }
 
+    public function testGetControllerWithClosure()
+    {
+        $initialController = function () {};
+        $this->request->attributes->set('_controller', $initialController);
+
+        $this->viewBuilderRegistry
+            ->expects($this->once())
+            ->method('getFromRegistry')
+            ->with($initialController)
+            ->willReturn(null);
+
+        $this->event
+            ->expects($this->never())
+            ->method('setController');
+
+        $this->controllerListener->getController($this->event);
+    }
+
     public function testGetControllerMatchedView()
     {
         $id = 123;
