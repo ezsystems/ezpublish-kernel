@@ -12,12 +12,14 @@ use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler;
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Handler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use Stash\Interfaces\ItemInterface;
 
 /**
  * Test case for Persistence\Cache\ContentHandler.
@@ -36,7 +38,7 @@ class ContentHandlerTest extends HandlerTest
             //array( 'load', array( 2, 1, array( 'eng-GB' ) ) ),
             //array( 'load', array( 2, 1 ) ),
             //array( 'loadContentInfo', array( 2 ) ),
-            array('loadVersionInfo', array(2, 1)),
+            //array('loadVersionInfo', array(2, 1)),
             array('loadDraftsForUser', array(14)),
             //array( 'setStatus', array( 2, 0, 1 ) ),
             //array( 'updateMetadata', array( 2, new MetadataUpdateStruct ) ),
@@ -294,6 +296,99 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadVersionInfo
+     */
+    public function testLoadVersionInfoCacheIsMiss()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+        $cacheItemMock = $this->getMock(ItemInterface::class);
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('getItem')
+            ->with('content', 'info', 2, 'versioninfo', 1)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('isMiss')
+            ->will($this->returnValue(true));
+
+        $innerHandlerMock = $this->getMock(Handler::class);
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('contentHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('loadVersionInfo')
+            ->with(2, 1)
+            ->will(
+                $this->returnValue(
+                    new VersionInfo(['contentInfo' => new ContentInfo(['id' => 2]), 'versionNo' => 1])
+                )
+            );
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->isInstanceOf(VersionInfo::class))
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('save')
+            ->with();
+
+        $handler = $this->persistenceCacheHandler->contentHandler();
+        $handler->loadVersionInfo(2, 1);
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadVersionInfo
+     */
+    public function testLoadVersionInfoHasCache()
+    {
+        $this->loggerMock->expects($this->never())->method($this->anything());
+        $cacheItemMock = $this->getMock(ItemInterface::class);
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('getItem')
+            ->with('content', 'info', 2, 'versioninfo', 1)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('isMiss')
+            ->will($this->returnValue(false));
+
+        $this->persistenceHandlerMock
+            ->expects($this->never())
+            ->method('contentHandler');
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('get')
+            ->will(
+                $this->returnValue(
+                    new VersionInfo(['contentInfo' => new ContentInfo(['id' => 2]), 'versionNo' => 1])
+                )
+            );
+
+        $cacheItemMock
+            ->expects($this->never())
+            ->method('set');
+
+        $handler = $this->persistenceCacheHandler->contentHandler();
+        $handler->loadVersionInfo(2, 1);
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::setStatus
      */
     public function testSetStatus()
@@ -313,9 +408,15 @@ class ContentHandlerTest extends HandlerTest
             ->will($this->returnValue(true));
 
         $this->cacheMock
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('clear')
             ->with('content', 2, 1)
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('clear')
+            ->with('content', 'info', 2, 'versioninfo', 1)
             ->will($this->returnValue(null));
 
         $handler = $this->persistenceCacheHandler->contentHandler();
@@ -432,9 +533,15 @@ class ContentHandlerTest extends HandlerTest
             );
 
         $this->cacheMock
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('clear')
             ->with('content', 2, 1)
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('clear')
+            ->with('content', 'info', 2, 'versioninfo', 1)
             ->will($this->returnValue(null));
 
         $handler = $this->persistenceCacheHandler->contentHandler();
@@ -613,18 +720,24 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(1))
             ->method('clear')
-            ->with('content', 'info', 'remoteId')
+            ->with('content', 'info', 2)
             ->will($this->returnValue(true));
 
         $this->cacheMock
             ->expects($this->at(2))
+            ->method('clear')
+            ->with('content', 'info', 'remoteId')
+            ->will($this->returnValue(true));
+
+        $this->cacheMock
+            ->expects($this->at(3))
             ->method('clear')
             ->with('location', 'subtree')
             ->will($this->returnValue(true));
 
         $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
-            ->expects($this->at(3))
+            ->expects($this->at(4))
             ->method('getItem')
             ->with('content', 2, 1, ContentHandler::ALL_TRANSLATIONS_KEY)
             ->will($this->returnValue($cacheItemMock));
@@ -646,7 +759,7 @@ class ContentHandlerTest extends HandlerTest
 
         $cacheItemMock2 = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
-            ->expects($this->at(4))
+            ->expects($this->at(5))
             ->method('getItem')
             ->with('content', 'info', 2)
             ->will($this->returnValue($cacheItemMock2));

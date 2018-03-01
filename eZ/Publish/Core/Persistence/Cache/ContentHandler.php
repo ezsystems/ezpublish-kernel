@@ -107,9 +107,14 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function loadVersionInfo($contentId, $versionNo)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
+        $cache = $this->cache->getItem('content', 'info', $contentId, 'versioninfo', $versionNo);
+        $versionInfo = $cache->get();
+        if ($cache->isMiss()) {
+            $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $versionNo]);
+            $cache->set($versionInfo = $this->persistenceHandler->contentHandler()->loadVersionInfo($contentId, $versionNo))->save();
+        }
 
-        return $this->persistenceHandler->contentHandler()->loadVersionInfo($contentId, $versionNo);
+        return $versionInfo;
     }
 
     /**
@@ -134,6 +139,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         if ($status === VersionInfo::STATUS_PUBLISHED) {
             $this->cache->clear('content', 'info', $contentId);
             $this->cache->clear('content', 'info', 'remoteId');
+        } else {
+            $this->cache->clear('content', 'info', $contentId, 'versioninfo', $version);
         }
 
         return $return;
@@ -169,6 +176,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
         $this->cache->clear('content', $contentId, $versionNo);
+        $this->cache->clear('content', 'info', $contentId, 'versioninfo', $versionNo);
 
         return $content;
     }
@@ -287,6 +295,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $content = $this->persistenceHandler->contentHandler()->publish($contentId, $versionNo, $struct);
 
         $this->cache->clear('content', $contentId);
+        $this->cache->clear('content', 'info', $contentId);
         $this->cache->clear('content', 'info', 'remoteId');
         $this->cache->clear('location', 'subtree');
 
