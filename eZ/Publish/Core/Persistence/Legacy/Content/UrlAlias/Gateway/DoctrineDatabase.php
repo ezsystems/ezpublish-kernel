@@ -1250,14 +1250,14 @@ class DoctrineDatabase extends Gateway
             ->from($this->table)
             ->where('action = :action')
             // fetch rows matching any of the given Languages
-            ->where('lang_mask & :languageMask <> 0')
+            ->andWhere('lang_mask & :languageMask <> 0')
             ->setParameter(':action', 'eznode:' . $locationId)
             ->setParameter(':languageMask', $languageMask)
         ;
 
         $statement = $query->execute();
-        while (false !== ($row = $statement->fetch(\PDO::FETCH_ASSOC))) {
-            yield $row;
-        }
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $rows ?: [];
     }
 }
