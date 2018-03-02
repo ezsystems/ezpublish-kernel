@@ -38,7 +38,7 @@ class Value extends BaseValue
     public function __toString()
     {
         if ($this->page instanceof Page) {
-            return $this->page->layout;
+            return (string)$this->page->layout;
         }
 
         return '';
