@@ -352,6 +352,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             $languageCode
         );
         $this->cache->clear('content', $contentId, $versionNo);
+        $this->cache->clear('content', 'info', $contentId, 'versioninfo', $versionNo);
 
         return $content;
     }
