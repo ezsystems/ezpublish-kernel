@@ -5418,6 +5418,11 @@ class ContentServiceTest extends BaseContentServiceTest
      * @dataProvider providerForDeleteTranslationFromDraftRemovesUrlAliasOnPublishing
      *
      * @param string[] $fieldValues translated field values
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteTranslationFromDraftRemovesUrlAliasOnPublishing(array $fieldValues)
     {
@@ -5478,6 +5483,65 @@ class ContentServiceTest extends BaseContentServiceTest
             $aliases = $urlAliasService->listLocationAliases($location, true, $languageCode);
             self::assertEmpty($aliases, 'Custom URL alias for the deleted translation still exists');
         }
+    }
+
+    /**
+     * Test that URL aliases for deleted Translations are properly archived.
+     */
+    public function testDeleteTranslationFromDraftArchivesUrlAliasOnPublishing()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $content = $contentService->publishVersion(
+            $this->createMultilingualContentDraft(
+                'folder',
+                2,
+                'eng-US',
+                [
+                    'name' => [
+                        'eng-GB' => 'BritishEnglishContent',
+                        'eng-US' => 'AmericanEnglishContent',
+                    ],
+                ]
+            )->versionInfo
+        );
+
+        $unrelatedContent = $contentService->publishVersion(
+            $this->createMultilingualContentDraft(
+                'folder',
+                2,
+                'eng-US',
+                [
+                    'name' => [
+                        'eng-GB' => 'AnotherBritishContent',
+                        'eng-US' => 'AnotherAmericanContent',
+                    ],
+                ]
+            )->versionInfo
+        );
+
+        $urlAlias = $urlAliasService->lookup('/BritishEnglishContent');
+        self::assertFalse($urlAlias->isHistory);
+        self::assertEquals($urlAlias->path, '/BritishEnglishContent');
+        self::assertEquals($urlAlias->destination, $content->contentInfo->mainLocationId);
+
+        $draft = $contentService->deleteTranslationFromDraft(
+            $contentService->createContentDraft($content->contentInfo)->versionInfo,
+            'eng-GB'
+        );
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        $urlAlias = $urlAliasService->lookup('/BritishEnglishContent');
+        self::assertTrue($urlAlias->isHistory);
+        self::assertEquals($urlAlias->path, '/BritishEnglishContent');
+        self::assertEquals($urlAlias->destination, $content->contentInfo->mainLocationId);
+
+        $unrelatedUrlAlias = $urlAliasService->lookup('/AnotherBritishContent');
+        self::assertFalse($unrelatedUrlAlias->isHistory);
+        self::assertEquals($unrelatedUrlAlias->path, '/AnotherBritishContent');
+        self::assertEquals($unrelatedUrlAlias->destination, $unrelatedContent->contentInfo->mainLocationId);
     }
 
     /**
