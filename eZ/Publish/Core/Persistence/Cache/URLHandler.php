@@ -31,6 +31,12 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
 
         $this->cache->invalidateTags(['url-' . $id]);
 
+        if ($struct->url !== null) {
+            $this->cache->invalidateTags(array_map(function ($id) {
+                return 'content-' . $id;
+            }, $this->persistenceHandler->urlHandler()->findUsages($id)));
+        }
+
         return $url;
     }
 
