@@ -46,6 +46,16 @@ class UserHandlerTest extends TestCase
         return $user;
     }
 
+    protected function getValidUserToken($time = null)
+    {
+        $userToken = new Persistence\User\UserTokenUpdateStruct();
+        $userToken->userId = 42;
+        $userToken->hashKey = md5('hash');
+        $userToken->time = $time ?? (new \DateTime())->add(new \DateInterval('P1D'))->getTimestamp();
+
+        return $userToken;
+    }
+
     public function testCreateUser()
     {
         $handler = $this->getUserHandler();
@@ -141,6 +151,73 @@ class UserHandlerTest extends TestCase
         $this->assertEquals(
             $user,
             $users[0]
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadUserByTokenNotFound()
+    {
+        $handler = $this->getUserHandler();
+        $handler->create($user = $this->getValidUser());
+        $handler->updateUserToken($this->getValidUserToken());
+
+        $handler->loadUserByToken('asd');
+    }
+
+    public function testLoadUserByToken()
+    {
+        $handler = $this->getUserHandler();
+        $handler->create($user = $this->getValidUser());
+        $handler->updateUserToken($userToken = $this->getValidUserToken());
+
+        $loadedUser = $handler->loadUserByToken($userToken->hashKey);
+        $this->assertEquals(
+            $user,
+            $loadedUser
+        );
+    }
+
+    public function testUpdateUserToken()
+    {
+        $handler = $this->getUserHandler();
+
+        $handler->updateUserToken($userToken = $this->getValidUserToken(1234567890));
+
+        $this->assertQueryResult(
+            [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, 42]],
+            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            'Expected user data to be updated.'
+        );
+
+        $handler->updateUserToken($userToken = $this->getValidUserToken(2234567890));
+
+        $this->assertQueryResult(
+            [['0800fc577294c34e0b28ad2839435945', 1, 2234567890, 42]],
+            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            'Expected user token data to be updated.'
+        );
+    }
+
+    public function testExpireUserToken()
+    {
+        $handler = $this->getUserHandler();
+
+        $handler->updateUserToken($userToken = $this->getValidUserToken(1234567890));
+
+        $this->assertQueryResult(
+            [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, 42]],
+            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            'Expected user data to be updated.'
+        );
+
+        $handler->expireUserToken($userToken->hashKey);
+
+        $this->assertQueryResult(
+            [['0800fc577294c34e0b28ad2839435945', 1, 0, 42]],
+            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            'Expected user token to be expired.'
         );
     }
 

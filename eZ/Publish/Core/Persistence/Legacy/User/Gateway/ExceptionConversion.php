@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\SPI\Persistence\User;
 use Doctrine\DBAL\DBALException;
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use PDOException;
 use RuntimeException;
 
@@ -125,6 +126,24 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads a user with user hash key.
+     *
+     * @param string $hash
+     *
+     * @return array
+     */
+    public function loadUserByToken($hash)
+    {
+        try {
+            return $this->innerGateway->loadUserByToken($hash);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (\PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Update the user information specified by the user struct.
      *
      * @param User $user
@@ -133,6 +152,38 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateUser($user);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Update the user token information specified by the user token struct.
+     *
+     * @param UserTokenUpdateStruct $userTokenUpdateStruct
+     */
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        try {
+            return $this->innerGateway->updateUserToken($userTokenUpdateStruct);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        try {
+            return $this->innerGateway->expireUserToken($hash);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

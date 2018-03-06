@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 
 /**
  * User gateway implementation using the Doctrine database.
@@ -229,6 +230,57 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Loads a user with user hash key.
+     *
+     * @param string $hash
+     *
+     * @return array
+     */
+    public function loadUserByToken($hash)
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn('contentobject_id', 'ezuser'),
+            $this->handler->quoteColumn('login', 'ezuser'),
+            $this->handler->quoteColumn('email', 'ezuser'),
+            $this->handler->quoteColumn('password_hash', 'ezuser'),
+            $this->handler->quoteColumn('password_hash_type', 'ezuser'),
+            $this->handler->quoteColumn('is_enabled', 'ezuser_setting'),
+            $this->handler->quoteColumn('max_login', 'ezuser_setting')
+        )->from(
+            $this->handler->quoteTable('ezuser')
+        )->leftJoin(
+            $this->handler->quoteTable('ezuser_setting'),
+            $query->expr->eq(
+                $this->handler->quoteColumn('user_id', 'ezuser_setting'),
+                $this->handler->quoteColumn('contentobject_id', 'ezuser')
+            )
+        )->leftJoin(
+            $this->handler->quoteTable('ezuser_accountkey'),
+            $query->expr->eq(
+                $this->handler->quoteColumn('user_id', 'ezuser_accountkey'),
+                $this->handler->quoteColumn('contentobject_id', 'ezuser')
+            )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->handler->quoteColumn('hash_key', 'ezuser_accountkey'),
+                    $query->bindValue($hash, null, \PDO::PARAM_STR)
+                ),
+                $query->expr->gte(
+                    $this->handler->quoteColumn('time', 'ezuser_accountkey'),
+                    $query->bindValue(time(), null, \PDO::PARAM_INT)
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Update the user information specified by the user struct.
      *
      * @param User $user
@@ -271,6 +323,86 @@ class DoctrineDatabase extends Gateway
                 $query->expr->eq(
                     $this->handler->quoteColumn('user_id'),
                     $query->bindValue($user->id, null, \PDO::PARAM_INT)
+                )
+            );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Update or insert the user token information specified by the user token struct.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     */
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn('id', 'ezuser_accountkey')
+        )->from(
+            $this->handler->quoteTable('ezuser_accountkey')
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn('user_id', 'ezuser_accountkey'),
+                $query->bindValue($userTokenUpdateStruct->userId, null, \PDO::PARAM_INT)
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        if (empty($statement->fetchAll(\PDO::FETCH_ASSOC))) {
+            $query = $this->handler->createInsertQuery();
+            $query
+                ->insertInto($this->handler->quoteTable('ezuser_accountkey'))
+                ->set(
+                    $this->handler->quoteColumn('hash_key'),
+                    $query->bindValue($userTokenUpdateStruct->hashKey)
+                )->set(
+                    $this->handler->quoteColumn('time'),
+                    $query->bindValue($userTokenUpdateStruct->time)
+                )->set(
+                    $this->handler->quoteColumn('user_id'),
+                    $query->bindValue($userTokenUpdateStruct->userId)
+                );
+
+            $query->prepare()->execute();
+        } else {
+            $query = $this->handler->createUpdateQuery();
+            $query
+                ->update($this->handler->quoteTable('ezuser_accountkey'))
+                ->set(
+                    $this->handler->quoteColumn('hash_key'),
+                    $query->bindValue($userTokenUpdateStruct->hashKey)
+                )->set(
+                    $this->handler->quoteColumn('time'),
+                    $query->bindValue($userTokenUpdateStruct->time)
+                )->where(
+                    $query->expr->eq(
+                        $this->handler->quoteColumn('user_id'),
+                        $query->bindValue($userTokenUpdateStruct->userId, null, \PDO::PARAM_INT)
+                    )
+                );
+            $query->prepare()->execute();
+        }
+    }
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update($this->handler->quoteTable('ezuser_accountkey'))
+            ->set(
+                $this->handler->quoteColumn('time'),
+                $query->bindValue(0)
+            )->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn('hash_key'),
+                    $query->bindValue($hash, null, \PDO::PARAM_STR)
                 )
             );
         $query->prepare()->execute();

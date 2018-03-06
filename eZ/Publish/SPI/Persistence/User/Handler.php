@@ -66,11 +66,36 @@ interface Handler
     public function loadByEmail($email);
 
     /**
+     * Loads user with user hash.
+     *
+     * @param string $hash
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
+    public function loadUserByToken($hash);
+
+    /**
      * Update the user information specified by the user struct.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      */
     public function update(User $user);
+
+    /**
+     * Update the user information specified by the user token struct.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     */
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct);
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash);
 
     /**
      * Delete user with the given ID.
