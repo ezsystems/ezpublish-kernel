@@ -91,3 +91,10 @@ services:
             - [setContainer, ["@service_container"]]
         tags:
             - { name: kernel.cache_warmer }
+
+    ezpublish.cache_warmer.persistence_cache_clearer:
+        class: eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\PersistenceCacheClearer
+        arguments:
+            - '@ezpublish.cache_pool.spi.cache.decorator'
+        tags:
+            - { name: kernel.cache_warmer }
