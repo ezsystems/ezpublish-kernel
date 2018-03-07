@@ -64,7 +64,7 @@ class PermissionTest extends BaseServiceMockTest
                 array(
                     27 => $this->createRole(
                         array(
-                            array('test-module', '*', 'dummy-limitation'),
+                            array('dummy-module', '*', 'dummy-limitation'),
                         ),
                         27
                     ),
@@ -81,7 +81,7 @@ class PermissionTest extends BaseServiceMockTest
                 array(
                     28 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', '*'),
+                            array('dummy-module', 'dummy-function', '*'),
                         ),
                         28
                     ),
@@ -128,7 +128,7 @@ class PermissionTest extends BaseServiceMockTest
                 ->will($this->returnValue($roles[$roleAssignment->roleId]));
         }
 
-        $result = $mockedService->hasAccess('test-module', 'test-function');
+        $result = $mockedService->hasAccess('dummy-module', 'dummy-function');
 
         self::assertEquals(true, $result);
     }
@@ -158,7 +158,7 @@ class PermissionTest extends BaseServiceMockTest
                 array(
                     30 => $this->createRole(
                         array(
-                            array('test-module', 'dummy-function', 'dummy-limitation'),
+                            array('dummy-module', '*', 'dummy-limitation'),
                         ),
                         30
                     ),
@@ -205,7 +205,7 @@ class PermissionTest extends BaseServiceMockTest
                 ->will($this->returnValue($roles[$roleAssignment->roleId]));
         }
 
-        $result = $service->hasAccess('test-module', 'test-function');
+        $result = $service->hasAccess('dummy-module2', 'dummy-function2');
 
         self::assertEquals(false, $result);
     }
@@ -230,7 +230,7 @@ class PermissionTest extends BaseServiceMockTest
 
         $result = $service->sudo(
             function (Repository $repo) {
-                return $repo->hasAccess('test-module', 'test-function');
+                return $repo->hasAccess('dummy-module', 'dummy-function');
             },
             $repositoryMock
         );
@@ -248,7 +248,7 @@ class PermissionTest extends BaseServiceMockTest
                 array(
                     31 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', 'test-limitation'),
+                            array('dummy-module', 'dummy-function', 'test-limitation'),
                         ),
                         31
                     ),
@@ -265,13 +265,13 @@ class PermissionTest extends BaseServiceMockTest
                 array(
                     31 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', 'test-limitation'),
+                            array('dummy-module', 'dummy-function', 'test-limitation'),
                         ),
                         31
                     ),
                     32 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', 'test-limitation2'),
+                            array('dummy-module', 'dummy-function', 'test-limitation2'),
                         ),
                         32
                     ),
@@ -348,21 +348,21 @@ class PermissionTest extends BaseServiceMockTest
         /* @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
         self::assertEquals(
             $permissionSets,
-            $permissionResolverMock->hasAccess('test-module', 'test-function')
+            $permissionResolverMock->hasAccess('dummy-module', 'dummy-function')
         );
     }
 
     /**
      * @return array
      */
-    public function providerForTestHasAccessReturnsException()
+    public function providerForTestHasAccessReturnsLimitationNotFoundException()
     {
         return array(
             array(
                 array(
                     31 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', 'notfound'),
+                            array('dummy-module', 'dummy-function', 'notfound'),
                         ),
                         31
                     ),
@@ -379,13 +379,13 @@ class PermissionTest extends BaseServiceMockTest
                 array(
                     31 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', 'test-limitation'),
+                            array('dummy-module', 'dummy-function', 'test-limitation'),
                         ),
                         31
                     ),
                     32 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', 'notfound'),
+                            array('dummy-module', 'dummy-function', 'notfound'),
                         ),
                         32
                     ),
@@ -409,10 +409,10 @@ class PermissionTest extends BaseServiceMockTest
     /**
      * Test for the hasAccess() method.
      *
-     * @dataProvider providerForTestHasAccessReturnsException
+     * @dataProvider providerForTestHasAccessReturnsLimitationNotFoundException
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException
      */
-    public function testHasAccessReturnsException(array $roles, array $roleAssignments)
+    public function testHasAccessReturnsLimitationNotFoundException(array $roles, array $roleAssignments)
     {
         /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
@@ -463,7 +463,80 @@ class PermissionTest extends BaseServiceMockTest
             }
         }
 
-        $permissionResolverMock->hasAccess('test-module', 'test-function');
+        $permissionResolverMock->hasAccess('dummy-module', 'dummy-function');
+    }
+
+    /**
+     * @return array
+     */
+    public function providerForTestHasAccessReturnsInvalidArgumentValueException()
+    {
+        return array(
+            array(
+                array(
+                    31 => $this->createRole(
+                        array(
+                            array('test-module', 'test-function', '*'),
+                        ),
+                        31
+                    ),
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            'roleId' => 31,
+                        )
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    31 => $this->createRole(
+                        array(
+                            array('other-module', 'test-function', '*'),
+                        ),
+                        31
+                    ),
+                    32 => $this->createRole(
+                        array(
+                            array('test-module', 'other-function', '*'),
+                        ),
+                        32
+                    ),
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            'roleId' => 31,
+                        )
+                    ),
+                    new RoleAssignment(
+                        array(
+                            'roleId' => 32,
+                        )
+                    ),
+                ),
+            ),
+        );
+    }
+
+    /**
+     * Test for the hasAccess() method.
+     *
+     * @dataProvider providerForTestHasAccessReturnsInvalidArgumentValueException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     */
+    public function testHasAccessReturnsInvalidArgumentValueException(array $roles, array $roleAssignments)
+    {
+        $permissionResolverMock = $this->getPermissionResolverMock(['getCurrentUserReference']);
+
+        /** @var $role \eZ\Publish\SPI\Persistence\User\Role */
+        foreach ($roles as $role) {
+            /** @var $policy \eZ\Publish\SPI\Persistence\User\Policy */
+            foreach ($role->policies as $policy) {
+                $permissionResolverMock->hasAccess($policy->module, $policy->function);
+            }
+        }
     }
 
     public function providerForTestHasAccessReturnsPermissionSetsWithRoleLimitation()
@@ -473,7 +546,11 @@ class PermissionTest extends BaseServiceMockTest
                 array(
                     32 => $this->createRole(
                         array(
-                            array('test-module', 'test-function', 'test-limitation'),
+                            array('dummy-module', 'dummy-function', [
+                                'Subtree' => [
+                                    '/1/2/',
+                                ],
+                            ]),
                         ),
                         32
                     ),
@@ -482,8 +559,8 @@ class PermissionTest extends BaseServiceMockTest
                     new RoleAssignment(
                         array(
                             'roleId' => 32,
-                            'limitationIdentifier' => 'test-role-limitation',
-                            'values' => array('test-role-limitation-value'),
+                            'limitationIdentifier' => 'Subtree',
+                            'values' => array('/1/2/'),
                         )
                     ),
                 ),
@@ -496,8 +573,8 @@ class PermissionTest extends BaseServiceMockTest
                     new RoleAssignment(
                         array(
                             'roleId' => 33,
-                            'limitationIdentifier' => 'test-role-limitation',
-                            'values' => array('test-role-limitation-value'),
+                            'limitationIdentifier' => 'Subtree',
+                            'values' => array('/1/2/'),
                         )
                     ),
                 ),
@@ -569,7 +646,7 @@ class PermissionTest extends BaseServiceMockTest
 
         self::assertEquals(
             $permissionSets,
-            $permissionResolverMock->hasAccess('test-module', 'test-function')
+            $permissionResolverMock->hasAccess('dummy-module', 'dummy-function')
         );
     }
 
@@ -953,6 +1030,24 @@ class PermissionTest extends BaseServiceMockTest
                         $this->getLimitationServiceMock(),
                         $this->getPersistenceMock()->userHandler(),
                         $this->getUserReferenceMock(),
+                        [
+                            'dummy-module' => [
+                                'dummy-function' => [
+                                    'dummy-limitation' => true
+                                ],
+                                'dummy-function2' => [
+                                    'dummy-limitation' => true
+                                ]
+                            ],
+                            'dummy-module2' => [
+                                'dummy-function' => [
+                                    'dummy-limitation' => true
+                                ],
+                                'dummy-function2' => [
+                                    'dummy-limitation' => true
+                                ]
+                            ]
+                        ]
                     ]
                 )
                 ->getMock();

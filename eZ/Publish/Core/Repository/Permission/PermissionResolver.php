@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
-use eZ\Publish\Core\Repository\RoleService;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use Exception;
@@ -53,7 +52,11 @@ class PermissionResolver implements PermissionResolverInterface
      */
     private $currentUserRef;
 
-    /** @var array */
+    /**
+     * Map of system configured policies, for validation usage.
+     *
+     * @var array
+     */
     private $policyMap;
 
     /**
@@ -74,8 +77,7 @@ class PermissionResolver implements PermissionResolverInterface
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
         $this->currentUserRef = $userReference;
-        // Union makes sure default settings are ignored if provided in argument
-        $this->policyMap = $policyMap + RoleService::DEFAULT_CORE_POLICYMAP;
+        $this->policyMap = $policyMap;
     }
 
     public function getCurrentUserReference()

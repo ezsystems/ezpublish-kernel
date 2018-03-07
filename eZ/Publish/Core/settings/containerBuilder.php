@@ -44,6 +44,7 @@ $loader->load('search_engines/common.yml');
 $loader->load('settings.yml');
 $loader->load('utils.yml');
 $loader->load('tests/common.yml');
+$loader->load('policies.yml');
 
 // Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
 if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {

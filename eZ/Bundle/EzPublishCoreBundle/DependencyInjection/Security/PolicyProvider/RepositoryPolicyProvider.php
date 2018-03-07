@@ -11,6 +11,6 @@ class RepositoryPolicyProvider extends YamlPolicyProvider
 {
     public function getFiles()
     {
-        return [__DIR__ . '/../../../Resources/config/policies.yml'];
+        return [];
     }
 }

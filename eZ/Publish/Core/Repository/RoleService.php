@@ -47,57 +47,6 @@ use Exception;
  */
 class RoleService implements RoleServiceInterface
 {
-    const DEFAULT_CORE_POLICYMAP = [
-        'content' => [
-            'read' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true],
-            'diff' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true],
-            'view_embed' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true],
-            'create' => ['Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
-            'edit' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true],
-            'manage_locations' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true],
-            'hide' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
-            'reverserelatedlist' => null,
-            'translate' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
-            'remove' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true],
-            'versionread' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true],
-            'versionremove' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true],
-            'translations' =>  null,
-            'urltranslator' =>  null,
-            'pendinglist' =>  null,
-            'restore' =>  null,
-            'cleantrash' =>  null,
-        ],
-        'class' => [
-            'update' => null,
-            'create' => null,
-            'delete' => null,
-        ],
-        'state' => [
-            'assign' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true],
-            'administrate' => null,
-        ],
-        'role' => [
-            'assign' => null,
-            'update' => null,
-            'create' => null,
-            'delete' => null,
-            'read' => null,
-        ],
-        'section' => [
-            'assign' => ['Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true],
-            'edit' => null,
-            'view' => null,
-        ],
-        'user' => [
-            'login' => ['SiteAccess' => true],
-            'password' => null,
-            'preferences' => null,
-            'register' => null,
-            'selfedit' => null,
-            'activation' => null,
-        ],
-    ];
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -144,10 +93,6 @@ class RoleService implements RoleServiceInterface
         $this->limitationService = $limitationService;
         $this->roleDomainMapper = $roleDomainMapper;
         $this->settings = $settings;
-        // Union makes sure default settings are ignored if provided in argument
-        $this->settings['policyMap'] = isset($settings['policyMap']) ?
-            $settings['policyMap'] + self::DEFAULT_CORE_POLICYMAP :
-            self::DEFAULT_CORE_POLICYMAP;
     }
 
     /**
@@ -1437,7 +1382,6 @@ class RoleService implements RoleServiceInterface
                         "'{$limitation->getIdentifier()}' was found several times among the limitations"
                     );
                 }
-
                 if (!isset($this->settings['policyMap'][$module][$function][$limitation->getIdentifier()])) {
                     throw new InvalidArgumentException(
                         'policy',

@@ -133,8 +133,6 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\UrlChecker(),
                 )
             );
-
-            $this->extension->addPolicyProvider(new RepositoryPolicyProvider());
         }
 
         return $this->extension;
