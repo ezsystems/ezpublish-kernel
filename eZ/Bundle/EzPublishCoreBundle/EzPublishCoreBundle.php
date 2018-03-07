@@ -14,8 +14,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPa
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\HttpCachePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ImaginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterSearchEngineIndexerPass;
@@ -48,7 +46,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as Co
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\URLHandlerPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
-use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -71,27 +68,16 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new LocationViewPass());
         $container->addCompilerPass(new BlockViewPass());
         $container->addCompilerPass(new SignalSlotPass());
-        $container->addCompilerPass(new IdentityDefinerPass());
         $container->addCompilerPass(new RouterPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new RichTextHtml5ConverterPass());
         $container->addCompilerPass(new FragmentPass());
         $container->addCompilerPass(new StorageConnectionPass());
         $container->addCompilerPass(new ImaginePass());
-        $container->addCompilerPass(new HttpCachePass());
         $container->addCompilerPass(new ComplexSettingsPass(new ComplexSettingParser()));
         $container->addCompilerPass(new ConfigResolverParameterPass(new DynamicSettingParser()));
         $container->addCompilerPass(new AsseticPass());
         $container->addCompilerPass(new URLHandlerPass());
-
-        $container->addCompilerPass(
-            new RegisterListenersPass(
-                'ezpublish.http_cache.event_dispatcher',
-                'ezpublish.http_cache.event_listener',
-                'ezpublish.http_cache.event_subscriber'
-            ),
-            PassConfig::TYPE_BEFORE_REMOVING
-        );
         $container->addCompilerPass(new BinaryContentDownloadPass());
         $container->addCompilerPass(new ViewProvidersPass());
 

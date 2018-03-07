@@ -16,18 +16,15 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\F
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PoliciesConfigBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PolicyProviderInterface;
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
-use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\Config\FileLocator;
 use InvalidArgumentException;
-use Symfony\Component\Yaml\Yaml;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
 
-class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
+class EzPublishCoreExtension extends Extension
 {
     const RICHTEXT_CUSTOM_TAGS_PARAMETER = 'ezplatform.ezrichtext.custom_tags';
 
@@ -101,8 +98,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $loader->load('services.yml');
         // Security services
         $loader->load('security.yml');
-        // Slots
-        $loader->load('slot.yml');
 
         if (interface_exists('FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface')) {
             $loader->load('routing/js_routing.yml');
@@ -492,15 +487,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         foreach ($this->policyProviders as $provider) {
             $provider->addPolicies($policiesBuilder);
         }
-    }
-
-    public function prepend(ContainerBuilder $container)
-    {
-        // Default settings for FOSHttpCacheBundle
-        $configFile = __DIR__ . '/../Resources/config/fos_http_cache.yml';
-        $config = Yaml::parse(file_get_contents($configFile));
-        $container->prependExtensionConfig('fos_http_cache', $config);
-        $container->addResource(new FileResource($configFile));
     }
 
     /**
