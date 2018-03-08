@@ -79,6 +79,7 @@ class SecurityPass implements CompilerPassInterface
 
         $successHandlerDef = $container->getDefinition('security.authentication.success_handler');
         $successHandlerDef->setClass(DefaultAuthenticationSuccessHandler::class);
+        $successHandlerDef->addArgument($container->getParameter('ezpublish.siteaccess.groups'));
         $successHandlerDef->addMethodCall(
             'setConfigResolver',
             array($configResolverRef)
