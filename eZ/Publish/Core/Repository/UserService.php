@@ -66,6 +66,9 @@ class UserService implements UserServiceInterface
     /** @var \Psr\Log\LoggerInterface|null */
     protected $logger;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     public function setLogger(LoggerInterface $logger = null)
     {
         $this->logger = $logger;
@@ -81,6 +84,7 @@ class UserService implements UserServiceInterface
     public function __construct(RepositoryInterface $repository, Handler $userHandler, array $settings = array())
     {
         $this->repository = $repository;
+        $this->permissionResolver = $repository->getPermissionResolver();
         $this->userHandler = $userHandler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
@@ -781,8 +785,17 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
 
-        if (!$this->repository->canUser('content', 'edit', $loadedUser)) {
+        $canEditContent = $this->permissionResolver->canUser('content', 'edit', $loadedUser);
+
+        if (!$canEditContent && $this->isUserProfileUpdateRequested($userUpdateStruct)) {
             throw new UnauthorizedException('content', 'edit');
+        }
+
+        if (!empty($userUpdateStruct->password) &&
+            !$canEditContent &&
+            !$this->permissionResolver->canUser('user', 'password', $loadedUser)
+        ) {
+            throw new UnauthorizedException('user', 'password');
         }
 
         $this->repository->beginTransaction();
@@ -1324,5 +1337,22 @@ class UserService implements UserServiceInterface
             default:
                 throw new InvalidArgumentException('type', "Password hash type '$type' is not recognized");
         }
+    }
+
+    /**
+     * Return true if any of the UserUpdateStruct properties refers to User Profile (Content) update.
+     *
+     * @param UserUpdateStruct $userUpdateStruct
+     *
+     * @return bool
+     */
+    private function isUserProfileUpdateRequested(UserUpdateStruct $userUpdateStruct)
+    {
+        return
+            !empty($userUpdateStruct->contentUpdateStruct) ||
+            !empty($userUpdateStruct->contentMetadataUpdateStruct) ||
+            !empty($userUpdateStruct->email) ||
+            !empty($userUpdateStruct->enabled) ||
+            !empty($userUpdateStruct->maxLogin);
     }
 }
