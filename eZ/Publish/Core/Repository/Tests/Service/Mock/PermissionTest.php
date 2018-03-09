@@ -1033,21 +1033,21 @@ class PermissionTest extends BaseServiceMockTest
                         [
                             'dummy-module' => [
                                 'dummy-function' => [
-                                    'dummy-limitation' => true
+                                    'dummy-limitation' => true,
                                 ],
                                 'dummy-function2' => [
-                                    'dummy-limitation' => true
-                                ]
+                                    'dummy-limitation' => true,
+                                ],
                             ],
                             'dummy-module2' => [
                                 'dummy-function' => [
-                                    'dummy-limitation' => true
+                                    'dummy-limitation' => true,
                                 ],
                                 'dummy-function2' => [
-                                    'dummy-limitation' => true
-                                ]
-                            ]
-                        ]
+                                    'dummy-limitation' => true,
+                                ],
+                            ],
+                        ],
                     ]
                 )
                 ->getMock();

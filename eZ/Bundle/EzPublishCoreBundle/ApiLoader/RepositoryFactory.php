@@ -55,7 +55,7 @@ class RepositoryFactory implements ContainerAwareInterface
     protected $roleLimitations = array();
 
     /**
-     * Map of system configured policies
+     * Map of system configured policies.
      *
      * @var array
      */

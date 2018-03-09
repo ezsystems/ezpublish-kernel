@@ -49,7 +49,7 @@ class RepositoryFactory implements ContainerAwareInterface
     protected $roleLimitations = array();
 
     /**
-     * Policies map
+     * Policies map.
      *
      * @var array
      */
@@ -93,7 +93,7 @@ class RepositoryFactory implements ContainerAwareInterface
                 'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
-                    'policyMap' => $this->policyMap
+                    'policyMap' => $this->policyMap,
                 ),
                 'languages' => $this->container->getParameter('languages'),
             ),
