@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -103,6 +104,26 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * {@inheritdoc}
      */
+    public function loadUserByToken($hash)
+    {
+        $cacheItem = $this->cache->getItem('ez-user-' . $hash . '-by-account-key');
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
+
+        $this->logger->logCall(__METHOD__, array('hash' => $hash));
+        $user = $this->persistenceHandler->userHandler()->loadUserByToken($hash);
+
+        $cacheItem->set($user);
+        $cacheItem->tag(['content-' . $user->id, 'user-' . $user->id]);
+        $this->cache->save($cacheItem);
+
+        return $user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function update(User $user)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $user));
@@ -110,6 +131,31 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
         // Clear corresponding content cache as update of the User changes it's external data
         $this->cache->invalidateTags(['content-fields-' . $user->id, 'user-' . $user->id]);
+
+        return $return;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $this->logger->logCall(__METHOD__, array('struct' => $userTokenUpdateStruct));
+        $return = $this->persistenceHandler->userHandler()->updateUserToken($userTokenUpdateStruct);
+
+        // Clear corresponding content cache as update of the User changes it's external data
+        $this->cache->invalidateTags(['content-fields-' . $userTokenUpdateStruct->userId, 'user-' . $userTokenUpdateStruct->userId]);
+
+        return $return;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function expireUserToken($hash)
+    {
+        $this->logger->logCall(__METHOD__, array('hash' => $hash));
+        $return = $this->persistenceHandler->userHandler()->expireUserToken($hash);
 
         return $return;
     }

@@ -8,11 +8,13 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use DateTime;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -2530,5 +2532,103 @@ class UserServiceTest extends BaseTest
 
         // Reset to default settings, so we don't break other tests
         $settingsProperty->setValue($userService, $defaultUserServiceSettings);
+    }
+
+    /**
+     * Test loading User by Token.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserByToken
+     */
+    public function testLoadUserByToken()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $user = $this->createUserVersion1();
+
+        $userTokenUpdateStruct = new UserTokenUpdateStruct();
+        $userTokenUpdateStruct->hashKey = md5('hash');
+        $userTokenUpdateStruct->time = new DateTime();
+
+        $userService->updateUserToken($user, $userTokenUpdateStruct);
+
+        $loadedUser = $userService->loadUserByToken($userTokenUpdateStruct->hashKey);
+        self::assertEquals($user, $loadedUser);
+
+        return $userTokenUpdateStruct->hashKey;
+    }
+
+    /**
+     * Test trying to load User by invalid Token.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserByToken
+     */
+    public function testLoadUserByTokenThrowsNotFoundException()
+    {
+        $this->expectException(NotFoundException::class);
+
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $user = $this->createUserVersion1();
+
+        $userTokenUpdateStruct = new UserTokenUpdateStruct();
+        $userTokenUpdateStruct->hashKey = md5('hash');
+        $userTokenUpdateStruct->time = new DateTime();
+
+        $userService->updateUserToken($user, $userTokenUpdateStruct);
+
+        $userService->loadUserByToken('not_existing_token');
+    }
+
+    /**
+     * Test updating User Token.
+     *
+     * @covers  \eZ\Publish\API\Repository\UserService::updateUserToken()
+     *
+     * @depends testLoadUserByToken
+     *
+     * @param string $originalUserToken
+     */
+    public function testUpdateUserToken($originalUserToken)
+    {
+        $repository = $this->getRepository(false);
+        $userService = $repository->getUserService();
+
+        $user = $userService->loadUserByToken($originalUserToken);
+
+        $userTokenUpdateStruct = new UserTokenUpdateStruct();
+        $userTokenUpdateStruct->hashKey = md5('my_updated_hash');
+        $userTokenUpdateStruct->time = new DateTime();
+
+        $userService->updateUserToken($user, $userTokenUpdateStruct);
+
+        $loadedUser = $userService->loadUserByToken($userTokenUpdateStruct->hashKey);
+        self::assertEquals($user, $loadedUser);
+    }
+
+    /**
+     * Test invalidating (expiring) User Token.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::expireUserToken()
+     *
+     * @depends testLoadUserByToken
+     *
+     * @param string $userToken
+     */
+    public function testExpireUserToken($userToken)
+    {
+        $this->expectException(NotFoundException::class);
+
+        $repository = $this->getRepository(false);
+        $userService = $repository->getUserService();
+
+        // sanity check
+        $userService->loadUserByToken($userToken);
+
+        $userService->expireUserToken($userToken);
+
+        // should throw NotFoundException now
+        $userService->loadUserByToken($userToken);
     }
 }

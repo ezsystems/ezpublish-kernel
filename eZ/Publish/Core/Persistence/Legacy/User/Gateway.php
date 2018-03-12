@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\User;
 
 use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 
 /**
  * Base class for user gateways.
@@ -59,11 +60,34 @@ abstract class Gateway
     abstract public function loadByEmail($email);
 
     /**
+     * Loads user with user hash.
+     *
+     * @param string $hash
+     *
+     * @return array
+     */
+    abstract public function loadUserByToken($hash);
+
+    /**
      * Update the user information specified by the user struct.
      *
      * @param User $user
      */
     abstract public function updateUser(User $user);
+
+    /**
+     * Update the user acoount key specified by the user account key struct.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     */
+    abstract public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct);
+
+    /**
+     * Expires user account key with user hash.
+     *
+     * @param string $hash
+     */
+    abstract public function expireUserToken($hash);
 
     /**
      * Assigns role to user with given limitation.

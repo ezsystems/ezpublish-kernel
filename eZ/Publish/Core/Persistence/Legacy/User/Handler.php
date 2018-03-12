@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\User;
 
 use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler as BaseUserHandler;
 use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
@@ -148,6 +149,26 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Loads user with user hash.
+     *
+     * @param string $hash
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
+    public function loadUserByToken($hash)
+    {
+        $data = $this->userGateway->loadUserByToken($hash);
+
+        if (empty($data)) {
+            throw new NotFound('user', $hash);
+        }
+
+        return $this->mapper->mapUser(reset($data));
+    }
+
+    /**
      * Update the user information specified by the user struct.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
@@ -155,6 +176,26 @@ class Handler implements BaseUserHandler
     public function update(User $user)
     {
         $this->userGateway->updateUser($user);
+    }
+
+    /**
+     * Update the user token information specified by the userToken struct.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     */
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $this->userGateway->updateUserToken($userTokenUpdateStruct);
+    }
+
+    /**
+     * Expires user account key with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        $this->userGateway->expireUserToken($hash);
     }
 
     /**

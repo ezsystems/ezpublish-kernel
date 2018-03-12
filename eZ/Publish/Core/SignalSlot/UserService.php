@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -18,6 +19,7 @@ use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\MoveUserGroupSignal;
+use eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserTokenSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserSignal;
@@ -309,6 +311,23 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Loads a user with user hash key.
+     *
+     * {@inheritdoc}
+     *
+     * @param string $hash
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given hash was not found
+     */
+    public function loadUserByToken($hash, array $prioritizedLanguages = [])
+    {
+        return $this->service->loadUserByToken($hash, $prioritizedLanguages);
+    }
+
+    /**
      * This method deletes a user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -358,6 +377,36 @@ class UserService implements UserServiceInterface
         );
 
         return $returnValue;
+    }
+
+    /**
+     * Update the user account key information specified by the user account key struct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $returnValue = $this->service->updateUserToken($user, $userTokenUpdateStruct);
+        $this->signalDispatcher->emit(
+            new UpdateUserTokenSignal(
+                ['userId' => $user->id]
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        return $this->service->expireUserToken($hash);
     }
 
     /**

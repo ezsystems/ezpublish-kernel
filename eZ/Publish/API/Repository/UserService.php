@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -196,6 +197,16 @@ interface UserService
     public function loadUsersByEmail($email, array $prioritizedLanguages = []);
 
     /**
+     * Loads a user with user hash key.
+     *
+     * @param string $hash
+     * @param array $prioritizedLanguages
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadUserByToken($hash, array $prioritizedLanguages = []);
+
+    /**
      * This method deletes a user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -223,6 +234,23 @@ interface UserService
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function updateUser(User $user, UserUpdateStruct $userUpdateStruct);
+
+    /**
+     * Update the user token information specified by the user token struct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct);
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash);
 
     /**
      * Assigns a new user group to the user.

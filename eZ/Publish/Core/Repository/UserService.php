@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -21,6 +22,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupC
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct as SPIUserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
@@ -64,6 +66,9 @@ class UserService implements UserServiceInterface
     /** @var \Psr\Log\LoggerInterface|null */
     protected $logger;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     public function setLogger(LoggerInterface $logger = null)
     {
         $this->logger = $logger;
@@ -79,6 +84,7 @@ class UserService implements UserServiceInterface
     public function __construct(RepositoryInterface $repository, Handler $userHandler, array $settings = array())
     {
         $this->repository = $repository;
+        $this->permissionResolver = $repository->getPermissionResolver();
         $this->userHandler = $userHandler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
@@ -672,6 +678,30 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Loads a user for the given token.
+     *
+     * {@inheritdoc}
+     *
+     * @param string $hash
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     */
+    public function loadUserByToken($hash, array $prioritizedLanguages = [])
+    {
+        if (!is_string($hash) || empty($hash)) {
+            throw new InvalidArgumentValue('hash', $hash);
+        }
+
+        $spiUser = $this->userHandler->loadUserByToken($hash);
+
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
+    }
+
+    /**
      * This method deletes a user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -755,8 +785,17 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
 
-        if (!$this->repository->canUser('content', 'edit', $loadedUser)) {
+        $canEditContent = $this->permissionResolver->canUser('content', 'edit', $loadedUser);
+
+        if (!$canEditContent && $this->isUserProfileUpdateRequested($userUpdateStruct)) {
             throw new UnauthorizedException('content', 'edit');
+        }
+
+        if (!empty($userUpdateStruct->password) &&
+            !$canEditContent &&
+            !$this->permissionResolver->canUser('user', 'password', $loadedUser)
+        ) {
+            throw new UnauthorizedException('user', 'password');
         }
 
         $this->repository->beginTransaction();
@@ -808,6 +847,68 @@ class UserService implements UserServiceInterface
         }
 
         return $this->loadUser($loadedUser->id);
+    }
+
+    /**
+     * Update the user token information specified by the user token struct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \RuntimeException
+     * @throws \Exception
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function updateUserToken(APIUser $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $loadedUser = $this->loadUser($user->id);
+
+        if ($userTokenUpdateStruct->hashKey !== null && (!is_string($userTokenUpdateStruct->hashKey) || empty($userTokenUpdateStruct->hashKey))) {
+            throw new InvalidArgumentValue('hashKey', $userTokenUpdateStruct->hashKey, 'UserTokenUpdateStruct');
+        }
+
+        if ($userTokenUpdateStruct->time === null) {
+            throw new InvalidArgumentValue('time', $userTokenUpdateStruct->time, 'UserTokenUpdateStruct');
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->userHandler->updateUserToken(
+                new SPIUserTokenUpdateStruct(
+                    array(
+                        'userId' => $loadedUser->id,
+                        'hashKey' => $userTokenUpdateStruct->hashKey,
+                        'time' => $userTokenUpdateStruct->time->getTimestamp(),
+                    )
+                )
+            );
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->loadUser($loadedUser->id);
+    }
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        $this->repository->beginTransaction();
+        try {
+            $this->userHandler->expireUserToken($hash);
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -1236,5 +1337,22 @@ class UserService implements UserServiceInterface
             default:
                 throw new InvalidArgumentException('type', "Password hash type '$type' is not recognized");
         }
+    }
+
+    /**
+     * Return true if any of the UserUpdateStruct properties refers to User Profile (Content) update.
+     *
+     * @param UserUpdateStruct $userUpdateStruct
+     *
+     * @return bool
+     */
+    private function isUserProfileUpdateRequested(UserUpdateStruct $userUpdateStruct)
+    {
+        return
+            !empty($userUpdateStruct->contentUpdateStruct) ||
+            !empty($userUpdateStruct->contentMetadataUpdateStruct) ||
+            !empty($userUpdateStruct->email) ||
+            !empty($userUpdateStruct->enabled) ||
+            !empty($userUpdateStruct->maxLogin);
     }
 }

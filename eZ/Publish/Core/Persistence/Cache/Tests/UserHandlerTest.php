@@ -36,11 +36,14 @@ class UserHandlerTest extends AbstractCacheHandlerTest
     {
         $user = new User(['id' => 14]);
         $policy = new Policy(['id' => 13, 'roleId' => 9]);
+        $userToken = new User\UserTokenUpdateStruct(['userId' => 14]);
 
         // string $method, array $arguments, array? $tags, string? $key
         return [
             ['create', [$user], ['content-fields-14']],
             ['update', [$user], ['content-fields-14', 'user-14']],
+            ['updateUserToken', [$userToken], ['content-fields-14', 'user-14']],
+            ['expireUserToken', [14]],
             ['delete', [14], ['content-fields-14', 'user-14']],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
@@ -74,6 +77,7 @@ class UserHandlerTest extends AbstractCacheHandlerTest
             ['load', [14], 'ez-user-14', $user],
             ['loadByLogin', ['admin'], 'ez-user-admin-by-login', $user],
             ['loadByEmail', ['nospam@ez.no'], 'ez-user-nospam§ez.no-by-email', [$user]],
+            ['loadUserByToken', ['hash'], 'ez-user-hash-by-account-key', $user],
             ['loadRole', [9], 'ez-role-9', $role],
             ['loadRoleByIdentifier', ['member'], 'ez-role-member-by-identifier', $role],
             ['loadRoleAssignment', [11], 'ez-role-assignment-11', $roleAssignment],
