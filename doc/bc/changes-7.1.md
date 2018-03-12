@@ -3,11 +3,11 @@
 Changes affecting version compatibility with former or future versions.
 
 ## Changes
-
+* The method `eZ\Publish\API\Repository\PermissionResolver::hasAccess` will now throw an `eZ\Publish\API\Repository\Exceptions\InvalidArgumentException` if module or function is invalid.
 
 ## Deprecations
 
-
+* The `eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\RepositoryPolicyProvider` is no longer used. System policies configuration was moved to the `eZ/Publish/Core/settings/policies.yml` file.
 
 ## Removed features
 
