@@ -53,21 +53,31 @@ class PermissionResolver implements PermissionResolverInterface
     private $currentUserRef;
 
     /**
+     * Map of system configured policies, for validation usage.
+     *
+     * @var array
+     */
+    private $policyMap;
+
+    /**
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
+     * @param array $policyMap Map of system configured policies, for validation usage.
      */
     public function __construct(
         RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService,
         UserHandler $userHandler,
-        APIUserReference $userReference
+        APIUserReference $userReference,
+        array $policyMap = []
     ) {
         $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
         $this->currentUserRef = $userReference;
+        $this->policyMap = $policyMap;
     }
 
     public function getCurrentUserReference()
@@ -87,6 +97,12 @@ class PermissionResolver implements PermissionResolverInterface
 
     public function hasAccess($module, $function, APIUserReference $userReference = null)
     {
+        if (!isset($this->policyMap[$module])) {
+            throw new InvalidArgumentValue('module', "module: {$module}/ function: {$function}");
+        } elseif (!array_key_exists($function, $this->policyMap[$module])) {
+            throw new InvalidArgumentValue('function', "module: {$module}/ function: {$function}");
+        }
+
         // Full access if sudo nesting level is set by {@see sudo()}
         if ($this->sudoNestingLevel > 0) {
             return true;

@@ -34,7 +34,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5Conv
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\RepositoryPolicyProvider;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeNameableCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
@@ -119,8 +118,6 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\UrlChecker(),
                 )
             );
-
-            $this->extension->addPolicyProvider(new RepositoryPolicyProvider());
         }
 
         return $this->extension;

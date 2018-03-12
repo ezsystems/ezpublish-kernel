@@ -92,35 +92,7 @@ class RoleService implements RoleServiceInterface
         $this->userHandler = $userHandler;
         $this->limitationService = $limitationService;
         $this->roleDomainMapper = $roleDomainMapper;
-        // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
-            'policyMap' => array(
-                'content' => array(
-                    'read' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'diff' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'view_embed' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'create' => array('Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'edit' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true),
-                    'publish' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true),
-                    'manage_locations' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true),
-                    'hide' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'translate' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'remove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'versionread' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'versionremove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'pdf' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                ),
-                'section' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true),
-                ),
-                'state' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true),
-                ),
-                'user' => array(
-                    'login' => array('SiteAccess' => true),
-                ),
-            ),
-        );
+        $this->settings = $settings;
     }
 
     /**

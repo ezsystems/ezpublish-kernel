@@ -29,6 +29,7 @@ services:
             - "%ezpublish.api.inner_repository.class%"
             - "@ezpublish.field_type_collection.factory"
             - "@ezpublish.field_type_nameable_collection.factory"
+            - "%ezpublish.api.role.policy_map%"
         calls:
             - [setContainer, ["@service_container"]]
 

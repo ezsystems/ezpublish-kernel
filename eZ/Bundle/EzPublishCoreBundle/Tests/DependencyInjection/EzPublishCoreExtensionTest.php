@@ -781,6 +781,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRegisteredPolicies()
     {
+        $this->load();
+        self::assertContainerBuilderHasParameter('ezpublish.api.role.policy_map');
+        $previousPolicyMap = $this->container->getParameter('ezpublish.api.role.policy_map');
+
         $policies1 = [
             'custom_module' => [
                 'custom_function_1' => null,
@@ -822,8 +826,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         ];
 
         $this->load();
-
         self::assertContainerBuilderHasParameter('ezpublish.api.role.policy_map');
+        $expectedPolicies = array_merge_recursive($expectedPolicies, $previousPolicyMap);
         self::assertEquals($expectedPolicies, $this->container->getParameter('ezpublish.api.role.policy_map'));
     }
 

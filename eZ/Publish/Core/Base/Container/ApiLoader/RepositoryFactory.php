@@ -48,14 +48,23 @@ class RepositoryFactory implements ContainerAwareInterface
      */
     protected $roleLimitations = array();
 
+    /**
+     * Policies map.
+     *
+     * @var array
+     */
+    protected $policyMap = array();
+
     public function __construct(
         $repositoryClass,
         FieldTypeCollectionFactory $fieldTypeCollectionFactory,
-        FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory
+        FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory,
+        array $policyMap
     ) {
         $this->repositoryClass = $repositoryClass;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
         $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
+        $this->policyMap = $policyMap;
     }
 
     /**
@@ -84,6 +93,7 @@ class RepositoryFactory implements ContainerAwareInterface
                 'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
+                    'policyMap' => $this->policyMap,
                 ),
                 'languages' => $this->container->getParameter('languages'),
             ),
