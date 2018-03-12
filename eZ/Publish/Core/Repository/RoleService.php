@@ -1382,6 +1382,7 @@ class RoleService implements RoleServiceInterface
                         "'{$limitation->getIdentifier()}' was found several times among the limitations"
                     );
                 }
+                
                 if (!isset($this->settings['policyMap'][$module][$function][$limitation->getIdentifier()])) {
                     throw new InvalidArgumentException(
                         'policy',
