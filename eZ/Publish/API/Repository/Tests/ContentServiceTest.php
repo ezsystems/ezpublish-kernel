@@ -1480,10 +1480,10 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
-    public function testUpdateContentIgnoreIsRequiredOnNonUpdatedLanguages()
+    public function testUpdateContentValidatorIgnoresRequiredFieldsOfNotUpdatedLanguages()
     {
         $repository = $this->getRepository();
         /* BEGIN: Use Case */
