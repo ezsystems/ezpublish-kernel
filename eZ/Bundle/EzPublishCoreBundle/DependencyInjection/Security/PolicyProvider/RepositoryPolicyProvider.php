@@ -7,6 +7,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider;
 
+/**
+ * @deprecated Deprecated since 7.1. No longer used. System policies configuration was moved to the eZ/Publish/Core/settings/policies.yml.
+ */
 class RepositoryPolicyProvider extends YamlPolicyProvider
 {
     public function getFiles()
