@@ -944,7 +944,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('create'),
-                $this->isInstanceOf($contentCreateStruct),
+                $this->isInstanceOf(get_class($contentCreateStruct)),
                 $this->equalTo(array())
             )->will($this->returnValue(false));
 
@@ -1005,7 +1005,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('create'),
-                $this->isInstanceOf($contentCreateStruct),
+                $this->isInstanceOf(get_class($contentCreateStruct)),
                 $this->equalTo(array())
             )->will($this->returnValue(true));
 
@@ -1908,7 +1908,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('create'),
-                $this->isInstanceOf($contentCreateStruct),
+                $this->isInstanceOf(get_class($contentCreateStruct)),
                 $this->equalTo(array())
             )->will($this->returnValue(true));
 

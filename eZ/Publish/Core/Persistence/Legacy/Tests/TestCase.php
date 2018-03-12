@@ -248,7 +248,7 @@ abstract class TestCase extends BaseTestCase
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $message
      */
-    public static function assertQueryResult(array $expectation, SelectQuery $query, $message = null)
+    public static function assertQueryResult(array $expectation, SelectQuery $query, $message = '')
     {
         $statement = $query->prepare();
         $statement->execute();
