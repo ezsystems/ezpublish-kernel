@@ -39,6 +39,7 @@ services:
             - "@ezpublish.api.persistence_handler"
             - "@ezpublish.spi.search"
             - '@ezpublish.search.background_indexer'
+            - '@ezpublish.repository.relation_processor'
         lazy: true
 
     ezpublish.api.service.inner_content:
@@ -126,3 +127,10 @@ services:
 
     ezpublish.search.background_indexer:
         class: eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer
+
+    ezpublish.repository.relation_processor:
+        class: eZ\Publish\Core\Repository\Helper\RelationProcessor
+        arguments:
+            - '@ezpublish.api.persistence_handler'
+        calls:
+            - ['setLogger', ['@?logger']]

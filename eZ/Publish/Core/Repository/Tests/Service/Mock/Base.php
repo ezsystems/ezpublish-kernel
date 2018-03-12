@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Repository\Repository;
@@ -57,6 +58,7 @@ abstract class Base extends TestCase
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
                 new NullIndexer(),
+                $this->getRelationProcessorMock(),
                 $serviceSettings,
                 $this->getStubbedUser(14)
             );
@@ -194,6 +196,16 @@ abstract class Base extends TestCase
         }
 
         return $this->persistenceMock;
+    }
+
+    protected function getRelationProcessorMock()
+    {
+        return $this->getMock(RelationProcessor::class,
+            array(),
+            array(),
+            '',
+            false
+        );
     }
 
     /**

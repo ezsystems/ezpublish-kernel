@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use DOMDocument;
 use Exception;
 
 /**
@@ -1652,6 +1653,60 @@ class ContentServiceTest extends BaseContentServiceTest
         // Throws ContentFieldValidationException because the string length
         // validation of the field "short_name" fails
         $contentService->updateContent($draft->getVersionInfo(), $contentUpdate);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentValidatorIgnoresRequiredFieldsOfNotUpdatedLanguages()
+    {
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        // Create multilangual content
+        $contentService = $repository->getContentService();
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'An awesome Sidelfingen folder', 'eng-US');
+        $contentCreate->setField('name', 'An awesome Sidelfingen folder', 'eng-GB');
+
+        $contentDraft = $contentService->createContent($contentCreate);
+
+        // 2. Update content type definition
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+
+        $fieldDefinition = $contentType->getFieldDefinition('description');
+        $fieldDefinitionUpdate = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $fieldDefinitionUpdate->identifier = 'description';
+        $fieldDefinitionUpdate->isRequired = true;
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdate
+        );
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        // 3. Update only eng-US translation
+        $description = new DOMDocument();
+        $description->loadXML(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>Lorem ipsum dolor</para>
+</section>
+XML
+        );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField('name', 'An awesome Sidelfingen folder (updated)', 'eng-US');
+        $contentUpdate->setField('description', $description);
+
+        $contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdate);
         /* END: Use Case */
     }
 
