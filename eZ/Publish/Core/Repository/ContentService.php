@@ -1358,12 +1358,8 @@ class ContentService implements ContentServiceInterface
                 continue;
             }
 
-//            dump($field->fieldDefIdentifier, $field->languageCode);
-
             $languageCodes[$field->languageCode] = true;
         }
-
-//        dump(array_keys($languageCodes));
 
         return array_keys($languageCodes);
     }
