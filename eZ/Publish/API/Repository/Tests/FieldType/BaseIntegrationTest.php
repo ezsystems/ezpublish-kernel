@@ -309,8 +309,16 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        $contentTypeIdentifier = 'test-' . $this->getTypeName();
+
+        try {
+            return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+        } catch (Repository\Exceptions\NotFoundException $e) {
+            // Move on to creating Content Type
+        }
+
         $createStruct = $contentTypeService->newContentTypeCreateStruct(
-            'test-' . $this->getTypeName()
+            $contentTypeIdentifier
         );
         $createStruct->mainLanguageCode = $this->getOverride('mainLanguageCode', $typeCreateOverride, 'eng-GB');
         $createStruct->remoteId = $this->getTypeName();
@@ -539,10 +547,16 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      *
      * @param array $names Content names in the form of <code>[languageCode => name]</code>
      * @param array $fieldData FT-specific data in the form of <code>[languageCode => data]</code>
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createMultilingualContent(array $names, array $fieldData)
+    protected function createMultilingualContent(array $names, array $fieldData, array $locationCreateStructs = [])
     {
         self::assertEquals(array_keys($names), array_keys($fieldData), 'Languages passed to names and data differ');
 
@@ -567,7 +581,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->remoteId = md5(uniqid('', true) . microtime());
         $createStruct->alwaysAvailable = true;
 
-        return $contentService->createContent($createStruct);
+        return $contentService->createContent($createStruct, $locationCreateStructs);
     }
 
     /**

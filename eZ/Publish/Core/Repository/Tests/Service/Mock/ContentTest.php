@@ -5000,7 +5000,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $fieldTypeMock = $this->createMock('eZ\\Publish\\SPI\\FieldType\\FieldType');
         $existingLanguageCodes = array_map(
             function (Field $field) {
@@ -5081,44 +5080,32 @@ class ContentTest extends BaseServiceMockTest
             $languageCodes
         );
         $allFieldErrors = array();
-        $validateCount = 0;
         $emptyValue = self::EMPTY_FIELD_VALUE;
-        foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
-            foreach ($fieldValues[$fieldDefinition->identifier] as $languageCode => $value) {
-                $fieldTypeMock->expects($this->at($validateCount++))
-                    ->method('acceptValue')
-                    ->will(
-                        $this->returnCallback(
-                            function ($valueString) {
-                                return new ValueStub($valueString);
-                            }
-                        )
-                    );
 
-                $fieldTypeMock->expects($this->at($validateCount++))
-                    ->method('isEmptyValue')
-                    ->will(
-                        $this->returnCallback(
-                            function (ValueStub $value) use ($emptyValue) {
-                                return $emptyValue === (string)$value;
-                            }
-                        )
-                    );
+        $fieldTypeMock->expects($this->exactly(count($fieldValues) * count($languageCodes)))
+            ->method('acceptValue')
+            ->will(
+                $this->returnCallback(
+                    function ($valueString) {
+                        return new ValueStub($valueString);
+                    }
+                )
+            );
 
-                if (self::EMPTY_FIELD_VALUE === (string)$value) {
-                    continue;
-                }
+        $fieldTypeMock->expects($this->exactly(count($fieldValues) * count($languageCodes)))
+            ->method('isEmptyValue')
+            ->will(
+                $this->returnCallback(
+                    function (ValueStub $value) use ($emptyValue) {
+                        return $emptyValue === (string)$value;
+                    }
+                )
+            );
 
-                $fieldTypeMock->expects($this->at($validateCount++))
-                    ->method('validate')
-                    ->with(
-                        $this->equalTo($fieldDefinition),
-                        $this->equalTo($value)
-                    )->will($this->returnArgument(1));
-
-                $allFieldErrors[$fieldDefinition->id][$languageCode] = $value;
-            }
-        }
+        $fieldTypeMock
+            ->expects($this->any())
+            ->method('validate')
+            ->willReturnArgument(1);
 
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
@@ -5136,7 +5123,124 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestUpdateContentThrowsContentFieldValidationException()
     {
-        return $this->providerForTestUpdateContentNonRedundantFieldSetComplex();
+        $allFieldErrors = [
+            [
+                'fieldDefinitionId1' => [
+                    'eng-GB' => 'newValue1-eng-GB',
+                    'eng-US' => 'newValue1-eng-GB',
+                ],
+                'fieldDefinitionId2' => [
+                    'eng-GB' => 'initialValue2',
+                ],
+                'fieldDefinitionId3' => [
+                    'eng-GB' => 'initialValue3',
+                    'eng-US' => 'initialValue3',
+                ],
+                'fieldDefinitionId4' => [
+                    'eng-GB' => 'initialValue4',
+                    'eng-US' => 'newValue4',
+                ],
+            ],
+            [
+                'fieldDefinitionId1' => [
+                    'eng-GB' => 'newValue1-eng-GB',
+                    'eng-US' => 'newValue1-eng-GB',
+                ],
+                'fieldDefinitionId2' => [
+                    'eng-GB' => 'initialValue2',
+                ],
+                'fieldDefinitionId3' => [
+                    'eng-GB' => 'initialValue3',
+                    'eng-US' => 'initialValue3',
+                ],
+                'fieldDefinitionId4' => [
+                    'eng-GB' => 'initialValue4',
+                    'eng-US' => 'newValue4',
+                ],
+            ],
+            [
+                'fieldDefinitionId1' => [
+                    'eng-GB' => 'newValue1-eng-GB',
+                    'eng-US' => 'newValue1-eng-GB',
+                ],
+                'fieldDefinitionId2' => [
+                    'eng-GB' => 'initialValue2',
+                    'eng-US' => 'newValue2',
+                ],
+                'fieldDefinitionId3' => [
+                    'eng-GB' => 'initialValue3',
+                    'eng-US' => 'initialValue3',
+                ],
+                'fieldDefinitionId4' => [
+                    'eng-GB' => 'initialValue4',
+                    'eng-US' => 'defaultValue4',
+                ],
+            ],
+            [
+                'fieldDefinitionId1' => [
+                    'eng-GB' => 'newValue1-eng-GB',
+                    'eng-US' => 'newValue1-eng-GB',
+                ],
+                'fieldDefinitionId2' => [
+                    'eng-GB' => 'initialValue2',
+                    'eng-US' => 'newValue2',
+                ],
+                'fieldDefinitionId3' => [
+                    'eng-GB' => 'initialValue3',
+                    'eng-US' => 'initialValue3',
+                ],
+                'fieldDefinitionId4' => [
+                    'eng-GB' => 'initialValue4',
+                    'eng-US' => 'defaultValue4',
+                ],
+            ],
+            [
+                'fieldDefinitionId1' => [
+                    'eng-GB' => 'newValue1-eng-GB',
+                    'ger-DE' => 'newValue1-eng-GB',
+                    'eng-US' => 'newValue1-eng-GB',
+                ],
+                'fieldDefinitionId2' => [
+                    'eng-GB' => 'initialValue2',
+                    'eng-US' => 'newValue2',
+                ],
+                'fieldDefinitionId3' => [
+                    'eng-GB' => 'initialValue3',
+                    'ger-DE' => 'initialValue3',
+                    'eng-US' => 'initialValue3',
+                ],
+                'fieldDefinitionId4' => [
+                    'eng-GB' => 'initialValue4',
+                    'eng-US' => 'defaultValue4',
+                    'ger-DE' => 'defaultValue4',
+                ],
+            ],
+            [
+                'fieldDefinitionId1' => [
+                    'eng-US' => 'newValue1-eng-GB',
+                    'ger-DE' => 'newValue1-eng-GB',
+                ],
+                'fieldDefinitionId2' => [
+                    'eng-US' => 'newValue2',
+                ],
+                'fieldDefinitionId3' => [
+                    'ger-DE' => 'initialValue3',
+                    'eng-US' => 'initialValue3',
+                ],
+                'fieldDefinitionId4' => [
+                    'ger-DE' => 'defaultValue4',
+                    'eng-US' => 'defaultValue4',
+                ],
+            ],
+        ];
+
+        $data = $this->providerForTestUpdateContentNonRedundantFieldSetComplex();
+        $count = count($data);
+        for ($i = 0; $i < $count; ++$i) {
+            $data[$i][] = $allFieldErrors[$i];
+        }
+
+        return $data;
     }
 
     /**
@@ -5149,10 +5253,10 @@ class ContentTest extends BaseServiceMockTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @expectedExceptionMessage Content fields did not validate
      */
-    public function testUpdateContentThrowsContentFieldValidationException($initialLanguageCode, $structFields)
+    public function testUpdateContentThrowsContentFieldValidationException($initialLanguageCode, $structFields, $spiField, $allFieldErrors)
     {
         list($existingFields, $fieldDefinitions) = $this->fixturesForTestUpdateContentNonRedundantFieldSetComplex();
-        list($versionInfo, $contentUpdateStruct, $allFieldErrors) =
+        list($versionInfo, $contentUpdateStruct) =
             $this->assertForTestUpdateContentThrowsContentFieldValidationException(
                 $initialLanguageCode,
                 $structFields,
