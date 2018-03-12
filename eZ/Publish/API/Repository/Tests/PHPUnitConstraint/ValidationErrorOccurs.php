@@ -8,13 +8,15 @@
  */
 namespace eZ\Publish\API\Repository\Tests\PHPUnitConstraint;
 
+use PHPUnit\Framework\Constraint\Constraint as AbstractPHPUnitConstraint;
+
 /**
  * PHPUnit constraint checking that the given ValidationError message occurs in asserted ContentFieldValidationException.
  *
  * @see \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
  * @see \eZ\Publish\SPI\FieldType\ValidationError
  */
-class ValidationErrorOccurs extends \PHPUnit_Framework_Constraint
+class ValidationErrorOccurs extends AbstractPHPUnitConstraint
 {
     /**
      * @var string
@@ -36,7 +38,7 @@ class ValidationErrorOccurs extends \PHPUnit_Framework_Constraint
      *
      * @return bool
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
         foreach ($other->getFieldErrors() as $fieldId => $errors) {
             foreach ($errors as $languageCode => $fieldErrors) {
@@ -57,7 +59,7 @@ class ValidationErrorOccurs extends \PHPUnit_Framework_Constraint
      *
      * @return string
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         return sprintf(
             '%s::getFieldErrors = %s %s',
@@ -72,7 +74,7 @@ class ValidationErrorOccurs extends \PHPUnit_Framework_Constraint
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return "contains a ValidationError with the message '{$this->expectedValidationErrorMessage}'";
     }
