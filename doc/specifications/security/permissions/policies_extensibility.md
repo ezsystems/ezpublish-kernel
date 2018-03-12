@@ -96,5 +96,5 @@ class AcmeFooBundle extends Bundle
 ```
 
 ## Core policies
-Policies used internally in repository services are defined in `EzPublishCoreBundle/Resources/config/policies.yml`.
+Policies used internally in repository services are defined in `eZ/Publish/Core/settings/policies.yml`.
 
