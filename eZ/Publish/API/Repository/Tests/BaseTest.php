@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -510,5 +512,20 @@ abstract class BaseTest extends TestCase
         $roleService->publishRoleDraft($roleDraft);
 
         return $roleService->loadRole($roleDraft->id);
+    }
+
+    /**
+     * Traverse all errors for all fields in all Translations to find expected one.
+     *
+     * @param \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException $exception
+     * @param string $expectedValidationErrorMessage
+     */
+    protected function assertValidationErrorOccurs(
+        ContentFieldValidationException $exception,
+        $expectedValidationErrorMessage
+    ) {
+        $constraint = new PHPUnitConstraintValidationErrorOccurs($expectedValidationErrorMessage);
+
+        self::assertThat($exception, $constraint);
     }
 }
