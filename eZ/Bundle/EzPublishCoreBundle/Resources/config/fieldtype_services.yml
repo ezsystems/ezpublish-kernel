@@ -94,6 +94,21 @@ services:
     ezpublish.fieldType.ezpage.hashConverter:
         class: "%ezpublish.fieldType.ezpage.hashConverter.class%"
 
+    # Relation and RelationList
+    ezpublish.fieldType.ezobjectrelation.relation_service:
+        class: \eZ\Publish\Core\MVC\Symfony\FieldType\Relation\RelationService
+        arguments:
+            - "@ezpublish.api.repository"
+        lazy: true
+
+    ezpublish.fieldType.ezobjectrelation.parameter_provider:
+        class: \eZ\Publish\Core\MVC\Symfony\FieldType\Relation\ParameterProvider
+        arguments:
+            - "@ezpublish.fieldType.ezobjectrelationlist.relation_service"
+        tags:
+            - { name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelation }
+            - { name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelationlist }
+
     # RichText
     ezpublish.fieldType.ezrichtext.normalizer.input:
         class: "%ezpublish.fieldType.ezrichtext.normalizer.document_type_definition.class%"
