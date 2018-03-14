@@ -68,6 +68,19 @@ interface Handler
     public function load($id, $version, array $translations = null);
 
     /**
+     * Return list of unique Content, with content id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param array $contentIds
+     * @param string[] $translations
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content[]
+     */
+    public function loadContentList(array $contentIds, array $translations): array;
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId

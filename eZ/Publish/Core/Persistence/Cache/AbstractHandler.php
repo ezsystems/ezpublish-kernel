@@ -56,11 +56,15 @@ abstract class AbstractHandler
      * Cache items must be stored with a key in the following format "${keyPrefix}${id}", like "ez-content-info-${id}",
      * in order for this method to be able to prefix key on id's and also extract key prefix afterwards.
      *
+     * It also optionally supports a key suffix, for use on a variable argument that affects all lookups,
+     * like translations, i.e. "ez-content-${id}-${translationKey}" where $keySuffix = "-${translationKey}".
+     *
      * @param array $ids
      * @param string $keyPrefix
      * @param callable $missingLoader Function for loading missing objects, gets array with missing id's as argument,
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $loadedTagger Function for tagging loaded object, gets object as argument, return array of tags.
+     * @param string $keySuffix Optional argument for key suffix, for instance translations argument for all lookups.
      *
      * @return array
      */
@@ -68,7 +72,8 @@ abstract class AbstractHandler
         array $ids,
         string $keyPrefix,
         callable $missingLoader,
-        callable $loadedTagger
+        callable $loadedTagger,
+        string $keySuffix = ''
     ): array {
         if (empty($ids)) {
             return [];
@@ -77,15 +82,20 @@ abstract class AbstractHandler
         // Generate unique cache keys
         $cacheKeys = [];
         foreach (array_unique($ids) as $id) {
-            $cacheKeys[] = $keyPrefix . $id;
+            $cacheKeys[] = $keyPrefix . $id . $keySuffix;
         }
 
         // Load cache items by cache keys (will contain hits and misses)
         $list = [];
         $cacheMisses = [];
         $keyPrefixLength = strlen($keyPrefix);
+        $keySuffixLength = strlen($keySuffix);
         foreach ($this->cache->getItems($cacheKeys) as $key => $cacheItem) {
             $id = substr($key, $keyPrefixLength);
+            if ($keySuffixLength !== 0) {
+                $id = substr($id, 0, -$keySuffixLength);
+            }
+
             if ($cacheItem->isHit()) {
                 $list[$id] = $cacheItem->get();
             } else {

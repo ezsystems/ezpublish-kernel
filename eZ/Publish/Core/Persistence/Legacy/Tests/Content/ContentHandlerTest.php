@@ -520,6 +520,74 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadContentList
+     */
+    public function testLoadContentList()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+
+        $infoRows = [
+            ['id' => 2, 'version' => 2, 'language_mask' => 2],
+            ['id' => 3, 'version' => 1, 'language_mask' => 3],
+        ];
+        $gatewayMock->expects($this->once())
+            ->method('loadContentInfoList')
+            ->with($this->equalTo([2, 3]))
+            ->willReturn($infoRows);
+
+        $infoList = [
+            new ContentInfo(['id' => 2, 'currentVersionNo' => 2, 'alwaysAvailable' => false, 'mainLanguageCode' => 'eng-US']),
+            new ContentInfo(['id' => 3, 'currentVersionNo' => 1, 'alwaysAvailable' => true, 'mainLanguageCode' => 'eng-US']),
+        ];
+        $mapperMock->expects($this->once())
+            ->method('extractContentInfoFromRows')
+            ->with($this->equalTo($infoRows))
+            ->willReturn($infoList);
+
+        $idVersionTranslationPairs = [
+            ['id' => 2, 'version' => 2, 'languages' => ['eng-GB']],
+            ['id' => 3, 'version' => 1, 'languages' => ['eng-GB', 'eng-US']],
+        ];
+        $contentRows = [
+            ['ezcontentobject_id' => 2, 'ezcontentobject_version_version' => 2],
+            ['ezcontentobject_id' => 3, 'ezcontentobject_version_version' => 1],
+        ];
+        $gatewayMock->expects($this->once())
+            ->method('loadContentList')
+            ->with($this->equalTo($idVersionTranslationPairs))
+            ->willReturn($contentRows);
+
+        $gatewayMock->expects($this->once())
+            ->method('loadVersionedNameData')
+            ->with($this->equalTo([['id' => 2, 'version' => 2], ['id' => 3, 'version' => 1]]))
+            ->willReturn([22]);
+
+        $expected = [
+            2 => $this->getContentFixtureForDraft(2, 2),
+            3 => $this->getContentFixtureForDraft(3, 1),
+        ];
+        $mapperMock->expects($this->once())
+            ->method('extractContentFromRows')
+            ->with($this->equalTo($contentRows), $this->equalTo([22]))
+            ->willReturn($expected);
+
+        $fieldHandlerMock->expects($this->exactly(2))
+            ->method('loadExternalFieldData')
+            ->with($this->isInstanceOf(Content::class));
+
+        $result = $handler->loadContentList([2, 3], ['eng-GB']);
+
+        $this->assertEquals(
+            $expected,
+            $result
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadContentInfoByRemoteId
      */
     public function testLoadContentInfoByRemoteId()
@@ -566,20 +634,23 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a Content for {@link testCreateDraftFromVersion()}.
      *
+     * @param int $id Optional id
+     * @param int $versionNo Optional version number
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    protected function getContentFixtureForDraft()
+    protected function getContentFixtureForDraft(int $id = 23, int $versionNo = 2)
     {
         $content = new Content();
         $content->versionInfo = new VersionInfo();
-        $content->versionInfo->versionNo = 2;
+        $content->versionInfo->versionNo = $versionNo;
 
-        $content->versionInfo->contentInfo = new ContentInfo();
+        $content->versionInfo->contentInfo = new ContentInfo(['id' => $id]);
 
         $field = new Field();
-        $field->versionNo = 2;
+        $field->versionNo = $versionNo;
 
-        $content->fields = array($field);
+        $content->fields = [$field];
 
         return $content;
     }

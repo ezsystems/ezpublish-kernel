@@ -69,10 +69,12 @@ class ContentHandlerTest extends AbstractCacheHandlerTest
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, mixed? $data, bool $multi = false
         return [
             ['load', [2, 1], 'ez-content-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, $content],
             ['load', [2, 1, ['eng-GB', 'eng-US']], 'ez-content-2-1-eng-GB|eng-US', $content],
+            ['loadContentList', [[2], []], 'ez-content-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, [2 => $content], true],
+            ['loadContentList', [[2], ['eng-GB', 'eng-US']], 'ez-content-2-eng-GB|eng-US', [2 => $content], true],
             ['loadContentInfo', [2], 'ez-content-info-2', $info],
             ['loadContentInfoList', [[2]], 'ez-content-info-2', [2 => $info], true],
             ['loadContentInfoByRemoteId', ['3d8jrj'], 'ez-content-info-byRemoteId-3d8jrj', $info],

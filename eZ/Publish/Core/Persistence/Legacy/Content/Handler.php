@@ -321,10 +321,65 @@ class Handler implements BaseContentHandler
             $this->contentGateway->loadVersionedNameData(array(array('id' => $id, 'version' => $version)))
         );
         $content = $contentObjects[0];
+        unset($rows, $contentObjects);
 
         $this->fieldHandler->loadExternalFieldData($content);
 
         return $content;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @todo
+     * REVIEW NOTE: This methods ALWAYS handles AlwaysAvailable, this would perhaps be better handled in API layer like
+     *              done on load(), thus making it optional. AND faster as it can loadContentInfoList via SPI cache.
+     *              However then we would need a argument structure like used on gateway here.
+     *              Would that be OK for loadContentList() in SPI layer??
+     *              If so it should also take version number  as part of the structure.
+     */
+    public function loadContentList(array $contentIds, array $translations): array
+    {
+        $infoList = $this->mapper->extractContentInfoFromRows(
+            $this->contentGateway->loadContentInfoList($contentIds)
+        );
+
+        if (empty($infoList)) {
+            return [];
+        }
+
+        $IdVersionPairs = [];
+        $IdVersionTranslationPairs = [];
+        foreach ($infoList as $info) {
+            $IdVersionTranslation = [
+                'id' => $info->id,
+                'version' => $info->currentVersionNo,
+                'languages' => $translations,
+            ];
+
+            if ($info->alwaysAvailable && !in_array($info->mainLanguageCode, $translations)) {
+                $IdVersionTranslation['languages'][] = $info->mainLanguageCode;
+            }
+
+            $IdVersionTranslationPairs[] = $IdVersionTranslation;
+            unset($IdVersionTranslation['languages']);
+
+            $IdVersionPairs[] = $IdVersionTranslation;
+        }
+        unset($infoList, $info);
+
+        $contentObjects = $this->mapper->extractContentFromRows(
+            $this->contentGateway->loadContentList($IdVersionTranslationPairs),
+            $this->contentGateway->loadVersionedNameData($IdVersionPairs)
+        );
+
+        $result = [];
+        foreach ($contentObjects as $content) {
+            $this->fieldHandler->loadExternalFieldData($content);
+            $result[$content->versionInfo->contentInfo->id] = $content;
+        }
+
+        return $result;
     }
 
     /**

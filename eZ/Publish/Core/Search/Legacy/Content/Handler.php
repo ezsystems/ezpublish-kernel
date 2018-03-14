@@ -193,6 +193,7 @@ class Handler implements SearchHandlerInterface
 
     protected function extractMatchedLanguage($languageMask, $mainLanguageId, $languageSettings)
     {
+        // @todo load all at once or better yet load several at once? Either way check if this is using cached instance
         foreach ($languageSettings['languages'] as $languageCode) {
             if ($languageMask & $this->languageHandler->loadByLanguageCode($languageCode)->id) {
                 return $languageCode;

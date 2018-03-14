@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
@@ -75,6 +76,23 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->cache->save($cacheItem);
 
         return $content;
+    }
+
+    public function loadContentList(array $contentIds, array $translations): array
+    {
+        return $this->getMultipleCacheItems(
+            $contentIds,
+            'ez-content-',
+            function (array $cacheMissIds) use ($translations) {
+                $this->logger->logCall(__CLASS__ . '::loadContentList', ['content' => $cacheMissIds, 'translations' => $translations]);
+
+                return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
+            },
+            function (Content $content) {
+                return $this->getCacheTags($content->versionInfo->contentInfo, true);
+            },
+            '-' . (empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations))
+        );
     }
 
     /**
