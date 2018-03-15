@@ -439,6 +439,7 @@ services:
     ezpublish.fieldType.ezuser:
         class: "%ezpublish.fieldType.ezuser.class%"
         parent: ezpublish.fieldType
+        arguments: ["@ezpublish.spi.persistence.cache.userHandler"]
         tags:
             - {name: ezpublish.fieldType, alias: ezuser}
 

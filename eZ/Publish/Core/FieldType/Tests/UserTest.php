@@ -8,9 +8,11 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\Core\Persistence\Cache\UserHandler;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * @group fieldType
@@ -31,7 +33,8 @@ class UserTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new UserType();
+        $userHandler = $this->createMock(UserHandler::class);
+        $fieldType = new UserType($userHandler);
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -293,6 +296,67 @@ class UserTest extends FieldTypeTest
                 new UserValue($userData),
             ),
         );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings and
+     * field value which are considered valid by the {@link validate()} method.
+     *
+     * @return array
+     */
+    public function provideValidDataForValidate()
+    {
+        return [
+            [
+                [],
+                new UserValue([
+                    'hasStoredLogin' => true,
+                    'contentId' => 23,
+                    'login' => 'sindelfingen',
+                    'email' => 'sindelfingen@example.com',
+                    'passwordHash' => '1234567890abcdef',
+                    'passwordHashType' => 'md5',
+                    'enabled' => true,
+                    'maxLogin' => 1000,
+                ]),
+            ],
+        ];
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings,
+     * field value and corresponding validation errors returned by
+     * the {@link validate()} method.
+     *
+     * @return array
+     */
+    public function provideInvalidDataForValidate()
+    {
+        return [
+            [
+                [],
+                new UserValue([
+                    'hasStoredLogin' => false,
+                    'contentId' => 23,
+                    'login' => 'sindelfingen',
+                    'email' => 'sindelfingen@example.com',
+                    'passwordHash' => '1234567890abcdef',
+                    'passwordHashType' => 'md5',
+                    'enabled' => true,
+                    'maxLogin' => 1000,
+                ]),
+                [
+                    new ValidationError(
+                        "The user login '%login%' is used by another user. You must enter a unique login.",
+                        null,
+                        [
+                            '%login%' => 'sindelfingen',
+                        ],
+                        'username'
+                    ),
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()

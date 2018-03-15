@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\Core\Persistence\Cache\UserHandler;
 
 /**
  * Integration test for legacy storage field types.
@@ -54,7 +55,8 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $fieldType = new FieldType\User\Type();
+        $userHandler = $this->createMock(UserHandler::class);
+        $fieldType = new FieldType\User\Type($userHandler);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
