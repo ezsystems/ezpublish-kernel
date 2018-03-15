@@ -1599,8 +1599,8 @@ CREATE TABLE `ezprest_authcode` (
   `id` varchar(200) NOT NULL DEFAULT '',
   `scope` varchar(200) DEFAULT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `authcode_client_id` (`client_id`)
+  PRIMARY KEY (`id` (191)),
+  KEY `authcode_client_id` (`client_id` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1640,7 +1640,7 @@ CREATE TABLE `ezprest_clients` (
   `updated` int(11) NOT NULL DEFAULT '0',
   `version` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `client_id_unique` (`client_id`,`version`)
+  UNIQUE KEY `client_id_unique` (`client_id` (191),`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1658,8 +1658,8 @@ CREATE TABLE `ezprest_token` (
   `refresh_token` varchar(200) NOT NULL DEFAULT '',
   `scope` varchar(200) DEFAULT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `token_client_id` (`client_id`)
+  PRIMARY KEY (`id` (191)),
+  KEY `token_client_id` (`client_id` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1913,7 +1913,7 @@ CREATE TABLE `ezsearch_search_phrase` (
   `phrase_count` int(11) DEFAULT '0',
   `result_count` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ezsearch_search_phrase_phrase` (`phrase`),
+  UNIQUE KEY `ezsearch_search_phrase_phrase` (`phrase` (191)),
   KEY `ezsearch_search_phrase_count` (`phrase_count`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
