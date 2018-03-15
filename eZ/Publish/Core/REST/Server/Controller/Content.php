@@ -234,7 +234,7 @@ class Content extends RestController
      */
     public function createContent(Request $request)
     {
-        $contentCreate = $this->parseRequestContent($request);
+        $contentCreate = $this->parseCreateContentRequest($request);
 
         return $this->doCreateContent($request, $contentCreate);
     }
@@ -708,7 +708,7 @@ class Content extends RestController
      *
      * @return mixed
      */
-    protected function parseRequestContent(Request $request)
+    protected function parseCreateContentRequest(Request $request)
     {
         return $this->inputDispatcher->parse(
             new Message(
