@@ -7,7 +7,7 @@ CREATE TABLE ezbinaryfile (
   original_filename varchar(255) NOT NULL DEFAULT '',
   version int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (contentobject_attribute_id,version)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezimagefile;
 CREATE TABLE ezimagefile (
@@ -17,7 +17,7 @@ CREATE TABLE ezimagefile (
   PRIMARY KEY (id),
   KEY ezimagefile_coid (contentobject_attribute_id),
   KEY ezimagefile_file (filepath(200))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezmedia;
 CREATE TABLE ezmedia (
@@ -35,7 +35,7 @@ CREATE TABLE ezmedia (
   version int(11) NOT NULL DEFAULT 0,
   width int(11) DEFAULT NULL,
   PRIMARY KEY (contentobject_attribute_id,version)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
@@ -49,7 +49,7 @@ CREATE TABLE ezcobj_state (
   UNIQUE KEY ezcobj_state_identifier (group_id,identifier),
   KEY ezcobj_state_lmask (language_mask),
   KEY ezcobj_state_priority (priority)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcobj_state_group;
 CREATE TABLE ezcobj_state_group (
@@ -60,7 +60,7 @@ CREATE TABLE ezcobj_state_group (
   PRIMARY KEY (id),
   UNIQUE KEY ezcobj_state_group_identifier (identifier),
   KEY ezcobj_state_group_lmask (language_mask)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcobj_state_group_language;
 CREATE TABLE ezcobj_state_group_language (
@@ -70,7 +70,7 @@ CREATE TABLE ezcobj_state_group_language (
   real_language_id bigint(20) NOT NULL DEFAULT 0,
   name varchar(45) NOT NULL DEFAULT '',
   PRIMARY KEY (contentobject_state_group_id,real_language_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcobj_state_language;
 CREATE TABLE ezcobj_state_language (
@@ -79,14 +79,14 @@ CREATE TABLE ezcobj_state_language (
   language_id bigint(20) NOT NULL DEFAULT 0,
   name varchar(45) NOT NULL DEFAULT '',
   PRIMARY KEY (contentobject_state_id,language_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcobj_state_link;
 CREATE TABLE ezcobj_state_link (
   contentobject_id int(11) NOT NULL DEFAULT 0,
   contentobject_state_id int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (contentobject_id,contentobject_state_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
@@ -96,7 +96,7 @@ CREATE TABLE ezcontent_language (
   name varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (id),
   KEY ezcontent_language_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentclass;
 CREATE TABLE ezcontentclass (
@@ -121,7 +121,7 @@ CREATE TABLE ezcontentclass (
   PRIMARY KEY (id,version),
   KEY ezcontentclass_version (version),
   KEY ezcontentclass_identifier (identifier,version)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentclass_attribute;
 CREATE TABLE ezcontentclass_attribute (
@@ -154,7 +154,7 @@ CREATE TABLE ezcontentclass_attribute (
   version int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (id,version),
   KEY ezcontentclass_attr_ccid (contentclass_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentclass_classgroup;
 CREATE TABLE ezcontentclass_classgroup (
@@ -163,7 +163,7 @@ CREATE TABLE ezcontentclass_classgroup (
   group_id int(11) NOT NULL DEFAULT 0,
   group_name varchar(255) DEFAULT NULL,
   PRIMARY KEY (contentclass_id,contentclass_version,group_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentclass_name;
 CREATE TABLE ezcontentclass_name (
@@ -173,7 +173,7 @@ CREATE TABLE ezcontentclass_name (
   language_locale varchar(20) NOT NULL DEFAULT '',
   name varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (contentclass_id,contentclass_version,language_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentclassgroup;
 CREATE TABLE ezcontentclassgroup (
@@ -184,7 +184,7 @@ CREATE TABLE ezcontentclassgroup (
   modifier_id int(11) NOT NULL DEFAULT 0,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentobject;
 CREATE TABLE ezcontentobject (
@@ -208,7 +208,7 @@ CREATE TABLE ezcontentobject (
   KEY ezcontentobject_pub (published),
   UNIQUE KEY ezcontentobject_remote_id (remote_id),
   KEY ezcontentobject_status (status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentobject_attribute;
 CREATE TABLE ezcontentobject_attribute (
@@ -231,7 +231,7 @@ CREATE TABLE ezcontentobject_attribute (
   KEY ezcontentobject_classattr_id (contentclassattribute_id),
   KEY sort_key_int (sort_key_int),
   KEY sort_key_string (sort_key_string)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentobject_link;
 CREATE TABLE ezcontentobject_link (
@@ -244,7 +244,7 @@ CREATE TABLE ezcontentobject_link (
   PRIMARY KEY (id),
   KEY ezco_link_from (from_contentobject_id,from_contentobject_version,contentclassattribute_id),
   KEY ezco_link_to_co_id (to_contentobject_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentobject_name;
 CREATE TABLE ezcontentobject_name (
@@ -258,7 +258,7 @@ CREATE TABLE ezcontentobject_name (
   KEY ezcontentobject_name_cov_id (content_version),
   KEY ezcontentobject_name_lang_id (language_id),
   KEY ezcontentobject_name_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentobject_trash;
 CREATE TABLE ezcontentobject_trash (
@@ -284,7 +284,7 @@ CREATE TABLE ezcontentobject_trash (
   KEY ezcobj_trash_p_node_id (parent_node_id),
   KEY ezcobj_trash_path (path_string),
   KEY ezcobj_trash_path_ident (path_identification_string(50))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentobject_tree;
 CREATE TABLE ezcontentobject_tree (
@@ -312,7 +312,7 @@ CREATE TABLE ezcontentobject_tree (
   KEY ezcontentobject_tree_path (path_string),
   KEY ezcontentobject_tree_path_ident (path_identification_string(50)),
   KEY modified_subnode (modified_subnode)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezcontentobject_version;
 CREATE TABLE ezcontentobject_version (
@@ -332,7 +332,7 @@ CREATE TABLE ezcontentobject_version (
   KEY ezcobj_version_status (status),
   KEY idx_object_version_objver (contentobject_id,version),
   KEY ezcontentobject_version_object_status (contentobject_id,status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS eznode_assignment;
 CREATE TABLE eznode_assignment (
@@ -354,7 +354,7 @@ CREATE TABLE eznode_assignment (
   KEY eznode_assignment_coid_cov (contentobject_id,contentobject_version),
   KEY eznode_assignment_is_main (is_main),
   KEY eznode_assignment_parent_node (parent_node)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezpolicy;
 CREATE TABLE ezpolicy (
@@ -366,7 +366,7 @@ CREATE TABLE ezpolicy (
   PRIMARY KEY (id),
   KEY ezpolicy_original_id (original_id),
   KEY ezpolicy_role_id (role_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezpolicy_limitation;
 CREATE TABLE ezpolicy_limitation (
@@ -375,7 +375,7 @@ CREATE TABLE ezpolicy_limitation (
   policy_id int(11) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY policy_id (policy_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezpolicy_limitation_value;
 CREATE TABLE ezpolicy_limitation_value (
@@ -385,7 +385,7 @@ CREATE TABLE ezpolicy_limitation_value (
   PRIMARY KEY (id),
   KEY ezpolicy_limitation_value_val (value),
   KEY ezpolicy_limitation_value_limitation_id (limitation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezrole;
 CREATE TABLE ezrole (
@@ -395,7 +395,7 @@ CREATE TABLE ezrole (
   value char(1) DEFAULT NULL,
   version int(11) DEFAULT 0,
   PRIMARY KEY (id,version)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezurl;
 CREATE TABLE ezurl (
@@ -408,7 +408,7 @@ CREATE TABLE ezurl (
   url longtext,
   PRIMARY KEY (id),
   KEY ezurl_url (url(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezurl_object_link;
 CREATE TABLE ezurl_object_link (
@@ -418,7 +418,7 @@ CREATE TABLE ezurl_object_link (
   KEY ezurl_ol_coa_id (contentobject_attribute_id),
   KEY ezurl_ol_coa_version (contentobject_attribute_version),
   KEY ezurl_ol_url_id (url_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezurlalias;
 CREATE TABLE ezurlalias (
@@ -437,7 +437,7 @@ CREATE TABLE ezurlalias (
   KEY ezurlalias_source_md5 (source_md5),
   KEY ezurlalias_source_url (source_url(255)),
   KEY ezurlalias_wcard_fwd (is_wildcard,forward_to_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezurlalias_ml;
 CREATE TABLE ezurlalias_ml (
@@ -460,13 +460,13 @@ CREATE TABLE ezurlalias_ml (
   KEY ezurlalias_ml_par_lnk_txt (parent,text(32),link),
   KEY ezurlalias_ml_text (text(32),id,link),
   KEY ezurlalias_ml_text_lang (text(32),lang_mask,parent)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezurlalias_ml_incr;
 CREATE TABLE ezurlalias_ml_incr (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezurlwildcard;
 CREATE TABLE ezurlwildcard (
@@ -475,7 +475,7 @@ CREATE TABLE ezurlwildcard (
   source_url longtext NOT NULL,
   type int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezuser;
 CREATE TABLE ezuser (
@@ -486,7 +486,7 @@ CREATE TABLE ezuser (
   password_hash_type int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (contentobject_id),
   UNIQUE KEY `ezuser_login` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezuser_role;
 CREATE TABLE ezuser_role (
@@ -498,7 +498,7 @@ CREATE TABLE ezuser_role (
   PRIMARY KEY (id),
   KEY ezuser_role_contentobject_id (contentobject_id),
   KEY ezuser_role_role_id (role_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezuser_setting;
 CREATE TABLE ezuser_setting (
@@ -506,7 +506,7 @@ CREATE TABLE ezuser_setting (
   max_login int(11) DEFAULT NULL,
   user_id int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezsearch_object_word_link;
 CREATE TABLE ezsearch_object_word_link (
@@ -529,7 +529,7 @@ CREATE TABLE ezsearch_object_word_link (
   KEY ezsearch_object_word_link_integer_value (integer_value),
   KEY ezsearch_object_word_link_object (contentobject_id),
   KEY ezsearch_object_word_link_word (word_id)
-) ENGINE=InnoDB AUTO_INCREMENT=17279 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17279 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezsearch_word;
 CREATE TABLE ezsearch_word (
@@ -539,7 +539,7 @@ CREATE TABLE ezsearch_word (
   PRIMARY KEY (id),
   KEY ezsearch_word_obj_count (object_count),
   KEY ezsearch_word_word_i (word)
-) ENGINE=InnoDB AUTO_INCREMENT=2523 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2523 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezsection;
 CREATE TABLE ezsection (
@@ -549,7 +549,7 @@ CREATE TABLE ezsection (
   name varchar(255) DEFAULT NULL,
   navigation_part_identifier varchar(100) DEFAULT 'ezcontentnavigationpart',
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezuser_accountkey;
 CREATE TABLE ezuser_accountkey (
@@ -559,7 +559,7 @@ CREATE TABLE ezuser_accountkey (
   user_id int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   KEY hash_key (hash_key)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezuservisit;
 CREATE TABLE ezuservisit (
@@ -570,7 +570,7 @@ CREATE TABLE ezuservisit (
   user_id int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (user_id),
   KEY ezuservisit_co_visit_count (current_visit_timestamp,login_count)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezkeyword;
 CREATE TABLE ezkeyword (
@@ -579,7 +579,7 @@ CREATE TABLE ezkeyword (
   keyword varchar(255) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY ezkeyword_keyword (keyword)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezkeyword_attribute_link;
 CREATE TABLE ezkeyword_attribute_link (
@@ -589,7 +589,7 @@ CREATE TABLE ezkeyword_attribute_link (
   PRIMARY KEY (id),
   KEY ezkeyword_attr_link_kid_oaid (keyword_id,objectattribute_id),
   KEY ezkeyword_attr_link_oaid (objectattribute_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezgmaplocation;
 CREATE TABLE ezgmaplocation (
@@ -600,4 +600,4 @@ CREATE TABLE ezgmaplocation (
   address varchar(150) DEFAULT NULL,
   PRIMARY KEY (contentobject_attribute_id,contentobject_version),
   KEY latitude_longitude_key (latitude,longitude)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

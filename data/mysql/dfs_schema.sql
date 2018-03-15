@@ -20,7 +20,7 @@ CREATE TABLE ezdfsfile (
   KEY `ezdfsfile_name_trunk` (`name_trunk`(250)),
   KEY `ezdfsfile_mtime` (`mtime`),
   KEY `ezdfsfile_expired_name` (`expired`,`name`(250))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
