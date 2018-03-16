@@ -88,73 +88,43 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * Loads a location object from its $locationId.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
-     *
-     * @param mixed $locationId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * {@inheritdoc}
      */
-    public function loadLocation($locationId)
+    public function loadLocation($locationId, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocation($locationId);
-    }
-
-    /**
-     * Loads a location object from its $remoteId.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
-     *
-     * @param string $remoteId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
-     */
-    public function loadLocationByRemoteId($remoteId)
-    {
-        return $this->service->loadLocationByRemoteId($remoteId);
-    }
-
-    /**
-     * Loads the locations for the given content object.
-     *
-     * If a $rootLocation is given, only locations that belong to this location are returned.
-     * The location list is also filtered by permissions on reading locations.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
-     */
-    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null)
-    {
-        return $this->service->loadLocations($contentInfo, $rootLocation);
-    }
-
-    /**
-     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of locations returned
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\LocationList
-     */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25)
-    {
-        return $this->service->loadLocationChildren($location, $offset, $limit);
+        return $this->service->loadLocation($locationId, $prioritizedLanguages);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo)
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
     {
-        return $this->service->loadParentLocationsForDraftContent($versionInfo);
+        return $this->service->loadLocationByRemoteId($remoteId, $prioritizedLanguages);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null, array $prioritizedLanguages = null)
+    {
+        return $this->service->loadLocations($contentInfo, $rootLocation, $prioritizedLanguages);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
+    {
+        return $this->service->loadLocationChildren($location, $offset, $limit, $prioritizedLanguages);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null)
+    {
+        return $this->service->loadParentLocationsForDraftContent($versionInfo, $prioritizedLanguages);
     }
 
     /**

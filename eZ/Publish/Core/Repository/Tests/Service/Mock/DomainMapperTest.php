@@ -112,9 +112,9 @@ class DomainMapperTest extends BaseServiceMockTest
         ];
 
         return [
-            [$locationHits, [32, 33], [32 => new ContentInfo(['id' => 32]), 33 => new ContentInfo(['id' => 33])], 0],
-            [$locationHits, [32, 33], [32 => new ContentInfo(['id' => 32])], 1],
-            [$locationHits, [32, 33], [], 2],
+            [$locationHits, [32, 33], [], [32 => new ContentInfo(['id' => 32]), 33 => new ContentInfo(['id' => 33])], 0],
+            [$locationHits, [32, 33], ['languages' => ['eng-GB']], [32 => new ContentInfo(['id' => 32])], 1],
+            [$locationHits, [32, 33], ['languages' => ['eng-GB']], [], 2],
         ];
     }
 
@@ -124,12 +124,14 @@ class DomainMapperTest extends BaseServiceMockTest
      *
      * @param array $locationHits
      * @param array $contentIds
+     * @param array $languageFilter
      * @param array $contentInfoList
      * @param int $missing
      */
     public function testBuildLocationDomainObjectsOnSearchResult(
         array $locationHits,
         array $contentIds,
+        array $languageFilter,
         array $contentInfoList,
         int $missing
     ) {
@@ -146,7 +148,7 @@ class DomainMapperTest extends BaseServiceMockTest
         }
 
         $spiResult = clone $result;
-        $missingLocations = $this->getDomainMapper()->buildLocationDomainObjectsOnSearchResult($result);
+        $missingLocations = $this->getDomainMapper()->buildLocationDomainObjectsOnSearchResult($result, $languageFilter);
         $this->assertInternalType('array', $missingLocations);
 
         if (!$missing) {

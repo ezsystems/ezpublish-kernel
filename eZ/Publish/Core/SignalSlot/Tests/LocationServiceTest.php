@@ -87,28 +87,34 @@ class LocationServiceTest extends ServiceTest
             ),
             array(
                 'loadLocation',
-                array($rootId),
+                array($rootId, []),
                 $root,
                 0,
             ),
             array(
                 'loadLocationByRemoteId',
-                array($rootRemoteId),
+                array($rootRemoteId, []),
                 $root,
                 0,
             ),
             array(
                 'loadLocations',
-                array($locationContentInfo, $root),
+                array($locationContentInfo, $root, []),
                 array($location),
                 0,
             ),
             array(
                 'loadLocationChildren',
-                array($root, 0, 1),
+                array($root, 0, 1, []),
                 $rootChildren,
                 0,
             ),
+            /*array(
+                'loadParentLocationsForDraftContent',
+                array($root, 0, 1, []),
+                $rootChildren,
+                0,
+            ),*/
             array(
                 'getLocationChildCount',
                 array($root),

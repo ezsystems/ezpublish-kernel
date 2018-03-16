@@ -9,11 +9,13 @@
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as TypeHandler;
 use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\ContentProxy;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -130,6 +132,47 @@ class DomainMapper
                 'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             )
         );
+    }
+
+    /**
+     * Builds a Content proxy object (lazy loaded, loads as soon as used).
+     */
+    public function buildContentProxy(int $id, array $prioritizedLanguages = []): APIContent
+    {
+        $generator = $this->generatorForContentList([$id], $prioritizedLanguages);
+
+        return new ContentProxy($generator, $id);
+    }
+
+    /**
+     * Builds a list of Content proxy objects (lazy loaded, loads all as soon as one of them loads).
+     */
+    public function buildContentProxyList(array $ids, array $prioritizedLanguages = []): array
+    {
+        $list = [];
+        $generator = $this->generatorForContentList($ids, $prioritizedLanguages);
+        foreach ($ids as $id) {
+            $list[$id] = new ContentProxy($generator, $id);
+        }
+
+        return $list;
+    }
+
+    private function generatorForContentList(array $ids, array $prioritizedLanguages = []): \Generator
+    {
+        $list = $this->contentHandler->loadContentList($ids, $prioritizedLanguages);
+        while (!empty($list)) {
+            $id = yield;
+            $info = $list[$id]->versionInfo->contentInfo;
+            yield $this->buildContentDomainObject(
+                $list[$id],
+                null,//@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                $prioritizedLanguages,
+                $info->alwaysAvailable ? $info->mainLanguageCode : null
+            );
+
+            unset($list[$id]);
+        }
     }
 
     /**
@@ -343,10 +386,11 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo|null $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\Content|null $content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function buildLocationDomainObject(SPILocation $spiLocation, SPIContentInfo $contentInfo = null)
+    public function buildLocationDomainObject(SPILocation $spiLocation, SPIContentInfo $contentInfo = null, APIContent $content = null)
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
         if ($spiLocation->id == 1) {
@@ -368,14 +412,20 @@ class DomainMapper
                     'mainLanguageCode' => 'eng-GB',
                 )
             );
+            // content is left as null in this case atm
         } else {
             $contentInfo = $this->buildContentInfoDomainObject(
                 $contentInfo ?: $this->contentHandler->loadContentInfo($spiLocation->contentId)
             );
+
+            if ($content === null) {
+                $content = $this->buildContentProxy($spiLocation->contentId);
+            }
         }
 
         return new Location(
             array(
+                'content' => $content,
                 'contentInfo' => $contentInfo,
                 'id' => $spiLocation->id,
                 'priority' => $spiLocation->priority,
@@ -394,7 +444,7 @@ class DomainMapper
     /**
      * Build API Content domain objects in bulk and apply to ContentSearchResult.
      *
-     * Loading of Content objects are done in one operation.
+     * Loading of Content objects are done in bulk.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result SPI search result with SPI ContentInfo items as hits
      * @param array $languageFilter
@@ -439,13 +489,15 @@ class DomainMapper
     /**
      * Build API Location and corresponding ContentInfo domain objects and apply to LocationSearchResult.
      *
-     * Loading of ContentInfo objects are done in one operation.
+     * This is done in order to be able to:
+     * Load ContentInfo objects in bulk, generate proxy objects for Content that will loaded in bulk on-demand (on use).
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result SPI search result with SPI Location items as hits
+     * @param array $languageFilter
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[] Locations we did not find content info for is returned.
      */
-    public function buildLocationDomainObjectsOnSearchResult(SearchResult $result)
+    public function buildLocationDomainObjectsOnSearchResult(SearchResult $result, array $languageFilter)
     {
         if (empty($result->searchHits)) {
             return [];
@@ -458,11 +510,16 @@ class DomainMapper
 
         $missingLocations = [];
         $contentInfoList = $this->contentHandler->loadContentInfoList($contentIds);
+        $contentList = $this->buildContentProxyList(
+            $contentIds,
+            !empty($languageFilter['languages']) ? $languageFilter['languages'] : []
+        );
         foreach ($result->searchHits as $key => $hit) {
             if (isset($contentInfoList[$hit->valueObject->contentId])) {
                 $hit->valueObject = $this->buildLocationDomainObject(
                     $hit->valueObject,
-                    $contentInfoList[$hit->valueObject->contentId]
+                    $contentInfoList[$hit->valueObject->contentId],
+                    $contentList[$hit->valueObject->contentId]
                 );
             } else {
                 $missingLocations[] = $hit->valueObject;
