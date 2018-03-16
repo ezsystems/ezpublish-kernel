@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -57,6 +58,64 @@ class LocationServiceAuthorizationTest extends BaseTest
         $locationService->createLocation(
             $contentInfo,
             $locationCreate
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createLocation() method. Tests a case when user doesn't have content/manage_locations policy for the new location ID.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     */
+    public function testCreateLocationThrowsUnauthorizedExceptionDueToLackOfContentManageLocationsPolicy()
+    {
+        $repository = $this->getRepository();
+
+        $mediaDirectoryLocationId = $this->generateId('location', '43');
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+        // Location for "Media" directory
+        $contentLocation = $locationService->loadLocation($mediaDirectoryLocationId);
+
+        // Create the new "Dummy" user group
+        $userService = $repository->getUserService();
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct('eng-GB');
+        $userGroupCreateStruct->setField('name', 'Dummy');
+        $dummyUserGroup = $userService->createUserGroup($userGroupCreateStruct, $userService->loadUserGroup(4));
+
+        // Create the new "Dummy" role with content/* policy limited by Subtree to "Media" folder
+        $roleService = $repository->getRoleService();
+        $role = $this->createRoleWithPolicies('Dummy', [
+            [
+                'module' => 'content',
+                'function' => 'read',
+                'limitations' => [],
+            ],
+            [
+                'module' => 'content',
+                'function' => 'manage_locations',
+                'limitations' => [new SubtreeLimitation(['limitationValues' => [$contentLocation->pathString]])],
+            ],
+        ]);
+
+        $user = $this->createUser('johndoe', 'John', 'Doe', $dummyUserGroup);
+        $roleService->assignRoleToUser($role, $user);
+        // Set current user to newly created user
+        $repository->setCurrentUser($user);
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct('2');
+        $locationCreateStruct->priority = 12;
+        $locationCreateStruct->hidden = false;
+        $locationCreateStruct->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreateStruct->sortOrder = Location::SORT_ORDER_DESC;
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->createLocation(
+            $contentLocation->contentInfo,
+            $locationCreateStruct
         );
         /* END: Use Case */
     }
