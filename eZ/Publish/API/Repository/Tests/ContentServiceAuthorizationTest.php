@@ -1566,7 +1566,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // Create and publish folders for the test case
         $folderDraft = $this->createContentDraft('folder', 2, ['name' => 'Folder1']);
-        $sourceFolder = $contentService->publishVersion($folderDraft->versionInfo);
+        $contentService->publishVersion($folderDraft->versionInfo);
         $authorizedFolderDraft = $this->createContentDraft('folder', 2, ['name' => 'AuthorizedFolder']);
         $authorizedFolder = $contentService->publishVersion($authorizedFolderDraft->versionInfo);
 
@@ -1583,9 +1583,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreateStruct->addLimitation($locationLimitation);
         $roleCreateStruct->addPolicy($policyCreateStruct);
-
-        $sourceFolderLocation = $locationService->loadLocation($sourceFolder->contentInfo->mainLocationId);
-        $authorizedFolderLocation = $locationService->loadLocation($authorizedFolder->contentInfo->mainLocationId);
 
         // check if content/publish policy is available (@since 6.8)
         $limitations = $roleService->getLimitationTypesByModuleFunction('content', 'publish');
