@@ -382,6 +382,10 @@ class LocationService implements LocationServiceInterface
         $content = $this->repository->getContentService()->loadContent($contentInfo->id);
         $parentLocation = $this->loadLocation($locationCreateStruct->parentLocationId);
 
+        if (!$this->repository->canUser('content', 'manage_locations', $content->contentInfo, $parentLocation)) {
+            throw new UnauthorizedException('content', 'manage_locations');
+        }
+
         if (!$this->repository->canUser('content', 'create', $content->contentInfo, $parentLocation)) {
             throw new UnauthorizedException('content', 'create');
         }
