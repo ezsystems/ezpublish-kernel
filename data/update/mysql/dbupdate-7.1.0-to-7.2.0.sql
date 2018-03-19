@@ -1,6 +1,6 @@
 SET default_storage_engine=InnoDB;
 -- Set storage engine schema version number
-UPDATE ezsite_data SET value='7.1.0' WHERE name='ezpublish-version';
+UPDATE ezsite_data SET value='7.2.0' WHERE name='ezpublish-version';
 
 --
 -- EZP-28950: MySQL UTF8 doesn't support 4-byte chars
