@@ -78,8 +78,8 @@ class Template extends Render implements Converter
             );
         }
 
-        if ($tag->hasAttribute('xlink:align')) {
-            $parameters['align'] = $tag->getAttribute('xlink:align');
+        if ($tag->hasAttribute('ezxhtml:align')) {
+            $parameters['align'] = $tag->getAttribute('ezxhtml:align');
         }
 
         $content = $this->renderer->renderTag(
