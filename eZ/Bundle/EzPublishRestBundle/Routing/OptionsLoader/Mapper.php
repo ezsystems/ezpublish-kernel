@@ -26,7 +26,7 @@ class Mapper
         $optionsRoute->setMethods(array('OPTIONS'));
         $optionsRoute->setDefault(
             '_controller',
-            '_ezpublish_rest.controller.options:getRouteOptions'
+            'ezpublish_rest.controller.options:getRouteOptions'
         );
 
         $optionsRoute->setDefault(
