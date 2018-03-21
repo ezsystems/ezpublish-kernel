@@ -78,7 +78,7 @@ class MapperTest extends TestCase
         );
 
         self::assertEquals(
-            '_ezpublish_rest.controller.options:getRouteOptions',
+            'ezpublish_rest.controller.options:getRouteOptions',
             $optionsRoute->getDefault('_controller')
         );
     }
