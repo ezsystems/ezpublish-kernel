@@ -260,16 +260,18 @@
 {% endif %}
 {% endblock %}
 
+{# relation_service is exposed under parameters.relation_service thanks to Relation\ParameterProvider #}
 {% block ezobjectrelationlist_field %}
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
-    <ul {{ block( 'field_attributes' ) }}>
-        {% for contentId in field.value.destinationContentIds %}
-        <li>
-            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
-        </li>
-        {% endfor %}
-    </ul>
+        {% set relation_service = parameters.relation_service %}
+        <ul {{ block( 'field_attributes' ) }}>
+            {% for contentId in field.value.destinationContentIds if relation_service.isValid(contentId) %}
+            <li>
+                {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
+            </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 {% endspaceless %}
 {% endblock %}
@@ -432,12 +434,16 @@
 {% endspaceless %}
 {% endblock %}
 
+{# relation_service is exposed under parameters.relation_service thanks to Relation\ParameterProvider #}
 {% block ezobjectrelation_field %}
 {% spaceless %}
 {% if not ez_is_field_empty( content, field ) %}
+    {% set relation_service = parameters.relation_service %}
+    {% if relation_service.isValid(field.value.destinationContentId) %}
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
     </div>
+    {% endif %}
 {% endif %}
 {% endspaceless %}
 {% endblock %}
