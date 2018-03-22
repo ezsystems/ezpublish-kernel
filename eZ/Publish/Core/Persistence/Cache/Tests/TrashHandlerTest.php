@@ -30,8 +30,8 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         // string $method, array $arguments, array? $tags, string? $key
         return [
             ['loadTrashItem', [6]],
-            ['trashSubtree', [6], ['location-6', 'location-path-6']],
-            ['recover', [6, 2], ['location-6', 'location-path-6']],
+            ['trashSubtree', [6], ['content-42', 'content-fields-42', 'location-6', 'location-path-6']],
+            ['recover', [6, 2], ['content-42', 'content-fields-42', 'location-6', 'location-path-6']],
             ['emptyTrash', []],
             ['deleteTrashItem', [6]],
         ];
