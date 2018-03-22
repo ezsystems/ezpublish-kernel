@@ -8,6 +8,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\Core\Persistence\Cache\ContentHandler;
+use eZ\Publish\Core\Persistence\Cache\LocationHandler;
+use eZ\Publish\SPI\Persistence\Content\Location;
+
 /**
  * Abstract test case for spi cache impl.
  */
@@ -34,6 +38,22 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         $this->loggerMock->expects($this->once())->method('logCall');
 
         $innerHandler = $this->createMock($this->getHandlerClassName());
+
+//        $contentHandlerMock = $this->createMock(ContentHandler::class);
+//
+//        $locationHandlerMock = $this->createMock(LocationHandler::class);
+//        $locationHandlerMock
+//            ->method('load')
+//            ->will($this->returnValue(new Location(['id' => 6, 'contentId' => 42])));
+//
+//        $this->persistenceHandlerMock
+//            ->method('contentHandler')
+//            ->will($this->returnValue($contentHandlerMock));
+//
+//        $this->persistenceHandlerMock
+//            ->method('locationHandler')
+//            ->will($this->returnValue($locationHandlerMock));
+
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method($handlerMethodName)
