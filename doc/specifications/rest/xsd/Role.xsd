@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values"
+  elementFormDefault="qualified">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
   <xsd:include schemaLocation="Limitation.xsd" />
 
@@ -54,7 +55,7 @@
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
-          <xsd:element name="limitation" type="roleLimitationType" />
+          <xsd:element name="limitation" type="roleLimitationType" minOccurs="0"/>
           <xsd:element name="Role" type="ref"/>
         </xsd:all>
       </xsd:extension>

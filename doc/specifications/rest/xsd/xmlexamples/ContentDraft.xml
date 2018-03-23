@@ -1,54 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Content href="/content/objects/23" id="23"
-  media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123">
+<Content xmlns="http://ez.no/API/Values"
+         href="/content/objects/23" id="23"
+         media-type="application/vnd.ez.api.Content+xml"
+         remoteId="qwert123">
   <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
-  <Name>This is a title</Name>
+  <name>This is a title</name>
   <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
-  <CurrentVersion href="/content/objects/23/versions/1"
-    media-type="application/vnd.ez.api.Version+xml">
+  <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+  <MainLocation href="/content/locations/65" media-type="application/vnd.ez.api.Location+xml" />
+  <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+  <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+  <publishDate>2012-02-12T12:30:00</publishDate>
+  <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
+  <mainLanguageCode>eng-US</mainLanguageCode>
+  <currentVersionNo>1</currentVersionNo>
+  <alwaysAvailable>true</alwaysAvailable>
+  <CurrentVersion href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
     <Version>
       <VersionInfo>
         <id>123</id>
         <versionNo>1</versionNo>
         <status>DRAFT</status>
         <modificationDate>2012-02-12T12:30:00</modificationDate>
-        <creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+        <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>2012-02-12T12:30:00</creationDate>
         <initialLanguageCode>eng-US</initialLanguageCode>
+        <languageCodes></languageCodes>
+        <names>
+          <value>Title</value>
+        </names>
         <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
       </VersionInfo>
-      <fields>
+      <Fields>
         <field>
           <id>1234</id>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>eng-UK</languageCode>
-          <value>This is a title</value>
+          <fieldValue>This is a title</fieldValue>
         </field>
         <field>
           <id>1235</id>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>eng-UK</languageCode>
-          <value>This is a summary</value>
+          <fieldValue>This is a summary</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <id>4321</id>
+          <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
-          <value>
-            <authors>
-              <author name="John Doe" email="john.doe@example.net" />
-              <author name="Bruce Willis" email="bruce.willis@example.net" />
-            </authors>
-          </value>
+          <fieldValue>
+            <value>
+              <value key="name">John Doe</value>
+              <value key="email">john.doe@example.net</value>
+            </value>
+            <value>
+              <value key="name">Bruce Willis</value>
+              <value key="email">bruce.willis</value>
+            </value>
+          </fieldValue>
         </field>
-      </fields>
+      </Fields>
       <Relations />
     </Version>
   </CurrentVersion>
-  <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
-  <MainLocation href="/content/locations/65" media-type="application/vnd.ez.api.Location+xml" />
-  <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-  <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
-  <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
-  <mainLanguageCode>eng-US</mainLanguageCode>
-  <alwaysAvailable>true</alwaysAvailable>
 </Content>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<UserCreate>
+<UserCreate xmlns="http://ez.no/API/Values">
   <mainLanguageCode>eng-US</mainLanguageCode>
   <remoteId>remoteId-qwert426</remoteId>
   <login>john</login>
@@ -7,14 +7,14 @@
   <password>john-does-password</password>
   <fields>
     <field>
-      <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
-      <value>John</value>
+      <fieldValue>John</fieldValue>
     </field>
     <field>
-      <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
-      <value>Doe</value>
+      <fieldValue>Doe</fieldValue>
     </field>
   </fields>
 </UserCreate>

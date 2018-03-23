@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentTypeGroupInput>
+<ContentTypeGroupInput xmlns="http://ez.no/API/Values">
   <identifier>newContentTypeGroup</identifier>
 </ContentTypeGroupInput>

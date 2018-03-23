@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Query>
+<Query xmlns="http://ez.no/API/Values">
   <Criteria>
     <AND>
       <ContentTypeIdentifierCriterion>article</ContentTypeIdentifierCriterion>

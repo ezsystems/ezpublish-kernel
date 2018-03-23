@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Relations href="/content/object/32/versions/2/relations" media-type="application/vnd.ez.api.RelationList+xml">
+<RelationList xmlns="http://ez.no/API/Values" href="/content/object/32/versions/2/relations" media-type="application/vnd.ez.api.RelationList+xml">
     <Relation href="/content/object/32/versions/2/relations/43" media-type="application/vnd.ez.api.Relation+xml">
       <SourceContent href="/content/objects/23"
         media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -8,11 +8,11 @@
       <RelationType>COMMON</RelationType>
     </Relation>
     <Relation href="/content/object/32/versions/2/relations/98" media-type="application/vnd.ez.api.Relation+xml">
-      <SourceContent href="/content/objects/23"
-        media-type="application/vnd.ez.api.ContentInfo+xml" />
-      <DestinationContent href="/content/objects/87"
-        media-type="application/vnd.ez.api.ContentInfo+xml" />
-      <sourceFieldDefinitionIdentifier>body</sourceFieldDefinitionIdentifier>
-      <RelationType>EMBED</RelationType>
+        <SourceContent href="/content/objects/23"
+                       media-type="application/vnd.ez.api.ContentInfo+xml" />
+        <DestinationContent href="/content/objects/87"
+                            media-type="application/vnd.ez.api.ContentInfo+xml" />
+        <SourceFieldDefinitionIdentifier>body</SourceFieldDefinitionIdentifier>
+        <RelationType>EMBED</RelationType>
     </Relation>
-</Relations>
+</RelationList>

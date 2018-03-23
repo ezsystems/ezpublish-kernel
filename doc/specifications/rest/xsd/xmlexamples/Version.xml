@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+<Version xmlns="http://ez.no/API/Values" href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
   <VersionInfo>
     <id>45</id>
     <versionNo>4</versionNo>
@@ -17,24 +17,24 @@
   <Fields>
     <field>
       <id>1234</id>
-      <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
       <languageCode>ger-DE</languageCode>
-      <value>Titel</value>
+      <fieldValue>Titel</fieldValue>
     </field>
     <field>
       <id>1235</id>
-      <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
       <languageCode>ger-DE</languageCode>
-      <value>Dies ist eine Zusammenfassungy</value>
+      <fieldValue>Dies ist eine Zusammenfassungy</fieldValue>
     </field>
     <field>
-      <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
       <languageCode>ger-DE</languageCode>
-      <value>
+      <fieldValue>
         <authors>
           <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
         </authors>
-      </value>
+      </fieldValue>
     </field>
   </Fields>
   <Relations>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml">
+<RoleAssignmentList xmlns="http://ez.no/API/Values"
+                    href="/user/groups/1/5/65/roles"
+                    media-type="application/vnd.ez.api.RoleAssignmentList+xml">
   <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="application/vnd.ez.api.RoleAssignment+xml">
     <Role href="/user/roles/5" media-type="application/vnd.ez.api.Role+xml"/>
   </RoleAssignment>

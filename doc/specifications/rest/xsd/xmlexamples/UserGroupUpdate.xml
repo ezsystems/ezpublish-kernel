@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<UserGroupUpdate>
+<UserGroupUpdate xmlns="http://ez.no/API/Values">
   <fields>
     <field>
       <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>

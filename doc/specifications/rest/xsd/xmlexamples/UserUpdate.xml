@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<UserUpdate>
+<UserUpdate xmlns="http://ez.no/API/Values">
   <email>john.doe@mooglemail.com</email>
   <fields>
     <field>
-      <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>signature</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
-      <value>
+      <fieldValue>
       John Doe
       Example Systems
       john.doe@mooglemail.com
       skype: johndoe
-      </value>
+      </fieldValue>
     </field>
   </fields>
 </UserUpdate>

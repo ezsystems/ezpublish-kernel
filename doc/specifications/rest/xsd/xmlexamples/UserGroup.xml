@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<UserGroup href="/user/groups/1/5/65" id="65" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
+<UserGroup xmlns="http://ez.no/API/Values" href="/user/groups/1/5/65" id="65" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
   <ContentType href="/content/types/5" media-type="application/vnd.ez.api.ContentType+xml" />
   <name>UserGroup</name>
   <Versions href="/content/objects/78/versions" media-type="application/vnd.ez.api.VersionList+xml" />

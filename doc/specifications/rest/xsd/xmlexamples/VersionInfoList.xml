@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<VersionList href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
+<VersionList xmlns="http://ez.no/API/Values" href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
   <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
     <VersionInfo>
       <id>12</id>

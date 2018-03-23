@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentTypeCreate>
+<ContentTypeCreate xmlns="http://ez.no/API/Values">
   <identifier>newContentType</identifier>
   <names>
     <value languageCode="eng-US">New Content Type</value>
@@ -15,6 +15,7 @@
   <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
   <defaultSortField>PATH</defaultSortField>
   <defaultSortOrder>ASC</defaultSortOrder>
+  <User href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
   <FieldDefinitions>
     <FieldDefinition>
       <identifier>title</identifier>
@@ -30,10 +31,12 @@
         <value languageCode="eng-US">Title</value>
       </names>
       <descriptions>
-        <value languageCode="eng-US">This is the title</value>
+      <value languageCode="eng-US">This is the title</value>
       </descriptions>
+      <fieldSettings />
+      <validatorConfiguration />
     </FieldDefinition>
-   <FieldDefinition>
+    <FieldDefinition>
       <identifier>summary</identifier>
       <fieldType>ezxmltext</fieldType>
       <fieldGroup>content</fieldGroup>
@@ -41,7 +44,7 @@
       <isTranslatable>true</isTranslatable>
       <isRequired>false</isRequired>
       <isInfoCollector>false</isInfoCollector>
-      <defaultValue></defaultValue>
+      <defaultValue />
       <isSearchable>true</isSearchable>
       <names>
         <value languageCode="eng-US">Summary</value>
@@ -49,6 +52,8 @@
       <descriptions>
         <value languageCode="eng-US">This is the summary</value>
       </descriptions>
+      <fieldSettings />
+      <validatorConfiguration />
     </FieldDefinition>
    </FieldDefinitions>
 </ContentTypeCreate>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values"
+  elementFormDefault="qualified">
   <xsd:include schemaLocation="VersionInfo.xsd" />
   <xsd:include schemaLocation="Relation.xsd" />
   <xsd:complexType name="fieldOutputValueType">
@@ -19,7 +20,7 @@
           <xsd:element name="Fields" minOccurs="0">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="field" type="fieldValueType"
+                <xsd:element name="field" type="fieldType"
                   minOccurs="1" maxOccurs="unbounded" />
               </xsd:sequence>
             </xsd:complexType>
@@ -40,6 +41,6 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:element name="Version" type="vnd.ez.api.Version"></xsd:element>
+  <xsd:element name="Version" type="vnd.ez.api.Version" />
 </xsd:schema>
 

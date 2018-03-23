@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Root media-type="application/vnd.ez.api.Root+xml">
+<Root xmlns="http://ez.no/API/Values" media-type="application/vnd.ez.api.Root+xml">
     <content media-type="" href="/api/ezp/v2/content/objects"/>
     <contentByRemoteId media-type="" href="/api/ezp/v2/content/objects?{&amp;remoteId}"/>
     <contentTypes media-type="application/vnd.ez.api.ContentTypeInfoList+xml" href="/api/ezp/v2/content/types"/>

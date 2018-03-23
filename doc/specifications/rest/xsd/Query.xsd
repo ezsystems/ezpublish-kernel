@@ -1,0 +1,49 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ez.no/API/Values"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="vnd.ez.api.Query">
+    <xs:all>
+      <xs:element type="vnd.ez.api.Criterion" name="filter" />
+      <xs:element type="vnd.ez.api.Criterion" name="query" />
+      <xs:element name="SortClauses" type="Query.SortClause" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="vnd.ez.api.Criterion">
+    <xs:sequence maxOccurs="1" minOccurs="1">
+      <xs:element name="AND" type="vnd.ez.api.Criterion.Logical" />
+      <xs:element name="ContentTypeIdentifierCriterion" type="xs:string" />
+      <xs:element name="FieldCritierion" type="vnd.ez.api.Criterion.Generic">
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vnd.ez.api.Criterion.Logical">
+    <xs:all>
+      <xs:element type="xs:string" name="target"/>
+      <xs:element type="xs:string" name="operator"/>
+      <xs:element type="xs:string" name="value"/>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="vnd.ez.api.Criterion.Generic">
+    <xs:sequence>
+      <xs:element type="xs:string" name="target"/>
+      <xs:element type="xs:string" name="operator"/>
+      <xs:element type="xs:string" name="value"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Query.SortClause">
+    <xs:sequence>
+      <xs:element name="SortClause">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element type="xs:string" name="SortField"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="Query" type="vnd.ez.api.Query" />
+</xs:schema>

@@ -1,0 +1,27 @@
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values"
+            elementFormDefault="qualified">
+    <xsd:include schemaLocation="CommonDefinitions.xsd" />
+    <xsd:include schemaLocation="Content.xsd" />
+    <xsd:include schemaLocation="ContentInfo.xsd" />
+    <xsd:include schemaLocation="ContentCreate.xsd" />
+    <xsd:include schemaLocation="ContentTypeGroup.xsd" />
+    <xsd:include schemaLocation="ContentUpdate.xsd" />
+    <xsd:include schemaLocation="Location.xsd" />
+    <xsd:include schemaLocation="LocationUpdate.xsd" />
+    <xsd:include schemaLocation="Policy.xsd" />
+    <xsd:include schemaLocation="Query.xsd" />
+    <xsd:include schemaLocation="Relation.xsd" />
+    <xsd:include schemaLocation="Role.xsd" />
+    <xsd:include schemaLocation="Root.xsd" />
+    <xsd:include schemaLocation="Section.xsd" />
+    <xsd:include schemaLocation="User.xsd" />
+    <xsd:include schemaLocation="UserCreate.xsd" />
+    <xsd:include schemaLocation="UserGroup.xsd" />
+    <xsd:include schemaLocation="UserGroupCreate.xsd" />
+    <xsd:include schemaLocation="UserGroupUpdate.xsd" />
+    <xsd:include schemaLocation="UserUpdate.xsd" />
+    <xsd:include schemaLocation="VersionList.xsd" />
+    <xsd:include schemaLocation="VersionUpdate.xsd" />
+    <xsd:include schemaLocation="View.xsd" />
+</xsd:schema>

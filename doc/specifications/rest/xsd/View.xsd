@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values"
+  elementFormDefault="qualified">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
   <xsd:include schemaLocation="Content.xsd" />
   <xsd:simpleType name="fieldOperatorType">
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="IN" />
-      <xsd:enumeration value="LIKE" />
+      <xsd:enumeration value="LIKE
+" />
       <xsd:enumeration value="EQ" />
       <xsd:enumeration value="LT" />
       <xsd:enumeration value="LTE" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewInput>
+<ViewInput xmlns="http://ez.no/API/Values">
   <identifier>ArticleTitleView</identifier>
   <Query>
     <Criteria>

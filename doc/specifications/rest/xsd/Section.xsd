@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values"
+  elementFormDefault="qualified">
 
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
@@ -30,8 +31,8 @@
         <xsd:element name="name" type="xsd:string" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
-  <xsd:element name="Section" type="vnd.ez.api.Section"></xsd:element>
-  <xsd:element name="SectionList" type="vnd.ez.api.SectionList"></xsd:element>
-  <xsd:element name="SectionInput" type="vnd.ez.api.SectionInput"></xsd:element>
+  <xsd:element name="Section" type="vnd.ez.api.Section" />
+  <xsd:element name="SectionList" type="vnd.ez.api.SectionList" />
+  <xsd:element name="SectionInput" type="vnd.ez.api.SectionInput" />
 </xsd:schema>
 

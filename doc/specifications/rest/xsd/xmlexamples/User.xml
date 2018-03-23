@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<User href="/user/users/99" id="99" media-type="application/vnd.ez.api.User+xml"
+<User xmlns="http://ez.no/API/Values" href="/user/users/99" id="99" media-type="application/vnd.ez.api.User+xml"
   remoteId="remoteId-qwert426">
   <ContentType href="/content/types/4" media-type="application/vnd.ez.api.ContentType+xml" />
   <name>John</name>
