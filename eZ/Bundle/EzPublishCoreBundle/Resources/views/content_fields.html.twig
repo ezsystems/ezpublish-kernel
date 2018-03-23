@@ -26,11 +26,6 @@
 {% endspaceless %}
 {% endblock %}
 
-{% block ezrichtext_field %}
-    {%- set field_value = field.value.xml|richtext_to_html5 -%}
-    {{ block( 'simple_block_field' ) }}
-{% endblock %}
-
 {% block ezauthor_field %}
 {% spaceless %}
     {% if field.value.authors|length() > 0 %}

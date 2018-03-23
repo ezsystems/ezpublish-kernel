@@ -30,7 +30,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TranslationCollectorPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
@@ -69,7 +68,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new SignalSlotPass());
         $container->addCompilerPass(new RouterPass());
         $container->addCompilerPass(new SecurityPass());
-        $container->addCompilerPass(new RichTextHtml5ConverterPass());
         $container->addCompilerPass(new FragmentPass());
         $container->addCompilerPass(new StorageConnectionPass());
         $container->addCompilerPass(new ImaginePass());
@@ -106,7 +104,6 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\BlockView(),
                     new ConfigParser\Common(),
                     new ConfigParser\Content(),
-                    new ConfigParser\FieldType\RichText(),
                     new ConfigParser\FieldTemplates(),
                     new ConfigParser\FieldEditTemplates(),
                     new ConfigParser\FieldDefinitionSettingsTemplates(),

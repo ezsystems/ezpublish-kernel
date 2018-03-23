@@ -26,8 +26,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterf
 
 class EzPublishCoreExtension extends Extension
 {
-    const RICHTEXT_CUSTOM_TAGS_PARAMETER = 'ezplatform.ezrichtext.custom_tags';
-
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector
      */
@@ -110,7 +108,6 @@ class EzPublishCoreExtension extends Extension
         $this->registerSiteAccessConfiguration($config, $container);
         $this->registerImageMagickConfiguration($config, $container);
         $this->registerPageConfiguration($config, $container);
-        $this->registerRichTextConfiguration($config, $container);
 
         // Routing
         $this->handleRouting($config, $container, $loader);
@@ -277,22 +274,6 @@ class EzPublishCoreExtension extends Extension
             $container->setParameter(
                 'ezpublish.ezpage.enabledBlocks',
                 $config['ezpage']['enabledBlocks'] + $container->getParameter('ezpublish.ezpage.enabledBlocks')
-            );
-        }
-    }
-
-    /**
-     * Register parameters of global RichText configuration.
-     *
-     * @param array $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    private function registerRichTextConfiguration(array $config, ContainerBuilder $container)
-    {
-        if (isset($config['ezrichtext']['custom_tags'])) {
-            $container->setParameter(
-                static::RICHTEXT_CUSTOM_TAGS_PARAMETER,
-                $config['ezrichtext']['custom_tags']
             );
         }
     }

@@ -21,7 +21,6 @@ parameters:
     ezpublish.templating.field_block_renderer.twig.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
     ezpublish.twig.extension.field_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
     ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
-    ezpublish.twig.extension.rich_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RichTextExtension
 
     ezpublish.view.cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
     ezpublish.view.block_cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\BlockCacheResponseListener
@@ -191,15 +190,6 @@ services:
         arguments: ["@ezpublish.fieldType.ezimage.variation_service"]
         tags:
             - { name: twig.extension }
-
-    ezpublish.twig.extension.rich_text:
-        class: "%ezpublish.twig.extension.rich_text.class%"
-        arguments:
-            - "@ezpublish.fieldType.ezrichtext.converter.output.xhtml5"
-            - "@ezpublish.fieldType.ezrichtext.converter.edit.xhtml5"
-        tags:
-            - { name: twig.extension }
-
 
     ezpublish.view.custom_location_controller_checker:
         class: "%ezpublish.view.custom_location_controller_checker.class%"

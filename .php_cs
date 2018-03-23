@@ -33,8 +33,6 @@ return PhpCsFixer\Config::create()
                 'eZ/Bundle/EzPublishCoreBundle/Tests/DependencyInjection/Fixtures',
                 'eZ/Publish/API/Repository/Tests/FieldType/_fixtures',
                 'eZ/Publish/API/Repository/Tests/_fixtures',
-                'eZ/Publish/Core/FieldType/Tests/RichText/Converter/Xslt/_fixtures',
-                'eZ/Publish/Core/FieldType/Tests/RichText/Gateway/_fixtures',
                 'eZ/Publish/Core/FieldType/Tests/Url/Gateway/_fixtures',
                 'eZ/Publish/Core/FieldType/Tests/XmlText/Converter/_fixtures',
                 'eZ/Publish/Core/IO/Tests/_fixtures',
