@@ -228,6 +228,41 @@ class TemplateTest extends TestCase
                     ),
                 ),
             ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <eztemplate name="custom_tag" ezxhtml:align="right">
+    <ezcontent><para>Param: value</para></ezcontent>
+    <ezconfig>
+        <ezvalue key="param">value</ezvalue>
+    </ezconfig>
+  </eztemplate>
+</section>',
+                '<?xml version="1.0"?>
+ <section xmlns="http://docbook.org/ns/docbook" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <eztemplate name="custom_tag" ezxhtml:align="right">
+    <ezcontent>
+      <para>param: value</para>
+    </ezcontent>
+    <ezconfig>
+      <ezvalue key="param">value</ezvalue>
+    </ezconfig>
+    <ezpayload>custom_tag</ezpayload>
+  </eztemplate>
+</section>',
+                array(
+                    array(
+                        'name' => 'custom_tag',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'custom_tag',
+                            'content' => '<para>Param: value</para>',
+                            'params' => array('param' => 'value'),
+                            'align' => 'right',
+                        ),
+                    ),
+                ),
+            ),
         );
     }
 
