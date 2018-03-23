@@ -19,4 +19,13 @@ class UpdateUrlSignal extends Signal
      * @var int
      */
     public $urlId;
+
+    /**
+     * If URL address was changed.
+     *
+     * @var bool
+     *
+     * @since 6.13.2
+     */
+    public $urlChanged;
 }

@@ -90,6 +90,7 @@ class URLService implements URLServiceInterface
         $this->signalDispatcher->emit(
             new UpdateUrlSignal([
                 'urlId' => $returnValue->id,
+                'urlChanged' => $struct->url !== null,
             ])
         );
 
