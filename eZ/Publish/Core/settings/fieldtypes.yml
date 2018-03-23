@@ -272,7 +272,6 @@ parameters:
         ZM: {Name: "Zambia", Alpha2: "ZM", Alpha3: "ZMB", IDC: "260"}
         ZW: {Name: "Zimbabwe", Alpha2: "ZW", Alpha3: "ZWE", IDC: "263"}
     ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
-    ezpublish.fieldType.ezrichtext.class: eZ\Publish\Core\FieldType\RichText\Type
 
 services:
     ezpublish.fieldType:
@@ -403,19 +402,6 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezurl}
-
-    ezpublish.fieldType.ezrichtext:
-        class: "%ezpublish.fieldType.ezrichtext.class%"
-        parent: ezpublish.fieldType
-        arguments:
-            - "@ezpublish.fieldType.ezrichtext.validator.docbook"
-            - "@ezpublish.fieldType.ezrichtext.converter.input.dispatcher"
-            - "@ezpublish.fieldType.ezrichtext.normalizer.input"
-            - "@ezpublish.fieldType.ezrichtext.validator.input.dispatcher"
-            - '@ezpublish.fieldType.ezrichtext.validator.internal_link'
-            - '@eZ\Publish\Core\FieldType\RichText\CustomTagsValidator'
-        tags:
-            - {name: ezpublish.fieldType, alias: ezrichtext}
 
     ezpublish.fieldType.ezpage:
         class: "%ezpublish.fieldType.ezpage.class%"

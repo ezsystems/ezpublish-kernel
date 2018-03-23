@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-  <paragraph class="dire">
-    <link url_id="72">Hello <embed view="embed" size="medium" custom:offset="0" custom:limit="5" object_id="110"/> goodbye</link>
-  </paragraph>
-  <paragraph class="fire">Hesperus entreats thy light, Goddess excellently bright.</paragraph>
-</section>

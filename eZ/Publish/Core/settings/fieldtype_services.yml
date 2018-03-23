@@ -1,13 +1,4 @@
 parameters:
-    ezpublish.fieldType.ezrichtext.normalizer.aggregate.class: eZ\Publish\Core\FieldType\RichText\Normalizer\Aggregate
-    ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
-    ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
-    ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator
-    ezpublish.fieldType.ezrichtext.resources: "%ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/RichText/Resources"
-    ezpublish.fieldType.ezrichtext.validator.docbook.resources:
-        - "%ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/ezpublish.rng"
-        - "%ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/docbook.iso.sch.xsl"
-    ezpublish.fieldType.ezrichtext.validator.internal_link.class: eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
     ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\PageService
     ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
     ezpublish.fieldType.ezimage.io_legacy.class: eZ\Publish\Core\FieldType\Image\IO\Legacy
@@ -61,32 +52,6 @@ services:
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: "%ezpublish.fieldType.ezbinaryfile.pathGenerator.class%"
 
-    # RichText
-    ezpublish.fieldType.ezrichtext.converter.input.dispatcher:
-        class: "%ezpublish.fieldType.ezrichtext.converter.dispatcher.class%"
-        arguments:
-            -
-                http://docbook.org/ns/docbook: null
-
-    ezpublish.fieldType.ezrichtext.validator.docbook:
-        class: "%ezpublish.fieldType.ezrichtext.validator.xml.class%"
-        arguments: ["%ezpublish.fieldType.ezrichtext.validator.docbook.resources%"]
-
-    ezpublish.fieldType.ezrichtext.validator.input.dispatcher:
-        class: "%ezpublish.fieldType.ezrichtext.validator.dispatcher.class%"
-        arguments:
-            -
-                http://docbook.org/ns/docbook: null
-
-    ezpublish.fieldType.ezrichtext.validator.internal_link:
-        class: '%ezpublish.fieldType.ezrichtext.validator.internal_link.class%'
-        arguments:
-            - '@ezpublish.spi.persistence.cache.contentHandler'
-            - '@ezpublish.spi.persistence.cache.locationHandler'
-
-    ezpublish.fieldType.ezrichtext.normalizer.input:
-        class: "%ezpublish.fieldType.ezrichtext.normalizer.aggregate.class%"
-
     # Page
     ezpublish.fieldType.ezpage.pageService:
         class: "%ezpublish.fieldType.ezpage.pageService.class%"
@@ -115,8 +80,3 @@ services:
         class: "%ezpublish.fieldType.ezselection.nameable_field.class%"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezselection}
-
-    # Symfony 3.4+ service definitions:
-    eZ\Publish\Core\FieldType\RichText\CustomTagsValidator:
-        public: false
-        arguments: ['%ezplatform.ezrichtext.custom_tags%']

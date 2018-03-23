@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
-  <p>Some <span data-ezelement="ezembedinline" id="id3" data-href="ezcontent://601" data-ezview="embed-inline-custom" class="embedClass" data-ezalign="left"/> for the otherwise unremarkable paragraph.</p>
-  <p>This paragraph is just showing off its <span data-ezelement="ezembedinline" id="id5" data-href="ezcontent://501" data-ezview="embed-inline" class="embedClass2" data-ezalign="right">
-    <span data-ezelement="ezconfig">
-      <span data-ezelement="ezvalue" data-ezvalue-key="size">medium</span>
-    </span>
-  </span> content.</p>
-</section>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
-  <p>
-    <iframe data-ezcustomtag="youtube" width="480" height="360" src="http://www.youtube.com/embed/5BSGdX7eNn4" frameborder="0" allowfullscreen=""/>
-  </p>
-  <p>This is a paragraph with <u>underlined</u> text.</p>
-  <p>Thirsty? Have some H<sub>2</sub>O.</p>
-  <p>The equation e<sup>πi</sup> + 1 = 0 ties together five of the most important mathematical constants.</p>
-</section>
