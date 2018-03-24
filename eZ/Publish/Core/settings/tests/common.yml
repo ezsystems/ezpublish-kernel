@@ -6,3 +6,15 @@ services:
     ezpublish.cache_pool.driver:
         class: Symfony\Component\Cache\Adapter\ArrayAdapter
         arguments: [120, false]
+
+    ezpublish_test.fieldType.ezrichtext:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        arguments: [ "ezrichtext" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezrichtext}
+
+    ezpublish_test.fieldType.ezrichtext.converter:
+        class: "%ezpublish.fieldType.eznull.converter.class%"
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezrichtext}
