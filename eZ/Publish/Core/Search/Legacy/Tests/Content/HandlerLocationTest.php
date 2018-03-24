@@ -238,7 +238,7 @@ class HandlerLocationTest extends LanguageAwareTestCase
                     'ezstring' => new Converter\TextLineConverter(),
                     'ezprice' => new Converter\IntegerConverter(),
                     'ezurl' => new Converter\UrlConverter(),
-                    'ezrichtext' => new Converter\RichTextConverter(),
+                    'ezrichtext' => new Converter\NullConverter(),
                     'ezboolean' => new Converter\CheckboxConverter(),
                     'ezkeyword' => new Converter\KeywordConverter(),
                 )
