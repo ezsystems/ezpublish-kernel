@@ -21,7 +21,7 @@ use Symfony\Component\Yaml\Yaml;
 class CustomTagsValidatorTest extends TestCase
 {
     /**
-     * @var CustomTagsValidator
+     * @var \eZ\Publish\Core\FieldType\RichText\CustomTagsValidator
      */
     private $validator;
 
@@ -37,7 +37,7 @@ class CustomTagsValidatorTest extends TestCase
     /**
      * Test validating DocBook document containing Custom Tags.
      *
-     * @covers       \CustomTagsValidator::validateDocument
+     * @covers \eZ\Publish\Core\FieldType\RichText\CustomTagsValidator::validateDocument
      *
      * @dataProvider providerForTestValidateDocument
      *
@@ -77,27 +77,6 @@ DOCBOOK
                 ),
                 [
                     'Missing RichText Custom Tag name',
-                ],
-            ],
-            [
-                $this->createDocument(
-                    <<<DOCBOOK
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
-         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
-         version="5.0-variant ezpublish-1.0">
-  <eztemplate name="undefined_tag">
-    <ezcontent>Undefined</ezcontent>
-    <ezconfig>
-      <ezvalue key="title">Test</ezvalue>
-    </ezconfig>
-  </eztemplate>
-</section>
-DOCBOOK
-                ),
-                [
-                    "Unknown RichText Custom Tag 'undefined_tag'",
                 ],
             ],
             [
@@ -199,7 +178,6 @@ DOCBOOK
                 ),
                 [
                     'Missing RichText Custom Tag name',
-                    "Unknown RichText Custom Tag 'undefined_tag'",
                     "Missing attribute name for RichText Custom Tag 'video'",
                     "The attribute 'title' of RichText Custom Tag 'video' cannot be empty",
                     "The attribute 'width' of RichText Custom Tag 'video' cannot be empty",
@@ -207,6 +185,31 @@ DOCBOOK
                 ],
             ],
         ];
+    }
+
+    /**
+     * Test that defined but not configured yet Custom Tag doesn't cause validation error.
+     */
+    public function testValidateDocumentAcceptsLegacyTags()
+    {
+        $document = $this->createDocument(
+                <<<DOCBOOK
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <eztemplate name="undefined_tag">
+    <ezcontent>Undefined</ezcontent>
+    <ezconfig>
+      <ezvalue key="title">Test</ezvalue>
+    </ezconfig>
+  </eztemplate>
+</section>
+DOCBOOK
+        );
+
+        self::assertEmpty($this->validator->validateDocument($document));
     }
 
     /**
