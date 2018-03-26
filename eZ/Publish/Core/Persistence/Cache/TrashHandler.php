@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Relation;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
@@ -32,9 +33,24 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     public function trashSubtree($locationId)
     {
         $this->logger->logCall(__METHOD__, array('locationId' => $locationId));
+
+        $location = $this->persistenceHandler->locationHandler()->load($locationId);
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadRelations($location->contentId);
+
         $return = $this->persistenceHandler->trashHandler()->trashSubtree($locationId);
 
-        $this->cache->invalidateTags(['location-' . $locationId, 'location-path-' . $locationId]);
+        $tags = [];
+        if (!empty($reverseRelations)) {
+            $tags = array_map(function (Relation $relation) {
+                return 'content-fields-' . $relation->destinationContentId;
+            }, $reverseRelations);
+        }
+
+        $this->cache->invalidateTags([
+            'content-' . $location->contentId,
+            'content-fields-' . $location->contentId,
+            'location-' . $locationId, 'location-path-' . $locationId,
+        ] + $tags);
 
         return $return;
     }
@@ -45,9 +61,24 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     public function recover($trashedId, $newParentId)
     {
         $this->logger->logCall(__METHOD__, array('id' => $trashedId, 'newParentId' => $newParentId));
+
         $return = $this->persistenceHandler->trashHandler()->recover($trashedId, $newParentId);
 
-        $this->cache->invalidateTags(['location-' . $trashedId, 'location-path-' . $trashedId]);
+        $location = $this->persistenceHandler->locationHandler()->load($return);
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadRelations($location->contentId);
+
+        $tags = [];
+        if (!empty($reverseRelations)) {
+            $tags = array_map(function (Relation $relation) {
+                return 'content-fields-' . $relation->destinationContentId;
+            }, $reverseRelations);
+        }
+
+        $this->cache->invalidateTags([
+            'content-' . $location->contentId,
+            'content-fields-' . $location->contentId,
+            'location-' . $trashedId, 'location-path-' . $trashedId,
+        ] + $tags);
 
         return $return;
     }
