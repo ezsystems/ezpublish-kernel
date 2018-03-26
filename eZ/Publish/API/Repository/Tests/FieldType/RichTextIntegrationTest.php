@@ -667,14 +667,7 @@ EOT;
             $invalidXmlDocument = $this->createDocument($xmlDocumentPath);
             $this->createContent(new RichTextValue($invalidXmlDocument));
         } catch (ContentFieldValidationException $e) {
-            // get first nested ValidationError
-            /** @var \eZ\Publish\SPI\FieldType\ValidationError $error */
-            $error = current(current(current($e->getFieldErrors())));
-
-            self::assertEquals(
-                $expectedValidationMessage,
-                $error->getTranslatableMessage()->message
-            );
+            $this->assertValidationErrorOccurs($e, $expectedValidationMessage);
 
             return;
         }
@@ -690,10 +683,6 @@ EOT;
     public function providerForTestCreateContentWithInvalidCustomTag()
     {
         $data = [
-            [
-                __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/unknown_tag.xml',
-                "Unknown RichText Custom Tag 'unknown_tag'",
-            ],
             [
                 __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/equation.xml',
                 "The attribute 'processor' of RichText Custom Tag 'equation' cannot be empty",
