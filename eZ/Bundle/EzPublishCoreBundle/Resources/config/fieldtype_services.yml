@@ -77,6 +77,20 @@ services:
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezpage}
 
+    ezpublish.fieldType.ezobjectrelation.parameterProvider:
+        class: \eZ\Publish\Core\MVC\Symfony\FieldType\Relation\ParameterProvider
+        arguments:
+            - "@ezpublish.api.service.content"
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelation}
+
+    ezpublish.fieldType.ezobjectrelationlist.parameterProvider:
+        class: \eZ\Publish\Core\MVC\Symfony\FieldType\RelationList\ParameterProvider
+        arguments:
+            - "@ezpublish.api.service.content"
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelationlist}
+
     # Page
     ezpublish.fieldType.ezpage.pageService.factory:
         class: "%ezpublish.fieldType.ezpage.pageService.factory.class%"
