@@ -82,7 +82,7 @@ class Type extends FieldType
      */
     protected function checkValueStructure(BaseValue $value)
     {
-        if (!is_string($value->link)) {
+        if (null !== $value->link && !is_string($value->link)) {
             throw new InvalidArgumentType(
                 '$value->link',
                 'string',
@@ -90,7 +90,7 @@ class Type extends FieldType
             );
         }
 
-        if (isset($value->text) && !is_string($value->text)) {
+        if (null !== $value->text && !is_string($value->text)) {
             throw new InvalidArgumentType(
                 '$value->text',
                 'string',

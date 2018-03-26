@@ -80,6 +80,7 @@ class Mapper
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
         $contentInfo->currentVersionNo = $currentVersionNo;
+        $contentInfo->status = ContentInfo::STATUS_DRAFT;
         $contentInfo->isPublished = false;
 
         return $contentInfo;
@@ -257,6 +258,8 @@ class Mapper
         $contentInfo->mainLanguageCode = $this->languageHandler->load($row["{$prefix}initial_language_id"])->languageCode;
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
         $contentInfo->mainLocationId = ($row["{$treePrefix}main_node_id"] !== null ? (int)$row["{$treePrefix}main_node_id"] : null);
+        $contentInfo->status = (int)$row["{$prefix}status"];
+        $contentInfo->isPublished = ($contentInfo->status == ContentInfo::STATUS_PUBLISHED);
 
         return $contentInfo;
     }
