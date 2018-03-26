@@ -41,7 +41,7 @@ class CustomTagsValidator
      *
      * @return string[] an array of error messages
      */
-    public function validateDocument(DOMDocument $xmlDocument)
+    public function validateDocument(DOMDocument $xmlDocument): array
     {
         $errors = [];
 
@@ -56,7 +56,11 @@ class CustomTagsValidator
             }
 
             if (!isset($this->customTagsConfiguration[$tagName])) {
-                $errors[] = "Unknown RichText Custom Tag '{$tagName}'";
+                @trigger_error(
+                    "Configuration for RichText Custom Tag '{$tagName}' not found. " .
+                    'Custom Tags configuration is required since 7.1, its lack will result in validation error in 8.x',
+                    E_USER_DEPRECATED
+                );
                 continue;
             }
 
