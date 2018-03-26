@@ -236,6 +236,21 @@ class DomainMapper
      */
     public function buildContentInfoDomainObject(SPIContentInfo $spiContentInfo)
     {
+        // Map SPI statuses to API
+        switch ($spiContentInfo->status) {
+            case SPIContentInfo::STATUS_TRASHED:
+                $status = ContentInfo::STATUS_TRASHED;
+                break;
+
+            case SPIContentInfo::STATUS_PUBLISHED:
+                $status = ContentInfo::STATUS_PUBLISHED;
+                break;
+
+            case SPIContentInfo::STATUS_DRAFT:
+            default:
+                $status = ContentInfo::STATUS_DRAFT;
+        }
+
         return new ContentInfo(
             array(
                 'id' => $spiContentInfo->id,
@@ -255,6 +270,7 @@ class DomainMapper
                 'remoteId' => $spiContentInfo->remoteId,
                 'mainLanguageCode' => $spiContentInfo->mainLanguageCode,
                 'mainLocationId' => $spiContentInfo->mainLocationId,
+                'status' => $status,
             )
         );
     }

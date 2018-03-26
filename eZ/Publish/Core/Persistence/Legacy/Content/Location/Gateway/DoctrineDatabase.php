@@ -1144,7 +1144,7 @@ class DoctrineDatabase extends Gateway
         $query->prepare()->execute();
 
         $this->removeLocation($locationRow['node_id']);
-        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_ARCHIVED);
+        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_TRASHED);
     }
 
     /**

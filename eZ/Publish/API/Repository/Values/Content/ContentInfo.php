@@ -26,9 +26,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $remoteId a global unique id of the Content object
  * @property-read string $mainLanguageCode The main language code of the Content object. If the available flag is set to true the Content is shown in this language if the requested language does not exist.
  * @property-read mixed $mainLocationId Identifier of the main location.
+ * @property-read int $status status of the Content object
  */
 class ContentInfo extends ValueObject
 {
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
+    const STATUS_TRASHED = 2;
+
     /**
      * The unique id of the Content object.
      *
@@ -125,4 +130,37 @@ class ContentInfo extends ValueObject
      * @var mixed
      */
     protected $mainLocationId;
+
+    /**
+     * Status of the content.
+     *
+     * Replaces deprecated API\ContentInfo::$published.
+     *
+     * @var int
+     */
+    protected $status;
+
+    /**
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->status === self::STATUS_DRAFT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->status === self::STATUS_PUBLISHED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTrashed()
+    {
+        return $this->status === self::STATUS_TRASHED;
+    }
 }

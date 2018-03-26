@@ -19,7 +19,10 @@ class ContentInfo extends ValueObject
 {
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
-    const STATUS_ARCHIVED = 2;
+    const STATUS_TRASHED = 2;
+
+    /** @deprecated Use ContentInfo::STATUS_TRASHED */
+    const STATUS_ARCHIVED = self::STATUS_TRASHED;
 
     /**
      * Content's unique ID.
@@ -58,6 +61,8 @@ class ContentInfo extends ValueObject
     public $currentVersionNo;
 
     /**
+     * @deprecated Use SPI\ContentInfo::$status (with value ContentInfo::STATUS_PUBLISHED)
+     *
      * Flag indicating if content is currently published.
      *
      * @var bool
@@ -115,4 +120,13 @@ class ContentInfo extends ValueObject
      * @var mixed
      */
     public $mainLocationId;
+
+    /**
+     * Status of the content.
+     *
+     * Replaces deprecated SPI\ContentInfo::$isPublished.
+     *
+     * @var int
+     */
+    public $status;
 }

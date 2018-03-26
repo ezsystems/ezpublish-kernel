@@ -80,6 +80,7 @@ class Mapper
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
         $contentInfo->currentVersionNo = $currentVersionNo;
+        $contentInfo->status = ContentInfo::STATUS_DRAFT;
         $contentInfo->isPublished = false;
 
         return $contentInfo;
@@ -250,7 +251,7 @@ class Mapper
         $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
         $contentInfo->sectionId = (int)$row["{$prefix}section_id"];
         $contentInfo->currentVersionNo = (int)$row["{$prefix}current_version"];
-        $contentInfo->isPublished = (bool)($row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED);
+        $contentInfo->isPublished = ($row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED);
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];
@@ -258,6 +259,8 @@ class Mapper
         $contentInfo->mainLanguageCode = $this->languageHandler->load($row["{$prefix}initial_language_id"])->languageCode;
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
         $contentInfo->mainLocationId = ($row["{$treePrefix}main_node_id"] !== null ? (int)$row["{$treePrefix}main_node_id"] : null);
+        $contentInfo->status = (int)$row["{$prefix}status"];
+        $contentInfo->isPublished = ($contentInfo->status == ContentInfo::STATUS_PUBLISHED);
 
         return $contentInfo;
     }

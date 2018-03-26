@@ -36,6 +36,7 @@ $versionInfo->contentInfo->isPublished = true;
 $versionInfo->contentInfo->mainLanguageCode = 'eng-US';
 $versionInfo->contentInfo->name = 'Something';
 $versionInfo->contentInfo->mainLocationId = 228;
+$versionInfo->contentInfo->status = 1;
 
 $content->versionInfo = $versionInfo;
 

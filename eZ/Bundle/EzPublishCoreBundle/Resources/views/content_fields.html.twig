@@ -264,7 +264,7 @@
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
-        {% for contentId in field.value.destinationContentIds %}
+        {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
         <li>
             {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
         </li>
@@ -434,7 +434,7 @@
 
 {% block ezobjectrelation_field %}
 {% spaceless %}
-{% if not ez_is_field_empty( content, field ) %}
+{% if not ez_is_field_empty( content, field ) and parameters.available %}
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
     </div>
