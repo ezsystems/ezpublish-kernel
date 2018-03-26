@@ -95,6 +95,8 @@ class Field extends FieldBase
      * @param string $fieldIdentifier
      *
      * @return array
+     *
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     protected function getFieldsInformation($fieldIdentifier)
     {
@@ -137,6 +139,9 @@ class Field extends FieldBase
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     public function handle(
         CriteriaConverter $converter,
@@ -154,11 +159,10 @@ class Field extends FieldBase
         );
 
         $whereExpressions = array();
+
         foreach ($fieldsInformation as $fieldTypeIdentifier => $fieldsInfo) {
             if ($fieldsInfo['column'] === false) {
-                throw new NotImplementedException(
-                    "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
-                );
+                continue;
             }
 
             $filter = $this->fieldValueConverter->convertCriteria(
@@ -174,6 +178,15 @@ class Field extends FieldBase
                     $fieldsInfo['ids']
                 ),
                 $filter
+            );
+        }
+
+        if (empty($whereExpressions)) {
+            throw new NotImplementedException(
+                sprintf(
+                    'Following fieldtypes are not searchable in the legacy search engine: %s',
+                    implode(', ', array_keys($fieldsInformation))
+                )
             );
         }
 
