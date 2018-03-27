@@ -7,15 +7,12 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\FieldType\Relation\Value;
 use eZ\Publish\Core\MVC\Symfony\FieldType\Relation\ParameterProvider;
 use PHPUnit\Framework\TestCase;
 
 class ParameterProviderTest extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     public function providerForTestGetViewParameters()
     {
         return [
