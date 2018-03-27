@@ -124,14 +124,13 @@ abstract class FieldType implements FieldTypeInterface
      * that no validation errors occurred. Overwrite in derived types, if
      * validation is supported.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $value The field value for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\Value|\eZ\Publish\SPI\FieldType\Value $value The field value for which an action is performed
+     * @param array|null $fieldSettings Actual settings of the field
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $value, array $fieldSettings = null)
     {
         return array();
     }

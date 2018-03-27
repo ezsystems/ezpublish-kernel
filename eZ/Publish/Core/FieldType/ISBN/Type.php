@@ -124,21 +124,20 @@ class Type extends FieldType
      *
      * Does not use validators.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\ISBN\Value $fieldValue The field value for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\ISBN\Value|\eZ\Publish\SPI\FieldType\Value $fieldValue The field value for which an action is performed
+     * @param array|null $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue, array $fieldSettings = null)
     {
         $validationErrors = array();
         if ($this->isEmptyValue($fieldValue)) {
             return $validationErrors;
         }
 
-        $fieldSettings = $fieldDefinition->getFieldSettings();
+        $fieldSettings = $fieldSettings ?? $fieldDefinition->getFieldSettings();
         $isbnTestNumber = preg_replace("/[\s|\-]/", '', trim($fieldValue->isbn));
 
         // Check if value and settings are inline
