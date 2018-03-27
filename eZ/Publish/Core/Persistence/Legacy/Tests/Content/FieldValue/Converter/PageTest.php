@@ -43,7 +43,6 @@ class PageTest extends TestCase
         <rotation_until>1393607060</rotation_until>
         <moved_to>42</moved_to>
       </item>
-      <item action="add" />
     </block>
     <zone_identifier>left</zone_identifier>
   </zone>
@@ -118,17 +117,12 @@ EOT;
                                                     'contentId' => '62',
                                                     'locationId' => '64',
                                                     'priority' => '1',
-                                                    'publicationDate' => '1393607060',
-                                                    'visibilityDate' => '1393607060',
-                                                    'hiddenDate' => '1393607060',
-                                                    'rotationUntilDate' => '1393607060',
+                                                    'publicationDate' => new \DateTime('@1393607060'),
+                                                    'visibilityDate' => new \DateTime('@1393607060'),
+                                                    'hiddenDate' => new \DateTime('@1393607060'),
+                                                    'rotationUntilDate' => new \DateTime('@1393607060'),
                                                     'movedTo' => '42',
-                                                    'attributes' => array(),
-                                                )
-                                            ),
-                                            new Parts\Item(
-                                                array(
-                                                    'action' => 'add',
+                                                    'blockId' => '250bcab3ea2929edbf72ece096dcdb7a',
                                                     'attributes' => array(),
                                                 )
                                             ),
@@ -222,6 +216,16 @@ EOT;
         <unit></unit>
       </rotation>
       <zone_id>ee94402090bb170600a8dab9e1bd1c5a</zone_id>
+      <item action="add">
+        <object_id>62</object_id>
+        <node_id>64</node_id>
+        <priority>1</priority>
+        <ts_publication>1393607060</ts_publication>
+        <ts_visible>1393607060</ts_visible>
+        <ts_hidden>1393607060</ts_hidden>
+        <rotation_until>1393607060</rotation_until>
+        <moved_to>42</moved_to>
+      </item>
     </block>
     <zone_identifier>zone_1</zone_identifier>
   </zone>

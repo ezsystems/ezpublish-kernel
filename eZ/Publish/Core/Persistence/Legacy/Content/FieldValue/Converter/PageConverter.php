@@ -283,16 +283,20 @@ class PageConverter implements Converter
                     $this->addNewNotEmptyXmlElement($dom, $itemNode, 'priority', $attrValue);
                     break;
                 case 'publicationDate':
-                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_publication', $attrValue);
+                    /* @var $attrValue \DateTime */
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_publication', $attrValue->getTimestamp());
                     break;
                 case 'visibilityDate':
-                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_visible', $attrValue);
+                    /* @var $attrValue \DateTime|null */
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_visible', $attrValue ? $attrValue->getTimestamp() : 0);
                     break;
                 case 'hiddenDate':
-                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_hidden', $attrValue);
+                    /* @var $attrValue \DateTime|null */
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_hidden', $attrValue ? $attrValue->getTimestamp() : 0);
                     break;
                 case 'rotationUntilDate':
-                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'rotation_until', $attrValue);
+                    /* @var $attrValue \DateTime|null */
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'rotation_until', $attrValue ? $attrValue->getTimestamp() : 0);
                     break;
                 case 'movedTo':
                     $this->addNewNotEmptyXmlElement($dom, $itemNode, 'moved_to', $attrValue);
@@ -501,7 +505,7 @@ class PageConverter implements Converter
 
             switch ($node->nodeName) {
                 case 'item':
-                    $items[] = $this->restoreItemFromXml($node);
+                    $items[] = $this->restoreItemFromXml($node, $blockId);
                     break;
                 case 'rotation':
                     if ($rotation === null) {
@@ -566,12 +570,16 @@ class PageConverter implements Converter
      * Restores value for a given Item $node.
      *
      * @param \DOMElement $node
+     * @param string $blockId
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item
      */
-    protected function restoreItemFromXml(DOMElement $node)
+    protected function restoreItemFromXml(DOMElement $node, $blockId)
     {
-        $item = array('attributes' => array());
+        $item = array(
+            'blockId' => $blockId,
+            'attributes' => array(),
+        );
 
         if ($node->hasAttributes()) {
             foreach ($node->attributes as $attr) {
@@ -592,25 +600,25 @@ class PageConverter implements Converter
 
             switch ($node->nodeName) {
                 case 'object_id':
-                    $item['contentId'] = $node->nodeValue;
+                    $item['contentId'] = (int)$node->nodeValue;
                     break;
                 case 'node_id':
-                    $item['locationId'] = $node->nodeValue;
+                    $item['locationId'] = (int)$node->nodeValue;
                     break;
                 case 'priority':
-                    $item[$node->nodeName] = $node->nodeValue;
+                    $item[$node->nodeName] = (int)$node->nodeValue;
                     break;
                 case 'ts_publication':
-                    $item['publicationDate'] = $node->nodeValue;
+                    $item['publicationDate'] = new \DateTime("@{$node->nodeValue}");
                     break;
                 case 'ts_visible':
-                    $item['visibilityDate'] = $node->nodeValue;
+                    $item['visibilityDate'] = $node->nodeValue ? new \DateTime("@{$node->nodeValue}") : null;
                     break;
                 case 'ts_hidden':
-                    $item['hiddenDate'] = $node->nodeValue;
+                    $item['hiddenDate'] = $node->nodeValue ? new \DateTime("@{$node->nodeValue}") : null;
                     break;
                 case 'rotation_until':
-                    $item['rotationUntilDate'] = $node->nodeValue;
+                    $item['rotationUntilDate'] = $node->nodeValue ? new \DateTime("@{$node->nodeValue}") : null;
                     break;
                 case 'moved_to':
                     $item['movedTo'] = $node->nodeValue;

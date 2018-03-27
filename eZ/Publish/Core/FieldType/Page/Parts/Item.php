@@ -45,7 +45,7 @@ class Item extends ValueObject
     protected $publicationDate;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $visibilityDate;
 
