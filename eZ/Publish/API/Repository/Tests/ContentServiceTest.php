@@ -694,6 +694,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'languageCodes' => [
                     'eng-US',
                 ],
+                'status' => ContentInfo::STATUS_PUBLISHED,
             ],
             $versionInfo
         );
@@ -5998,6 +5999,7 @@ XML
             'remoteId' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
             'mainLanguageCode' => 'eng-US',
             'mainLocationId' => 43,
+            'status' => ContentInfo::STATUS_PUBLISHED,
         ];
     }
 }
