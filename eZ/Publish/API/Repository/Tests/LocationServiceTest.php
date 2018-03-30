@@ -1122,7 +1122,7 @@ class LocationServiceTest extends BaseTest
         );
         $this->assertEquals(
             $demoDesignLocation->id,
-            $repository->getURLAliasService()->lookup('/Plain-site')->destination
+            $repository->getURLAliasService()->lookup('/eZ-Publish-Demo-Design-without-demo-content')->destination
         );
     }
 
