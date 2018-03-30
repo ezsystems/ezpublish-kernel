@@ -37,14 +37,19 @@ class SectionTest extends RESTFunctionalTestCase
   <name>testCreateSection</name>
 </SectionInput>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/sections', 'SectionInput+xml', 'Section+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/sections',
+            'SectionInput+xml',
+            'Section+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -63,8 +68,13 @@ XML;
   <name>testUpdateSection</name>
 </SectionInput>
 XML;
-        $request = $this->createHttpRequest('PATCH', $sectionHref, 'SectionInput+xml', 'Section+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $sectionHref,
+            'SectionInput+xml',
+            'Section+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);

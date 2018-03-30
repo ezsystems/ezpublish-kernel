@@ -23,14 +23,19 @@ class ContentTypeTest extends RESTFunctionalTestCase
   <identifier>testCreateContentTypeGroup</identifier>
 </ContentTypeGroupInput>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/typegroups', 'ContentTypeGroupInput+xml', 'ContentTypeGroup+json');
-        $request->setContent($body);
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/typegroups',
+            'ContentTypeGroupInput+xml',
+            'ContentTypeGroup+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -51,8 +56,13 @@ XML;
 </ContentTypeGroupInput>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $contentTypeGroupHref, 'ContentTypeGroupInput+xml', 'ContentTypeGroup+json');
-        $request->setContent($body);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $contentTypeGroupHref,
+            'ContentTypeGroupInput+xml',
+            'ContentTypeGroup+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -110,17 +120,17 @@ XML;
             'POST',
             "$contentTypeGroupHref/types?publish=true",
             'ContentTypeCreate+xml',
-            'ContentType+json'
+            'ContentType+json',
+            $body
         );
-        $request->setContent($body);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $this->addCreatedElement($response->getHeader('Location'));
+        $this->addCreatedElement($response->getHeader('Location')[0]);
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
@@ -276,7 +286,7 @@ XML;
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -301,16 +311,19 @@ XML;
 </ContentTypeUpdate>
 XML;
 
-        $request = $this->createHttpRequest('POST', $contentTypeHref, 'ContentTypeUpdate+xml', 'ContentTypeInfo+json');
-        $request->setContent($content);
-        $response = $this->sendHttpRequest(
-            $request
+        $request = $this->createHttpRequest(
+            'POST',
+            $contentTypeHref,
+            'ContentTypeUpdate+xml',
+            'ContentTypeInfo+json',
+            $content
         );
+        $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -344,11 +357,14 @@ XML;
 </ContentTypeUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $contentTypeDraftHref, 'ContentTypeUpdate+xml', 'ContentTypeInfo+json');
-        $request->setContent($content);
-        $response = $this->sendHttpRequest(
-            $request
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $contentTypeDraftHref,
+            'ContentTypeUpdate+xml',
+            'ContentTypeInfo+json',
+            $content
         );
+        $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
     }
@@ -383,15 +399,15 @@ XML;
             'POST',
             "$contentTypeDraftHref/fieldDefinitions",
             'FieldDefinitionCreate+xml',
-            'FieldDefinition+json'
+            'FieldDefinition+json',
+            $body
         );
-        $request->setContent($body);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
@@ -408,7 +424,7 @@ XML;
 
         self::assertHttpResponseCodeEquals($response, 200);
 
-        $data = json_decode($response->getContent(), true);
+        $data = json_decode($response->getBody(), true);
 
         return $data['FieldDefinitions']['FieldDefinition'][0]['_href'];
     }
@@ -416,8 +432,12 @@ XML;
     /**
      * @depends testAddContentTypeDraftFieldDefinition
      * Covers GET /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
+     *
+     * @param string $fieldDefinitionHref
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
-    public function testLoadContentTypeFieldDefinition($fieldDefinitionHref)
+    public function testLoadContentTypeFieldDefinition(string $fieldDefinitionHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', $fieldDefinitionHref)
@@ -449,25 +469,27 @@ XML;
             'PATCH',
             $fieldDefinitionHref,
             'FieldDefinitionUpdate+xml',
-            'FieldDefinition+json'
+            'FieldDefinition+json',
+            $body
         );
-        $request->setContent($body);
-
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * Covers DELETE /content/types/<contentTypeId>/draft/fieldDefinitions/<fieldDefinitionId>.
      * @depends testAddContentTypeDraftFieldDefinition
+     *
+     * @param string $fieldDefinitionHref
      */
-    public function deleteContentTypeDraftFieldDefinition($fieldDefinitionHref)
+    public function deleteContentTypeDraftFieldDefinition(string $fieldDefinitionHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('DELETE', $fieldDefinitionHref)
         );
 
-        self::testLoadContentTypeFieldDefinition($response, 204);
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**

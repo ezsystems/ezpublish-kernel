@@ -37,16 +37,16 @@ XML;
             'POST',
             '/api/ezp/v2/content/objectstategroups',
             'ObjectStateGroupCreate+xml',
-            'ObjectStateGroup+json'
+            'ObjectStateGroup+json',
+            $body
         );
-        $request->setContent($body);
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -79,16 +79,16 @@ XML;
             'POST',
             "$objectStateGroupHref/objectstates",
             'ObjectStateCreate+xml',
-            'ObjectState+json'
+            'ObjectState+json',
+            $body
         );
-        $request->setContent($body);
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -163,8 +163,13 @@ XML;
 XML;
 
         $folderHref = $folder['_href'];
-        $request = $this->createHttpRequest('PATCH', "$folderHref/objectstates", 'ContentObjectStates+xml', 'ContentObjectStates+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            "$folderHref/objectstates",
+            'ContentObjectStates+xml',
+            'ContentObjectStates+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -204,9 +209,13 @@ XML;
   </descriptions>
 </ObjectStateUpdate>
 XML;
-        $request = $this->createHttpRequest('PATCH', $objectStateHref, 'ObjectStateUpdate+xml', 'ObjectState+json');
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $objectStateHref,
+            'ObjectStateUpdate+xml',
+            'ObjectState+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -231,9 +240,13 @@ XML;
   </descriptions>
 </ObjectStateGroupUpdate>
 XML;
-        $request = $this->createHttpRequest('PATCH', $objectStateGroupHref, 'ObjectStateGroupUpdate+xml', 'ObjectStateGroup+json');
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $objectStateGroupHref,
+            'ObjectStateGroupUpdate+xml',
+            'ObjectStateGroup+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
