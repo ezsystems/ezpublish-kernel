@@ -695,7 +695,6 @@ class ContentServiceTest extends BaseContentServiceTest
                 'languageCodes' => [
                     'eng-US',
                 ],
-                'status' => ContentInfo::STATUS_PUBLISHED,
             ],
             $versionInfo
         );
@@ -2469,6 +2468,7 @@ XML
                     'remoteId' => 'abcdef0123456789abcdef0123456789',
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => $draftContent->contentInfo->mainLocationId,
+                    'status' => ContentInfo::STATUS_PUBLISHED,
                 ]),
                 'id' => $draftContent->versionInfo->id,
                 'versionNo' => 2,
