@@ -8,8 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
-use Buzz\Message\Request;
-use Buzz\Message\Response;
+use Nyholm\Psr7\Request;
 use Buzz\Client\Curl;
 
 class BuzzDriver implements DriverInterface
@@ -17,39 +16,55 @@ class BuzzDriver implements DriverInterface
     use DriverHelper;
 
     /**
-     * @var bool
+     * @var \Psr\Http\Message\ResponseInterface
      */
-    private $sent = false;
+    private $response = null;
 
     /**
-     * @var \Buzz\Message\Request
-     */
-    private $request;
-
-    /**
-     * @var \Buzz\Message\Response
-     */
-    private $response;
-
-    /**
-     * Initialize the request and response.
-     */
-    public function __construct()
-    {
-        $this->request = new Request();
-        $this->response = new Response();
-    }
-
-    /**
-     * Get reponse.
+     * Host used to prepare Request URI.
      *
-     * @return \Buzz\Message\Response
+     * @var string
+     */
+    private $host = null;
+
+    /**
+     * Resource path used to prepare Request URI.
+     *
+     * @var string
+     */
+    private $resource = '';
+
+    /**
+     * HTTP method used to prepare Request.
+     *
+     * @var string
+     */
+    private $method = null;
+
+    /**
+     * Request headers.
+     *
+     * @var array
+     */
+    private $headers = [];
+
+    /**
+     * Request message body.
+     *
+     * @var string
+     */
+    private $body = null;
+
+    /**
+     * Get response.
+     *
+     * @return \Psr\Http\Message\ResponseInterface
      *
      * @throws \RuntimeException If request hasn't been send already
      */
     protected function getResponse()
     {
-        if ($this->sent) {
+        if (null !== $this->response) {
             return $this->response;
         }
 
@@ -57,13 +72,22 @@ class BuzzDriver implements DriverInterface
     }
 
     /**
-     * Get request.
+     * Prepare and get request.
      *
-     * @return \Buzz\Message\Request
+     * @return \Psr\Http\Message\RequestInterface
      */
     protected function getRequest()
     {
-        return $this->request;
+        if (empty($this->method) || empty($this->host)) {
+            throw new \RuntimeException('Attempted to get unspecified Request');
+        }
+
+        return new Request(
+            $this->method,
+            $this->host . $this->resource,
+            $this->headers,
+            $this->body
+        );
     }
 
     /**
@@ -72,14 +96,13 @@ class BuzzDriver implements DriverInterface
     public function send()
     {
         // prepare client
-        $curl = new Curl();
-        $curl->setTimeout(10);
-        $curl->send(
-            $this->request,
-            $this->response
+        $curl = new Curl(
+            [
+                'timeout' => 10,
+            ]
         );
-
-        $this->sent = true;
+        $this->response = null;
+        $this->response = $curl->sendRequest($this->getRequest());
     }
 
     /**
@@ -93,7 +116,7 @@ class BuzzDriver implements DriverInterface
             $host = substr($host, 0, strlen($host) - 1);
         }
 
-        $this->getRequest()->setHost($host);
+        $this->host = $host;
     }
 
     /**
@@ -103,7 +126,7 @@ class BuzzDriver implements DriverInterface
      */
     public function setResource($resource)
     {
-        $this->getRequest()->setResource($resource);
+        $this->resource = $resource;
     }
 
     /**
@@ -114,10 +137,11 @@ class BuzzDriver implements DriverInterface
     public function setMethod($method)
     {
         if (in_array(strtolower($method), ['publish', 'patch', 'move', 'swap'])) {
-            $this->getRequest()->addHeader("X-HTTP-Method-Override: $method");
-            $method = 'POST';
+            $this->headers['X-HTTP-Method-Override'] = $method;
+            $this->method = 'POST';
+        } else {
+            $this->method = strtoupper($method);
         }
-        $this->getRequest()->setMethod($method);
     }
 
     /**
@@ -148,6 +172,7 @@ class BuzzDriver implements DriverInterface
      * Set request header.
      *
      * @param string $header Header to be set
+     * @param mixed $value
      */
     public function setHeader($header, $value)
     {
@@ -155,10 +180,7 @@ class BuzzDriver implements DriverInterface
             $value = implode(';', $value);
         }
 
-        // Buzz can only add/append header, so we need to (re-)set all headers
-        $headers = $this->unFormatHeaders($this->getRequest()->getHeaders());
-        $headers[$header] = $value;
-        $this->getRequest()->setHeaders($headers);
+        $this->headers[$header] = $value;
     }
 
     /**
@@ -170,7 +192,7 @@ class BuzzDriver implements DriverInterface
      */
     public function getHeaders()
     {
-        return $this->unFormatHeaders($this->response->getHeaders());
+        return $this->response->getHeaders();
     }
 
     /**
@@ -182,7 +204,11 @@ class BuzzDriver implements DriverInterface
      */
     public function getBody()
     {
-        return $this->getResponse()->getContent();
+        $bodyStream = $this->getResponse()->getBody();
+        $contents = $bodyStream->getContents();
+        $bodyStream->rewind();
+
+        return $contents;
     }
 
     /**
@@ -192,32 +218,6 @@ class BuzzDriver implements DriverInterface
      */
     public function setBody($body)
     {
-        $this->getRequest()->setContent($body);
-    }
-
-    /**
-     * Converts the buzz headers attributes into single lines.
-     *
-     * @param array $headers All headers
-     *
-     * @return array
-     */
-    protected function unFormatHeaders(array $headers)
-    {
-        $headersInAssociativeArray = array();
-        foreach ($headers as $header) {
-            $colonPosition = strpos($header, ':');
-
-            // if no ':' is found than add all header to array
-            if ($colonPosition === false) {
-                $headersInAssociativeArray[] = $header;
-            } else {
-                $key = strtolower(trim(substr($header, 0, $colonPosition)));
-                $value = trim(substr($header, $colonPosition + 1, strlen($header)));
-                $headersInAssociativeArray[$key] = $value;
-            }
-        }
-
-        return $headersInAssociativeArray;
+        $this->body = $body;
     }
 }
