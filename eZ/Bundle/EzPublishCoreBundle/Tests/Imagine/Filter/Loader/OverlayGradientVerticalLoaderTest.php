@@ -2,10 +2,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayBaseLoader;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayGradientVerticalLoader;
 use Imagine\Image\Fill\Gradient\Vertical;
 use Imagine\Image\ImageInterface;
-use ImagineCustomBundle\Loader\OverlayBaseLoader;
-use ImagineCustomBundle\Loader\OverlayGradientVerticalLoader;
 use PHPUnit\Framework\TestCase;
 
 class OverlayGradientVerticalLoaderTest extends TestCase
