@@ -40,10 +40,10 @@ class OverlayGradientVerticalLoaderTest extends TestCase
     public function loadInvalidProvider()
     {
         return [
-            [[]],
-            [[123]],
-            [['foo' => 'bar']],
-            [[123, 456]],
+            'empty_params' => [[]],
+            'missing_start_end_colors' => [[123]],
+            'face_params' => [['foo' => 'bar']],
+            'missing_end_color' => [[123, 456]],
         ];
     }
 
