@@ -40,10 +40,10 @@ class OverlayLoaderTest extends TestCase
     public function loadInvalidProvider()
     {
         return [
-            [[]],
-            [[123]],
-            [['foo' => 'bar']],
-            [[123, null]],
+            'empty_params' => [[]],
+            'missing_color' => [[123]],
+            'fake_params' => [['foo' => 'bar']],
+            'empty_color' => [[123, null]],
         ];
     }
 
