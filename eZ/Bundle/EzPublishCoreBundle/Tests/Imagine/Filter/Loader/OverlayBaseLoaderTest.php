@@ -2,20 +2,19 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\CropFilterLoader;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayBaseLoader;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\Fill\Gradient\Horizontal;
 use Imagine\Image\Fill\Gradient\Vertical;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Palette\PaletteInterface;
-use ImagineCustomBundle\Loader\OverlayBaseLoader;
 use PHPUnit\Framework\TestCase;
 
 class OverlayBaseLoaderTest extends TestCase
 {
     /**
-     * @var CropFilterLoader
+     * @var OverlayBaseLoader
      */
     private $loader;
 
