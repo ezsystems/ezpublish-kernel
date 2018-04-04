@@ -38,11 +38,11 @@ class OverlayBaseLoader extends FilterLoaderWrapped
         $palette = $image->palette();
         $startColor = $palette->color($options['startColor'], $options['opacity']);
         switch (true) {
-            case strpos($options['endColor'], '+') === 0:
+            case \is_string($options['endColor']) && strpos($options['endColor'], '+') === 0:
                 $endColor = $palette->color($options['endColor'], $endOpacity)
                     ->lighten(str_replace('+', '', $options['endColor']));
                 break;
-            case strpos($options['endColor'], '-') === 0:
+            case \is_string($options['endColor']) && strpos($options['endColor'], '-') === 0:
                 $endColor = $palette->color($options['endColor'], $endOpacity)
                     ->darken(str_replace('-', '', $options['endColor']));
                 break;
