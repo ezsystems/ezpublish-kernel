@@ -24,7 +24,7 @@ class OverlayGradientVerticalLoaderTest extends TestCase
     {
         parent::setUp();
         $this->innerLoader = $this->createMock(OverlayBaseLoader::class);
-        $this->loader      = new OverlayGradientVerticalLoader();
+        $this->loader = new OverlayGradientVerticalLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
 
@@ -49,9 +49,9 @@ class OverlayGradientVerticalLoaderTest extends TestCase
 
     public function testLoad()
     {
-        $opacity    = 30;
+        $opacity = 30;
         $startColor = [0, 0, 0];
-        $endColor   = '+125';
+        $endColor = '+125';
 
         $image = $this->createMock(ImageInterface::class);
         $this->innerLoader
