@@ -22,7 +22,7 @@ class OverlayBaseLoader extends FilterLoaderWrapped
         $verticalLinerClass = Vertical::class;
         if (!\in_array($options['linerClass'], [$horizontalLinerClass, $verticalLinerClass], true)){
             throw new InvalidArgumentException(
-                'Unsupported the "linerClass" it should be "' . $horizontalLinerClass . '" or "'
+                'Unsupported "linerClass", expected: "' . $horizontalLinerClass . '" or "'
                 . $verticalLinerClass . '"'
             );
         }
