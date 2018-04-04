@@ -22,7 +22,7 @@ class OverlayBaseLoader extends FilterLoaderWrapped
         $verticalLinerClass = Vertical::class;
         if (!\in_array($options['linerClass'], [$horizontalLinerClass, $verticalLinerClass], true)){
             throw new InvalidArgumentException(
-                'Unsuported the "linerClass" it should be "' . $horizontalLinerClass . '" or "'
+                'Unsupported the "linerClass" it should be "' . $horizontalLinerClass . '" or "'
                 . $verticalLinerClass . '"'
             );
         }
@@ -58,11 +58,11 @@ class OverlayBaseLoader extends FilterLoaderWrapped
         if ($options['linerClass'] === $horizontalLinerClass) {
             $imageWidth = $imageSize->getWidth();
             $liner = new Horizontal($imageWidth, $startColor, $endColor);
-            $overlay->crop($startPoint, new Box($imageWidth, 1));
+            $overlay->crop($startPoint, new Box($imageWidth, 1)); // crop overlay to 1px height
         } else {
             $imageHeight = $imageSize->getHeight();
             $liner = new Vertical($imageHeight, $startColor, $endColor);
-            $overlay->crop($startPoint, new Box(1, $imageHeight));
+            $overlay->crop($startPoint, new Box(1, $imageHeight)); // crop overlay to 1px width
         }
 
         $filler = new Fill($liner);
