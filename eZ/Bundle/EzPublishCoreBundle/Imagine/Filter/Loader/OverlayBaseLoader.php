@@ -7,6 +7,7 @@ use Imagine\Image\Fill\Gradient\Horizontal;
 use Imagine\Image\Fill\Gradient\Vertical;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
+use Imagine\Image\Box;
 use Imagine\Exception\InvalidArgumentException;
 
 class OverlayBaseLoader extends FilterLoaderWrapped
@@ -16,7 +17,15 @@ class OverlayBaseLoader extends FilterLoaderWrapped
         if (!isset($options['opacity'], $options['startColor'], $options['endColor'], $options['linerClass'])) {
             throw new InvalidArgumentException('Missing one of required options');
         }
-
+        
+        $horizontalLinerClass = Horizontal::class;
+        $verticalLinerClass = Vertical::class;
+        if (!\in_array($options['linerClass'], [$horizontalLinerClass, $verticalLinerClass], true)){
+            throw new InvalidArgumentException(
+                'Unsuported the "linerClass" it should be "' . $horizontalLinerClass . '" or "'
+                . $verticalLinerClass . '"'
+            );
+        }
         $startOpacity = $endOpacity = $options['opacity'];
         if (is_array($options['opacity'])) {
             if (count($options['opacity']) < 2) {
@@ -24,10 +33,9 @@ class OverlayBaseLoader extends FilterLoaderWrapped
             }
             list($startOpacity, $endOpacity) = $options['opacity'];
         }
-
-        $imageSize = $image->getSize();
+        
+        // build start/end colors from options
         $palette = $image->palette();
-
         $startColor = $palette->color($options['startColor'], $options['opacity']);
         switch (true) {
             case strpos($options['endColor'], '+') === 0:
@@ -42,19 +50,25 @@ class OverlayBaseLoader extends FilterLoaderWrapped
                 $endColor = $palette->color($options['endColor'], $endOpacity);
                 break;
         }
+        unset($palette); // don't needed more
 
-        if ($options['linerClass'] === Horizontal::class) {
-            $linerSize = $imageSize->getWidth();
+        $imageSize = $image->getSize();
+        $startPoint = new Point(0, 0);
+        $overlay = $image->copy();
+        if ($options['linerClass'] === $horizontalLinerClass) {
+            $imageWidth = $imageSize->getWidth();
+            $liner = new Horizontal($imageWidth, $startColor, $endColor);
+            $overlay->crop($startPoint, new Box($imageWidth, 1));
         } else {
-            $linerSize = $imageSize->getHeight();
+            $imageHeight = $imageSize->getHeight();
+            $liner = new Vertical($imageHeight, $startColor, $endColor);
+            $overlay->crop($startPoint, new Box(1, $imageHeight));
         }
 
-        $overlay = $image->copy();
-        /** @var Horizontal|Vertical $liner */
-        $liner = new $options['linerClass']($linerSize, $startColor, $endColor);
-        $filter = new Fill($liner);
-        $overlay = $filter->apply($overlay);
+        $filler = new Fill($liner);
+        $overlay = $filler->apply($overlay);
+        $overlay->resize($imageSize);
 
-        return $image->paste($overlay, new Point(0, 0));
+        return $image->paste($overlay, $startPoint);        
     }
 }
