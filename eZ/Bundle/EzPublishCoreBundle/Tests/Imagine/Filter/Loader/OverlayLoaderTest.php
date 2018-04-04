@@ -2,10 +2,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayBaseLoader;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\OverlayLoader;
 use Imagine\Image\Fill\Gradient\Horizontal;
 use Imagine\Image\ImageInterface;
-use ImagineCustomBundle\Loader\OverlayBaseLoader;
-use ImagineCustomBundle\Loader\OverlayLoader;
 use PHPUnit\Framework\TestCase;
 
 class OverlayLoaderTest extends TestCase
@@ -24,7 +24,7 @@ class OverlayLoaderTest extends TestCase
     {
         parent::setUp();
         $this->innerLoader = $this->createMock(OverlayBaseLoader::class);
-        $this->loader      = new OverlayLoader();
+        $this->loader = new OverlayLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
 
@@ -50,7 +50,7 @@ class OverlayLoaderTest extends TestCase
     public function testLoad()
     {
         $opacity = 30;
-        $color   = [0, 0, 0];
+        $color = [0, 0, 0];
 
         $image = $this->createMock(ImageInterface::class);
         $this->innerLoader
