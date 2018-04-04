@@ -36,21 +36,17 @@ class OverlayBaseLoaderTest extends TestCase
     public function loadInvalidProvider()
     {
         return [
-            [[]],
-            [['opacity' => 30]],
-            [['opacity' => 30, 'startColor' => [0, 0, 0]]],
-            [['opacity' => 30, 'startColor' => [0, 0, 0], 'endColor' => [0, 0, 0]]],
-            [['opacity' => 30, 'startColor' => [0, 0, 0], 'endColor' => [0, 0, 0], 'linerClass' => '']],
-            [['opacity' => 30, 'startColor' => [0, 0, 0], 'linerClass' => Horizontal::class]],
-            [['opacity' => 30, 'startColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
-            [['opacity' => 30, 'startColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
-            [['opacity' => 30, 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
-            [['opacity' => 30, 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
-            [['startColor' => [0, 0, 0], 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
-            [['startColor' => [0, 0, 0], 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
-            [['opacity' => [30], 'startColor' => [0, 0, 0], 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
-            [['foo' => 'bar']],
-            [[123, null]],
+            'missing_all_params' => [[]],
+            'missing_start_end_colors_liner_class' => [['opacity' => 30]],
+            'missing_end_color_liner_class' => [['opacity' => 30, 'startColor' => [0, 0, 0]]],
+            'missing_liner_class' => [['opacity' => 30, 'startColor' => [0, 0, 0], 'endColor' => [0, 0, 0]]],
+            'invalid)liner_class' => [['opacity' => 30, 'startColor' => [0, 0, 0], 'endColor' => [0, 0, 0], 'linerClass' => '']],
+            'liner_horizontal_missing_end_color' => [['opacity' => 30, 'startColor' => [0, 0, 0], 'linerClass' => Horizontal::class]],
+            'liner_vertical_missing_end_color' => [['opacity' => 30, 'startColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
+            'liner_vertical_missing_start_color' => [['opacity' => 30, 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
+            'liner_horizontal_missing_start_color' => [['opacity' => 30, 'endColor' => [0, 0, 0], 'linerClass' => Horizontal::class]],
+            'missing_opacity' => [['startColor' => [0, 0, 0], 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
+            'invalid_opacity' => [['opacity' => [30], 'startColor' => [0, 0, 0], 'endColor' => [0, 0, 0], 'linerClass' => Vertical::class]],
         ];
     }
 
