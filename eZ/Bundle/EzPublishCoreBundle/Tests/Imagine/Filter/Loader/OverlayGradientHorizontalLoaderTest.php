@@ -42,7 +42,7 @@ class OverlayGradientHorizontalLoaderTest extends TestCase
         return [
             'empty_params' => [[]],
             'missed_start_end_colors' => [[123]],
-            'face_params' => [['foo' => 'bar']],
+            'fake_params' => [['foo' => 'bar']],
             'missed_end_color' => [[123, 456]],
         ];
     }
