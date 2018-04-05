@@ -25,7 +25,7 @@ class RootTest extends RESTFunctionalTestCase
         );
         self::assertHttpResponseCodeEquals($response, 200);
 
-        return $response->getContent();
+        return $response->getBody();
     }
 
     /**
@@ -39,7 +39,7 @@ class RootTest extends RESTFunctionalTestCase
             $this->createHttpRequest('GET', '/api/ezp/v2/' . uniqid('rest'), '', 'Stuff+json')
         );
         self::assertHttpResponseCodeEquals($response, 404);
-        $responseArray = json_decode($response->getContent(), true);
+        $responseArray = json_decode($response->getBody(), true);
         self::assertArrayHasKey('ErrorMessage', $responseArray);
         self::assertEquals('No such route', $responseArray['ErrorMessage']['errorDescription']);
     }

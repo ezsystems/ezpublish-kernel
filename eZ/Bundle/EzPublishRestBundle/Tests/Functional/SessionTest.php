@@ -5,9 +5,11 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
-use Buzz\Message\Form\FormRequest;
-use Buzz\Message\Response;
-use Buzz\Message\Request;
+use Buzz\Browser;
+use DOMDocument;
+use DOMXPath;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use stdClass;
 
 class SessionTest extends TestCase
@@ -20,8 +22,7 @@ class SessionTest extends TestCase
 
     public function testCreateSessionBadCredentials()
     {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
-        $this->setSessionInput($request, 'badpassword');
+        $request = $this->createAuthenticationHttpRequest('admin', 'bad_password');
         $response = $this->sendHttpRequest($request);
         self::assertHttpResponseCodeEquals($response, 401);
     }
@@ -36,6 +37,8 @@ class SessionTest extends TestCase
 
     /**
      * @depends testCreateSession
+     *
+     * @param \stdClass $session
      */
     public function testRefreshSession(stdClass $session)
     {
@@ -60,8 +63,9 @@ class SessionTest extends TestCase
     {
         $session = $this->login();
 
-        $refreshRequest = $this->createRefreshRequest($session);
-        $this->removeCsrfHeader($refreshRequest);
+        $refreshRequest = $this
+            ->createRefreshRequest($session)
+            ->withoutHeader('X-CSRF-Token');
         $response = $this->sendHttpRequest($refreshRequest);
         self::assertHttpResponseCodeEquals($response, 401);
     }
@@ -82,39 +86,47 @@ class SessionTest extends TestCase
     public function testDeleteSessionMissingCsrfToken()
     {
         $session = $this->login();
-        $request = $this->createDeleteRequest($session);
-        $this->removeCsrfHeader($request);
+        $request = $this
+            ->createDeleteRequest($session)
+            ->withoutHeader('X-CSRF-Token');
         $response = $this->sendHttpRequest($request);
         self::assertHttpResponseCodeEquals($response, 401);
     }
 
     public function testLoginWithExistingFrontendSession()
     {
-        $loginFormResponse = $this->sendHttpRequest(new Request('GET', '/login', $this->getHttpHost()));
-        $domDocument = $loginFormResponse->toDomDocument();
-        $xpath = new \DOMXPath($domDocument);
+        $baseURI = $this->getBaseURI();
+        $browser = new Browser();
+
+        $response = $browser->get("{$baseURI}/login");
+        self::assertHttpResponseCodeEquals($response, 200);
+
+        $domDocument = new DOMDocument();
+        // load HTML, suppress error reporting due to buggy Sf toolbar code in dev/behat ENVs
+        $domDocument->loadHTML($response->getBody(), LIBXML_NOERROR);
+        $xpath = new DOMXPath($domDocument);
 
         $csrfDomElements = $xpath->query("//input[@name='_csrf_token']/@value");
         self::assertGreaterThan(0, $csrfDomElements->length);
         $csrfTokenValue = $csrfDomElements->item(0)->nodeValue;
 
-        $loginPostRequest = new FormRequest('POST', '/login_check', $this->getHttpHost());
-        $loginPostRequest->addFields([
-            '_username' => $this->getLoginUsername(),
-            '_password' => $this->getLoginPassword(),
-            '_csrf_token' => $csrfTokenValue,
-        ]);
-        $loginResponse = $this->sendHttpRequest($loginPostRequest);
-        if (!$sessionCookieHeader = $loginResponse->getHeader('set-cookie')) {
-            self::fail('No cookie in login response');
-        }
+        $loginResponse = $browser->submitForm(
+            "{$baseURI}/login_check",
+            [
+                '_username' => $this->getLoginUsername(),
+                '_password' => $this->getLoginPassword(),
+                '_csrf_token' => $csrfTokenValue,
+            ]
+        );
+        self::assertHttpResponseHasHeader($loginResponse, 'set-cookie');
 
-        list($sessionCookie) = explode(';', $sessionCookieHeader);
-
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
-        $this->setSessionInput($request);
-        $request->addHeader("Cookie: $sessionCookie");
+        $request = $this->createAuthenticationHttpRequest(
+            $this->getLoginUsername(),
+            $this->getLoginPassword(),
+            ['Cookie' => $loginResponse->getHeader('set-cookie')[0]]
+        );
         $response = $this->sendHttpRequest($request);
+
         // Since Session is reused, not created, expect 200 instead of 201
         self::assertHttpResponseCodeEquals($response, 200);
     }
@@ -130,55 +142,51 @@ class SessionTest extends TestCase
     }
 
     /**
-     * @param stdClass $session
-     * @return \Buzz\Message\Request
+     * @param \stdClass $session
+     *
+     * @return \Psr\Http\Message\RequestInterface
      */
-    protected function createRefreshRequest(stdClass $session)
+    protected function createRefreshRequest(stdClass $session): RequestInterface
     {
-        $request = $this->createHttpRequest('POST',
-            sprintf('/api/ezp/v2/user/sessions/%s/refresh', $session->identifier), '', 'Session+json');
-        $request->addHeaders([
-            sprintf('Cookie: %s=%s', $session->name, $session->identifier),
-            sprintf('X-CSRF-Token: %s', $session->csrfToken),
-        ]);
+        $request = $this->createHttpRequest(
+            'POST',
+            sprintf('/api/ezp/v2/user/sessions/%s/refresh', $session->identifier),
+            '',
+            'Session+json',
+            '',
+            [
+                'Cookie' => sprintf('%s=%s', $session->name, $session->identifier),
+                'X-CSRF-Token' => $session->csrfToken,
+            ]
+        );
 
         return $request;
     }
 
     /**
-     * @param $session
-     * @return \Buzz\Message\Request
+     * @param \stdClass $session
+     *
+     * @return \Psr\Http\Message\RequestInterface
      */
-    protected function createDeleteRequest($session)
+    protected function createDeleteRequest(stdClass $session): RequestInterface
     {
-        $deleteRequest = $this->createHttpRequest('DELETE', $session->_href);
-        $deleteRequest->addHeaders([
-            sprintf('Cookie: %s=%s', $session->name, $session->identifier),
-            sprintf('X-CSRF-Token: %s', $session->csrfToken),
-        ]);
+        $deleteRequest = $this->createHttpRequest(
+            'DELETE',
+            $session->_href,
+            '',
+            '',
+            '',
+            [
+                'Cookie' => sprintf('%s=%s', $session->name, $session->identifier),
+                'X-CSRF-Token' => $session->csrfToken,
+            ]
+        );
 
         return $deleteRequest;
     }
 
-    private static function assertHttpResponseDeletesSessionCookie($session, Response $response)
+    private static function assertHttpResponseDeletesSessionCookie($session, ResponseInterface $response)
     {
-        self::assertStringStartsWith("{$session->name}=deleted;", $response->getHeader('set-cookie'));
-    }
-
-    /**
-     * Removes the CSRF token header from a $request.
-     *
-     * @param Request $request
-     */
-    private function removeCsrfHeader(Request $request)
-    {
-        foreach ($request->getHeaders() as $headerString) {
-            list($headerName) = explode(': ', $headerString);
-            if (strtolower($headerName) !== 'x-csrf-token') {
-                $headers[] = $headerString;
-            }
-        }
-
-        $request->setHeaders($headers);
+        self::assertStringStartsWith("{$session->name}=deleted;", $response->getHeader('set-cookie')[0]);
     }
 }
