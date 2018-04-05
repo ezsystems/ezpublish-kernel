@@ -34,16 +34,19 @@ class LocationTest extends RESTFunctionalTestCase
   <sortOrder>ASC</sortOrder>
 </LocationCreate>
 XML;
-        $request = $this->createHttpRequest('POST', "$contentHref/locations", 'LocationCreate+xml', 'Location+json');
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'POST',
+            "$contentHref/locations",
+            'LocationCreate+xml',
+            'Location+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
-
-        return $href;
+        return $response->getHeader('Location')[0];
     }
 
     /**
@@ -114,14 +117,20 @@ XML;
      */
     public function testCopySubtree($locationHref)
     {
-        $request = $this->createHttpRequest('COPY', $locationHref);
-        $request->addHeader('Destination: /api/ezp/v2/content/locations/1/43');
+        $request = $this->createHttpRequest(
+            'COPY',
+            $locationHref,
+            '',
+            '',
+            '',
+            ['Destination' => '/api/ezp/v2/content/locations/1/43']
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
@@ -130,8 +139,14 @@ XML;
      */
     public function testMoveSubtree($locationHref)
     {
-        $request = $this->createHttpRequest('MOVE', $locationHref);
-        $request->addHeader('Destination: /api/ezp/v2/content/locations/1/5');
+        $request = $this->createHttpRequest(
+            'MOVE',
+            $locationHref,
+            '',
+            '',
+            '',
+            ['Destination' => '/api/ezp/v2/content/locations/1/5']
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
@@ -191,9 +206,13 @@ XML;
 </LocationUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $locationHref, 'LocationUpdate+xml', 'Location+json');
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $locationHref,
+            'LocationUpdate+xml',
+            'Location+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
