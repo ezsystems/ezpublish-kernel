@@ -41,6 +41,7 @@
         "ezsystems/behatbundle": "^6.1"
     },
     "conflict": {
+        "symfony/symfony": "3.4.7",
         "doctrine/dbal": "2.7.0"
     },
     "replace": {
