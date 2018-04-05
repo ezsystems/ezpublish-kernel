@@ -10,14 +10,16 @@ class OverlayLoader extends FilterLoaderWrapped
 {
     public function load(ImageInterface $image, array $options = array())
     {
-        if (count($options) < 2) {
+        if (\count($options) < 2) {
             throw new InvalidArgumentException('Missing opacity and/or color option(s)');
         }
-        if (isset($options['opacity'])) {
+        if (isset($options['opacity'], $options['color'])) {
             $options[0] = $options['opacity'];
-        }
-        if (isset($options['color'])) {
             $options[1] = $options['color'];
+        }
+
+        if (!isset($options[0], $options[1])) {
+            throw new InvalidArgumentException('Unsupported configuration');
         }
 
         return $this->innerLoader->load($image, [
