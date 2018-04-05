@@ -325,6 +325,7 @@ class ContentService implements ContentServiceInterface
                 array(
                     'contentId' => $contentInfo->id,
                     'versionNo' => ($versionInfo !== null ? $versionInfo->versionNo : null),
+                    'newVersionNo' => $returnValue->getVersionInfo()->versionNo,
                     'userId' => ($user !== null ? $user->id : null),
                 )
             )

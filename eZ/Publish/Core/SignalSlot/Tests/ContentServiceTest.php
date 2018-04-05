@@ -163,6 +163,7 @@ class ContentServiceTest extends ServiceTest
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
+                    'newVersionNo' => $content->getVersionInfo()->versionNo,
                     'userId' => $userId,
                 ),
             ),
