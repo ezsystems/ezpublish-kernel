@@ -30,10 +30,10 @@ class HttpOptionsTest extends TestCase
         );
 
         self::assertHttpResponseCodeEquals($response, 200);
-        self::assertEquals(0, (int)($response->getHeader('Content-Length')));
+        self::assertEquals(0, (int)($response->getHeader('Content-Length')[0]));
 
         self::assertHttpResponseHasHeader($response, 'Allow');
-        $actualMethods = explode(',', $response->getHeader('Allow'));
+        $actualMethods = explode(',', $response->getHeader('Allow')[0]);
         self::assertEquals($expectedMethods, $actualMethods);
     }
 

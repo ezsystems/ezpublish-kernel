@@ -248,12 +248,13 @@ XML;
             'POST',
             '/api/ezp/v2/content/urlaliases',
             'UrlAliasCreate+xml',
-            'UrlAlias+json'
+            'UrlAlias+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
-        $href = $response->getHeader('Location');
+
+        self::assertHttpResponseHasHeader($response, 'Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
