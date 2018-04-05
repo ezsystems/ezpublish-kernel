@@ -241,8 +241,22 @@ class URLAliasService implements URLAliasServiceInterface
             }
         }
 
+        usort($prioritizedAliasList, [$this, 'compareUrlAliases']);
+        usort($urlAliasList, [$this, 'compareUrlAliases']);
+
         // Add aliases not matched by prioritized language to the end of the list
         return array_values($prioritizedAliasList + $urlAliasList);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias $firstAlias
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias $secondAlias
+     *
+     * @return int
+     */
+    private function compareUrlAliases(URLAlias $firstAlias, URLAlias $secondAlias)
+    {
+        return strnatcasecmp($firstAlias->path, $secondAlias->path);
     }
 
     /**
