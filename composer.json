@@ -42,6 +42,9 @@
         "symfony/assetic-bundle": "~2.3",
         "ezsystems/behatbundle": "^6.1"
     },
+    "conflict": {
+        "doctrine/dbal": "2.7.0"
+    },
     "replace": {
         "ezsystems/ezpublish": "*",
         "ezsystems/ezpublish-api": "self.version",
