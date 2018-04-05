@@ -40,15 +40,19 @@ class UrlWildcardTest extends RESTFunctionalTestCase
 </UrlWildcardCreate>
 XML;
 
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/urlwildcards', 'UrlWildcardCreate+xml', 'UrlWildcard+json');
-        $request->setContent($xml);
-
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/urlwildcards',
+            'UrlWildcardCreate+xml',
+            'UrlWildcard+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;

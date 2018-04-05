@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use Buzz\Message\Response;
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use Psr\Http\Message\ResponseInterface;
 
 class ContentTest extends RESTFunctionalTestCase
 {
@@ -20,7 +21,6 @@ class ContentTest extends RESTFunctionalTestCase
      */
     public function testCreateContent()
     {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/objects', 'ContentCreate+xml', 'ContentInfo+json');
         $string = $this->addTestSuffix(__FUNCTION__);
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -48,14 +48,20 @@ class ContentTest extends RESTFunctionalTestCase
   </fields>
 </ContentCreate>
 XML;
-        $request->setContent($body);
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/objects',
+            'ContentCreate+xml',
+            'ContentInfo+json',
+            $body
+        );
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -88,7 +94,7 @@ XML;
         );
 
         self::assertHttpResponseCodeEquals($response, 307);
-        self::assertEquals($response->getHeader('Location'), $restContentHref);
+        self::assertEquals($response->getHeader('Location')[0], $restContentHref);
     }
 
     /**
@@ -117,8 +123,13 @@ XML;
   <remoteId>{$string}</remoteId>
 </ContentUpdate>
 XML;
-        $request = $this->createHttpRequest('PATCH', $restContentHref, 'ContentUpdate+xml', 'ContentInfo+json');
-        $request->setContent($content);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $restContentHref,
+            'ContentUpdate+xml',
+            'ContentInfo+json',
+            $content
+        );
         $response = $this->sendHttpRequest($request);
         self::assertHttpResponseCodeEquals($response, 200);
 
@@ -128,26 +139,32 @@ XML;
     /**
      * @depends testPublishContent
      *
+     * @param string $restContentHref
+     *
      * @return string ContentVersion REST ID
      */
-    public function testCreateDraftFromVersion($restContentHref)
+    public function testCreateDraftFromVersion(string $restContentHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('COPY', "{$restContentHref}/versions/1")
         );
 
         self::assertHttpResponseCodeEquals($response, 201);
-        self::assertEquals($response->getHeader('Location'), "{$restContentHref}/versions/2");
+        self::assertEquals($response->getHeader('Location')[0], "{$restContentHref}/versions/2");
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
      * @depends testPublishContent
      * Covers GET /content/objects/<contentId>/currentversion
      * @covers \eZ\Publish\Core\REST\Server\Controller\Content::redirectCurrentVersion
+     *
+     * @param string $restContentHref
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
-    public function testRedirectCurrentVersion($restContentHref)
+    public function testRedirectCurrentVersion(string $restContentHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', "$restContentHref/currentversion")
@@ -185,17 +202,25 @@ XML;
     {
         $testContent = $this->loadContent($restContentHref);
 
-        $request = $this->createHttpRequest('COPY', $restContentHref);
-        $request->addHeader('Destination: ' . $testContent['MainLocation']['_href']);
-
+        $request = $this->createHttpRequest(
+            'COPY',
+            $restContentHref,
+            '',
+            '',
+            '',
+            ['Destination' => $testContent['MainLocation']['_href']]
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
-        self::assertStringStartsWith('/api/ezp/v2/content/objects/', $response->getHeader('Location'));
+        self::assertStringStartsWith(
+            '/api/ezp/v2/content/objects/',
+            $response->getHeader('Location')[0]
+        );
 
-        $this->addCreatedElement($response->getHeader('Location'));
+        $this->addCreatedElement($response->getHeader('Location')[0]);
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
@@ -242,7 +267,7 @@ XML;
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
@@ -280,11 +305,14 @@ XML;
 </VersionUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $restContentVersionHref, 'VersionUpdate+xml', 'Version+json');
-        $request->setContent($xml);
-        $response = $this->sendHttpRequest(
-            $request
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $restContentVersionHref,
+            'VersionUpdate+xml',
+            'Version+json',
+            $xml
         );
+        $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
     }
@@ -335,14 +363,18 @@ XML;
 </RelationCreate>
 XML;
 
-        $request = $this->createHttpRequest('POST', "$restContentVersionHref/relations", 'RelationCreate+xml', 'Relation+json');
-        $request->setContent($content);
-
+        $request = $this->createHttpRequest(
+            'POST',
+            "$restContentVersionHref/relations",
+            'RelationCreate+xml',
+            'Relation+json',
+            $content
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
 
-        $response = json_decode($response->getContent(), true);
+        $response = json_decode($response->getBody(), true);
 
         return $response['Relation']['_href'];
     }
@@ -382,9 +414,9 @@ XML;
             throw new \InvalidArgumentException("Content with ID $restContentHref could not be loaded");
         }
 
-        $array = json_decode($response->getContent(), true);
+        $array = json_decode($response->getBody(), true);
         if ($array === null) {
-            self::fail('Error loading content. Response: ' . $response->getContent());
+            self::fail('Error loading content. Response: ' . $response->getBody());
         }
 
         return $array['Content'];
@@ -405,11 +437,14 @@ XML;
   </Query>
 </ViewInput>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/views', 'ViewInput+xml', 'View+json');
-        $request->setContent($body);
-        $response = $this->sendHttpRequest(
-            $request
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/views',
+            'ViewInput+xml',
+            'View+json',
+            $body
         );
+        $response = $this->sendHttpRequest($request);
 
         // Returns 301 since 6.0 (deprecated in favour of /views)
         self::assertHttpResponseCodeEquals($response, 301);
@@ -439,7 +474,7 @@ XML;
             $this->createHttpRequest('GET', $restContentVersionHref, '', 'Version+json')
         );
 
-        $version = json_decode($response->getContent(), true);
+        $version = json_decode($response->getBody(), true);
         self::assertNotContains($translationToDelete, $version['Version']['VersionInfo']['languageCodes']);
     }
 
@@ -464,7 +499,7 @@ XML;
             $this->createHttpRequest('GET', $restContentVersionHref, '', 'Version+json')
         );
         self::assertHttpResponseCodeEquals($response, 200);
-        $version = json_decode($response->getContent(), true);
+        $version = json_decode($response->getBody(), true);
 
         // load all Versions
         self::assertNotEmpty($version['Version']['VersionInfo']['Content']['_href']);
@@ -475,7 +510,7 @@ XML;
         self::assertHttpResponseCodeEquals($response, 200);
 
         // load Version list
-        $versionList = json_decode($response->getContent(), true);
+        $versionList = json_decode($response->getBody(), true);
         $version = $this->getVersionInfoFromJSONVersionListByStatus(
             $versionList['VersionList'],
             'DRAFT'
@@ -540,7 +575,7 @@ XML;
             $this->createHttpRequest('GET', "$restContentHref/versions", '', 'VersionList+json')
         );
         self::assertHttpResponseCodeEquals($response, 200);
-        $versionList = json_decode($response->getContent(), true);
+        $versionList = json_decode($response->getBody(), true);
         foreach ($versionList['VersionList']['VersionItem'] as $versionItem) {
             self::assertNotContains($translationToDelete, $versionItem['VersionInfo']['languageCodes']);
             foreach ($versionItem['VersionInfo']['names']['value'] as $name) {
@@ -584,7 +619,7 @@ XML;
             $this->createHttpRequest('GET', "$restContentHref/versions", '', 'VersionList+json')
         );
         self::assertHttpResponseCodeEquals($response, 200);
-        $versionList = json_decode($response->getContent(), true);
+        $versionList = json_decode($response->getBody(), true);
         foreach ($versionList['VersionList']['VersionItem'] as $versionItem) {
             self::assertNotEmpty($versionItem['VersionInfo']['languageCodes']);
             self::assertNotContains($translationToDelete, $versionItem['VersionInfo']['languageCodes']);
@@ -621,11 +656,14 @@ XML;
 </VersionUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $restContentVersionHref, 'VersionUpdate+xml', 'Version+json');
-        $request->setContent($xml);
-        $response = $this->sendHttpRequest(
-            $request
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $restContentVersionHref,
+            'VersionUpdate+xml',
+            'Version+json',
+            $xml
         );
+        $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
     }
@@ -653,14 +691,15 @@ XML;
     /**
      * Assert that Version REST Response contains proper fields.
      *
-     * @param \Buzz\Message\Response $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      */
-    private function assertVersionResponseContainsExpectedFields(Response $response)
+    private function assertVersionResponseContainsExpectedFields(ResponseInterface $response)
     {
-        $contentType = $response->getHeader('Content-Type');
+        self::assertHttpResponseHasHeader($response, 'Content-Type');
+        $contentType = $response->getHeader('Content-Type')[0];
         self::assertNotEmpty($contentType);
 
-        $responseBody = $response->getContent();
+        $responseBody = $response->getBody();
 
         // check if response is of an expected Content-Type
         self::assertEquals('Version+xml', $this->getMediaFromTypeString($contentType));
@@ -722,18 +761,23 @@ XML;
   </fields>
 </ContentCreate>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/objects', 'ContentCreate+xml', 'ContentInfo+json');
-        $request->setContent($body);
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/objects',
+            'ContentCreate+xml',
+            'ContentInfo+json',
+            $body
+        );
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode($response->getBody(), true);
         self::assertNotEmpty($content['Content']);
 
         return $content['Content'];
@@ -753,7 +797,7 @@ XML;
         );
         self::assertHttpResponseCodeEquals($response, 201);
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         self::assertNotEmpty($href);
 
         return $href;
@@ -787,8 +831,13 @@ XML;
 </ContentUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $restContentHref, 'ContentUpdate+xml', 'ContentInfo+json');
-        $request->setContent($content);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $restContentHref,
+            'ContentUpdate+xml',
+            'ContentInfo+json',
+            $content
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);

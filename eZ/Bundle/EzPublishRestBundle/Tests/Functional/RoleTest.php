@@ -35,14 +35,19 @@ class RoleTest extends RESTFunctionalTestCase
   </descriptions>
 </RoleInput>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/roles', 'RoleInput+xml', 'Role+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/user/roles',
+            'RoleInput+xml',
+            'Role+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -74,15 +79,15 @@ XML;
             'POST',
             '/api/ezp/v2/user/roles?publish=false',
             'RoleInput+xml',
-            'RoleDraft+json'
+            'RoleDraft+json',
+            $xml
         );
-        $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href . '/draft';
@@ -138,15 +143,15 @@ XML;
             'POST',
             $roleHref,
             'RoleInput+xml',
-            'RoleDraft+json'
+            'RoleDraft+json',
+            $xml
         );
-        $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href . '/draft';
@@ -185,11 +190,9 @@ XML;
 </RoleInput>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $roleHref, 'RoleInput+xml', 'Role+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest('PATCH', $roleHref, 'RoleInput+xml', 'Role+json', $xml);
         $response = $this->sendHttpRequest($request);
 
-        // @todo Fix failure Notice: Trying to get property of non-object in \/home\/bertrand\/www\/ezpublish-kernel\/eZ\/Publish\/Core\/Persistence\/Cache\/UserHandler.php line 174
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
@@ -213,8 +216,13 @@ XML;
 </RoleInput>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $roleDraftHref, 'RoleInput+xml', 'RoleDraft+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $roleDraftHref,
+            'RoleInput+xml',
+            'RoleDraft+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -243,14 +251,19 @@ XML;
   </limitations>
 </PolicyCreate>
 XML;
-        $request = $this->createHttpRequest('POST', "$roleHref/policies", 'PolicyCreate+xml', 'Policy+json');
-        $request->setContent($xml);
-
+        $request = $this->createHttpRequest(
+            'POST',
+            "$roleHref/policies",
+            'PolicyCreate+xml',
+            'Policy+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -282,15 +295,15 @@ XML;
             'POST',
             $this->roleDraftHrefToRoleHref($roleDraftHref) . '/policies',
             'PolicyCreate+xml',
-            'Policy+json'
+            'Policy+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -341,8 +354,13 @@ XML;
 </PolicyUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $policyHref, 'PolicyUpdate+xml', 'Policy+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $policyHref,
+            'PolicyUpdate+xml',
+            'Policy+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -367,8 +385,7 @@ XML;
 </PolicyUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $policyHref, 'PolicyUpdate+xml', 'Policy+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest('PATCH', $policyHref, 'PolicyUpdate+xml', 'Policy+json', $xml);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -395,12 +412,12 @@ XML;
             'POST',
             '/api/ezp/v2/user/users/10/roles',
             'RoleAssignInput+xml',
-            'RoleAssignmentList+json'
+            'RoleAssignmentList+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
-        $roleAssignmentArray = json_decode($response->getContent(), true);
+
+        $roleAssignmentArray = json_decode($response->getBody(), true);
 
         self::assertHttpResponseCodeEquals($response, 200);
 
@@ -436,12 +453,12 @@ XML;
             'POST',
             '/api/ezp/v2/user/users/10/roles',
             'RoleAssignInput+xml',
-            'RoleAssignmentList+json'
+            'RoleAssignmentList+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
-        $roleAssignmentArray = json_decode($response->getContent(), true);
+
+        $roleAssignmentArray = json_decode($response->getBody(), true);
 
         self::assertHttpResponseCodeEquals($response, 200);
 
@@ -490,10 +507,6 @@ XML;
      */
     public function testAssignRoleToUserGroup($roleHref)
     {
-        self::markTestSkipped('Breaks roles, thus preventing login');
-
-        return;
-
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <RoleAssignInput>
@@ -505,17 +518,17 @@ XML;
   </limitation>
 </RoleAssignInput>
 XML;
-
+        // Assign to "Guest users" group to avoid affecting other tests
         $request = $this->createHttpRequest(
             'POST',
-            '/api/ezp/v2/user/groups/1/5/44/roles',
+            '/api/ezp/v2/user/groups/1/5/12/roles',
             'RoleAssignInput+xml',
-            'RoleAssignmentList+json'
+            'RoleAssignmentList+json',
+            $xml
         );
-        $request->setContent($xml);
 
         $response = $this->sendHttpRequest($request);
-        $roleAssignmentArray = json_decode($response->getContent(), true);
+        $roleAssignmentArray = json_decode($response->getBody(), true);
 
         self::assertHttpResponseCodeEquals($response, 200);
 
@@ -710,14 +723,14 @@ XML;
             'POST',
             '/api/ezp/v2/user/roles',
             'RoleInput+xml',
-            'RoleDraft+json'
+            'RoleDraft+json',
+            $xml
         );
-        $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
 
         $this->addCreatedElement($href);
 

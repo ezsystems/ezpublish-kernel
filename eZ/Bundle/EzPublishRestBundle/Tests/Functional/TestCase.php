@@ -8,16 +8,24 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
-use Buzz\Message\Request as HttpRequest;
-use Buzz\Message\Response as HttpResponse;
-use Buzz\Converter\RequestConverter;
-use Buzz\Converter\ResponseConverter;
+use Buzz\Client\Curl;
+use Nyholm\Psr7\Request as HttpRequest;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class TestCase extends BaseTestCase
 {
+    const X_HTTP_METHOD_OVERRIDE_MAP = [
+        'PUBLISH' => 'POST',
+        'MOVE' => 'POST',
+        'PATCH' => 'PATCH',
+        'COPY' => 'POST',
+    ];
+
     /**
-     * @var \Buzz\Client\ClientInterface
+     * @var \Buzz\Client\BuzzClientInterface
      */
     private $httpClient;
 
@@ -72,26 +80,29 @@ class TestCase extends BaseTestCase
         $this->httpAuth = getenv('EZP_TEST_REST_AUTH') ?: 'admin:publish';
         list($this->loginUsername, $this->loginPassword) = explode(':', $this->httpAuth);
 
-        $this->httpClient = new \Buzz\Client\Curl();
-        $this->httpClient->setVerifyPeer(false);
-        $this->httpClient->setTimeout(90);
-        $this->httpClient->setOption(CURLOPT_FOLLOWLOCATION, false);
+        $this->httpClient = new Curl([
+            'verify' => false,
+            'timeout' => 90,
+            'allow_redirects' => false,
+        ]);
 
         if ($this->autoLogin) {
             $session = $this->login();
-            $this->headers[] = sprintf('Cookie: %s=%s', $session->name, $session->identifier);
-            $this->headers[] = sprintf('X-CSRF-Token: %s', $session->csrfToken);
+            $this->headers['Cookie'] = sprintf('%s=%s', $session->name, $session->identifier);
+            $this->headers['X-CSRF-Token'] = $session->csrfToken;
         }
     }
 
     /**
-     * @return HttpResponse
+     * @param \Psr\Http\Message\RequestInterface $request
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
-    public function sendHttpRequest(HttpRequest $request)
+    public function sendHttpRequest(RequestInterface $request): ResponseInterface
     {
-        $request = RequestConverter::psr7($request);
-
-        return ResponseConverter::buzz($this->httpClient->sendRequest($request));
+        return $this->httpClient->sendRequest($request);
     }
 
     protected function getHttpHost()
@@ -110,41 +121,70 @@ class TestCase extends BaseTestCase
     }
 
     /**
-     * @return HttpRequest
+     * Get base URI for \Buzz\Browser based requests.
+     *
+     * @return string
      */
-    public function createHttpRequest($method, $uri, $contentType = '', $acceptType = '')
+    protected function getBaseURI()
     {
+        return "http://{$this->httpHost}";
+    }
+
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param string $contentType
+     * @param string $acceptType
+     * @param string $body
+     *
+     * @param array $extraHeaders [key => value] array of extra headers
+     *
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    public function createHttpRequest(
+        string $method,
+        string $uri,
+        string $contentType = '',
+        string $acceptType = '',
+        string $body = '',
+        array $extraHeaders = []
+    ): RequestInterface {
         $headers = array_merge(
             $method === 'POST' && $uri === '/api/ezp/v2/user/sessions' ? [] : $this->headers,
             [
-                'Content-Type: ' . $this->generateMediaTypeString($contentType),
-                'Accept: ' . $this->generateMediaTypeString($acceptType),
+                'Content-Type' => $this->generateMediaTypeString($contentType),
+                'Accept' => $this->generateMediaTypeString($acceptType),
             ]
         );
 
-        switch ($method) {
-            case 'PUBLISH': $method = 'POST'; $headers[] = 'X-HTTP-Method-Override: PUBLISH'; break;
-            case 'MOVE':    $method = 'POST'; $headers[] = 'X-HTTP-Method-Override: MOVE'; break;
-            case 'PATCH':   $method = 'PATCH'; $headers[] = 'X-HTTP-Method-Override: PATCH'; break;
-            case 'COPY':    $method = 'POST'; $headers[] = 'X-HTTP-Method-Override: COPY'; break;
+        if (isset(static::X_HTTP_METHOD_OVERRIDE_MAP[$method])) {
+            $headers['X-HTTP-Method-Override'] = $method;
+            $method = static::X_HTTP_METHOD_OVERRIDE_MAP[$method];
         }
 
-        $request = new HttpRequest($method, $uri, $this->httpHost);
-        $request->addHeaders($headers);
-
-        return $request;
+        return new HttpRequest(
+            $method,
+            $this->httpHost . $uri,
+            array_merge($headers, $extraHeaders),
+            $body
+        );
     }
 
-    protected function assertHttpResponseCodeEquals(HttpResponse $response, $expected)
+    protected function assertHttpResponseCodeEquals(ResponseInterface $response, $expected)
     {
         $responseCode = $response->getStatusCode();
-        if ($responseCode != $expected) {
+        try {
+            self::assertEquals($expected, $responseCode);
+        } catch (ExpectationFailedException $e) {
             $errorMessageString = '';
-            if (strpos($response->getHeader('Content-Type'), 'application/vnd.ez.api.ErrorMessage+xml') !== false) {
-                $body = \simplexml_load_string($response->getContent());
+            $contentTypeHeader = $response->hasHeader('Content-Type')
+                ? $response->getHeader('Content-Type')[0]
+                : '';
+            if (strpos($contentTypeHeader, 'application/vnd.ez.api.ErrorMessage+xml') !== false) {
+                $body = \simplexml_load_string($response->getBody());
                 $errorMessageString = $this->getHttpResponseCodeErrorMessage($body);
-            } elseif (strpos($response->getHeader('Content-Type'), 'application/vnd.ez.api.ErrorMessage+json') !== false) {
-                $body = json_decode($response->getContent());
+            } elseif (strpos($contentTypeHeader, 'application/vnd.ez.api.ErrorMessage+json') !== false) {
+                $body = json_decode($response->getBody());
                 $errorMessageString = $this->getHttpResponseCodeErrorMessage($body->ErrorMessage);
             }
 
@@ -171,10 +211,10 @@ EOF;
         return $errorMessageString;
     }
 
-    protected function assertHttpResponseHasHeader(HttpResponse $response, $header, $expectedValue = null)
+    protected function assertHttpResponseHasHeader(ResponseInterface $response, $header, $expectedValue = null)
     {
-        $headerValue = $response->getHeader($header);
-        self::assertNotNull($headerValue, "Failed asserting that response has a $header header");
+        $headerValue = $response->hasHeader($header) ? $response->getHeader($header)[0] : null;
+        self::assertNotNull($headerValue, "Failed asserting that response has a {$header} header");
         if ($expectedValue !== null) {
             self::assertEquals($expectedValue, $headerValue);
         }
@@ -265,17 +305,21 @@ XML;
      */
     protected function createContent($xml)
     {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/objects', 'ContentCreate+xml', 'Content+json');
-        $request->setContent($xml);
-
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/objects',
+            'ContentCreate+xml',
+            'Content+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
 
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode($response->getBody(), true);
 
         if (!isset($content['Content']['CurrentVersion']['Version'])) {
-            self::fail("Incomplete response (no version):\n" . $response->getContent() . "\n");
+            self::fail("Incomplete response (no version):\n" . $response->getBody() . "\n");
         }
 
         $response = $this->sendHttpRequest(
@@ -284,7 +328,7 @@ XML;
 
         self::assertHttpResponseCodeEquals($response, 204);
 
-        $this->addCreatedElement($content['Content']['_href'], true);
+        $this->addCreatedElement($content['Content']['_href']);
 
         return $content['Content'];
     }
@@ -300,7 +344,7 @@ XML;
             $this->createHttpRequest('GET', "$contentHref/locations", '', 'LocationList+json')
         );
         self::assertHttpResponseCodeEquals($response, 200);
-        $folderLocations = json_decode($response->getContent(), true);
+        $folderLocations = json_decode($response->getBody(), true);
 
         return $folderLocations;
     }
@@ -321,26 +365,29 @@ XML;
      */
     protected function login()
     {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/sessions', 'SessionInput+json', 'Session+json');
-        $this->setSessionInput($request);
+        $request = $this->createAuthenticationHttpRequest($this->getLoginUsername(), $this->getLoginPassword());
         $response = $this->sendHttpRequest($request);
         self::assertHttpResponseCodeEquals($response, 201);
 
-        return json_decode($response->getContent())->Session;
+        return json_decode($response->getBody())->Session;
     }
 
     /**
-     * Sets the request's content to a JSON session creation payload.
+     * @param string $login
+     * @param string $password
+     * @param array $extraHeaders extra [key => value] headers to be passed with the authentication request.
      *
-     * @param HttpRequest $request
-     * @param string $password The password to use in the input. Will use the default one if not set.
-     *
-     * @return string
+     * @return \Psr\Http\Message\RequestInterface
      */
-    protected function setSessionInput(HttpRequest $request, $password = null)
+    protected function createAuthenticationHttpRequest(string $login, string $password, array $extraHeaders = [])
     {
-        $request->setContent(
-            sprintf('{"SessionInput": {"login": "admin", "password": "%s"}}', $password ?: $this->loginPassword)
+        return $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/user/sessions',
+            'SessionInput+json',
+            'Session+json',
+            sprintf('{"SessionInput": {"login": "%s", "password": "%s"}}', $login, $password),
+            $extraHeaders
         );
     }
 }

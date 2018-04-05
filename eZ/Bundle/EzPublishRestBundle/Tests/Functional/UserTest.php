@@ -55,15 +55,15 @@ XML;
             'POST',
             '/api/ezp/v2/user/groups/1/5/subgroups',
             'UserGroupCreate+xml',
-            'UserGroup+json'
+            'UserGroup+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -106,10 +106,9 @@ XML;
             'PATCH',
             $groupHref,
             'UserGroupUpdate+xml',
-            'UserGroup+json'
+            'UserGroup+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -150,15 +149,15 @@ XML;
             'POST',
             "{$userGroupHref}/users",
             'UserCreate+xml',
-            'User+json'
+            'User+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -201,10 +200,9 @@ XML;
             'PATCH',
             $userHref,
             'UserUpdate+xml',
-            'User+json'
+            'User+json',
+            $xml
         );
-        $request->setContent($xml);
-
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -352,10 +350,16 @@ XML;
      */
     public function testMoveUserGroup($groupHref)
     {
-        $request = $this->createHttpRequest('MOVE', $groupHref);
-        $request->addHeader('Destination: /api/ezp/v2/user/groups/1/5/12');
-
+        $request = $this->createHttpRequest(
+            'MOVE',
+            $groupHref,
+            '',
+            '',
+            '',
+            ['Destination' => '/api/ezp/v2/user/groups/1/5/12']
+        );
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 201);
     }
 
@@ -381,15 +385,15 @@ XML;
             'POST',
             '/api/ezp/v2/user/sessions',
             'SessionInput+xml',
-            'Session+json'
+            'Session+json',
+            $xml
         );
-        $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
