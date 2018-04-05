@@ -98,35 +98,36 @@ class EzPublishCoreBundle extends Bundle
         $securityExtension->addSecurityListenerFactory(new HttpBasicFactory());
         $container->addCompilerPass(new TranslationCollectorPass());
         $container->addCompilerPass(new SlugConverterConfigurationPass());
+
+        if (!$container->hasExtension('ezrichtext')) {
+            $this->getContainerExtension()->addConfigParser(new ConfigParser\FieldType\RichText());
+        }
     }
 
     public function getContainerExtension()
     {
         if (!isset($this->extension)) {
-            $this->extension = new EzPublishCoreExtension(
-                array(
-                    // LocationView config parser needs to be specified AFTER ContentView config
-                    // parser since it is used to convert location view override rules to content
-                    // view override rules. If it were specified before, ContentView provider would
-                    // just undo the conversion LocationView did.
-                    new ConfigParser\ContentView(),
-                    new ConfigParser\LocationView(),
-                    new ConfigParser\BlockView(),
-                    new ConfigParser\Common(),
-                    new ConfigParser\Content(),
-                    new ConfigParser\FieldType\RichText(),
-                    new ConfigParser\FieldType\ImageAsset(),
-                    new ConfigParser\FieldTemplates(),
-                    new ConfigParser\FieldEditTemplates(),
-                    new ConfigParser\FieldDefinitionSettingsTemplates(),
-                    new ConfigParser\FieldDefinitionEditTemplates(),
-                    new ConfigParser\Image(),
-                    new ConfigParser\Page(),
-                    new ConfigParser\Languages(),
-                    new ConfigParser\IO(new ComplexSettingParser()),
-                    new ConfigParser\UrlChecker(),
-                )
-            );
+            $this->extension = new EzPublishCoreExtension([
+                // LocationView config parser needs to be specified AFTER ContentView config
+                // parser since it is used to convert location view override rules to content
+                // view override rules. If it were specified before, ContentView provider would
+                // just undo the conversion LocationView did.
+                new ConfigParser\ContentView(),
+                new ConfigParser\LocationView(),
+                new ConfigParser\BlockView(),
+                new ConfigParser\Common(),
+                new ConfigParser\Content(),
+                new ConfigParser\FieldType\ImageAsset(),
+                new ConfigParser\FieldTemplates(),
+                new ConfigParser\FieldEditTemplates(),
+                new ConfigParser\FieldDefinitionSettingsTemplates(),
+                new ConfigParser\FieldDefinitionEditTemplates(),
+                new ConfigParser\Image(),
+                new ConfigParser\Page(),
+                new ConfigParser\Languages(),
+                new ConfigParser\IO(new ComplexSettingParser()),
+                new ConfigParser\UrlChecker(),
+            ]);
         }
 
         return $this->extension;
