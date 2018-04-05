@@ -4,6 +4,8 @@ UPDATE ezsite_data SET value='7.2.0' WHERE name='ezpublish-version';
 
 --
 -- EZP-28950: MySQL UTF8 doesn't support 4-byte chars
+-- This shortens indexes so that 4-byte content can fit.
+-- After running these, convert the table character set, see doc/upgrade/7.2.md
 --
 
 ALTER TABLE `ezprest_authcode` DROP PRIMARY KEY;
