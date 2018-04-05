@@ -23,7 +23,7 @@ class CreateContentDraftSignal extends Signal
     public $contentId;
 
     /**
-     * Version Number.
+     * Original Version Number.
      *
      * @var int
      */
@@ -35,4 +35,11 @@ class CreateContentDraftSignal extends Signal
      * @var mixed
      */
     public $userId;
+
+    /**
+     * Version number of newly created draft.
+     *
+     * @var int
+     */
+    public $newVersionNo;
 }
