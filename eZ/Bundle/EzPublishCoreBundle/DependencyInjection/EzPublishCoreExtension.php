@@ -182,10 +182,16 @@ class EzPublishCoreExtension extends Extension
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     *
+     * @throws \Exception
      */
     private function handleDefaultSettingsLoading(ContainerBuilder $container, FileLoader $loader)
     {
         $loader->load('default_settings.yml');
+
+        if (!array_key_exists('EzPlatformRichTextBundle', $container->getParameter('kernel.bundles'))) {
+            $loader->load('ezrichtext_default_settings.yml');
+        }
 
         foreach ($this->defaultSettingsCollection as $fileLocation => $files) {
             $externalLoader = new Loader\YamlFileLoader($container, new FileLocator($fileLocation));
