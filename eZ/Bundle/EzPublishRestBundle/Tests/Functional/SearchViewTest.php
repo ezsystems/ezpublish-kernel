@@ -44,10 +44,12 @@ class SearchViewTest extends RESTFunctionalTestCase
     /**
      * @dataProvider xmlProvider
      * Covers POST with ContentQuery Logic on /api/ezp/v2/views.
+     *
+     * @param string $xmlQueryBody
+     * @param int $expectedCount
      */
     public function testSimpleContentQuery(string $xmlQueryBody, int $expectedCount)
     {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/views', 'ViewInput+xml; version=1.1', 'ContentInfo+json');
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ViewInput>
@@ -62,12 +64,17 @@ class SearchViewTest extends RESTFunctionalTestCase
 </ContentQuery>
 </ViewInput>
 XML;
-
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/views',
+            'ViewInput+xml; version=1.1',
+            'ContentInfo+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getContent());
+        $jsonResponse = json_decode($response->getBody());
         self::assertEquals($expectedCount, $jsonResponse->View->Result->count);
     }
 
@@ -130,17 +137,18 @@ XML;
             'POST',
             '/api/ezp/v2/content/typegroups/1/types?publish=true',
             'ContentTypeCreate+xml',
-            'ContentType+json'
+            'ContentType+json',
+            $body
         );
-        $request->setContent($body);
         $response = $this->sendHttpRequest($request);
 
-        return $response->getHeader('Location');
+        self::assertHttpResponseHasHeader($response, 'Location');
+
+        return $response->getHeader('Location')[0];
     }
 
     private function createTestContentWithTags(string $name, array $tags): string
     {
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/objects', 'ContentCreate+xml', 'ContentInfo+json');
         $tagsString = implode(',', $tags);
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -173,10 +181,17 @@ XML;
     </fields>
 </ContentCreate>
 XML;
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/objects',
+            'ContentCreate+xml',
+            'ContentInfo+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
-        $href = $response->getHeader('Location');
+
+        self::assertHttpResponseHasHeader($response, 'Location');
+        $href = $response->getHeader('Location')[0];
         $this->sendHttpRequest(
             $this->createHttpRequest('PUBLISH', "$href/versions/1")
         );
