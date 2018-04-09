@@ -11,6 +11,7 @@ use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriter
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use Exception;
 
 /**
  * Cache implementation of PermissionResolver and PermissionCriterionResolver interface.
@@ -39,6 +40,13 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
      * @var int
      */
     private $cacheTTL;
+
+    /**
+     * Counter for the current sudo nesting level {@see sudo()}.
+     *
+     * @var int
+     */
+    private $sudoNestingLevel = 0;
 
     /**
      * Cached value for current user's getCriterion() result.
@@ -99,7 +107,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     {
         // We only cache content/read lookup as those are the once frequently done, and it's only one we can safely
         // do that won't harm the system if it becomes stale (but user might experience permissions exceptions if it do)
-        if ($module !== 'content' || $function !== 'read') {
+        if ($module !== 'content' || $function !== 'read' || $this->sudoNestingLevel > 0) {
             return $this->permissionCriterionResolver->getPermissionsCriterion($module, $function);
         }
 
@@ -121,6 +129,15 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
      */
     public function sudo(\Closure $callback, RepositoryInterface $outerRepository)
     {
-        return $this->permissionResolver->sudo($callback, $outerRepository);
+        ++$this->sudoNestingLevel;
+        try {
+            $returnValue = $this->permissionResolver->sudo($callback, $outerRepository);
+        } catch (Exception $e) {
+            --$this->sudoNestingLevel;
+            throw $e;
+        }
+        --$this->sudoNestingLevel;
+
+        return $returnValue;
     }
 }
