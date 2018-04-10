@@ -4499,4 +4499,84 @@ class SearchServiceTest extends BaseTest
             }
         };
     }
+
+    /**
+     * Test searching using Field Criterion where the given Field Identifier exists in
+     * both searchable and non-searchable Fields.
+     * Number of returned results depends on used storage.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldCriterionForContentsWithIdenticalFieldIdentifiers()
+    {
+        $this->createContentWithFieldType(
+            'url',
+            'title',
+            'foo'
+        );
+        $this->createContentWithFieldType(
+            'string',
+            'title',
+            'foo'
+        );
+        $query = new Query(
+            array(
+                'query' => new Criterion\Field(
+                    'title',
+                    Criterion\Operator::EQ,
+                    'foo'
+                ),
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent($query);
+
+        $this->assertTrue(($result->totalCount === 1 || $result->totalCount === 2));
+    }
+
+    private function createContentWithFieldType(
+        string $fieldType,
+        string $fieldName,
+        string $fieldValue
+    ) {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct($fieldType . uniqid());
+        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->remoteId = $fieldType . '-123';
+        $createStruct->names = ['eng-GB' => $fieldType];
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct($fieldName, 'ez' . $fieldType);
+        $fieldCreate->names = ['eng-GB' => $fieldName];
+        $fieldCreate->fieldGroup = 'main';
+        $fieldCreate->position = 1;
+
+        $createStruct->addFieldDefinition($fieldCreate);
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentGroup]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStruct->remoteId = $fieldType . '-456';
+        $createStruct->alwaysAvailable = false;
+        $createStruct->setField(
+            $fieldName,
+            $fieldValue
+        );
+
+        $draft = $contentService->createContent($createStruct);
+        $content = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
+
+        return $content;
+    }
 }

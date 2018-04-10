@@ -25,10 +25,16 @@ class SearchViewTest extends RESTFunctionalTestCase
      */
     protected $contentHrefList;
 
+    /**
+     * @var string
+     */
+    private $nonSearchableContentHref;
+
     protected function setUp()
     {
         parent::setUp();
         $this->contentTypeHref = $this->createTestContentType();
+        $this->nonSearchableContentHref = $this->createContentWithUrlField();
         $this->contentHrefList[] = $this->createTestContentWithTags('test-name', ['foo', 'bar']);
         $this->contentHrefList[] = $this->createTestContentWithTags('fancy-name', ['baz', 'foobaz']);
         $this->contentHrefList[] = $this->createTestContentWithTags('even-fancier', ['bar', 'bazfoo']);
@@ -39,6 +45,7 @@ class SearchViewTest extends RESTFunctionalTestCase
         parent::tearDown();
         array_map([$this, 'deleteContent'], $this->contentHrefList);
         $this->deleteContent($this->contentTypeHref);
+        $this->deleteContent($this->nonSearchableContentHref);
     }
 
     /**
@@ -305,5 +312,60 @@ XML;
     private function getXmlString(DOMElement $simpleXMLElement): string
     {
         return $simpleXMLElement->ownerDocument->saveXML($simpleXMLElement);
+    }
+
+    /**
+     * This is just to assure that field with same name but without legacy search engine implementation
+     * does not block search in different content type.
+     */
+    private function createContentWithUrlField(): string
+    {
+        $body = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentTypeCreate>
+  <identifier>rich-text-test</identifier>
+  <names>
+    <value languageCode="eng-GB">urlContentType</value>
+  </names>
+  <remoteId>testUrlContentType</remoteId>
+  <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
+  <nameSchema>&lt;title&gt;</nameSchema>
+  <isContainer>true</isContainer>
+  <mainLanguageCode>eng-GB</mainLanguageCode>
+  <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
+  <defaultSortField>PATH</defaultSortField>
+  <defaultSortOrder>ASC</defaultSortOrder>
+  <FieldDefinitions>
+    <FieldDefinition>
+      <identifier>title</identifier>
+      <fieldType>ezurl</fieldType>
+      <fieldGroup>content</fieldGroup>
+      <position>1</position>
+      <isTranslatable>true</isTranslatable>
+      <isRequired>true</isRequired>
+      <isInfoCollector>false</isInfoCollector>
+      <names>
+        <value languageCode="eng-GB">Title</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-GB">This is the title but in url type</value>
+      </descriptions>
+    </FieldDefinition>
+   </FieldDefinitions>
+</ContentTypeCreate>
+XML;
+
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/typegroups/1/types?publish=true',
+            'ContentTypeCreate+xml',
+            'ContentType+json',
+            $body
+        );
+
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseHasHeader($response, 'Location');
+
+        return $response->getHeader('Location')[0];
     }
 }
