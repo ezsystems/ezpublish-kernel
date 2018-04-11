@@ -437,7 +437,9 @@
           <xsl:value-of select="@scope"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+       <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </th>
   </xsl:template>
 
@@ -491,7 +493,9 @@
           <xsl:value-of select="@rowspan"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </td>
   </xsl:template>
 
