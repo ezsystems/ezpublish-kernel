@@ -358,6 +358,12 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="docbook:th/text()">
+    <xsl:call-template name="breakLine">
+      <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="docbook:th">
     <xsl:element name="th" namespace="{$outputNamespace}">
       <xsl:if test="@class">
@@ -419,6 +425,12 @@
       </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="docbook:td/text()">
+    <xsl:call-template name="breakLine">
+      <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="docbook:td">
