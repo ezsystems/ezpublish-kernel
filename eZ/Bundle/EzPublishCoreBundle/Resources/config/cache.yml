@@ -6,6 +6,7 @@ services:
     # in Core configuration, see eZ/Publish/Core/settings/storage_engines/cache.yml for details
     ezpublish.cache_pool:
         class: "%ezpublish.cache_pool.class%"
+        lazy: true
         factory: ["@ezpublish.cache_pool.factory", getCachePool]
         arguments: ["@ezpublish.config.resolver"]
 
