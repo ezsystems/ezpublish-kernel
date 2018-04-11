@@ -897,20 +897,20 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $configuration = [
             'transformation' => 'urlalias_lowercase',
             'separator' => 'dash',
-            'transformationGroups' => [
+            'transformation_groups' => [
                 'urlalias' => [
                     'commands' => [
                         'ascii_lowercase',
                         'cyrillic_lowercase',
                     ],
-                    'cleanupMethod' => 'url_cleanup',
+                    'cleanup_method' => 'url_cleanup',
                 ],
                 'urlalias_compact' => [
                     'commands' => [
                         'greek_normalize',
                         'exta_lowercase',
                     ],
-                    'cleanupMethod' => 'compact_cleanup',
+                    'cleanup_method' => 'compact_cleanup',
                 ],
             ],
         ];

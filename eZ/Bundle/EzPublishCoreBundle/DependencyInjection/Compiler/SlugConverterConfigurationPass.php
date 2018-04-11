@@ -41,11 +41,17 @@ class SlugConverterConfigurationPass implements CompilerPassInterface
 
         $transformationGroups = $parameterConfiguration['transformationGroups'] ?? SlugConverter::DEFAULT_CONFIGURATION['transformationGroups'];
 
-        if (isset($semanticConfiguration['transformationGroups'])) {
+        if (isset($semanticConfiguration['transformation_groups'])) {
             $mergedConfiguration['transformationGroups'] = array_merge_recursive(
                 $transformationGroups,
-                $semanticConfiguration['transformationGroups']
+                $semanticConfiguration['transformation_groups']
             );
+
+            foreach ($semanticConfiguration['transformation_groups'] as $group => $groupConfig) {
+                if (isset($groupConfig['cleanup_method'])) {
+                    $mergedConfiguration['transformationGroups'][$group]['cleanupMethod'] = $groupConfig['cleanup_method'];
+                }
+            }
         }
 
         if (isset($mergedConfiguration['transformation']) &&

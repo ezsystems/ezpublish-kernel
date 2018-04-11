@@ -570,8 +570,7 @@ class EzPublishCoreExtension extends Extension
     private function registerUrlAliasConfiguration(array $config, ContainerBuilder $container)
     {
         if (!isset($config['url_alias'])) {
-            $config['url_alias'] = [];
-            $config['url_alias']['slug_converter_config'] = [];
+            $config['url_alias'] = ['slug_converter_config' => []];
         }
 
         $container->setParameter('ezpublish.url_alias.slug_converter_config', $config['url_alias']['slug_converter_config']);
