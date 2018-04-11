@@ -123,8 +123,6 @@ interface FieldType
     /**
      * Validates a field based on the validator configuration in the field definition.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\SPI\FieldType\Value $value The field value for which an action is performed
      *
