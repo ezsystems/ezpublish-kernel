@@ -58,8 +58,10 @@ services:
             - "%ezpublish.persistence.external_storage_registry.class%"
 
     ezpublish.persistence.slug_converter:
-        class: "%ezpublish.persistence.slug_converter.class%"
-        arguments: ["@ezpublish.api.storage_engine.transformation_processor"]
+        class: '%ezpublish.persistence.slug_converter.class%'
+        arguments:
+            - '@ezpublish.api.storage_engine.transformation_processor'
+            - []
 
     ezpublish.api.storage_engine.transformation_parser:
         class: "%ezpublish.api.storage_engine.transformation_parser.class%"

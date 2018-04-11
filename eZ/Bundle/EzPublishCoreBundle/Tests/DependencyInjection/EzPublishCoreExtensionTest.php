@@ -891,4 +891,39 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $this->container->getParameter($this->extension::RICHTEXT_CUSTOM_TAGS_PARAMETER)
         );
     }
+
+    public function testUrlAliasConfiguration()
+    {
+        $configuration = [
+            'transformation' => 'urlalias_lowercase',
+            'separator' => 'dash',
+            'transformationGroups' => [
+                'urlalias' => [
+                    'commands' => [
+                        'ascii_lowercase',
+                        'cyrillic_lowercase',
+                    ],
+                    'cleanupMethod' => 'url_cleanup',
+                ],
+                'urlalias_compact' => [
+                    'commands' => [
+                        'greek_normalize',
+                        'exta_lowercase',
+                    ],
+                    'cleanupMethod' => 'compact_cleanup',
+                ],
+            ],
+        ];
+        $this->load([
+            'url_alias' => [
+                'slug_converter_config' => $configuration,
+            ],
+        ]);
+        $this->assertTrue($this->container->hasParameter('ezpublish.url_alias.slug_converter_config'));
+        $parsedConfig = $this->container->getParameter('ezpublish.url_alias.slug_converter_config');
+        $this->assertSame(
+            $configuration,
+            $parsedConfig
+        );
+    }
 }

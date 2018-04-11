@@ -62,6 +62,7 @@ class Configuration extends SiteAccessConfiguration
         $this->addPageSection($rootNode);
         $this->addRouterSection($rootNode);
         $this->addRichTextSection($rootNode);
+        $this->addUrlAliasSection($rootNode);
 
         // Delegate SiteAccess config to configuration parsers
         $this->mainConfigParser->addSemanticConfig($this->generateScopeBaseNode($rootNode));
@@ -567,5 +568,51 @@ EOT;
                 ->end()
             ->end()
         ;
+    }
+
+    /**
+     * Define Url Alias Slug converter Semantic Configuration.
+     *
+     * The configuration is available at:
+     * <code>
+     * ezpublish:
+     *     url_alias:
+     *         slug_converter_config:
+     *             transformation: name_of_transformation_group_to_use
+     *             separator:  name_of_separator_to_use
+     *             transformationGroups:
+     *                 transformation_group_name: name of existing or new transformation group
+     *                     commands : [] array of commands which will be added to group
+     *                     cleanupMethod: name_of_cleanup_method
+     * </code>
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
+     *
+     * @return null|\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeBuilder|\Symfony\Component\Config\Definition\Builder\NodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeParentInterface|\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface|\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition
+     */
+    private function addUrlAliasSection(ArrayNodeDefinition $rootNode)
+    {
+        return $rootNode
+            ->children()
+                ->arrayNode('url_alias')
+                    ->children()
+                        ->arrayNode('slug_converter_config')
+                            ->children()
+                                ->scalarNode('transformation')->end()
+                                ->scalarNode('separator')->end()
+                                ->arrayNode('transformationGroups')
+                                    ->arrayPrototype()
+                                        ->children()
+                                            ->arrayNode('commands')
+                                                ->scalarPrototype()->end()
+                                            ->end()
+                                            ->scalarNode('cleanupMethod')->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 }
