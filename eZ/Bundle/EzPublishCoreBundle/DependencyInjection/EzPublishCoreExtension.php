@@ -189,7 +189,7 @@ class EzPublishCoreExtension extends Extension
     {
         $loader->load('default_settings.yml');
 
-        if (!array_key_exists('EzPlatformRichTextBundle', $container->getParameter('kernel.bundles'))) {
+        if (!$this->isRichTextBundleEnabled($container)) {
             $loader->load('ezrichtext_default_settings.yml');
         }
 
@@ -310,6 +310,16 @@ class EzPublishCoreExtension extends Extension
                 $config['ezrichtext']['custom_styles']
             );
         }
+        // keep BC
+        if (!empty($config['ezrichtext']) && $this->isRichTextBundleEnabled($container)) {
+            $container->prependExtensionConfig('ezrichtext', $config['ezrichtext']);
+            if (!empty($config['ezrichtext']['custom_tags']) || !empty($config['ezrichtext']['custom_styles'])) {
+                @trigger_error(
+                    'ezpublish.ezrichtext configuration is deprecated since v7.4, move entire configuration node to ezrichtext extension',
+                    E_USER_DEPRECATED
+                );
+            }
+        }
     }
 
     /**
@@ -367,6 +377,11 @@ class EzPublishCoreExtension extends Extension
         $coreLoader->load('notification.yml');
         $coreLoader->load('user_preference.yml');
 
+        // Load Core RichText settings
+        if (!$this->isRichTextBundleEnabled($container)) {
+            $coreLoader->load('richtext.yml');
+        }
+
         // Public API services
         $loader->load('papi.yml');
 
@@ -375,6 +390,11 @@ class EzPublishCoreExtension extends Extension
 
         // Storage engine
         $loader->load('storage_engines.yml');
+
+        // Load CoreBundle RichText settings
+        if (!$this->isRichTextBundleEnabled($container)) {
+            $loader->load('richtext.yml');
+        }
     }
 
     /**
@@ -604,5 +624,14 @@ class EzPublishCoreExtension extends Extension
         }
 
         $container->setParameter('ezpublish.url_alias.slug_converter', $config['url_alias']['slug_converter']);
+    }
+
+    private function isRichTextBundleEnabled(ContainerBuilder $container)
+    {
+        return $container->hasParameter('kernel.bundles')
+            && array_key_exists(
+                'EzPlatformRichTextBundle',
+                $container->getParameter('kernel.bundles')
+            );
     }
 }

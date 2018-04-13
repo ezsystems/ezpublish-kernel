@@ -1,0 +1,7 @@
+imports:
+    - {resource: richtext/fieldtype_external_storages.yml}
+    - {resource: richtext/fieldtype_services.yml}
+    - {resource: richtext/fieldtypes.yml}
+    - {resource: richtext/indexable_fieldtypes.yml}
+    - {resource: richtext/storage_engines/legacy/external_storage_gateways.yml}
+    - {resource: richtext/storage_engines/legacy/field_value_converters.yml}
