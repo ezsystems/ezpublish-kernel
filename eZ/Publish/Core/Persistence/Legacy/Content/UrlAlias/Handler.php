@@ -843,38 +843,14 @@ class Handler implements UrlAliasHandlerInterface
      */
     private function getLocationEntryInLanguage(array $locationEntries, $languageId)
     {
-        foreach ($locationEntries as $row) {
-            $languageIds = $this->extractLanguageIdsFromMask($row['lang_mask']);
-            if (in_array($languageId, $languageIds)) {
-                return $row;
+        $entries = array_filter(
+            $locationEntries,
+            function (array $row) use ($languageId) {
+                return (bool) ($row['lang_mask'] & $languageId);
             }
-        }
+        );
 
-        return null;
-    }
-
-    /**
-     * Extracts every language Ids contained in $languageMask.
-     *
-     * @param int $languageMask
-     *
-     * @return int[] An array of language IDs
-     */
-    private function extractLanguageIdsFromMask($languageMask)
-    {
-        $exp = 2;
-        $languageIds = [];
-
-        // Decomposition of $languageMask into its binary components.
-        while ($exp <= $languageMask) {
-            if ($languageMask & $exp) {
-                $languageIds[] = $exp;
-            }
-
-            $exp *= 2;
-        }
-
-        return $languageIds;
+        return !empty($entries) ? array_shift($entries) : null;
     }
 
     /**
