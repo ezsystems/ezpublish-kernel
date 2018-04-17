@@ -89,6 +89,7 @@ services:
             - "@ezpublish.image_alias.imagine.cache_resolver"
             - "@liip_imagine.filter.configuration"
             - "@?logger"
+            - '@ezpublish.fieldType.ezimage.io_service'
 
     ezpublish.image_alias.imagine.alias_cleaner:
         class: "%ezpublish.image_alias.imagine.alias_cleaner.class%"

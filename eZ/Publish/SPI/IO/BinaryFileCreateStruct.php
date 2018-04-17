@@ -46,6 +46,13 @@ class BinaryFileCreateStruct
     public $id;
 
     /**
+     * Extra metadata. For instance image width/height attributes.
+     *
+     * @var array
+     */
+    public $extraData;
+
+    /**
      * @var resource
      */
     private $inputStream;

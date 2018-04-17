@@ -71,3 +71,4 @@ services:
 
     ezpublish.fieldType.metadataHandler.imagesize:
         class: "%ezpublish.core.io.metadataHandler.imageSize.class%"
+        arguments: ['@ezpublish.core.io.flysystem.default_filesystem', '@liip_imagine']

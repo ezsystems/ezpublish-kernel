@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read int $mtime File modification time
  * @property-read string $uri HTTP URI to the binary file
  * @property-read int $size File size
+ * @property-read array $extraData Extra metadata of the binary file
  */
 class BinaryFile extends ValueObject
 {
@@ -50,6 +51,13 @@ class BinaryFile extends ValueObject
      * @var string
      */
     protected $uri;
+
+    /**
+     * Extra metadata. For instance image width/height attributes.
+     *
+     * @var array
+     */
+    public $extraData;
 
     /**
      * The file's mime type.

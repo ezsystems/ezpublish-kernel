@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -63,18 +64,25 @@ class AliasGenerator implements VariationHandler
      */
     private $ioResolver;
 
+    /**
+     * @var IOServiceInterface
+     */
+    private $ioService;
+
     public function __construct(
         LoaderInterface $dataLoader,
         FilterManager $filterManager,
         ResolverInterface $ioResolver,
         FilterConfiguration $filterConfiguration,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        IOServiceInterface $ioService
     ) {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
         $this->ioResolver = $ioResolver;
         $this->filterConfiguration = $filterConfiguration;
         $this->logger = $logger;
+        $this->ioService = $ioService;
     }
 
     /**
@@ -118,6 +126,8 @@ class AliasGenerator implements VariationHandler
         }
 
         try {
+            $binaryFilePath = $this->ioResolver->getFilePath($originalPath, $variationName);
+            $binaryFile = $this->ioService->loadBinaryFile($binaryFilePath);
             $aliasInfo = new SplFileInfo(
                 $this->ioResolver->resolve($originalPath, $variationName)
             );
@@ -133,6 +143,8 @@ class AliasGenerator implements VariationHandler
                 'dirPath' => $aliasInfo->getPath(),
                 'uri' => $aliasInfo->getPathname(),
                 'imageId' => $imageValue->imageId,
+                'width' => isset($binaryFile->extraData['width']) ? $binaryFile->extraData['width'] : null,
+                'height' => isset($binaryFile->extraData['height']) ? $binaryFile->extraData['height'] : null,
             )
         );
     }

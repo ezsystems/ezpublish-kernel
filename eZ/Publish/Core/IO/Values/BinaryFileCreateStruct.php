@@ -37,6 +37,13 @@ class BinaryFileCreateStruct extends ValueObject
     public $inputStream;
 
     /**
+     * Extra metadata. For instance image width/height attributes.
+     *
+     * @var array
+     */
+    public $extraData;
+
+    /**
      * The file's mime type
      * If not provided, will be auto-detected by the IOService
      * Example: text/xml.
