@@ -3,6 +3,7 @@ parameters:
 
     ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
     ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
+    ezpublish.image_alias.imagine.alias_generator_decorator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\CachedAliasGeneratorDecorator
     ezpublish.image_alias.imagine.alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
     ezpublish.image_alias.imagine.alias_cleaner.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner
 
@@ -81,6 +82,12 @@ services:
         tags:
             - { name: liip_imagine.cache.resolver, resolver: ezpublish }
 
+    ezpublish.image_alias.imagine.alias_generator_decorator:
+        class: "%ezpublish.image_alias.imagine.alias_generator_decorator.class%"
+        arguments:
+            - "@ezpublish.image_alias.imagine.alias_generator"
+            - "@ezpublish.cache_pool"
+
     ezpublish.image_alias.imagine.alias_generator:
         class: "%ezpublish.image_alias.imagine.alias_generator.class%"
         arguments:
@@ -88,6 +95,7 @@ services:
             - "@liip_imagine.filter.manager"
             - "@ezpublish.image_alias.imagine.cache_resolver"
             - "@liip_imagine.filter.configuration"
+            - "@liip_imagine"
             - "@?logger"
 
     ezpublish.image_alias.imagine.alias_cleaner:
