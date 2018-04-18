@@ -248,3 +248,8 @@ services:
         arguments:
          - '%session.save_path%'
          - 'redis'
+
+    ezplatform.core.command.copy_subtree:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\CopySubtreeCommand
+        autowire: true
+        autoconfigure: true
