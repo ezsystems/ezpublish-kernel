@@ -6,6 +6,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
+use Behat\Symfony2Extension\Context\KernelDictionary;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -16,6 +19,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlConfigurationContext implements Context
 {
+    use KernelDictionary;
+
     private static $platformConfigurationFilePath = 'app/config/ezplatform_behat.yml';
 
     public function addConfiguration(array $configuration)
@@ -30,7 +35,14 @@ class YamlConfigurationContext implements Context
 
         $this->addImportToPlatformYaml($destinationFileName);
 
-        shell_exec('php bin/console --env=behat cache:clear');
+        $application = new Application($this->getKernel());
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'cache:clear',
+        ]);
+
+        $application->run($input);
     }
 
     private function addImportToPlatformYaml($importedFileName)
