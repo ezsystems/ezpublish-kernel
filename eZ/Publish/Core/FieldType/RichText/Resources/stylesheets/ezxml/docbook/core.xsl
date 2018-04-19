@@ -11,6 +11,10 @@
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
+  <xsl:key name="ids" match="//anchor[@name]" use="@name"/>
+  <xsl:key name="ids" match="*[@xhtml:id]" use="@xhtml:id"/>
+  <xsl:key name="ids" match="//embed[@ezlegacytmp-embed-link-id]" use="@ezlegacytmp-embed-link-id"/>
+
   <xsl:template match="custom">
     <xsl:element name="eztemplateinline" namespace="http://docbook.org/ns/docbook">
       <xsl:attribute name="name">
@@ -188,9 +192,16 @@
 
   <xsl:template match="anchor">
     <xsl:element name="anchor" namespace="http://docbook.org/ns/docbook">
-      <xsl:attribute name="xml:id">
-        <xsl:value-of select="@name"/>
-      </xsl:attribute>
+      <xsl:if test="count(key('ids', @name)) = 1">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@name"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="count(key('ids', @name)) &gt; 1">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="concat('duplicated_id_', @name, '_', generate-id(.))"/>
+        </xsl:attribute>
+      </xsl:if>
     </xsl:element>
   </xsl:template>
 
@@ -198,9 +209,16 @@
     <xsl:element name="link" namespace="http://docbook.org/ns/docbook">
       <xsl:call-template name="addLinkAttributes"/>
       <xsl:if test="@xhtml:id">
-        <xsl:attribute name="xml:id">
-          <xsl:value-of select="@xhtml:id"/>
-        </xsl:attribute>
+        <xsl:if test="count(key('ids', @xhtml:id)) = 1">
+          <xsl:attribute name="xml:id">
+            <xsl:value-of select="@xhtml:id"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="count(key('ids', @xhtml:id)) &gt; 1">
+          <xsl:attribute name="xml:id">
+            <xsl:value-of select="concat('duplicated_id_', @xhtml:id, '_', generate-id(.))"/>
+          </xsl:attribute>
+        </xsl:if>
       </xsl:if>
       <xsl:if test="@class">
         <xsl:attribute name="ezxhtml:class">
@@ -511,9 +529,16 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="@xhtml:id">
-        <xsl:attribute name="xml:id">
-          <xsl:value-of select="@xhtml:id"/>
-        </xsl:attribute>
+        <xsl:if test="count(key('ids', @xhtml:id)) = 1">
+          <xsl:attribute name="xml:id">
+            <xsl:value-of select="@xhtml:id"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="count(key('ids', @xhtml:id)) &gt; 1">
+          <xsl:attribute name="xml:id">
+            <xsl:value-of select="concat('duplicated_id_', @xhtml:id, '_', generate-id(.))"/>
+          </xsl:attribute>
+        </xsl:if>
       </xsl:if>
       <xsl:if test="@view">
         <xsl:attribute name="view">
@@ -588,9 +613,16 @@
       </xsl:attribute>
     </xsl:if>
     <xsl:if test="@ezlegacytmp-embed-link-id">
-      <xsl:attribute name="xml:id">
-        <xsl:value-of select="@ezlegacytmp-embed-link-id"/>
-      </xsl:attribute>
+      <xsl:if test="count(key('ids', @ezlegacytmp-embed-link-id)) = 1">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@ezlegacytmp-embed-link-id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="count(key('ids', @ezlegacytmp-embed-link-id)) &gt; 1">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="concat('duplicated_id_', @ezlegacytmp-embed-link-id, '_', generate-id(.))"/>
+        </xsl:attribute>
+      </xsl:if>
     </xsl:if>
     <xsl:if test="@ezlegacytmp-embed-link-class">
       <xsl:attribute name="ezxhtml:class">
