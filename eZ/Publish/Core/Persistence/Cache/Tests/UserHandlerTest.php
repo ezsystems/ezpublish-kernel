@@ -37,6 +37,7 @@ class UserHandlerTest extends AbstractCacheHandlerTest
         $user = new User(['id' => 14]);
         $policy = new Policy(['id' => 13, 'roleId' => 9]);
         $userToken = new User\UserTokenUpdateStruct(['userId' => 14]);
+        $calls = [['locationHandler', Location\Handler::class, 'loadLocationsByContent', [new Location(['id' => '43'])]]];
 
         // string $method, array $arguments, array? $tags, string? $key
         return [
@@ -59,7 +60,7 @@ class UserHandlerTest extends AbstractCacheHandlerTest
             ['updatePolicy', [$policy], ['policy-13', 'role-9']],
             ['deletePolicy', [13, 9], ['policy-13', 'role-9']],
             ['loadPoliciesByUserId', [14]],
-            ['assignRole', [14, 9], ['role-assignment-group-list-14', 'role-assignment-role-list-9']],
+            ['assignRole', [14, 9], ['role-assignment-group-list-14', 'role-assignment-role-list-9', 'location-path-43'], null, $calls],
             ['unassignRole', [14, 9], ['role-assignment-group-list-14', 'role-assignment-role-list-9']],
             ['removeRoleAssignment', [11], ['role-assignment-11']],
         ];
