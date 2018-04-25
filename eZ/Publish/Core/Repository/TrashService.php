@@ -117,8 +117,8 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue('id', $location->id, 'Location');
         }
 
-        if ($this->repository->canUser('content', 'manage_locations', $location->getContentInfo(), $location) !== true) {
-            throw new UnauthorizedException('content', 'manage_locations');
+        if (!$this->repository->canUser('content', 'remove', $location->getContentInfo(), $location)) {
+            throw new UnauthorizedException('content', 'remove');
         }
 
         $this->repository->beginTransaction();
