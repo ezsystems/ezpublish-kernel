@@ -65,7 +65,7 @@ class AliasGenerator implements VariationHandler
     private $ioResolver;
 
     /**
-     * @var IOServiceInterface
+     * @var \eZ\Publish\Core\IO\IOServiceInterface
      */
     private $ioService;
 
@@ -75,7 +75,7 @@ class AliasGenerator implements VariationHandler
         ResolverInterface $ioResolver,
         FilterConfiguration $filterConfiguration,
         LoggerInterface $logger = null,
-        IOServiceInterface $ioService
+        IOServiceInterface $ioService = null
     ) {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
@@ -83,6 +83,13 @@ class AliasGenerator implements VariationHandler
         $this->filterConfiguration = $filterConfiguration;
         $this->logger = $logger;
         $this->ioService = $ioService;
+
+        if ($ioService === null) {
+            @trigger_error(
+                'IOService is missing, variation width and height parameters might not be set',
+                E_USER_WARNING
+            );
+        }
     }
 
     /**
@@ -127,7 +134,9 @@ class AliasGenerator implements VariationHandler
 
         try {
             $binaryFilePath = $this->ioResolver->getFilePath($originalPath, $variationName);
-            $binaryFile = $this->ioService->loadBinaryFile($binaryFilePath);
+            if ($this->ioService) {
+                $binaryFile = $this->ioService->loadBinaryFile($binaryFilePath);
+            }
             $aliasInfo = new SplFileInfo(
                 $this->ioResolver->resolve($originalPath, $variationName)
             );
