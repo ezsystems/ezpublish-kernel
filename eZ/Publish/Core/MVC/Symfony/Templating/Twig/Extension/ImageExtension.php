@@ -52,7 +52,7 @@ class ImageExtension extends Twig_Extension
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variationName
      *
-     * @return \eZ\Publish\SPI\Variation\Values\Variation
+     * @return \eZ\Publish\SPI\Variation\Values\Variation|null
      */
     public function getImageVariation(Field $field, VersionInfo $versionInfo, $variationName)
     {
