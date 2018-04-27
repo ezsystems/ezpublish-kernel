@@ -47,38 +47,58 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
     }
 
     /**
-     * Test for the trash() method.
+     * Test for the trash() method without proper permissions.
      *
-     * @see \eZ\Publish\API\Repository\TrashService::trash()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     *
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @expectedExceptionMessage User does not have access to 'remove' 'content'
      */
     public function testTrashThrowsUnauthorizedException()
     {
         $repository = $this->getRepository();
-
-        $anonymousUserId = $this->generateId('user', 10);
-        /* BEGIN: Inline */
-        // $anonymousUserId is the ID of the "Anonymous" user
-        // remoteId of the "Media" page main location
-        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
-
-        $userService = $repository->getUserService();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        // Load "Media" page location
+        // Load "Media" page location to be trashed
         $mediaLocation = $locationService->loadLocationByRemoteId(
-            $mediaRemoteId
+            '75c715a51699d2d309a924eca6a95145'
         );
 
-        // Set "Anonymous" as current user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
-
-        // This call will fail with an "UnauthorizedException"
+        // switch user context before testing TrashService::trash method
+        $repository->getPermissionResolver()->setCurrentUserReference(
+            $this->createUserWithPolicies('trash_test_user', [])
+        );
         $trashService->trash($mediaLocation);
-        /* END: Inline */
+    }
+
+    /**
+     * Test for the trash() method with proper minimal permission set.
+     *
+     * @depends testTrashThrowsUnauthorizedException
+     *
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     */
+    public function testTrashRequiresContentRemovePolicy()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+
+        // Load "Media" page location to be trashed
+        $mediaLocation = $locationService->loadLocationByRemoteId(
+            '75c715a51699d2d309a924eca6a95145'
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference(
+            $this->createUserWithPolicies(
+                'trash_test_user',
+                [
+                    ['module' => 'content', 'function' => 'remove'],
+                ]
+            )
+        );
+        $trashService->trash($mediaLocation);
     }
 
     /**

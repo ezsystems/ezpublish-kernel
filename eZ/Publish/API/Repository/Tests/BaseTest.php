@@ -548,6 +548,46 @@ abstract class BaseTest extends TestCase
     }
 
     /**
+     * Create user and assign new role with the given policies.
+     *
+     * @param string $login
+     * @param array $policiesData list of policies in the form of <code>[ [ 'module' => 'name', 'function' => 'name'] ]</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \Exception
+     */
+    public function createUserWithPolicies($login, array $policiesData)
+    {
+        $repository = $this->getRepository(false);
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        $repository->beginTransaction();
+        try {
+            $userCreateStruct = $userService->newUserCreateStruct(
+                $login,
+                "{$login}@test.local",
+                $login,
+                'eng-GB'
+            );
+            $userCreateStruct->setField('first_name', $login);
+            $userCreateStruct->setField('last_name', $login);
+            $user = $userService->createUser($userCreateStruct, [$userService->loadUserGroup(4)]);
+
+            $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_'), $policiesData);
+            $roleService->assignRoleToUser($role, $user);
+
+            $repository->commit();
+
+            return $user;
+        } catch (\Exception $ex) {
+            $repository->rollback();
+            throw $ex;
+        }
+    }
+
+    /**
      * Traverse all errors for all fields in all Translations to find expected one.
      *
      * @param \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException $exception
