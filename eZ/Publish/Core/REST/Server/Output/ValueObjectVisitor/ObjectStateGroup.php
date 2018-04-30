@@ -36,7 +36,7 @@ class ObjectStateGroup extends ValueObjectVisitor
 
     protected function visitObjectStateGroupAttributes(Visitor $visitor, Generator $generator, ObjectStateGroupValue $data)
     {
-       $generator->startAttribute(
+        $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadObjectStateGroup', array('objectStateGroupId' => $data->id))
         );

@@ -37,7 +37,7 @@ class Policy extends ValueObjectVisitor
 
     protected function visitPolicyAttributes(Visitor $visitor, Generator $generator, PolicyValue $data)
     {
-       $generator->startAttribute(
+        $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadPolicy', array('roleId' => $data->roleId, 'policyId' => $data->id))
         );
