@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use \eZ\Publish\API\Repository\Values\User\Role as RoleValue;
 
 /**
  * Role value object visitor.
@@ -30,7 +31,12 @@ class Role extends ValueObjectVisitor
         $generator->startObjectElement('Role');
         $visitor->setHeader('Content-Type', $generator->getMediaType($data instanceof RoleDraft ? 'RoleDraft' : 'Role'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('RoleInput'));
+        $this->visitRoleAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('Role');
+    }
 
+    protected function visitRoleAttributes(Visitor $visitor, Generator $generator, RoleValue $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadRole', array('roleId' => $data->id))
@@ -47,7 +53,5 @@ class Role extends ValueObjectVisitor
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Policies');
-
-        $generator->endObjectElement('Role');
     }
 }
