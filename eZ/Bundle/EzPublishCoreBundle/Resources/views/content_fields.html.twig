@@ -422,8 +422,8 @@
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
     {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
-    {% set width = parameters.width is defined ? parameters.width : imageAlias.width %}
-    {% set height = parameters.height is defined ? parameters.height : imageAlias.height %}
+    {% set width = parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : '') %}
+    {% set height = parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : '') %}
     <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %} class="{{ parameters.class }}"{% endif %} />
 </figure>
 {% endif %}
