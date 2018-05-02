@@ -27,7 +27,7 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      * @param array|null $tags
      * @param string|null $key
      */
-    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, string $key = null, array $additionalCalls = [])
+    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, string $key = null)
     {
         $handlerMethodName = $this->getHandlerMethodName();
 
@@ -59,19 +59,6 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
             $this->cacheMock
                 ->expects($this->never())
                 ->method($this->anything());
-        }
-
-        foreach ($additionalCalls as $additionalCall) {
-            $innerHandlerMock = $this->createMock($additionalCall[1]);
-            $this->persistenceHandlerMock
-                ->expects($this->once())
-                ->method($additionalCall[0])
-                ->willReturn($innerHandlerMock);
-
-            $innerHandlerMock
-                ->expects($this->once())
-                ->method($additionalCall[2])
-                ->willReturn($additionalCall[3]);
         }
 
         $handler = $this->persistenceCacheHandler->$handlerMethodName();
