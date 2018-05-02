@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\API\Repository\Values\User\Role as RoleValue;
 
 /**
  * Role value object visitor.
