@@ -37,8 +37,10 @@ class VersionTranslationInfo extends ValueObjectVisitor
         $generator->endObjectElement('VersionTranslationInfo');
     }
 
-    protected function visitVersionTranslationInfoAttributes(Visitor $visitor, Generator $generator, VersionTranslationInfoValue $versionInfo)
+    protected function visitVersionTranslationInfoAttributes(Visitor $visitor, Generator $generator, VersionTranslationInfoValue $versionTranslationInfo)
     {
+        $versionInfo = $versionTranslationInfo->getVersionInfo();
+
         // single language-independent conditions for deleting Translation
         $canDelete = count($versionInfo->languageCodes) >= 2 && $versionInfo->isDraft();
 
