@@ -35,7 +35,7 @@ class Role extends ValueObjectVisitor
         $generator->endObjectElement('Role');
     }
 
-    protected function visitRoleAttributes(Visitor $visitor, Generator $generator, RoleValue $data)
+    protected function visitRoleAttributes(Visitor $visitor, Generator $generator, $data)
     {
         $generator->startAttribute(
             'href',
