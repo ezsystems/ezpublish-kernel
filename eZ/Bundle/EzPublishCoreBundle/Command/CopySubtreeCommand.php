@@ -130,13 +130,10 @@ class CopySubtreeCommand extends Command
         $sourceLocation = $this->locationService->loadLocation($sourceLocationId);
         $targetLocation = $this->locationService->loadLocation($targetLocationId);
 
-        $sourceContentType = $this->contentTypeService->loadContentType(
-            $sourceLocation->getContentInfo()->contentTypeId
-        );
-        if (!$sourceContentType->isContainer) {
+        if (stripos($targetLocation->pathString, $sourceLocation->pathString) !== false) {
             throw new InvalidArgumentException(
-                'source-location-id',
-                'Cannot copy subtree of non container location'
+                'target-location-id',
+                'Target parent location is a sub location of the source subtree'
             );
         }
 
