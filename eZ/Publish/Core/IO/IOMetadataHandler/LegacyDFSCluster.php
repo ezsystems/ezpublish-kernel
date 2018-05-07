@@ -13,7 +13,6 @@ use eZ\Publish\Core\IO\IOMetadataHandler;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\UrlDecorator;
@@ -71,11 +70,11 @@ class LegacyDFSCluster implements IOMetadataHandler
              **/
             $stmt = $this->db->prepare(<<<SQL
 INSERT INTO ezdfsfile
-  (name, name_hash, name_trunk, mtime, size, scope, datatype)
-  VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype)
+  (name, name_hash, name_trunk, mtime, size, scope, datatype, extra_data)
+  VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype, :extra_data)
 ON DUPLICATE KEY UPDATE
   datatype=VALUES(datatype), scope=VALUES(scope), size=VALUES(size),
-  mtime=VALUES(mtime)
+  mtime=VALUES(mtime), extra_data=VALUES(extra_data)
 SQL
             );
             $stmt->bindValue('name', $path);
@@ -85,6 +84,7 @@ SQL
             $stmt->bindValue('size', $binaryFileCreateStruct->size);
             $stmt->bindValue('scope', $this->getScope($binaryFileCreateStruct));
             $stmt->bindValue('datatype', $binaryFileCreateStruct->mimeType);
+            $stmt->bindValue('extra_data', json_encode($binaryFileCreateStruct->extraData));
             $stmt->execute();
         } catch (DBALException $e) {
             throw new RuntimeException("A DBAL error occured while writing $path", 0, $e);
@@ -99,6 +99,7 @@ SQL
      * @throws BinaryFileNotFoundException If $spiBinaryFileId is not found
      *
      * @param string $spiBinaryFileId
+     * @throws DBALException Any unhandled DBAL exception
      */
     public function delete($spiBinaryFileId)
     {
@@ -147,7 +148,6 @@ SQL
      *
      * @param string $spiBinaryFileId
      *
-     * @throws NotFoundException
      * @throws DBALException Any unhandled DBAL exception
      *
      * @return bool
@@ -272,6 +272,7 @@ SQL
         $spiBinaryFile->size = $properties['size'];
         $spiBinaryFile->mtime = new DateTime('@' . $properties['mtime']);
         $spiBinaryFile->mimeType = $properties['datatype'];
+        $spiBinaryFile->extraData = json_decode($properties['extra_data'], true);
 
         return $spiBinaryFile;
     }
@@ -288,6 +289,7 @@ SQL
         $spiBinaryFile->mtime = $binaryFileCreateStruct->mtime;
         $spiBinaryFile->size = $binaryFileCreateStruct->size;
         $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
+        $spiBinaryFile->extraData = $binaryFileCreateStruct->extraData;
 
         return $spiBinaryFile;
     }

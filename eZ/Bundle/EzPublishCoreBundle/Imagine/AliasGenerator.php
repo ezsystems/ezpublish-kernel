@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -63,18 +64,32 @@ class AliasGenerator implements VariationHandler
      */
     private $ioResolver;
 
+    /**
+     * @var \eZ\Publish\Core\IO\IOServiceInterface
+     */
+    private $ioService;
+
     public function __construct(
         LoaderInterface $dataLoader,
         FilterManager $filterManager,
         ResolverInterface $ioResolver,
         FilterConfiguration $filterConfiguration,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        IOServiceInterface $ioService = null
     ) {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
         $this->ioResolver = $ioResolver;
         $this->filterConfiguration = $filterConfiguration;
         $this->logger = $logger;
+        $this->ioService = $ioService;
+
+        if ($ioService === null) {
+            @trigger_error(
+                'IOService is missing, variation width and height parameters might not be set',
+                E_USER_WARNING
+            );
+        }
     }
 
     /**
@@ -118,6 +133,10 @@ class AliasGenerator implements VariationHandler
         }
 
         try {
+            $binaryFilePath = $this->ioResolver->getFilePath($originalPath, $variationName);
+            if ($this->ioService) {
+                $binaryFile = $this->ioService->loadBinaryFile($binaryFilePath);
+            }
             $aliasInfo = new SplFileInfo(
                 $this->ioResolver->resolve($originalPath, $variationName)
             );
@@ -133,6 +152,8 @@ class AliasGenerator implements VariationHandler
                 'dirPath' => $aliasInfo->getPath(),
                 'uri' => $aliasInfo->getPathname(),
                 'imageId' => $imageValue->imageId,
+                'width' => isset($binaryFile->extraData['width']) ? $binaryFile->extraData['width'] : null,
+                'height' => isset($binaryFile->extraData['height']) ? $binaryFile->extraData['height'] : null,
             )
         );
     }

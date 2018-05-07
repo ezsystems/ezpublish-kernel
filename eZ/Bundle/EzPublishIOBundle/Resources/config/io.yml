@@ -136,12 +136,14 @@ services:
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - ~
+            - ~
 
     # Default flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem.default:
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
+            - '@ezpublish.fieldType.metadataHandler.imagesize'
 
     # Base service for flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem:

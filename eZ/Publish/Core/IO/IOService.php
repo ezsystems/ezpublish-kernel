@@ -237,6 +237,7 @@ class IOService implements IOServiceInterface
         $spiBinaryCreateStruct->setInputStream($binaryFileCreateStruct->inputStream);
         $spiBinaryCreateStruct->mimeType = $binaryFileCreateStruct->mimeType;
         $spiBinaryCreateStruct->mtime = new \DateTime();
+        $spiBinaryCreateStruct->extraData = $binaryFileCreateStruct->extraData;
 
         return $spiBinaryCreateStruct;
     }
@@ -257,6 +258,7 @@ class IOService implements IOServiceInterface
                 'id' => $this->removeUriPrefix($spiBinaryFile->id),
                 'uri' => $spiBinaryFile->uri,
                 'mimeType' => $spiBinaryFile->mimeType ?: $this->metadataHandler->getMimeType($spiBinaryFile->id),
+                'extraData' => $spiBinaryFile->extraData,
             )
         );
     }

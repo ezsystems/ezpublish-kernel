@@ -34,6 +34,7 @@ services:
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
+            - '@ezpublish.fieldType.metadataHandler.imagesize'
 
     # binarydata handlers
     ezpublish.core.io.binarydata_handler:

@@ -46,6 +46,13 @@ class BinaryFile
     public $uri;
 
     /**
+     * Extra metadata. For instance image width/height attributes.
+     *
+     * @var array
+     */
+    public $extraData;
+
+    /**
      * The file's mime type.
      *
      * Example: text/xml

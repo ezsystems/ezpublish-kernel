@@ -9,18 +9,49 @@
 namespace eZ\Publish\Core\IO\MetadataHandler;
 
 use eZ\Publish\Core\IO\MetadataHandler;
+use Imagine\Exception\RuntimeException;
+use Imagine\Image\ImagineInterface;
+use League\Flysystem\FileNotFoundException;
+use League\Flysystem\FilesystemInterface;
 
 class ImageSize implements MetadataHandler
 {
+    /**
+     * @var FilesystemInterface
+     */
+    private $filesystem;
+
+    /**
+     * @var ImagineInterface
+     */
+    private $imagine;
+
+    public function __construct(FilesystemInterface $filesystem, ImagineInterface $imagine)
+    {
+        $this->filesystem = $filesystem;
+        $this->imagine = $imagine;
+    }
+
+    /**
+     * Extract file metadata.
+     *
+     * @param string $filePath
+     * @return array
+     */
     public function extract($filePath)
     {
-        $metadata = getimagesize($filePath);
+        try {
+            $imageAsString = $this->filesystem->read($filePath);
+            $imageSize = $this->imagine->load($imageAsString)->getSize();
+        } catch (FileNotFoundException $e) {
+            return [];
+        } catch (RuntimeException $e) {
+            return [];
+        }
 
-        return array(
-            'width' => $metadata[0],
-            'height' => $metadata[1],
-            // required until a dedicated mimetype metadata handler is added
-            'mime' => $metadata['mime'],
-        );
+        return [
+            'width' => $imageSize->getWidth(),
+            'height' => $imageSize->getHeight(),
+        ];
     }
 }

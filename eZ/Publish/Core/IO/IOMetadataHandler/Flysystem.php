@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\IO\IOMetadataHandler;
 use DateTime;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOMetadataHandler;
+use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use League\Flysystem\FileNotFoundException;
@@ -21,9 +22,15 @@ class Flysystem implements IOMetadataHandler
     /** @var FilesystemInterface */
     private $filesystem;
 
-    public function __construct(FilesystemInterface $filesystem)
+    /**
+     * @var MetadataHandler
+     */
+    private $metadataHandler;
+
+    public function __construct(FilesystemInterface $filesystem, MetadataHandler $metadataHandler)
     {
         $this->filesystem = $filesystem;
+        $this->metadataHandler = $metadataHandler;
     }
 
     /**
@@ -60,6 +67,8 @@ class Flysystem implements IOMetadataHandler
         if (isset($info['timestamp'])) {
             $spiBinaryFile->mtime = new DateTime('@' . $info['timestamp']);
         }
+
+        $spiBinaryFile->extraData = $this->metadataHandler->extract($spiBinaryFileId);
 
         return $spiBinaryFile;
     }
