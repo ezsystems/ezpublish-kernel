@@ -580,10 +580,10 @@ EOT;
      *         slug_converter_config:
      *             transformation: name_of_transformation_group_to_use
      *             separator:  name_of_separator_to_use
-     *             transformationGroups:
+     *             transformation_groups:
      *                 transformation_group_name: name of existing or new transformation group
      *                     commands : [] array of commands which will be added to group
-     *                     cleanupMethod: name_of_cleanup_method
+     *                     cleanup_method: name_of_cleanup_method
      * </code>
      * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
      *
