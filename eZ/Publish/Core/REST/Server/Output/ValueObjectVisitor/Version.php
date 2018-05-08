@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
 use eZ\Publish\Core\REST\Server\Values\RelationList as RelationListValue;
+use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
@@ -43,48 +44,11 @@ class Version extends ValueObjectVisitor
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $content = $data->content;
-
-        $versionInfo = $content->getVersionInfo();
-        $contentType = $data->contentType;
-
         $generator->startObjectElement('Version');
 
         $visitor->setHeader('Content-Type', $generator->getMediaType('Version'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('VersionUpdate'));
-
-        $path = $data->path;
-        if ($path == null) {
-            $path = $this->router->generate(
-                'ezpublish_rest_loadContentInVersion',
-                array(
-                    'contentId' => $content->id,
-                    'versionNumber' => $versionInfo->versionNo,
-                )
-            );
-        }
-
-        $generator->startAttribute('href', $path);
-        $generator->endAttribute('href');
-
-        $visitor->visitValueObject($versionInfo);
-
-        $generator->startHashElement('Fields');
-        $generator->startList('field');
-        foreach ($content->getFields() as $field) {
-            $this->visitField($generator, $contentType, $field);
-        }
-        $generator->endList('field');
-        $generator->endHashElement('Fields');
-
-        $visitor->visitValueObject(
-            new RelationListValue(
-                $data->relations,
-                $content->id,
-                $versionInfo->versionNo
-            )
-        );
-
+        $this->visitVersionAttributes($visitor, $generator, $data);
         $generator->endObjectElement('Version');
     }
 
@@ -118,5 +82,45 @@ class Version extends ValueObjectVisitor
         );
 
         $generator->endHashElement('field');
+    }
+
+    protected function visitVersionAttributes(Visitor $visitor, Generator $generator, VersionValue $data)
+    {
+        $content = $data->content;
+
+        $versionInfo = $content->getVersionInfo();
+        $contentType = $data->contentType;
+
+        $path = $data->path;
+        if ($path == null) {
+            $path = $this->router->generate(
+                'ezpublish_rest_loadContentInVersion',
+                array(
+                    'contentId' => $content->id,
+                    'versionNumber' => $versionInfo->versionNo,
+                )
+            );
+        }
+
+        $generator->startAttribute('href', $path);
+        $generator->endAttribute('href');
+
+        $visitor->visitValueObject($versionInfo);
+
+        $generator->startHashElement('Fields');
+        $generator->startList('field');
+        foreach ($content->getFields() as $field) {
+            $this->visitField($generator, $contentType, $field);
+        }
+        $generator->endList('field');
+        $generator->endHashElement('Fields');
+
+        $visitor->visitValueObject(
+            new RelationListValue(
+                $data->relations,
+                $content->id,
+                $versionInfo->versionNo
+            )
+        );
     }
 }

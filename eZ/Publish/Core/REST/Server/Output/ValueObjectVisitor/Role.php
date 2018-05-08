@@ -30,7 +30,12 @@ class Role extends ValueObjectVisitor
         $generator->startObjectElement('Role');
         $visitor->setHeader('Content-Type', $generator->getMediaType($data instanceof RoleDraft ? 'RoleDraft' : 'Role'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('RoleInput'));
+        $this->visitRoleAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('Role');
+    }
 
+    protected function visitRoleAttributes(Visitor $visitor, Generator $generator, $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadRole', array('roleId' => $data->id))
@@ -47,7 +52,5 @@ class Role extends ValueObjectVisitor
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Policies');
-
-        $generator->endObjectElement('Role');
     }
 }
