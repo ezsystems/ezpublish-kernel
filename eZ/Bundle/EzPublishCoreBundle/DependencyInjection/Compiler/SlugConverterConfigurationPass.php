@@ -27,7 +27,7 @@ class SlugConverterConfigurationPass implements CompilerPassInterface
         $slugConverterDefinition = $container->getDefinition('ezpublish.persistence.slug_converter');
 
         $parameterConfiguration = $slugConverterDefinition->getArgument(1);
-        $semanticConfiguration = $container->getParameter('ezpublish.url_alias.slug_converter_config');
+        $semanticConfiguration = $container->getParameter('ezpublish.url_alias.slug_converter');
 
         $mergedConfiguration = $parameterConfiguration;
 

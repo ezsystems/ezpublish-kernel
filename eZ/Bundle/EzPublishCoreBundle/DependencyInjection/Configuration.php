@@ -577,7 +577,7 @@ EOT;
      * <code>
      * ezpublish:
      *     url_alias:
-     *         slug_converter_config:
+     *         slug_converter:
      *             transformation: name_of_transformation_group_to_use
      *             separator:  name_of_separator_to_use
      *             transformation_groups:
@@ -585,9 +585,10 @@ EOT;
      *                     commands : [] array of commands which will be added to group
      *                     cleanup_method: name_of_cleanup_method
      * </code>
+     *
      * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
      *
-     * @return null|\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeBuilder|\Symfony\Component\Config\Definition\Builder\NodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeParentInterface|\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface|\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
      */
     private function addUrlAliasSection(ArrayNodeDefinition $rootNode)
     {
@@ -595,7 +596,7 @@ EOT;
             ->children()
                 ->arrayNode('url_alias')
                     ->children()
-                        ->arrayNode('slug_converter_config')
+                        ->arrayNode('slug_converter')
                             ->children()
                                 ->scalarNode('transformation')->end()
                                 ->scalarNode('separator')->end()
