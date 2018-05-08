@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Values\VersionTranslationInfo as VersionTranslationInfoValue;
 use eZ\Publish\API\Repository\Values;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as VersionInfoValue;
+use RuntimeException;
 
 /**
  * VersionInfo value object visitor.
@@ -55,7 +56,7 @@ class VersionInfo extends ValueObjectVisitor
         }
 
         // @todo FIXME: What exception to use?
-        throw new \Exception('Undefined version status: ' . $status);
+        throw new RuntimeException('Undefined version status: ' . $status);
     }
 
     protected function visitVersionInfoAttributes(Visitor $visitor, Generator $generator, VersionInfoValue $versionInfo)
