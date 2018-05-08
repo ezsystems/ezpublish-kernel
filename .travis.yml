@@ -60,6 +60,7 @@ branches:
   only:
     - master
     - /^\d.\d+$/
+    - add-travis-notifications
 
 # setup requirements for running unit/integration/behat tests
 before_script:
