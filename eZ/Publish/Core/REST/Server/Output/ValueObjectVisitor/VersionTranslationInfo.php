@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\VersionTranslationInfo as VersionTranslationInfoValue;
 
 /**
  * Version value object visitor.
@@ -32,6 +33,13 @@ class VersionTranslationInfo extends ValueObjectVisitor
         }
 
         $generator->startObjectElement('VersionTranslationInfo');
+        $this->visitVersionTranslationInfoAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('VersionTranslationInfo');
+    }
+
+    protected function visitVersionTranslationInfoAttributes(Visitor $visitor, Generator $generator, VersionTranslationInfoValue $versionTranslationInfo)
+    {
+        $versionInfo = $versionTranslationInfo->getVersionInfo();
 
         // single language-independent conditions for deleting Translation
         $canDelete = count($versionInfo->languageCodes) >= 2 && $versionInfo->isDraft();
@@ -62,7 +70,5 @@ class VersionTranslationInfo extends ValueObjectVisitor
             $generator->endHashElement('Language');
         }
         $generator->endList('Language');
-
-        $generator->endObjectElement('VersionTranslationInfo');
     }
 }

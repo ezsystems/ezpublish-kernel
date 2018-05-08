@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\SPI\Variation\Values\ImageVariation as ImageVariationValue;
 
 class ImageVariation extends ValueObjectVisitor
 {
@@ -20,6 +21,12 @@ class ImageVariation extends ValueObjectVisitor
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
         $generator->startObjectElement('ContentImageVariation');
+        $this->visitImageVariationAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('ContentImageVariation');
+    }
+
+    protected function visitImageVariationAttributes(Visitor $visitor, Generator $generator, ImageVariationValue $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate(
@@ -54,7 +61,5 @@ class ImageVariation extends ValueObjectVisitor
             $generator->startValueElement('fileSize', $data->fileSize);
             $generator->endValueElement('fileSize');
         }
-
-        $generator->endObjectElement('ContentImageVariation');
     }
 }

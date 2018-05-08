@@ -28,7 +28,6 @@ class Trash extends ValueObjectVisitor
     {
         $generator->startObjectElement('Trash');
         $visitor->setHeader('Content-Type', $generator->getMediaType('Trash'));
-
         $generator->startAttribute('href', $data->path);
         $generator->endAttribute('href');
 
@@ -39,7 +38,6 @@ class Trash extends ValueObjectVisitor
         }
 
         $generator->endList('TrashItem');
-
         $generator->endObjectElement('Trash');
     }
 }
