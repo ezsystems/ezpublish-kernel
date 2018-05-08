@@ -2329,6 +2329,36 @@ class RoleServiceTest extends BaseTest
     /**
      * Test for the assignRoleToUserGroup() method.
      *
+     * Related issue: EZP-29113
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup()
+     */
+    public function testAssignRoleToUserGroupAffectsRoleAssignmentsForUser()
+    {
+        $roleService = $this->getRepository()->getRoleService();
+
+        /* BEGIN: Use Case */
+        $userGroup = $this->createUserGroupVersion1();
+        $user = $this->createUser('user', 'John', 'Doe', $userGroup);
+
+        $initRoleAssignments = $roleService->getRoleAssignmentsForUser($user, true);
+
+        // Load the existing "Administrator" role
+        $role = $roleService->loadRoleByIdentifier('Administrator');
+
+        // Assign the "Administrator" role to the newly created user group
+        $roleService->assignRoleToUserGroup($role, $userGroup);
+
+        $updatedRoleAssignments = $roleService->getRoleAssignmentsForUser($user, true);
+        /* END: Use Case */
+
+        $this->assertEmpty($initRoleAssignments);
+        $this->assertEquals(1, count($updatedRoleAssignments));
+    }
+
+    /**
+     * Test for the assignRoleToUserGroup() method.
+     *
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */

@@ -458,7 +458,13 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $this->logger->logCall(__METHOD__, array('group' => $contentId, 'role' => $roleId, 'limitation' => $limitation));
         $return = $this->persistenceHandler->userHandler()->assignRole($contentId, $roleId, $limitation);
 
-        $this->cache->invalidateTags(['role-assignment-group-list-' . $contentId, 'role-assignment-role-list-' . $roleId]);
+        $tags = ['role-assignment-group-list-' . $contentId, 'role-assignment-role-list-' . $roleId];
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId);
+        foreach ($locations as $location) {
+            $tags[] = 'location-path-' . $location->id;
+        }
+
+        $this->cache->invalidateTags($tags);
 
         return $return;
     }
