@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\TransformationProcessor;
  */
 class SlugConverter
 {
-    protected $configuration = array(
+    const DEFAULT_CONFIGURATION = array(
         'wordSeparatorName' => 'dash',
         'urlAliasNameLimit' => 255,
         'transformation' => 'urlalias',
@@ -104,6 +104,44 @@ class SlugConverter
                 ),
                 'cleanupMethod' => 'url_cleanup_compat',
             ),
+            'urlalias_lowercase' => array(
+                'commands' => array(
+                    'ascii_lowercase',
+                    'cyrillic_lowercase',
+                    'greek_lowercase',
+                    'latin1_lowercase',
+                    'latin-exta_lowercase',
+                    'latin_lowercase',
+
+                    'space_normalize',
+                    'hyphen_normalize',
+                    'apostrophe_normalize',
+                    'doublequote_normalize',
+                    'greek_normalize',
+                    'endline_search_normalize',
+                    'tab_search_normalize',
+                    'specialwords_search_normalize',
+
+                    'apostrophe_to_doublequote',
+                    'math_to_ascii',
+                    'inverted_to_normal',
+
+                    'special_decompose',
+                    'latin_search_decompose',
+
+                    'cyrillic_transliterate_ascii',
+                    'greek_transliterate_ascii',
+                    'hebrew_transliterate_ascii',
+                    'latin1_transliterate_ascii',
+                    'latin-exta_transliterate_ascii',
+
+                    'cyrillic_diacritical',
+                    'greek_diacritical',
+                    'latin1_diacritical',
+                    'latin-exta_diacritical',
+                ),
+                'cleanupMethod' => 'url_cleanup',
+            ),
         ),
         'reservedNames' => array(
             'class',
@@ -143,15 +181,22 @@ class SlugConverter
     protected $transformationProcessor;
 
     /**
+     * @var array
+     */
+    protected $configuration;
+
+    /**
      * Creates a new URL slug converter.
      *
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      * @param array $configuration
      */
-    public function __construct(TransformationProcessor $transformationProcessor, array $configuration = array())
-    {
+    public function __construct(
+        TransformationProcessor $transformationProcessor,
+        array $configuration = array()
+    ) {
         $this->transformationProcessor = $transformationProcessor;
-        $this->configuration = $configuration + $this->configuration;
+        $this->configuration = $configuration + self::DEFAULT_CONFIGURATION;
     }
 
     /**

@@ -111,6 +111,7 @@ class EzPublishCoreExtension extends Extension
         $this->registerImageMagickConfiguration($config, $container);
         $this->registerPageConfiguration($config, $container);
         $this->registerRichTextConfiguration($config, $container);
+        $this->registerUrlAliasConfiguration($config, $container);
 
         // Routing
         $this->handleRouting($config, $container, $loader);
@@ -560,5 +561,18 @@ class EzPublishCoreExtension extends Extension
     public function addSiteAccessConfigurationFilter(SiteAccessConfigurationFilter $filter)
     {
         $this->siteaccessConfigurationFilters[] = $filter;
+    }
+
+    /**
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    private function registerUrlAliasConfiguration(array $config, ContainerBuilder $container)
+    {
+        if (!isset($config['url_alias'])) {
+            $config['url_alias'] = ['slug_converter' => []];
+        }
+
+        $container->setParameter('ezpublish.url_alias.slug_converter', $config['url_alias']['slug_converter']);
     }
 }
