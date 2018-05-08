@@ -503,7 +503,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="embed | embed-inline">
+  <xsl:template match="embed[@node_id|@object_id] | embed-inline[@node_id|@object_id]">
     <xsl:variable name="embedname">
       <xsl:choose>
         <xsl:when test="local-name() = 'embed-inline'">
@@ -526,11 +526,6 @@
             <xsl:value-of select="concat( 'ezcontent://', @object_id )"/>
           </xsl:attribute>
         </xsl:when>
-        <xsl:otherwise>
-          <xsl:message terminate="yes">
-            Unhandled link type
-          </xsl:message>
-        </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="@xhtml:id">
         <xsl:choose>
