@@ -55,7 +55,6 @@ class VersionInfo extends ValueObjectVisitor
                 return 'ARCHIVED';
         }
 
-        // @todo FIXME: What exception to use?
         throw new RuntimeException('Undefined version status: ' . $status);
     }
 
