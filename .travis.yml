@@ -60,6 +60,7 @@ branches:
   only:
     - master
     - /^\d.\d+$/
+    - add-travis-notifications
 
 # setup requirements for running unit/integration/behat tests
 before_script:
@@ -79,10 +80,14 @@ script:
   - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/behat $BEHAT_OPTS" ; fi
   - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"  ; fi
 
-# disable mail notifications
 notifications:
-  email: false
-
+  slack:
+    rooms:
+      - secure: P0Qir+iYhFgO/PLIR3DucuqwBxYaZ0Avkq8auPEgZOHtlSSyHpm0sRUJqaw0s49ClUfn2NhOC8KXVv13O0Ngzh6Ue/NvzMsIX97oU8JqczGV6LT7Z2nsWFpV1hDlgC0bM6W/dl2Vj6zTK24gNaFFD8P+TbYOeAvLArlFl9nfqhJ/jh1ztBtjcsDPVs0LZu+aQp/XBQzENtRSiR7u7nFlVuSbzR9zY376t8LZyy2Re4ynef7EiXimLA2wSKMb9ID8h1pj1p0vx1Ts3DMLpOlKJaSeEsvneqLRyGA/OB+nfQlAASQYhplKs5gJBiMrhSi/9kLo+LdqiMEdJsvpq/mO5qR0r3e4Jnq0utW0kTPAwuOfS+Oh4XpZhbfpwokQmTgjbPDpt79q0Dzjz+veUep96Kj1DBxcxpSCjk9xJZWYbR1RPgDJmK9FRQJYWJHcj//U5ilup9SJ/AgiHcu4hsa109lc+0znTQOjXhXa1Y7Z5jr44T3h3lypq393uVMUUHogav/kv2tpLwu05RMzJ8VMT03aHSCtAGvgDf5IJOIOL/P2vRpoLCc/iFukzOuAYNxDQ60Us8Ej2xKhCp3r0ETM73PsBPvUTGzL31uaQ+LRYy1067HIUFtepBT7bVwmuCI5oRCSvRQpZeku9mw6On0B+JJLRSajh9MP6c4tB+yza4Y=
+    # on_success: change
+    on_success: always
+    on_failure: always
+    # on_pull_requests: false
 # reduce depth (history) of git checkout
 git:
   depth: 30
