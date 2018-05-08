@@ -10,6 +10,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SlugConverterConf
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -43,7 +44,7 @@ class SlugConverterConfigurationPassTest extends AbstractCompilerPassTestCase
 
         $this->setDefinition('ezpublish.persistence.slug_converter', $definition);
 
-        $this->setParameter('ezpublish.url_alias.slug_converter_config', [
+        $this->setParameter('ezpublish.url_alias.slug_converter', [
             'transformation' => 'urlalias',
             'separator' => 'underscore',
             'transformation_groups' => [
@@ -56,7 +57,7 @@ class SlugConverterConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter */
-        $slugConverterRef = new \ReflectionClass(SlugConverter::class);
+        $slugConverterRef = new ReflectionClass(SlugConverter::class);
         $configurationPropertyRef = $slugConverterRef->getProperty('configuration');
         $configurationPropertyRef->setAccessible(true);
         $configuration = $configurationPropertyRef->getValue($this->container->get('ezpublish.persistence.slug_converter'));

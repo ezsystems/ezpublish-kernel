@@ -916,11 +916,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         ];
         $this->load([
             'url_alias' => [
-                'slug_converter_config' => $configuration,
+                'slug_converter' => $configuration,
             ],
         ]);
-        $this->assertTrue($this->container->hasParameter('ezpublish.url_alias.slug_converter_config'));
-        $parsedConfig = $this->container->getParameter('ezpublish.url_alias.slug_converter_config');
+        $parsedConfig = $this->container->getParameter('ezpublish.url_alias.slug_converter');
         $this->assertSame(
             $configuration,
             $parsedConfig
