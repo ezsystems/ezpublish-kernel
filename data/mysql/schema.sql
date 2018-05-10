@@ -43,7 +43,7 @@ CREATE TABLE `ezbasket` (
   `productcollection_id` int(11) NOT NULL DEFAULT '0',
   `session_id` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `ezbasket_session_id` (`session_id`)
+  KEY `ezbasket_session_id` (`session_id` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -171,7 +171,7 @@ CREATE TABLE `ezcollab_group` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `ezcollab_group_depth` (`depth`),
-  KEY `ezcollab_group_path` (`path_string`)
+  KEY `ezcollab_group_path` (`path_string` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -436,7 +436,7 @@ CREATE TABLE `ezcontent_language` (
   `locale` varchar(20) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `ezcontent_language_name` (`name`)
+  KEY `ezcontent_language_name` (`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -655,7 +655,7 @@ CREATE TABLE `ezcontentobject_attribute` (
   KEY `ezcontentobject_attribute_language_code` (`language_code`),
   KEY ezcontentobject_classattr_id (contentclassattribute_id),
   KEY `sort_key_int` (`sort_key_int`),
-  KEY `sort_key_string` (`sort_key_string`)
+  KEY `sort_key_string` (`sort_key_string` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -696,7 +696,7 @@ CREATE TABLE `ezcontentobject_name` (
   PRIMARY KEY (`contentobject_id`,`content_version`,`content_translation`),
   KEY `ezcontentobject_name_cov_id` (`content_version`),
   KEY `ezcontentobject_name_lang_id` (`language_id`),
-  KEY `ezcontentobject_name_name` (`name`)
+  KEY `ezcontentobject_name_name` (`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -728,7 +728,7 @@ CREATE TABLE `ezcontentobject_trash` (
   KEY `ezcobj_trash_depth` (`depth`),
   KEY `ezcobj_trash_modified_subnode` (`modified_subnode`),
   KEY `ezcobj_trash_p_node_id` (`parent_node_id`),
-  KEY `ezcobj_trash_path` (`path_string`),
+  KEY `ezcobj_trash_path` (`path_string` (191)),
   KEY `ezcobj_trash_path_ident` (`path_identification_string`(50))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -762,7 +762,7 @@ CREATE TABLE `ezcontentobject_tree` (
   KEY `ezcontentobject_tree_co_id` (`contentobject_id`),
   KEY `ezcontentobject_tree_depth` (`depth`),
   KEY `ezcontentobject_tree_p_node_id` (`parent_node_id`),
-  KEY `ezcontentobject_tree_path` (`path_string`),
+  KEY `ezcontentobject_tree_path` (`path_string` (191)),
   KEY `ezcontentobject_tree_path_ident` (`path_identification_string`(50)),
   KEY `modified_subnode` (`modified_subnode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -965,7 +965,7 @@ CREATE TABLE `ezimagefile` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `ezimagefile_coid` (`contentobject_attribute_id`),
-  KEY `ezimagefile_file` (`filepath`(200))
+  KEY `ezimagefile_file` (`filepath` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1076,7 +1076,7 @@ CREATE TABLE `ezkeyword` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `keyword` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ezkeyword_keyword` (`keyword`)
+  KEY `ezkeyword_keyword` (`keyword` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1412,7 +1412,7 @@ CREATE TABLE `ezorder_status` (
   `status_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `ezorder_status_active` (`is_active`),
-  KEY `ezorder_status_name` (`name`),
+  KEY `ezorder_status_name` (`name` (191)),
   KEY `ezorder_status_sid` (`status_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1563,7 +1563,7 @@ CREATE TABLE `ezpolicy_limitation_value` (
   `limitation_id` int(11) DEFAULT NULL,
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ezpolicy_limitation_value_val` (`value`),
+  KEY `ezpolicy_limitation_value_val` (`value` (191)),
   KEY `ezpolicy_limit_value_limit_id` (`limitation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1893,7 +1893,7 @@ CREATE TABLE `ezsearch_object_word_link` (
   `word_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `ezsearch_object_word_link_frequency` (`frequency`),
-  KEY `ezsearch_object_word_link_identifier` (`identifier`),
+  KEY `ezsearch_object_word_link_identifier` (`identifier` (191)),
   KEY `ezsearch_object_word_link_integer_value` (`integer_value`),
   KEY `ezsearch_object_word_link_object` (`contentobject_id`),
   KEY `ezsearch_object_word_link_word` (`word_id`)
@@ -2105,7 +2105,7 @@ CREATE TABLE `ezurl` (
   `original_url_md5` varchar(32) NOT NULL DEFAULT '',
   `url` longtext,
   PRIMARY KEY (`id`),
-  KEY `ezurl_url` (`url`(255))
+  KEY `ezurl_url` (`url` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2143,11 +2143,11 @@ CREATE TABLE `ezurlalias` (
   `source_md5` varchar(32) DEFAULT NULL,
   `source_url` longtext NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `ezurlalias_desturl` (`destination_url`(200)),
+  KEY `ezurlalias_desturl` (`destination_url` (191)),
   KEY `ezurlalias_forward_to_id` (`forward_to_id`),
   KEY `ezurlalias_imp_wcard_fwd` (`is_imported`,`is_wildcard`,`forward_to_id`),
   KEY `ezurlalias_source_md5` (`source_md5`),
-  KEY `ezurlalias_source_url` (`source_url`(255)),
+  KEY `ezurlalias_source_url` (`source_url` (191)),
   KEY `ezurlalias_wcard_fwd` (`is_wildcard`,`forward_to_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
