@@ -464,6 +464,53 @@ class LocationServiceTest extends BaseTest
             $location->contentInfo
         );
         $this->assertEquals($this->generateId('object', 4), $location->contentInfo->id);
+
+        // Check lazy loaded proxy on ->content
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $content = $location->getContent()
+        );
+        $this->assertEquals(4, $content->contentInfo->id);
+    }
+
+    public function testLoadLocationPrioritizedLanguagesFallback()
+    {
+        $repository = $this->getRepository();
+
+        // Add a language
+        $languageService = $repository->getContentLanguageService();
+        $languageStruct = $languageService->newLanguageCreateStruct();
+        $languageStruct->name = 'Norsk';
+        $languageStruct->languageCode = 'nor-NO';
+        $languageService->createLanguage($languageStruct);
+
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $location = $locationService->loadLocation(5);
+
+        // Translate "Users"
+        $draft = $contentService->createContentDraft($location->contentInfo);
+        $struct = $contentService->newContentUpdateStruct();
+        $struct->setField('name', 'Brukere', 'nor-NO');
+        $draft = $contentService->updateContent($draft->getVersionInfo(), $struct);
+        $contentService->publishVersion($draft->getVersionInfo());
+
+        // Load with prioritc language (fallback will be the old one)
+        $location = $locationService->loadLocation(5, ['nor-NO']);
+
+        $this->assertInstanceOf(
+            Location::class,
+            $location
+        );
+        self::assertEquals(5, $location->id);
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $content = $location->getContent()
+        );
+        $this->assertEquals(4, $content->contentInfo->id);
+
+        $this->assertEquals($content->getVersionInfo()->getName(), 'Brukere');
+        $this->assertEquals($content->getVersionInfo()->getName('eng-US'), 'Users');
     }
 
     /**
