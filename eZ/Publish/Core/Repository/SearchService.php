@@ -19,8 +19,6 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -107,28 +105,10 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
-        $contentService = $this->repository->getContentService();
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
-        foreach ($result->searchHits as $key => $hit) {
-            try {
-                // As we get ContentInfo from SPI, we need to load full content (avoids getting stale content data)
-                $hit->valueObject = $contentService->internalLoadContent(
-                    $hit->valueObject->id,
-                    (!empty($languageFilter['languages']) ? $languageFilter['languages'] : null),
-                    null,
-                    false,
-                    (isset($languageFilter['useAlwaysAvailable']) ? $languageFilter['useAlwaysAvailable'] : true)
-                );
-            } catch (APINotFoundException $e) {
-                // Most likely stale data, so we register content for background re-indexing.
-                $this->backgroundIndexer->registerContent($hit->valueObject);
-                unset($result->searchHits[$key]);
-                --$result->totalCount;
-            } catch (APIUnauthorizedException $e) {
-                // Most likely stale cached permission criterion, as ttl is only a few seconds we don't react to this
-                unset($result->searchHits[$key]);
-                --$result->totalCount;
-            }
+        $missingContentList = $this->domainMapper->buildContentDomainObjectsOnSearchResult($result, $languageFilter);
+        foreach ($missingContentList as $missingContent) {
+            $this->backgroundIndexer->registerContent($missingContent);
         }
 
         return $result;

@@ -103,7 +103,7 @@ class DomainMapper
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null, array $fieldLanguages = null, $fieldAlwaysAvailableLanguage = null)
+    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null, array $fieldLanguages = null, string $fieldAlwaysAvailableLanguage = null)
     {
         if ($contentType === null) {
             $contentType = $this->contentTypeHandler->load(
@@ -145,7 +145,7 @@ class DomainMapper
      *
      * @return array
      */
-    public function buildDomainFields(array $spiFields, $contentType, array $languages = null, $alwaysAvailableLanguage = null)
+    public function buildDomainFields(array $spiFields, $contentType, array $languages = null, string $alwaysAvailableLanguage = null)
     {
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
@@ -392,16 +392,65 @@ class DomainMapper
     }
 
     /**
+     * Build API Content domain objects in bulk and apply to ContentSearchResult.
+     *
+     * Loading of Content objects are done in one operation.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result SPI search result with SPI ContentInfo items as hits
+     * @param array $languageFilter
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[] ContentInfo we did not find content for is returned.
+     */
+    public function buildContentDomainObjectsOnSearchResult(SearchResult $result, array $languageFilter)
+    {
+        if (empty($result->searchHits)) {
+            return [];
+        }
+
+        $contentIds = [];
+        foreach ($result->searchHits as $hit) {
+            $contentIds[] = $hit->valueObject->id;
+        }
+
+        $contentList = $this->contentHandler->loadContentList(
+            $contentIds,
+            !empty($languageFilter['languages']) ? $languageFilter['languages'] : []
+        );
+
+        $missingContentList = [];
+        foreach ($result->searchHits as $key => $hit) {
+            if (isset($contentList[$hit->valueObject->id])) {
+                $hit->valueObject = $this->buildContentDomainObject(
+                    $contentList[$hit->valueObject->id],
+                    null,//@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                    !empty($languageFilter['languages']) ? $languageFilter['languages'] : null,
+                    empty($languageFilter['useAlwaysAvailable']) ? null : $hit->valueObject->mainLanguageCode
+                );
+            } else {
+                $missingContentList[] = $hit->valueObject;
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            }
+        }
+
+        return $missingContentList;
+    }
+
+    /**
      * Build API Location and corresponding ContentInfo domain objects and apply to LocationSearchResult.
      *
      * Loading of ContentInfo objects are done in one operation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result SPI search result with SPI Location items as hits
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location[] Locations we did not find content info for is retunred as an array.
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[] Locations we did not find content info for is returned.
      */
     public function buildLocationDomainObjectsOnSearchResult(SearchResult $result)
     {
+        if (empty($result->searchHits)) {
+            return [];
+        }
+
         $contentIds = [];
         foreach ($result->searchHits as $hit) {
             $contentIds[] = $hit->valueObject->contentId;
