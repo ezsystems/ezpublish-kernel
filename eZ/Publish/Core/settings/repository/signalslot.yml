@@ -14,6 +14,7 @@ parameters:
     ezpublish.signalslot.service.location.class: eZ\Publish\Core\SignalSlot\LocationService
     ezpublish.signalslot.service.language.class: eZ\Publish\Core\SignalSlot\LanguageService
     ezpublish.signalslot.service.url.class: eZ\Publish\Core\SignalSlot\URLService
+    ezpublish.signalslot.service.bookmark.class: eZ\Publish\Core\SignalSlot\BookmarkService
 
     # Single slot internal services
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
@@ -40,6 +41,7 @@ services:
             - "@ezpublish.signalslot.service.location"
             - "@ezpublish.signalslot.service.language"
             - "@ezpublish.signalslot.service.url"
+            - "@ezpublish.signalslot.service.bookmark"
 
     ezpublish.signalslot.service.content:
         class: "%ezpublish.signalslot.service.content.class%"
@@ -123,6 +125,12 @@ services:
         class: "%ezpublish.signalslot.service.url.class%"
         arguments:
             - "@ezpublish.api.service.inner_url"
+            - "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"
+
+    ezpublish.signalslot.service.bookmark:
+        class: "%ezpublish.signalslot.service.bookmark.class%"
+        arguments:
+            - "@ezpublish.api.service.inner_bookmark"
             - "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"
 
     # Single slot internal services

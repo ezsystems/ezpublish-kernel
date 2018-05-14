@@ -1,0 +1,31 @@
+parameters:
+    ezpublish.persistence.legacy.bookmark.gateway.inner.class: eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.bookmark.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\ExceptionConversion
+    ezpublish.persistence.legacy.bookmark.mapper.class: eZ\Publish\Core\Persistence\Legacy\Bookmark\Mapper
+    ezpublish.spi.persistence.legacy.bookmark.handler.class: eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler
+
+services:
+    ezpublish.persistence.legacy.bookmark.gateway.inner:
+        class: '%ezpublish.persistence.legacy.bookmark.gateway.inner.class%'
+        arguments:
+            - '@ezpublish.persistence.connection'
+
+    ezpublish.persistence.legacy.bookmark.gateway.exception_conversion:
+        class: '%ezpublish.persistence.legacy.bookmark.gateway.exception_conversion.class%'
+        arguments:
+            - '@ezpublish.persistence.legacy.bookmark.gateway.inner'
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.bookmark.gateway:
+        alias: ezpublish.persistence.legacy.bookmark.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.bookmark.mapper:
+        class: '%ezpublish.persistence.legacy.bookmark.mapper.class%'
+
+    ezpublish.spi.persistence.legacy.bookmark.handler:
+        class: '%ezpublish.spi.persistence.legacy.bookmark.handler.class%'
+        arguments:
+            - "@ezpublish.persistence.legacy.bookmark.gateway"
+            - "@ezpublish.persistence.legacy.bookmark.mapper"
+        lazy: true
+
