@@ -67,6 +67,11 @@ interface Handler
     public function urlHandler();
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Bookmark\Handler
+     */
+    public function bookmarkHandler();
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler
      */
     public function transactionHandler();
