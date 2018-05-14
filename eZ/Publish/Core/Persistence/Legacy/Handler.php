@@ -19,6 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandler
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use eZ\Publish\SPI\Persistence\TransactionHandler as SPITransactionHandler;
 use eZ\Publish\Core\Persistence\Legacy\URL\Handler as UrlHandler;
+use eZ\Publish\SPI\Persistence\Bookmark\Handler as BookmarkHandler;
 
 /**
  * The main handler for Legacy Storage Engine.
@@ -85,6 +86,11 @@ class Handler implements HandlerInterface
      */
     protected $urlHandler;
 
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Bookmark\Handler
+     */
+    protected $bookmarkHandler;
+
     public function __construct(
         ContentHandler $contentHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -97,7 +103,8 @@ class Handler implements HandlerInterface
         UrlAliasHandler $urlAliasHandler,
         UrlWildcardHandler $urlWildcardHandler,
         UserHandler $userHandler,
-        UrlHandler $urlHandler
+        UrlHandler $urlHandler,
+        BookmarkHandler $bookmarkHandler
     ) {
         $this->contentHandler = $contentHandler;
         $this->contentTypeHandler = $contentTypeHandler;
@@ -111,6 +118,7 @@ class Handler implements HandlerInterface
         $this->urlWildcardHandler = $urlWildcardHandler;
         $this->userHandler = $userHandler;
         $this->urlHandler = $urlHandler;
+        $this->bookmarkHandler = $bookmarkHandler;
     }
 
     public function contentHandler()
@@ -166,6 +174,11 @@ class Handler implements HandlerInterface
     public function urlHandler()
     {
         return $this->urlHandler;
+    }
+
+    public function bookmarkHandler()
+    {
+        return $this->bookmarkHandler;
     }
 
     /**
