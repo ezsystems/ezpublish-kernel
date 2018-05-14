@@ -601,3 +601,13 @@ CREATE TABLE ezgmaplocation (
   PRIMARY KEY (contentobject_attribute_id,contentobject_version),
   KEY latitude_longitude_key (latitude,longitude)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS ezcontentbrowsebookmark;
+CREATE TABLE ezcontentbrowsebookmark (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL DEFAULT '',
+  node_id int(11) NOT NULL DEFAULT '0',
+  user_id int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY ezcontentbrowsebookmark_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

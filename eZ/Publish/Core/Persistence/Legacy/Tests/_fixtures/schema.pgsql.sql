@@ -474,6 +474,14 @@ CREATE TABLE ezkeyword_attribute_link (
   objectattribute_id integer DEFAULT 0 NOT NULL
 );
 
+DROP TABLE IF EXISTS ezcontentbrowsebookmark;
+CREATE TABLE ezcontentbrowsebookmark (
+  id SERIAL,
+  name character varying(255) DEFAULT ''::character varying NOT NULL,
+  node_id integer DEFAULT 0 NOT NULL,
+  user_id integer DEFAULT 0 NOT NULL
+);
+
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
@@ -650,6 +658,8 @@ CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword_attribute_link USING btree (o
 
 CREATE INDEX ezuser_accountkey_hash_key ON ezuser_accountkey USING btree (hash_key);
 
+CREATE INDEX ezcontentbrowsebookmark_user ON ezcontentbrowsebookmark USING btree (user_id);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -775,3 +785,6 @@ ALTER TABLE ONLY ezkeyword
 
 ALTER TABLE ONLY ezkeyword_attribute_link
     ADD CONSTRAINT ezkeyword_attribute_link_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezcontentbrowsebookmark
+    ADD CONSTRAINT ezcontentbrowsebookmark_pkey PRIMARY KEY (id);
