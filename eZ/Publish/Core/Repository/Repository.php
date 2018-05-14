@@ -186,6 +186,13 @@ class Repository implements RepositoryInterface
     protected $urlService;
 
     /**
+     * Instance of Bookmark service.
+     *
+     * @var \eZ\Publish\API\Repository\BookmarkService
+     */
+    protected $bookmarkService;
+
+    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -656,6 +663,23 @@ class Repository implements RepositoryInterface
         );
 
         return $this->urlService;
+    }
+
+    /**
+     * Get BookmarkService.
+     *
+     * @return \eZ\Publish\API\Repository\BookmarkService
+     */
+    public function getBookmarkService()
+    {
+        if ($this->bookmarkService === null) {
+            $this->bookmarkService = new BookmarkService(
+                $this,
+                $this->persistenceHandler->bookmarkHandler()
+            );
+        }
+
+        return $this->bookmarkService;
     }
 
     /**
