@@ -10,13 +10,12 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A more like this criterion is matched by content which contains similar terms
  * found in the given content, text or url fetch.
  */
-class MoreLikeThis extends Criterion implements CriterionInterface
+class MoreLikeThis extends Criterion
 {
     const CONTENT = 1;
     const TEXT = 2;
@@ -51,8 +50,13 @@ class MoreLikeThis extends Criterion implements CriterionInterface
         );
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self($value);
     }
 }

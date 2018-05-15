@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on its id.
@@ -19,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: will match from a list of ContentId
  * - EQ: will match against one ContentId
  */
-class ContentId extends Criterion implements CriterionInterface
+class ContentId extends Criterion
 {
     /**
      * Creates a new ContentId criterion.
@@ -44,8 +43,13 @@ class ContentId extends Criterion implements CriterionInterface
         );
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self($value);
     }
 }

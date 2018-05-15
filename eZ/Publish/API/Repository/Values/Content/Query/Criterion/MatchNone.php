@@ -9,7 +9,6 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that just matches nothing.
@@ -17,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * Useful for BlockingLimitation type, where a limitation is typically missing and needs to
  * tell the system should block everything within the OR conditions it might be part of.
  */
-class MatchNone extends Criterion implements CriterionInterface
+class MatchNone extends Criterion
 {
     public function __construct()
     {
@@ -29,8 +28,13 @@ class MatchNone extends Criterion implements CriterionInterface
         return array();
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self();
     }
 }

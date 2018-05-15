@@ -9,12 +9,11 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that just matches everything.
  */
-class MatchAll extends Criterion implements CriterionInterface
+class MatchAll extends Criterion
 {
     /**
      * Creates a new MatchAll criterion.
@@ -29,8 +28,13 @@ class MatchAll extends Criterion implements CriterionInterface
         return array();
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self();
     }
 }

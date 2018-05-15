@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on its state.
@@ -19,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: matches against a list of object state IDs
  * - EQ: matches against one object state ID
  */
-class ObjectStateId extends Criterion implements CriterionInterface
+class ObjectStateId extends Criterion
 {
     /**
      * Creates a new ObjectStateId criterion.
@@ -50,8 +49,13 @@ class ObjectStateId extends Criterion implements CriterionInterface
         );
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self($value);
     }
 }
