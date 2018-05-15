@@ -9,11 +9,11 @@
 namespace EzSystems\PlatformInstallerBundle\Command;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\ConnectionException;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -35,7 +35,6 @@ class InstallPlatformCommand extends Command
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
     private $installers = array();
 
-    const EXIT_DATABASE_NOT_FOUND_ERROR = 3;
     const EXIT_GENERAL_DATABASE_ERROR = 4;
     const EXIT_PARAMETERS_NOT_FOUND = 5;
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
@@ -69,7 +68,7 @@ class InstallPlatformCommand extends Command
         $this->output = $output;
         $this->checkPermissions();
         $this->checkParameters();
-        $this->checkDatabase();
+        $this->checkCreateDatabase($output);
 
         $type = $input->getArgument('type');
         $installer = $this->getInstaller($type);
@@ -107,39 +106,25 @@ class InstallPlatformCommand extends Command
         }
     }
 
-    /**
-     * @throws \Exception if an unexpected database error occurs
-     */
-    private function configuredDatabaseExists()
+    private function checkCreateDatabase(OutputInterface $output)
     {
+        $output->writeln(
+            sprintf(
+                'Creating the database <comment>%s</comment> if it does not exist, executing command doctrine:database:create --if-not-exists',
+                $this->db->getDatabase()
+            )
+        );
         try {
-            $this->db->connect();
-        } catch (ConnectionException $e) {
-            // @todo 1049 is MySQL's code for "database doesn't exist", refactor
-            if ($e->getPrevious()->getCode() == 1049) {
-                return false;
-            }
-            throw $e;
-        }
-
-        return true;
-    }
-
-    private function checkDatabase()
-    {
-        try {
-            if (!$this->configuredDatabaseExists()) {
-                $this->output->writeln(
-                    sprintf(
-                        "The configured database '%s' does not exist",
-                        $this->db->getDatabase()
-                    )
-                );
-                exit(self::EXIT_DATABASE_NOT_FOUND_ERROR);
-            }
-        } catch (ConnectionException $e) {
-            $this->output->writeln('An error occurred connecting to the database:');
-            $this->output->writeln($e->getMessage());
+            $bufferedOutput = new BufferedOutput();
+            $this->executeCommand($bufferedOutput, 'doctrine:database:create --if-not-exists');
+            $output->writeln($bufferedOutput->fetch());
+        } catch (\RuntimeException $exception) {
+            $this->output->writeln(
+                sprintf(
+                    "<error>The configured database '%s' does not exist or cannot be created.</error>",
+                    $this->db->getDatabase()
+                )
+            );
             $this->output->writeln("Please check the database configuration in 'app/config/parameters.yml'");
             exit(self::EXIT_GENERAL_DATABASE_ERROR);
         }
