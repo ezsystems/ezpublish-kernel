@@ -16,6 +16,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\F
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PoliciesConfigBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PolicyProviderInterface;
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -476,6 +477,19 @@ class EzPublishCoreExtension extends Extension
     private function handleImage(array $config, ContainerBuilder $container, FileLoader $loader)
     {
         $loader->load('image.yml');
+
+        $providers = [];
+        if (isset($config['image_placeholder'])) {
+            foreach ($config['image_placeholder'] as $name => $value) {
+                if (isset($providers[$name])) {
+                    throw new InvalidConfigurationException("A image_placeholder named $name already exists");
+                }
+
+                $providers[$name] = $value;
+            }
+        }
+
+        $container->setParameter('image_alias.placeholder_providers', $providers);
     }
 
     private function handleUrlChecker($config, ContainerBuilder $container, FileLoader $loader)

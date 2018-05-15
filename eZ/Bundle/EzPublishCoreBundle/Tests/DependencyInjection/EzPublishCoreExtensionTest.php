@@ -181,6 +181,38 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertSame($customFilters['wow'], $filters['wow']);
     }
 
+    public function testImagePlaceholderConfiguration()
+    {
+        $this->load([
+            'image_placeholder' => [
+                'default' => [
+                    'provider' => 'generic',
+                    'options' => [
+                        'foo' => 'Foo',
+                        'bar' => 'Bar',
+                    ],
+                ],
+                'fancy' => [
+                    'provider' => 'remote',
+                ],
+            ],
+        ]);
+
+        $this->assertEquals([
+            'default' => [
+                'provider' => 'generic',
+                'options' => [
+                    'foo' => 'Foo',
+                    'bar' => 'Bar',
+                ],
+            ],
+            'fancy' => [
+                'provider' => 'remote',
+                'options' => [],
+            ],
+        ], $this->container->getParameter('image_alias.placeholder_providers'));
+    }
+
     public function testEzPageConfiguration()
     {
         $customLayouts = array(
