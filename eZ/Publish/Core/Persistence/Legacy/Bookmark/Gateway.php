@@ -33,6 +33,7 @@ abstract class Gateway
      *
      * @param int $userId ID of user
      * @param int $locationId ID of location
+     *
      * @return array
      */
     abstract public function loadBookmarkDataByUserIdAndLocationId(int $userId, int $locationId): array;
@@ -43,6 +44,7 @@ abstract class Gateway
      * @param int $userId ID of user
      * @param int $offset Offset to start listing from, 0 by default
      * @param int $limit Limit for the listing. -1 by default (no limit)
+     *
      * @return array
      */
     abstract public function loadUserBookmarks(int $userId, int $offset = 0, int $limit = -1): array;
@@ -51,6 +53,7 @@ abstract class Gateway
      * Count bookmarks owned by given $userId.
      *
      * @param int $userId ID of user
+     *
      * @return int
      */
     abstract public function countUserBookmarks(int $userId): int;
