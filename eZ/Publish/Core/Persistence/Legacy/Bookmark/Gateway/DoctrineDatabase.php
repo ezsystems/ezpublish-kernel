@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway;
 use eZ\Publish\SPI\Persistence\Bookmark\Bookmark;
 use PDO;
@@ -86,7 +86,7 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function loadBookmarkDataByUserIdAndLocationId(int $userId, int $locationId): array
+    public function loadBookmarkDataByUserIdAndLocationId(int $userId, array $locationIds): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -94,10 +94,10 @@ class DoctrineDatabase extends Gateway
             ->from(self::TABLE_BOOKMARKS)
             ->where($query->expr()->andX(
                 $query->expr()->eq(self::COLUMN_USER_ID, ':user_id'),
-                $query->expr()->eq(self::COLUMN_LOCATION_ID, ':location_id')
+                $query->expr()->in(self::COLUMN_LOCATION_ID, ':location_id')
             ))
             ->setParameter(':user_id', $userId, PDO::PARAM_INT)
-            ->setParameter(':location_id', $locationId, PDO::PARAM_INT);
+            ->setParameter(':location_id', $locationIds, Connection::PARAM_INT_ARRAY);
 
         return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -32,11 +32,11 @@ abstract class Gateway
      * Load data for an bookmark with the given $userId and $locationId.
      *
      * @param int $userId ID of user
-     * @param int $locationId ID of location
+     * @param array $locationIds ID of location
      *
      * @return array
      */
-    abstract public function loadBookmarkDataByUserIdAndLocationId(int $userId, int $locationId): array;
+    abstract public function loadBookmarkDataByUserIdAndLocationId(int $userId, array $locationIds): array;
 
     /**
      * Load data for all bookmarks owned by given $userId.

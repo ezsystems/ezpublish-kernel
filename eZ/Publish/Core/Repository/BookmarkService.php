@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Repository;
 
 use Exception;
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Bookmark\BookmarkList;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -76,15 +75,17 @@ class BookmarkService implements BookmarkServiceInterface
     {
         $loadedLocation = $this->repository->getLocationService()->loadLocation($location->id);
 
-        try {
-            $bookmark = $this->bookmarkHandler->loadByUserIdAndLocationId($this->getCurrentUserId(), $loadedLocation->id);
-        } catch (NotFoundException $e) {
+        $bookmarks = $this->bookmarkHandler->loadByUserIdAndLocationId(
+            $this->getCurrentUserId(), [$loadedLocation->id]
+        );
+
+        if (empty($bookmarks)) {
             throw new InvalidArgumentException('$location', 'location is not bookmarked.');
         }
 
         $this->repository->beginTransaction();
         try {
-            $this->bookmarkHandler->delete($bookmark->id);
+            $this->bookmarkHandler->delete(reset($bookmarks)->id);
             $this->repository->commit();
         } catch (Exception $ex) {
             $this->repository->rollback();
@@ -117,15 +118,11 @@ class BookmarkService implements BookmarkServiceInterface
      */
     public function isBookmarked(Location $location): bool
     {
-        try {
-            $this->bookmarkHandler->loadByUserIdAndLocationId(
-                $this->getCurrentUserId(), $location->id
-            );
+        $bookmarks = $this->bookmarkHandler->loadByUserIdAndLocationId(
+            $this->getCurrentUserId(), [$location->id]
+        );
 
-            return true;
-        } catch (NotFoundException $e) {
-            return false;
-        }
+        return !empty($bookmarks);
     }
 
     private function getCurrentUserId(): int

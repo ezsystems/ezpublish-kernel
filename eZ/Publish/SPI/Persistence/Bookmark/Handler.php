@@ -31,13 +31,11 @@ interface Handler
      * Get bookmark by user id and location id.
      *
      * @param int $userId
-     * @param array $locationId
+     * @param array $locationIds
      *
-     * @return \eZ\Publish\SPI\Persistence\Bookmark\Bookmark
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @return \eZ\Publish\SPI\Persistence\Bookmark\Bookmark[]
      */
-    public function loadByUserIdAndLocationId(int $userId, int $locationId): Bookmark;
+    public function loadByUserIdAndLocationId(int $userId, array $locationIds): array;
 
     /**
      * Loads bookmarks owned by user.

@@ -109,7 +109,7 @@ class HandlerTest extends TestCase
         $this->gateway
             ->expects($this->once())
             ->method('loadBookmarkDataByUserIdAndLocationId')
-            ->with($userId, $locationId)
+            ->with($userId, [$locationId])
             ->willReturn($rows);
 
         $this->mapper
@@ -118,12 +118,11 @@ class HandlerTest extends TestCase
             ->with($rows)
             ->willReturn([$object]);
 
-        $this->assertEquals($object, $this->handler->loadByUserIdAndLocationId($userId, $locationId));
+        $this->assertEquals([$locationId => $object], $this->handler->loadByUserIdAndLocationId($userId, [$locationId]));
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler::loadByUserIdAndLocationId
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadByUserIdAndLocationIdNonExistingBookmark()
     {
@@ -133,7 +132,7 @@ class HandlerTest extends TestCase
         $this->gateway
             ->expects($this->once())
             ->method('loadBookmarkDataByUserIdAndLocationId')
-            ->with($userId, $locationId)
+            ->with($userId, [$locationId])
             ->willReturn([]);
 
         $this->mapper
@@ -142,7 +141,7 @@ class HandlerTest extends TestCase
             ->with([])
             ->willReturn([]);
 
-        $this->handler->loadByUserIdAndLocationId($userId, $locationId);
+        $this->assertEmpty($this->handler->loadByUserIdAndLocationId($userId, [$locationId]));
     }
 
     /**

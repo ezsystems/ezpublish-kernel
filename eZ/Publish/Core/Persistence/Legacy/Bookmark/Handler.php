@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Bookmark;
 
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Bookmark\Bookmark;
 use eZ\Publish\SPI\Persistence\Bookmark\CreateStruct;
 use eZ\Publish\SPI\Persistence\Bookmark\Handler as HandlerInterface;
@@ -60,20 +59,18 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function loadByUserIdAndLocationId(int $userId, int $locationId): Bookmark
+    public function loadByUserIdAndLocationId(int $userId, array $locationIds): array
     {
-        $bookmark = $this->mapper->extractBookmarksFromRows(
-            $this->gateway->loadBookmarkDataByUserIdAndLocationId($userId, $locationId)
+        $bookmarks = $this->mapper->extractBookmarksFromRows(
+            $this->gateway->loadBookmarkDataByUserIdAndLocationId($userId, $locationIds)
         );
 
-        if (count($bookmark) < 1) {
-            throw new NotFoundException('Bookmark', [
-                'userId' => $userId,
-                'locationId' => $locationId,
-            ]);
+        $list = [];
+        foreach ($bookmarks as $bookmark) {
+            $list[$bookmark->locationId] = $bookmark;
         }
 
-        return reset($bookmark);
+        return $list;
     }
 
     /**

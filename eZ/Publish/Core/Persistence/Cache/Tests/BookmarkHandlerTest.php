@@ -49,7 +49,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            ['loadByUserIdAndLocationId', [2, 3], 'ez-bookmark-2-3', $bookmark],
+            ['loadByUserIdAndLocationId', [3, [2]], 'ez-bookmark-3-2', [2 => $bookmark], true],
         ];
     }
 }

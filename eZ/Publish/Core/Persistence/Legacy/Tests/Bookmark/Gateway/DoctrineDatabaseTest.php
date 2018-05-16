@@ -85,7 +85,7 @@ class DoctrineDatabaseTest extends TestCase
     {
         $data = $this->getGateway()->loadBookmarkDataByUserIdAndLocationId(
             (int) self::EXISTING_BOOKMARK_DATA['user_id'],
-            (int) self::EXISTING_BOOKMARK_DATA['node_id']
+            [(int) self::EXISTING_BOOKMARK_DATA['node_id']]
         );
 
         $this->assertEquals([self::EXISTING_BOOKMARK_DATA], $data);

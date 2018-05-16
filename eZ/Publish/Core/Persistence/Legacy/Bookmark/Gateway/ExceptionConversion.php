@@ -60,7 +60,7 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function loadBookmarkDataByUserIdAndLocationId(int $userId, int $locationId): array
+    public function loadBookmarkDataByUserIdAndLocationId(int $userId, array $locationId): array
     {
         try {
             return $this->innerGateway->loadBookmarkDataByUserIdAndLocationId($userId, $locationId);

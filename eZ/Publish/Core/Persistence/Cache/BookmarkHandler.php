@@ -46,28 +46,26 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
     /**
      * {@inheritdoc}
      */
-    public function loadByUserIdAndLocationId(int $userId, int $locationId): Bookmark
+    public function loadByUserIdAndLocationId(int $userId, array $locationIds): array
     {
-        $cacheItem = $this->cache->getItem('ez-bookmark-' . $userId . '-' . $locationId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        return $this->getMultipleCacheItems(
+            $locationIds,
+            'ez-bookmark-' . $userId . '-',
+            function (array $missingIds) use ($userId) {
+                $this->logger->logCall(__METHOD__, [
+                    'userId' => $userId,
+                    'locationIds' => $missingIds,
+                ]);
 
-        $this->logger->logCall(__METHOD__, [
-            'userId' => $userId,
-            'locationId' => $locationId,
-        ]);
-
-        $bookmark = $this->persistenceHandler->bookmarkHandler()->loadByUserIdAndLocationId($userId, $locationId);
-
-        $cacheItem->set($bookmark);
-        $cacheItem->tag([
-            'bookmark-' . $bookmark->id,
-            'location-' . $bookmark->locationId,
-        ]);
-        $this->cache->save($cacheItem);
-
-        return $bookmark;
+                return $this->persistenceHandler->bookmarkHandler()->loadByUserIdAndLocationId($userId, $missingIds);
+            },
+            function (Bookmark $bookmark) {
+                return [
+                    'bookmark-' . $bookmark->id,
+                    'location-' . $bookmark->locationId,
+                ];
+            }
+        );
     }
 
     /**
