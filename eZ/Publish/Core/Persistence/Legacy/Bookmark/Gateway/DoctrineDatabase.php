@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway;
 
 use Doctrine\DBAL\Driver\Connection;
@@ -49,7 +51,7 @@ class DoctrineDatabase extends Gateway
 
         $query->execute();
 
-        return $this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
 
     /**
@@ -134,7 +136,7 @@ class DoctrineDatabase extends Gateway
             ->where($query->expr()->eq(self::COLUMN_USER_ID, ':user_id'))
             ->setParameter(':user_id', $userId, PDO::PARAM_INT);
 
-        return $query->execute()->fetchColumn();
+        return (int) $query->execute()->fetchColumn();
     }
 
     private function getColumns(): array

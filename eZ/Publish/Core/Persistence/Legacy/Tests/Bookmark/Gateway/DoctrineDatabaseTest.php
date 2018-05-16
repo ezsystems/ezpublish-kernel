@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Bookmark\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase;
@@ -82,8 +84,8 @@ class DoctrineDatabaseTest extends TestCase
     public function testLoadBookmarkDataByUserIdAndLocationId()
     {
         $data = $this->getGateway()->loadBookmarkDataByUserIdAndLocationId(
-            self::EXISTING_BOOKMARK_DATA['user_id'],
-            self::EXISTING_BOOKMARK_DATA['node_id']
+            (int) self::EXISTING_BOOKMARK_DATA['user_id'],
+            (int) self::EXISTING_BOOKMARK_DATA['node_id']
         );
 
         $this->assertEquals([self::EXISTING_BOOKMARK_DATA], $data);
