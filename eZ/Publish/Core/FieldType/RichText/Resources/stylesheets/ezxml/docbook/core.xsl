@@ -351,9 +351,7 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
-        <xsl:apply-templates/>
-      </xsl:element>
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
