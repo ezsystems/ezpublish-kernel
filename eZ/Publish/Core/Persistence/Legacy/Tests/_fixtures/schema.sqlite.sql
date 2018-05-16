@@ -533,3 +533,12 @@ CREATE TABLE ezgmaplocation (
   PRIMARY KEY (contentobject_attribute_id,contentobject_version)
 );
 CREATE INDEX ezgmaplocation_latlon ON ezgmaplocation (latitude,longitude);
+
+CREATE TABLE ezcontentbrowsebookmark (
+  id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name text(255) NOT NULL DEFAULT '',
+  node_id integer NOT NULL DEFAULT 0,
+  user_id integer NOT NULL DEFAULT 0
+);
+
+CREATE INDEX ezcontentbrowsebookmark_user ON ezcontentbrowsebookmark(user_id);

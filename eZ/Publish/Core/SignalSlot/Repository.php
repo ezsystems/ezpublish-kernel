@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot;
 
+use eZ\Publish\API\Repository\BookmarkService;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference;
@@ -129,6 +130,13 @@ class Repository implements RepositoryInterface
     protected $urlService;
 
     /**
+     * Instance of Bookmark service.
+     *
+     * @var \eZ\Publish\API\Repository\BookmarkService
+     */
+    protected $bookmarkService;
+
+    /**
      * Constructor.
      *
      * Construct repository object from aggregated repository and signal
@@ -150,6 +158,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\SignalSlot\LocationService $locationService
      * @param \eZ\Publish\Core\SignalSlot\LanguageService $languageService
      * @param \eZ\Publish\Core\SignalSlot\URLService $urlService
+     * @param \eZ\Publish\Core\SignalSlot\BookmarkService bookmarkService
      */
     public function __construct(
         RepositoryInterface $repository,
@@ -167,7 +176,8 @@ class Repository implements RepositoryInterface
         TrashService $trashService,
         LocationService $locationService,
         LanguageService $languageService,
-        URLService $urlService
+        URLService $urlService,
+        BookmarkService $bookmarkService
     ) {
         $this->signalDispatcher = $signalDispatcher;
         $this->repository = $repository;
@@ -185,6 +195,7 @@ class Repository implements RepositoryInterface
         $this->locationService = $locationService;
         $this->languageService = $languageService;
         $this->urlService = $urlService;
+        $this->bookmarkService = $bookmarkService;
     }
 
     /**
@@ -405,6 +416,16 @@ class Repository implements RepositoryInterface
     public function getURLService()
     {
         return $this->urlService;
+    }
+
+    /**
+     * Get BookmarkService.
+     *
+     * @return \eZ\Publish\API\Repository\BookmarkService
+     */
+    public function getBookmarkService()
+    {
+        return $this->bookmarkService;
     }
 
     /**

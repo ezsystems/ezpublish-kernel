@@ -9,6 +9,7 @@ parameters:
     ezpublish.spi.persistence.url_alias_handler.class: eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
     ezpublish.spi.persistence.url_wildcard_handler.class: eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
     ezpublish.spi.persistence.user_handler.class: eZ\Publish\SPI\Persistence\User\Handler
+    ezpublish.spi.persistence.bookmark_handler.class: eZ\Publish\SPI\Persistence\Bookmark\Handler
 
 services:
     ezpublish.spi.persistence.content_handler:
@@ -50,3 +51,7 @@ services:
     ezpublish.spi.persistence.user_handler:
         class: "%ezpublish.spi.persistence.user_handler.class%"
         factory: ["@ezpublish.api.persistence_handler", userHandler]
+
+    ezpublish.spi.persistence.bookmark_handler:
+        class: "%ezpublish.spi.persistence.bookmark_handler.class%"
+        factory: ["@ezpublish.api.persistence_handler", bookmarkHandler]

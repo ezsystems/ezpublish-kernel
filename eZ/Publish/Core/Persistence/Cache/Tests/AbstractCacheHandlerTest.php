@@ -6,6 +6,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 /**
@@ -26,8 +28,9 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      * @param array $arguments
      * @param array|null $tags
      * @param string|null $key
+     * @param mixed $returnValue
      */
-    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, string $key = null)
+    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, string $key = null, $returnValue = null)
     {
         $handlerMethodName = $this->getHandlerMethodName();
 
@@ -43,7 +46,7 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
             ->expects($this->once())
             ->method($method)
             ->with(...$arguments)
-            ->will($this->returnValue(null));
+            ->will($this->returnValue($returnValue));
 
         if ($tags || $key) {
             $this->cacheMock

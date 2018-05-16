@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\SPI\Persistence;
 
 /**
@@ -65,6 +67,11 @@ interface Handler
      * @return \eZ\Publish\Core\Persistence\Legacy\URL\Handler
      */
     public function urlHandler();
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Bookmark\Handler
+     */
+    public function bookmarkHandler();
 
     /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler

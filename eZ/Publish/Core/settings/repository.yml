@@ -3,6 +3,9 @@ services:
     ezpublish.api.repository:
         alias: ezpublish.signalslot.repository
 
+    ezpublish.api.service.bookmark:
+        alias: ezpublish.signalslot.service.bookmark
+
     ezpublish.api.service.content:
         alias: ezpublish.signalslot.service.content
 

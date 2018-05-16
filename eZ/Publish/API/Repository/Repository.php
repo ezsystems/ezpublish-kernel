@@ -206,6 +206,13 @@ interface Repository
     public function getURLService();
 
     /**
+     * Get BookmarkService.
+     *
+     * @return \eZ\Publish\API\Repository\BookmarkService
+     */
+    public function getBookmarkService();
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,

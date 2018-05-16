@@ -1,4 +1,5 @@
 imports:
+    - {resource: storage_engines/legacy/bookmark.yml}
     - {resource: storage_engines/legacy/content.yml}
     - {resource: storage_engines/legacy/content_type.yml}
     - {resource: storage_engines/legacy/external_storage_gateways.yml}
@@ -37,6 +38,7 @@ services:
             - "@ezpublish.spi.persistence.legacy.url_wildcard.handler"
             - "@ezpublish.spi.persistence.legacy.user.handler"
             - "@ezpublish.spi.persistence.legacy.url.handler"
+            - "@ezpublish.spi.persistence.legacy.bookmark.handler"
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
         lazy: true

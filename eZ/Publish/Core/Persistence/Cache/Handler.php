@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
@@ -18,6 +20,7 @@ use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
+use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
 
 /**
  * Persistence Cache Handler class.
@@ -85,6 +88,11 @@ class Handler implements PersistenceHandlerInterface
     protected $urlHandler;
 
     /**
+     * @var BookmarkHandler
+     */
+    protected $bookmarkHandler;
+
+    /**
      * @var PersistenceLogger
      */
     protected $logger;
@@ -104,6 +112,7 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
      * @param \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler $objectStateHandler
      * @param \eZ\Publish\Core\Persistence\Cache\URLHandler $urlHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\BookmarkHandler $bookmarkHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
@@ -119,6 +128,7 @@ class Handler implements PersistenceHandlerInterface
         CacheUrlAliasHandler $urlAliasHandler,
         CacheObjectStateHandler $objectStateHandler,
         CacheUrlHandler $urlHandler,
+        CacheBookmarkHandler $bookmarkHandler,
         PersistenceLogger $logger
     ) {
         $this->persistenceHandler = $persistenceHandler;
@@ -133,6 +143,7 @@ class Handler implements PersistenceHandlerInterface
         $this->urlAliasHandler = $urlAliasHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->urlHandler = $urlHandler;
+        $this->bookmarkHandler = $bookmarkHandler;
         $this->logger = $logger;
     }
 
@@ -234,6 +245,14 @@ class Handler implements PersistenceHandlerInterface
     public function urlHandler()
     {
         return $this->urlHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Cache\BookmarkHandler
+     */
+    public function bookmarkHandler()
+    {
+        return $this->bookmarkHandler;
     }
 
     /**
