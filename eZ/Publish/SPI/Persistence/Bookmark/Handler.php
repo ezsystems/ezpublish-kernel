@@ -26,17 +26,6 @@ interface Handler
     public function delete(int $bookmarkId): void;
 
     /**
-     * Get bookmark by id.
-     *
-     * @param int $bookmarkId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Bookmark\Bookmark
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function loadById(int $bookmarkId): Bookmark;
-
-    /**
      * Get bookmark by user id and location id.
      *
      * @param int $userId

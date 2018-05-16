@@ -27,14 +27,6 @@ abstract class Gateway
     abstract public function deleteBookmark(int $id): void;
 
     /**
-     * Load data for an bookmark with the given $id.
-     *
-     * @param int $id ID of bookmark
-     * @return array
-     */
-    abstract public function loadBookmarkDataById(int $id): array;
-
-    /**
      * Load data for an bookmark with the given $userId and $locationId.
      *
      * @param int $userId ID of user

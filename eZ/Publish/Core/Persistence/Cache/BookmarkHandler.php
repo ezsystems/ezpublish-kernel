@@ -44,31 +44,6 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
     /**
      * {@inheritdoc}
      */
-    public function loadById(int $bookmarkId): Bookmark
-    {
-        $cacheItem = $this->cache->getItem('ez-bookmark-' . $bookmarkId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, [
-            'id' => $bookmarkId,
-        ]);
-
-        $bookmark = $this->persistenceHandler->bookmarkHandler()->loadById($bookmarkId);
-        $cacheItem->set($bookmark);
-        $cacheItem->tag([
-            'bookmark-' . $bookmarkId,
-            'location-' . $bookmark->locationId,
-        ]);
-        $this->cache->save($cacheItem);
-
-        return $bookmark;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function loadByUserIdAndLocationId(int $userId, int $locationId): Bookmark
     {
         $cacheItem = $this->cache->getItem('ez-bookmark-' . $userId . '-' . $locationId);

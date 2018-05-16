@@ -83,61 +83,6 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler::loadById
-     */
-    public function testLoadByIdExistingBookmark()
-    {
-        $rows = [
-            [
-                'name' => 'Contact',
-                'node_id' => 54,
-                'user_id' => 87,
-            ],
-        ];
-
-        $object = new Bookmark([
-            'name' => 'Contact',
-            'locationId' => 54,
-            'userId' => 87,
-        ]);
-
-        $this->gateway
-            ->expects($this->once())
-            ->method('loadBookmarkDataById')
-            ->with(self::BOOKMARK_ID)
-            ->willReturn($rows);
-
-        $this->mapper
-            ->expects($this->once())
-            ->method('extractBookmarksFromRows')
-            ->with($rows)
-            ->willReturn([$object]);
-
-        $this->assertEquals($object, $this->handler->loadById(self::BOOKMARK_ID));
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler::loadById
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     */
-    public function testLoadByIdNonExistingBookmark()
-    {
-        $this->gateway
-            ->expects($this->once())
-            ->method('loadBookmarkDataById')
-            ->with(self::BOOKMARK_ID)
-            ->willReturn([]);
-
-        $this->mapper
-            ->expects($this->once())
-            ->method('extractBookmarksFromRows')
-            ->with([])
-            ->willReturn([]);
-
-        $this->handler->loadById(self::BOOKMARK_ID);
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler::loadByUserIdAndLocationId
      */
     public function testLoadByUserIdAndLocationIdExistingBookmark()

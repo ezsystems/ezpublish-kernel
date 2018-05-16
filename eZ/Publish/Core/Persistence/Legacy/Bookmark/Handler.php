@@ -58,22 +58,6 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function loadById(int $bookmarkId): Bookmark
-    {
-        $bookmark = $this->mapper->extractBookmarksFromRows(
-            $this->gateway->loadBookmarkDataById($bookmarkId)
-        );
-
-        if (count($bookmark) < 1) {
-            throw new NotFoundException('Bookmark', $bookmarkId);
-        }
-
-        return reset($bookmark);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function loadByUserIdAndLocationId(int $userId, int $locationId): Bookmark
     {
         $bookmark = $this->mapper->extractBookmarksFromRows(

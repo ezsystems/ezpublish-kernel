@@ -58,18 +58,6 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function loadBookmarkDataById(int $id): array
-    {
-        try {
-            return $this->innerGateway->loadBookmarkDataById($id);
-        } catch (DBALException | PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function loadBookmarkDataByUserIdAndLocationId(int $userId, int $locationId): array
     {
         try {
