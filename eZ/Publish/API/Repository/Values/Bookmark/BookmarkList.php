@@ -12,6 +12,9 @@ use ArrayIterator;
 use IteratorAggregate;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
+/**
+ * List of bookmarked locations.
+ */
 class BookmarkList extends ValueObject implements IteratorAggregate
 {
     /**

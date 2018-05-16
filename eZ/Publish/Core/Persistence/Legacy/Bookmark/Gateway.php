@@ -10,6 +10,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Bookmark;
 
 use eZ\Publish\SPI\Persistence\Bookmark\Bookmark;
 
+/**
+ * Base class for bookmark gateways.
+ */
 abstract class Gateway
 {
     /**
