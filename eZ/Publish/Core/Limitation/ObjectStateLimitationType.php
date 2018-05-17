@@ -126,6 +126,11 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
             throw new InvalidArgumentException('$object', 'Must be of type: Content, VersionInfo or ContentInfo');
         }
 
+        // Skip evaluating for RootLocation
+        if (0 === $object->id) {
+            return true;
+        }
+
         if (empty($limitationValues)) {
             return false;
         }
@@ -286,6 +291,8 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function valueSchema()
     {
