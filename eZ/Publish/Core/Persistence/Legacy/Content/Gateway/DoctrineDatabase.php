@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
@@ -852,18 +853,15 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList()
+     * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
      *
-     * @param string $column
-     * @param array $ids Array of int, or if $bindype is set to Connection::PARAM_STR_ARRAY then array of string
-     * @param int $bindType One of Connection::PARAM_*_ARRAY constants.
+     * @param \Doctrine\DBAL\Query\QueryBuilder $query
      *
      * @return array
      */
-    private function internalLoadContentInfo(string $column, array $ids, int $bindType = Connection::PARAM_INT_ARRAY): array
+    private function internalLoadContentInfo(DoctrineQueryBuilder $query): array
     {
-        $q = $this->connection->createQueryBuilder();
-        $q
+        $query
             ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
             ->from('ezcontentobject', 'c')
             ->leftJoin(
@@ -871,10 +869,9 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject_tree',
                 't',
                 'c.id = t.contentobject_id AND t.node_id = t.main_node_id'
-            )->where("c.${column} IN (:ids)")
-            ->setParameter('ids', $ids, $bindType);
+            );
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
     /**
@@ -891,7 +888,11 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfo($contentId)
     {
-        $results = $this->internalLoadContentInfo('id', [$contentId]);
+        $query = $this->connection->createQueryBuilder();
+        $query->where('c.id = :id')
+              ->setParameter('id', $contentId, \PDO::PARAM_INT);
+
+        $results = $this->internalLoadContentInfo($query);
         if (empty($results)) {
             throw new NotFound('content', "id: $contentId");
         }
@@ -901,7 +902,11 @@ class DoctrineDatabase extends Gateway
 
     public function loadContentInfoList(array $contentIds)
     {
-        return $this->internalLoadContentInfo('id', $contentIds);
+        $query = $this->connection->createQueryBuilder();
+        $query->where('c.id IN (:ids)')
+              ->setParameter('ids', $contentIds, Connection::PARAM_INT_ARRAY);
+
+        return $this->internalLoadContentInfo($query);
     }
 
     /**
@@ -917,9 +922,38 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        $results = $this->internalLoadContentInfo('remote_id', [$remoteId], Connection::PARAM_STR_ARRAY);
+        $query = $this->connection->createQueryBuilder();
+        $query->where('c.remote_id = :id')
+              ->setParameter('id', $remoteId, \PDO::PARAM_STR);
+
+        $results = $this->internalLoadContentInfo($query);
         if (empty($results)) {
             throw new NotFound('content', "remote_id: $remoteId");
+        }
+
+        return $results[0];
+    }
+
+    /**
+     * Loads info for a content object identified by its location ID (node ID).
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    public function loadContentInfoByLocationId($locationId)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->where('t.main_node_id = :id')
+              ->setParameter('id', $locationId, \PDO::PARAM_INT);
+
+        $results = $this->internalLoadContentInfo($query);
+        if (empty($results)) {
+            throw new NotFound('content', "main_node_id: $locationId");
         }
 
         return $results[0];
