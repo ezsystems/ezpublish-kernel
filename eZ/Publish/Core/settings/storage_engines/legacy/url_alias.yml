@@ -33,4 +33,6 @@ services:
             - "@ezpublish.persistence.legacy.location.gateway"
             - "@ezpublish.spi.persistence.legacy.language.handler"
             - "@ezpublish.persistence.slug_converter"
+            - "@ezpublish.persistence.legacy.content.gateway"
+            - "@ezpublish.persistence.legacy.language.mask_generator"
         lazy: true
