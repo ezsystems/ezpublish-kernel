@@ -537,6 +537,7 @@ class LocationService implements LocationServiceInterface
                 $location2->id,
                 $location2->parentLocationId
             );
+            $this->persistenceHandler->bookmarkHandler()->locationSwapped($loadedLocation1->id, $loadedLocation2->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();

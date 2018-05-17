@@ -41,9 +41,7 @@ class DoctrineDatabaseTest extends TestCase
             'name' => 'Lorem ipsum dolor...',
         ]));
 
-        $data = $this->connection
-            ->executeQuery('SELECT * FROM ezcontentbrowsebookmark WHERE id = :id', ['id' => $id])
-            ->fetch(PDO::FETCH_ASSOC);
+        $data = $this->loadBookmark($id);
 
         $this->assertEquals([
             'id' => $id,
@@ -60,11 +58,7 @@ class DoctrineDatabaseTest extends TestCase
     {
         $this->getGateway()->deleteBookmark(self::EXISTING_BOOKMARK_ID);
 
-        $data = $this->connection
-            ->executeQuery('SELECT * FROM ezcontentbrowsebookmark WHERE id = :id', ['id' => self::EXISTING_BOOKMARK_ID])
-            ->fetch(PDO::FETCH_ASSOC);
-
-        $this->assertEmpty($data);
+        $this->assertEmpty($this->loadBookmark(self::EXISTING_BOOKMARK_ID));
     }
 
     /**
@@ -135,6 +129,29 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase::locationSwapped
+     */
+    public function testLocationSwapped()
+    {
+        $bookmark1Id = 3;
+        $bookmark2Id = 4;
+
+        $bookmark1BeforeSwap = $this->loadBookmark($bookmark1Id);
+        $bookmark2BeforeSwap = $this->loadBookmark($bookmark2Id);
+
+        $this->getGateway()->locationSwapped(
+            (int) $bookmark1BeforeSwap['node_id'],
+            (int) $bookmark2BeforeSwap['node_id']
+        );
+
+        $bookmark1AfterSwap = $this->loadBookmark($bookmark1Id);
+        $bookmark2AfterSwap = $this->loadBookmark($bookmark2Id);
+
+        $this->assertEquals($bookmark1BeforeSwap['node_id'], $bookmark2AfterSwap['node_id']);
+        $this->assertEquals($bookmark2BeforeSwap['node_id'], $bookmark1AfterSwap['node_id']);
+    }
+
+    /**
      * Return a ready to test DoctrineStorage gateway.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase
@@ -144,5 +161,14 @@ class DoctrineDatabaseTest extends TestCase
         return new DoctrineDatabase(
             $this->getDatabaseHandler()->getConnection()
         );
+    }
+
+    private function loadBookmark(int $id): array
+    {
+        $data = $this->connection
+            ->executeQuery('SELECT * FROM ezcontentbrowsebookmark WHERE id = :id', ['id' => $id])
+            ->fetch(PDO::FETCH_ASSOC);
+
+        return is_array($data) ? $data : [];
     }
 }
