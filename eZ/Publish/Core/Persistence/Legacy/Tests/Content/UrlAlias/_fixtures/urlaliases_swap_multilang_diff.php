@@ -179,10 +179,50 @@ return array(
         0 => array(
             'id' => 3,
             'initial_language_id' => 2,
+            'current_version' => 1,
         ),
         1 => array(
             'id' => 4,
             'initial_language_id' => 2,
+            'current_version' => 1,
         ),
     ),
+    'ezcontentobject_name' => [
+        0 => [
+            'contentobject_id' => 3,
+            'content_version' => 1,
+            'name' => 'swap hr',
+            'content_translation' => 'cro-HR',
+        ],
+        1 => [
+            'contentobject_id' => 3,
+            'content_version' => 1,
+            'name' => 'swap this',
+            'content_translation' => 'ger-DE',
+        ],
+        2 => [
+            'contentobject_id' => 3,
+            'content_version' => 1,
+            'name' => 'swap this',
+            'content_translation' => 'nor-NO',
+        ],
+        3 => [
+            'contentobject_id' => 4,
+            'content_version' => 1,
+            'name' => 'swap this',
+            'content_translation' => 'cro-HR',
+        ],
+        4 => [
+            'contentobject_id' => 4,
+            'content_version' => 1,
+            'name' => 'swap this',
+            'content_translation' => 'ger-DE',
+        ],
+        5 => [
+            'contentobject_id' => 4,
+            'content_version' => 1,
+            'name' => 'swap en',
+            'content_translation' => 'eng-GB',
+        ],
+    ],
 );
