@@ -16,10 +16,10 @@ CREATE TABLE ezdfsfile (
   `expired` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`name_hash`),
-  KEY `ezdfsfile_name` (`name`(250)),
-  KEY `ezdfsfile_name_trunk` (`name_trunk`(250)),
+  KEY `ezdfsfile_name` (`name` (191)),
+  KEY `ezdfsfile_name_trunk` (`name_trunk` (191)),
   KEY `ezdfsfile_mtime` (`mtime`),
-  KEY `ezdfsfile_expired_name` (`expired`,`name`(250))
+  KEY `ezdfsfile_expired_name` (`expired`,`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
