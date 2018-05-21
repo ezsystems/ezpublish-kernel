@@ -97,6 +97,9 @@ class ContentViewBuilder implements ViewBuilder
 
         if (isset($parameters['content'])) {
             $content = $parameters['content'];
+        } else if ($location instanceof Location) {
+            // if we already have location load content true it so we avoid dual loading in case user does that in view
+            $content = $location->getContent();
         } else {
             if (isset($parameters['contentId'])) {
                 $contentId = $parameters['contentId'];
@@ -114,6 +117,13 @@ class ContentViewBuilder implements ViewBuilder
         if (isset($location)) {
             if ($location->contentId !== $content->id) {
                 throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');
+            }
+
+            if (isset($parameters['contentId']) && $location->contentId !== $parameters['contentId']) {
+                throw new InvalidArgumentException(
+                    'Location',
+                    'Provided location does not belong to selected content as requested via contentId parameter'
+                );
             }
         } elseif (isset($this->locationLoader)) {
             try {
