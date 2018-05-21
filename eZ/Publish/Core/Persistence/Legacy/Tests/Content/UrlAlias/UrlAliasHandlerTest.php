@@ -8,13 +8,15 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase as DoctrineDatabaseLocation;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase as LanguageGateway;
@@ -3876,6 +3878,286 @@ class UrlAliasHandlerTest extends TestCase
      *
      * @group swap
      */
+    public function testLocationSwappedSiblingsSameName()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_siblings_same_name.php');
+
+        $countBeforeReusing = $this->countRows();
+
+        $handler->locationSwapped(314, 2, 315, 2);
+
+        $this->assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+
+        $urlAlias = $handler->lookup('swap');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 314,
+                    'languageCodes' => [
+                        'cro-HR',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('swap2');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap2'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 315,
+                    'languageCodes' => [
+                        'cro-HR',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap2',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+    }
+
+    /**
+     * Test for the locationSwapped() method.
+     *
+     * @group swap
+     */
+    public function testLocationSwappedSiblingsSameNameReverse()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_siblings_same_name.php');
+
+        $countBeforeReusing = $this->countRows();
+
+        $handler->locationSwapped(315, 2, 314, 2);
+
+        $this->assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+
+        $urlAlias = $handler->lookup('swap');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 314,
+                    'languageCodes' => [
+                        'cro-HR',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('swap2');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap2'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 315,
+                    'languageCodes' => [
+                        'cro-HR',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap2',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+    }
+
+    /**
+     * Test for the locationSwapped() method.
+     *
+     * @group swap
+     */
+    public function testLocationSwappedSiblingsSameNameMultipleLanguages()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_swap_siblings_same_name_multilang.php');
+
+        $countBeforeReusing = $this->countRows();
+
+        $handler->locationSwapped(314, 2, 315, 2);
+
+        $this->assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+
+        $urlAlias = $handler->lookup('swap-hr');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap-hr'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 314,
+                    'languageCodes' => [
+                        'cro-HR',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap-hr',
+                                'eng-GB' => 'swap-en2',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('swap-hr2');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap-hr2'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 315,
+                    'languageCodes' => [
+                        'cro-HR',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap-hr2',
+                                'eng-GB' => 'swap-en',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('swap-en');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap-en'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 315,
+                    'languageCodes' => [
+                        'eng-GB',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap-hr2',
+                                'eng-GB' => 'swap-en',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+
+        $urlAlias = $handler->lookup('swap-en2');
+        $this->assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-' . md5('swap-en2'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => 314,
+                    'languageCodes' => [
+                        'eng-GB',
+                    ],
+                    'pathData' => [
+                        [
+                            'always-available' => false,
+                            'translations' => [
+                                'cro-HR' => 'swap-hr',
+                                'eng-GB' => 'swap-en2',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ]
+            ),
+            $urlAlias
+        );
+    }
+
+    /**
+     * Test for the locationSwapped() method.
+     *
+     * @group swap
+     */
     public function testLocationSwappedMultipleLanguagesSimple()
     {
         $handler = $this->getHandler();
@@ -5030,11 +5312,13 @@ class UrlAliasHandlerTest extends TestCase
         return $this->getMockBuilder(Handler::class)
             ->setConstructorArgs(
                 array(
-                    $this->createMock(Gateway::class),
+                    $this->createMock(UrlAliasGateway::class),
                     $this->createMock(Mapper::class),
                     $this->createMock(LocationGateway::class),
                     $this->createMock(LanguageHandler::class),
                     $this->createMock(SlugConverter::class),
+                    $this->createMock(Gateway::class),
+                    $this->createMock(LanguageMaskGenerator::class),
                 )
             )
             ->setMethods($methods)
@@ -5054,13 +5338,22 @@ class UrlAliasHandlerTest extends TestCase
         );
         $mapper = new Mapper($languageMaskGenerator);
         $slugConverter = new SlugConverter($this->getProcessor());
+        $contentGateway = new ContentGateway(
+            $this->getDatabaseHandler(),
+            $this->getDatabaseConnection(),
+            new ContentGateway\QueryBuilder($this->getDatabaseHandler()),
+            $languageHandler,
+            $languageMaskGenerator
+        );
 
         return new Handler(
             $gateway,
             $mapper,
             $this->getLocationGateway(),
             $languageHandler,
-            $slugConverter
+            $slugConverter,
+            $contentGateway,
+            $languageMaskGenerator
         );
     }
 
