@@ -74,6 +74,10 @@
         "branch-alias": {
             "dev-master": "7.2.x-dev",
             "dev-tmp_ci_branch": "7.2.x-dev"
+        },
+        "thanks": {
+            "name": "ezsystems/ezplatform",
+            "url": "https://github.com/ezsystems/ezplatform"
         }
     }
 }
