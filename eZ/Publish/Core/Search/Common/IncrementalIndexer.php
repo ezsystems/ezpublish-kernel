@@ -74,6 +74,8 @@ abstract class IncrementalIndexer extends Indexer
      * @param int[] $contentIds
      * @param bool $commit
      * @param bool $continueOnError
+     *
+     * @return int[] Returns content id's we could not index as field indexer threw a InvalidIndexDataException, details on the exception can be found in log message.
      */
     abstract public function updateSearchIndex(array $contentIds, $commit, $continueOnError = false);
 

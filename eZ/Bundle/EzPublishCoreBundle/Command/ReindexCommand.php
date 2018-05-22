@@ -116,7 +116,7 @@ class ReindexCommand extends ContainerAwareCommand
                 'continue-on-error',
                 null,
                 InputOption::VALUE_NONE,
-                'Continue indexing even if some content could not get properly indexed. Instead output info on items that could not be indexed at the end. Only applicable with --processes=0 and --iteration-count=1'
+                'Continue indexing even if some content could not get properly indexed. Instead output info on items that could not be indexed at the end. This option automatically disables parallel processes and is meant for debug usage typically in combination with one of the filter options.'
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -218,7 +218,7 @@ EOT
         }
 
         $iterations = ceil($count / $iterationCount);
-        $processes = $input->getOption('processes');
+        $processes = $continueOnError ? 1 : $input->getOption('processes');
         $processCount = $processes === 'auto' ? $this->getNumberOfCPUCores() - 1 : (int) $processes;
         $processCount = min($iterations, $processCount);
         $processMessage = $processCount > 1 ? "using $processCount parallel child processes" : 'using single (current) process';
