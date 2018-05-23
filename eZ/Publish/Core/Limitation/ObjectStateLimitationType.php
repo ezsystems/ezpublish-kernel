@@ -127,7 +127,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
         }
 
         // Skip evaluating for RootLocation
-        if (0 === $object->id) {
+        if (1 === $object->mainLocationId) {
             return true;
         }
 
