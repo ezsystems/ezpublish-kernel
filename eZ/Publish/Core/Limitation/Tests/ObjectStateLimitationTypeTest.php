@@ -146,7 +146,7 @@ class ObjectStateLimitationTypeTest extends Base
             // RootLocation, no object states assigned
             [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
-                'object' => new ContentInfo(['id' => 0, 'published' => true]),
+                'object' => new ContentInfo(['id' => 0, 'mainLocationId' => 1, 'published' => true]),
                 'expected' => true,
             ],
         ];
