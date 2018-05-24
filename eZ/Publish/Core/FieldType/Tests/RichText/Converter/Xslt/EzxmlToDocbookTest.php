@@ -9,7 +9,8 @@
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Xslt;
 
 use eZ\Publish\Core\FieldType\RichText\Converter\Aggregate;
-use eZ\Publish\Core\FieldType\XmlText\Converter\Expanding;
+use eZ\Publish\Core\FieldType\XmlText\Converter\ExpandingToRichText;
+use eZ\Publish\Core\FieldType\XmlText\Converter\ExpandingList;
 use eZ\Publish\Core\FieldType\RichText\Converter\Ezxml\ToRichTextPreNormalize;
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking;
 use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
@@ -23,20 +24,20 @@ class EzxmlToDocbookTest extends BaseTest
     {
         parent::setUp();
 
-        if (!class_exists(Expanding::class)) {
+        if (!class_exists(ExpandingToRichText::class)) {
             $this->markTestSkipped('This tests requires XmlText field type');
         }
     }
 
     /**
-     * @return \eZ\Publish\Core\FieldType\RichText\Converter\Xslt
+     * @return \eZ\Publish\Core\FieldType\RichText\Converter\Aggregate
      */
     protected function getConverter()
     {
         if ($this->converter === null) {
             $this->converter = new Aggregate(
                 array(
-                    new ToRichTextPreNormalize(new Expanding(), new EmbedLinking()),
+                    new ToRichTextPreNormalize([new ExpandingToRichText(), new ExpandingList(), new EmbedLinking()]),
                     new Xslt(
                         $this->getConversionTransformationStylesheet(),
                         $this->getCustomConversionTransformationStylesheets()

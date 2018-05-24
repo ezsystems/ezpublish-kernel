@@ -102,6 +102,9 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="line">
+  </xsl:template>
+
   <xsl:template match="paragraph">
     <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
       <xsl:if test="@class">
@@ -126,6 +129,8 @@
               </xsl:if>
             </xsl:for-each>
           </xsl:element>
+          <!-- paragraph may also contain a list so let's apply templates too -->
+          <xsl:apply-templates/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates/>
