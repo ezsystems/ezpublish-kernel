@@ -188,7 +188,8 @@ services:
 
     ezpublish.twig.extension.image:
         class: "%ezpublish.twig.extension.image.class%"
-        arguments: ["@ezpublish.fieldType.ezimage.variation_service"]
+        arguments:
+            - '@ezpublish.image_alias.imagine.alias_generator'
         tags:
             - { name: twig.extension }
 

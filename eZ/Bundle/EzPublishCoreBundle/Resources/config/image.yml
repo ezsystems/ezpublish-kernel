@@ -95,6 +95,38 @@ services:
         arguments: ["@ezpublish.image_alias.imagine.cache_resolver"]
         lazy: true
 
+    ezpublish.image_alias.imagine.placeholder_provider.configurator:
+        class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderAliasGeneratorConfigurator'
+        arguments:
+            - '@ezpublish.config.resolver'
+            - '@ezpublish.image_alias.imagine.placeholder_provider.registry'
+            - '%image_alias.placeholder_providers%'
+
+    ezpublish.image_alias.imagine.alias_generator.placeholder:
+        class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderAliasGenerator'
+        decorates: 'ezpublish.image_alias.imagine.alias_generator'
+        configurator: ['@ezpublish.image_alias.imagine.placeholder_provider.configurator', 'configure']
+        arguments:
+            - '@ezpublish.image_alias.imagine.alias_generator.placeholder.inner'
+            - '@ezpublish.image_alias.imagine.cache_resolver'
+            - '@ezpublish.fieldType.ezimage.io_service'
+        public: false
+
+    ezpublish.image_alias.imagine.placeholder_provider.registry:
+        class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry'
+
+    ezpublish.image_alias.placeholder_provider.generic:
+        class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider\GenericProvider'
+        arguments:
+            - '@liip_imagine'
+        tags:
+            - { name: 'ezpublish.placeholder_provider', type: 'generic' }
+
+    ezpublish.image_alias.imagine.placeholder_provider.remote:
+        class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider\RemoteProvider'
+        tags:
+            - { name: 'ezpublish.placeholder_provider', type: 'remote' }
+
     ezpublish.image_alias.imagine.filter.loader.scaledown.base:
         abstract: true
         public: false
