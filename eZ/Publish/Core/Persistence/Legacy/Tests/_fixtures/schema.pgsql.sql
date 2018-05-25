@@ -609,6 +609,8 @@ CREATE UNIQUE INDEX ezcontentobject_remote_id ON ezcontentobject USING btree (re
 
 CREATE INDEX ezcontentobject_status ON ezcontentobject USING btree (status);
 
+CREATE INDEX ezcontentobject_section ON ezcontentobject USING btree (section_id);
+
 CREATE INDEX ezcontentobject_attribute_co_id_ver_lang_code ON ezcontentobject_attribute USING btree (contentobject_id, "version", language_code);
 
 CREATE INDEX ezcontentobject_attribute_language_code ON ezcontentobject_attribute USING btree (language_code);
@@ -652,6 +654,8 @@ CREATE INDEX ezcontentobject_tree_p_node_id ON ezcontentobject_tree USING btree 
 CREATE INDEX ezcontentobject_tree_path ON ezcontentobject_tree USING btree (path_string);
 
 CREATE INDEX ezcontentobject_tree_path_ident ON ezcontentobject_tree USING btree (path_identification_string);
+
+CREATE INDEX ezcontentobject_tree_contentobject_id_path_string ON ezcontentobject_tree USING btree (path_string, contentobject_id);
 
 CREATE INDEX modified_subnode ON ezcontentobject_tree USING btree (modified_subnode);
 
