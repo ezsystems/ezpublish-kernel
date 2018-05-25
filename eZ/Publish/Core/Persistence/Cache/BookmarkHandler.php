@@ -93,4 +93,18 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
 
         return $this->persistenceHandler->bookmarkHandler()->countUserBookmarks($userId);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function locationSwapped(int $location1Id, int $location2Id): void
+    {
+        $this->logger->logCall(__METHOD__, [
+            'location1Id' => $location1Id,
+            'location2Id' => $location2Id,
+        ]);
+
+        // Cache clearing is already done by locationHandler
+        $this->persistenceHandler->bookmarkHandler()->locationSwapped($location1Id, $location2Id);
+    }
 }

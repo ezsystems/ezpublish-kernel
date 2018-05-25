@@ -90,4 +90,12 @@ class Handler implements HandlerInterface
     {
         return $this->gateway->countUserBookmarks($userId);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function locationSwapped(int $location1Id, int $location2Id): void
+    {
+        $this->gateway->locationSwapped($location1Id, $location2Id);
+    }
 }

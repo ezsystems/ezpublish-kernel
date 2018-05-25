@@ -60,4 +60,12 @@ abstract class Gateway
      * @return int
      */
     abstract public function countUserBookmarks(int $userId): int;
+
+    /**
+     * Updates related bookmarks when location was swapped.
+     *
+     * @param int $location1Id ID of first location
+     * @param int $location2Id ID of second location
+     */
+    abstract public function locationSwapped(int $location1Id, int $location2Id): void;
 }

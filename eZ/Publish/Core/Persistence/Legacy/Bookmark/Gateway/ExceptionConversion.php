@@ -92,4 +92,16 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function locationSwapped(int $location1Id, int $location2Id): void
+    {
+        try {
+            $this->innerGateway->locationSwapped($location1Id, $location2Id);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
 }

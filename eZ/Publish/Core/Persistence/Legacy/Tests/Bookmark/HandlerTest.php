@@ -197,4 +197,20 @@ class HandlerTest extends TestCase
 
         $this->assertEquals($objects, $this->handler->loadUserBookmarks($userId, $offset, $limit));
     }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler::locationSwapped
+     */
+    public function testLocationSwapped()
+    {
+        $location1Id = 1;
+        $location2Id = 2;
+
+        $this->gateway
+            ->expects($this->once())
+            ->method('locationSwapped')
+            ->with($location1Id, $location2Id);
+
+        $this->handler->locationSwapped($location1Id, $location2Id);
+    }
 }

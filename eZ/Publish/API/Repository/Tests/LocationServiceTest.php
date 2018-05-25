@@ -1319,6 +1319,41 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test if location swap affects related bookmarks.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
+     */
+    public function testBookmarksAreSwappedAfterSwapLocation()
+    {
+        $repository = $this->getRepository();
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+        $bookmarkService = $repository->getBookmarkService();
+
+        $mediaLocation = $locationService->loadLocation($mediaLocationId);
+        $demoDesignLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        // Bookmark locations
+        $bookmarkService->createBookmark($mediaLocation);
+        $bookmarkService->createBookmark($demoDesignLocation);
+
+        $beforeSwap = $bookmarkService->loadBookmarks();
+
+        // Swaps the content referred to by the locations
+        $locationService->swapLocation($mediaLocation, $demoDesignLocation);
+
+        $afterSwap = $bookmarkService->loadBookmarks();
+        /* END: Use Case */
+
+        $this->assertEquals($beforeSwap->items[0]->id, $afterSwap->items[1]->id);
+        $this->assertEquals($beforeSwap->items[1]->id, $afterSwap->items[0]->id);
+    }
+
+    /**
      * Test for the hideLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
