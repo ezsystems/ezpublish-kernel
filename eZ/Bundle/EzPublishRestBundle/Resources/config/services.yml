@@ -233,6 +233,13 @@ services:
             - "%ezpublish_rest.csrf_token_intention%"
             - "@?ezpublish_rest.security.csrf.token_manager"
 
+    ezpublish_rest.controller.bookmark:
+        class: eZ\Publish\Core\REST\Server\Controller\Bookmark
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - '@ezpublish.api.service.bookmark'
+            - '@ezpublish.api.service.location'
+
     ezpublish_rest.request_listener:
         class: "%ezpublish_rest.request_listener.class%"
         tags:
