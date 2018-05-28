@@ -453,7 +453,9 @@ CREATE TABLE `ezcontentbrowsebookmark` (
   `node_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `ezcontentbrowsebookmark_user` (`user_id`)
+  KEY `ezcontentbrowsebookmark_user` (`user_id`),
+  KEY `ezcontentbrowsebookmark_location` (`node_id`),
+  KEY `ezcontentbrowsebookmark_user_location` (`user_id`, `node_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2537,6 +2539,20 @@ CREATE TABLE `ezworkflow_process` (
   PRIMARY KEY (`id`),
   KEY `ezworkflow_process_process_key` (`process_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `ezcontentbrowsebookmark`
+ADD CONSTRAINT `ezcontentbrowsebookmark_location_fk`
+  FOREIGN KEY (`node_id`)
+  REFERENCES `ezcontentobject_tree` (`node_id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `ezcontentbrowsebookmark`
+ADD CONSTRAINT `ezcontentbrowsebookmark_user_fk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `ezuser` (`contentobject_id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
