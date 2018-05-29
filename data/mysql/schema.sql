@@ -625,7 +625,8 @@ CREATE TABLE `ezcontentobject` (
   KEY `ezcontentobject_lmask` (`language_mask`),
   KEY `ezcontentobject_owner` (`owner_id`),
   KEY `ezcontentobject_pub` (`published`),
-  KEY `ezcontentobject_status` (`status`)
+  KEY `ezcontentobject_status` (`status`),
+  KEY `ezcontentobject_section` (`section_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -764,7 +765,8 @@ CREATE TABLE `ezcontentobject_tree` (
   KEY `ezcontentobject_tree_p_node_id` (`parent_node_id`),
   KEY `ezcontentobject_tree_path` (`path_string` (191)),
   KEY `ezcontentobject_tree_path_ident` (`path_identification_string`(50)),
-  KEY `modified_subnode` (`modified_subnode`)
+  KEY `modified_subnode` (`modified_subnode`),
+  KEY `ezcontentobject_tree_contentobject_id_path_string` (`path_string`, `contentobject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
