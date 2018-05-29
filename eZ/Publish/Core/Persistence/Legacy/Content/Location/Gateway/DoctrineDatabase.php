@@ -41,6 +41,11 @@ class DoctrineDatabase extends Gateway
     protected $handler;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
@@ -48,6 +53,7 @@ class DoctrineDatabase extends Gateway
     public function __construct(DatabaseHandler $handler)
     {
         $this->handler = $handler;
+        $this->connection = $handler->getConnection();
     }
 
     /**
@@ -1330,39 +1336,49 @@ class DoctrineDatabase extends Gateway
     /**
      * Set section on all content objects in the subtree.
      *
-     * @param mixed $pathString
-     * @param mixed $sectionId
+     * @param string $pathString
+     * @param int $sectionId
      *
      * @return bool
      */
     public function setSectionForSubtree($pathString, $sectionId)
     {
-        $query = $this->handler->createUpdateQuery();
-
-        $subSelect = $query->subSelect();
-        $subSelect
-            ->select($this->handler->quoteColumn('contentobject_id'))
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
+        $selectContentIdsQuery = $this->connection->createQueryBuilder();
+        $selectContentIdsQuery
+            ->select('t.contentobject_id')
+            ->from('ezcontentobject_tree', 't')
             ->where(
-                $subSelect->expr->like(
-                    $this->handler->quoteColumn('path_string'),
-                    $subSelect->bindValue($pathString . '%')
+                $selectContentIdsQuery->expr()->like(
+                    't.path_string',
+                    $selectContentIdsQuery->createPositionalParameter("{$pathString}%")
                 )
             );
 
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject'))
+        $contentIds = array_map(
+            'intval',
+            $selectContentIdsQuery->execute()->fetchAll(PDO::FETCH_COLUMN)
+        );
+
+        if (empty($contentIds)) {
+            return false;
+        }
+
+        $updateSectionQuery = $this->connection->createQueryBuilder();
+        $updateSectionQuery
+            ->update('ezcontentobject')
             ->set(
-                $this->handler->quoteColumn('section_id'),
-                $query->bindValue($sectionId)
+                'section_id',
+                $updateSectionQuery->createPositionalParameter($sectionId, PDO::PARAM_INT)
             )
             ->where(
-                $query->expr->in(
-                    $this->handler->quoteColumn('id'),
-                    $subSelect
+                $updateSectionQuery->expr()->in(
+                    'id',
+                    $contentIds
                 )
             );
-        $query->prepare()->execute();
+        $affectedRows = $updateSectionQuery->execute();
+
+        return $affectedRows > 0;
     }
 
     /**
