@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use eZ\Publish\SPI\Variation\VariationHandler;
-use eZ\Publish\Core\FieldType\Value;
+use eZ\Publish\SPI\FieldType\Value;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Binary\BinaryInterface;
