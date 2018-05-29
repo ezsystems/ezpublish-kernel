@@ -45,6 +45,10 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 'type' => 'hash',
                 'default' => array(),
             ),
+            'defaultValue' => array(
+                'type' => 'hash',
+                'default' => array(),
+            ),
         );
     }
 
@@ -64,6 +68,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 3 => 'Turtles',
                 4 => 'Zombies',
             ),
+            'defaultValue' => array(),
         );
     }
 
@@ -78,6 +83,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             'somethingUnknown' => 0,
             'isMultiple' => array(),
             'options' => new \stdClass(),
+            'defaultValue' => 'bad',
         );
     }
 

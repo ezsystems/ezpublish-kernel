@@ -149,6 +149,13 @@
 
 {% block ezselection_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+    {% set defaultValue = null %}
+    {% if settings.defaultValue %}
+        {% for value in settings.defaultValue %}
+            {% set defaultValue = defaultValue ~ settings.options[value] ~ ( not loop.last ? ', ' : '' ) %}
+        {% endfor %}
+    {% endif %}
+    {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting options">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.options.label'|trans|desc("Defined options")}}</div>
         <div class="ez-fielddefinition-setting-value">

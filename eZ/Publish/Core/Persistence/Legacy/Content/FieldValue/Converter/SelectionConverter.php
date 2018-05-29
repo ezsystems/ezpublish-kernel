@@ -57,7 +57,7 @@ class SelectionConverter implements Converter
                 explode('-', $value->dataText)
             );
         } else {
-            $fieldValue->data = array();
+            $fieldValue->data = [];
         }
         $fieldValue->sortKey = $value->sortKeyString;
     }
@@ -93,6 +93,14 @@ class SelectionConverter implements Converter
             }
             $storageDef->dataText5 = $xml->saveXML();
         }
+
+        if ($fieldSettings['defaultValue'] == null) {
+            $fieldSettings['defaultValue'] = [];
+        }
+
+        $storageDef->dataText4 = empty($fieldSettings['defaultValue'])
+            ? ''
+            : implode(',', $fieldSettings['defaultValue']);
     }
 
     /**
@@ -103,7 +111,7 @@ class SelectionConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        $options = array();
+        $options = [];
         $simpleXml = simplexml_load_string($storageDef->dataText5);
 
         if ($simpleXml !== false) {
@@ -112,17 +120,21 @@ class SelectionConverter implements Converter
             }
         }
 
+        $defaultValue = $storageDef->dataText4 == null
+            ? []
+            : explode(',', $storageDef->dataText4);
+
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
                 'options' => $options,
-            )
+                'defaultValue' => $defaultValue,
+            ]
         );
 
-        // @todo: Can Selection store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();
-        $fieldDef->defaultValue->data = array();
-        $fieldDef->defaultValue->sortKey = '';
+        $fieldDef->defaultValue->data = $defaultValue;
+        $fieldDef->defaultValue->sortKey = $storageDef->dataText4;
     }
 
     /**

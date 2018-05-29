@@ -41,7 +41,7 @@ class SelectionTest extends TestCase
     public function testToStorageValue()
     {
         $fieldValue = new FieldValue();
-        $fieldValue->data = array(1, 3);
+        $fieldValue->data = [1, 3];
         $fieldValue->sortKey = '1-3';
 
         $expectedStorageFieldValue = new StorageFieldValue();
@@ -66,7 +66,7 @@ class SelectionTest extends TestCase
     public function testToStorageValueEmpty()
     {
         $fieldValue = new FieldValue();
-        $fieldValue->data = array();
+        $fieldValue->data = [];
         $fieldValue->sortKey = '';
 
         $expectedStorageFieldValue = new StorageFieldValue();
@@ -95,7 +95,7 @@ class SelectionTest extends TestCase
         $storageFieldValue->sortKeyString = '1-3';
 
         $expectedFieldValue = new FieldValue();
-        $expectedFieldValue->data = array(1, 3);
+        $expectedFieldValue->data = [1, 3];
         $expectedFieldValue->sortKey = '1-3';
 
         $actualFieldValue = new FieldValue();
@@ -120,7 +120,7 @@ class SelectionTest extends TestCase
         $storageFieldValue->sortKeyString = '';
 
         $expectedFieldValue = new FieldValue();
-        $expectedFieldValue->data = array();
+        $expectedFieldValue->data = [];
         $expectedFieldValue->sortKey = '';
 
         $actualFieldValue = new FieldValue();
@@ -141,26 +141,31 @@ class SelectionTest extends TestCase
     public function testToStorageFieldDefinitionMultiple()
     {
         $fieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => true,
-                                'options' => array(
+                                'options' => [
                                     0 => 'First',
                                     1 => 'Second',
                                     2 => 'Third',
-                                ),
-                            )
+                                ],
+                                'defaultValue' => [
+                                    0,
+                                    1,
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
         $expectedStorageFieldDefinition->dataInt1 = 1;
+        $expectedStorageFieldDefinition->dataText4 = '0,1';
         $expectedStorageFieldDefinition->dataText5 = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <ezselection><options><option id="0" name="First"/><option id="1" name="Second"/><option id="2" name="Third"/></options></ezselection>
@@ -182,24 +187,28 @@ EOT;
     public function testToStorageFieldDefinitionSingle()
     {
         $fieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => false,
-                                'options' => array(
+                                'options' => [
                                     0 => 'First',
-                                ),
-                            )
+                                ],
+                                'defaultValue' => [
+                                    0,
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
         $expectedStorageFieldDefinition->dataInt1 = 0;
+        $expectedStorageFieldDefinition->dataText4 = '0';
         $expectedStorageFieldDefinition->dataText5 = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <ezselection><options><option id="0" name="First"/></options></ezselection>
@@ -222,6 +231,7 @@ EOT;
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $storageFieldDefinition->dataInt1 = 1;
+        $storageFieldDefinition->dataText4 = '0, 1';
         $storageFieldDefinition->dataText5 = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <ezselection>
@@ -234,28 +244,35 @@ EOT;
 EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => true,
-                                'options' => array(
+                                'options' => [
                                     0 => 'First',
                                     1 => 'Second',
                                     2 => 'Third',
-                                ),
-                            )
+                                ],
+                                'defaultValue' => [
+                                    0,
+                                    1,
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 'defaultValue' => new FieldValue(
-                    array(
-                        'data' => array(),
-                        'sortKey' => '',
-                    )
+                    [
+                        'data' => [
+                            0 => '0',
+                            1 => ' 1',
+                        ],
+                        'sortKey' => '0, 1',
+                    ]
                 ),
-            )
+            ]
         );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();
@@ -274,6 +291,7 @@ EOT;
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $storageFieldDefinition->dataInt1 = 0;
+        $storageFieldDefinition->dataInt4 = '';
         $storageFieldDefinition->dataText5 = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <ezselection>
@@ -283,19 +301,20 @@ EOT;
 EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => false,
-                                'options' => array(),
-                            )
+                                'options' => [],
+                                'defaultValue' => [],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-                'defaultValue' => new FieldValue(array('data' => array())),
-            )
+                'defaultValue' => new FieldValue(['data' => []]),
+            ]
         );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();
