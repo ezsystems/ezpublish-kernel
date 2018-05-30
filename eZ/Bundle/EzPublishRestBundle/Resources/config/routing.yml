@@ -1184,7 +1184,7 @@ ezpublish_rest_isBookmarked:
     path: /bookmark/{locationPath}
     defaults:
         _controller: ezpublish_rest.controller.bookmark:isBookmarked
-    methods: [HEAD]
+    methods: [GET, HEAD]
     requirements:
         locationPath: "[0-9/]+"
 
