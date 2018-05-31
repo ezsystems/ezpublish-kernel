@@ -60,11 +60,11 @@ abstract class AbstractHandler
      * like translations, i.e. "ez-content-${id}-${translationKey}" where $keySuffix = "-${translationKey}".
      *
      * @param array $ids
-     * @param string $keyPrefix
+     * @param string $keyPrefix E.g "ez-content-"
      * @param callable $missingLoader Function for loading missing objects, gets array with missing id's as argument,
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $loadedTagger Function for tagging loaded object, gets object as argument, return array of tags.
-     * @param string $keySuffix Optional argument for key suffix, for instance translations argument for all lookups.
+     * @param array $keySuffixes Optional, key is id as provided in $ids, and value is a key suffix e.g. "-eng-Gb"
      *
      * @return array
      */
@@ -73,7 +73,7 @@ abstract class AbstractHandler
         string $keyPrefix,
         callable $missingLoader,
         callable $loadedTagger,
-        string $keySuffix = ''
+        array $keySuffixes = []
     ): array {
         if (empty($ids)) {
             return [];
@@ -82,18 +82,17 @@ abstract class AbstractHandler
         // Generate unique cache keys
         $cacheKeys = [];
         foreach (array_unique($ids) as $id) {
-            $cacheKeys[] = $keyPrefix . $id . $keySuffix;
+            $cacheKeys[] = $keyPrefix . $id . (!empty($keySuffixes[$id]) ? $keySuffixes[$id] : '');
         }
 
         // Load cache items by cache keys (will contain hits and misses)
         $list = [];
         $cacheMisses = [];
         $keyPrefixLength = strlen($keyPrefix);
-        $keySuffixLength = strlen($keySuffix);
         foreach ($this->cache->getItems($cacheKeys) as $key => $cacheItem) {
             $id = substr($key, $keyPrefixLength);
-            if ($keySuffixLength !== 0) {
-                $id = substr($id, 0, -$keySuffixLength);
+            if (!empty($keySuffixes)) {
+                $id = explode('-', $id, 2)[0];
             }
 
             if ($cacheItem->isHit()) {

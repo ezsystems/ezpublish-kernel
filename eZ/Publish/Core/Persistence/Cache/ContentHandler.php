@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\LoadStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
@@ -78,20 +79,37 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         return $content;
     }
 
-    public function loadContentList(array $contentIds, array $translations): array
+    public function loadContentList(array $contentLoadStructs): array
     {
+        // Extract id's and make key suffix for each one (handling undefined versionNo and languages)
+        $contentIds = [];
+        $keySuffixes = [];
+        foreach ($contentLoadStructs as $struct) {
+            $contentIds[] = $struct->id;
+            $keySuffixes[$struct->id] = ($struct->versionNo ? "-{$struct->versionNo}-" : '-' ).
+                (empty($struct->languages) ? self::ALL_TRANSLATIONS_KEY : implode('|', $struct->languages));
+        }
+
         return $this->getMultipleCacheItems(
             $contentIds,
             'ez-content-',
-            function (array $cacheMissIds) use ($translations) {
-                $this->logger->logCall(__CLASS__ . '::loadContentList', ['content' => $cacheMissIds, 'translations' => $translations]);
+            function (array $cacheMissIds) use ($contentLoadStructs) {
+                $this->logger->logCall(__CLASS__ . '::loadContentList', ['content' => $cacheMissIds]);
 
-                return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
+                $filteredStructs = [];
+                /* @var $contentLoadStructs \eZ\Publish\SPI\Persistence\Content\LoadStruct[] */
+                foreach ($contentLoadStructs as $struct) {
+                    if (in_array($struct->id, $cacheMissIds)) {
+                        $filteredStructs[] = $struct;
+                    }
+                }
+
+                return $this->persistenceHandler->contentHandler()->loadContentList($filteredStructs);
             },
             function (Content $content) {
                 return $this->getCacheTags($content->versionInfo->contentInfo, true);
             },
-            '-' . (empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations))
+            $keySuffixes
         );
     }
 

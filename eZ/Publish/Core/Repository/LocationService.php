@@ -182,7 +182,7 @@ class LocationService implements LocationServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildLocationDomainObject($newLocation, null, $content);
+        return $this->domainMapper->buildLocationWithContent($newLocation, $content);
     }
 
     /**
@@ -191,8 +191,7 @@ class LocationService implements LocationServiceInterface
     public function loadLocation($locationId, array $prioritizedLanguages = null)
     {
         $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId);
-        $content = $this->domainMapper->buildContentProxy($spiLocation->contentId, $prioritizedLanguages ?: []);
-        $location = $this->domainMapper->buildLocationDomainObject($spiLocation, null, $content);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read');
         }
@@ -210,8 +209,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
-        $content = $this->domainMapper->buildContentProxy($spiLocation->contentId, $prioritizedLanguages ?: []);
-        $location = $this->domainMapper->buildLocationDomainObject($spiLocation, null, $content);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read');
         }
@@ -235,9 +233,9 @@ class LocationService implements LocationServiceInterface
 
         $locations = [];
         $spiInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($contentInfo->id);
-        $content = $this->domainMapper->buildContentProxy($contentInfo->id, $prioritizedLanguages ?: []);
+        $content = $this->domainMapper->buildContentProxy($spiInfo, $prioritizedLanguages ?: []);
         foreach ($spiLocations as $spiLocation) {
-            $location = $this->domainMapper->buildLocationDomainObject($spiLocation, $spiInfo, $content);
+            $location = $this->domainMapper->buildLocationWithContent($spiLocation, $content, $spiInfo);
             if ($this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
                 $locations[] = $location;
             }
@@ -309,12 +307,12 @@ class LocationService implements LocationServiceInterface
         $locations = [];
         $permissionResolver = $this->repository->getPermissionResolver();
         $spiContentInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList($contentIds);
-        $contentList = $this->domainMapper->buildContentProxyList($contentIds, $prioritizedLanguages ?: []);
+        $contentList = $this->domainMapper->buildContentProxyList($spiContentInfoList, $prioritizedLanguages ?: []);
         foreach ($spiLocations as $spiLocation) {
-            $location = $this->domainMapper->buildLocationDomainObject(
+            $location = $this->domainMapper->buildLocationWithContent(
                 $spiLocation,
-                $spiContentInfoList[$spiLocation->contentId],
-                $contentList[$spiLocation->contentId]
+                $contentList[$spiLocation->contentId],
+                $spiContentInfoList[$spiLocation->contentId]
             );
 
             if ($permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
@@ -439,7 +437,7 @@ class LocationService implements LocationServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildLocationDomainObject($newLocation, null, $content);
+        return $this->domainMapper->buildLocationWithContent($newLocation, $content);
     }
 
     /**

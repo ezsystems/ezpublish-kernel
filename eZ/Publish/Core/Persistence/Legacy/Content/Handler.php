@@ -330,48 +330,36 @@ class Handler implements BaseContentHandler
 
     /**
      * {@inheritdoc}
-     *
-     * @todo
-     * REVIEW NOTE: This methods ALWAYS handles AlwaysAvailable, this would perhaps be better handled in API layer like
-     *              done on load(), thus making it optional. AND faster as it can loadContentInfoList via SPI cache.
-     *              However then we would need a argument structure like used on gateway here.
-     *              Would that be OK for loadContentList() in SPI layer??
-     *              If so it should also take version number  as part of the structure.
      */
-    public function loadContentList(array $contentIds, array $translations): array
+    public function loadContentList(array $contentLoadStructs): array
     {
-        $infoList = $this->mapper->extractContentInfoFromRows(
-            $this->contentGateway->loadContentInfoList($contentIds)
-        );
+        $IdVersionTranslationPairs = [];
+        foreach ($contentLoadStructs as $struct) {
+            $IdVersionTranslationPairs[] = [
+                'id' => $struct->id,
+                'version' => $struct->versionNo,
+                'languages' => $struct->languages,
+            ];
+        }
 
-        if (empty($infoList)) {
+        $rawList = $this->contentGateway->loadContentList($IdVersionTranslationPairs);
+        if (empty($rawList)) {
             return [];
         }
 
         $IdVersionPairs = [];
-        $IdVersionTranslationPairs = [];
-        foreach ($infoList as $info) {
-            $IdVersionTranslation = [
-                'id' => $info->id,
-                'version' => $info->currentVersionNo,
-                'languages' => $translations,
+        foreach ($rawList as $row) {
+            $IdVersionPairs[] = [
+                'id' => $row['ezcontentobject_id'],
+                'version' => $row['ezcontentobject_version_version'],
             ];
-
-            if ($info->alwaysAvailable && !in_array($info->mainLanguageCode, $translations)) {
-                $IdVersionTranslation['languages'][] = $info->mainLanguageCode;
-            }
-
-            $IdVersionTranslationPairs[] = $IdVersionTranslation;
-            unset($IdVersionTranslation['languages']);
-
-            $IdVersionPairs[] = $IdVersionTranslation;
         }
-        unset($infoList, $info);
 
         $contentObjects = $this->mapper->extractContentFromRows(
-            $this->contentGateway->loadContentList($IdVersionTranslationPairs),
+            $rawList,
             $this->contentGateway->loadVersionedNameData($IdVersionPairs)
         );
+        unset($rawList, $IdVersionPairs, $IdVersionTranslationPairs);
 
         $result = [];
         foreach ($contentObjects as $content) {

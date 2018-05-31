@@ -73,12 +73,14 @@ interface Handler
      * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
      * to calling logic to determine if this should cause exception or not.
      *
-     * @param array $contentIds
-     * @param string[] $translations
+     * NOTE: Even if LoadStruct technically allows to load several versions of same content, this method does not allow
+     * this by design as content is returned as Map with key being content id.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content[]
+     * @param \eZ\Publish\SPI\Persistence\Content\LoadStruct[] $contentLoadStructs
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content[<int>]
      */
-    public function loadContentList(array $contentIds, array $translations): array;
+    public function loadContentList(array $contentLoadStructs): array;
 
     /**
      * Returns the metadata object for a content identified by $contentId.

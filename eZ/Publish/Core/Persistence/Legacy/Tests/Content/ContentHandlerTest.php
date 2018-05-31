@@ -530,27 +530,11 @@ class ContentHandlerTest extends TestCase
         $mapperMock = $this->getMapperMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
-        $infoRows = [
-            ['id' => 2, 'version' => 2, 'language_mask' => 2],
-            ['id' => 3, 'version' => 1, 'language_mask' => 3],
-        ];
-        $gatewayMock->expects($this->once())
-            ->method('loadContentInfoList')
-            ->with($this->equalTo([2, 3]))
-            ->willReturn($infoRows);
 
-        $infoList = [
-            new ContentInfo(['id' => 2, 'currentVersionNo' => 2, 'alwaysAvailable' => false, 'mainLanguageCode' => 'eng-US']),
-            new ContentInfo(['id' => 3, 'currentVersionNo' => 1, 'alwaysAvailable' => true, 'mainLanguageCode' => 'eng-US']),
-        ];
-        $mapperMock->expects($this->once())
-            ->method('extractContentInfoFromRows')
-            ->with($this->equalTo($infoRows))
-            ->willReturn($infoList);
 
         $idVersionTranslationPairs = [
             ['id' => 2, 'version' => 2, 'languages' => ['eng-GB']],
-            ['id' => 3, 'version' => 1, 'languages' => ['eng-GB', 'eng-US']],
+            ['id' => 3, 'version' => null, 'languages' => ['eng-GB', 'eng-US']],
         ];
         $contentRows = [
             ['ezcontentobject_id' => 2, 'ezcontentobject_version_version' => 2],
@@ -579,7 +563,12 @@ class ContentHandlerTest extends TestCase
             ->method('loadExternalFieldData')
             ->with($this->isInstanceOf(Content::class));
 
-        $result = $handler->loadContentList([2, 3], ['eng-GB']);
+        $loadStructList = [
+          new Content\LoadStruct(['id' => 2, 'versionNo' => 2, 'languages' => ['eng-GB']]),
+          new Content\LoadStruct(['id' => 3, 'languages' => ['eng-GB', 'eng-US']]),
+        ];
+
+        $result = $handler->loadContentList($loadStructList);
 
         $this->assertEquals(
             $expected,
