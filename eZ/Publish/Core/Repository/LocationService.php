@@ -355,7 +355,6 @@ class LocationService implements LocationServiceInterface
             'sortClauses' => $location->getSortClauses(),
         ]);
 
-        // @todo: We always respect always avaiable flag here, we should check if that is the case in all loading sceanrios!!
         return $this->repository->getSearchService()->findLocations($query, ['languages' => $prioritizedLanguages]);
     }
 

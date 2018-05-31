@@ -333,23 +333,23 @@ class Handler implements BaseContentHandler
      */
     public function loadContentList(array $contentLoadStructs): array
     {
-        $IdVersionTranslationPairs = [];
+        $idVersionTranslationPairs = [];
         foreach ($contentLoadStructs as $struct) {
-            $IdVersionTranslationPairs[] = [
+            $idVersionTranslationPairs[] = [
                 'id' => $struct->id,
                 'version' => $struct->versionNo,
                 'languages' => $struct->languages,
             ];
         }
 
-        $rawList = $this->contentGateway->loadContentList($IdVersionTranslationPairs);
+        $rawList = $this->contentGateway->loadContentList($idVersionTranslationPairs);
         if (empty($rawList)) {
             return [];
         }
 
-        $IdVersionPairs = [];
+        $idVersionPairs = [];
         foreach ($rawList as $row) {
-            $IdVersionPairs[] = [
+            $idVersionPairs[] = [
                 'id' => $row['ezcontentobject_id'],
                 'version' => $row['ezcontentobject_version_version'],
             ];
@@ -357,9 +357,9 @@ class Handler implements BaseContentHandler
 
         $contentObjects = $this->mapper->extractContentFromRows(
             $rawList,
-            $this->contentGateway->loadVersionedNameData($IdVersionPairs)
+            $this->contentGateway->loadVersionedNameData($idVersionPairs)
         );
-        unset($rawList, $IdVersionPairs, $IdVersionTranslationPairs);
+        unset($rawList, $idVersionPairs, $idVersionTranslationPairs);
 
         $result = [];
         foreach ($contentObjects as $content) {

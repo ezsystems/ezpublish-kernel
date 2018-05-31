@@ -836,9 +836,6 @@ class DoctrineDatabase extends Gateway
         $results = $this->internalLoadContent([
             ['id' => $contentId, 'version' => $version, 'languages' => $translations],
         ]);
-        //if (empty($results)) {
-        // @todo: Should we add a throw here to cleanup and be consistent with other load methods?
-        //}
 
         return $results;
     }

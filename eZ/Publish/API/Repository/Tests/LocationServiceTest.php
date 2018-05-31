@@ -467,7 +467,7 @@ class LocationServiceTest extends BaseTest
 
         // Check lazy loaded proxy on ->content
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            Content::class,
             $content = $location->getContent()
         );
         $this->assertEquals(4, $content->contentInfo->id);
@@ -504,7 +504,7 @@ class LocationServiceTest extends BaseTest
         );
         self::assertEquals(5, $location->id);
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            Content::class,
             $content = $location->getContent()
         );
         $this->assertEquals(4, $content->contentInfo->id);

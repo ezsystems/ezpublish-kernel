@@ -197,7 +197,7 @@ class DomainMapper
             } else {
                 $loadStructList[] = new SPIContent\LoadStruct([
                     'id' => $info->id,
-                    'languages' => $prioritizedLanguages
+                    'languages' => $prioritizedLanguages,
                 ]);
             }
         }
@@ -437,7 +437,6 @@ class DomainMapper
         SPILocation $spiLocation,
         SPIContentInfo $contentInfo = null
     ) {
-
         if ($contentInfo === null) {
             return $this->buildLocation($spiLocation);
         }
@@ -448,7 +447,6 @@ class DomainMapper
             $this->buildContentProxy($contentInfo)
         );
     }
-
 
     public function buildLocation(
         SPILocation $spiLocation,

@@ -530,8 +530,6 @@ class ContentHandlerTest extends TestCase
         $mapperMock = $this->getMapperMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
-
-
         $idVersionTranslationPairs = [
             ['id' => 2, 'version' => 2, 'languages' => ['eng-GB']],
             ['id' => 3, 'version' => null, 'languages' => ['eng-GB', 'eng-US']],

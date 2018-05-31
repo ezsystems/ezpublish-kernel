@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
-use eZ\Publish\SPI\Persistence\Content\LoadStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
@@ -86,7 +85,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $keySuffixes = [];
         foreach ($contentLoadStructs as $struct) {
             $contentIds[] = $struct->id;
-            $keySuffixes[$struct->id] = ($struct->versionNo ? "-{$struct->versionNo}-" : '-' ).
+            $keySuffixes[$struct->id] = ($struct->versionNo ? "-{$struct->versionNo}-" : '-') .
                 (empty($struct->languages) ? self::ALL_TRANSLATIONS_KEY : implode('|', $struct->languages));
         }
 
