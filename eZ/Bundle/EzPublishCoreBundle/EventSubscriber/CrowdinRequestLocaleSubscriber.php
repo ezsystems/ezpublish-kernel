@@ -19,7 +19,7 @@ class CrowdinRequestLocaleSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => [
-                ['setInContextAcceptLanguage', 100],
+                ['setInContextAcceptLanguage', -100],
             ],
         ];
     }
@@ -30,6 +30,6 @@ class CrowdinRequestLocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $e->getRequest()->headers->set('accept-language', 'ach-UG');
+        $e->getRequest()->setLocale('ach_UG');
     }
 }

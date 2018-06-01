@@ -29,7 +29,7 @@ class CrowdinRequestLocaleSubscriberTest extends TestCase
 
         $this->assertEquals(
             $shouldHaveCustomLocale,
-            'ach_UG' === $event->getRequest()->getPreferredLanguage(),
+            'ach_UG' === $event->getRequest()->getLocale(),
             'The custom ach_UG locale was expected to be set by the event subscriber'
         );
     }
