@@ -129,7 +129,7 @@
               </xsl:if>
             </xsl:for-each>
           </xsl:element>
-          <!-- paragraph may also contain a list so let's apply templates too -->
+          <!-- paragraph may also contain child elements which needs to be converted too -->
           <xsl:apply-templates/>
         </xsl:when>
         <xsl:otherwise>
