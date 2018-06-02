@@ -23,6 +23,64 @@ class ContentProxy extends APIContent
      */
     protected $object;
 
+    /**
+     * @var ContentContentInfoProxy|null
+     */
+    protected $contentInfoProxy;
+
+    public function __get($name)
+    {
+        if ($name === 'id') {
+            return $this->id;
+        }
+
+        if ($name === 'contentInfo') {
+            return $this->getContentInfo();
+        }
+
+        if ($this->object === null) {
+            $this->loadObject();
+        }
+
+        return $this->object->$name;
+    }
+
+    public function __isset($name)
+    {
+        if ($name === 'id' || $name === 'contentInfo') {
+            return true;
+        }
+
+        if ($this->object === null) {
+            $this->loadObject();
+        }
+
+        return isset($this->object->$name);
+    }
+
+    /**
+     * Return content info, in proxy form if we have not loaded object yet.
+     *
+     * For usage in among others DomainMapper->buildLocation() to make sure we can lazy load content info retrieval.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    protected function getContentInfo()
+    {
+        if ($this->object === null) {
+            if ($this->contentInfoProxy === null) {
+                $this->contentInfoProxy = new ContentContentInfoProxy($this, $this->id);
+            }
+
+            return $this->contentInfoProxy;
+        } elseif ($this->contentInfoProxy !== null) {
+            // Remove ref when we no longer need the proxy
+            unset($this->contentInfoProxy);
+        }
+
+        return $this->object->getVersionInfo()->getContentInfo();
+    }
+
     public function getVersionInfo()
     {
         if ($this->object === null) {

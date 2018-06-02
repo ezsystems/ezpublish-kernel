@@ -489,14 +489,12 @@ class DomainMapper
     public function buildLocationWithContent(
         SPILocation $spiLocation,
         APIContent $content,
-        SPIContentInfo $contentInfo = null
+        SPIContentInfo $spiContentInfo = null
     ): APILocation {
-        if ($contentInfo === null) {
-            // @todo In case of content proxy we should somehow make sure a new getContentInfo() return a proxy object,
-            //       to avoid triggering loading whole content here.
-            $contentInfo = $content->contentInfo;
+        if ($spiContentInfo !== null) {
+            $contentInfo = $this->buildContentInfoDomainObject($spiContentInfo);
         } else {
-            $contentInfo = $this->buildContentInfoDomainObject($contentInfo);
+            $contentInfo = $content->contentInfo;
         }
 
         return $this->mapLocation($spiLocation, $contentInfo, $content);
