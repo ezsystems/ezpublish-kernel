@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\SPI\Persistence;
 
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+
 /**
  * The field type interface which field types available to storage engines have to implement.
  *
@@ -21,4 +23,13 @@ interface FieldType
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public function getEmptyValue();
+
+    /**
+     * Returns if the given $value is considered empty by the field type.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
+     *
+     * @return bool
+     */
+    public function isEmptyValue(FieldValue $value);
 }
