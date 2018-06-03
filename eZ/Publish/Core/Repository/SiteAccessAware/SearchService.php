@@ -46,8 +46,7 @@ class SearchService implements SearchServiceInterface
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable'],
-            true
+            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
         );
 
         return $this->service->findContent($query, $languageFilter, $filterOnUserPermissions);
@@ -60,8 +59,7 @@ class SearchService implements SearchServiceInterface
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable'],
-            true
+            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
         );
 
         return $this->service->findContentInfo($query, $languageFilter, $filterOnUserPermissions);
@@ -74,8 +72,7 @@ class SearchService implements SearchServiceInterface
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable'],
-            true
+            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
         );
 
         return $this->service->findSingle($filter, $languageFilter, $filterOnUserPermissions);
@@ -93,8 +90,7 @@ class SearchService implements SearchServiceInterface
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable'],
-            true
+            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
         );
 
         return $this->service->findLocations($query, $languageFilter, $filterOnUserPermissions);

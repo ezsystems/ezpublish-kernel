@@ -79,7 +79,7 @@ class Content extends RestController
         $contentVersion = null;
         $relations = null;
         if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
-            $languages = Language::ALL_LANGUAGES;
+            $languages = Language::ALL;
             if ($request->query->has('languages')) {
                 $languages = explode(',', $request->query->get('languages'));
             }
@@ -189,7 +189,7 @@ class Content extends RestController
      */
     public function loadContentInVersion($contentId, $versionNumber, Request $request)
     {
-        $languages = Language::ALL_LANGUAGES;
+        $languages = Language::ALL;
         if ($request->query->has('languages')) {
             $languages = explode(',', $request->query->get('languages'));
         }

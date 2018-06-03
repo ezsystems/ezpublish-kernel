@@ -4,6 +4,7 @@ namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 
 use eZ\Publish\API\Repository\UserService as APIService;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Repository\SiteAccessAware\UserService;
 use eZ\Publish\Core\Repository\Values\User\User;
@@ -31,6 +32,7 @@ class UserServiceTest extends AbstractServiceTest
 
         $userCreateStruct = new UserCreateStruct();
         $userUpdateStruct = new UserUpdateStruct();
+        $userTokenUpdateStruct = new UserTokenUpdateStruct();
         $user = new User();
 
         // string $method, array $arguments, bool $return = true
@@ -47,6 +49,9 @@ class UserServiceTest extends AbstractServiceTest
 
             ['assignUserToUserGroup', [$user, $userGroup]],
             ['unAssignUserFromUserGroup', [$user, $userGroup]],
+
+            ['updateUserToken', [$user, $userTokenUpdateStruct]],
+            ['expireUserToken', ['43ir43jrt43']],
 
             ['newUserCreateStruct', ['adam', 'adam@gmail.com', 'Eve', 'eng-AU', 4]],
             ['newUserGroupCreateStruct', ['eng-AU', 7]],
@@ -70,6 +75,7 @@ class UserServiceTest extends AbstractServiceTest
             ['loadUsersByEmail', ['nospam@ez.no', self::LANG_ARG], true, 1],
             ['loadUserGroupsOfUser', [$user, 50, 50, self::LANG_ARG], true, 3],
             ['loadUsersOfUserGroup', [$userGroup, 50, 50, self::LANG_ARG], true, 3],
+            ['loadUserByToken', ['43ir43jrt43', self::LANG_ARG], true, 1],
         ];
     }
 }

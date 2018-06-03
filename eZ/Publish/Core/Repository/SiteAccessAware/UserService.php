@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Repository\Helper\LanguageResolver;
 
@@ -148,6 +149,24 @@ class UserService implements UserServiceInterface
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadUsersOfUserGroup($userGroup, $offset, $limit, $prioritizedLanguages);
+    }
+
+    public function loadUserByToken($hash, array $prioritizedLanguages = null)
+    {
+        return $this->service->loadUserByToken(
+            $hash,
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+        );
+    }
+
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        return $this->service->updateUserToken($user, $userTokenUpdateStruct);
+    }
+
+    public function expireUserToken($hash)
+    {
+        return $this->service->expireUserToken($hash);
     }
 
     public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null)

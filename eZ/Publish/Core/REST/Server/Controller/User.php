@@ -158,7 +158,7 @@ class User extends RestController
 
         $userGroup = $this->userService->loadUserGroup(
             $userGroupLocation->contentId,
-            Language::ALL_LANGUAGES
+            Language::ALL
         );
         $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
         $contentType = $this->contentTypeService->loadContentType($userGroupContentInfo->contentTypeId);
@@ -184,7 +184,7 @@ class User extends RestController
      */
     public function loadUser($userId)
     {
-        $user = $this->userService->loadUser($userId, Language::ALL_LANGUAGES);
+        $user = $this->userService->loadUser($userId, Language::ALL);
 
         $userContentInfo = $user->getVersionInfo()->getContentInfo();
         $contentType = $this->contentTypeService->loadContentType($userContentInfo->contentTypeId);
@@ -475,18 +475,18 @@ class User extends RestController
                     $this->buildRestUserObject(
                         $this->userService->loadUser(
                             $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id,
-                            Language::ALL_LANGUAGES
+                            Language::ALL
                         )
                     ),
                 );
             } elseif ($request->query->has('login')) {
                 $restUsers = array(
                     $this->buildRestUserObject(
-                        $this->userService->loadUserByLogin($request->query->get('login'), Language::ALL_LANGUAGES)
+                        $this->userService->loadUserByLogin($request->query->get('login'), Language::ALL)
                     ),
                 );
             } elseif ($request->query->has('email')) {
-                foreach ($this->userService->loadUsersByEmail($request->query->get('email'), Language::ALL_LANGUAGES) as $user) {
+                foreach ($this->userService->loadUsersByEmail($request->query->get('email'), Language::ALL) as $user) {
                     $restUsers[] = $this->buildRestUserObject($user);
                 }
             }
@@ -559,7 +559,7 @@ class User extends RestController
     {
         $restUserGroups = array();
         if ($request->query->has('id')) {
-            $userGroup = $this->userService->loadUserGroup($request->query->get('id'), Language::ALL_LANGUAGES);
+            $userGroup = $this->userService->loadUserGroup($request->query->get('id'), Language::ALL);
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupMainLocation = $this->locationService->loadLocation($userGroupContentInfo->mainLocationId);
             $contentType = $this->contentTypeService->loadContentType($userGroupContentInfo->contentTypeId);
@@ -596,7 +596,7 @@ class User extends RestController
     public function loadUserGroupByRemoteId(Request $request)
     {
         $contentInfo = $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'));
-        $userGroup = $this->userService->loadUserGroup($contentInfo->id, Language::ALL_LANGUAGES);
+        $userGroup = $this->userService->loadUserGroup($contentInfo->id, Language::ALL);
         $userGroupLocation = $this->locationService->loadLocation($contentInfo->mainLocationId);
         $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
 
@@ -733,7 +733,7 @@ class User extends RestController
             $userGroup,
             $offset >= 0 ? $offset : 0,
             $limit >= 0 ? $limit : 25,
-            Language::ALL_LANGUAGES
+            Language::ALL
         );
 
         $restUserGroups = array();
@@ -783,7 +783,7 @@ class User extends RestController
             $user,
             $offset >= 0 ? $offset : 0,
             $limit >= 0 ? $limit : 25,
-            Language::ALL_LANGUAGES
+            Language::ALL
         );
 
         $restUserGroups = array();
@@ -831,7 +831,7 @@ class User extends RestController
             $userGroup,
             $offset >= 0 ? $offset : 0,
             $limit >= 0 ? $limit : 25,
-            Language::ALL_LANGUAGES
+            Language::ALL
         );
 
         $restUsers = array();

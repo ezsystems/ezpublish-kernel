@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\URLService;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 
@@ -51,17 +50,8 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\API\Repository\ObjectStateService */
     protected $objectStateService;
 
-    /** @var \eZ\Publish\API\Repository\FieldTypeService */
-    protected $fieldTypeService;
-
     /** @var \eZ\Publish\API\Repository\URLAliasService */
     protected $urlAliasService;
-
-    /** @var \eZ\Publish\API\Repository\URLService */
-    protected $urlService;
-
-    /** @var \eZ\Publish\API\Repository\URLWildcardService */
-    protected $urlWildcardService;
 
     /**
      * Construct repository object from aggregated repository.
@@ -70,12 +60,9 @@ class Repository implements RepositoryInterface
         RepositoryInterface $repository,
         ContentService $contentService,
         ContentTypeService $contentTypeService,
-        FieldTypeService $fieldTypeService,
         RoleService $roleService,
         ObjectStateService $objectStateService,
         URLAliasService $urlAliasService,
-        URLService $urlService,
-        URLWildcardService $urlWildcardService,
         UserService $userService,
         SearchService $searchService,
         SectionService $sectionService,
@@ -86,12 +73,9 @@ class Repository implements RepositoryInterface
         $this->repository = $repository;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
-        $this->fieldTypeService = $fieldTypeService;
         $this->roleService = $roleService;
         $this->objectStateService = $objectStateService;
         $this->urlAliasService = $urlAliasService;
-        $this->urlService = $urlService;
-        $this->urlWildcardService = $urlWildcardService;
         $this->userService = $userService;
         $this->searchService = $searchService;
         $this->sectionService = $sectionService;
@@ -172,7 +156,7 @@ class Repository implements RepositoryInterface
 
     public function getURLWildcardService()
     {
-        return $this->urlWildcardService;
+        return $this->repository->getURLWildcardService();
     }
 
     public function getObjectStateService()
@@ -192,7 +176,7 @@ class Repository implements RepositoryInterface
 
     public function getFieldTypeService()
     {
-        return $this->fieldTypeService;
+        return $this->repository->getFieldTypeService();
     }
 
     public function getPermissionResolver()
@@ -202,7 +186,12 @@ class Repository implements RepositoryInterface
 
     public function getURLService()
     {
-        return $this->urlService;
+        return $this->repository->getURLService();
+    }
+
+    public function getBookmarkService()
+    {
+        return $this->repository->getBookmarkService();
     }
 
     public function beginTransaction()

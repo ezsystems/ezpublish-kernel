@@ -23,7 +23,7 @@ class Language extends ValueObject
     /**
      * Constant for use in API's to specify that you want to load all languages.
      */
-    const ALL_LANGUAGES = [];
+    const ALL = [];
 
     /**
      * The language id (auto generated).

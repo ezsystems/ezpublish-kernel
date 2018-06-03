@@ -72,7 +72,7 @@ class LanguageResolver
 
         // Detect if we should load all languages by default
         if ($this->showAllTranslations) {
-            return Language::ALL_LANGUAGES;
+            return Language::ALL;
         }
 
         // create language based on context and configuration

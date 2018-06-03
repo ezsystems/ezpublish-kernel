@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\Core\Repository\Helper\LanguageResolver;
 
 /**
  * LocationService for SiteAccessAware layer.
@@ -25,15 +26,21 @@ class LocationService implements LocationServiceInterface
     /** @var \eZ\Publish\API\Repository\LocationService */
     protected $service;
 
+    /** @var LanguageResolver */
+    protected $languageResolver;
+
     /**
-     * Construct service object from aggregated service.
+     * Construct service object from aggregated service and LanguageResolver.
      *
      * @param \eZ\Publish\API\Repository\LocationService $service
+     * @param LanguageResolver $languageResolver
      */
     public function __construct(
-        LocationServiceInterface $service
+        LocationServiceInterface $service,
+        LanguageResolver $languageResolver
     ) {
         $this->service = $service;
+        $this->languageResolver = $languageResolver;
     }
 
     public function copySubtree(Location $subtree, Location $targetParentLocation)
@@ -41,29 +48,47 @@ class LocationService implements LocationServiceInterface
         return $this->service->copySubtree($subtree, $targetParentLocation);
     }
 
-    public function loadLocation($locationId)
+    public function loadLocation($locationId, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocation($locationId);
+        return $this->service->loadLocation(
+            $locationId,
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+        );
     }
 
-    public function loadLocationByRemoteId($remoteId)
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocationByRemoteId($remoteId);
+        return $this->service->loadLocationByRemoteId(
+            $remoteId,
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+        );
     }
 
-    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null)
+    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocations($contentInfo, $rootLocation);
+        return $this->service->loadLocations(
+            $contentInfo,
+            $rootLocation,
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+        );
     }
 
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25)
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocationChildren($location, $offset, $limit);
+        return $this->service->loadLocationChildren(
+            $location,
+            $offset,
+            $limit,
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+        );
     }
 
-    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo)
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null)
     {
-        return $this->service->loadParentLocationsForDraftContent($versionInfo);
+        return $this->service->loadParentLocationsForDraftContent(
+            $versionInfo,
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+        );
     }
 
     public function getLocationChildCount(Location $location)

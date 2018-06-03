@@ -127,7 +127,7 @@ class ObjectState extends RestController
      */
     public function loadObjectStateGroup($objectStateGroupId)
     {
-        return $this->objectStateService->loadObjectStateGroup($objectStateGroupId, Language::ALL_LANGUAGES);
+        return $this->objectStateService->loadObjectStateGroup($objectStateGroupId, Language::ALL);
     }
 
     /**
@@ -141,7 +141,7 @@ class ObjectState extends RestController
     public function loadObjectState($objectStateGroupId, $objectStateId)
     {
         return new RestObjectState(
-            $this->objectStateService->loadObjectState($objectStateId, Language::ALL_LANGUAGES),
+            $this->objectStateService->loadObjectState($objectStateId, Language::ALL),
             $objectStateGroupId
         );
     }
@@ -154,7 +154,7 @@ class ObjectState extends RestController
     public function loadObjectStateGroups()
     {
         return new Values\ObjectStateGroupList(
-            $this->objectStateService->loadObjectStateGroups(0, -1, Language::ALL_LANGUAGES)
+            $this->objectStateService->loadObjectStateGroups(0, -1, Language::ALL)
         );
     }
 
@@ -170,7 +170,7 @@ class ObjectState extends RestController
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup($objectStateGroupId);
 
         return new Values\ObjectStateList(
-            $this->objectStateService->loadObjectStates($objectStateGroup, Language::ALL_LANGUAGES),
+            $this->objectStateService->loadObjectStates($objectStateGroup, Language::ALL),
             $objectStateGroup->id
         );
     }

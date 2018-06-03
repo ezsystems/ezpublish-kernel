@@ -70,7 +70,7 @@ class ContentService implements ContentServiceInterface
             $contentInfo,
             $this->languageResolver->getPrioritizedLanguages($languages),
             $versionNo,
-            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable, true)
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
         );
     }
 
@@ -79,7 +79,7 @@ class ContentService implements ContentServiceInterface
         return $this->service->loadContentByVersionInfo(
             $versionInfo,
             $this->languageResolver->getPrioritizedLanguages($languages),
-            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable, true)
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
         );
     }
 
@@ -89,7 +89,7 @@ class ContentService implements ContentServiceInterface
             $contentId,
             $this->languageResolver->getPrioritizedLanguages($languages),
             $versionNo,
-            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable, true)
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
         );
     }
 
@@ -99,7 +99,7 @@ class ContentService implements ContentServiceInterface
             $remoteId,
             $this->languageResolver->getPrioritizedLanguages($languages),
             $versionNo,
-            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable, true)
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
         );
     }
 

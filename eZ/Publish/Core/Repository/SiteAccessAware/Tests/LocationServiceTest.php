@@ -26,25 +26,12 @@ class LocationServiceTest extends AbstractServiceTest
     {
         $location = new Location();
         $contentInfo = new ContentInfo();
-        $versionInfo = new VersionInfo();
         $locationCreateStruct = new LocationCreateStruct();
         $locationUpdateStruct = new LocationUpdateStruct();
 
         // string $method, array $arguments, bool $return = true
         return [
             ['copySubtree', [$location, $location]],
-
-            ['loadLocation', [55]],
-
-            ['loadLocationByRemoteId', ['3498jtj943n']],
-
-            ['loadLocations', [$contentInfo]],
-            ['loadLocations', [$contentInfo, $location]],
-
-            ['loadLocationChildren', [$location]],
-            ['loadLocationChildren', [$location, 50, 50]],
-
-            ['loadParentLocationsForDraftContent', [$versionInfo]],
 
             ['getLocationChildCount', [$location]],
 
@@ -70,7 +57,26 @@ class LocationServiceTest extends AbstractServiceTest
 
     public function providerForLanguagesLookupMethods()
     {
+        $location = new Location();
+        $contentInfo = new ContentInfo();
+        $versionInfo = new VersionInfo();
+
         // string $method, array $arguments, bool $return, int $languageArgumentIndex
-        return [];
+        return [
+            ['loadLocation', [55], true, 1],
+            ['loadLocation', [55, self::LANG_ARG], true, 1],
+
+            ['loadLocationByRemoteId', ['ergemiotregf'], true, 1],
+            ['loadLocationByRemoteId', ['ergemiotregf', self::LANG_ARG], true, 1],
+
+            ['loadLocations', [$contentInfo, null], true, 2],
+            ['loadLocations', [$contentInfo, $location, self::LANG_ARG], true, 2],
+
+            ['loadLocationChildren', [$location, 0, 15], true, 3],
+            ['loadLocationChildren', [$location, 50, 50, self::LANG_ARG], true, 3],
+
+            ['loadParentLocationsForDraftContent', [$versionInfo], true, 1],
+            ['loadParentLocationsForDraftContent', [$versionInfo, self::LANG_ARG], true, 1],
+        ];
     }
 }
