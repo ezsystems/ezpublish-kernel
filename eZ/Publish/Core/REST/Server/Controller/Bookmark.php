@@ -96,7 +96,7 @@ class Bookmark extends RestController
 
             return new Values\NoContent();
         } catch (InvalidArgumentException $e) {
-            throw new Exceptions\NotFoundException("Location $locationPath is not bookmarked");
+            throw new Exceptions\NotFoundException("Location {$locationPath} is not bookmarked");
         }
     }
 
@@ -118,7 +118,7 @@ class Bookmark extends RestController
         );
 
         if (!$this->bookmarkService->isBookmarked($location)) {
-            throw new Exceptions\NotFoundException("Location $locationPath is not bookmarked");
+            throw new Exceptions\NotFoundException("Location {$locationPath} is not bookmarked");
         }
 
         return new Values\OK();
