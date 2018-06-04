@@ -153,14 +153,14 @@ services:
     ezpublish.param_converter.content:
         class: "%ezpublish.param_converter.content.class%"
         arguments:
-            - "@ezpublish.api.service.content"
+            - "@ezpublish.siteaccessaware.service.content"
         tags:
             - { name: request.param_converter, priority: "%ezpublish.param_converter.content.priority%", converter: ez_content_converter }
 
     ezpublish.param_converter.location:
         class: "%ezpublish.param_converter.location.class%"
         arguments:
-            - "@ezpublish.api.service.location"
+            - "@ezpublish.siteaccessaware.service.location"
         tags:
             - { name: request.param_converter, priority: "%ezpublish.param_converter.location.priority%", converter: ez_location_converter }
 
