@@ -1165,28 +1165,28 @@ ezpublish_rest_loadCountryList:
 # Bookmark
 
 ezpublish_rest_createBookmark:
-    path: /bookmark/{locationPath}
+    path: /bookmark/{locationId}
     defaults:
         _controller: ezpublish_rest.controller.bookmark:createBookmark
     methods: [POST]
     requirements:
-        locationPath: "[0-9/]+"
+        locationId: "[0-9]+"
 
 ezpublish_rest_deleteBookmark:
-    path: /bookmark/{locationPath}
+    path: /bookmark/{locationId}
     defaults:
         _controller: ezpublish_rest.controller.bookmark:deleteBookmark
     methods: [DELETE]
     requirements:
-        locationPath: "[0-9/]+"
+        locationId: "[0-9]+"
 
 ezpublish_rest_isBookmarked:
-    path: /bookmark/{locationPath}
+    path: /bookmark/{locationId}
     defaults:
         _controller: ezpublish_rest.controller.bookmark:isBookmarked
     methods: [GET, HEAD]
     requirements:
-        locationPath: "[0-9/]+"
+        locationId: "[0-9]+"
 
 ezpublish_rest_loadBookmarks:
     path: /bookmark

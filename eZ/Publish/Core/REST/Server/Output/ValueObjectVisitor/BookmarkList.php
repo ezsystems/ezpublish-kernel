@@ -35,6 +35,12 @@ class BookmarkList extends ValueObjectVisitor
         $generator->startList('items');
         foreach ($data->items as $restLocation) {
             $generator->startObjectElement('Bookmark');
+
+            $generator->startAttribute('_href', $this->router->generate('ezpublish_rest_isBookmarked', [
+                'locationId' => $restLocation->location->id,
+            ]));
+            $generator->endAttribute('_href');
+
             $visitor->visitValueObject($restLocation);
             $generator->endObjectElement('Bookmark');
         }
