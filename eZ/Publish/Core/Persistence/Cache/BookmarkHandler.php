@@ -52,7 +52,7 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
             $locationIds,
             'ez-bookmark-' . $userId . '-',
             function (array $missingIds) use ($userId) {
-                $this->logger->logCall(__METHOD__, [
+                $this->logger->logCall(__CLASS__ . '::loadByUserIdAndLocationId', [
                     'userId' => $userId,
                     'locationIds' => $missingIds,
                 ]);
