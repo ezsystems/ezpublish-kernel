@@ -12,6 +12,8 @@ use eZ\Publish\Core\Persistence\Cache\Tests\AbstractCacheHandlerTest;
 use eZ\Publish\SPI\Persistence\Bookmark\Bookmark;
 use eZ\Publish\SPI\Persistence\Bookmark\CreateStruct;
 use eZ\Publish\SPI\Persistence\Bookmark\Handler as SPIBookmarkHandler;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
 
 /**
  * Test case for Persistence\Cache\BookmarkHandler.
@@ -44,13 +46,15 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
     {
         $bookmark = new Bookmark([
             'id' => 1,
-            'locationId' => 2,
+            'locationId' => 43,
             'userId' => 3,
         ]);
 
+        $calls = [['locationHandler', SPILocationHandler::class, 'load', new Location(['pathString' => '/1/2/43/'])]];
+
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            ['loadByUserIdAndLocationId', [3, [2]], 'ez-bookmark-3-2', [2 => $bookmark], true],
+            ['loadByUserIdAndLocationId', [3, [43]], 'ez-bookmark-3-43', [43 => $bookmark], true, $calls],
         ];
     }
 }

@@ -91,6 +91,14 @@ CREATE TABLE ezcontent_language (
     name character varying(255) DEFAULT ''::character varying NOT NULL
 );
 
+DROP TABLE IF EXISTS ezcontentbrowsebookmark;
+CREATE TABLE ezcontentbrowsebookmark (
+  id SERIAL,
+  name character varying(255) DEFAULT ''::character varying NOT NULL,
+  node_id integer DEFAULT 0 NOT NULL,
+  user_id integer DEFAULT 0 NOT NULL
+);
+
 DROP TABLE IF EXISTS ezcontentclass;
 CREATE TABLE ezcontentclass (
     always_available integer DEFAULT 0 NOT NULL,
@@ -474,14 +482,6 @@ CREATE TABLE ezkeyword_attribute_link (
   objectattribute_id integer DEFAULT 0 NOT NULL
 );
 
-DROP TABLE IF EXISTS ezcontentbrowsebookmark;
-CREATE TABLE ezcontentbrowsebookmark (
-  id SERIAL,
-  name character varying(255) DEFAULT ''::character varying NOT NULL,
-  node_id integer DEFAULT 0 NOT NULL,
-  user_id integer DEFAULT 0 NOT NULL
-);
-
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
@@ -664,6 +664,10 @@ CREATE INDEX ezuser_accountkey_hash_key ON ezuser_accountkey USING btree (hash_k
 
 CREATE INDEX ezcontentbrowsebookmark_user ON ezcontentbrowsebookmark USING btree (user_id);
 
+CREATE INDEX ezcontentbrowsebookmark_location ON ezcontentbrowsebookmark USING btree (node_id);
+
+CREATE INDEX ezcontentbrowsebookmark_user_location ON ezcontentbrowsebookmark USING btree (user_id, node_id);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -792,3 +796,17 @@ ALTER TABLE ONLY ezkeyword_attribute_link
 
 ALTER TABLE ONLY ezcontentbrowsebookmark
     ADD CONSTRAINT ezcontentbrowsebookmark_pkey PRIMARY KEY (id);
+
+ALTER TABLE ezcontentbrowsebookmark
+ADD CONSTRAINT ezcontentbrowsebookmark_location_fk
+  FOREIGN KEY (node_id)
+  REFERENCES ezcontentobject_tree (node_id)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE ezcontentbrowsebookmark
+ADD CONSTRAINT ezcontentbrowsebookmark_user_fk
+  FOREIGN KEY (user_id)
+  REFERENCES ezuser (contentobject_id)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;

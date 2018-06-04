@@ -1672,6 +1672,39 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the deleteLocation() method.
+     *
+     * @covers  \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
+     */
+    public function testDeleteLocationDeletesRelatedBookmarks()
+    {
+        $repository = $this->getRepository();
+
+        $parentLocationId = $this->generateId('location', 43);
+        $childLocationId = $this->generateId('location', 53);
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+        $bookmarkService = $repository->getBookmarkService();
+
+        // Load location
+        $childLocation = $locationService->loadLocation($childLocationId);
+        // Add location to bookmarks
+        $bookmarkService->createBookmark($childLocation);
+        // Load parent location
+        $parentLocation = $locationService->loadLocation($parentLocationId);
+        // Delete parent location
+        $locationService->deleteLocation($parentLocation);
+        /* END: Use Case */
+
+        // Location isn't bookmarked anymore
+        foreach ($bookmarkService->loadBookmarks(0, 9999) as $bookmarkedLocation) {
+            $this->assertNotEquals($childLocation->id, $bookmarkedLocation->id);
+        }
+    }
+
+    /**
      * Test for the copySubtree() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()

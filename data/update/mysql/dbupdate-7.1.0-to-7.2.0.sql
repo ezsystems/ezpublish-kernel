@@ -70,3 +70,27 @@ ALTER TABLE `ezurlalias` ADD KEY `ezurlalias_desturl` (`destination_url` (191));
 
 ALTER TABLE `ezurlalias` DROP KEY `ezurlalias_source_url`;
 ALTER TABLE `ezurlalias` ADD KEY `ezurlalias_source_url` (`source_url` (191));
+
+--
+-- EZP-29146: As a developer, I want a API to manage bookmarks
+--
+
+ALTER TABLE `ezcontentbrowsebookmark`
+ADD INDEX `ezcontentbrowsebookmark_user_location` (`node_id`, `user_id`);
+
+ALTER TABLE `ezcontentbrowsebookmark`
+ADD INDEX `ezcontentbrowsebookmark_location` (`node_id`);
+
+ALTER TABLE `ezcontentbrowsebookmark`
+ADD CONSTRAINT `ezcontentbrowsebookmark_location_fk`
+  FOREIGN KEY (`node_id`)
+  REFERENCES `ezcontentobject_tree` (`node_id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `ezcontentbrowsebookmark`
+ADD CONSTRAINT `ezcontentbrowsebookmark_user_fk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `ezuser` (`contentobject_id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;

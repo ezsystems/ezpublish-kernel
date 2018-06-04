@@ -1434,6 +1434,41 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the deleteUser() method.
+     *
+     * @covers  \eZ\Publish\API\Repository\UserService::deleteUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
+     */
+    public function testDeleteUserDeletesRelatedBookmarks()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+        $locationService = $repository->getLocationService();
+        $bookmarkService = $repository->getBookmarkService();
+        /* BEGIN: Use Case */
+        $admin = $repository->getPermissionResolver()->getCurrentUserReference();
+
+        $user = $this->createUserVersion1();
+
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $bookmarkService->createBookmark(
+            $locationService->loadLocation($this->generateId('location', 43))
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($admin);
+        // Delete the currently created user
+        $userService->deleteUser($user);
+
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+        /* END: Use Case */
+
+        $this->assertEquals(0, $bookmarkService->loadBookmarks(0, 9999)->totalCount);
+    }
+
+    /**
      * Test for the newUserUpdateStruct() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::newUserUpdateStruct()

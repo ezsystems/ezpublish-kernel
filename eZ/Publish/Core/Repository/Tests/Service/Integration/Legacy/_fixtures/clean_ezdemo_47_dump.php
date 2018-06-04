@@ -130,38 +130,6 @@ return array(
       'contentobject_state_id' => '1',
     ),
   ),
-  'ezcontentbrowsebookmark' => array(
-    0 => array(
-        'id' => '1',
-        'name' => '',
-        'node_id' => '5',
-        'user_id' => '14',
-    ),
-    1 => array(
-        'id' => '3',
-        'name' => '',
-        'node_id' => '12',
-        'user_id' => '14',
-    ),
-    2 => array(
-        'id' => '4',
-        'name' => '',
-        'node_id' => '13',
-        'user_id' => '14',
-    ),
-    3 => array(
-        'id' => '5',
-        'name' => '',
-        'node_id' => '15',
-        'user_id' => '14',
-    ),
-    4 => array(
-        'id' => '6',
-        'name' => '',
-        'node_id' => '14',
-        'user_id' => '14',
-    )
-  ),
   'ezcontent_language' => array(
     0 => array(
       'disabled' => '0',
@@ -11695,4 +11663,36 @@ Country�</literallayout></para></section>
       'user_id' => '14',
     ),
   ),
+  'ezcontentbrowsebookmark' => array(
+    0 => array(
+      'id' => '1',
+      'name' => '',
+      'node_id' => '5',
+      'user_id' => '14',
+    ),
+    1 => array(
+      'id' => '3',
+      'name' => '',
+      'node_id' => '12',
+      'user_id' => '14',
+    ),
+    2 => array(
+      'id' => '4',
+      'name' => '',
+      'node_id' => '13',
+      'user_id' => '14',
+    ),
+    3 => array(
+      'id' => '5',
+      'name' => '',
+      'node_id' => '15',
+      'user_id' => '14',
+    ),
+    4 => array(
+       'id' => '6',
+       'name' => '',
+       'node_id' => '14',
+       'user_id' => '14',
+      ),
+    ),
 );

@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\PDOException;
 use eZ\Publish\Core\Base\ServiceContainer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
@@ -177,11 +179,17 @@ class Legacy extends SetupFactory
         $data['ezmedia'] = array();
         $data['ezkeyword'] = array();
 
-        foreach ($data as $table => $rows) {
-            // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
-            $q = $dbPlatform->getTruncateTableSql($handler->quoteIdentifier($table));
-            $connection->executeUpdate($q);
+        foreach (array_reverse(array_keys($data)) as $table) {
+            try {
+                // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
+                $connection->executeUpdate($dbPlatform->getTruncateTableSql($handler->quoteIdentifier($table)));
+            } catch (DBALException | PDOException $e) {
+                // Fallback to DELETE if TRUNCATE failed (because of FKs for instance)
+                $connection->createQueryBuilder()->delete($table)->execute();
+            }
+        }
 
+        foreach ($data as $table => $rows) {
             // Check that at least one row exists
             if (!isset($rows[0])) {
                 continue;

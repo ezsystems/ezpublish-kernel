@@ -60,10 +60,18 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
                 return $this->persistenceHandler->bookmarkHandler()->loadByUserIdAndLocationId($userId, $missingIds);
             },
             function (Bookmark $bookmark) {
-                return [
+                $tags = [
                     'bookmark-' . $bookmark->id,
                     'location-' . $bookmark->locationId,
+                    'user-' . $bookmark->userId,
                 ];
+
+                $location = $this->persistenceHandler->locationHandler()->load($bookmark->locationId);
+                foreach (explode('/', trim($location->pathString, '/')) as $locationId) {
+                    $tags[] = 'location-path-' . $locationId;
+                }
+
+                return $tags;
             }
         );
     }
