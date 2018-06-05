@@ -100,15 +100,15 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      * @param ContentType|SPIType $contentType
-     * @param array|null $fieldLanguages Language codes to filter fields on
-     * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $fieldLanguages
+     * @param array $prioritizedLanguages Prioritized language codes to filter fields on
+     * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
     public function buildContentDomainObject(
         SPIContent $spiContent,
         $contentType = null,
-        array $fieldLanguages = null,
+        array $prioritizedLanguages = [],
         string $fieldAlwaysAvailableLanguage = null
     ) {
         if ($contentType === null) {
@@ -118,7 +118,6 @@ class DomainMapper
         }
 
         $prioritizedFieldLanguageCode = null;
-        $prioritizedLanguages = $fieldLanguages ?: [];
         if (!empty($prioritizedLanguages)) {
             $availableFieldLanguageMap = array_fill_keys($spiContent->versionInfo->languageCodes, true);
             foreach ($prioritizedLanguages as $prioritizedLanguage) {
@@ -131,7 +130,7 @@ class DomainMapper
 
         return new Content(
             array(
-                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldLanguages, $fieldAlwaysAvailableLanguage),
+                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage),
                 'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
                 'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             )
@@ -227,16 +226,16 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
      * @param ContentType|SPIType $contentType
-     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     * @param array $prioritizedLanguages A language priority, filters returned fields and is used as prioritized language code on
      *                         returned value object. If not given all languages are returned.
-     * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $languages
+     * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
      *
      * @return array
      */
     public function buildDomainFields(
         array $spiFields,
         $contentType,
-        array $languages = null,
+        array $prioritizedLanguages = [],
         string $alwaysAvailableLanguage = null
     ) {
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
@@ -249,9 +248,9 @@ class DomainMapper
         }
 
         $fieldInFilterLanguagesMap = array();
-        if ($languages !== null && $alwaysAvailableLanguage !== null) {
+        if (!empty($prioritizedLanguages) && $alwaysAvailableLanguage !== null) {
             foreach ($spiFields as $spiField) {
-                if (in_array($spiField->languageCode, $languages)) {
+                if (in_array($spiField->languageCode, $prioritizedLanguages)) {
                     $fieldInFilterLanguagesMap[$spiField->fieldDefinitionId] = true;
                 }
             }
@@ -264,8 +263,8 @@ class DomainMapper
                 continue;
             }
 
-            if ($languages !== null && !in_array($spiField->languageCode, $languages)) {
-                // If filtering is enabled we ignore fields in other languages then $fieldLanguages, if:
+            if (!empty($prioritizedLanguages) && !in_array($spiField->languageCode, $prioritizedLanguages)) {
+                // If filtering is enabled we ignore fields in other languages then $prioritizedLanguages, if:
                 if ($alwaysAvailableLanguage === null) {
                     // Ignore field if we don't have $alwaysAvailableLanguageCode fallback
                     continue;
@@ -537,8 +536,8 @@ class DomainMapper
         }
 
         $loadStructList = [];
-        $prioritizedLanguages = !empty($languageFilter['languages']) ? $languageFilter['languages'] : [];
-        $useAlwaysAvailable = isset($languageFilter['useAlwaysAvailable']) ? $languageFilter['useAlwaysAvailable'] : true;
+        $prioritizedLanguages = $languageFilter['languages'] ?? [];
+        $useAlwaysAvailable = $languageFilter['useAlwaysAvailable'] ?? true;
         foreach ($result->searchHits as $hit) {
             if ($useAlwaysAvailable && $hit->valueObject->alwaysAvailable) {
                 $languages = $prioritizedLanguages;
@@ -562,7 +561,7 @@ class DomainMapper
                 $hit->valueObject = $this->buildContentDomainObject(
                     $contentList[$hit->valueObject->id],
                     null,//@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
-                    !empty($languageFilter['languages']) ? $languageFilter['languages'] : null,
+                    $languageFilter['languages'] ?? [],
                     $useAlwaysAvailable ? $hit->valueObject->mainLanguageCode : null
                 );
             } else {

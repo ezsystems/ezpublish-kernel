@@ -390,7 +390,7 @@ class ContentService implements ContentServiceInterface
         return $this->domainMapper->buildContentDomainObject(
             $spiContent,
             null,
-            empty($languages) ? null : $languages,
+            $languages ?? [],
             $alwaysAvailableLanguageCode
         );
     }

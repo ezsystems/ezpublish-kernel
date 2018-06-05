@@ -82,7 +82,7 @@ abstract class AbstractHandler
         // Generate unique cache keys
         $cacheKeys = [];
         foreach (array_unique($ids) as $id) {
-            $cacheKeys[] = $keyPrefix . $id . (!empty($keySuffixes[$id]) ? $keySuffixes[$id] : '');
+            $cacheKeys[] = $keyPrefix . $id . ($keySuffixes[$id] ?? '');
         }
 
         // Load cache items by cache keys (will contain hits and misses)
