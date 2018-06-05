@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,6 +23,7 @@ class ImaginePass implements CompilerPassInterface
         }
 
         $filterConfigDef = $container->findDefinition('liip_imagine.filter.configuration');
+        $filterConfigDef->setClass(FilterConfiguration::class);
         $filterConfigDef->addMethodCall('setConfigResolver', array(new Reference('ezpublish.config.resolver')));
 
         if ($container->hasAlias('liip_imagine')) {
