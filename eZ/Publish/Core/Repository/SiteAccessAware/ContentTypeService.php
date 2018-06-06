@@ -30,7 +30,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     protected $service;
 
-    /** @var LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
     protected $languageResolver;
 
     /**

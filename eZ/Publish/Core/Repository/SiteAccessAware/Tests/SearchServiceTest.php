@@ -51,6 +51,16 @@ class SearchServiceTest extends AbstractServiceTest
         ];
     }
 
+    protected function setLanguagesLookupArguments(array $arguments, $languageArgumentIndex)
+    {
+        $arguments[$languageArgumentIndex] = [
+            'languages' => [],
+            'useAlwaysAvailable' => null,
+        ];
+
+        return $arguments;
+    }
+
     protected function setLanguagesLookupExpectedArguments(array $arguments, $languageArgumentIndex, array $languages)
     {
         $arguments[$languageArgumentIndex] = [

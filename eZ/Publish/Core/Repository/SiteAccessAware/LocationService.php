@@ -26,7 +26,7 @@ class LocationService implements LocationServiceInterface
     /** @var \eZ\Publish\API\Repository\LocationService */
     protected $service;
 
-    /** @var LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
     protected $languageResolver;
 
     /**

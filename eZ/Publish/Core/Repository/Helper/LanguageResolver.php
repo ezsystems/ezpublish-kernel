@@ -12,25 +12,38 @@ class LanguageResolver
     /**
      * Values typically provided by configuration.
      *
-     * These will need to change when configuration (scope) changes using setters below.
+     * These will need to change when configuration (scope) changes mid flight using setters below.
+     *
+     * @var array
      */
     private $configLanguages;
-    private $useAlwaysAvailable;
-    private $showAllTranslations;
+
+    /** @var bool */
+    private $defaultUseAlwaysAvailable;
+
+    /** @var bool */
+    private $defaultShowAllTranslations;
 
     /**
      * Values typically provided by user context, will need to be set depending on your own custom logic using setter.
      *
      * E.g. Backend UI might expose a language selector for the whole backend that should be reflected on both
      *      UI strings as well as default languages to prioritize for repository objects.
+     *
+     * If set, this will have priority over configured languages.
+     *
+     * @var string|null
      */
     private $contextLanguage;
 
-    public function __construct(array $configLanguages, bool $useAlwaysAvailable = null, bool $showAllTranslations = null)
-    {
+    public function __construct(
+        array $configLanguages,
+        bool $defaultUseAlwaysAvailable = true,
+        bool $defaultShowAllTranslations = false
+    ) {
         $this->configLanguages = $configLanguages;
-        $this->useAlwaysAvailable = $useAlwaysAvailable;
-        $this->showAllTranslations = $showAllTranslations;
+        $this->defaultUseAlwaysAvailable = $defaultUseAlwaysAvailable;
+        $this->defaultShowAllTranslations = $defaultShowAllTranslations;
     }
 
     /**
@@ -38,7 +51,7 @@ class LanguageResolver
      *
      * @param array $configLanguages
      */
-    public function setConfigLanguages(array $configLanguages)
+    public function setConfigLanguages(array $configLanguages): void
     {
         $this->configLanguages = $configLanguages;
     }
@@ -49,9 +62,11 @@ class LanguageResolver
      * User language will, if set, will have prepended before configured languages. But in cases PHP API consumer
      * specifies languages to retrieve repository objects in it will instead be appended as a fallback.
      *
+     * If set, this will have priority over configured languages.
+     *
      * @param string|null $contextLanguage
      */
-    public function setContextLanguage(?string $contextLanguage)
+    public function setContextLanguage(?string $contextLanguage): void
     {
         $this->contextLanguage = $contextLanguage;
     }
@@ -61,9 +76,9 @@ class LanguageResolver
      *
      * @param array|null $forcedLanguages Optional, typically arguments provided to API, will be used first if set.
      *
-     * @return array|null
+     * @return array
      */
-    public function getPrioritizedLanguages(?array $forcedLanguages)
+    public function getPrioritizedLanguages(?array $forcedLanguages): array
     {
         // Skip if languages param has been set by API user
         if ($forcedLanguages !== null) {
@@ -71,11 +86,11 @@ class LanguageResolver
         }
 
         // Detect if we should load all languages by default
-        if ($this->showAllTranslations) {
+        if ($this->defaultShowAllTranslations) {
             return Language::ALL;
         }
 
-        // create language based on context and configuration
+        // create language based on context and configuration, where context language is made most important one
         $languages = [];
         if ($this->contextLanguage !== null) {
             $languages[] = $this->contextLanguage;
@@ -87,11 +102,11 @@ class LanguageResolver
     /**
      * For use by event listening to config resolver scope changes (or other event changing configured languages).
      *
-     * @param bool $useAlwaysAvailable
+     * @param bool $defaultUseAlwaysAvailable
      */
-    public function setUseAlwaysAvailable(bool $useAlwaysAvailable)
+    public function setDefaultUseAlwaysAvailable(bool $defaultUseAlwaysAvailable): void
     {
-        $this->useAlwaysAvailable = $useAlwaysAvailable;
+        $this->defaultUseAlwaysAvailable = $defaultUseAlwaysAvailable;
     }
 
     /**
@@ -99,31 +114,26 @@ class LanguageResolver
      *
      * @param bool|null $forcedUseAlwaysAvailable Optional, if set will be used instead of configured value,
      *        typically arguments provided to API.
-     * @param bool $defaultUseAlwaysAvailable
      *
      * @return bool
      */
-    public function getUseAlwaysAvailable(?bool $forcedUseAlwaysAvailable = null, bool $defaultUseAlwaysAvailable = true)
+    public function getUseAlwaysAvailable(?bool $forcedUseAlwaysAvailable = null): bool
     {
         if ($forcedUseAlwaysAvailable !== null) {
             return $forcedUseAlwaysAvailable;
         }
 
-        if ($this->useAlwaysAvailable !== null) {
-            return $this->useAlwaysAvailable;
-        }
-
-        return $defaultUseAlwaysAvailable;
+        return $this->defaultUseAlwaysAvailable;
     }
 
     /**
      * For use by event listening to config resolver scope changes (or other event changing configured languages).
      *
-     * @param bool $showAllTranslations
+     * @param bool $defaultShowAllTranslations
      */
-    public function setShowAllTranslations(bool $showAllTranslations)
+    public function setShowAllTranslations(bool $defaultShowAllTranslations): void
     {
-        $this->showAllTranslations = $showAllTranslations;
+        $this->defaultShowAllTranslations = $defaultShowAllTranslations;
     }
 
     /**
@@ -131,20 +141,15 @@ class LanguageResolver
      *
      * @param bool|null $forcedShowAllTranslations Optional, if set will be used instead of configured value,
      *        typically arguments provided to API.
-     * @param bool $defaultShowAllTranslations
      *
      * @return bool
      */
-    public function getShowAllTranslations(?bool $forcedShowAllTranslations = null, bool $defaultShowAllTranslations = false)
+    public function getShowAllTranslations(?bool $forcedShowAllTranslations = null): bool
     {
         if ($forcedShowAllTranslations !== null) {
             return $forcedShowAllTranslations;
         }
 
-        if ($this->showAllTranslations !== null) {
-            return $this->showAllTranslations;
-        }
-
-        return $defaultShowAllTranslations;
+        return $this->defaultShowAllTranslations;
     }
 }

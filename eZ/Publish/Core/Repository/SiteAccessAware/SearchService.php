@@ -22,7 +22,7 @@ class SearchService implements SearchServiceInterface
     /** @var \eZ\Publish\API\Repository\SearchService */
     protected $service;
 
-    /** @var LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
     protected $languageResolver;
 
     /**
@@ -39,58 +39,58 @@ class SearchService implements SearchServiceInterface
         $this->languageResolver = $languageResolver;
     }
 
-    public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findContent(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         $languageFilter['languages'] = $this->languageResolver->getPrioritizedLanguages(
-            empty($languageFilter['languages']) ? [] : $languageFilter['languages']
+            $languageFilter['languages'] ?? null
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
+            $languageFilter['useAlwaysAvailable'] ?? null
         );
 
         return $this->service->findContent($query, $languageFilter, $filterOnUserPermissions);
     }
 
-    public function findContentInfo(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findContentInfo(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         $languageFilter['languages'] = $this->languageResolver->getPrioritizedLanguages(
-            empty($languageFilter['languages']) ? [] : $languageFilter['languages']
+            $languageFilter['languages'] ?? null
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
+            $languageFilter['useAlwaysAvailable'] ?? null
         );
 
         return $this->service->findContentInfo($query, $languageFilter, $filterOnUserPermissions);
     }
 
-    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findSingle(Criterion $filter, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         $languageFilter['languages'] = $this->languageResolver->getPrioritizedLanguages(
-            empty($languageFilter['languages']) ? [] : $languageFilter['languages']
+            $languageFilter['languages'] ?? null
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
+            $languageFilter['useAlwaysAvailable'] ?? null
         );
 
         return $this->service->findSingle($filter, $languageFilter, $filterOnUserPermissions);
     }
 
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
     {
         return $this->service->suggest($prefix, $fieldPaths, $limit, $filter);
     }
 
-    public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findLocations(LocationQuery $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         $languageFilter['languages'] = $this->languageResolver->getPrioritizedLanguages(
-            empty($languageFilter['languages']) ? [] : $languageFilter['languages']
+            $languageFilter['languages'] ?? null
         );
 
         $languageFilter['useAlwaysAvailable'] = $this->languageResolver->getUseAlwaysAvailable(
-            empty($languageFilter['useAlwaysAvailable']) ? null : $languageFilter['useAlwaysAvailable']
+            $languageFilter['useAlwaysAvailable'] ?? null
         );
 
         return $this->service->findLocations($query, $languageFilter, $filterOnUserPermissions);

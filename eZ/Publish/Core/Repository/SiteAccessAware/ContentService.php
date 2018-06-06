@@ -27,7 +27,7 @@ class ContentService implements ContentServiceInterface
     /** @var \eZ\Publish\API\Repository\ContentService */
     protected $service;
 
-    /** @var LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
     protected $languageResolver;
 
     /**

@@ -20,7 +20,7 @@ class URLAliasService implements URLAliasServiceInterface
     /** @var \eZ\Publish\API\Repository\URLAliasService */
     protected $service;
 
-    /** @var LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
     protected $languageResolver;
 
     /**

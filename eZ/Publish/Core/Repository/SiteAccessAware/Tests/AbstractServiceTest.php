@@ -122,6 +122,21 @@ abstract class AbstractServiceTest extends TestCase
     }
 
     /**
+     * Method to be able to customize the logic for setting expected language argument during {@see testForLanguagesLookup()}.
+     *
+     * @param array $arguments
+     * @param int $languageArgumentIndex
+     *
+     * @return array
+     */
+    protected function setLanguagesLookupArguments(array $arguments, $languageArgumentIndex)
+    {
+        $arguments[$languageArgumentIndex] = [];
+
+        return $arguments;
+    }
+
+    /**
      * Test that language aware methods does a language lookup when language is not set.
      *
      * @dataProvider providerForLanguagesLookupMethods
@@ -134,7 +149,8 @@ abstract class AbstractServiceTest extends TestCase
     final public function testForLanguagesLookup($method, array $arguments, $return, $languageArgumentIndex, callable $callback = null)
     {
         $languages = ['eng-GB', 'eng-US'];
-        $arguments[$languageArgumentIndex] = [];
+
+        $arguments = $this->setLanguagesLookupArguments($arguments, $languageArgumentIndex, $languages);
 
         $expectedArguments = $this->setLanguagesLookupExpectedArguments($arguments, $languageArgumentIndex, $languages);
 

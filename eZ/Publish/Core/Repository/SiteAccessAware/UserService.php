@@ -28,7 +28,7 @@ class UserService implements UserServiceInterface
     /** @var \eZ\Publish\API\Repository\UserService */
     protected $service;
 
-    /** @var LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
     protected $languageResolver;
 
     /**

@@ -26,7 +26,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     /** @var \eZ\Publish\API\Repository\ObjectStateService */
     protected $service;
 
-    /** @var LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
     protected $languageResolver;
 
     /**
