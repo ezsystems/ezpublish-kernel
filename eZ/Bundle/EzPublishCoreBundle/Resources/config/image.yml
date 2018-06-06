@@ -1,6 +1,4 @@
 parameters:
-    liip_imagine.filter.configuration.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration
-
     ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
     ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
     ezpublish.image_alias.imagine.alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
@@ -168,7 +166,7 @@ services:
         class: "%ezpublish.image_alias.imagine.filter.loader.scaleheight.class%"
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaleheight" }
-            
+
     ezpublish.image_alias.imagine.filter.loader.scale:
         parent: ezpublish.image_alias.imagine.filter.loader.relative_scale
         class: "%ezpublish.image_alias.imagine.filter.loader.scale.class%"
