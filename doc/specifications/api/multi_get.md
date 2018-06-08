@@ -13,13 +13,13 @@ at once.
 #### Note on Caching
 Part of the reason why this is being proposed now is that with kernel version 7.0 _(eZ Platform v2)_ and it's move to
 Symfony Cache. We can now actually also load several cache items in one call, meaning any exposure of multi load
-endpoints will provide some performance improvements also when cache is warm, not just when it is cold & request goes to
-database.
+endpoints will provide noticeable performance improvements also when cache is warm, not just when it is cold & request
+goes to database.
 
 
 ## SPI _(PHP)_
-Before we try to define how a multi lookup API endpoint should look like, we'll first cover the layer below, the Service
-Provider Interface, or SPI for short.
+Before we try to define how a multi lookup API endpoint should look like, we'll first cover the layer below, the _Service
+Provider Interface_, or *SPI* for short.
 
 Reason for that is that the concerns are simpler. SPI layer does not deal with Business layer logic and in general only
 knows about two things:
@@ -27,7 +27,7 @@ knows about two things:
 - Throwing when entity is _Not Found_
 
 However as written in intro, there are cases where this throw logic is unwanted. And more importantly when loading several
-entities, if we throw when one is missing, we are activly refusing the callee to retrieve the items that where found.
+entities, if we throw when one is missing, we are actively refusing the callee to retrieve the items that *where* found.
 
 #### Design
 
@@ -43,14 +43,29 @@ As such, for the lower layer SPI the following pattern would be fitting, here us
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[<mixed>] An iterable set of ContentInfo where id is key.
      */
-    public function loadContentInfoList(array $contentIds);
+    public function loadContentInfoList(array $contentIds): iterable;
 ```
 
 Notes:
 - If the endpoint is retuning arrays, generators or collection object is up to each and every use case. Only thing
-  defined here is that it's _iterable_.
+  defined here is that it is _iterable_.
 - There is no offset or limit, given we do lookup on id's that would be up to callee.
 - Callee can easily get missing entities with `$missingIds = array_diff($contentIds, array_keys($contentInfoList))`
+
+##### Note on more complex cases
+
+For loading whole Content we also need to at least specify which language each and every item should be loaded in, in
+order to take always available into account, and in order for cache layer to know enough to generate unique cache keys.
+
+To do this, we can use a LoadStruct:
+```php
+Class LoadStruct implements SPI\Persistent\ValueObject
+{
+    public mixed $id;
+    public ?int $versionNo;
+    public array $languages;
+}
+```
 
 
 ## API _(PHP & REST)_
@@ -67,39 +82,47 @@ But again there are plenty of use cases where throw/catch logic is not wanted. E
 specifically blocks where multiple content items have been assigned to be displayed, and we want to show what the user
 has access to, ignoring the rest.
 
-#### Design
+#### PHP Design
 
 For the higher layer API we would need something more concrete, and with stronger type hinting as this is among the
-strengths of the API. Staying with ContentInfo as an example here we can envision the following pattern:
+strengths of the API. Taking Content as an example here we can envision the following pattern:
 ```php
     /**
      * Return collection of unique Content Info, with content id as key.
      *
-     * The returning collection contains methods to retrive info on items not found, as well as items the user does not
-     * have access to read.
-     *
      * @param array $contentIds
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo[<mixed>]|\eZ\Publish\API\Repository\Values\MultiLoadCollection
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[<mixed>]|\eZ\Publish\API\Repository\Values\ContentCollection
      */
-    public function loadContentInfoList(array $contentIds);
+    public function loadContentCollection(array $contentIds, array $prioritizedLanguages = []) : ContentCollection;
 
 
-Interface MultiLoadCollection
+Interface ContentCollection implements iterable
 {
+    /**
+     * Return all content objeects, also the once user does not have access to.
+     *
+     * This method is only to be used in cases where you know for sure you want to load items
+     * regardless of permissions.
+     *
+     * To get list filtered by permissing, just iterate ContentCollection itself.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[<mixed>]
+     */
+    public function all(): array;
+
     public function getNotFoundIds() : array;
+
     public function getUnauthorizedIds() : array;
 }
 ```
 
 Notes:
-- Like in SPI we only document what is returned is _iterable_, and in this case also that it implements an interface to
+- Like in SPI we only document what is returned is _iterable_, but in this case also that it implements an interface to
   get info on items not part of the collection _(NotFound or Unauthorized)_
 - Also like in SPI there is no offset or limit, given we do lookup on id's that would still be up to callee here.
-  NOTE: However if we see use cases where lots of items are loaded by id we can consider to rather use generators or lazy
-  loaded collections and still return a valid _iterable_ structure.
 
-#### REST
+#### REST Design
 
 _TBD:_ In general like other collections in REST API with added information on which items where not found and which where
 Unauthorized with current user.
