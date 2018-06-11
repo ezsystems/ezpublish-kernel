@@ -1,4 +1,4 @@
-# eZ Platform Kernel (a.k.a. *eZ Publish 6.x kernel*)
+# eZ Platform Kernel
 [![Build Status](https://img.shields.io/travis/ezsystems/ezpublish-kernel.svg?style=flat-square&branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
 [![Downloads](https://img.shields.io/packagist/dt/ezsystems/ezpublish-kernel.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezpublish-kernel)
 [![Latest version](https://img.shields.io/github/release/ezsystems/ezpublish-kernel.svg?style=flat-square)](https://github.com/ezsystems/ezpublish-kernel/releases)
@@ -6,7 +6,7 @@
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0/big.png)](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0)
 
-Welcome to the *eZ Platform Kernel* (also known as *eZ Publish 6.x kernel*). The kernel is the heart of *eZ Platform*, a modern
+Welcome to the *eZ Platform Kernel* (also known as *eZ Publish 6.x and higher kernel*). The kernel is the heart of *eZ Platform*, a modern
 CMS built on top of the Symfony (Full Stack) Framework. Containing an advanced Content Model, it allows you to structure any kind of content or content-like data in a future-proof Content Repository. It also aims to provide additional features for the MVC layer (Symfony) to increase your productivity.
 
 This code repository contains several layers of (and implementations of) APIs. *Kernel* refers to this being the core,
