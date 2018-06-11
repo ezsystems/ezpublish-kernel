@@ -180,6 +180,7 @@ class TestCase extends BaseTestCase
             $contentTypeHeader = $response->hasHeader('Content-Type')
                 ? $response->getHeader('Content-Type')[0]
                 : '';
+
             if (strpos($contentTypeHeader, 'application/vnd.ez.api.ErrorMessage+xml') !== false) {
                 $body = \simplexml_load_string($response->getBody());
                 $errorMessageString = $this->getHttpResponseCodeErrorMessage($body);
