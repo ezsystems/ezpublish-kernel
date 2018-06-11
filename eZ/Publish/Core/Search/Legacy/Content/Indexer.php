@@ -32,9 +32,8 @@ class Indexer extends IncrementalIndexer
         return 'eZ Platform Legacy (SQL) Search Engine';
     }
 
-    public function updateSearchIndex(array $contentIds, $commit, $continueOnError = false)
+    public function updateSearchIndex(array $contentIds, $commit)
     {
-        $unindexableContentIds = [];
         $contentHandler = $this->persistenceHandler->contentHandler();
         foreach ($contentIds as $contentId) {
             try {
@@ -49,16 +48,11 @@ class Indexer extends IncrementalIndexer
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
             } catch (InvalidIndexDataException $indexDataException) {
-                $unindexableContentIds[] = $contentId;
-                if (!$continueOnError) {
-                    $this->logger->error($indexDataException->getMessage());
+                if (!$this->errorHandler->handle($info, $indexDataException->getMessage())) {
                     break;
                 }
-                $this->logger->warning($indexDataException->getMessage());
             }
         }
-
-        return $unindexableContentIds;
     }
 
     public function purge()

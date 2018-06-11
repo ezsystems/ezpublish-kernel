@@ -26,6 +26,11 @@ use PDO;
 abstract class IncrementalIndexer extends Indexer
 {
     /**
+     * @var \eZ\Publish\Core\Search\Common\IndexerErrorHandler
+     */
+    protected $errorHandler;
+
+    /**
      * @deprecated Kept for compatibility with consumers of Indexer, performs purge first & recreate of index second.
      */
     final public function createSearchIndex(OutputInterface $output, $iterationCount, $commit)
@@ -73,11 +78,8 @@ abstract class IncrementalIndexer extends Indexer
      *
      * @param int[] $contentIds
      * @param bool $commit
-     * @param bool $continueOnError
-     *
-     * @return int[] Returns content id's we could not index as field indexer threw a InvalidIndexDataException, details on the exception can be found in log message.
      */
-    abstract public function updateSearchIndex(array $contentIds, $commit, $continueOnError = false);
+    abstract public function updateSearchIndex(array $contentIds, $commit);
 
     /**
      * Purges whole index, should only be done if user asked for it.
@@ -90,4 +92,12 @@ abstract class IncrementalIndexer extends Indexer
      * @return string
      */
     abstract public function getName();
+
+    /**
+     * @param \eZ\Publish\Core\Search\Common\IndexerErrorHandler $errorHandler
+     */
+    public function setErrorHandler(IndexerErrorHandler $errorHandler)
+    {
+        $this->errorHandler = $errorHandler;
+    }
 }

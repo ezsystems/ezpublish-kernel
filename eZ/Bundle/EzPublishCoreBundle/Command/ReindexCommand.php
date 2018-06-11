@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use eZ\Publish\Core\Search\Common\IndexerErrorHandler\LocalErrorHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Search\Common\Indexer;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
@@ -46,6 +47,11 @@ class ReindexCommand extends ContainerAwareCommand
     private $logger;
 
     /**
+     * @var eZ\Publish\Core\Search\Common\IndexerErrorHandler\LocalErrorHandler
+     */
+    private $errorHandler;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -54,7 +60,11 @@ class ReindexCommand extends ContainerAwareCommand
     public function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
-        $this->searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
+
+        $searchIndexerFactory = $this->getContainer()->get('ezpublish.api.search_engine.indexer.factory');
+        $this->errorHandler = new LocalErrorHandler($input->getOption('continue-on-error'));
+        $this->searchIndexer = $searchIndexerFactory->buildSearchEngineIndexerWithErrorHandler($this->errorHandler);
+
         $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
         $this->logger = $this->getContainer()->get('logger');
         if (!$this->searchIndexer instanceof Indexer) {
@@ -183,7 +193,6 @@ EOT
     protected function indexIncrementally(InputInterface $input, OutputInterface $output, $iterationCount, $commit)
     {
         $continueOnError = $input->getOption('continue-on-error');
-        $unindexableContentIds = [];
 
         if ($contentIds = $input->getOption('content-ids')) {
             $contentIds = explode(',', $contentIds);
@@ -192,9 +201,9 @@ EOT
                 count($contentIds)
             ));
 
-            $unindexableContentIds += $this->searchIndexer->updateSearchIndex($contentIds, $commit, $continueOnError);
+            $this->searchIndexer->updateSearchIndex($contentIds, $commit);
 
-            return $this->printUnindexableContentIds($output, $unindexableContentIds);
+            return $this->printUnindexableContentIds($output);
         }
 
         if ($since = $input->getOption('since')) {
@@ -244,18 +253,14 @@ EOT
         } else {
             // if we only have one process, or less iterations to warrant running several, we index it all inline
             foreach ($this->fetchIteration($stmt, $iterationCount) as $contentIds) {
-                $unindexableContentIds += $this->searchIndexer->updateSearchIndex($contentIds, $commit, $continueOnError);
+                $this->searchIndexer->updateSearchIndex($contentIds, $commit);
                 $progress->advance(1);
             }
         }
 
         $progress->finish();
 
-        if ($unindexableContentIds) {
-            $this->printUnindexableContentIds($output, $unindexableContentIds);
-
-            return 1;
-        }
+        $this->printUnindexableContentIds($output);
     }
 
     private function runParallelProcess(ProgressBar $progress, Statement $stmt, $processCount, $iterationCount, $commit)
@@ -453,14 +458,15 @@ EOT
 
     /**
      * @param OutputInterface $output
-     * @param array $unindexableContentIds
      */
-    private function printUnindexableContentIds(OutputInterface $output, array $unindexableContentIds)
+    private function printUnindexableContentIds(OutputInterface $output)
     {
-        $output->writeln('');
-        $output->writeln(sprintf(
-            '<error>Indexing failed on some content items, try running command with "--iteration-count=1 --content-ids=<ids>": %s</error>',
-            implode(',', $unindexableContentIds)
-        ));
+        if ($this->errorHandler->hasErrors()) {
+            $output->writeln('');
+            $output->writeln(sprintf(
+                '<error>Indexing failed on some content items, try running command with "--iteration-count=1 --content-ids=<ids>": %s</error>',
+                implode(', ', array_keys($this->errorHandler->getErrors()))
+            ));
+        }
     }
 }

@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Search\Common;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Search\Common\IndexerErrorHandler\NullErrorHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
@@ -46,16 +47,23 @@ abstract class Indexer
      */
     protected $searchHandler;
 
+    /**
+     * @var \eZ\Publish\Core\Search\Common\IndexerErrorHandler
+     */
+    protected $errorHandler;
+
     public function __construct(
         LoggerInterface $logger,
         PersistenceHandler $persistenceHandler,
         DatabaseHandler $databaseHandler,
-        SearchHandler $searchHandler
+        SearchHandler $searchHandler,
+        IndexerErrorHandler $errorCollector = null
     ) {
         $this->logger = $logger;
         $this->persistenceHandler = $persistenceHandler;
         $this->databaseHandler = $databaseHandler;
         $this->searchHandler = $searchHandler;
+        $this->errorHandler = $errorCollector ?: new NullErrorHandler();
     }
 
     /**
