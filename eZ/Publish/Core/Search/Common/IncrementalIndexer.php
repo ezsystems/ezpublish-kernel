@@ -26,11 +26,6 @@ use PDO;
 abstract class IncrementalIndexer extends Indexer
 {
     /**
-     * @var \eZ\Publish\Core\Search\Common\IndexerErrorHandler
-     */
-    protected $errorHandler;
-
-    /**
      * @deprecated Kept for compatibility with consumers of Indexer, performs purge first & recreate of index second.
      */
     final public function createSearchIndex(OutputInterface $output, $iterationCount, $commit)
@@ -94,10 +89,10 @@ abstract class IncrementalIndexer extends Indexer
     abstract public function getName();
 
     /**
-     * @param \eZ\Publish\Core\Search\Common\IndexerErrorHandler $errorHandler
+     * @param \eZ\Publish\Core\Search\Common\IndexerErrorCollector $errorCollector
      */
-    public function setErrorHandler(IndexerErrorHandler $errorHandler)
+    public function setErrorCollector(IndexerErrorCollector $errorCollector)
     {
-        $this->errorHandler = $errorHandler;
+        $this->errorCollector = $errorCollector;
     }
 }

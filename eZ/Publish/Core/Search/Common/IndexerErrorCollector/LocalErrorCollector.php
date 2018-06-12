@@ -1,11 +1,11 @@
 <?php
 
-namespace eZ\Publish\Core\Search\Common\IndexerErrorHandler;
+namespace eZ\Publish\Core\Search\Common\IndexerErrorCollector;
 
-use eZ\Publish\Core\Search\Common\IndexerErrorHandler;
+use eZ\Publish\Core\Search\Common\IndexerErrorCollector;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 
-class LocalErrorHandler implements IndexerErrorHandler
+class LocalErrorCollector implements IndexerErrorCollector
 {
     /**
      * @var array
@@ -23,12 +23,9 @@ class LocalErrorHandler implements IndexerErrorHandler
     }
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo
-     * @param string $errorMessage
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function handle(ContentInfo $contentInfo, $errorMessage)
+    public function collect(ContentInfo $contentInfo, $errorMessage)
     {
         $this->indexerErrors[$contentInfo->id] = $errorMessage;
 
@@ -36,7 +33,7 @@ class LocalErrorHandler implements IndexerErrorHandler
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getErrors()
     {
@@ -44,7 +41,7 @@ class LocalErrorHandler implements IndexerErrorHandler
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasErrors()
     {

@@ -10,7 +10,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidSearchEngineIndexer;
 use eZ\Publish\Core\Search\Common\Indexer as SearchEngineIndexer;
-use eZ\Publish\Core\Search\Common\IndexerErrorHandler;
 
 /**
  * The search engine indexer factory.
@@ -84,18 +83,5 @@ class SearchEngineIndexerFactory
         }
 
         return $this->searchEngineIndexers[$repositoryConfig['search']['engine']];
-    }
-
-    /**
-     * @param \eZ\Publish\Core\Search\Common\IndexerErrorHandler $errorHandlingStrategy
-     *
-     * @return \eZ\Publish\Core\Search\Common\Indexer
-     */
-    public function buildSearchEngineIndexerWithErrorHandler(IndexerErrorHandler $errorHandlingStrategy)
-    {
-        $searchIndexer = clone $this->buildSearchEngineIndexer();
-        $searchIndexer->setErrorHandler($errorHandlingStrategy);
-
-        return $searchIndexer;
     }
 }

@@ -8,7 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
-use eZ\Publish\Core\Search\Common\IndexerErrorHandler\LocalErrorHandler;
+use eZ\Publish\Core\Search\Common\IndexerErrorCollector\LocalErrorCollector;
+use eZ\Publish\Core\Search\Common\IndexerErrorCollector\NullErrorCollector;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Search\Common\Indexer;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
@@ -47,9 +48,9 @@ class ReindexCommand extends ContainerAwareCommand
     private $logger;
 
     /**
-     * @var eZ\Publish\Core\Search\Common\IndexerErrorHandler\LocalErrorHandler
+     * @var \eZ\Publish\Core\Search\Common\IndexerErrorCollector\LocalErrorCollector
      */
-    private $errorHandler;
+    private $errorCollector;
 
     /**
      * Initialize objects required by {@see execute()}.
@@ -61,12 +62,19 @@ class ReindexCommand extends ContainerAwareCommand
     {
         parent::initialize($input, $output);
 
-        $searchIndexerFactory = $this->getContainer()->get('ezpublish.api.search_engine.indexer.factory');
-        $this->errorHandler = new LocalErrorHandler($input->getOption('continue-on-error'));
-        $this->searchIndexer = $searchIndexerFactory->buildSearchEngineIndexerWithErrorHandler($this->errorHandler);
+        $searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
+        // It's required to clone $searchIndexer, otherwise global service state will be changed due to setting errorCollector
+        $this->searchIndexer = clone $searchIndexer;
+        if ($this->searchIndexer instanceof IncrementalIndexer) {
+            $this->errorCollector = new LocalErrorCollector($input->getOption('continue-on-error'));
+            $this->searchIndexer->setErrorCollector($this->errorCollector);
+        } else {
+            $this->errorCollector = new NullErrorCollector();
+        }
 
         $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
         $this->logger = $this->getContainer()->get('logger');
+
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -461,11 +469,11 @@ EOT
      */
     private function printUnindexableContentIds(OutputInterface $output)
     {
-        if ($this->errorHandler->hasErrors()) {
+        if ($this->errorCollector->hasErrors()) {
             $output->writeln('');
             $output->writeln(sprintf(
                 '<error>Indexing failed on some content items, try running command with "--iteration-count=1 --content-ids=<ids>": %s</error>',
-                implode(', ', array_keys($this->errorHandler->getErrors()))
+                implode(', ', array_keys($this->errorCollector->getErrors()))
             ));
         }
     }

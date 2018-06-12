@@ -7,15 +7,25 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 /**
  * Interface for handling errors during indexing.
  */
-interface IndexerErrorHandler
+interface IndexerErrorCollector
 {
     /**
-     * Handles indexer error.
+     * Collects indexer error.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo
      * @param string $errorMessage
      *
      * @return bool
      */
-    public function handle(ContentInfo $contentInfo, $errorMessage);
+    public function collect(ContentInfo $contentInfo, $errorMessage);
+
+    /**
+     * @return bool
+     */
+    public function hasErrors();
+
+    /**
+     * @return array
+     */
+    public function getErrors();
 }

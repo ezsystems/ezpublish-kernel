@@ -48,7 +48,7 @@ class Indexer extends IncrementalIndexer
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
             } catch (InvalidIndexDataException $indexDataException) {
-                if (!$this->errorHandler->handle($info, $indexDataException->getMessage())) {
+                if (!$this->errorCollector->collect($info, $indexDataException->getMessage())) {
                     break;
                 }
             }
