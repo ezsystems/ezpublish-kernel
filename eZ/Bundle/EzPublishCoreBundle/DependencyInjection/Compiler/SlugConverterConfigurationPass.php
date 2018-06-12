@@ -61,6 +61,18 @@ class SlugConverterConfigurationPass implements CompilerPassInterface
                 $mergedConfiguration['transformation'],
                 implode(', ', array_keys($mergedConfiguration['transformationGroups']))
             ));
+        } elseif (empty($mergedConfiguration['transformation'])) {
+            $container->log(
+                $this,
+                sprintf(
+                    'Relying on default url_alias.slug_converter.transformation setting ("%s") is deprecated and might change in the next major. Set it explicitly to one of the following: %s',
+                    SlugConverter::DEFAULT_CONFIGURATION['transformation'],
+                    implode(
+                        ', ',
+                        array_keys(SlugConverter::DEFAULT_CONFIGURATION['transformationGroups'])
+                    )
+                )
+            );
         }
 
         $slugConverterDefinition->setArgument(1, $mergedConfiguration);
