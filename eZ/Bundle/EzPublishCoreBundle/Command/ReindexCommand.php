@@ -465,7 +465,7 @@ EOT
     }
 
     /**
-     * @param OutputInterface $output
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     private function printUnindexableContentIds(OutputInterface $output)
     {

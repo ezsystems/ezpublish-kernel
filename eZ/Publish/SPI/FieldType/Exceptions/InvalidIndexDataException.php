@@ -37,7 +37,7 @@ class InvalidIndexDataException extends Exception
         $this->languageCode = $languageCode;
 
         $message = sprintf('Field %d in the version %d for %s language can not be indexed', $this->fieldId, $this->versionNo, $this->languageCode);
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, 1, $previous);
     }
 
     /**
