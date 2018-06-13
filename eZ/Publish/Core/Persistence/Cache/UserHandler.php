@@ -93,16 +93,14 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $this->logger->logCall(__METHOD__, array('email' => $email));
         $users = $this->persistenceHandler->userHandler()->loadByEmail($email);
 
-        if (!empty($users)) {
-            $cacheItem->set($users);
-            $cacheTags = [];
-            foreach ($users as $user) {
-                $cacheTags[] = 'content-' . $user->id;
-                $cacheTags[] = 'user-' . $user->id;
-            }
-            $cacheItem->tag($cacheTags);
-            $this->cache->save($cacheItem);
+        $cacheItem->set($users);
+        $cacheTags = [];
+        foreach ($users as $user) {
+            $cacheTags[] = 'content-' . $user->id;
+            $cacheTags[] = 'user-' . $user->id;
         }
+        $cacheItem->tag($cacheTags);
+        $this->cache->save($cacheItem);
 
         return $users;
     }
