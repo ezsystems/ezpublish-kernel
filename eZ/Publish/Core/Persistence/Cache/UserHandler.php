@@ -32,6 +32,10 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
         // Clear corresponding content cache as creation of the User changes it's external data
         $this->cache->invalidateTags(['content-fields-' . $user->id]);
+        $this->cache->deleteItems([
+            'ez-user-' . str_replace('@', '§', $user->login) . '-by-login',
+            'ez-user-' . str_replace('@', '§', $user->email) . '-by-email',
+        ]);
 
         return $return;
     }
@@ -89,14 +93,16 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $this->logger->logCall(__METHOD__, array('email' => $email));
         $users = $this->persistenceHandler->userHandler()->loadByEmail($email);
 
-        $cacheItem->set($users);
-        $cacheTags = [];
-        foreach ($users as $user) {
-            $cacheTags[] = 'content-' . $user->id;
-            $cacheTags[] = 'user-' . $user->id;
+        if (!empty($users)) {
+            $cacheItem->set($users);
+            $cacheTags = [];
+            foreach ($users as $user) {
+                $cacheTags[] = 'content-' . $user->id;
+                $cacheTags[] = 'user-' . $user->id;
+            }
+            $cacheItem->tag($cacheTags);
+            $this->cache->save($cacheItem);
         }
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
 
         return $users;
     }
