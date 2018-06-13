@@ -32,6 +32,10 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
         // Clear corresponding content cache as creation of the User changes it's external data
         $this->cache->invalidateTags(['content-fields-' . $user->id]);
+        $this->cache->deleteItems([
+            'ez-user-' . str_replace('@', '§', $user->login) . '-by-login',
+            'ez-user-' . str_replace('@', '§', $user->email) . '-by-email',
+        ]);
 
         return $return;
     }
