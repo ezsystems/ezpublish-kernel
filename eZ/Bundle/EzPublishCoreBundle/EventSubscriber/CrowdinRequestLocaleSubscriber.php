@@ -19,7 +19,7 @@ class CrowdinRequestLocaleSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => [
-                ['setInContextAcceptLanguage', -100],
+                ['setInContextAcceptLanguage', 15],
             ],
         ];
     }
