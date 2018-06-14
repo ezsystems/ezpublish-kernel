@@ -14,8 +14,9 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use eZ\Publish\SPI\Variation\VariationHandler;
-use eZ\Publish\Core\FieldType\Value;
+use eZ\Publish\SPI\FieldType\Value;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
@@ -25,6 +26,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
+use Psr\Log\NullLogger;
 use SplFileInfo;
 
 /**
@@ -74,7 +76,7 @@ class AliasGenerator implements VariationHandler
         $this->filterManager = $filterManager;
         $this->ioResolver = $ioResolver;
         $this->filterConfiguration = $filterConfiguration;
-        $this->logger = $logger;
+        $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
     /**
@@ -96,6 +98,7 @@ class AliasGenerator implements VariationHandler
 
         $originalPath = $imageValue->id;
 
+        $variationWidth = $variationHeight = null;
         // Create the image alias only if it does not already exist.
         if ($variationName !== IORepositoryResolver::VARIATION_ORIGINAL && !$this->ioResolver->isStored($originalPath, $variationName)) {
             try {
@@ -104,16 +107,18 @@ class AliasGenerator implements VariationHandler
                 throw new SourceImageNotFoundException($originalPath, 0, $e);
             }
 
-            if ($this->logger) {
-                $this->logger->debug("Generating '$variationName' variation on $originalPath, field #$fieldId ($fieldDefIdentifier)");
-            }
+            $this->logger->debug("Generating '$variationName' variation on $originalPath, field #$fieldId ($fieldDefIdentifier)");
 
             $this->ioResolver->store(
                 $this->applyFilter($originalBinary, $variationName),
                 $originalPath,
                 $variationName
             );
-        } elseif ($this->logger) {
+        } else {
+            if ($variationName === IORepositoryResolver::VARIATION_ORIGINAL) {
+                $variationWidth = $imageValue->width;
+                $variationHeight = $imageValue->height;
+            }
             $this->logger->debug("'$variationName' variation on $originalPath is already generated. Loading from cache.");
         }
 
@@ -124,16 +129,20 @@ class AliasGenerator implements VariationHandler
         } catch (NotResolvableException $e) {
             // If for some reason image alias cannot be resolved, throw the appropriate exception.
             throw new InvalidVariationException($variationName, 'image', 0, $e);
+        } catch (RuntimeException $e) {
+            throw new InvalidVariationException($variationName, 'image', 0, $e);
         }
 
         return new ImageVariation(
-            array(
+            [
                 'name' => $variationName,
                 'fileName' => $aliasInfo->getFilename(),
                 'dirPath' => $aliasInfo->getPath(),
                 'uri' => $aliasInfo->getPathname(),
                 'imageId' => $imageValue->imageId,
-            )
+                'width' => $variationWidth,
+                'height' => $variationHeight,
+            ]
         );
     }
 
