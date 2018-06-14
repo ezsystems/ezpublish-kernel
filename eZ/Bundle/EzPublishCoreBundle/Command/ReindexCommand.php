@@ -128,7 +128,7 @@ class ReindexCommand extends ContainerAwareCommand
                 'processes',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable',
+                'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable. This option will be automatically disabled if continue on error option is used.',
                 'auto'
             )->addOption(
                 'continue-on-error',
