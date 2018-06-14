@@ -48,6 +48,6 @@ class ContentContentInfoProxy extends APIContentInfo
     protected function loadObject()
     {
         $this->object = $this->proxy->getVersionInfo()->getContentInfo();
-        unset($this->proxy);
+        $this->proxy = null;
     }
 }

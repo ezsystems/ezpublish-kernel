@@ -75,7 +75,7 @@ class ContentProxy extends APIContent
             return $this->contentInfoProxy;
         } elseif ($this->contentInfoProxy !== null) {
             // Remove ref when we no longer need the proxy
-            unset($this->contentInfoProxy);
+            $this->contentInfoProxy = null;
         }
 
         return $this->object->getVersionInfo()->getContentInfo();
