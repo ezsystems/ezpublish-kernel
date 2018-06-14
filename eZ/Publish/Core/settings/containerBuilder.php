@@ -24,6 +24,8 @@ $containerBuilder = new ContainerBuilder();
 $containerBuilder->addResource(new FileResource(__FILE__));
 
 // Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
+// if not set then driver will be empty and Stash\Pool will use Ephemeral which is what we want for integration tests.
+// For full app CoreBundle overrides this and generated bundle using StashBundle settings.
 if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
     $containerBuilder
         ->register('ezpublish.cache_pool.driver', 'Stash\Driver\Redis')
