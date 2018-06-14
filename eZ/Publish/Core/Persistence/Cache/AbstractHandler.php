@@ -56,8 +56,8 @@ abstract class AbstractHandler
      * Cache items must be stored with a key in the following format "${keyPrefix}${id}", like "ez-content-info-${id}",
      * in order for this method to be able to prefix key on id's and also extract key prefix afterwards.
      *
-     * It also optionally supports a key suffix, for use on a variable argument that affects all lookups,
-     * like translations, i.e. "ez-content-${id}-${translationKey}" where $keySuffix = "-${translationKey}".
+     * It also optionally supports a key suffixs, for use on a variable argument that affects all lookups,
+     * like translations, i.e. "ez-content-${id}-${translationKey}" where $keySuffixes = [$id => "-${translationKey}"].
      *
      * @param array $ids
      * @param string $keyPrefix E.g "ez-content-"
