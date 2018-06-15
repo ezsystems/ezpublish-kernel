@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use InvalidArgumentException;
 
-abstract class Criterion
+abstract class Criterion implements CriterionInterface
 {
     /**
      * The operator used by the Criterion.
@@ -114,6 +114,38 @@ abstract class Criterion
     }
 
     /**
+     * Criterion description function.
+     *
+     * Returns the combination of the Criterion's supported operator/value,
+     * as an array of eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications objects
+     * - Operator is one supported Operator, as an Operator::* constant
+     * - ValueType is the type of input value this operator requires, either array or single
+     * - SupportedTypes is an array of types the operator will accept
+     * - ValueCountLimitation is an integer saying how many values are expected.
+     *
+     * <code>
+     * // IN and EQ are supported
+     * return [
+     *     // The EQ operator expects a single value, either as an integer or a string
+     *     new Specifications(
+     *         Operator::EQ,
+     *         Specifications::INPUT_TYPE_SINGLE,
+     *         [Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING],
+     *     ),
+     *     // The IN operator expects an array of values, of either integers or strings
+     *     new Specifications(
+     *         Operator::IN,
+     *         Specifications::INPUT_TYPE_ARRAY,
+     *         [Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING]
+     *     )
+     * ]
+     * </code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications[]
+     */
+    abstract public function getSpecifications();
+
+    /**
      * Returns a callback that checks the values types depending on the operator specifications.
      *
      * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
@@ -146,8 +178,13 @@ abstract class Criterion
         return $callback;
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new static($target, $operator, $value);
     }
 }

@@ -10,7 +10,6 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
@@ -29,7 +28,7 @@ use InvalidArgumentException;
  * );
  * </code>
  */
-class UserMetadata extends Criterion implements CriterionInterface
+class UserMetadata extends Criterion
 {
     /**
      * UserMetadata target: Owner user.
