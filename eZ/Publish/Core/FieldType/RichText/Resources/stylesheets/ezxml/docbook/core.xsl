@@ -260,9 +260,14 @@
           <xsl:value-of select="concat( '#', @anchor_name )"/>
         </xsl:attribute>
       </xsl:when>
+      <xsl:when test="@href">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( '', @href )"/>
+        </xsl:attribute>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:message terminate="yes">
-          Unhandled link typeccc
+          Unhandled link type
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
