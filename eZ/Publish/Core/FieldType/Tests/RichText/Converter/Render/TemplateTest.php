@@ -242,7 +242,7 @@ class TemplateTest extends TestCase
  <section xmlns="http://docbook.org/ns/docbook" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
   <eztemplate name="custom_tag" ezxhtml:align="right">
     <ezcontent>
-      <para>param: value</para>
+      <para>Param: value</para>
     </ezcontent>
     <ezconfig>
       <ezvalue key="param">value</ezvalue>
