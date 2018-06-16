@@ -164,7 +164,7 @@ class TestCase extends BaseTestCase
 
         return new HttpRequest(
             $method,
-            $this->httpHost . $uri,
+            $this->getBaseURI() . $uri,
             array_merge($headers, $extraHeaders),
             $body
         );
