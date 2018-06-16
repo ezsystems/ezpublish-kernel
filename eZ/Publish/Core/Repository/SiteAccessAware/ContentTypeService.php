@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Repository\Helper\LanguageResolver;
+use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
 /**
  * SiteAccess aware implementation of ContentTypeService injecting languages where needed.
@@ -30,14 +30,14 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     protected $service;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
     protected $languageResolver;
 
     /**
      * Construct service object from aggregated service and LanguageResolver.
      *
      * @param \eZ\Publish\API\Repository\ContentTypeService $service
-     * @param LanguageResolver $languageResolver
+     * @param \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver $languageResolver
      */
     public function __construct(
         ContentTypeServiceInterface $service,

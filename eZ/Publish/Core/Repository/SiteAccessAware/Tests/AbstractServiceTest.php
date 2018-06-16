@@ -2,7 +2,7 @@
 
 namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 
-use eZ\Publish\Core\Repository\Helper\LanguageResolver;
+use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 use PHPUnit\Framework\TestCase;
 use Closure;
 
@@ -35,9 +35,9 @@ abstract class AbstractServiceTest extends TestCase
     protected $service;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Helper\LanguageResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $languageHelperMock;
+    protected $languageResolverMock;
 
     abstract public function getAPIServiceClassName();
 
@@ -47,21 +47,21 @@ abstract class AbstractServiceTest extends TestCase
     {
         parent::setUp();
         $this->innerApiServiceMock = $this->getMockBuilder($this->getAPIServiceClassName())->getMock();
-        $this->languageHelperMock = $this->getMockBuilder(LanguageResolver::class)
+        $this->languageResolverMock = $this->getMockBuilder(LanguageResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceClassName = $this->getSiteAccessAwareServiceClassName();
 
         $this->service = new $serviceClassName(
             $this->innerApiServiceMock,
-            $this->languageHelperMock // Not all services needs or expects this, however once they do it will be there
+            $this->languageResolverMock
         );
     }
 
     protected function tearDown()
     {
         unset($this->service);
-        unset($this->languageHelperMock);
+        unset($this->languageResolverMock);
         unset($this->innerApiServiceMock);
         parent::tearDown();
     }
@@ -154,7 +154,7 @@ abstract class AbstractServiceTest extends TestCase
 
         $expectedArguments = $this->setLanguagesLookupExpectedArguments($arguments, $languageArgumentIndex, $languages);
 
-        $this->languageHelperMock
+        $this->languageResolverMock
             ->expects($this->once())
             ->method('getPrioritizedLanguages')
             ->with([])
@@ -208,7 +208,7 @@ abstract class AbstractServiceTest extends TestCase
         $languages = ['eng-GB', 'eng-US'];
         $arguments = $this->setLanguagesPassTroughArguments($arguments, $languageArgumentIndex, $languages);
 
-        $this->languageHelperMock
+        $this->languageResolverMock
             ->expects($this->once())
             ->method('getPrioritizedLanguages')
             ->with($languages)

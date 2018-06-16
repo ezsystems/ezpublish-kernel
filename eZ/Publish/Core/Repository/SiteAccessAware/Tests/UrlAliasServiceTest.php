@@ -38,7 +38,7 @@ class UrlAliasServiceTest extends AbstractServiceTest
         $location = new Location();
 
         $callback = function ($languageLookup) {
-            $this->languageHelperMock
+            $this->languageResolverMock
                 ->expects($this->once())
                 ->method('getShowAllTranslations')
                 ->with($languageLookup ? null : true)

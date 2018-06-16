@@ -35,7 +35,7 @@ class SearchServiceTest extends AbstractServiceTest
         $criterion = new Query\Criterion\ContentId(44);
 
         $callback = function ($languageLookup) {
-            $this->languageHelperMock
+            $this->languageResolverMock
                 ->expects($this->once())
                 ->method('getUseAlwaysAvailable')
                 ->with($languageLookup ? null : true)

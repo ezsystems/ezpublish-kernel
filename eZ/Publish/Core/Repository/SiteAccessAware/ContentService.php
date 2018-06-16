@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Helper\LanguageResolver;
+use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
 /**
  * SiteAccess aware implementation of ContentService injecting languages where needed.
@@ -27,14 +27,14 @@ class ContentService implements ContentServiceInterface
     /** @var \eZ\Publish\API\Repository\ContentService */
     protected $service;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
     protected $languageResolver;
 
     /**
      * Construct service object from aggregated service and LanguageResolver.
      *
      * @param \eZ\Publish\API\Repository\ContentService $service
-     * @param LanguageResolver $languageResolver
+     * @param \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver $languageResolver
      */
     public function __construct(
         ContentServiceInterface $service,

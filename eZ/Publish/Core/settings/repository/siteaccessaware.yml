@@ -75,5 +75,5 @@ services:
 
     # Helpers
     ezpublish.helper.language_resolver:
-        class: eZ\Publish\Core\Repository\Helper\LanguageResolver
+        class: eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver
         arguments: ['%languages%']

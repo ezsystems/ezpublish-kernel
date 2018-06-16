@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Repository\Helper\LanguageResolver;
+use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
 /**
  * UserService for SiteAccessAware layer.
@@ -28,14 +28,14 @@ class UserService implements UserServiceInterface
     /** @var \eZ\Publish\API\Repository\UserService */
     protected $service;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\LanguageResolver */
+    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
     protected $languageResolver;
 
     /**
      * Construct service object from aggregated service.
      *
      * @param \eZ\Publish\API\Repository\UserService $service
-     * @param LanguageResolver $languageResolver
+     * @param \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver $languageResolver
      */
     public function __construct(
         UserServiceInterface $service,

@@ -1,6 +1,12 @@
 <?php
 
-namespace eZ\Publish\Core\Repository\Helper;
+/**
+ * File containing LanguageResolver class.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
+namespace eZ\Publish\Core\Repository\SiteAccessAware\Language;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
 
