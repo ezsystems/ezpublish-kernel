@@ -5,7 +5,6 @@ services:
             - '@ezpublish.api.inner_repository'
             - '@ezpublish.siteaccessaware.service.content'
             - '@ezpublish.siteaccessaware.service.content_type'
-            - '@ezpublish.siteaccessaware.service.role'
             - '@ezpublish.siteaccessaware.service.object_state'
             - '@ezpublish.siteaccessaware.service.url_alias'
             - '@ezpublish.siteaccessaware.service.user'
@@ -27,11 +26,6 @@ services:
         arguments:
             - '@ezpublish.signalslot.service.content_type'
             - '@ezpublish.helper.language_resolver'
-
-    ezpublish.siteaccessaware.service.role:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\RoleService
-        arguments:
-            - '@ezpublish.signalslot.service.role'
 
     ezpublish.siteaccessaware.service.object_state:
         class: eZ\Publish\Core\Repository\SiteAccessAware\ObjectStateService

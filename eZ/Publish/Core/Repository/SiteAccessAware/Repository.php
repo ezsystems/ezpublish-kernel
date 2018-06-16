@@ -27,9 +27,6 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\API\Repository\SectionService */
     protected $sectionService;
 
-    /** @var \eZ\Publish\API\Repository\RoleService */
-    protected $roleService;
-
     /** @var \eZ\Publish\API\Repository\SearchService */
     protected $searchService;
 
@@ -61,7 +58,6 @@ class Repository implements RepositoryInterface
         RepositoryInterface $repository,
         ContentService $contentService,
         ContentTypeService $contentTypeService,
-        RoleService $roleService,
         ObjectStateService $objectStateService,
         URLAliasService $urlAliasService,
         UserService $userService,
@@ -74,7 +70,6 @@ class Repository implements RepositoryInterface
         $this->repository = $repository;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
-        $this->roleService = $roleService;
         $this->objectStateService = $objectStateService;
         $this->urlAliasService = $urlAliasService;
         $this->userService = $userService;
@@ -167,7 +162,7 @@ class Repository implements RepositoryInterface
 
     public function getRoleService()
     {
-        return $this->roleService;
+        return $this->repository->getRoleService();
     }
 
     public function getSearchService()
