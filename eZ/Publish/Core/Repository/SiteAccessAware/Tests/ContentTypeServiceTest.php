@@ -14,6 +14,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\User\User;
 
 class ContentTypeServiceTest extends AbstractServiceTest
 {
@@ -42,6 +43,8 @@ class ContentTypeServiceTest extends AbstractServiceTest
         $fieldDefinitionCreateStruct = new FieldDefinitionCreateStruct();
         $fieldDefinitionUpdateStruct = new FieldDefinitionUpdateStruct();
 
+        $user = new User();
+
         // string $method, array $arguments, bool $return = true
         return [
             ['createContentTypeGroup', [$contentTypeGroupCreateStruct]],
@@ -61,7 +64,7 @@ class ContentTypeServiceTest extends AbstractServiceTest
             ['deleteContentType', [$contentType]],
 
             ['copyContentType', [$contentType]],
-            //['copyContentType', [$contentType, $user]],
+            ['copyContentType', [$contentType, $user]],
 
             ['assignContentTypeGroup', [$contentType, $contentTypeGroup]],
 

@@ -6,6 +6,8 @@ use eZ\Publish\API\Repository\ContentService as APIService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\SiteAccessAware\ContentService;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
@@ -31,6 +33,8 @@ class ContentServiceTest extends AbstractServiceTest
         $contentUpdateStruct = new ContentUpdateStruct();
         $contentMetaStruct = new ContentMetadataUpdateStruct();
         $locationCreateStruct = new LocationCreateStruct();
+        $user = new User();
+        $contentType = new ContentType();
 
         // string $method, array $arguments, bool $return = true
         return [
@@ -53,10 +57,10 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['createContentDraft', [$contentInfo]],
             ['createContentDraft', [$contentInfo, $versionInfo]],
-            //['createContentDraft', [$contentInfo, $versionInfo, $user]],
+            ['createContentDraft', [$contentInfo, $versionInfo, $user]],
 
             ['loadContentDrafts', []],
-            //['loadContentDrafts', [$user]],
+            ['loadContentDrafts', [$user]],
 
             ['updateContent', [$versionInfo, $contentUpdateStruct]],
 
@@ -83,7 +87,7 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['deleteTranslationFromDraft', [$versionInfo, 'eng-GB']],
 
-            //['newContentCreateStruct', [$contentType, 'eng-GB']],
+            ['newContentCreateStruct', [$contentType, 'eng-GB']],
             ['newContentMetadataUpdateStruct', []],
             ['newContentUpdateStruct', []],
         ];
