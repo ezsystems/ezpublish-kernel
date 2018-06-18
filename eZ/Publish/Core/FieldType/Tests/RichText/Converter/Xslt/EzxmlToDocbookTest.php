@@ -16,6 +16,8 @@ use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
 
 /**
  * Tests conversion from legacy ezxml to docbook format.
+ *
+ * @deprecated since version 7.2, to be removed in 8.0. *
  */
 class EzxmlToDocbookTest extends BaseTest
 {

@@ -199,9 +199,9 @@ eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/ezxml/docbook
 
 ### Legacy eZXML => Internal
 
-Conversion from XHTML5 from client side editor to the internal format is performed by `ToRichTextPreNormalize` and `Xslt` converters configures with main `Aggregate` converter to act as one:
+Conversion from Legacy eZXML to the internal format is performed by `ToRichTextPreNormalize` and `Xslt` converters configures with main `Aggregate` converter to act as one:
 
- 1. `eZ/Publish/Core/FieldType/RichText/Converter/Ezxml/ToRichTextPreNormalize` converter
+ 1. `eZ/Publish/Core/FieldType/XmlText/Converter/ToRichTextPreNormalize` converter
 
    With Legacy XmlText it is possible to store XML data differently in regard to the usage of temporary paragraphs that wrap block level elements. In Legacy Stack that is of no consequence as the difference is always normalized, but that also needs to be handled in the new stack. In XmlText field type implementation in the new stack that is handled by `Expanding` and `EmbedLinking` converters.
 

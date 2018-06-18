@@ -17,6 +17,8 @@ use DOMDocument;
  * Expands paragraphs and links embeds of a XML document in legacy ezxml format.
  *
  * Relies on XmlText's Expanding and EmbedLinking converters implementation.
+ *
+ * @deprecated since version 7.2, to be removed in 8.0. Use eZ\Publish\Core\FieldType\XmlText\Converter\ToRichTextPreNormalize instead. *
  */
 class ToRichTextPreNormalize implements Converter
 {
