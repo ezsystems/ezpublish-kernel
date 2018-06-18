@@ -22,7 +22,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Field as FieldSortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 
 /**
  * Integration test for searching and sorting with Field criterion and Field sort clause.
@@ -234,15 +233,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
             $this->markTestSkipped(
                 'Legacy Search Engine does not support custom fields'
-            );
-        }
-    }
-
-    protected function checkLocationFieldSearchSupport()
-    {
-        if ($this->getSetupFactory() instanceof LegacyElasticsearch) {
-            $this->markTestSkipped(
-                'Elasticsearch Search Engine does not support custom fields'
             );
         }
     }
@@ -1306,7 +1296,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function findLocations(Repository $repository, Criterion $criterion, $filter)
     {
-        $this->checkLocationFieldSearchSupport();
         $searchService = $repository->getSearchService();
 
         if ($filter) {
@@ -1339,7 +1328,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function sortLocations(Repository $repository, SortClause $sortClause)
     {
-        $this->checkLocationFieldSearchSupport();
         $searchService = $repository->getSearchService();
 
         $query = new LocationQuery(

@@ -1,3 +1,0 @@
-parameters:
-    ezpublish.search.common.field_value_mapper.float.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\FloatMapper
-    ezpublish.search.common.field_value_mapper.geo_location.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\GeoLocationMapper

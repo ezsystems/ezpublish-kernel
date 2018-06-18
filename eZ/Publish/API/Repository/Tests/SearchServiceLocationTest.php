@@ -33,9 +33,6 @@ class SearchServiceLocationTest extends BaseTest
     protected function setUp()
     {
         $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestSkipped('Field Location search is not yet implemented Elasticsearch search engine');
-        }
 
         parent::setUp();
     }

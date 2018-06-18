@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -34,10 +33,6 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
     public function setUp()
     {
         $setupFactory = $this->getSetupFactory();
-
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestIncomplete('Not implemented for Elasticsearch Search Engine');
-        }
 
         parent::setUp();
     }
