@@ -13,13 +13,13 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\ContentInfoLocationLoader;
+use eZ\Publish\Core\MVC\Exception\HiddenLocationException;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\View\EmbedView;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -211,7 +211,7 @@ class ContentViewBuilder implements ViewBuilder
             }
         );
         if ($location->invisible) {
-            throw new NotFoundHttpException('Location cannot be displayed as it is flagged as invisible.');
+            throw new HiddenLocationException($location, 'Location cannot be displayed as it is flagged as invisible.');
         }
 
         return $location;
