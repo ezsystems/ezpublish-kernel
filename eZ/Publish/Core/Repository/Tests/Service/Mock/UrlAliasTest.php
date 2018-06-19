@@ -189,6 +189,17 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $aliasList = array(new UrlAlias(array('isCustom' => false)));
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $mockedService->removeAliases($aliasList);
     }
 
@@ -200,6 +211,16 @@ class UrlAliasTest extends BaseServiceMockTest
         $aliasList = array(new UrlAlias(array('isCustom' => true)));
         $spiAliasList = array(new SPIUrlAlias(array('isCustom' => true)));
         $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -230,6 +251,16 @@ class UrlAliasTest extends BaseServiceMockTest
         $aliasList = array(new UrlAlias(array('isCustom' => true)));
         $spiAliasList = array(new SPIUrlAlias(array('isCustom' => true)));
         $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3175,6 +3206,16 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateUrlAlias()
     {
         $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3221,6 +3262,16 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateUrlAliasWithRollback()
     {
         $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3264,10 +3315,24 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateUrlAliasThrowsInvalidArgumentException()
     {
         $location = $this->getLocationStub();
-        $urlAliasService = $this->getRepository()->getURLAliasService();
-        $urlAliasHandler = $this->getPersistenceMockHandler('Content\\UrlAlias\\Handler');
 
-        $urlAliasHandler->expects(
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
+        $handlerMock = $this->getPersistenceMock()->urlAliasHandler();
+        $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
+
+        $handlerMock->expects(
             $this->once()
         )->method(
             'createCustomUrlAlias'
@@ -3281,7 +3346,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
-        $urlAliasService->createUrlAlias(
+        $mockedService->createUrlAlias(
             $location,
             'path',
             'languageCode',
@@ -3297,6 +3362,16 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $resource = 'module:content/search';
         $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3343,6 +3418,16 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $resource = 'module:content/search';
         $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3384,8 +3469,23 @@ class UrlAliasTest extends BaseServiceMockTest
      */
     public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionResource()
     {
-        $urlAliasService = $this->getRepository()->getURLAliasService();
-        $urlAliasService->createGlobalUrlAlias(
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
+        $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
+        $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
+
+        $mockedService->createGlobalUrlAlias(
             'invalid/resource',
             'path',
             'languageCode',
@@ -3402,7 +3502,19 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionPath()
     {
         $resource = 'module:content/search';
-        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
+        );
         $urlAliasHandler = $this->getPersistenceMockHandler('Content\\UrlAlias\\Handler');
 
         $urlAliasHandler->expects(
@@ -3419,7 +3531,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
-        $urlAliasService->createGlobalUrlAlias(
+        $mockedService->createGlobalUrlAlias(
             $resource,
             'path',
             'languageCode',
@@ -3458,6 +3570,17 @@ class UrlAliasTest extends BaseServiceMockTest
             'getLocationService'
         )->will(
             $this->returnValue($locationServiceMock)
+        );
+
+        $repositoryMock->expects(
+            $this->exactly(2)
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(true)
         );
 
         $mockedService->expects(
@@ -3551,5 +3674,90 @@ class UrlAliasTest extends BaseServiceMockTest
                 )
             )
             ->getMock();
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @depends testConstructor
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createUrlAlias
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateUrlAliasThrowsUnauthorizedException()
+    {
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+        $location = $this->getLocationStub();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(false)
+        );
+        $mockedService->createUrlAlias(
+            $location,
+            'path',
+            'languageCode',
+            'forwarding'
+        );
+    }
+
+    /**
+     * Test for the createGlobalUrlAlias() method.
+     *
+     * @depends testConstructor
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createGlobalUrlAlias
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateGlobalUrlAliasThrowsUnauthorizedException()
+    {
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(false)
+        );
+        $mockedService->createGlobalUrlAlias(
+            'eznode:42',
+            'path',
+            'languageCode',
+            'forwarding',
+            'alwaysAvailable'
+        );
+    }
+
+    /**
+     * Test for the removeAliases() method.
+     *
+     * @depends testConstructor
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::removeAliases
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemoveAliasesThrowsUnauthorizedException()
+    {
+        $aliasList = array(new UrlAlias(array('isCustom' => true)));
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            'hasAccess'
+        )->with(
+            $this->equalTo('content'),
+            $this->equalTo('urltranslator')
+        )->will(
+            $this->returnValue(false)
+        );
+        $mockedService->removeAliases($aliasList);
     }
 }
