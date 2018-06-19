@@ -46,6 +46,10 @@ class Location extends MultipleValued
             return false;
         }
 
+        if (null === $view->getLocation()) {
+            return false;
+        }
+
         return isset($this->values[$view->getLocation()->id]);
     }
 }
