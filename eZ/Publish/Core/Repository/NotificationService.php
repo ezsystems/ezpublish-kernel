@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository;
+
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;

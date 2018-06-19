@@ -23,7 +23,7 @@ class NotificationHandler extends AbstractHandler implements Handler
     public function createNotification(Notification $notification)
     {
         $this->logger->logCall(__METHOD__, [
-            'notificationId' => $notification->id
+            'notificationId' => $notification->id,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->createNotification($notification);
@@ -42,7 +42,7 @@ class NotificationHandler extends AbstractHandler implements Handler
     public function updateNotification(Notification $notification)
     {
         $this->logger->logCall(__METHOD__, [
-            'notificationId' => $notification->id
+            'notificationId' => $notification->id,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->updateNotification($notification);
@@ -62,7 +62,7 @@ class NotificationHandler extends AbstractHandler implements Handler
         $this->logger->logCall(__METHOD__, [
             'ownerId' => $ownerId,
             'limit' => $limit,
-            'page' => $page
+            'page' => $page,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->getNotificationsByOwnerId($ownerId, $limit, $page);
@@ -78,7 +78,7 @@ class NotificationHandler extends AbstractHandler implements Handler
     public function countPendingNotificationsByOwnerId($ownerId)
     {
         $this->logger->logCall(__METHOD__, [
-            'ownerId' => $ownerId
+            'ownerId' => $ownerId,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->countPendingNotificationsByOwnerId($ownerId);
@@ -94,7 +94,7 @@ class NotificationHandler extends AbstractHandler implements Handler
     public function countNotificationsByOwnerId($ownerId)
     {
         $this->logger->logCall(__METHOD__, [
-            'ownerId' => $ownerId
+            'ownerId' => $ownerId,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->countNotificationsByOwnerId($ownerId);
@@ -110,7 +110,7 @@ class NotificationHandler extends AbstractHandler implements Handler
     public function getNotificationById($notificationId)
     {
         $this->logger->logCall(__METHOD__, [
-            'notificationId' => $notificationId
+            'notificationId' => $notificationId,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->getNotificationById($notificationId);
