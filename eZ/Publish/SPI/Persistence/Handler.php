@@ -74,6 +74,11 @@ interface Handler
     public function bookmarkHandler();
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Notification\Handler
+     */
+    public function notificationHandler();
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler
      */
     public function transactionHandler();

@@ -238,6 +238,11 @@ class Repository implements RepositoryInterface
     protected $backgroundIndexer;
 
     /**
+     * @var \eZ\Publish\API\Repository\NotificationService
+     */
+    protected $notificationService;
+
+    /**
      * Constructor.
      *
      * Construct repository object with provided storage engine
@@ -858,6 +863,23 @@ class Repository implements RepositoryInterface
         );
 
         return $this->nameSchemaService;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\NotificationService
+     */
+    public function getNotificationService()
+    {
+        if ($this->notificationService !== null) {
+            return $this->notificationService;
+        }
+
+        $this->notificationService = new NotificationService(
+            $this->persistenceHandler->notificationHandler(),
+            $this
+        );
+
+        return $this->notificationService;
     }
 
     /**

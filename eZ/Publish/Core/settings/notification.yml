@@ -1,0 +1,15 @@
+services:
+    eZ\Publish\Core\Notification\Renderer\Registry:
+        autowire: true
+        autoconfigure: false
+        public: false
+
+    notification.renderer.registry: '@eZ\Publish\Core\Notification\Renderer\Registry'
+
+    eZ\Publish\Core\Notification\Slot\OnNotificationSlot:
+        arguments:
+            - '@ezpublish.spi.persistence.legacy.notification.handler'
+        tags:
+            - { name: ezpublish.api.slot, signal: '*' }
+
+    notification.signal.event_notification: '@eZ\Publish\Core\Notification\Slot\OnNotificationSlot'

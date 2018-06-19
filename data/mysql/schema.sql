@@ -2555,6 +2555,24 @@ ADD CONSTRAINT `ezcontentbrowsebookmark_user_fk`
   REFERENCES `ezuser` (`contentobject_id`)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
+--
+-- Table structure for table `eznotification`
+--
+DROP TABLE IF EXISTS `eznotification`;
+CREATE TABLE `eznotification` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `owner_id` int(11) NOT NULL,
+  `is_pending` tinyint(1) NOT NULL DEFAULT '1',
+  `type` varchar(128) NOT NULL,
+  `created` int(11) NOT NULL,
+  `data` blob NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner_id` (`owner_id`),
+  KEY `is_pending` (`is_pending`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

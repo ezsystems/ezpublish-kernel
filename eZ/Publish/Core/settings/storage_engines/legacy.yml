@@ -14,6 +14,7 @@ imports:
     - {resource: storage_engines/legacy/url.yml}
     - {resource: storage_engines/legacy/url_criterion_handlers.yml}
     - {resource: storage_engines/legacy/user.yml}
+    - {resource: storage_engines/legacy/notification.yml}
 
 parameters:
     ezpublish.spi.search.legacy.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\MainHandler
@@ -39,6 +40,7 @@ services:
             - "@ezpublish.spi.persistence.legacy.user.handler"
             - "@ezpublish.spi.persistence.legacy.url.handler"
             - "@ezpublish.spi.persistence.legacy.bookmark.handler"
+            - "@ezpublish.spi.persistence.legacy.notification.handler"
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
         lazy: true
