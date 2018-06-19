@@ -21,7 +21,7 @@ use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
-use eZ\Publish\Core\Persistence\Legacy\Notification\Handler as NotificationHandler;
+use eZ\Publish\Core\Persistence\Cache\NotificationHandler as NotificationHandler;
 
 /**
  * Persistence Cache Handler class.
@@ -94,14 +94,14 @@ class Handler implements PersistenceHandlerInterface
     protected $bookmarkHandler;
 
     /**
-     * @var PersistenceLogger
-     */
-    protected $logger;
-
-    /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Notification\Handler
      */
     protected $notificationHandler;
+
+    /**
+     * @var PersistenceLogger
+     */
+    protected $logger;
 
     /**
      * Construct the class.
@@ -119,8 +119,8 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler $objectStateHandler
      * @param \eZ\Publish\Core\Persistence\Cache\URLHandler $urlHandler
      * @param \eZ\Publish\Core\Persistence\Cache\BookmarkHandler $bookmarkHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\NotificationHandler $notificationHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
-     * @param \eZ\Publish\Core\Persistence\Legacy\Notification\Handler $notificationHandler
      */
     public function __construct(
         PersistenceHandlerInterface $persistenceHandler,
@@ -136,8 +136,8 @@ class Handler implements PersistenceHandlerInterface
         CacheObjectStateHandler $objectStateHandler,
         CacheUrlHandler $urlHandler,
         CacheBookmarkHandler $bookmarkHandler,
-        PersistenceLogger $logger,
-        NotificationHandler $notificationHandler
+        NotificationHandler $notificationHandler,
+        PersistenceLogger $logger
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->sectionHandler = $sectionHandler;
@@ -152,8 +152,8 @@ class Handler implements PersistenceHandlerInterface
         $this->objectStateHandler = $objectStateHandler;
         $this->urlHandler = $urlHandler;
         $this->bookmarkHandler = $bookmarkHandler;
-        $this->logger = $logger;
         $this->notificationHandler = $notificationHandler;
+        $this->logger = $logger;
     }
 
     /**
@@ -263,7 +263,6 @@ class Handler implements PersistenceHandlerInterface
     {
         return $this->bookmarkHandler;
     }
-
 
     /**
      * @return \eZ\Publish\SPI\Persistence\Notification\Handler
