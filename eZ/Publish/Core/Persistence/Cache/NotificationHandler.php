@@ -16,11 +16,11 @@ class NotificationHandler extends AbstractHandler implements Handler
     /**
      * Store Notification ValueObject in persistent storage.
      *
-     * @param Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
      * @return int
      */
-    public function createNotification(Notification $notification)
+    public function createNotification(Notification $notification): int
     {
         $this->logger->logCall(__METHOD__, [
             'notificationId' => $notification->id,
@@ -33,13 +33,11 @@ class NotificationHandler extends AbstractHandler implements Handler
      * Update Notification ValueObject in persistent storage.
      * There's no edit feature but it's essential to mark Notification as read.
      *
-     * @todo
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @param Notification $notification
-     *
-     * @return Notification
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function updateNotification(Notification $notification)
+    public function updateNotification(Notification $notification): Notification
     {
         $this->logger->logCall(__METHOD__, [
             'notificationId' => $notification->id,
@@ -51,13 +49,13 @@ class NotificationHandler extends AbstractHandler implements Handler
     /**
      * Get paginated users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      * @param int $limit
      * @param int $page
      *
-     * @return Notification[]
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
      */
-    public function getNotificationsByOwnerId($ownerId, $limit, $page)
+    public function getNotificationsByOwnerId($ownerId, int $limit, int $page): array
     {
         $this->logger->logCall(__METHOD__, [
             'ownerId' => $ownerId,
@@ -71,11 +69,11 @@ class NotificationHandler extends AbstractHandler implements Handler
     /**
      * Count users unread Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countPendingNotificationsByOwnerId($ownerId)
+    public function countPendingNotificationsByOwnerId($ownerId): int
     {
         $this->logger->logCall(__METHOD__, [
             'ownerId' => $ownerId,
@@ -87,11 +85,11 @@ class NotificationHandler extends AbstractHandler implements Handler
     /**
      * Count total users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countNotificationsByOwnerId($ownerId)
+    public function countNotificationsByOwnerId($ownerId): int
     {
         $this->logger->logCall(__METHOD__, [
             'ownerId' => $ownerId,
@@ -105,9 +103,9 @@ class NotificationHandler extends AbstractHandler implements Handler
      *
      * @param int $notificationId
      *
-     * @return Notification
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function getNotificationById($notificationId)
+    public function getNotificationById($notificationId): Notification
     {
         $this->logger->logCall(__METHOD__, [
             'notificationId' => $notificationId,

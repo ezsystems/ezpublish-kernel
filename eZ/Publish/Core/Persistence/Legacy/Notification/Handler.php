@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Notification;
 
 use eZ\Publish\SPI\Persistence\Notification\Handler as HandlerInterface;
@@ -11,12 +13,11 @@ use eZ\Publish\SPI\Persistence\Notification\Notification;
 
 class Handler implements HandlerInterface
 {
+    /** @var \eZ\Publish\SPI\Persistence\Notification\Handler */
     protected $gateway;
 
     /**
-     * Handler constructor.
-     *
-     * @param HandlerInterface $gateway
+     * @param \eZ\Publish\SPI\Persistence\Notification\Handler $gateway
      */
     public function __construct(HandlerInterface $gateway)
     {
@@ -26,9 +27,9 @@ class Handler implements HandlerInterface
     /**
      * Store Notification ValueObject in persistent storage.
      *
-     * @param Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @return int
+     * @return mixed
      */
     public function createNotification(Notification $notification)
     {
@@ -38,13 +39,13 @@ class Handler implements HandlerInterface
     /**
      * Get paginated users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      * @param int $limit
      * @param int $page
      *
-     * @return Notification[]
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
      */
-    public function getNotificationsByOwnerId($ownerId, $limit = 100, $page = 0)
+    public function getNotificationsByOwnerId($ownerId, int $limit = 100, int $page = 0): array
     {
         return $this->gateway->getNotificationsByOwnerId($ownerId, $limit, $page);
     }
@@ -52,11 +53,11 @@ class Handler implements HandlerInterface
     /**
      * Count users unread Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countPendingNotificationsByOwnerId($ownerId)
+    public function countPendingNotificationsByOwnerId($ownerId): int
     {
         return $this->gateway->countPendingNotificationsByOwnerId($ownerId);
     }
@@ -64,11 +65,11 @@ class Handler implements HandlerInterface
     /**
      * Get Notification by its id.
      *
-     * @param int $notificationId
+     * @param mixed $notificationId
      *
-     * @return Notification
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function getNotificationById($notificationId)
+    public function getNotificationById($notificationId): Notification
     {
         return $this->gateway->getNotificationById($notificationId);
     }
@@ -79,11 +80,11 @@ class Handler implements HandlerInterface
      *
      * @todo
      *
-     * @param Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @return Notification
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function updateNotification(Notification $notification)
+    public function updateNotification(Notification $notification): Notification
     {
         return $this->gateway->updateNotification($notification);
     }
@@ -91,11 +92,11 @@ class Handler implements HandlerInterface
     /**
      * Count total users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countNotificationsByOwnerId($ownerId)
+    public function countNotificationsByOwnerId($ownerId): int
     {
         return $this->gateway->countNotificationsByOwnerId($ownerId);
     }

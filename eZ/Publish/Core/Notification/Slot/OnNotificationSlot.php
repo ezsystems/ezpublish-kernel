@@ -16,13 +16,13 @@ use eZ\Publish\SPI\Persistence\Notification\Notification;
 
 class OnNotificationSlot extends Slot
 {
-    /** @var Handler $persistenceHandler */
+    /** @var \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler */
     protected $persistenceHandler;
 
     /**
      * OnNotificationSlot constructor.
      *
-     * @param Handler $persistenceHandler
+     * @param \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler
      */
     public function __construct(Handler $persistenceHandler)
     {
@@ -32,7 +32,8 @@ class OnNotificationSlot extends Slot
     /**
      * Receive the given $signal and react on it.
      *
-     * @param Signal $signal
+     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
      * @return bool
      */
     public function receive(Signal $signal)

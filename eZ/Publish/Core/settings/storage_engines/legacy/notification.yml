@@ -3,16 +3,10 @@ parameters:
     notification.persistence.gateway.doctrine.class: eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase
 
 services:
-
     notification.persistence.gateway.doctrine:
         class: '%notification.persistence.gateway.doctrine.class%'
         arguments:
             - '@ezpublish.api.storage_engine.legacy.dbhandler'
-
-#    notification.persistence.handler:
-#        class: '%notification.persistence.handler.class%'
-#        arguments:
-#            - '@notification.persistence.gateway.doctrine'
 
     eZ\Publish\Core\Persistence\Legacy\Notification\Handler:
         arguments:

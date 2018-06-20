@@ -4,27 +4,32 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Notification\Gateway;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\InsertQuery;
 use eZ\Publish\Core\Persistence\Database\Query;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use eZ\Publish\Core\Persistence\Database\UpdateQuery;
 use eZ\Publish\SPI\Persistence\Notification\Handler;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use PDO;
 
 class DoctrineDatabase implements Handler
 {
-    /** @var DatabaseHandler $handler */
+    const TABLE_NOTIFICATION = 'eznotification';
+    const COLUMN_ID = 'id';
+    const COLUMN_OWNER_ID = 'owner_id';
+    const COLUMN_IS_PENDING = 'is_pending';
+    const COLUMN_TYPE = 'type';
+    const COLUMN_CREATED = 'created';
+    const COLUMN_DATA = 'data';
+
+    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler */
     protected $handler;
 
     /**
-     * DoctrineDatabase constructor.
-     *
-     * @param DatabaseHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      */
     public function __construct(DatabaseHandler $handler)
     {
@@ -34,9 +39,9 @@ class DoctrineDatabase implements Handler
     /**
      * Store Notification ValueObject in persistent storage.
      *
-     * @param Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @return int
+     * @return mixed
      */
     public function createNotification(Notification $notification)
     {
@@ -44,16 +49,16 @@ class DoctrineDatabase implements Handler
 
         $handler->beginTransaction();
 
-        /** @var InsertQuery $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\InsertQuery $query */
         $query = $handler->createInsertQuery();
-        $query->insertInto($handler->quoteTable('eznotification'));
-        $this->bindColumnValue($query, 'owner_id', $notification->ownerId);
-        $this->bindColumnValue($query, 'type', $notification->type);
-        $this->bindColumnValue($query, 'created', $notification->created);
-        $this->bindColumnValue($query, 'data', json_encode($notification->data));
+        $query->insertInto($handler->quoteTable(self::TABLE_NOTIFICATION));
+        $this->bindColumnValue($query, self::COLUMN_OWNER_ID, $notification->ownerId);
+        $this->bindColumnValue($query, self::COLUMN_TYPE, $notification->type);
+        $this->bindColumnValue($query, self::COLUMN_CREATED, $notification->created);
+        $this->bindColumnValue($query, self::COLUMN_DATA, json_encode($notification->data));
         $query->prepare()->execute();
 
-        $notificationId = $handler->lastInsertId($handler->getSequenceName('eznotification', 'id'));
+        $notificationId = $handler->lastInsertId($handler->getSequenceName(self::TABLE_NOTIFICATION, self::COLUMN_ID));
 
         $handler->commit();
 
@@ -63,35 +68,35 @@ class DoctrineDatabase implements Handler
     /**
      * Get paginated users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      * @param int $limit
      * @param int $page
      *
-     * @return Notification[]
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
      */
-    public function getNotificationsByOwnerId($ownerId, $limit, $page = 0)
+    public function getNotificationsByOwnerId($ownerId, int $limit, int $page = 0): array
     {
         $handler = $this->handler;
 
-        /** @var SelectQuery $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable('eznotification'));
+        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
         $query->select(
-            $handler->quoteColumn('id', 'eznotification'),
-            $handler->quoteColumn('is_pending', 'eznotification'),
-            $handler->quoteColumn('owner_id', 'eznotification'),
-            $handler->quoteColumn('type', 'eznotification'),
-            $handler->quoteColumn('created', 'eznotification'),
-            $handler->quoteColumn('data', 'eznotification')
+            $handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_IS_PENDING, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_TYPE, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_CREATED, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_DATA, self::TABLE_NOTIFICATION)
         );
         $query->where(
             $query->expr->eq(
-                $this->handler->quoteColumn('owner_id', 'eznotification'),
+                $this->handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
                 $query->bindValue($ownerId, null, PDO::PARAM_INT)
             )
         );
 
-        $query->orderBy('created', 'DESC');
+        $query->orderBy(self::COLUMN_CREATED, 'DESC');
         $query->limit($limit, $page * $limit);
 
         $statement = $query->prepare();
@@ -104,12 +109,12 @@ class DoctrineDatabase implements Handler
         foreach ($spiNotifications as $spi) {
             $notification = new Notification();
 
-            $notification->id = $spi['id'];
-            $notification->ownerId = $spi['owner_id'];
-            $notification->isPending = $spi['is_pending'];
-            $notification->created = $spi['created'];
-            $notification->type = $spi['type'];
-            $notification->data = json_decode($spi['data']);
+            $notification->id = $spi[self::COLUMN_ID];
+            $notification->ownerId = $spi[self::COLUMN_OWNER_ID];
+            $notification->isPending = $spi[self::COLUMN_IS_PENDING];
+            $notification->created = $spi[self::COLUMN_CREATED];
+            $notification->type = $spi[self::COLUMN_TYPE];
+            $notification->data = json_decode($spi[self::COLUMN_DATA]);
 
             $notifications[] = $notification;
         }
@@ -120,25 +125,25 @@ class DoctrineDatabase implements Handler
     /**
      * Count users unread Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countPendingNotificationsByOwnerId($ownerId)
+    public function countPendingNotificationsByOwnerId($ownerId): int
     {
         $handler = $this->handler;
 
-        /** @var SelectQuery $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable('eznotification'));
+        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
         $query->select('COUNT(id)');
         $query->where(
             $query->expr->eq(
-                $this->handler->quoteColumn('owner_id', 'eznotification'),
+                $this->handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
                 $query->bindValue($ownerId, null, PDO::PARAM_INT)
             ),
             $query->expr->eq(
-                $this->handler->quoteColumn('is_pending', 'eznotification'),
+                $this->handler->quoteColumn(self::COLUMN_IS_PENDING, self::TABLE_NOTIFICATION),
                 $query->bindValue(true, null, PDO::PARAM_INT)
             )
         );
@@ -154,21 +159,21 @@ class DoctrineDatabase implements Handler
     /**
      * Count total users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countNotificationsByOwnerId($ownerId)
+    public function countNotificationsByOwnerId($ownerId): int
     {
         $handler = $this->handler;
 
-        /** @var SelectQuery $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable('eznotification'));
+        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
         $query->select('COUNT(id)');
         $query->where(
             $query->expr->eq(
-                $this->handler->quoteColumn('owner_id', 'eznotification'),
+                $this->handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
                 $query->bindValue($ownerId, null, PDO::PARAM_INT)
             )
         );
@@ -184,28 +189,28 @@ class DoctrineDatabase implements Handler
     /**
      * Get Notification by its id.
      *
-     * @param int $notificationId
+     * @param mixed $notificationId
      *
-     * @return Notification
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function getNotificationById($notificationId)
+    public function getNotificationById($notificationId): Notification
     {
         $handler = $this->handler;
 
-        /** @var SelectQuery $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable('eznotification'));
+        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
         $query->select(
-            $handler->quoteColumn('id', 'eznotification'),
-            $handler->quoteColumn('is_pending', 'eznotification'),
-            $handler->quoteColumn('owner_id', 'eznotification'),
-            $handler->quoteColumn('type', 'eznotification'),
-            $handler->quoteColumn('created', 'eznotification'),
-            $handler->quoteColumn('data', 'eznotification')
+            $handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_IS_PENDING, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_TYPE, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_CREATED, self::TABLE_NOTIFICATION),
+            $handler->quoteColumn(self::COLUMN_DATA, self::TABLE_NOTIFICATION)
         );
         $query->where(
             $query->expr->eq(
-                $this->handler->quoteColumn('id', 'eznotification'),
+                $this->handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
                 $query->bindValue($notificationId, null, PDO::PARAM_INT)
             )
         );
@@ -218,12 +223,12 @@ class DoctrineDatabase implements Handler
         $notification = new Notification();
 
         if ($spiNotification) {
-            $notification->id = $spiNotification['id'];
-            $notification->ownerId = $spiNotification['owner_id'];
-            $notification->isPending = $spiNotification['is_pending'];
-            $notification->created = $spiNotification['created'];
-            $notification->type = $spiNotification['type'];
-            $notification->data = json_decode($spiNotification['data']);
+            $notification->id = $spiNotification[self::TABLE_NOTIFICATION];
+            $notification->ownerId = $spiNotification[self::COLUMN_OWNER_ID];
+            $notification->isPending = $spiNotification[self::COLUMN_IS_PENDING];
+            $notification->created = $spiNotification[self::COLUMN_CREATED];
+            $notification->type = $spiNotification[self::COLUMN_TYPE];
+            $notification->data = json_decode($spiNotification[self::COLUMN_DATA]);
         }
 
         return $notification;
@@ -235,36 +240,38 @@ class DoctrineDatabase implements Handler
      *
      * @todo
      *
-     * @param Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @throws InvalidArgumentException
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      *
-     * @return Notification
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    public function updateNotification(Notification $notification)
+    public function updateNotification(Notification $notification): Notification
     {
         $handler = $this->handler;
 
         if (!isset($notification->id) || !is_numeric($notification->id)) {
-            throw new InvalidArgumentException('id', 'Cannot update Notification');
+            throw new InvalidArgumentException(self::COLUMN_ID, 'Cannot update Notification');
         }
 
-        /** @var UpdateQuery $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\UpdateQuery $query */
         $query = $handler->createUpdateQuery();
-        $query->update($handler->quoteTable('eznotification'));
+        $query->update($handler->quoteTable(self::TABLE_NOTIFICATION));
         $query->where(
             $query->expr->eq(
-                $this->handler->quoteColumn('id', 'eznotification'),
+                $this->handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
                 $query->bindValue($notification->id, null, PDO::PARAM_INT)
             )
         );
 
         if (isset($notification->isPending)) {
-            $this->bindColumnValue($query, 'is_pending', (int)$notification->isPending);
+            $this->bindColumnValue($query, self::COLUMN_IS_PENDING, (int)$notification->isPending);
         }
 
         $statement = $query->prepare();
         $statement->execute();
+
+        return $notification;
     }
 
     /**
@@ -272,11 +279,11 @@ class DoctrineDatabase implements Handler
      *
      * @internal
      *
-     * @param Query $query Query to work on (context)
+     * @param \eZ\Publish\Core\Persistence\Database\Query $query Query to work on (context)
      * @param string $column Table column name
      * @param mixed $value Value to be insterted
      */
-    protected function bindColumnValue(Query $query, $column, $value)
+    protected function bindColumnValue(Query $query, string $column, $value)
     {
         $query->set(
             $this->handler->quoteColumn($column),

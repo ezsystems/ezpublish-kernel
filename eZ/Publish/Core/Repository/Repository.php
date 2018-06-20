@@ -21,6 +21,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Exception;
 use RuntimeException;
+use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 
 /**
  * Repository class.
@@ -232,14 +233,10 @@ class Repository implements RepositoryInterface
      */
     protected $permissionsHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null
-     */
+    /** @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null */
     protected $backgroundIndexer;
 
-    /**
-     * @var \eZ\Publish\API\Repository\NotificationService
-     */
+    /** @var \eZ\Publish\API\Repository\NotificationService */
     protected $notificationService;
 
     /**
@@ -868,9 +865,9 @@ class Repository implements RepositoryInterface
     /**
      * @return \eZ\Publish\API\Repository\NotificationService
      */
-    public function getNotificationService()
+    public function getNotificationService(): NotificationServiceInterface
     {
-        if ($this->notificationService !== null) {
+        if (null !== $this->notificationService) {
             return $this->notificationService;
         }
 

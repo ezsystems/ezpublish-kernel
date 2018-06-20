@@ -14,16 +14,30 @@ class Registry
 {
     protected $registry = [];
 
+    /**
+     * @param string $alias
+     * @param \eZ\Publish\SPI\Notification\Renderer\NotificationRenderer $notificationRenderer
+     */
     public function addRenderer(string $alias, NotificationRenderer $notificationRenderer): void
     {
         $this->registry[$alias] = $notificationRenderer;
     }
 
+    /**
+     * @param string $alias
+     *
+     * @return \eZ\Publish\SPI\Notification\Renderer\NotificationRenderer
+     */
     public function getRenderer(string $alias): NotificationRenderer
     {
         return $this->registry[$alias];
     }
 
+    /**
+     * @param string $alias
+     *
+     * @return bool
+     */
     public function hasRenderer(string $alias): bool
     {
         return isset($this->registry[$alias]);

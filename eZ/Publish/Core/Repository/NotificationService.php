@@ -13,20 +13,19 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Persistence\Notification\Handler;
+use eZ\Publish\SPI\Persistence\Notification\Notification;
 
 class NotificationService implements NotificationServiceInterface
 {
-    /** @var Handler $persistenceHandler */
+    /** @var \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler */
     protected $persistenceHandler;
 
-    /** @var Repository $kernelRepository */
+    /** @var \eZ\Publish\API\Repository\Repository $kernelRepository */
     protected $kernelRepository;
 
     /**
-     * NotificationService constructor.
-     *
-     * @param Handler $persistenceHandler
-     * @param Repository $kernelRepository
+     * @param \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler
+     * @param \eZ\Publish\API\Repository\Repository $kernelRepository
      */
     public function __construct(Handler $persistenceHandler, Repository $kernelRepository)
     {
@@ -40,24 +39,22 @@ class NotificationService implements NotificationServiceInterface
      * @param int $limit Number of notifications to get
      * @param int $page Notifications pagination
      *
-     * @return \EzSystems\Notification\SPI\Persistence\ValueObject\Notification[]
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
      */
-    public function getUserNotifications($limit, $page)
+    public function getUserNotifications(int $limit, int $page): array
     {
         $currentUser = $this->kernelRepository->getCurrentUser();
 
-        $notifications = $this->persistenceHandler->getNotificationsByOwnerId($currentUser->id, $limit, $page);
-
-        return $notifications;
+        return $this->persistenceHandler->getNotificationsByOwnerId($currentUser->id, $limit, $page);
     }
 
     /**
      * Mark notification as read so it no longer bother the user.
      *
-     * @param int $notificationId Notification id to be marked as read
+     * @param mixed $notificationId Notification id to be marked as read
      *
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function markNotificationAsRead($notificationId)
     {
@@ -68,7 +65,7 @@ class NotificationService implements NotificationServiceInterface
             throw new NotFoundException('Notification', $notificationId);
         }
 
-        if ($notification->ownerId != $currentUser->id) {
+        if ($notification->ownerId !== $currentUser->id) {
             throw new UnauthorizedException($notificationId, 'Notification');
         }
 
@@ -86,13 +83,11 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return int
      */
-    public function getUserPendingNotificationCount()
+    public function getUserPendingNotificationCount(): int
     {
         $currentUser = $this->kernelRepository->getCurrentUser();
 
-        $notifications = $this->persistenceHandler->countPendingNotificationsByOwnerId($currentUser->id);
-
-        return $notifications;
+        return $this->persistenceHandler->countPendingNotificationsByOwnerId($currentUser->id);
     }
 
     /**
@@ -100,23 +95,21 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return int
      */
-    public function getUserNotificationCount()
+    public function getUserNotificationCount(): int
     {
         $currentUser = $this->kernelRepository->getCurrentUser();
 
-        $notifications = $this->persistenceHandler->countNotificationsByOwnerId($currentUser->id);
-
-        return $notifications;
+        return $this->persistenceHandler->countNotificationsByOwnerId($currentUser->id);
     }
 
     /**
-     * @param $notificationId
+     * @param mixed $notificationId
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      *
-     * @throws NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function getNotification($notificationId)
+    public function getNotification($notificationId): Notification
     {
         $currentUser = $this->kernelRepository->getCurrentUser();
 

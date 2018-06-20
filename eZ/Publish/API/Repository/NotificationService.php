@@ -14,14 +14,14 @@ interface NotificationService
      * @param int $limit Number of notifications to get
      * @param int $page Notifications pagination
      *
-     * @return \EzSystems\Notification\SPI\Persistence\ValueObject\Notification[]
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
      */
-    public function getUserNotifications($limit, $page);
+    public function getUserNotifications(int $limit, int $page): array;
 
     /**
      * Mark notification as read so it no longer bother the user.
      *
-     * @param int $notificationId Notification id to be marked as read
+     * @param mixed $notificationId Notification id to be marked as read
      */
     public function markNotificationAsRead($notificationId);
 
@@ -40,9 +40,9 @@ interface NotificationService
     public function getUserNotificationCount();
 
     /**
-     * @param $notificationId
+     * @param mixed $notificationId
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
     public function getNotification($notificationId);
 }

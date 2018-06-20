@@ -13,9 +13,9 @@ interface Handler
     /**
      * Store Notification ValueObject in persistent storage.
      *
-     * @param Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @return int
+     * @return mixed
      */
     public function createNotification(Notification $notification);
 
@@ -23,49 +23,47 @@ interface Handler
      * Update Notification ValueObject in persistent storage.
      * There's no edit feature but it's essential to mark Notification as read.
      *
-     * @todo
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @param Notification $notification
-     *
-     * @return Notification
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function updateNotification(Notification $notification);
+    public function updateNotification(Notification $notification): Notification;
 
     /**
      * Get paginated users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      * @param int $limit
      * @param int $page
      *
-     * @return Notification[]
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
      */
-    public function getNotificationsByOwnerId($ownerId, $limit, $page);
+    public function getNotificationsByOwnerId($ownerId, int $limit, int $page): array;
 
     /**
      * Count users unread Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countPendingNotificationsByOwnerId($ownerId);
+    public function countPendingNotificationsByOwnerId($ownerId): int;
 
     /**
      * Count total users Notifications.
      *
-     * @param int $ownerId
+     * @param mixed $ownerId
      *
      * @return int
      */
-    public function countNotificationsByOwnerId($ownerId);
+    public function countNotificationsByOwnerId($ownerId): int;
 
     /**
      * Get Notification by its id.
      *
-     * @param int $notificationId
+     * @param mixed $notificationId
      *
-     * @return Notification
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function getNotificationById($notificationId);
+    public function getNotificationById($notificationId): Notification;
 }
