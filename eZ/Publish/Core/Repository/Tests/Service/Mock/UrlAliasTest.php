@@ -204,7 +204,7 @@ class UrlAliasTest extends BaseServiceMockTest
             ->expects($this->atLeastOnce())
             ->method('getPermissionResolver')
             ->willReturn($permissionResolverMock);
-        
+
         $mockedService->removeAliases($aliasList);
     }
 
