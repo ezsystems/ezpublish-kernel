@@ -42,6 +42,7 @@
             <file>eZ/Publish/API/Repository/Tests/RoleServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/TrashServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLAliasServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>

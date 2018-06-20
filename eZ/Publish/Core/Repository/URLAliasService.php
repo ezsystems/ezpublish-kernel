@@ -81,7 +81,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function createUrlAlias(Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
     {
-        if ($this->repository->hasAccess('content', 'urltranslator') !== true) {
+        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -137,7 +137,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function createGlobalUrlAlias($resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
     {
-        if ($this->repository->hasAccess('content', 'urltranslator') !== true) {
+        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -577,7 +577,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function removeAliases(array $aliasList)
     {
-        if ($this->repository->hasAccess('content', 'urltranslator') !== true) {
+        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
