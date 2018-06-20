@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\UrlAlias;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
+use eZ\Publish\API\Repository\PermissionResolver;
 use Exception;
 
 /**
@@ -189,6 +190,21 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $aliasList = array(new UrlAlias(array('isCustom' => false)));
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
+        $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+
         $mockedService->removeAliases($aliasList);
     }
 
@@ -199,7 +215,20 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $aliasList = array(new UrlAlias(array('isCustom' => true)));
         $spiAliasList = array(new SPIUrlAlias(array('isCustom' => true)));
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
         $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -229,7 +258,20 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $aliasList = array(new UrlAlias(array('isCustom' => true)));
         $spiAliasList = array(new SPIUrlAlias(array('isCustom' => true)));
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
         $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3174,7 +3216,21 @@ class UrlAliasTest extends BaseServiceMockTest
      */
     public function testCreateUrlAlias()
     {
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
         $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3220,7 +3276,21 @@ class UrlAliasTest extends BaseServiceMockTest
      */
     public function testCreateUrlAliasWithRollback()
     {
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
         $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3264,10 +3334,26 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateUrlAliasThrowsInvalidArgumentException()
     {
         $location = $this->getLocationStub();
-        $urlAliasService = $this->getRepository()->getURLAliasService();
-        $urlAliasHandler = $this->getPersistenceMockHandler('Content\\UrlAlias\\Handler');
 
-        $urlAliasHandler->expects(
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
+        $handlerMock = $this->getPersistenceMock()->urlAliasHandler();
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
+        $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+
+        $handlerMock->expects(
             $this->once()
         )->method(
             'createCustomUrlAlias'
@@ -3281,7 +3367,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
-        $urlAliasService->createUrlAlias(
+        $mockedService->createUrlAlias(
             $location,
             'path',
             'languageCode',
@@ -3296,7 +3382,20 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateGlobalUrlAlias()
     {
         $resource = 'module:content/search';
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
         $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3342,7 +3441,20 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateGlobalUrlAliasWithRollback()
     {
         $resource = 'module:content/search';
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
         $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
         $mockedService = $this->getPartlyMockedURLAliasServiceService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandlerMock */
         $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
@@ -3384,8 +3496,23 @@ class UrlAliasTest extends BaseServiceMockTest
      */
     public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionResource()
     {
-        $urlAliasService = $this->getRepository()->getURLAliasService();
-        $urlAliasService->createGlobalUrlAlias(
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
+        $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+
+        $mockedService->createGlobalUrlAlias(
             'invalid/resource',
             'path',
             'languageCode',
@@ -3402,7 +3529,21 @@ class UrlAliasTest extends BaseServiceMockTest
     public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionPath()
     {
         $resource = 'module:content/search';
-        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
+        $repositoryMock = $this->getRepositoryMock();
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
         $urlAliasHandler = $this->getPersistenceMockHandler('Content\\UrlAlias\\Handler');
 
         $urlAliasHandler->expects(
@@ -3419,7 +3560,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
-        $urlAliasService->createGlobalUrlAlias(
+        $mockedService->createGlobalUrlAlias(
             $resource,
             'path',
             'languageCode',
@@ -3459,6 +3600,19 @@ class UrlAliasTest extends BaseServiceMockTest
         )->will(
             $this->returnValue($locationServiceMock)
         );
+
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->exactly(2))
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(true));
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
 
         $mockedService->expects(
             $this->exactly(2)
@@ -3551,5 +3705,97 @@ class UrlAliasTest extends BaseServiceMockTest
                 )
             )
             ->getMock();
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @depends testConstructor
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createUrlAlias
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateUrlAliasThrowsUnauthorizedException()
+    {
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+        $location = $this->getLocationStub();
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(false));
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+
+        $mockedService->createUrlAlias(
+            $location,
+            'path',
+            'languageCode',
+            'forwarding'
+        );
+    }
+
+    /**
+     * Test for the createGlobalUrlAlias() method.
+     *
+     * @depends testConstructor
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createGlobalUrlAlias
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateGlobalUrlAliasThrowsUnauthorizedException()
+    {
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(false));
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+        $mockedService->createGlobalUrlAlias(
+            'eznode:42',
+            'path',
+            'languageCode',
+            'forwarding',
+            'alwaysAvailable'
+        );
+    }
+
+    /**
+     * Test for the removeAliases() method.
+     *
+     * @depends testConstructor
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::removeAliases
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemoveAliasesThrowsUnauthorizedException()
+    {
+        $aliasList = array(new UrlAlias(array('isCustom' => true)));
+        $mockedService = $this->getPartlyMockedURLAliasServiceService();
+        $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->createMock(PermissionResolver::class);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('hasAccess')->with(
+                $this->equalTo('content'),
+                $this->equalTo('urltranslator')
+            )->will($this->returnValue(false));
+
+        $repositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
+        $mockedService->removeAliases($aliasList);
     }
 }
