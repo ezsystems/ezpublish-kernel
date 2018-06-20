@@ -4,133 +4,251 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use Exception;
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\Image\Value;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Model\Binary;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
-class ResizeOriginalImagesCommand extends ContainerAwareCommand
+/**
+ * This command resizes original images stored in ezimage FieldType in given ContentType using the selected variation.
+ */
+class ResizeOriginalImagesCommand extends Command
 {
     const DEFAULT_ITERATION_COUNT = 25;
+    const DEFAULT_REPOSITORY_USER = 'admin';
+
+    /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver
+     */
+    private $permissionResolver;
+
+    /**
+     * @var \eZ\Publish\API\Repository\UserService
+     */
+    private $userService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
+    private $contentTypeService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\SearchService
+     */
+    private $searchService;
+
+    /**
+     * @var \Liip\ImagineBundle\Imagine\Filter\FilterManager
+     */
+    private $filterManager;
+
+    /**
+     * @var \eZ\Publish\Core\IO\IOServiceInterface
+     */
+    private $ioService;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface
+     */
+    private $extensionGuesser;
+
+    public function __construct(
+        PermissionResolver $permissionResolver,
+        UserService $userService,
+        ContentTypeService $contentTypeService,
+        SearchService $searchService,
+        FilterManager $filterManager,
+        IOServiceInterface $ioService,
+        ExtensionGuesserInterface $extensionGuesser
+    ) {
+        $this->permissionResolver = $permissionResolver;
+        $this->userService = $userService;
+        $this->contentTypeService = $contentTypeService;
+        $this->searchService = $searchService;
+        $this->filterManager = $filterManager;
+        $this->ioService = $ioService;
+        $this->extensionGuesser = $extensionGuesser;
+
+        parent::__construct();
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        parent::initialize($input, $output);
+
+        $this->permissionResolver->setCurrentUserReference(
+            $this->userService->loadUserByLogin($input->getOption('user'))
+        );
+    }
 
     protected function configure()
     {
-        $this->setName('ezplatform:resize-original-images')->setDefinition(
+        $this->setName('ezplatform:images:resize-original')->setDefinition(
             [
-                new InputArgument('contentTypeIdentifier', InputArgument::REQUIRED, 'Indentifier of ContentType which has ezimage FieldType.'),
-                new InputArgument('imageFieldIdentifier', InputArgument::REQUIRED, 'Identifier of field of ezimage type.'),
-                new InputArgument('variation', InputArgument::OPTIONAL, 'Variation which will be used for original images.', 'original'),
-                new InputArgument('iteration-count', InputArgument::OPTIONAL, 'Iteration count. Number of images to be recreated in a single iteration, for avoiding using too much memory.',
+                new InputArgument('contentTypeIdentifier', InputArgument::REQUIRED,
+                    'Indentifier of ContentType which has ezimage FieldType.'),
+                new InputArgument('imageFieldIdentifier', InputArgument::REQUIRED,
+                    'Identifier of field of ezimage type.'),
+                new InputArgument('variation', InputArgument::OPTIONAL,
+                    'Variation which will be used for original images.', 'original'),
+                new InputArgument('iteration-count', InputArgument::OPTIONAL,
+                    'Iteration count. Number of images to be recreated in a single iteration, for avoiding using too much memory.',
                     self::DEFAULT_ITERATION_COUNT),
             ]
+        )->addOption(
+            'user',
+            'u',
+            InputOption::VALUE_OPTIONAL,
+            'eZ Platform username (with Role containing at least Content policies: read, versionread)',
+            self::DEFAULT_REPOSITORY_USER
         );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $contentTypeIdentifier = $input->getArgument('contentTypeIdentifier');
-        $imageField = $input->getArgument('imageFieldIdentifier');
+        $imageFieldIdentifier = $input->getArgument('imageFieldIdentifier');
         $variation = $input->getArgument('variation');
         $iterationCount = (int)$input->getArgument('iteration-count');
 
-        $repository = $this->getContainer()->get('ezpublish.api.repository');
-        $contentTypeService = $repository->getContentTypeService();
-        $searchService = $repository->getSearchService();
-        $filterManager = $this->getContainer()->get('liip_imagine.filter.manager');
-        $ioService = $this->getContainer()->get('ezpublish.fieldType.ezimage.io_service.published');
-        $extensionGuesser = $this->getContainer()->get('liip_imagine.extension_guesser');
+        $contentType = $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+        $fieldType = $contentType->getFieldDefinition($imageFieldIdentifier);
+        if (!$fieldType || $fieldType->fieldTypeIdentifier !== 'ezimage') {
+            $output->writeln(
+                sprintf(
+                    "<error>FieldType of identifier '%s' of ContentType '%s' has to be 'ezimage', '%s' given.</error>",
+                    $imageFieldIdentifier,
+                    $contentType->identifier,
+                    $fieldType ? $fieldType->fieldTypeIdentifier : ''
+                )
+            );
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+            return;
+        }
+
+        try {
+            $this->filterManager->getFilterConfiguration()->get($variation);
+        } catch (NonExistingFilterException $e) {
+            $output->writeln(
+                sprintf(
+                    '<error>%s</error>',
+                    $e->getMessage()
+                )
+            );
+
+            return;
+        }
+
         $query = new Query();
         $query->filter = new Query\Criterion\ContentTypeIdentifier($contentType->identifier);
 
-        $totalCount = $repository->sudo(function () use ($query, $searchService) {
-            return $searchService->findContent($query)->totalCount;
-        });
+        $totalCount = $this->searchService->findContent($query)->totalCount;
+        $query->limit = $iterationCount;
 
-        $output->writeln(sprintf('Found %d images matching given criteria.', $totalCount));
+        $output->writeln(
+            sprintf(
+                'Found %d images matching given criteria.',
+                $totalCount
+            )
+        );
 
         $progressBar = new ProgressBar($output, $totalCount);
         $progressBar->start();
 
         while ($query->offset <= $totalCount) {
-            $query->limit = $iterationCount;
-            $results = $repository->sudo(function () use ($query, $searchService) {
-                return $searchService->findContent($query);
-            });
-            $query->offset += $iterationCount;
+            $results = $this->searchService->findContent($query);
 
             /** @var SearchHit $hit */
             foreach ($results->searchHits as $hit) {
-                try {
-                    /** @var Value $field */
-                    if (empty($hit->valueObject->fields[$imageField])) {
-                        $output->writeln(sprintf("<error>ContentType '%s' does not have '%s' field</error>",
-                            $contentType->identifier, $imageField));
-
-                        return;
-                    }
-                    foreach ($hit->valueObject->fields[$imageField] as $language => $field) {
-                        $binaryFile = $ioService->loadBinaryFile($field->id);
-                        $mimeType = $ioService->getMimeType($field->id);
-                        $binary = new Binary(
-                            $ioService->getFileContents($binaryFile),
-                            $mimeType,
-                            $extensionGuesser->guess($mimeType)
-                        );
-
-                        $recreated = $filterManager->applyFilter($binary, $variation);
-                        $this->store($ioService, $recreated, $field);
-                    }
-                } catch (NonExistingFilterException $e) {
-                    $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
-
-                    return;
-                } catch (\Exception $e) {
-                    $output->writeln(sprintf('<error>Can not resized image ID: %s, error message: %s</error>',
-                        $field->imageId, $e->getMessage()));
-                }
-
+                $this->resize($output, $hit, $imageFieldIdentifier, $variation);
                 $progressBar->advance();
             }
+
+            $query->offset += $iterationCount;
         }
 
         $progressBar->finish();
         $output->writeln('');
-        $output->writeln(sprintf("<info>All images has been successfully resized using '%s' variation.</info>",
-            $variation));
+        $output->writeln(
+            sprintf(
+                "<info>All images have been successfully resized using '%s' variation.</info>",
+                $variation
+            )
+        );
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchHit $hit
+     * @param string $imageFieldIdentifier
+     * @param string $variation
+     */
+    private function resize(OutputInterface $output, SearchHit $hit, string $imageFieldIdentifier, string $variation)
+    {
+        try {
+            /** @var Value $field */
+            foreach ($hit->valueObject->fields[$imageFieldIdentifier] as $language => $field) {
+                $binaryFile = $this->ioService->loadBinaryFile($field->id);
+                $mimeType = $this->ioService->getMimeType($field->id);
+                $binary = new Binary(
+                    $this->ioService->getFileContents($binaryFile),
+                    $mimeType,
+                    $this->extensionGuesser->guess($mimeType)
+                );
+
+                $recreated = $this->filterManager->applyFilter($binary, $variation);
+                $this->store($recreated, $field);
+            }
+        } catch (Exception $e) {
+            $output->writeln(
+                sprintf(
+                    '<error>Can not resize image ID: %s, error message: %s.</error>',
+                    $field->imageId,
+                    $e->getMessage()
+                )
+            );
+        }
     }
 
     /**
      * Copy of eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver::store()
-     * We can't use original one because original method uses eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver::getFilePath()
-     * so we would end-up with image stored in _aliases instead of overwritten original image.
+     * Original one cannot be used since original method uses eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver::getFilePath()
+     * so ends-up with image stored in _aliases instead of overwritten original image.
      *
-     * @param IOServiceInterface $IOService
-     * @param BinaryInterface $binary
-     * @param Value $image
+     * @param \Liip\ImagineBundle\Binary\BinaryInterface $binary
+     * @param \eZ\Publish\Core\FieldType\Image\Value $image
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
-    private function store(IOServiceInterface $IOService, BinaryInterface $binary, Value $image)
+    private function store(BinaryInterface $binary, Value $image)
     {
         $tmpFile = tmpfile();
         fwrite($tmpFile, $binary->getContent());
         $tmpMetadata = stream_get_meta_data($tmpFile);
-        $binaryCreateStruct = $IOService->newBinaryCreateStructFromLocalFile($tmpMetadata['uri']);
+        $binaryCreateStruct = $this->ioService->newBinaryCreateStructFromLocalFile($tmpMetadata['uri']);
         $binaryCreateStruct->id = $image->id;
-        $IOService->createBinaryFile($binaryCreateStruct);
+        $this->ioService->createBinaryFile($binaryCreateStruct);
         fclose($tmpFile);
     }
 }

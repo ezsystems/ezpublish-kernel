@@ -253,3 +253,10 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\Command\CopySubtreeCommand
         autowire: true
         autoconfigure: true
+
+    ezplatform.core.command.resize_original_images:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\ResizeOriginalImagesCommand
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $ioService: '@ezpublish.fieldType.ezimage.io_service.published'
