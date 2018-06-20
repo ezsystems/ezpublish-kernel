@@ -21,7 +21,7 @@ use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
-use eZ\Publish\Core\Persistence\Cache\NotificationHandler as NotificationHandler;
+use eZ\Publish\Core\Persistence\Cache\NotificationHandler as CacheNotificationHandler;
 
 /**
  * Persistence Cache Handler class.
@@ -136,7 +136,7 @@ class Handler implements PersistenceHandlerInterface
         CacheObjectStateHandler $objectStateHandler,
         CacheUrlHandler $urlHandler,
         CacheBookmarkHandler $bookmarkHandler,
-        NotificationHandler $notificationHandler,
+        CacheNotificationHandler $notificationHandler,
         PersistenceLogger $logger
     ) {
         $this->persistenceHandler = $persistenceHandler;
