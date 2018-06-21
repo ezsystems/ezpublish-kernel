@@ -94,3 +94,20 @@ ADD CONSTRAINT `ezcontentbrowsebookmark_user_fk`
   REFERENCES `ezuser` (`contentobject_id`)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
+--
+-- EZEE-2081: Move NotificationBundle into AdminUI
+--
+
+DROP TABLE IF EXISTS `eznotification`;
+CREATE TABLE `eznotification` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  owner_id int(11) NOT NULL DEFAULT 0,
+  `is_pending` tinyint(1) NOT NULL DEFAULT '1',
+  `type` varchar(128) NOT NULL DEFAULT '',
+  `created` int(11) NOT NULL DEFAULT 0,
+  `data` blob,
+  PRIMARY KEY (`id`),
+  KEY `eznotification_owner` (`owner_id`),
+  KEY `eznotification_owner_is_pending` (`owner_id`, `is_pending`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

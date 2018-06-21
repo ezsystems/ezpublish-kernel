@@ -551,3 +551,15 @@ CREATE TABLE ezcontentbrowsebookmark (
 CREATE INDEX ezcontentbrowsebookmark_user ON ezcontentbrowsebookmark(user_id);
 CREATE INDEX ezcontentbrowsebookmark_location ON ezcontentbrowsebookmark(node_id);
 CREATE INDEX ezcontentbrowsebookmark_user_location ON ezcontentbrowsebookmark(user_id, node_id);
+
+CREATE TABLE eznotification (
+  id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  owner_id integer NOT NULL DEFAULT 0,
+  is_pending integer NOT NULL DEFAULT 1,
+  type text(255) NOT NULL DEFAULT '',
+  created integer NOT NULL DEFAULT 0,
+  data blob
+);
+
+CREATE INDEX eznotification_owner ON eznotification(owner_id);
+CREATE INDEX eznotification_owner_is_pending ON eznotification(owner_id, is_pending);

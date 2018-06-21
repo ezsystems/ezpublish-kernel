@@ -21,3 +21,23 @@ ADD CONSTRAINT ezcontentbrowsebookmark_user_fk
   REFERENCES ezuser (contentobject_id)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
+--
+-- EZEE-2081: Move NotificationBundle into AdminUI
+--
+
+DROP TABLE IF EXISTS eznotification;
+CREATE TABLE eznotification (
+    id SERIAL,
+    owner_id integer DEFAULT 0 NOT NULL ,
+    is_pending integer DEFAULT 1 NOT NULL,
+    type character varying(128) NOT NULL,
+    created integer DEFAULT 0 NOT NULL,
+    data bytea
+);
+
+ALTER TABLE ONLY eznotification
+    ADD CONSTRAINT eznotification_pkey PRIMARY KEY (id);
+
+CREATE INDEX eznotification_owner_id ON eznotification USING btree (owner_id);
+CREATE INDEX eznotification_owner_id_is_pending ON eznotification USING btree (owner_id, is_pending);

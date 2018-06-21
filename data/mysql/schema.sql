@@ -2562,14 +2562,14 @@ ADD CONSTRAINT `ezcontentbrowsebookmark_user_fk`
 DROP TABLE IF EXISTS `eznotification`;
 CREATE TABLE `eznotification` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) NOT NULL,
+  owner_id int(11) NOT NULL DEFAULT 0,
   `is_pending` tinyint(1) NOT NULL DEFAULT '1',
-  `type` varchar(128) NOT NULL,
-  `created` int(11) NOT NULL,
-  `data` blob NOT NULL,
+  `type` varchar(128) NOT NULL DEFAULT '',
+  `created` int(11) NOT NULL DEFAULT 0,
+  `data` blob,
   PRIMARY KEY (`id`),
-  KEY `owner_id` (`owner_id`),
-  KEY `is_pending` (`is_pending`)
+  KEY `eznotification_owner` (`owner_id`),
+  KEY `eznotification_owner_is_pending` (`owner_id`, `is_pending`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET character_set_client = @saved_cs_client */;
