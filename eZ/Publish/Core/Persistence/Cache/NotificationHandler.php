@@ -10,79 +10,157 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Notification\Handler;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
-use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
 
+/**
+ * SPI cache for Notification Handler.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Notification\Handler
+ */
 class NotificationHandler extends AbstractHandler implements Handler
 {
     /**
-     * Store Notification ValueObject in persistent storage.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function createNotification(Notification $notification)
     {
+        $this->logger->logCall(__METHOD__, [
+            'notificationId' => $notification->id,
+        ]);
+
+        $this->cache->invalidateTags([
+            'notification-count-' . $notification->ownerId,
+            'notification-pending-count-' . $notification->ownerId,
+        ]);
+
         return $this->persistenceHandler->notificationHandler()->createNotification($notification);
     }
 
     /**
-     * Update Notification ValueObject in persistent storage.
-     * There's no edit feature but it's essential to mark Notification as read.
-     *
-     * @param int $notificationId
-     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     * {@inheritdoc}
      */
-    public function updateNotification(int $notificationId, UpdateStruct $updateStruct): Notification
+    public function updateNotification(Notification $notification)
     {
-        return $this->persistenceHandler->notificationHandler()->updateNotification($notificationId, $updateStruct);
+        $this->logger->logCall(__METHOD__, [
+            'notificationId' => $notification->id,
+        ]);
+
+        $this->cache->invalidateTags([
+            'notification-' . $notification->id,
+            'notification-pending-count-' . $notification->ownerId,
+        ]);
+
+        return $this->persistenceHandler->notificationHandler()->updateNotification($notification);
     }
 
     /**
-     * Count users unread Notifications.
-     *
-     * @param int $ownerId
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function countPendingNotifications(int $ownerId): int
+    public function delete(Notification $notification): void
     {
-        return $this->persistenceHandler->notificationHandler()->countPendingNotifications($ownerId);
+        $this->logger->logCall(__METHOD__, [
+            'notificationId' => $notification->id,
+        ]);
+
+        $this->cache->invalidateTags([
+            'notification-' . $notification->id,
+            'notification-count-' . $notification->ownerId,
+            'notification-pending-count-' . $notification->ownerId,
+        ]);
+
+        // @todo:
+        // $this->persistenceHandler->notificationHandler()->delete($notification->id);
     }
 
     /**
-     * Get Notification by its id.
-     *
-     * @param int $notificationId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     * {@inheritdoc}
      */
-    public function getNotificationById(int $notificationId): Notification
+    public function getNotificationsByOwnerId($ownerId, $limit, $page)
     {
-        return $this->persistenceHandler->notificationHandler()->getNotificationById($notificationId);
+        $this->logger->logCall(__METHOD__, [
+            'ownerId' => $ownerId,
+            'limit' => $limit,
+            'page' => $page,
+        ]);
+
+        return $this->persistenceHandler->notificationHandler()->getNotificationsByOwnerId($ownerId, $limit, $page);
     }
 
     /**
-     * @param int $userId
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
+     * {@inheritdoc}
      */
-    public function loadUserNotifications(int $userId, int $offset, int $limit): array
+    public function countPendingNotificationsByOwnerId($ownerId)
     {
-        return $this->persistenceHandler->notificationHandler()->loadUserNotifications($userId, $offset, $limit);
+        $cacheItem = $this->cache->getItem('ez-notification-pending-count-' . $ownerId);
+
+        $count = $cacheItem->get();
+        if ($cacheItem->isHit()) {
+            return $count;
+        }
+
+        $this->logger->logCall(__METHOD__, [
+            'ownerId' => $ownerId,
+        ]);
+
+        $count = $this->persistenceHandler->notificationHandler()->countPendingNotificationsByOwnerId($ownerId);
+
+        $cacheItem->set($count);
+        $cacheItem->tag(['notification-pending-count-' . $ownerId]);
+        $this->cache->save($cacheItem);
+
+        return $count;
     }
 
     /**
-     * @param int $currentUserId
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function countNotifications(int $currentUserId): int
+    public function countNotificationsByOwnerId($ownerId)
     {
-        return $this->persistenceHandler->notificationHandler()->countNotifications($currentUserId);
+        $this->logger->logCall(__METHOD__, [
+            'ownerId' => $ownerId,
+        ]);
+
+        $cacheItem = $this->cache->getItem('ez-notification-count-' . $ownerId);
+
+        $count = $cacheItem->get();
+        if ($cacheItem->isHit()) {
+            return $count;
+        }
+
+        $this->logger->logCall(__METHOD__, [
+            'ownerId' => $ownerId,
+        ]);
+
+        $count = $this->persistenceHandler->notificationHandler()->countNotificationsByOwnerId($ownerId);
+
+        $cacheItem->set($count);
+        $cacheItem->tag(['notification-count-' . $ownerId]);
+        $this->cache->save($cacheItem);
+
+        return $count;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNotificationById($id)
+    {
+        $cacheItem = $this->cache->getItem('ez-notification-' . $id);
+
+        $notification = $cacheItem->get();
+        if ($cacheItem->isHit()) {
+            return $notification;
+        }
+
+        $this->logger->logCall(__METHOD__, [
+            'notificationId' => $id,
+        ]);
+
+        $notification = $this->persistenceHandler->notificationHandler()->getNotificationById($id);
+
+        $cacheItem->set($notification);
+        $cacheItem->tag(['notification-' . $id]);
+        $this->cache->save($cacheItem);
+
+        return $notification;
     }
 }
