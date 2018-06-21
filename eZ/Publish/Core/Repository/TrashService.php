@@ -340,6 +340,7 @@ class TrashService implements TrashServiceInterface
                 'depth' => $spiTrashItem->depth,
                 'sortField' => $spiTrashItem->sortField,
                 'sortOrder' => $spiTrashItem->sortOrder,
+                'trashed' => isset($spiTrashItem->trashed) ? new DateTime('@' . $spiTrashItem->trashed) : new DateTime(),
             )
         );
     }

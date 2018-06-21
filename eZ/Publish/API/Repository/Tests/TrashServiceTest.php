@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use DateTime;
 
 /**
  * Test case for operations in the TrashService using in memory storage.
@@ -253,6 +254,21 @@ class TrashServiceTest extends BaseTrashServiceTest
         $this->assertEquals(
             $trashItem,
             $trashItemReloaded
+        );
+
+        $this->assertInstanceOf(
+            DateTime::class,
+            $trashItemReloaded->trashed
+        );
+
+        $this->assertEquals(
+            $trashItem->trashed->getTimestamp(),
+            $trashItemReloaded->trashed->getTimestamp()
+        );
+
+        $this->assertGreaterThan(
+            0,
+            $trashItemReloaded->trashed->getTimestamp()
         );
     }
 
