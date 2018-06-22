@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Notification;
 
-use eZ\Publish\SPI\Persistence\Bookmark\Bookmark;
-use eZ\Publish\SPI\Persistence\Bookmark\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
 

@@ -48,7 +48,6 @@ class NotificationService implements NotificationServiceInterface
                 return $this->buildDomainObject($spiNotification);
             }, $this->persistenceHandler->loadUserNotifications($currentUserId, $offset, $limit)
             );
-
         }
 
         return $list;
@@ -146,7 +145,7 @@ class NotificationService implements NotificationServiceInterface
                 'isPending' => $spiNotification->isPending,
                 'type' => $spiNotification->type,
                 'created' => new DateTime("@{$spiNotification->created}"),
-                'data' => $spiNotification->data
+                'data' => $spiNotification->data,
             )
         );
     }

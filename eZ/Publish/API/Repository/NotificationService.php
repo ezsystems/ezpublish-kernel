@@ -32,8 +32,6 @@ interface NotificationService
      * Mark notification as read so it no longer bother the user.
      *
      * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
-     *
-     * @return void
      */
     public function markNotificationAsRead(Notification $notification): void;
 

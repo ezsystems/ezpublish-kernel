@@ -12,7 +12,6 @@ use ArrayIterator;
 use IteratorAggregate;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-
 class NotificationList extends ValueObject implements IteratorAggregate
 {
     /**

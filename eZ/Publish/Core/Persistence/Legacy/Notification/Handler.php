@@ -82,6 +82,7 @@ class Handler implements HandlerInterface
         $notification = $this->mapper->extractNotificationsFromRows(
             $this->gateway->getNotificationById($notificationId)
         );
+
         return reset($notification);
     }
 
