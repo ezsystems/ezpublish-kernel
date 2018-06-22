@@ -6,11 +6,14 @@ services:
     notification.persistence.gateway.doctrine:
         class: '%notification.persistence.gateway.doctrine.class%'
         arguments:
-            - '@ezpublish.api.storage_engine.legacy.dbhandler'
+            - '@ezpublish.persistence.connection'
+
+    eZ\Publish\Core\Persistence\Legacy\Notification\Mapper: ~
 
     eZ\Publish\Core\Persistence\Legacy\Notification\Handler:
         arguments:
             $gateway: '@notification.persistence.gateway.doctrine'
+            $mapper: '@eZ\Publish\Core\Persistence\Legacy\Notification\Mapper'
         lazy: true
 
     ezpublish.spi.persistence.legacy.notification.handler:

@@ -6,43 +6,48 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Notification\Notification;
+use eZ\Publish\API\Repository\Values\Notification\NotificationList;
+
 interface NotificationService
 {
     /**
      * Get currently logged user notifications.
+
+     * @param int $offset
+     * @param int $limit
      *
-     * @param int $limit Number of notifications to get
-     * @param int $page Notifications pagination
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
+     * @return \eZ\Publish\API\Repository\Values\Notification\NotificationList
      */
-    public function getUserNotifications(int $limit, int $page): array;
+    public function loadNotifications(int $offset, int $limit): NotificationList;
+
+    /**
+     * @param int $notificationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Notification\Notification
+     */
+    public function getNotification(int $notificationId): Notification;
 
     /**
      * Mark notification as read so it no longer bother the user.
      *
-     * @param mixed $notificationId Notification id to be marked as read
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     *
+     * @return void
      */
-    public function markNotificationAsRead($notificationId);
+    public function markNotificationAsRead(Notification $notification): void;
 
     /**
      * Get count of unread users notifications.
      *
      * @return int
      */
-    public function getUserPendingNotificationCount();
+    public function getPendingNotificationCount(): int;
 
     /**
-     * Get total count of users notifications.
+     * Get count of total users notifications.
      *
      * @return int
      */
-    public function getUserNotificationCount();
-
-    /**
-     * @param mixed $notificationId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
-     */
-    public function getNotification($notificationId);
+    public function getNotificationCount(): int;
 }

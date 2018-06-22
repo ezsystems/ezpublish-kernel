@@ -236,7 +236,7 @@ class Handler implements PersistenceHandlerInterface
     /**
      * @return \eZ\Publish\Core\Persistence\Cache\NotificationHandler
      */
-    public function notificationHandler(): NotificationHandler
+    public function notificationHandler()
     {
         return $this->notificationHandler;
     }

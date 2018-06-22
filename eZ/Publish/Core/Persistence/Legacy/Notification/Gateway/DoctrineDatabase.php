@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Notification\Gateway;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\Query;
-use eZ\Publish\SPI\Persistence\Notification\Handler;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use PDO;
 
-class DoctrineDatabase implements Handler
+class DoctrineDatabase
 {
     const TABLE_NOTIFICATION = 'eznotification';
     const COLUMN_ID = 'id';
@@ -25,15 +25,15 @@ class DoctrineDatabase implements Handler
     const COLUMN_CREATED = 'created';
     const COLUMN_DATA = 'data';
 
-    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler */
-    protected $handler;
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
+     * @param \Doctrine\DBAL\Connection $connection
      */
-    public function __construct(DatabaseHandler $handler)
+    public function __construct(Connection $connection)
     {
-        $this->handler = $handler;
+        $this->connection = $connection;
     }
 
     /**
@@ -43,195 +43,47 @@ class DoctrineDatabase implements Handler
      *
      * @return mixed
      */
-    public function createNotification(Notification $notification)
+    public function createNotification(Notification $notification): int
     {
-        $handler = $this->handler;
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::TABLE_NOTIFICATION)
+            ->values([
+                self::COLUMN_IS_PENDING => ':is_pending',
+                self::COLUMN_OWNER_ID => ':user_id',
+                self::COLUMN_CREATED => ':created',
+                self::COLUMN_TYPE => ':type',
+                self::COLUMN_DATA => ':data',
+            ])
+            ->setParameter(':is_pending', $notification->isPending, PDO::PARAM_INT)
+            ->setParameter(':user_id', $notification->ownerId, PDO::PARAM_INT)
+            ->setParameter(':created', $notification->created, PDO::PARAM_INT)
+            ->setParameter(':type', $notification->type, PDO::PARAM_STR)
+            ->setParameter(':data', json_encode($notification->data), PDO::PARAM_STR);
 
-        $handler->beginTransaction();
+        $query->execute();
 
-        /** @var \eZ\Publish\Core\Persistence\Database\InsertQuery $query */
-        $query = $handler->createInsertQuery();
-        $query->insertInto($handler->quoteTable(self::TABLE_NOTIFICATION));
-        $this->bindColumnValue($query, self::COLUMN_OWNER_ID, $notification->ownerId);
-        $this->bindColumnValue($query, self::COLUMN_TYPE, $notification->type);
-        $this->bindColumnValue($query, self::COLUMN_CREATED, $notification->created);
-        $this->bindColumnValue($query, self::COLUMN_DATA, json_encode($notification->data));
-        $query->prepare()->execute();
-
-        $notificationId = $handler->lastInsertId($handler->getSequenceName(self::TABLE_NOTIFICATION, self::COLUMN_ID));
-
-        $handler->commit();
-
-        return $notificationId;
-    }
-
-    /**
-     * Get paginated users Notifications.
-     *
-     * @param mixed $ownerId
-     * @param int $limit
-     * @param int $page
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
-     */
-    public function getNotificationsByOwnerId($ownerId, int $limit, int $page = 0): array
-    {
-        $handler = $this->handler;
-
-        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
-        $query->select(
-            $handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_IS_PENDING, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_TYPE, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_CREATED, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_DATA, self::TABLE_NOTIFICATION)
-        );
-        $query->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
-                $query->bindValue($ownerId, null, PDO::PARAM_INT)
-            )
-        );
-
-        $query->orderBy(self::COLUMN_CREATED, 'DESC');
-        $query->limit($limit, $page * $limit);
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $spiNotifications = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $notifications = [];
-
-        foreach ($spiNotifications as $spi) {
-            $notification = new Notification();
-
-            $notification->id = $spi[self::COLUMN_ID];
-            $notification->ownerId = $spi[self::COLUMN_OWNER_ID];
-            $notification->isPending = $spi[self::COLUMN_IS_PENDING];
-            $notification->created = $spi[self::COLUMN_CREATED];
-            $notification->type = $spi[self::COLUMN_TYPE];
-            $notification->data = json_decode($spi[self::COLUMN_DATA]);
-
-            $notifications[] = $notification;
-        }
-
-        return $notifications;
-    }
-
-    /**
-     * Count users unread Notifications.
-     *
-     * @param mixed $ownerId
-     *
-     * @return int
-     */
-    public function countPendingNotificationsByOwnerId($ownerId): int
-    {
-        $handler = $this->handler;
-
-        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
-        $query->select('COUNT(id)');
-        $query->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
-                $query->bindValue($ownerId, null, PDO::PARAM_INT)
-            ),
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_IS_PENDING, self::TABLE_NOTIFICATION),
-                $query->bindValue(true, null, PDO::PARAM_INT)
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $count = (int)$statement->fetch(PDO::FETCH_COLUMN);
-
-        return $count;
-    }
-
-    /**
-     * Count total users Notifications.
-     *
-     * @param mixed $ownerId
-     *
-     * @return int
-     */
-    public function countNotificationsByOwnerId($ownerId): int
-    {
-        $handler = $this->handler;
-
-        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
-        $query->select('COUNT(id)');
-        $query->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
-                $query->bindValue($ownerId, null, PDO::PARAM_INT)
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $count = (int)$statement->fetch(PDO::FETCH_COLUMN);
-
-        return $count;
+        return (int) $this->connection->lastInsertId();
     }
 
     /**
      * Get Notification by its id.
      *
-     * @param mixed $notificationId
+     * @param int $notificationId
      *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     * @return array
      */
-    public function getNotificationById($notificationId): Notification
+    public function getNotificationById(int $notificationId): array
     {
-        $handler = $this->handler;
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(...$this->getColumns())
+            ->from(self::TABLE_NOTIFICATION)
+            ->where($query->expr()->eq(self::COLUMN_ID, ':id'));
 
-        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $handler->createSelectQuery();
-        $query->from($handler->quoteTable(self::TABLE_NOTIFICATION));
-        $query->select(
-            $handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_IS_PENDING, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_OWNER_ID, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_TYPE, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_CREATED, self::TABLE_NOTIFICATION),
-            $handler->quoteColumn(self::COLUMN_DATA, self::TABLE_NOTIFICATION)
-        );
-        $query->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
-                $query->bindValue($notificationId, null, PDO::PARAM_INT)
-            )
-        );
+        $query->setParameter(':id', $notificationId, PDO::PARAM_INT);
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $spiNotification = $statement->fetch(\PDO::FETCH_ASSOC);
-
-        $notification = new Notification();
-
-        if ($spiNotification) {
-            $notification->id = $spiNotification[self::TABLE_NOTIFICATION];
-            $notification->ownerId = $spiNotification[self::COLUMN_OWNER_ID];
-            $notification->isPending = $spiNotification[self::COLUMN_IS_PENDING];
-            $notification->created = $spiNotification[self::COLUMN_CREATED];
-            $notification->type = $spiNotification[self::COLUMN_TYPE];
-            $notification->data = json_decode($spiNotification[self::COLUMN_DATA]);
-        }
-
-        return $notification;
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -241,53 +93,101 @@ class DoctrineDatabase implements Handler
      * @todo
      *
      * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
      *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    public function updateNotification(Notification $notification): Notification
+    public function updateNotification(Notification $notification)
     {
-        $handler = $this->handler;
-
         if (!isset($notification->id) || !is_numeric($notification->id)) {
             throw new InvalidArgumentException(self::COLUMN_ID, 'Cannot update Notification');
         }
 
-        /** @var \eZ\Publish\Core\Persistence\Database\UpdateQuery $query */
-        $query = $handler->createUpdateQuery();
-        $query->update($handler->quoteTable(self::TABLE_NOTIFICATION));
-        $query->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_ID, self::TABLE_NOTIFICATION),
-                $query->bindValue($notification->id, null, PDO::PARAM_INT)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
 
-        if (isset($notification->isPending)) {
-            $this->bindColumnValue($query, self::COLUMN_IS_PENDING, (int)$notification->isPending);
-        }
+        $query
+            ->update(self::TABLE_NOTIFICATION)
+            ->set(self::COLUMN_IS_PENDING, ':is_pending')
+            ->where($query->expr()->eq(self::COLUMN_ID, ':id'))
+            ->setParameter(':is_pending', $notification->isPending, PDO::PARAM_INT)
+            ->setParameter(':id', $notification->id, PDO::PARAM_INT);
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $notification;
+        $query->execute();
     }
 
     /**
-     * Helper to make insert value one-liners human readable.
+     * @param int $userId
      *
-     * @internal
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\Query $query Query to work on (context)
-     * @param string $column Table column name
-     * @param mixed $value Value to be insterted
+     * @return int
      */
-    protected function bindColumnValue(Query $query, string $column, $value)
+    public function countUserNotifications(int $userId): int
     {
-        $query->set(
-            $this->handler->quoteColumn($column),
-            $query->bindValue($value)
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('COUNT(' . self::COLUMN_ID . ')')
+            ->from(self::TABLE_NOTIFICATION)
+            ->where($query->expr()->eq(self::COLUMN_OWNER_ID, ':user_id'))
+            ->setParameter(':user_id', $userId, PDO::PARAM_INT);
+
+        return (int)$query->execute()->fetchColumn();
+    }
+
+    /**
+     * Count users unread Notifications.
+     *
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countUserPendingNotifications(int $userId): int
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('COUNT(' . self::COLUMN_ID . ')')
+            ->from(self::TABLE_NOTIFICATION)
+            ->where($query->expr()->eq(self::COLUMN_OWNER_ID, ':user_id'))
+            ->where($query->expr()->eq(self::COLUMN_IS_PENDING, true))
+            ->setParameter(':user_id', $userId, PDO::PARAM_INT);
+
+        return (int)$query->execute()->fetchColumn();
+    }
+
+    /**
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function loadUserNotifications(int $userId, int $offset = 0, int $limit = -1): array
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(...$this->getColumns())
+            ->from(self::TABLE_NOTIFICATION)
+            ->where($query->expr()->eq(self::COLUMN_OWNER_ID, ':user_id'))
+            ->setFirstResult($offset);
+
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+
+        $query->orderBy(self::COLUMN_ID, 'DESC');
+        $query->setParameter(':user_id', $userId, PDO::PARAM_INT);
+
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function getColumns(): array
+    {
+        return [
+            self::COLUMN_ID,
+            self::COLUMN_OWNER_ID,
+            self::COLUMN_IS_PENDING,
+            self::COLUMN_TYPE,
+            self::COLUMN_CREATED,
+            self::COLUMN_DATA,
+        ];
     }
 }

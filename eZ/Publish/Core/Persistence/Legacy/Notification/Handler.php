@@ -8,20 +8,27 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Notification;
 
+use eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Notification\Handler as HandlerInterface;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
+use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
 
 class Handler implements HandlerInterface
 {
-    /** @var \eZ\Publish\SPI\Persistence\Notification\Handler */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase */
     protected $gateway;
 
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Notification\Mapper */
+    protected $mapper;
+
     /**
-     * @param \eZ\Publish\SPI\Persistence\Notification\Handler $gateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase $gateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Notification\Mapper $mapper
      */
-    public function __construct(HandlerInterface $gateway)
+    public function __construct(DoctrineDatabase $gateway, Mapper $mapper)
     {
         $this->gateway = $gateway;
+        $this->mapper = $mapper;
     }
 
     /**
@@ -39,15 +46,15 @@ class Handler implements HandlerInterface
     /**
      * Get paginated users Notifications.
      *
-     * @param mixed $ownerId
+     * @param int $ownerId
      * @param int $limit
      * @param int $page
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
      */
-    public function getNotificationsByOwnerId($ownerId, int $limit = 100, int $page = 0): array
+    public function getNotificationsByOwnerId(int $ownerId, int $limit = 100, int $page = 0): array
     {
-        return $this->gateway->getNotificationsByOwnerId($ownerId, $limit, $page);
+        return $this->gateway->loadUserNotifications($ownerId, $limit, $page);
     }
 
     /**
@@ -57,9 +64,9 @@ class Handler implements HandlerInterface
      *
      * @return int
      */
-    public function countPendingNotificationsByOwnerId($ownerId): int
+    public function countPendingNotifications(int $ownerId): int
     {
-        return $this->gateway->countPendingNotificationsByOwnerId($ownerId);
+        return $this->gateway->countUserPendingNotifications($ownerId);
     }
 
     /**
@@ -69,9 +76,12 @@ class Handler implements HandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function getNotificationById($notificationId): Notification
+    public function getNotificationById(int $notificationId): Notification
     {
-        return $this->gateway->getNotificationById($notificationId);
+        $notification = $this->mapper->extractNotificationsFromRows(
+            $this->gateway->getNotificationById($notificationId)
+        );
+        return reset($notification);
     }
 
     /**
@@ -80,24 +90,45 @@ class Handler implements HandlerInterface
      *
      * @todo
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
+     * @param int $notificationId
+     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    public function updateNotification(Notification $notification): Notification
+    public function updateNotification(int $notificationId, UpdateStruct $updateStruct): Notification
     {
-        return $this->gateway->updateNotification($notification);
+        $notification = $this->mapper->createNotificationFromUpdateStruct(
+            $updateStruct
+        );
+        $notification->id = $notificationId;
+
+        $this->gateway->updateNotification($notification);
+
+        return $this->getNotificationById($notificationId);
     }
 
     /**
-     * Count total users Notifications.
-     *
-     * @param mixed $ownerId
+     * @param int $userId
      *
      * @return int
      */
-    public function countNotificationsByOwnerId($ownerId): int
+    public function countNotifications(int $userId): int
     {
-        return $this->gateway->countNotificationsByOwnerId($ownerId);
+        return $this->gateway->countUserNotifications($userId);
+    }
+
+    /**
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
+     */
+    public function loadUserNotifications(int $userId, int $offset, int $limit): array
+    {
+        return $this->mapper->extractNotificationsFromRows(
+            $this->gateway->loadUserNotifications($userId, $offset, $limit)
+        );
     }
 }

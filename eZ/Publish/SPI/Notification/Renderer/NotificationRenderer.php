@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Notification\Renderer;
 
-use eZ\Publish\SPI\Persistence\Notification\Notification;
+use eZ\Publish\API\Repository\Values\Notification\Notification;
 
 interface NotificationRenderer
 {

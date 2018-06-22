@@ -23,47 +23,44 @@ interface Handler
      * Update Notification ValueObject in persistent storage.
      * There's no edit feature but it's essential to mark Notification as read.
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
+     * @param int $notificationId
+     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function updateNotification(Notification $notification): Notification;
-
-    /**
-     * Get paginated users Notifications.
-     *
-     * @param mixed $ownerId
-     * @param int $limit
-     * @param int $page
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
-     */
-    public function getNotificationsByOwnerId($ownerId, int $limit, int $page): array;
+    public function updateNotification(int $notificationId, UpdateStruct $updateStruct): Notification;
 
     /**
      * Count users unread Notifications.
      *
-     * @param mixed $ownerId
+     * @param int $ownerId
      *
      * @return int
      */
-    public function countPendingNotificationsByOwnerId($ownerId): int;
-
-    /**
-     * Count total users Notifications.
-     *
-     * @param mixed $ownerId
-     *
-     * @return int
-     */
-    public function countNotificationsByOwnerId($ownerId): int;
+    public function countPendingNotifications(int $ownerId): int;
 
     /**
      * Get Notification by its id.
      *
-     * @param mixed $notificationId
+     * @param int $notificationId
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function getNotificationById($notificationId): Notification;
+    public function getNotificationById(int $notificationId): Notification;
+
+    /**
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
+     */
+    public function loadUserNotifications(int $userId, int $offset, int $limit): array;
+
+    /**
+     * @param int $currentUserId
+     *
+     * @return int
+     */
+    public function countNotifications(int $currentUserId): int;
 }

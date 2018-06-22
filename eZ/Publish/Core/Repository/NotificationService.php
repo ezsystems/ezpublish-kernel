@@ -8,12 +8,16 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository;
 
+use DateTime;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
+use eZ\Publish\API\Repository\Values\Notification\Notification as APINotification;
+use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Persistence\Notification\Handler;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
+use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
 
 class NotificationService implements NotificationServiceInterface
 {
@@ -33,49 +37,72 @@ class NotificationService implements NotificationServiceInterface
         $this->kernelRepository = $kernelRepository;
     }
 
-    /**
-     * Get currently logged user notifications.
-     *
-     * @param int $limit Number of notifications to get
-     * @param int $page Notifications pagination
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
-     */
-    public function getUserNotifications(int $limit, int $page): array
+    public function loadNotifications(int $offset = 0, int $limit = 25): NotificationList
     {
-        $currentUser = $this->kernelRepository->getCurrentUser();
+        $currentUserId = $this->getCurrentUserId();
 
-        return $this->persistenceHandler->getNotificationsByOwnerId($currentUser->id, $limit, $page);
+        $list = new NotificationList();
+        $list->totalCount = $this->persistenceHandler->countNotifications($currentUserId);
+        if ($list->totalCount > 0) {
+            $list->items = array_map(function (Notification $spiNotification) {
+                return $this->buildDomainObject($spiNotification);
+            }, $this->persistenceHandler->loadUserNotifications($currentUserId, $offset, $limit)
+            );
+
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param mixed $notificationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Notification\Notification
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function getNotification(int $notificationId): APINotification
+    {
+        $currentUserId = $this->getCurrentUserId();
+
+        $notification = $this->persistenceHandler->getNotificationById($notificationId);
+
+        if (!$notification->ownerId || $currentUserId != $notification->ownerId) {
+            throw new NotFoundException('Notification', $notificationId);
+        }
+
+        return $this->buildDomainObject($notification);
     }
 
     /**
      * Mark notification as read so it no longer bother the user.
      *
-     * @param mixed $notificationId Notification id to be marked as read
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    public function markNotificationAsRead($notificationId)
+    public function markNotificationAsRead(APINotification $notification): void
     {
-        $currentUser = $this->kernelRepository->getCurrentUser();
-        $notification = $this->persistenceHandler->getNotificationById($notificationId);
+        $currentUserId = $this->getCurrentUserId();
 
         if (!$notification->id) {
-            throw new NotFoundException('Notification', $notificationId);
+            throw new NotFoundException('Notification', $notification->id);
         }
 
-        if ($notification->ownerId !== $currentUser->id) {
-            throw new UnauthorizedException($notificationId, 'Notification');
+        if ($notification->ownerId !== $currentUserId) {
+            throw new UnauthorizedException($notification->id, 'Notification');
         }
 
         if (!$notification->isPending) {
             return;
         }
 
-        $notification->isPending = false;
+        $updateStruct = new UpdateStruct();
 
-        $this->persistenceHandler->updateNotification($notification);
+        $updateStruct->isPending = false;
+
+        $this->persistenceHandler->updateNotification($notification->id, $updateStruct);
     }
 
     /**
@@ -83,42 +110,44 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return int
      */
-    public function getUserPendingNotificationCount(): int
+    public function getPendingNotificationCount(): int
     {
-        $currentUser = $this->kernelRepository->getCurrentUser();
+        $currentUserId = $this->getCurrentUserId();
 
-        return $this->persistenceHandler->countPendingNotificationsByOwnerId($currentUser->id);
+        return $this->persistenceHandler->countPendingNotifications($currentUserId);
     }
 
     /**
-     * Get total count of users notifications.
+     * Get count of unread users notifications.
      *
      * @return int
      */
-    public function getUserNotificationCount(): int
+    public function getNotificationCount(): int
     {
-        $currentUser = $this->kernelRepository->getCurrentUser();
+        $currentUserId = $this->getCurrentUserId();
 
-        return $this->persistenceHandler->countNotificationsByOwnerId($currentUser->id);
+        return $this->persistenceHandler->countNotifications($currentUserId);
     }
 
-    /**
-     * @param mixed $notificationId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     */
-    public function getNotification($notificationId): Notification
+    private function getCurrentUserId(): int
     {
-        $currentUser = $this->kernelRepository->getCurrentUser();
+        return $this->kernelRepository
+            ->getPermissionResolver()
+            ->getCurrentUserReference()
+            ->getUserId();
+    }
 
-        $notification = $this->persistenceHandler->getNotificationById($notificationId);
-
-        if (!$notification->ownerId || $currentUser->id != $notification->ownerId) {
-            throw new NotFoundException('Notification', $notificationId);
-        }
-
-        return $notification;
+    protected function buildDomainObject(Notification $spiNotification): APINotification
+    {
+        return new APINotification(
+            array(
+                'id' => $spiNotification->id,
+                'ownerId' => $spiNotification->ownerId,
+                'isPending' => $spiNotification->isPending,
+                'type' => $spiNotification->type,
+                'created' => new DateTime("@{$spiNotification->created}"),
+                'data' => $spiNotification->data
+            )
+        );
     }
 }

@@ -78,7 +78,7 @@ interface Handler
     /**
      * @return \eZ\Publish\SPI\Persistence\Notification\Handler
      */
-    public function notificationHandler(): NotificationHandler;
+    public function notificationHandler();
 
     /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler
