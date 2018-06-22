@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Persistence\Notification;
 
+use eZ\Publish\API\Repository\Values\Notification\Notification as APINotification;
+
 interface Handler
 {
     /**
@@ -15,20 +17,20 @@ interface Handler
      *
      * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function createNotification(Notification $notification);
+    public function createNotification(Notification $notification): Notification;
 
     /**
      * Update Notification ValueObject in persistent storage.
      * There's no edit feature but it's essential to mark Notification as read.
      *
-     * @param int $notificationId
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
      * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function updateNotification(int $notificationId, UpdateStruct $updateStruct): Notification;
+    public function updateNotification(APINotification $notification, UpdateStruct $updateStruct): Notification;
 
     /**
      * Count users unread Notifications.

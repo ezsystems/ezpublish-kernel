@@ -102,7 +102,7 @@ class NotificationService implements NotificationServiceInterface
 
         $updateStruct->isPending = false;
 
-        $this->persistenceHandler->updateNotification($notification->id, $updateStruct);
+        $this->persistenceHandler->updateNotification($notification, $updateStruct);
     }
 
     /**

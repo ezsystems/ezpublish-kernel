@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Notification\Handler as HandlerInterface;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
+use eZ\Publish\API\Repository\Values\Notification\Notification as APINotification;
 
 class Handler implements HandlerInterface
 {
@@ -36,9 +37,9 @@ class Handler implements HandlerInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function createNotification(Notification $notification)
+    public function createNotification(Notification $notification): Notification
     {
         return $this->gateway->createNotification($notification);
     }
@@ -90,22 +91,22 @@ class Handler implements HandlerInterface
      *
      * @todo
      *
-     * @param int $notificationId
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $apiNotification
      * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    public function updateNotification(int $notificationId, UpdateStruct $updateStruct): Notification
+    public function updateNotification(APINotification $apiNotification, UpdateStruct $updateStruct): Notification
     {
         $notification = $this->mapper->createNotificationFromUpdateStruct(
             $updateStruct
         );
-        $notification->id = $notificationId;
+        $notification->id = $apiNotification->id;
 
         $this->gateway->updateNotification($notification);
 
-        return $this->getNotificationById($notificationId);
+        return $this->getNotificationById($notification->id);
     }
 
     /**

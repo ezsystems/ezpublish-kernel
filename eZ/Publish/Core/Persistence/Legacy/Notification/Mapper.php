@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
 
 class Mapper
 {
-
     /**
      * Extracts Bookmark objects from $rows.
      *

@@ -10,8 +10,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Notification\Gateway;
 
 use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use PDO;
 
@@ -41,7 +39,7 @@ class DoctrineDatabase
      *
      * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
      *
-     * @return mixed
+     * @return int
      */
     public function createNotification(Notification $notification): int
     {
@@ -92,9 +90,7 @@ class DoctrineDatabase
      *
      * @todo
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
-     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
-     *
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification*
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
