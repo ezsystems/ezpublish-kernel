@@ -41,7 +41,9 @@ class Handler implements HandlerInterface
      */
     public function createNotification(Notification $notification): Notification
     {
-        return $this->gateway->createNotification($notification);
+        $id = $this->gateway->createNotification($notification);
+
+        return $this->getNotificationById($id);
     }
 
     /**

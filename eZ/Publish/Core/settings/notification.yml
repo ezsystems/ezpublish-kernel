@@ -10,6 +10,6 @@ services:
         arguments:
             - '@ezpublish.spi.persistence.legacy.notification.handler'
         tags:
-            - { name: ezpublish.api.slot, signal: '*' }
+            - { name: ezpublish.api.slot, signal: \eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationSignal }
 
     notification.signal.event_notification: '@eZ\Publish\Core\Notification\Slot\OnNotificationSlot'
