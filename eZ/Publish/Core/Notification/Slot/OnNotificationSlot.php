@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Notification\Slot;
 use eZ\Publish\API\Repository\NotificationService;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationCreateSignal;
 use eZ\Publish\Core\SignalSlot\Slot;
 
 class OnNotificationSlot extends Slot
@@ -38,7 +38,7 @@ class OnNotificationSlot extends Slot
      */
     public function receive(Signal $signal)
     {
-        if (!($signal instanceof NotificationSignal)) {
+        if (!($signal instanceof NotificationCreateSignal)) {
             return false;
         }
 

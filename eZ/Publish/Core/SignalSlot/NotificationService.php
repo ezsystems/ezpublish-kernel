@@ -12,8 +12,9 @@ use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterfac
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
 use eZ\Publish\API\Repository\Values\Notification\NotificationList;
+use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationDeleteSignal;
+use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationCreateSignal;
 use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationReadSignal;
-use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationSignal;
 
 class NotificationService implements NotificationServiceInterface
 {
@@ -82,6 +83,10 @@ class NotificationService implements NotificationServiceInterface
      */
     public function deleteNotification(Notification $notification): void
     {
+        $this->signalDispatcher->emit(new NotificationDeleteSignal([
+            'notificationId' => $notification->id,
+        ]));
+
         $this->deleteNotification($notification);
     }
 
@@ -90,7 +95,7 @@ class NotificationService implements NotificationServiceInterface
      */
     public function createNotification(CreateStruct $createStruct): Notification
     {
-        $this->signalDispatcher->emit(new NotificationSignal([
+        $this->signalDispatcher->emit(new NotificationCreateSignal([
             'ownerId' => $createStruct->ownerId,
             'type' => $createStruct->type,
             'data' => $createStruct->data,

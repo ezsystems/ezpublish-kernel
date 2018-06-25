@@ -10,14 +10,8 @@ namespace eZ\Publish\Core\SignalSlot\Signal\NotificationService;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 
-class NotificationSignal extends Signal
+class NotificationDeleteSignal extends Signal
 {
-    /** @var mixed $ownerId */
-    public $ownerId;
-
-    /** @var string $type */
-    public $type;
-
-    /** @var array $data */
-    public $data;
+    /** @var int $notificationId */
+    public $notificationId;
 }
