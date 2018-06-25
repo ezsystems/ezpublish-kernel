@@ -34,7 +34,6 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -108,7 +107,8 @@ class ExceptionConversion extends Gateway
             return $this->innerGateway->insert($notification);
         } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
-        }    }
+        }
+    }
 
     /**
      * @param int $notificationId

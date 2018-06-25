@@ -35,7 +35,7 @@ class MapperTest extends TestCase
                 'type' => 'FOO',
                 'created' => 1529913161,
                 'is_pending' => 0,
-                'data' => null
+                'data' => null,
             ],
             [
                 'id' => 1,
@@ -46,9 +46,9 @@ class MapperTest extends TestCase
                 'data' => json_encode([
                     'foo' => 'Foo',
                     'bar' => 'Bar',
-                    'baz' => ['B', 'A', 'Z']
-                ])
-            ]
+                    'baz' => ['B', 'A', 'Z'],
+                ]),
+            ],
         ];
 
         $objects = [
@@ -58,7 +58,7 @@ class MapperTest extends TestCase
                 'type' => 'FOO',
                 'created' => 1529913161,
                 'isPending' => false,
-                'data' => []
+                'data' => [],
             ]),
             new Notification([
                 'id' => 1,
@@ -69,8 +69,8 @@ class MapperTest extends TestCase
                 'data' => [
                     'foo' => 'Foo',
                     'bar' => 'Bar',
-                    'baz' => ['B', 'A', 'Z']
-                ]
+                    'baz' => ['B', 'A', 'Z'],
+                ],
             ]),
         ];
 
@@ -90,8 +90,8 @@ class MapperTest extends TestCase
                 'type' => 'FOO',
                 'created' => 1529913161,
                 'is_pending' => false,
-                'data' => '{ InvalidJSON }'
-            ]
+                'data' => '{ InvalidJSON }',
+            ],
         ];
 
         $this->mapper->extractNotificationsFromRows($rows);
@@ -103,11 +103,11 @@ class MapperTest extends TestCase
     public function testCreateNotificationFromUpdateStruct()
     {
         $updateStruct = new UpdateStruct([
-            'isPending' => false
+            'isPending' => false,
         ]);
 
         $this->assertEquals(new Notification([
-            'isPending' => false
+            'isPending' => false,
         ]), $this->mapper->createNotificationFromUpdateStruct($updateStruct));
     }
 }

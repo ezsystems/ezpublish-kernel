@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
+declare(strict_types=1);
+
+namespace eZ\Publish\Core\SignalSlot;
+
+use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
+use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
+use eZ\Publish\API\Repository\Values\Notification\Notification;
+use eZ\Publish\API\Repository\Values\Notification\NotificationList;
+use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationReadSignal;
+use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationSignal;
+
+class NotificationService implements NotificationServiceInterface
+{
+    /** @var \eZ\Publish\API\Repository\BookmarkService */
+    protected $service;
+
+    /** @var \eZ\Publish\Core\SignalSlot\SignalDispatcher */
+    protected $signalDispatcher;
+
+    /**
+     * @param \eZ\Publish\API\Repository\NotificationService $service
+     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     */
+    public function __construct(NotificationServiceInterface $service, SignalDispatcher $signalDispatcher)
+    {
+        $this->service = $service;
+        $this->signalDispatcher = $signalDispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadNotifications(int $offset, int $limit): NotificationList
+    {
+        return $this->loadNotifications($offset, $limit);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNotification(int $notificationId): Notification
+    {
+        return $this->getNotification($notificationId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function markNotificationAsRead(Notification $notification): void
+    {
+        $this->signalDispatcher->emit(new NotificationReadSignal([
+            'notificationId' => $notification->id,
+        ]));
+
+        $this->markNotificationAsRead($notification);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPendingNotificationCount(): int
+    {
+        return $this->getPendingNotificationCount();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNotificationCount(): int
+    {
+        return $this->getNotificationCount();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteNotification(Notification $notification): void
+    {
+        $this->deleteNotification($notification);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createNotification(CreateStruct $createStruct): Notification
+    {
+        $this->signalDispatcher->emit(new NotificationSignal([
+            'ownerId' => $createStruct->ownerId,
+            'type' => $createStruct->type,
+            'data' => $createStruct->data,
+        ]));
+
+        return $this->createNotification($createStruct);
+    }
+}

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Notification;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Handler as HandlerInterface;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
@@ -47,20 +48,6 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Get paginated users Notifications.
-     *
-     * @param int $ownerId
-     * @param int $limit
-     * @param int $page
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
-     */
-    public function getNotificationsByOwnerId(int $ownerId, int $limit = 100, int $page = 0): array
-    {
-        return $this->gateway->loadUserNotifications($ownerId, $limit, $page);
-    }
-
-    /**
      * Count users unread Notifications.
      *
      * @param mixed $ownerId
@@ -78,12 +65,18 @@ class Handler implements HandlerInterface
      * @param mixed $notificationId
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function getNotificationById(int $notificationId): Notification
     {
         $notification = $this->mapper->extractNotificationsFromRows(
             $this->gateway->getNotificationById($notificationId)
         );
+
+        if (count($notification) < 1) {
+            throw new NotFoundException('Notification', $notificationId);
+        }
 
         return reset($notification);
     }

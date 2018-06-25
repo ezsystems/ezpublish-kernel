@@ -149,3 +149,8 @@ services:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "legacy"
         lazy: true
+
+    eZ\Publish\Core\SignalSlot\NotificationService:
+        arguments:
+            - "@ezpublish.api.service.inner_notification"
+            - "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"
