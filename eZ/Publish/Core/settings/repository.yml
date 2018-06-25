@@ -66,3 +66,4 @@ services:
 
     ezpublish.api.service.notification:
         alias: eZ\Publish\Core\SignalSlot\NotificationService
+        public: true
