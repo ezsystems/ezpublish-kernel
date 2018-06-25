@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Notification;
 
-use eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase;
+use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Handler as HandlerInterface;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
@@ -23,10 +23,10 @@ class Handler implements HandlerInterface
     protected $mapper;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase $gateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Notification\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Notification\Mapper $mapper
      */
-    public function __construct(DoctrineDatabase $gateway, Mapper $mapper)
+    public function __construct(Gateway $gateway, Mapper $mapper)
     {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
@@ -35,13 +35,13 @@ class Handler implements HandlerInterface
     /**
      * Store Notification ValueObject in persistent storage.
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\CreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function createNotification(Notification $notification): Notification
+    public function createNotification(CreateStruct $createStruct): Notification
     {
-        $id = $this->gateway->createNotification($notification);
+        $id = $this->gateway->insert($createStruct);
 
         return $this->getNotificationById($id);
     }
@@ -134,5 +134,13 @@ class Handler implements HandlerInterface
         return $this->mapper->extractNotificationsFromRows(
             $this->gateway->loadUserNotifications($userId, $offset, $limit)
         );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     */
+    public function delete(APINotification $notification): void
+    {
+        $this->gateway->delete($notification->id);
     }
 }

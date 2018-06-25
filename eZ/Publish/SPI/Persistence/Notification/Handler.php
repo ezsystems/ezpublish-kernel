@@ -15,11 +15,11 @@ interface Handler
     /**
      * Store Notification ValueObject in persistent storage.
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\CreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      */
-    public function createNotification(Notification $notification): Notification;
+    public function createNotification(CreateStruct $createStruct): Notification;
 
     /**
      * Update Notification ValueObject in persistent storage.
@@ -65,4 +65,10 @@ interface Handler
      * @return int
      */
     public function countNotifications(int $currentUserId): int;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     */
+    public function delete(APINotification $notification): void;
+
 }

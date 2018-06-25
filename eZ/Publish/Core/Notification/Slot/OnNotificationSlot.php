@@ -8,25 +8,25 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Notification\Slot;
 
+use eZ\Publish\API\Repository\NotificationService;
+use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationSignal;
 use eZ\Publish\Core\SignalSlot\Slot;
-use eZ\Publish\SPI\Persistence\Notification\Handler;
-use eZ\Publish\SPI\Persistence\Notification\Notification;
 
 class OnNotificationSlot extends Slot
 {
-    /** @var \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler */
-    protected $persistenceHandler;
+    /** @var \eZ\Publish\API\Repository\NotificationService $notificationService */
+    protected $notificationService;
 
     /**
      * OnNotificationSlot constructor.
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler
+     * @param \eZ\Publish\API\Repository\NotificationService $notificationService
      */
-    public function __construct(Handler $persistenceHandler)
+    public function __construct(NotificationService $notificationService)
     {
-        $this->persistenceHandler = $persistenceHandler;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -42,15 +42,13 @@ class OnNotificationSlot extends Slot
             return false;
         }
 
-        $notification = new Notification();
+        $notification = new CreateStruct();
 
         $notification->ownerId = $signal->ownerId;
         $notification->type = $signal->type;
         $notification->data = $signal->data;
-        $notification->created = time();
-        $notification->isPending = true;
 
-        $this->persistenceHandler->createNotification($notification);
+        $this->notificationService->createNotification($notification);
 
         return true;
     }

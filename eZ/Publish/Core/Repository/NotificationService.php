@@ -10,11 +10,13 @@ namespace eZ\Publish\Core\Repository;
 
 use DateTime;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
+use eZ\Publish\API\Repository\Values\Notification\CreateStruct as APICreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification as APINotification;
 use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Handler;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
@@ -37,6 +39,9 @@ class NotificationService implements NotificationServiceInterface
         $this->kernelRepository = $kernelRepository;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function loadNotifications(int $offset = 0, int $limit = 25): NotificationList
     {
         $currentUserId = $this->getCurrentUserId();
@@ -54,7 +59,7 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param mixed $notificationId
+     * @param int $notificationId
      *
      * @return \eZ\Publish\API\Repository\Values\Notification\Notification
      *
@@ -104,11 +109,6 @@ class NotificationService implements NotificationServiceInterface
         $this->persistenceHandler->updateNotification($notification, $updateStruct);
     }
 
-    /**
-     * Get count of unread users notifications.
-     *
-     * @return int
-     */
     public function getPendingNotificationCount(): int
     {
         $currentUserId = $this->getCurrentUserId();
@@ -116,11 +116,6 @@ class NotificationService implements NotificationServiceInterface
         return $this->persistenceHandler->countPendingNotifications($currentUserId);
     }
 
-    /**
-     * Get count of unread users notifications.
-     *
-     * @return int
-     */
     public function getNotificationCount(): int
     {
         $currentUserId = $this->getCurrentUserId();
@@ -136,6 +131,11 @@ class NotificationService implements NotificationServiceInterface
             ->getUserId();
     }
 
+    public function deleteNotification(APINotification $notification): void
+    {
+        $this->persistenceHandler->delete($notification);
+    }
+
     protected function buildDomainObject(Notification $spiNotification): APINotification
     {
         return new APINotification(
@@ -147,6 +147,20 @@ class NotificationService implements NotificationServiceInterface
                 'created' => new DateTime("@{$spiNotification->created}"),
                 'data' => $spiNotification->data,
             )
+        );
+    }
+
+    public function createNotification(APICreateStruct $createStruct): APINotification
+    {
+        $spiCreateStruct = new CreateStruct();
+        $spiCreateStruct->ownerId = $createStruct->ownerId;
+        $spiCreateStruct->type = $createStruct->type;
+        $spiCreateStruct->isPending = $createStruct->isPending;
+        $spiCreateStruct->data = $createStruct->data;
+        $spiCreateStruct->created = (new DateTime())->getTimestamp();
+
+        return $this->buildDomainObject(
+            $this->persistenceHandler->createNotification($spiCreateStruct)
         );
     }
 }

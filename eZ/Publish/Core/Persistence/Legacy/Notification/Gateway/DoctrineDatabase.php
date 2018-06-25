@@ -10,10 +10,12 @@ namespace eZ\Publish\Core\Persistence\Legacy\Notification\Gateway;
 
 use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Legacy\Notification\Gateway;
+use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use PDO;
 
-class DoctrineDatabase
+class DoctrineDatabase extends Gateway
 {
     const TABLE_NOTIFICATION = 'eznotification';
     const COLUMN_ID = 'id';
@@ -37,11 +39,11 @@ class DoctrineDatabase
     /**
      * Store Notification ValueObject in persistent storage.
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification
+     * @param \eZ\Publish\SPI\Persistence\Notification\CreateStruct $createStruct
      *
      * @return int
      */
-    public function createNotification(Notification $notification): int
+    public function insert(CreateStruct $createStruct): int
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -53,11 +55,11 @@ class DoctrineDatabase
                 self::COLUMN_TYPE => ':type',
                 self::COLUMN_DATA => ':data',
             ])
-            ->setParameter(':is_pending', $notification->isPending, PDO::PARAM_INT)
-            ->setParameter(':user_id', $notification->ownerId, PDO::PARAM_INT)
-            ->setParameter(':created', $notification->created, PDO::PARAM_INT)
-            ->setParameter(':type', $notification->type, PDO::PARAM_STR)
-            ->setParameter(':data', json_encode($notification->data), PDO::PARAM_STR);
+            ->setParameter(':is_pending', $createStruct->isPending, PDO::PARAM_INT)
+            ->setParameter(':user_id', $createStruct->ownerId, PDO::PARAM_INT)
+            ->setParameter(':created', $createStruct->created, PDO::PARAM_INT)
+            ->setParameter(':type', $createStruct->type, PDO::PARAM_STR)
+            ->setParameter(':data', json_encode($createStruct->data), PDO::PARAM_STR);
 
         $query->execute();
 
@@ -94,7 +96,7 @@ class DoctrineDatabase
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    public function updateNotification(Notification $notification)
+    public function updateNotification(Notification $notification): void
     {
         if (!isset($notification->id) || !is_numeric($notification->id)) {
             throw new InvalidArgumentException(self::COLUMN_ID, 'Cannot update Notification');
@@ -173,6 +175,20 @@ class DoctrineDatabase
         $query->setParameter(':user_id', $userId, PDO::PARAM_INT);
 
         return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param int $notificationId
+     */
+    public function delete(int $notificationId): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::TABLE_NOTIFICATION)
+            ->where($query->expr()->eq(self::COLUMN_ID, ':id'))
+            ->setParameter(':id', $notificationId, PDO::PARAM_INT);
+
+        $query->execute();
     }
 
     private function getColumns(): array

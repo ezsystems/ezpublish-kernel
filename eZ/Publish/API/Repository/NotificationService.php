@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
 use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 
@@ -50,4 +51,16 @@ interface NotificationService
      * @return int
      */
     public function getNotificationCount(): int;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     */
+    public function deleteNotification(Notification $notification): void;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Notification\CreateStruct $createStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\Notification\Notification
+     */
+    public function createNotification(CreateStruct $createStruct): Notification;
 }

@@ -7,8 +7,7 @@ services:
     notification.renderer.registry: '@eZ\Publish\Core\Notification\Renderer\Registry'
 
     eZ\Publish\Core\Notification\Slot\OnNotificationSlot:
-        arguments:
-            - '@ezpublish.spi.persistence.legacy.notification.handler'
+        autowire: true
         tags:
             - { name: ezpublish.api.slot, signal: \eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationSignal }
 

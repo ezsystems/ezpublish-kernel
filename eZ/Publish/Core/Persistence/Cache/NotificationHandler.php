@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Handler;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
@@ -23,18 +24,18 @@ class NotificationHandler extends AbstractHandler implements Handler
     /**
      * {@inheritdoc}
      */
-    public function createNotification(Notification $notification): Notification
+    public function createNotification(CreateStruct $createStruct): Notification
     {
         $this->logger->logCall(__METHOD__, [
-            'notificationId' => $notification->id,
+            'createStruct' => $createStruct,
         ]);
 
         $this->cache->invalidateTags([
-            'notification-count-' . $notification->ownerId,
-            'notification-pending-count-' . $notification->ownerId,
+            'notification-count-' . $createStruct->ownerId,
+            'notification-pending-count-' . $createStruct->ownerId,
         ]);
 
-        return $this->persistenceHandler->notificationHandler()->createNotification($notification);
+        return $this->persistenceHandler->notificationHandler()->createNotification($createStruct);
     }
 
     /**
@@ -57,7 +58,7 @@ class NotificationHandler extends AbstractHandler implements Handler
     /**
      * {@inheritdoc}
      */
-    public function delete(Notification $notification): void
+    public function delete(APINotification $notification): void
     {
         $this->logger->logCall(__METHOD__, [
             'notificationId' => $notification->id,
@@ -69,8 +70,7 @@ class NotificationHandler extends AbstractHandler implements Handler
             'notification-pending-count-' . $notification->ownerId,
         ]);
 
-        // @todo:
-        // $this->persistenceHandler->notificationHandler()->delete($notification->id);
+        $this->persistenceHandler->notificationHandler()->delete($notification);
     }
 
     /**
