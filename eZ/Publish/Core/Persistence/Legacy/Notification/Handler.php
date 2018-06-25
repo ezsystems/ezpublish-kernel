@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Notification\Notification as APINotificatio
 
 class Handler implements HandlerInterface
 {
-    /** @var \eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Notification\Gateway */
     protected $gateway;
 
     /** @var \eZ\Publish\Core\Persistence\Legacy\Notification\Mapper */

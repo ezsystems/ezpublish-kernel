@@ -1,18 +1,17 @@
-parameters:
-    notification.persistence.handler.class: eZ\Publish\Core\Persistence\Legacy\Notification\Handler
-    notification.persistence.gateway.doctrine.class: eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase
-
 services:
-    notification.persistence.gateway.doctrine:
-        class: '%notification.persistence.gateway.doctrine.class%'
+    eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase:
         arguments:
-            - '@ezpublish.persistence.connection'
+            $connection: '@ezpublish.persistence.connection'
+
+    eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\ExceptionConversion:
+        arguments:
+            $innerGateway: '@eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase'
 
     eZ\Publish\Core\Persistence\Legacy\Notification\Mapper: ~
 
     eZ\Publish\Core\Persistence\Legacy\Notification\Handler:
         arguments:
-            $gateway: '@notification.persistence.gateway.doctrine'
+            $gateway: '@eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\ExceptionConversion'
             $mapper: '@eZ\Publish\Core\Persistence\Legacy\Notification\Mapper'
         lazy: true
 
