@@ -142,7 +142,7 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
          * @var $object ContentInfo
          */
         $isOwner = $object->ownerId === $userId;
-        $isSelf = !$object instanceof ContentCreateStruct && $object->id === $userId;
+        $isSelf = $object instanceof ContentInfo && $object->id === $userId;
 
         return $isOwner || $isSelf;
     }
