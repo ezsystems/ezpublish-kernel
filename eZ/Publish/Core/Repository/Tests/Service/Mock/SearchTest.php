@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Repository\ContentService;
 use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
@@ -241,42 +239,23 @@ class SearchTest extends BaseServiceMockTest
         $service->findContent($query, array(), true);
     }
 
-    public function providerForFindContentWhenContentLoadThrowsException()
-    {
-        return [
-            [
-                new NotFoundException('content', 'id = 33'),
-                true,
-            ],
-            [
-                new UnauthorizedException('content', 'read', ['id' => 33]),
-                false,
-            ],
-        ];
-    }
-
     /**
      * Test for the findContent() method when search is out of sync with persistence.
      *
-     * @dataProvider providerForFindContentWhenContentLoadThrowsException
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      */
-    public function testFindContentWhenContentLoadThrowsException($e, $index = true)
+    public function testFindContentWhenDomainMapperThrowsException()
     {
         $indexer = $this->createMock(BackgroundIndexer::class);
-        if ($index) {
-            $indexer->expects($this->once())
-                ->method('registerContent')
-                ->with($this->isInstanceOf(SPIContentInfo::class));
-        } else {
-            $indexer->expects($this->never())->method($this->anything());
-        }
+        $indexer->expects($this->once())
+            ->method('registerContent')
+            ->with($this->isInstanceOf(SPIContentInfo::class));
 
         $service = $this->getMockBuilder(SearchService::class)
             ->setConstructorArgs([
-                $repo = $this->getRepositoryMock(),
+                $this->getRepositoryMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
-                $this->getDomainMapperMock(),
+                $mapper = $this->getDomainMapperMock(),
                 $this->getPermissionCriterionResolverMock(),
                 $indexer,
             ])->setMethods(['internalFindContentInfo'])
@@ -289,15 +268,15 @@ class SearchTest extends BaseServiceMockTest
             ->with($this->isInstanceOf(Query::class))
             ->willReturn($result);
 
-        $contentService = $this->createMock(ContentService::class);
-        $contentService->expects($this->once())
-            ->method('internalLoadContent')
-            ->with(33)
-            ->willThrowException($e);
+        $mapper->expects($this->once())
+            ->method('buildContentDomainObjectsOnSearchResult')
+            ->with($this->equalTo($result), $this->equalTo([]))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($info) {
+                unset($spiResult->searchHits[0]);
+                --$spiResult->totalCount;
 
-        $repo->expects($this->once())
-            ->method('getContentService')
-            ->willReturn($contentService);
+                return [$info];
+            });
 
         $finalResult = $service->findContent(new Query());
 
@@ -313,33 +292,19 @@ class SearchTest extends BaseServiceMockTest
      */
     public function testFindContentNoPermissionsFilter()
     {
-        $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
-        $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
+        $repositoryMock = $this->getRepositoryMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $domainMapperMock,
-            $permissionsCriterionResolverMock,
+            $mapper = $this->getDomainMapperMock(),
+            $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock(),
             new NullIndexer(),
             array()
         );
 
         $repositoryMock->expects($this->never())->method('hasAccess');
-
-        $repositoryMock
-            ->expects($this->once())
-            ->method('getContentService')
-            ->will(
-                $this->returnValue(
-                    $contentServiceMock = $this
-                        ->getMockBuilder(ContentService::class)
-                        ->disableOriginalConstructor()
-                        ->getMock()
-                )
-            );
 
         $serviceQuery = new Query();
         $handlerQuery = new Query(array('filter' => new Criterion\MatchAll(), 'limit' => 25));
@@ -362,10 +327,14 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        $contentServiceMock
-            ->expects($this->once())
-            ->method('internalLoadContent')
-            ->will($this->returnValue($contentMock));
+        $mapper->expects($this->once())
+            ->method('buildContentDomainObjectsOnSearchResult')
+            ->with($this->isInstanceOf(SearchResult::class), $this->equalTo([]))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($contentMock) {
+                $spiResult->searchHits[0]->valueObject = $contentMock;
+
+                return [];
+            });
 
         $result = $service->findContent($serviceQuery, $languageFilter, false);
 
@@ -388,31 +357,18 @@ class SearchTest extends BaseServiceMockTest
      */
     public function testFindContentWithPermission()
     {
-        $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
-            $repositoryMock,
+            $this->getRepositoryMock(),
             $searchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             array()
         );
-
-        $repositoryMock
-            ->expects($this->once())
-            ->method('getContentService')
-            ->will(
-                $this->returnValue(
-                    $contentServiceMock = $this
-                        ->getMockBuilder(ContentService::class)
-                        ->disableOriginalConstructor()
-                        ->getMock()
-                )
-            );
 
         $criterionMock = $this
             ->getMockBuilder(Criterion::class)
@@ -422,6 +378,11 @@ class SearchTest extends BaseServiceMockTest
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass(Content::class);
+
+        $permissionsCriterionResolverMock->expects($this->once())
+            ->method('getPermissionsCriterion')
+            ->with('content', 'read')
+            ->will($this->returnValue(true));
 
         /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
@@ -438,18 +399,15 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        $domainMapperMock->expects($this->never())
-            ->method($this->anything());
-
-        $contentServiceMock
+        $domainMapperMock
             ->expects($this->once())
-            ->method('internalLoadContent')
-            ->will($this->returnValue($contentMock));
+            ->method('buildContentDomainObjectsOnSearchResult')
+            ->with($this->isInstanceOf(SearchResult::class), $this->equalTo([]))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($contentMock) {
+                $spiResult->searchHits[0]->valueObject = $contentMock;
 
-        $permissionsCriterionResolverMock->expects($this->once())
-            ->method('getPermissionsCriterion')
-            ->with('content', 'read')
-            ->will($this->returnValue(true));
+                return [];
+            });
 
         $result = $service->findContent($query, $languageFilter, true);
 
@@ -472,14 +430,13 @@ class SearchTest extends BaseServiceMockTest
      */
     public function testFindContentWithNoPermission()
     {
-        $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
-            $repositoryMock,
+            $this->getRepositoryMock(),
             $searchHandlerMock,
-            $this->getDomainMapperMock(),
+            $mapper = $this->getDomainMapperMock(),
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             array()
@@ -499,6 +456,11 @@ class SearchTest extends BaseServiceMockTest
             ->with('content', 'read')
             ->will($this->returnValue(false));
 
+        $mapper->expects($this->once())
+            ->method('buildContentDomainObjectsOnSearchResult')
+            ->with($this->isInstanceOf(SearchResult::class), $this->equalTo([]))
+            ->willReturn([]);
+
         $result = $service->findContent($query, array(), true);
 
         $this->assertEquals(
@@ -512,12 +474,11 @@ class SearchTest extends BaseServiceMockTest
      */
     public function testFindContentWithDefaultQueryValues()
     {
-        $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
         $domainMapperMock = $this->getDomainMapperMock();
         $service = new SearchService(
-            $repositoryMock,
+            $this->getRepositoryMock(),
             $searchHandlerMock,
             $domainMapperMock,
             $this->getPermissionCriterionResolverMock(),
@@ -525,28 +486,9 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
-        $repositoryMock
-            ->expects($this->once())
-            ->method('getContentService')
-            ->will(
-                $this->returnValue(
-                    $contentServiceMock = $this
-                        ->getMockBuilder(ContentService::class)
-                        ->disableOriginalConstructor()
-                        ->getMock()
-                )
-            );
-
         $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass(Content::class);
-        $domainMapperMock->expects($this->never())
-            ->method($this->anything());
-
-        $contentServiceMock
-            ->expects($this->once())
-            ->method('internalLoadContent')
-            ->will($this->returnValue($contentMock));
 
         /* @var \PHPUnit\Framework\MockObject\MockObject $searchHandlerMock */
         $searchHandlerMock
@@ -571,6 +513,16 @@ class SearchTest extends BaseServiceMockTest
                     )
                 )
             );
+
+        $domainMapperMock
+            ->expects($this->once())
+            ->method('buildContentDomainObjectsOnSearchResult')
+            ->with($this->isInstanceOf(SearchResult::class), $this->equalTo([]))
+            ->willReturnCallback(function (SearchResult $spiResult) use ($contentMock) {
+                $spiResult->searchHits[0]->valueObject = $contentMock;
+
+                return [];
+            });
 
         $result = $service->findContent(new Query(), $languageFilter, false);
 

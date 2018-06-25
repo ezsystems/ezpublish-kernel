@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -254,6 +255,12 @@ class TrashServiceTest extends BaseTrashServiceTest
             $trashItem,
             $trashItemReloaded
         );
+
+        $this->assertInstanceOf(
+            Content::class,
+            $content = $trashItemReloaded->getContent()
+        );
+        $this->assertEquals($trashItem->contentId, $content->contentInfo->id);
     }
 
     /**

@@ -277,6 +277,18 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $IdVersionTranslationPairs): array
+    {
+        try {
+            return $this->innerGateway->loadContentList($IdVersionTranslationPairs);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads data for a content object identified by its remote ID.
      *
      * Returns an array with the relevant data.

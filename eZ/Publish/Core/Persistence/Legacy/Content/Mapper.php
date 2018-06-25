@@ -178,7 +178,7 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content[]
      */
-    public function extractContentFromRows(array $rows, array $nameRows)
+    public function extractContentFromRows(array $rows, array $nameRows, $prefix = 'ezcontentobject_')
     {
         $versionedNameData = array();
         foreach ($nameRows as $row) {
@@ -192,9 +192,9 @@ class Mapper
         $fields = array();
 
         foreach ($rows as $row) {
-            $contentId = (int)$row['ezcontentobject_id'];
+            $contentId = (int)$row["{$prefix}id"];
             if (!isset($contentInfos[$contentId])) {
-                $contentInfos[$contentId] = $this->extractContentInfoFromRow($row, 'ezcontentobject_');
+                $contentInfos[$contentId] = $this->extractContentInfoFromRow($row, $prefix);
             }
             if (!isset($versionInfos[$contentId])) {
                 $versionInfos[$contentId] = array();
@@ -387,7 +387,9 @@ class Mapper
         $field->type = $row['ezcontentobject_attribute_data_type_string'];
         $field->value = $this->extractFieldValueFromRow($row, $field->type);
         $field->languageCode = $row['ezcontentobject_attribute_language_code'];
-        $field->versionNo = (int)$row['ezcontentobject_attribute_version'];
+        $field->versionNo = isset($row['ezcontentobject_version_version']) ?
+            (int)$row['ezcontentobject_version_version'] :
+            (int)$row['ezcontentobject_attribute_version'];
 
         return $field;
     }

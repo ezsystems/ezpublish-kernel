@@ -194,6 +194,19 @@ abstract class Location extends ValueObject
     protected $sortOrder;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected $content;
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function getContent(): Content
+    {
+        return $this->content;
+    }
+
+    /**
      * Get SortClause objects built from Locations's sort options.
      *
      * @throws NotImplementedException If sort field has a deprecated/unsupported value which does not have a Sort Clause.

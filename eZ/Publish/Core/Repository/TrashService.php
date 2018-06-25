@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
@@ -91,7 +93,10 @@ class TrashService implements TrashServiceInterface
         }
 
         $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem($trashItemId);
-        $trash = $this->buildDomainTrashItemObject($spiTrashItem);
+        $trash = $this->buildDomainTrashItemObject(
+            $spiTrashItem,
+            $this->repository->getContentService()->internalLoadContent($spiTrashItem->contentId)
+        );
         if (!$this->repository->canUser('content', 'read', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'read');
         }
@@ -131,13 +136,12 @@ class TrashService implements TrashServiceInterface
             throw $e;
         }
 
-        // Use sudo as we want a trash item regardless of user access to the trash.
+        // Use internalLoadContent() as we want a trash item regardless of user access to the trash or not.
         try {
             return isset($spiTrashItem)
-                ? $this->repository->sudo(
-                    function () use ($spiTrashItem) {
-                        return $this->buildDomainTrashItemObject($spiTrashItem);
-                    }
+                ? $this->buildDomainTrashItemObject(
+                    $spiTrashItem,
+                    $this->repository->getContentService()->internalLoadContent($spiTrashItem->contentId)
                 )
                 : null;
         } catch (Exception $e) {
@@ -302,15 +306,7 @@ class TrashService implements TrashServiceInterface
             $query->sortClauses
         );
 
-        $trashItems = array();
-        foreach ($spiTrashItems as $spiTrashItem) {
-            try {
-                $trashItems[] = $this->buildDomainTrashItemObject($spiTrashItem);
-            } catch (UnauthorizedException $e) {
-                // Do nothing, thus exclude items the current user doesn't have read access to.
-            }
-        }
-
+        $trashItems = $this->buildDomainTrashItems($spiTrashItems);
         $searchResult = new SearchResult();
         $searchResult->totalCount = $searchResult->count = count($trashItems);
         $searchResult->items = $trashItems;
@@ -318,18 +314,30 @@ class TrashService implements TrashServiceInterface
         return $searchResult;
     }
 
-    /**
-     * Builds the domain TrashItem object from provided persistence trash item.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $spiTrashItem
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
-     */
-    protected function buildDomainTrashItemObject(Trashed $spiTrashItem)
+    protected function buildDomainTrashItems(array $spiTrashItems): array
+    {
+        $trashItems = array();
+        // TODO: load content in bulk once API allows for it
+        foreach ($spiTrashItems as $spiTrashItem) {
+            try {
+                $trashItems[] = $this->buildDomainTrashItemObject(
+                    $spiTrashItem,
+                    $this->repository->getContentService()->loadContent($spiTrashItem->contentId)
+                );
+            } catch (APIUnauthorizedException $e) {
+                // Do nothing, thus exclude items the current user doesn't have read access to.
+            }
+        }
+
+        return $trashItems;
+    }
+
+    protected function buildDomainTrashItemObject(Trashed $spiTrashItem, Content $content): APITrashItem
     {
         return new TrashItem(
             array(
-                'contentInfo' => $this->repository->getContentService()->loadContentInfo($spiTrashItem->contentId),
+                'content' => $content,
+                'contentInfo' => $content->contentInfo,
                 'id' => $spiTrashItem->id,
                 'priority' => $spiTrashItem->priority,
                 'hidden' => $spiTrashItem->hidden,
