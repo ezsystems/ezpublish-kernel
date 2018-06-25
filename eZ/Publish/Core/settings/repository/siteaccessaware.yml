@@ -2,7 +2,7 @@ services:
     ezpublish.siteaccessaware.repository:
         class: eZ\Publish\Core\Repository\SiteAccessAware\Repository
         arguments:
-            - '@ezpublish.api.inner_repository'
+            - '@ezpublish.signalslot.repository'
             - '@ezpublish.siteaccessaware.service.content'
             - '@ezpublish.siteaccessaware.service.content_type'
             - '@ezpublish.siteaccessaware.service.object_state'
