@@ -12,3 +12,6 @@ services:
             - { name: ezpublish.api.slot, signal: \eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationSignal }
 
     notification.signal.event_notification: '@eZ\Publish\Core\Notification\Slot\OnNotificationSlot'
+
+    eZ\Publish\API\Repository\NotificationService:
+        alias: eZ\Publish\Core\SignalSlot\NotificationService

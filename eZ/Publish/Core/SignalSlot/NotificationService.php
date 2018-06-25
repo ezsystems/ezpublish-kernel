@@ -39,7 +39,7 @@ class NotificationService implements NotificationServiceInterface
      */
     public function loadNotifications(int $offset, int $limit): NotificationList
     {
-        return $this->loadNotifications($offset, $limit);
+        return $this->service->loadNotifications($offset, $limit);
     }
 
     /**
@@ -47,7 +47,7 @@ class NotificationService implements NotificationServiceInterface
      */
     public function getNotification(int $notificationId): Notification
     {
-        return $this->getNotification($notificationId);
+        return $this->service->getNotification($notificationId);
     }
 
     /**
@@ -59,7 +59,7 @@ class NotificationService implements NotificationServiceInterface
             'notificationId' => $notification->id,
         ]));
 
-        $this->markNotificationAsRead($notification);
+        $this->service->markNotificationAsRead($notification);
     }
 
     /**
@@ -67,7 +67,7 @@ class NotificationService implements NotificationServiceInterface
      */
     public function getPendingNotificationCount(): int
     {
-        return $this->getPendingNotificationCount();
+        return $this->service->getPendingNotificationCount();
     }
 
     /**
@@ -75,7 +75,7 @@ class NotificationService implements NotificationServiceInterface
      */
     public function getNotificationCount(): int
     {
-        return $this->getNotificationCount();
+        return $this->service->getNotificationCount();
     }
 
     /**
@@ -87,7 +87,7 @@ class NotificationService implements NotificationServiceInterface
             'notificationId' => $notification->id,
         ]));
 
-        $this->deleteNotification($notification);
+        $this->service->deleteNotification($notification);
     }
 
     /**
@@ -101,6 +101,6 @@ class NotificationService implements NotificationServiceInterface
             'data' => $createStruct->data,
         ]));
 
-        return $this->createNotification($createStruct);
+        return $this->service->createNotification($createStruct);
     }
 }
