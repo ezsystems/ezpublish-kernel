@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Notification;
 
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
+use RuntimeException;
 
 class Mapper
 {
@@ -31,6 +32,19 @@ class Mapper
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     */
+    public function createNotificationFromUpdateStruct(UpdateStruct $updateStruct): Notification
+    {
+        $notification = new Notification();
+        $notification->isPending = $updateStruct->isPending;
+
+        return $notification;
+    }
+
+    /**
      * Extract Bookmark object from $row.
      *
      * @param array $row
@@ -44,21 +58,13 @@ class Mapper
         $notification->ownerId = (int)$row['owner_id'];
         $notification->type = $row['type'];
         $notification->created = (int)$row['created'];
-        $notification->isPending = $row['is_pending'];
-        $notification->data = json_decode($row['data']);
-
-        return $notification;
-    }
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
-     */
-    public function createNotificationFromUpdateStruct(UpdateStruct $updateStruct): Notification
-    {
-        $notification = new Notification();
-        $notification->isPending = $updateStruct->isPending;
+        $notification->isPending = (bool) $row['is_pending'];
+        if ($row['data'] !== null) {
+            $notification->data = json_decode($row['data'], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new RuntimeException('Error while decoding notification data: ' . json_last_error_msg());
+            }
+        }
 
         return $notification;
     }
