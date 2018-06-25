@@ -70,5 +70,4 @@ interface Handler
      * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
      */
     public function delete(APINotification $notification): void;
-
 }

@@ -40,7 +40,7 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function loadNotifications(int $offset = 0, int $limit = 25): NotificationList
     {

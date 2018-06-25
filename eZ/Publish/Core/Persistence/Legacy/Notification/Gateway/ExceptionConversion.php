@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Notification\Gateway;
 
 use Doctrine\DBAL\DBALException;
 use eZ\Publish\Core\Persistence\Legacy\Notification\Gateway;
+use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
 use PDOException;
 use RuntimeException;
@@ -33,17 +34,6 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createNotification(Notification $notification): int
-    {
-        try {
-            return $this->innerGateway->createNotification($notification);
-        } catch (DBALException | PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        }
-    }
 
     /**
      * {@inheritdoc}
@@ -100,6 +90,33 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadUserNotifications($userId, $offset, $limit);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Store Notification ValueObject in persistent storage.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Notification\CreateStruct $notification
+     *
+     * @return int
+     */
+    public function insert(CreateStruct $notification): int
+    {
+        try {
+            return $this->innerGateway->insert($notification);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }    }
+
+    /**
+     * @param int $notificationId
+     */
+    public function delete(int $notificationId): void
+    {
+        try {
+            $this->innerGateway->delete($notificationId);
         } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
