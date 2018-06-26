@@ -51,8 +51,7 @@ class NotificationService implements NotificationServiceInterface
         if ($list->totalCount > 0) {
             $list->items = array_map(function (Notification $spiNotification) {
                 return $this->buildDomainObject($spiNotification);
-            }, $this->persistenceHandler->loadUserNotifications($currentUserId, $offset, $limit)
-            );
+            }, $this->persistenceHandler->loadUserNotifications($currentUserId, $offset, $limit));
         }
 
         return $list;
@@ -150,16 +149,14 @@ class NotificationService implements NotificationServiceInterface
      */
     protected function buildDomainObject(Notification $spiNotification): APINotification
     {
-        return new APINotification(
-            array(
-                'id' => $spiNotification->id,
-                'ownerId' => $spiNotification->ownerId,
-                'isPending' => $spiNotification->isPending,
-                'type' => $spiNotification->type,
-                'created' => new DateTime("@{$spiNotification->created}"),
-                'data' => $spiNotification->data,
-            )
-        );
+        return new APINotification([
+            'id' => $spiNotification->id,
+            'ownerId' => $spiNotification->ownerId,
+            'isPending' => $spiNotification->isPending,
+            'type' => $spiNotification->type,
+            'created' => new DateTime("@{$spiNotification->created}"),
+            'data' => $spiNotification->data,
+        ]);
     }
 
     /**
