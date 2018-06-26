@@ -873,7 +873,7 @@ class Repository implements RepositoryInterface
 
         $this->notificationService = new NotificationService(
             $this->persistenceHandler->notificationHandler(),
-            $this
+            $this->getPermissionResolver()
         );
 
         return $this->notificationService;

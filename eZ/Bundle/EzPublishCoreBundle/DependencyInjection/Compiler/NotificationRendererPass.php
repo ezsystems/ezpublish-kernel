@@ -16,6 +16,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class NotificationRendererPass implements CompilerPassInterface
 {
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->has('notification.renderer.registry')) {

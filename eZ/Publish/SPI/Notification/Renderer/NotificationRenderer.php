@@ -12,7 +12,17 @@ use eZ\Publish\API\Repository\Values\Notification\Notification;
 
 interface NotificationRenderer
 {
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     *
+     * @return string
+     */
     public function render(Notification $notification): string;
 
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     *
+     * @return string|null
+     */
     public function generateUrl(Notification $notification): ?string;
 }

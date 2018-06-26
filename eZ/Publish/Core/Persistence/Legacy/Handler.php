@@ -71,6 +71,22 @@ class Handler implements HandlerInterface
     /** @var \eZ\Publish\SPI\Persistence\Notification\Handler */
     protected $notificationHandler;
 
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
+     * @param \eZ\Publish\SPI\Persistence\TransactionHandler $transactionHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler $trashHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler $urlAliasHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler $urlWildcardHandler
+     * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\URL\Handler $urlHandler
+     * @param \eZ\Publish\SPI\Persistence\Bookmark\Handler $bookmarkHandler
+     * @param \eZ\Publish\SPI\Persistence\Notification\Handler $notificationHandler
+     */
     public function __construct(
         ContentHandler $contentHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -163,6 +179,9 @@ class Handler implements HandlerInterface
         return $this->bookmarkHandler;
     }
 
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Notification\Handler
+     */
     public function notificationHandler(): NotificationHandler
     {
         return $this->notificationHandler;

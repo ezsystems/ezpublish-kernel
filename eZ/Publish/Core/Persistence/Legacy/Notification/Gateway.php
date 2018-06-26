@@ -35,8 +35,6 @@ abstract class Gateway
      * Update Notification ValueObject in persistent storage.
      * There's no edit feature but it's essential to mark Notification as read.
      *
-     * @todo
-     *
      * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification*
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException

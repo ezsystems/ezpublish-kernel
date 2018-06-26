@@ -34,11 +34,9 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Store Notification ValueObject in persistent storage.
+     * {@inheritdoc}
      *
-     * @param \eZ\Publish\SPI\Persistence\Notification\CreateStruct $createStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function createNotification(CreateStruct $createStruct): Notification
     {
@@ -48,11 +46,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Count users unread Notifications.
-     *
-     * @param mixed $ownerId
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function countPendingNotifications(int $ownerId): int
     {
@@ -60,11 +54,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Get Notification by its id.
-     *
-     * @param mixed $notificationId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
+     * {@inheritdoc}
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
@@ -82,16 +72,10 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Update Notification ValueObject in persistent storage.
-     * There's no edit feature but it's essential to mark Notification as read.
+     * {@inheritdoc}
      *
-     * @todo
-     *
-     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $apiNotification
-     * @param \eZ\Publish\SPI\Persistence\Notification\UpdateStruct $updateStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function updateNotification(APINotification $apiNotification, UpdateStruct $updateStruct): Notification
     {
@@ -106,9 +90,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @param int $userId
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function countNotifications(int $userId): int
     {
@@ -116,11 +98,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @param int $userId
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return \eZ\Publish\SPI\Persistence\Notification\Notification[]
+     * {@inheritdoc}
      */
     public function loadUserNotifications(int $userId, int $offset, int $limit): array
     {
@@ -130,7 +108,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     * {@inheritdoc}
      */
     public function delete(APINotification $notification): void
     {

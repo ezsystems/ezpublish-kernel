@@ -14,14 +14,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 class NotificationList extends ValueObject implements IteratorAggregate
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $totalCount = 0;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Notification\Notification[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Notification\Notification[] */
     public $items = [];
 
     /**

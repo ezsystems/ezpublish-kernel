@@ -37,11 +37,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Store Notification ValueObject in persistent storage.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Notification\CreateStruct $createStruct
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function insert(CreateStruct $createStruct): int
     {
@@ -67,11 +63,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Get Notification by its id.
-     *
-     * @param int $notificationId
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getNotificationById(int $notificationId): array
     {
@@ -87,14 +79,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Update Notification ValueObject in persistent storage.
-     * There's no edit feature but it's essential to mark Notification as read.
-     *
-     * @todo
-     *
-     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $notification*
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * {@inheritdoc}
      */
     public function updateNotification(Notification $notification): void
     {
@@ -115,9 +100,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * @param int $userId
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function countUserNotifications(int $userId): int
     {
@@ -132,11 +115,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Count users unread Notifications.
-     *
-     * @param int $userId
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function countUserPendingNotifications(int $userId): int
     {
@@ -152,11 +131,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * @param int $userId
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function loadUserNotifications(int $userId, int $offset = 0, int $limit = -1): array
     {
@@ -178,7 +153,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * @param int $notificationId
+     * {@inheritdoc}
      */
     public function delete(int $notificationId): void
     {
@@ -191,6 +166,9 @@ class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
+    /**
+     * @return array
+     */
     private function getColumns(): array
     {
         return [

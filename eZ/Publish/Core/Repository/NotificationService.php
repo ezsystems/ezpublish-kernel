@@ -10,12 +10,12 @@ namespace eZ\Publish\Core\Repository;
 
 use DateTime;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct as APICreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification as APINotification;
 use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Handler;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
@@ -26,17 +26,17 @@ class NotificationService implements NotificationServiceInterface
     /** @var \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler */
     protected $persistenceHandler;
 
-    /** @var \eZ\Publish\API\Repository\Repository $kernelRepository */
-    protected $kernelRepository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver $permissionResolver */
+    protected $permissionResolver;
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler
-     * @param \eZ\Publish\API\Repository\Repository $kernelRepository
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      */
-    public function __construct(Handler $persistenceHandler, Repository $kernelRepository)
+    public function __construct(Handler $persistenceHandler, PermissionResolver $permissionResolver)
     {
         $this->persistenceHandler = $persistenceHandler;
-        $this->kernelRepository = $kernelRepository;
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -59,9 +59,7 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param int $notificationId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Notification\Notification
+     * {@inheritdoc}
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
@@ -79,9 +77,7 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * Mark notification as read so it no longer bother the user.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     * {@inheritdoc}
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
@@ -109,6 +105,9 @@ class NotificationService implements NotificationServiceInterface
         $this->persistenceHandler->updateNotification($notification, $updateStruct);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPendingNotificationCount(): int
     {
         $currentUserId = $this->getCurrentUserId();
@@ -116,6 +115,9 @@ class NotificationService implements NotificationServiceInterface
         return $this->persistenceHandler->countPendingNotifications($currentUserId);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getNotificationCount(): int
     {
         $currentUserId = $this->getCurrentUserId();
@@ -123,19 +125,29 @@ class NotificationService implements NotificationServiceInterface
         return $this->persistenceHandler->countNotifications($currentUserId);
     }
 
+    /**
+     * @return int
+     */
     private function getCurrentUserId(): int
     {
-        return $this->kernelRepository
-            ->getPermissionResolver()
+        return $this->permissionResolver
             ->getCurrentUserReference()
             ->getUserId();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function deleteNotification(APINotification $notification): void
     {
         $this->persistenceHandler->delete($notification);
     }
 
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Notification\Notification $spiNotification
+     *
+     * @return \eZ\Publish\API\Repository\Values\Notification\Notification
+     */
     protected function buildDomainObject(Notification $spiNotification): APINotification
     {
         return new APINotification(
@@ -150,6 +162,11 @@ class NotificationService implements NotificationServiceInterface
         );
     }
 
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Notification\CreateStruct $createStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\Notification\Notification
+     */
     public function createNotification(APICreateStruct $createStruct): APINotification
     {
         $spiCreateStruct = new CreateStruct();

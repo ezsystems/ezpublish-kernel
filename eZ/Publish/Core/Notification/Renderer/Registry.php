@@ -12,6 +12,7 @@ use eZ\Publish\SPI\Notification\Renderer\NotificationRenderer;
 
 class Registry
 {
+    /** @var \eZ\Publish\SPI\Notification\Renderer\NotificationRenderer[]  */
     protected $registry = [];
 
     /**
