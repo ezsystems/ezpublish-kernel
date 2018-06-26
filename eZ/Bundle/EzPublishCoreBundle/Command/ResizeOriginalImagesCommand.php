@@ -27,6 +27,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
 /**
@@ -165,12 +166,30 @@ class ResizeOriginalImagesCommand extends Command
         $totalCount = $this->searchService->findContent($query)->totalCount;
         $query->limit = $iterationCount;
 
-        $output->writeln(
-            sprintf(
-                'Found %d images matching given criteria.',
-                $totalCount
-            )
-        );
+        if ($totalCount > 0) {
+            $output->writeln(
+                sprintf(
+                    '<info>Found %d images matching given criteria.</info>',
+                    $totalCount
+                )
+            );
+        } else {
+            $output->writeln(
+                sprintf(
+                    '<info>No images matching given criteria (ContentType: %s, FieldType %s) found. Exiting.</info>',
+                    $contentTypeIdentifier,
+                    $imageFieldIdentifier
+                )
+            );
+
+            return;
+        }
+
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion('<question>The changes you are going to perform cannot be undone. Please remember to do a proper backup before. Would you like to continue?</question> ', false);
+        if (!$helper->ask($input, $output, $question)) {
+            return;
+        }
 
         $progressBar = new ProgressBar($output, $totalCount);
         $progressBar->start();
@@ -208,6 +227,9 @@ class ResizeOriginalImagesCommand extends Command
         try {
             /** @var Value $field */
             foreach ($hit->valueObject->fields[$imageFieldIdentifier] as $language => $field) {
+                if (null === $field->id) {
+                    continue;
+                }
                 $binaryFile = $this->ioService->loadBinaryFile($field->id);
                 $mimeType = $this->ioService->getMimeType($field->id);
                 $binary = new Binary(
