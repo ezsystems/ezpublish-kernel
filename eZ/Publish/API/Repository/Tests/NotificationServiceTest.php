@@ -73,7 +73,7 @@ class NotificationServiceTest extends BaseTest
         $notification = $notificationService->getNotification($notificationId);
         /* END: Use Case */
 
-        $this->assertEquals(false, $notification->isPending);
+        $this->assertFalse($notification->isPending);
     }
 
     /**
