@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\BookmarkService;
+use eZ\Publish\Core\SignalSlot\NotificationService;
 use eZ\Publish\Core\SignalSlot\Repository;
 use eZ\Publish\Core\Repository\Repository as InnerRepository;
 use eZ\Publish\Core\Repository\Values\User\User;
@@ -53,6 +54,7 @@ class RepositoryTest extends TestCase
         $languageServiceMock = $this->getMockBuilder(LanguageService::class)->disableOriginalConstructor()->getMock();
         $urlServiceMock = $this->getMockBuilder(URLService::class)->disableOriginalConstructor()->getMock();
         $bookmarkServiceMock = $this->getMockBuilder(BookmarkService::class)->disableOriginalConstructor()->getMock();
+        $notificationServiceMock = $this->getMockBuilder(NotificationService::class)->disableOriginalConstructor()->getMock();
 
         $repository = new Repository(
             $innerRepositoryMock,
@@ -71,7 +73,8 @@ class RepositoryTest extends TestCase
             $locationServiceMock,
             $languageServiceMock,
             $urlServiceMock,
-            $bookmarkServiceMock
+            $bookmarkServiceMock,
+            $notificationServiceMock
         );
 
         $service = $repository->{$method}();
@@ -122,6 +125,7 @@ class RepositoryTest extends TestCase
         $languageServiceMock = $this->getMockBuilder(LanguageService::class)->disableOriginalConstructor()->getMock();
         $bookmarkServiceMock = $this->getMockBuilder(BookmarkService::class)->disableOriginalConstructor()->getMock();
         $urlServiceMock = $this->getMockBuilder(URLService::class)->disableOriginalConstructor()->getMock();
+        $notificationServiceMock = $this->getMockBuilder(NotificationService::class)->disableOriginalConstructor()->getMock();
 
         $innerRepositoryMock->expects($this->once())
             ->method($method)
@@ -148,7 +152,8 @@ class RepositoryTest extends TestCase
             $locationServiceMock,
             $languageServiceMock,
             $urlServiceMock,
-            $bookmarkServiceMock
+            $bookmarkServiceMock,
+            $notificationServiceMock
         );
 
         $result = call_user_func_array([$repository, $method], $parameters);

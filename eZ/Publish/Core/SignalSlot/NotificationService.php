@@ -18,7 +18,7 @@ use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationReadSignal
 
 class NotificationService implements NotificationServiceInterface
 {
-    /** @var \eZ\Publish\API\Repository\BookmarkService */
+    /** @var \eZ\Publish\API\Repository\NotificationService */
     protected $service;
 
     /** @var \eZ\Publish\Core\SignalSlot\SignalDispatcher */

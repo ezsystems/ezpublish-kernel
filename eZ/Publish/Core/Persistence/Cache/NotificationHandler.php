@@ -103,10 +103,6 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function countNotifications(int $ownerId): int
     {
-        $this->logger->logCall(__METHOD__, [
-            'ownerId' => $ownerId,
-        ]);
-
         $cacheItem = $this->cache->getItem('ez-notification-count-' . $ownerId);
 
         $count = $cacheItem->get();

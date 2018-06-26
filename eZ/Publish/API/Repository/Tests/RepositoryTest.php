@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use Exception;
+use eZ\Publish\API\Repository\NotificationService;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 
@@ -124,6 +125,22 @@ class RepositoryTest extends BaseTest
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\UserService',
             $repository->getUserService()
+        );
+    }
+
+    /**
+     * Test for the getNotificationService() method.
+     *
+     * @group user
+     *
+     * @see \eZ\Publish\API\Repository\Repository::getNotificationService()
+     */
+    public function testGetNotificationService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            NotificationService::class,
+            $repository->getNotificationService()
         );
     }
 

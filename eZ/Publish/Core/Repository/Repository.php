@@ -194,6 +194,13 @@ class Repository implements RepositoryInterface
     protected $bookmarkService;
 
     /**
+     * Instance of Notification service.
+     *
+     * @var \eZ\Publish\API\Repository\NotificationService
+     */
+    protected $notificationService;
+
+    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -235,9 +242,6 @@ class Repository implements RepositoryInterface
 
     /** @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null */
     protected $backgroundIndexer;
-
-    /** @var \eZ\Publish\API\Repository\NotificationService */
-    protected $notificationService;
 
     /**
      * Constructor.
