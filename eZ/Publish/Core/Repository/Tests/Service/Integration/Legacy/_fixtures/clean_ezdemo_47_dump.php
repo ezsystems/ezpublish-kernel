@@ -11697,17 +11697,17 @@ Country�</literallayout></para></section>
     ),
   'eznotification' => array(
     0 => array(
-        'id' => '1',
-        'owner_id' => '14',
-        'is_pending' => true,
+        'id' => 1,
+        'owner_id' => 14,
+        'is_pending' => 1,
         'type' => 'Workflow:Review',
-        'created' => '1529995052',
+        'created' => 1529995052,
         'data' => null
     ),
     1 => array(
         'id' => '2',
         'owner_id' => '14',
-        'is_pending' => false,
+        'is_pending' => 0,
         'type' => 'Workflow:Approve',
         'created' => '1529998652',
         'data' => null
@@ -11715,34 +11715,34 @@ Country�</literallayout></para></section>
     2 => array(
         'id' => '3',
         'owner_id' => '14',
-        'is_pending' => false,
+        'is_pending' => 0,
         'type' => 'Workflow:Reject',
         'created' => '1530002252',
         'data' => null
-      ),
-      3 => array(
+    ),
+    3 => array(
         'id' => '4',
         'owner_id' => '14',
-        'is_pending' => true,
+        'is_pending' => 1,
         'type' => 'Workflow:Review',
         'created' => '1530005852',
         'data' => null
-      ),
-      4 => array(
+    ),
+    4 => array(
         'id' => '5',
         'owner_id' => '14',
-        'is_pending' => true,
+        'is_pending' => 1,
         'type' => 'Workflow:Review',
         'created' => '1530009452',
         'data' => null
-      ),
-      5 => array(
+    ),
+    5 => array(
         'id' => '6',
         'owner_id' => '10',
-        'is_pending' => false,
+        'is_pending' => 0,
         'type' => 'Workflow:Review',
         'created' => '1530009452',
         'data' => null
-      ),
-    )
+    ),
+  )
 );

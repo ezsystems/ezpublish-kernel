@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Tests;
+
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
@@ -122,7 +123,8 @@ class NotificationServiceTest extends BaseTest
         try {
             $notificationService->getNotification($notificationId);
             $this->fail('Notification ' . $notificationId . ' not deleted.');
-        } catch (NotFoundException $e) {}
+        } catch (NotFoundException $e) {
+        }
     }
 
     /**
@@ -142,8 +144,8 @@ class NotificationServiceTest extends BaseTest
             'data' => [
                 'foo' => 'Foo',
                 'bar' => 'Bar',
-                'baz' => 'Baz'
-            ]
+                'baz' => 'Baz',
+            ],
         ]);
 
         $notification = $notificationService->createNotification($createStruct);
