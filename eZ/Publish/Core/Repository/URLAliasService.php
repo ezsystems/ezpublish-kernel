@@ -302,26 +302,25 @@ class URLAliasService implements URLAliasServiceInterface
         $prioritizedLanguageList
     ) {
         $pathData = array();
-        $pathLevels = count($spiUrlAlias->pathData);
 
         foreach ($spiUrlAlias->pathData as $level => $levelEntries) {
-            if ($level === $pathLevels - 1) {
-                $prioritizedLanguageCode = $this->selectAliasLanguageCode(
-                    $spiUrlAlias,
-                    $languageCode,
-                    $showAllTranslations,
-                    $prioritizedLanguageList
-                );
-            } else {
+            $prioritizedLanguageCode = $this->selectAliasLanguageCode(
+                $spiUrlAlias,
+                $languageCode,
+                $showAllTranslations,
+                $prioritizedLanguageList
+            );
+
+            if ($prioritizedLanguageCode === false) {
+                return false;
+            }
+
+            if (!isset($levelEntries['translations'][$prioritizedLanguageCode])) {
                 $prioritizedLanguageCode = $this->choosePrioritizedLanguageCode(
                     $levelEntries,
                     $showAllTranslations,
                     $prioritizedLanguageList
                 );
-            }
-
-            if ($prioritizedLanguageCode === false) {
-                return false;
             }
 
             $pathData[$level] = $levelEntries['translations'][$prioritizedLanguageCode];
