@@ -260,3 +260,4 @@ services:
         autoconfigure: true
         arguments:
             $ioService: '@ezpublish.fieldType.ezimage.io_service.published'
+            $imagine: '@liip_imagine'

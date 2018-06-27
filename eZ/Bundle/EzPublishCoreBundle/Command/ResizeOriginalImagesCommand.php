@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
-use Exception;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\SearchService;
@@ -17,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\Image\Value;
 use eZ\Publish\Core\IO\IOServiceInterface;
+use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -29,9 +31,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
+use Exception;
 
 /**
- * This command resizes original images stored in ezimage FieldType in given ContentType using the selected variation.
+ * This command resizes original images stored in ezimage FieldType in given ContentType using the selected filter.
  */
 class ResizeOriginalImagesCommand extends Command
 {
@@ -54,6 +57,11 @@ class ResizeOriginalImagesCommand extends Command
     private $contentTypeService;
 
     /**
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    private $contentService;
+
+    /**
      * @var \eZ\Publish\API\Repository\SearchService
      */
     private $searchService;
@@ -72,23 +80,31 @@ class ResizeOriginalImagesCommand extends Command
      * @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface
      */
     private $extensionGuesser;
+    /**
+     * @var \Imagine\Image\ImagineInterface
+     */
+    private $imagine;
 
     public function __construct(
         PermissionResolver $permissionResolver,
         UserService $userService,
         ContentTypeService $contentTypeService,
+        ContentService $contentService,
         SearchService $searchService,
         FilterManager $filterManager,
         IOServiceInterface $ioService,
-        ExtensionGuesserInterface $extensionGuesser
+        ExtensionGuesserInterface $extensionGuesser,
+        ImagineInterface $imagine
     ) {
         $this->permissionResolver = $permissionResolver;
         $this->userService = $userService;
         $this->contentTypeService = $contentTypeService;
+        $this->contentService = $contentService;
         $this->searchService = $searchService;
         $this->filterManager = $filterManager;
         $this->ioService = $ioService;
         $this->extensionGuesser = $extensionGuesser;
+        $this->imagine = $imagine;
 
         parent::__construct();
     }
@@ -110,13 +126,23 @@ class ResizeOriginalImagesCommand extends Command
                     'Indentifier of ContentType which has ezimage FieldType.'),
                 new InputArgument('imageFieldIdentifier', InputArgument::REQUIRED,
                     'Identifier of field of ezimage type.'),
-                new InputArgument('variation', InputArgument::OPTIONAL,
-                    'Variation which will be used for original images.', 'original'),
-                new InputArgument('iteration-count', InputArgument::OPTIONAL,
-                    'Iteration count. Number of images to be recreated in a single iteration, for avoiding using too much memory.',
-                    self::DEFAULT_ITERATION_COUNT),
             ]
-        )->addOption(
+        )
+        ->addOption(
+            'iteration-count',
+            'i',
+            InputOption::VALUE_OPTIONAL,
+            'Iteration count. Number of images to be recreated in a single iteration, for avoiding using too much memory.',
+            self::DEFAULT_ITERATION_COUNT
+        )
+        ->addOption(
+            'filter',
+            'f',
+            InputOption::VALUE_OPTIONAL,
+            'Filter which will be used for original images.',
+            IORepositoryResolver::VARIATION_ORIGINAL
+        )
+        ->addOption(
             'user',
             'u',
             InputOption::VALUE_OPTIONAL,
@@ -129,8 +155,8 @@ class ResizeOriginalImagesCommand extends Command
     {
         $contentTypeIdentifier = $input->getArgument('contentTypeIdentifier');
         $imageFieldIdentifier = $input->getArgument('imageFieldIdentifier');
-        $variation = $input->getArgument('variation');
-        $iterationCount = (int)$input->getArgument('iteration-count');
+        $filter = $input->getOption('filter');
+        $iterationCount = (int)$input->getOption('iteration-count');
 
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
         $fieldType = $contentType->getFieldDefinition($imageFieldIdentifier);
@@ -148,7 +174,7 @@ class ResizeOriginalImagesCommand extends Command
         }
 
         try {
-            $this->filterManager->getFilterConfiguration()->get($variation);
+            $this->filterManager->getFilterConfiguration()->get($filter);
         } catch (NonExistingFilterException $e) {
             $output->writeln(
                 sprintf(
@@ -199,7 +225,7 @@ class ResizeOriginalImagesCommand extends Command
 
             /** @var SearchHit $hit */
             foreach ($results->searchHits as $hit) {
-                $this->resize($output, $hit, $imageFieldIdentifier, $variation);
+                $this->resize($output, $hit, $imageFieldIdentifier, $filter);
                 $progressBar->advance();
             }
 
@@ -210,8 +236,8 @@ class ResizeOriginalImagesCommand extends Command
         $output->writeln('');
         $output->writeln(
             sprintf(
-                "<info>All images have been successfully resized using '%s' variation.</info>",
-                $variation
+                "<info>All images have been successfully resized using '%s' filter.</info>",
+                $filter
             )
         );
     }
@@ -220,9 +246,9 @@ class ResizeOriginalImagesCommand extends Command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchHit $hit
      * @param string $imageFieldIdentifier
-     * @param string $variation
+     * @param string $filter
      */
-    private function resize(OutputInterface $output, SearchHit $hit, string $imageFieldIdentifier, string $variation)
+    private function resize(OutputInterface $output, SearchHit $hit, string $imageFieldIdentifier, string $filter)
     {
         try {
             /** @var Value $field */
@@ -238,8 +264,25 @@ class ResizeOriginalImagesCommand extends Command
                     $this->extensionGuesser->guess($mimeType)
                 );
 
-                $recreated = $this->filterManager->applyFilter($binary, $variation);
-                $this->store($recreated, $field);
+                $resizedImageBinary = $this->filterManager->applyFilter($binary, $filter);
+                $newBinaryFile = $this->store($resizedImageBinary, $field);
+                $image = $this->imagine->load($this->ioService->getFileContents($newBinaryFile));
+                $dimensions = $image->getSize();
+
+                $contentDraft = $this->contentService->createContentDraft($hit->valueObject->getVersionInfo()->getContentInfo(), $hit->valueObject->getVersionInfo());
+                $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
+                $contentUpdateStruct->setField($imageFieldIdentifier, array(
+                    'id' => $field->id,
+                    'alternativeText' => $field->alternativeText,
+                    'fileName' => $field->fileName,
+                    'fileSize' => $newBinaryFile->size,
+                    'imageId' => $field->imageId,
+                    'width' => $dimensions->getWidth(),
+                    'height' => $dimensions->getHeight(),
+                ));
+                $contentDraft = $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+                $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+                $this->contentService->publishVersion($contentDraft->versionInfo);
             }
         } catch (Exception $e) {
             $output->writeln(
@@ -262,6 +305,8 @@ class ResizeOriginalImagesCommand extends Command
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     *
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile
      */
     private function store(BinaryInterface $binary, Value $image)
     {
@@ -270,7 +315,9 @@ class ResizeOriginalImagesCommand extends Command
         $tmpMetadata = stream_get_meta_data($tmpFile);
         $binaryCreateStruct = $this->ioService->newBinaryCreateStructFromLocalFile($tmpMetadata['uri']);
         $binaryCreateStruct->id = $image->id;
-        $this->ioService->createBinaryFile($binaryCreateStruct);
+        $newBinaryFile = $this->ioService->createBinaryFile($binaryCreateStruct);
         fclose($tmpFile);
+
+        return $newBinaryFile;
     }
 }
