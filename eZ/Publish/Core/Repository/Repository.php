@@ -21,6 +21,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Exception;
 use RuntimeException;
+use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 
 /**
  * Repository class.
@@ -193,6 +194,13 @@ class Repository implements RepositoryInterface
     protected $bookmarkService;
 
     /**
+     * Instance of Notification service.
+     *
+     * @var \eZ\Publish\API\Repository\NotificationService
+     */
+    protected $notificationService;
+
+    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -232,9 +240,7 @@ class Repository implements RepositoryInterface
      */
     protected $permissionsHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null
-     */
+    /** @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null */
     protected $backgroundIndexer;
 
     /**
@@ -858,6 +864,23 @@ class Repository implements RepositoryInterface
         );
 
         return $this->nameSchemaService;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\NotificationService
+     */
+    public function getNotificationService(): NotificationServiceInterface
+    {
+        if (null !== $this->notificationService) {
+            return $this->notificationService;
+        }
+
+        $this->notificationService = new NotificationService(
+            $this->persistenceHandler->notificationHandler(),
+            $this->getPermissionResolver()
+        );
+
+        return $this->notificationService;
     }
 
     /**

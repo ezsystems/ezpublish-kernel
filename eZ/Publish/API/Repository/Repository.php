@@ -213,6 +213,13 @@ interface Repository
     public function getBookmarkService();
 
     /**
+     * Get NotificationService.
+     *
+     * @return \eZ\Publish\API\Repository\NotificationService
+     */
+    public function getNotificationService();
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,

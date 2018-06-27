@@ -63,3 +63,7 @@ services:
     ezpublish.api.service.url:
         alias: ezpublish.signalslot.service.url
         public: true
+
+    ezpublish.api.service.notification:
+        alias: eZ\Publish\Core\SignalSlot\NotificationService
+        public: true

@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
+use eZ\Publish\Core\Persistence\Cache\NotificationHandler as CacheNotificationHandler;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -82,8 +83,8 @@ abstract class AbstractBaseHandlerTest extends TestCase
             new CacheObjectStateHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheBookmarkHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
-            $this->loggerMock,
-            $this->cacheMock
+            new CacheNotificationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            $this->loggerMock
         );
 
         $this->cacheItemsClosure = \Closure::bind(

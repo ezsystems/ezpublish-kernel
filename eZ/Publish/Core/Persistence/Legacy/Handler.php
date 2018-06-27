@@ -22,77 +22,71 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use eZ\Publish\SPI\Persistence\TransactionHandler as SPITransactionHandler;
 use eZ\Publish\Core\Persistence\Legacy\URL\Handler as UrlHandler;
 use eZ\Publish\SPI\Persistence\Bookmark\Handler as BookmarkHandler;
+use eZ\Publish\SPI\Persistence\Notification\Handler as NotificationHandler;
 
 /**
  * The main handler for Legacy Storage Engine.
  */
 class Handler implements HandlerInterface
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     protected $contentHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
     protected $languageHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
     protected $locationHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler */
     protected $objectStateHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Section\Handler */
     protected $sectionHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\TransactionHandler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\TransactionHandler */
     protected $transactionHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler */
     protected $trashHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler */
     protected $urlAliasHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler */
     protected $urlWildcardHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\User\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\User\Handler */
     protected $userHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\URL\Handler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\URL\Handler */
     protected $urlHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Bookmark\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Bookmark\Handler */
     protected $bookmarkHandler;
 
+    /** @var \eZ\Publish\SPI\Persistence\Notification\Handler */
+    protected $notificationHandler;
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
+     * @param \eZ\Publish\SPI\Persistence\TransactionHandler $transactionHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler $trashHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler $urlAliasHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler $urlWildcardHandler
+     * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\URL\Handler $urlHandler
+     * @param \eZ\Publish\SPI\Persistence\Bookmark\Handler $bookmarkHandler
+     * @param \eZ\Publish\SPI\Persistence\Notification\Handler $notificationHandler
+     */
     public function __construct(
         ContentHandler $contentHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -106,7 +100,8 @@ class Handler implements HandlerInterface
         UrlWildcardHandler $urlWildcardHandler,
         UserHandler $userHandler,
         UrlHandler $urlHandler,
-        BookmarkHandler $bookmarkHandler
+        BookmarkHandler $bookmarkHandler,
+        NotificationHandler $notificationHandler
     ) {
         $this->contentHandler = $contentHandler;
         $this->contentTypeHandler = $contentTypeHandler;
@@ -121,6 +116,7 @@ class Handler implements HandlerInterface
         $this->userHandler = $userHandler;
         $this->urlHandler = $urlHandler;
         $this->bookmarkHandler = $bookmarkHandler;
+        $this->notificationHandler = $notificationHandler;
     }
 
     public function contentHandler()
@@ -181,6 +177,14 @@ class Handler implements HandlerInterface
     public function bookmarkHandler()
     {
         return $this->bookmarkHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Notification\Handler
+     */
+    public function notificationHandler(): NotificationHandler
+    {
+        return $this->notificationHandler;
     }
 
     /**

@@ -53,6 +53,7 @@
             <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/FieldTypeServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/BookmarkServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/NotificationServiceTest.php</file>
             <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
         </testsuite>

@@ -1,0 +1,19 @@
+services:
+    eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+
+    eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\ExceptionConversion:
+        arguments:
+            $innerGateway: '@eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase'
+
+    eZ\Publish\Core\Persistence\Legacy\Notification\Mapper: ~
+
+    eZ\Publish\Core\Persistence\Legacy\Notification\Handler:
+        arguments:
+            $gateway: '@eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\ExceptionConversion'
+            $mapper: '@eZ\Publish\Core\Persistence\Legacy\Notification\Mapper'
+        lazy: true
+
+    ezpublish.spi.persistence.legacy.notification.handler:
+        alias: 'eZ\Publish\Core\Persistence\Legacy\Notification\Handler'

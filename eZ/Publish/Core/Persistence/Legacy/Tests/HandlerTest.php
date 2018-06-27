@@ -227,6 +227,19 @@ class HandlerTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::notificationHandler()
+     */
+    public function testNotificationHandlerTwice()
+    {
+        $handler = $this->getHandlerFixture();
+
+        $this->assertSame(
+            $handler->notificationHandler(),
+            $handler->notificationHandler()
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
      */
     public function testTransactionHandler()

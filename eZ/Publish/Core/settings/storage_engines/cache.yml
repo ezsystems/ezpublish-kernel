@@ -18,6 +18,7 @@ parameters:
     ezpublish.spi.persistence.cache.objectStateHandler.class: eZ\Publish\Core\Persistence\Cache\ObjectStateHandler
     ezpublish.spi.persistence.cache.urlHandler.class: eZ\Publish\Core\Persistence\Cache\URLHandler
     ezpublish.spi.persistence.cache.bookmarkHandler.class: eZ\Publish\Core\Persistence\Cache\BookmarkHandler
+    ezpublish.spi.persistence.cache.notificationHandler.class: eZ\Publish\Core\Persistence\Cache\NotificationHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"
@@ -94,6 +95,10 @@ services:
         class: "%ezpublish.spi.persistence.cache.bookmarkHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
+    ezpublish.spi.persistence.cache.notificationHandler:
+        class: "%ezpublish.spi.persistence.cache.notificationHandler.class%"
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
     ezpublish.spi.persistence.cache:
         class: "%ezpublish.spi.persistence.cache.class%"
         arguments:
@@ -110,4 +115,5 @@ services:
             - "@ezpublish.spi.persistence.cache.objectStateHandler"
             - "@ezpublish.spi.persistence.cache.urlHandler"
             - "@ezpublish.spi.persistence.cache.bookmarkHandler"
+            - '@ezpublish.spi.persistence.cache.notificationHandler'
             - "@ezpublish.spi.persistence.cache.persistenceLogger"

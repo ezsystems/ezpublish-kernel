@@ -482,6 +482,16 @@ CREATE TABLE ezkeyword_attribute_link (
   objectattribute_id integer DEFAULT 0 NOT NULL
 );
 
+DROP TABLE IF EXISTS eznotification;
+CREATE TABLE eznotification (
+    id SERIAL,
+    owner_id integer DEFAULT 0 NOT NULL ,
+    is_pending integer DEFAULT 1 NOT NULL,
+    type character varying(128) NOT NULL,
+    created integer DEFAULT 0 NOT NULL,
+    data text
+);
+
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
@@ -668,6 +678,10 @@ CREATE INDEX ezcontentbrowsebookmark_location ON ezcontentbrowsebookmark USING b
 
 CREATE INDEX ezcontentbrowsebookmark_user_location ON ezcontentbrowsebookmark USING btree (user_id, node_id);
 
+CREATE INDEX eznotification_owner_id ON eznotification USING btree (owner_id);
+
+CREATE INDEX eznotification_owner_id_is_pending ON eznotification USING btree (owner_id, is_pending);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -796,6 +810,9 @@ ALTER TABLE ONLY ezkeyword_attribute_link
 
 ALTER TABLE ONLY ezcontentbrowsebookmark
     ADD CONSTRAINT ezcontentbrowsebookmark_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY eznotification
+  ADD CONSTRAINT eznotification_pkey PRIMARY KEY (id);
 
 ALTER TABLE ezcontentbrowsebookmark
 ADD CONSTRAINT ezcontentbrowsebookmark_location_fk

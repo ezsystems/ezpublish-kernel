@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Persistence;
 
+use eZ\Publish\SPI\Persistence\Notification\Handler as NotificationHandler;
+
 /**
  * The main handler for Storage Engine.
  */
@@ -72,6 +74,11 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Bookmark\Handler
      */
     public function bookmarkHandler();
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Notification\Handler
+     */
+    public function notificationHandler();
 
     /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler

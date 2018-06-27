@@ -350,6 +350,7 @@ class EzPublishCoreExtension extends Extension
         $coreLoader->load('utils.yml');
         $coreLoader->load('io.yml');
         $coreLoader->load('policies.yml');
+        $coreLoader->load('notification.yml');
 
         // Public API services
         $loader->load('papi.yml');
