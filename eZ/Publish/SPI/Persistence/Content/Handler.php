@@ -68,6 +68,21 @@ interface Handler
     public function load($id, $version, array $translations = null);
 
     /**
+     * Return list of unique Content, with content id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * NOTE: Even if LoadStruct technically allows to load several versions of same content, this method does not allow
+     * this by design as content is returned as Map with key being content id.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\LoadStruct[] $contentLoadStructs
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content[<int>]
+     */
+    public function loadContentList(array $contentLoadStructs): array;
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId

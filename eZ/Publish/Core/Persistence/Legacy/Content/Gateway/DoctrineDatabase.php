@@ -827,29 +827,122 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $contentId
      * @param mixed $version
-     * @param string[] $translations
+     * @param string[]|null $translations
      *
      * @return array
      */
     public function load($contentId, $version, array $translations = null)
     {
-        $query = $this->queryBuilder->createFindQuery($translations);
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-                    $query->bindValue($contentId)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version'),
-                    $query->bindValue($version)
-                )
-            )
-        );
-        $statement = $query->prepare();
-        $statement->execute();
+        $results = $this->internalLoadContent([
+            ['id' => $contentId, 'version' => $version, 'languages' => $translations],
+        ]);
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    /**
+     * Loads current version for a list of content objects.
+     *
+     * @param array[] $IdVersionTranslationPairs Hashes with 'id', optionally 'version', & optionally 'languages'
+     *                If version is not set current version will be loaded, if languages is not set ALL will be loaded.
+     *
+     * @return array[]
+     */
+    public function loadContentList(array $IdVersionTranslationPairs): array
+    {
+        return $this->internalLoadContent($IdVersionTranslationPairs);
+    }
+
+    /**
+     * @see load(), loadContentList()
+     *
+     * @param array[] $IdVersionTranslationPairs Hashes with 'id', optionally 'version', & optionally 'languages'
+     *                If version is not set current version will be loaded, if languages is not set ALL will be loaded.
+     *
+     * @return array
+     */
+    private function internalLoadContent(array $IdVersionTranslationPairs): array
+    {
+        $q = $this->connection->createQueryBuilder();
+        $q
+            ->select(
+                'c.id AS ezcontentobject_id',
+                'c.contentclass_id AS ezcontentobject_contentclass_id',
+                'c.section_id AS ezcontentobject_section_id',
+                'c.owner_id AS ezcontentobject_owner_id',
+                'c.remote_id AS ezcontentobject_remote_id',
+                'c.current_version AS ezcontentobject_current_version',
+                'c.initial_language_id AS ezcontentobject_initial_language_id',
+                'c.modified AS ezcontentobject_modified',
+                'c.published AS ezcontentobject_published',
+                'c.status AS ezcontentobject_status',
+                'c.name AS ezcontentobject_name',
+                'c.language_mask AS ezcontentobject_language_mask',
+                'v.id AS ezcontentobject_version_id',
+                'v.version AS ezcontentobject_version_version',
+                'v.modified AS ezcontentobject_version_modified',
+                'v.creator_id AS ezcontentobject_version_creator_id',
+                'v.created AS ezcontentobject_version_created',
+                'v.status AS ezcontentobject_version_status',
+                'v.language_mask AS ezcontentobject_version_language_mask',
+                'v.initial_language_id AS ezcontentobject_version_initial_language_id',
+                'a.id AS ezcontentobject_attribute_id',
+                'a.contentclassattribute_id AS ezcontentobject_attribute_contentclassattribute_id',
+                'a.data_type_string AS ezcontentobject_attribute_data_type_string',
+                'a.language_code AS ezcontentobject_attribute_language_code',
+                'a.language_id AS ezcontentobject_attribute_language_id',
+                'a.data_float AS ezcontentobject_attribute_data_float',
+                'a.data_int AS ezcontentobject_attribute_data_int',
+                'a.data_text AS ezcontentobject_attribute_data_text',
+                'a.sort_key_int AS ezcontentobject_attribute_sort_key_int',
+                'a.sort_key_string AS ezcontentobject_attribute_sort_key_string',
+                't.main_node_id AS ezcontentobject_tree_main_node_id'
+            )
+            ->from('ezcontentobject', 'c')
+            ->innerJoin(
+                'c',
+                'ezcontentobject_version',
+                'v',
+                'c.id = v.contentobject_id'
+            )
+            ->innerJoin(
+                'v',
+                'ezcontentobject_attribute',
+                'a',
+                'v.contentobject_id = a.contentobject_id AND v.version = a.version'
+            )
+            ->leftJoin(
+                'c',
+                'ezcontentobject_tree',
+                't',
+                'c.id = t.contentobject_id AND t.node_id = t.main_node_id'
+            );
+
+        $where = [];
+        $expr = $q->expr();
+        foreach ($IdVersionTranslationPairs as $IdVersionTranslation) {
+            $clauses = [
+                $expr->eq('c.id', $q->createNamedParameter($IdVersionTranslation['id'], PDO::PARAM_INT)),
+                empty($IdVersionTranslation['version']) ?
+                    $expr->eq('v.version', 'c.current_version') :
+                    $expr->eq('v.version', $q->createNamedParameter($IdVersionTranslation['version'], PDO::PARAM_INT)),
+            ];
+
+            if (!empty($IdVersionTranslation['languages'])) {
+                $clauses[] = $expr->in(
+                    'a.language_code',
+                    $q->createNamedParameter($IdVersionTranslation['languages'], Connection::PARAM_STR_ARRAY)
+                );
+            }
+
+            $where[] = $expr->andX(...$clauses);
+        }
+
+        $q->where(
+            $expr->orX(...$where)
+        );
+
+        return $q->execute()->fetchAll();
     }
 
     /**

@@ -321,10 +321,53 @@ class Handler implements BaseContentHandler
             $this->contentGateway->loadVersionedNameData(array(array('id' => $id, 'version' => $version)))
         );
         $content = $contentObjects[0];
+        unset($rows, $contentObjects);
 
         $this->fieldHandler->loadExternalFieldData($content);
 
         return $content;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $contentLoadStructs): array
+    {
+        $idVersionTranslationPairs = [];
+        foreach ($contentLoadStructs as $struct) {
+            $idVersionTranslationPairs[] = [
+                'id' => $struct->id,
+                'version' => $struct->versionNo,
+                'languages' => $struct->languages,
+            ];
+        }
+
+        $rawList = $this->contentGateway->loadContentList($idVersionTranslationPairs);
+        if (empty($rawList)) {
+            return [];
+        }
+
+        $idVersionPairs = [];
+        foreach ($rawList as $row) {
+            $idVersionPairs[] = [
+                'id' => $row['ezcontentobject_id'],
+                'version' => $row['ezcontentobject_version_version'],
+            ];
+        }
+
+        $contentObjects = $this->mapper->extractContentFromRows(
+            $rawList,
+            $this->contentGateway->loadVersionedNameData($idVersionPairs)
+        );
+        unset($rawList, $idVersionPairs, $idVersionTranslationPairs);
+
+        $result = [];
+        foreach ($contentObjects as $content) {
+            $this->fieldHandler->loadExternalFieldData($content);
+            $result[$content->versionInfo->contentInfo->id] = $content;
+        }
+
+        return $result;
     }
 
     /**
