@@ -50,22 +50,20 @@ class HandlerTest extends TestCase
             'created' => 0,
         ]);
 
-        $notification = new Notification([
-            'id' => self::NOTIFICATION_ID,
-            'ownerId' => 5,
-            'type' => 'TEST',
-            'isPending' => true,
-            'data' => [],
-            'created' => 0,
-        ]);
-
         $this->gateway
             ->expects($this->once())
             ->method('insert')
             ->with($createStruct)
             ->willReturn(self::NOTIFICATION_ID);
 
-        $this->handler->createNotification($createStruct);
+        $this->mapper
+            ->expects($this->once())
+            ->method('extractNotificationsFromRows')
+            ->willReturn([new Notification([
+                'id' => self::NOTIFICATION_ID
+            ])]);
+
+        $notification = $this->handler->createNotification($createStruct);
 
         $this->assertEquals($notification->id, self::NOTIFICATION_ID);
     }
@@ -148,6 +146,13 @@ class HandlerTest extends TestCase
             ->expects($this->once())
             ->method('updateNotification')
             ->with($spiNotification);
+
+        $this->mapper
+            ->expects($this->once())
+            ->method('extractNotificationsFromRows')
+            ->willReturn([new Notification([
+                'id' => self::NOTIFICATION_ID
+            ])]);
 
         $this->handler->updateNotification($apiNotification, $updateStruct);
     }
