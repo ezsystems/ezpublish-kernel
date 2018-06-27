@@ -13,6 +13,7 @@ services:
             - '@ezpublish.siteaccessaware.service.trash'
             - '@ezpublish.siteaccessaware.service.location'
             - '@ezpublish.siteaccessaware.service.language'
+            - '@ezpublish.siteaccessaware.service.notification'
 
 
     ezpublish.siteaccessaware.service.content:
@@ -72,6 +73,11 @@ services:
         class: eZ\Publish\Core\Repository\SiteAccessAware\LanguageService
         arguments:
             - '@ezpublish.signalslot.service.language'
+
+    ezpublish.siteaccessaware.service.notification:
+        class: eZ\Publish\Core\Repository\SiteAccessAware\NotificationService
+        arguments:
+            - '@eZ\Publish\Core\SignalSlot\NotificationService'
 
     # Helpers
     ezpublish.helper.language_resolver:
