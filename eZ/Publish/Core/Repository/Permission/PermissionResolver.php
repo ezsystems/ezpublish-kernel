@@ -16,6 +16,7 @@ use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
+use Closure;
 use Exception;
 
 /**
@@ -265,7 +266,7 @@ class PermissionResolver implements PermissionResolverInterface
      *
      * @return mixed
      */
-    public function sudo(\Closure $callback, RepositoryInterface $outerRepository)
+    public function sudo(Closure $callback, RepositoryInterface $outerRepository)
     {
         ++$this->sudoNestingLevel;
         try {

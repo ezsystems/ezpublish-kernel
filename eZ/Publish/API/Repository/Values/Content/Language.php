@@ -21,6 +21,11 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class Language extends ValueObject
 {
     /**
+     * Constant for use in API's to specify that you want to load all languages.
+     */
+    const ALL = [];
+
+    /**
      * The language id (auto generated).
      *
      * @var mixed

@@ -338,6 +338,7 @@ class EzPublishCoreExtension extends Extension
         $coreLoader->load('repository.yml');
         $coreLoader->load('repository/inner.yml');
         $coreLoader->load('repository/signalslot.yml');
+        $coreLoader->load('repository/siteaccessaware.yml');
         $coreLoader->load('fieldtype_external_storages.yml');
         $coreLoader->load('fieldtypes.yml');
         $coreLoader->load('indexable_fieldtypes.yml');

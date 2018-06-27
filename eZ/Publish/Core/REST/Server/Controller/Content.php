@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
@@ -78,7 +79,7 @@ class Content extends RestController
         $contentVersion = null;
         $relations = null;
         if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
-            $languages = null;
+            $languages = Language::ALL;
             if ($request->query->has('languages')) {
                 $languages = explode(',', $request->query->get('languages'));
             }
@@ -188,7 +189,7 @@ class Content extends RestController
      */
     public function loadContentInVersion($contentId, $versionNumber, Request $request)
     {
-        $languages = null;
+        $languages = Language::ALL;
         if ($request->query->has('languages')) {
             $languages = explode(',', $request->query->get('languages'));
         }

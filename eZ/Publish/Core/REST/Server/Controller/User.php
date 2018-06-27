@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
@@ -156,7 +157,8 @@ class User extends RestController
         }
 
         $userGroup = $this->userService->loadUserGroup(
-            $userGroupLocation->contentId
+            $userGroupLocation->contentId,
+            Language::ALL
         );
         $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
         $contentType = $this->contentTypeService->loadContentType($userGroupContentInfo->contentTypeId);
@@ -182,7 +184,7 @@ class User extends RestController
      */
     public function loadUser($userId)
     {
-        $user = $this->userService->loadUser($userId);
+        $user = $this->userService->loadUser($userId, Language::ALL);
 
         $userContentInfo = $user->getVersionInfo()->getContentInfo();
         $contentType = $this->contentTypeService->loadContentType($userContentInfo->contentTypeId);
@@ -472,18 +474,19 @@ class User extends RestController
                 $restUsers = array(
                     $this->buildRestUserObject(
                         $this->userService->loadUser(
-                            $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id
+                            $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id,
+                            Language::ALL
                         )
                     ),
                 );
             } elseif ($request->query->has('login')) {
                 $restUsers = array(
                     $this->buildRestUserObject(
-                        $this->userService->loadUserByLogin($request->query->get('login'))
+                        $this->userService->loadUserByLogin($request->query->get('login'), Language::ALL)
                     ),
                 );
             } elseif ($request->query->has('email')) {
-                foreach ($this->userService->loadUsersByEmail($request->query->get('email')) as $user) {
+                foreach ($this->userService->loadUsersByEmail($request->query->get('email'), Language::ALL) as $user) {
                     $restUsers[] = $this->buildRestUserObject($user);
                 }
             }
@@ -556,7 +559,7 @@ class User extends RestController
     {
         $restUserGroups = array();
         if ($request->query->has('id')) {
-            $userGroup = $this->userService->loadUserGroup($request->query->get('id'));
+            $userGroup = $this->userService->loadUserGroup($request->query->get('id'), Language::ALL);
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupMainLocation = $this->locationService->loadLocation($userGroupContentInfo->mainLocationId);
             $contentType = $this->contentTypeService->loadContentType($userGroupContentInfo->contentTypeId);
@@ -593,7 +596,7 @@ class User extends RestController
     public function loadUserGroupByRemoteId(Request $request)
     {
         $contentInfo = $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'));
-        $userGroup = $this->userService->loadUserGroup($contentInfo->id);
+        $userGroup = $this->userService->loadUserGroup($contentInfo->id, Language::ALL);
         $userGroupLocation = $this->locationService->loadLocation($contentInfo->mainLocationId);
         $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
 
@@ -729,7 +732,8 @@ class User extends RestController
         $subGroups = $this->userService->loadSubUserGroups(
             $userGroup,
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : 25
+            $limit >= 0 ? $limit : 25,
+            Language::ALL
         );
 
         $restUserGroups = array();
@@ -778,7 +782,8 @@ class User extends RestController
         $userGroups = $this->userService->loadUserGroupsOfUser(
             $user,
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : 25
+            $limit >= 0 ? $limit : 25,
+            Language::ALL
         );
 
         $restUserGroups = array();
@@ -825,7 +830,8 @@ class User extends RestController
         $users = $this->userService->loadUsersOfUserGroup(
             $userGroup,
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : 25
+            $limit >= 0 ? $limit : 25,
+            Language::ALL
         );
 
         $restUsers = array();

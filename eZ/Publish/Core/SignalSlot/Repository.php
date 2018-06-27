@@ -11,6 +11,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\TransactionHandler;
+use Closure;
 
 /**
  * Repository class.
@@ -266,7 +267,7 @@ class Repository implements RepositoryInterface
      *
      * @return mixed
      */
-    public function sudo(\Closure $callback)
+    public function sudo(Closure $callback)
     {
         return $this->repository->sudo($callback, $this);
     }

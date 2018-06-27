@@ -19,6 +19,7 @@ use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
+use Closure;
 use Exception;
 use RuntimeException;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
@@ -384,7 +385,7 @@ class Repository implements RepositoryInterface
      *
      * @return mixed
      */
-    public function sudo(\Closure $callback, RepositoryInterface $outerRepository = null)
+    public function sudo(Closure $callback, RepositoryInterface $outerRepository = null)
     {
         return $this->getPermissionResolver()->sudo(
             $callback,

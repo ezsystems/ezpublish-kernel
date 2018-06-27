@@ -58,3 +58,7 @@ services:
         class: 'eZ\Publish\Core\Helper\ContentInfoLocationLoader\SudoMainLocationLoader'
         arguments:
             - "@ezpublish.api.repository"
+
+    ezpublish.helper.language_resolver:
+        class: eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver
+        arguments: ['$languages$']

@@ -64,7 +64,7 @@ services:
         arguments:
           - "@templating"
           - "@event_dispatcher"
-          - "@ezpublish.api.repository"
+          - "@ezpublish.siteaccessaware.repository"
           - "@ezpublish.config.resolver"
           - "%ezpublish.content_view.viewbase_layout%"
           - "@ezpublish.view.configurator"
@@ -137,7 +137,7 @@ services:
 
     ezpublish.templating.global_helper.core:
         class: "%ezpublish.templating.global_helper.core.class%"
-        arguments: ["@ezpublish.config.resolver", "@ezpublish.api.service.location", "@router", "@ezpublish.translation_helper"]
+        arguments: ["@ezpublish.config.resolver", "@ezpublish.siteaccessaware.service.location", "@router", "@ezpublish.translation_helper"]
         calls:
             - [setRequestStack, ["@request_stack"]]
 
@@ -220,7 +220,7 @@ services:
     ezpublish.view_builder.content:
         class: "%ezpublish.view_builder.content.class%"
         arguments:
-            - "@ezpublish.api.repository"
+            - "@ezpublish.siteaccessaware.repository"
             - "@security.authorization_checker"
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
