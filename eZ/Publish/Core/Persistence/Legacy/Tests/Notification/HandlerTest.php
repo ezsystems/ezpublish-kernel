@@ -60,7 +60,7 @@ class HandlerTest extends TestCase
             ->expects($this->once())
             ->method('extractNotificationsFromRows')
             ->willReturn([new Notification([
-                'id' => self::NOTIFICATION_ID
+                'id' => self::NOTIFICATION_ID,
             ])]);
 
         $notification = $this->handler->createNotification($createStruct);
@@ -151,7 +151,7 @@ class HandlerTest extends TestCase
             ->expects($this->once())
             ->method('extractNotificationsFromRows')
             ->willReturn([new Notification([
-                'id' => self::NOTIFICATION_ID
+                'id' => self::NOTIFICATION_ID,
             ])]);
 
         $this->handler->updateNotification($apiNotification, $updateStruct);
