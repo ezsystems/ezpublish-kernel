@@ -8,13 +8,14 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use Exception;
 
 /**
  * Test case for operations in the URLAliasService using in memory storage.
  *
- * @see eZ\Publish\API\Repository\URLAliasService
+ * @see \eZ\Publish\API\Repository\URLAliasService
  * @group url-alias
  */
 class URLAliasServiceTest extends BaseTest
@@ -570,6 +571,240 @@ class URLAliasServiceTest extends BaseTest
         $this->assertEquals(1, count($loadedAliases));
 
         return array($loadedAliases, $location);
+    }
+
+    /**
+     * Test for the listLocationAliases() method.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::listLocationAliases()
+     * @dataProvider urlAliasesWithLanguageProvider
+     *
+     * @param string $languageCode
+     * @param array $pathArray
+     */
+    public function testListLocationAliasesWithPrioritizedLanguagesList(string $languageCode, array $pathArray)
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+        $this->addLanguage('pol-PL', 'Polish');
+
+        $firstLevelFolder = [
+            $languageCode => $pathArray[0],
+        ];
+        $secondLevelFolder = [
+            $languageCode => $pathArray[1],
+        ];
+
+        $folderLocation = $this->createFolder($firstLevelFolder);
+        $secondFolderLocation = $this->createFolder($secondLevelFolder, $folderLocation->id);
+
+        $loadedSystemUrl = $urlAliasService->listLocationAliases(
+            $secondFolderLocation,
+            false,
+            null,
+            null,
+            [$languageCode]
+        );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedSystemUrl
+        );
+
+        $this->assertEquals('/' . implode('/', $pathArray), $loadedSystemUrl[0]->path);
+    }
+
+    private function createFolder(array $names, int $parentLocationId = 2): Location
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        $struct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            'eng-GB'
+        );
+
+        foreach ($names as $languageCode => $translatedName) {
+            $struct->setField('name', $translatedName, $languageCode);
+        }
+
+        $contentDraft = $contentService->createContent(
+            $struct,
+            [$locationService->newLocationCreateStruct($parentLocationId)]
+        );
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
+
+        return $locationService->loadLocation($content->contentInfo->mainLocationId);
+    }
+
+    private function addLanguage(string $languageCode, string $languageName): void
+    {
+        $repository = $this->getRepository();
+
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreateStruct = $languageService->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = $languageCode;
+        $languageCreateStruct->name = $languageName;
+        $languageService->createLanguage($languageCreateStruct);
+    }
+
+    /**
+     * Test for the listGlobalAliases() method.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::listGlobalAliases()
+     * @dataProvider urlAliasesWithLanguageProvider
+     *
+     * @param string $languageCode
+     * @param array $pathArray
+     * @param bool $isPrioritized
+     */
+    public function testListGlobalAliasesWithPrioritizedLanguagesList(
+        string $languageCode,
+        array $pathArray,
+        bool $isPrioritized
+    ) {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        $this->addLanguage('pol-PL', 'Polish');
+
+        $urlAliasService->createGlobalUrlAlias(
+            'module:content/search?SearchText=eZ',
+            '/' . implode('/', $pathArray),
+            $languageCode
+        );
+
+        /* END: Use Case */
+        $this->assertNotEquals($isPrioritized, empty($urlAliasService->listGlobalAliases($languageCode)));
+    }
+
+    /**
+     * Test for the load() method.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::load()
+     * @dataProvider urlAliasesWithLanguageProvider
+     *
+     * @param string $languageCode
+     * @param array $pathArray
+     * @param bool $isPrioritized
+     */
+    public function testLoadForSystemUrlWithPrioritizedLanguagesList(
+        string $languageCode,
+        array $pathArray,
+        bool $isPrioritized
+    ) {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+        $this->addLanguage('pol-PL', 'Polish');
+
+        $firstLevelFolder = [
+            $languageCode => $pathArray[0],
+        ];
+        $secondLevelFolder = [
+            $languageCode => $pathArray[1],
+        ];
+
+        $folderLocation = $this->createFolder($firstLevelFolder);
+        $secondFolderLocation = $this->createFolder($secondLevelFolder, $folderLocation->id);
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\URLAlias $systemAliases */
+        $systemAliases = $urlAliasService->listLocationAliases(
+            $secondFolderLocation,
+            false,
+            null,
+            null,
+            [$languageCode]
+        )[0];
+        /* END: Use Case */
+
+        $expectedPath = '/' . implode('/', $pathArray);
+
+        //Path build from default names for eng-GB which was not provided during creation
+        if (!$isPrioritized) {
+            $expectedPath = '/Folder/Folder';
+        }
+        $this->assertEquals(
+            $expectedPath,
+            $urlAliasService->load($systemAliases->id)->path
+        );
+    }
+
+    /**
+     * Test for the load() method.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::load()
+     * @dataProvider urlAliasesWithLanguageProvider
+     *
+     * @param string $languageCode
+     * @param array $pathArray
+     * @param bool $isPrioritized
+     */
+    public function testLoadForGlobalAliasWithPrioritizedLanguagesList(
+        string $languageCode,
+        array $pathArray,
+        bool $isPrioritized
+    ) {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+        $this->addLanguage('pol-PL', 'Polish');
+
+        $expectedPath = '/' . implode('/', $pathArray);
+        /** @var \eZ\Publish\API\Repository\Values\Content\URLAlias $globalAlias */
+        $globalAlias = $urlAliasService->createGlobalUrlAlias(
+            'module:content/search?SearchText=eZ',
+            $expectedPath,
+            $languageCode
+        );
+
+        if (!$isPrioritized) {
+            $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+        }
+        $this->assertEquals(
+            $expectedPath,
+            $urlAliasService->load($globalAlias->id)->path
+        );
+    }
+
+    public function urlAliasesWithLanguageProvider()
+    {
+        return [
+            [
+                'languageCode' => 'eng-GB',
+                'path' => [
+                    'first_level_eng',
+                    'second_level_eng',
+                ],
+                'isPrioritized' => true,
+            ],
+            [
+                'languageCode' => 'eng-US',
+                'path' => [
+                    'first_level_eng_us',
+                    'second_level_eng_us',
+                ],
+                'isPrioritized' => true,
+            ],
+            [
+                'languageCode' => 'pol-PL',
+                'path' => [
+                    'first_level_pol',
+                    'second_level_pol',
+                ],
+                'isPrioritized' => false,
+            ],
+        ];
     }
 
     /**
