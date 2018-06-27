@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\Image\Value;
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\IO\Values\BinaryFile;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
@@ -80,6 +81,7 @@ class ResizeOriginalImagesCommand extends Command
      * @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface
      */
     private $extensionGuesser;
+
     /**
      * @var \Imagine\Image\ImagineInterface
      */
@@ -223,7 +225,7 @@ class ResizeOriginalImagesCommand extends Command
         while ($query->offset <= $totalCount) {
             $results = $this->searchService->findContent($query);
 
-            /** @var SearchHit $hit */
+            /** @var \eZ\Publish\API\Repository\Values\Content\Search\SearchHit $hit */
             foreach ($results->searchHits as $hit) {
                 $this->resize($output, $hit, $imageFieldIdentifier, $filter);
                 $progressBar->advance();
@@ -248,10 +250,10 @@ class ResizeOriginalImagesCommand extends Command
      * @param string $imageFieldIdentifier
      * @param string $filter
      */
-    private function resize(OutputInterface $output, SearchHit $hit, string $imageFieldIdentifier, string $filter)
+    private function resize(OutputInterface $output, SearchHit $hit, string $imageFieldIdentifier, string $filter): void
     {
         try {
-            /** @var Value $field */
+            /** @var \eZ\Publish\Core\FieldType\Image\Value $field */
             foreach ($hit->valueObject->fields[$imageFieldIdentifier] as $language => $field) {
                 if (null === $field->id) {
                     continue;
@@ -271,7 +273,7 @@ class ResizeOriginalImagesCommand extends Command
 
                 $contentDraft = $this->contentService->createContentDraft($hit->valueObject->getVersionInfo()->getContentInfo(), $hit->valueObject->getVersionInfo());
                 $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
-                $contentUpdateStruct->setField($imageFieldIdentifier, array(
+                $contentUpdateStruct->setField($imageFieldIdentifier, [
                     'id' => $field->id,
                     'alternativeText' => $field->alternativeText,
                     'fileName' => $field->fileName,
@@ -279,7 +281,7 @@ class ResizeOriginalImagesCommand extends Command
                     'imageId' => $field->imageId,
                     'width' => $dimensions->getWidth(),
                     'height' => $dimensions->getHeight(),
-                ));
+                ]);
                 $contentDraft = $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
                 $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
                 $this->contentService->publishVersion($contentDraft->versionInfo);
@@ -308,7 +310,7 @@ class ResizeOriginalImagesCommand extends Command
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFile
      */
-    private function store(BinaryInterface $binary, Value $image)
+    private function store(BinaryInterface $binary, Value $image): BinaryFile
     {
         $tmpFile = tmpfile();
         fwrite($tmpFile, $binary->getContent());
