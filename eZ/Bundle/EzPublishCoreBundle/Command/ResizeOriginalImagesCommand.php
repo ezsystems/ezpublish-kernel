@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\PermissionResolver;
@@ -131,18 +130,17 @@ class ResizeOriginalImagesCommand extends Command
             ]
         )
         ->addOption(
+                'filter',
+                'f',
+                InputOption::VALUE_REQUIRED,
+                'Filter which will be used for original images.'
+        )
+        ->addOption(
             'iteration-count',
             'i',
             InputOption::VALUE_OPTIONAL,
             'Iteration count. Number of images to be recreated in a single iteration, for avoiding using too much memory.',
             self::DEFAULT_ITERATION_COUNT
-        )
-        ->addOption(
-            'filter',
-            'f',
-            InputOption::VALUE_OPTIONAL,
-            'Filter which will be used for original images.',
-            IORepositoryResolver::VARIATION_ORIGINAL
         )
         ->addOption(
             'user',
