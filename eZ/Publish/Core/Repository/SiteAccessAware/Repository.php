@@ -51,6 +51,9 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\API\Repository\URLAliasService */
     protected $urlAliasService;
 
+    /** @var \eZ\Publish\Core\Repository\NotificationService */
+    protected $notificationService;
+
     /**
      * Construct repository object from aggregated repository.
      */
@@ -65,7 +68,8 @@ class Repository implements RepositoryInterface
         SectionService $sectionService,
         TrashService $trashService,
         LocationService $locationService,
-        LanguageService $languageService
+        LanguageService $languageService,
+        NotificationService $notificationService
     ) {
         $this->repository = $repository;
         $this->contentService = $contentService;
@@ -78,6 +82,7 @@ class Repository implements RepositoryInterface
         $this->trashService = $trashService;
         $this->locationService = $locationService;
         $this->languageService = $languageService;
+        $this->notificationService = $notificationService;
     }
 
     public function getCurrentUser()
@@ -188,6 +193,11 @@ class Repository implements RepositoryInterface
     public function getBookmarkService()
     {
         return $this->repository->getBookmarkService();
+    }
+
+    public function getNotificationService()
+    {
+        return $this->repository->getNotificationService();
     }
 
     public function beginTransaction()
