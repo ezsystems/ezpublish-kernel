@@ -489,7 +489,7 @@ CREATE TABLE eznotification (
     is_pending integer DEFAULT 1 NOT NULL,
     type character varying(128) NOT NULL,
     created integer DEFAULT 0 NOT NULL,
-    data bytea
+    data text
 );
 
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
