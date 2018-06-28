@@ -12,20 +12,30 @@ use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
 use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 
+/**
+ * Notification Service.
+ *
+ * Service to manager user notifications. It works in the context of a current User (obtained from
+ * the PermissionResolver).
+ */
 interface NotificationService
 {
     /**
      * Get currently logged user notifications.
-
-     * @param int $offset
-     * @param int $limit
+     *
+     * @param int $offset the start offset for paging
+     * @param int $limit  the number of notifications returned
      *
      * @return \eZ\Publish\API\Repository\Values\Notification\NotificationList
      */
     public function loadNotifications(int $offset, int $limit): NotificationList;
 
     /**
-     * @param int $notificationId
+     * Load single notification (by ID)
+     *
+     * @param int $notificationId Notification ID
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\API\Repository\Values\Notification\Notification
      */
@@ -35,6 +45,9 @@ interface NotificationService
      * Mark notification as read so it no longer bother the user.
      *
      * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function markNotificationAsRead(Notification $notification): void;
 
@@ -53,14 +66,20 @@ interface NotificationService
     public function getNotificationCount(): int;
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
-     */
-    public function deleteNotification(Notification $notification): void;
-
-    /**
+     * Creates a new notification.
+     *
      * @param \eZ\Publish\API\Repository\Values\Notification\CreateStruct $createStruct
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @return \eZ\Publish\API\Repository\Values\Notification\Notification
      */
     public function createNotification(CreateStruct $createStruct): Notification;
+
+    /**
+     * Deletes notification.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
+     */
+    public function deleteNotification(Notification $notification): void;
 }

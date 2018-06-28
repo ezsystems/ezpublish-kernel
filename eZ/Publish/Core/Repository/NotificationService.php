@@ -24,10 +24,14 @@ use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
 
 class NotificationService implements NotificationServiceInterface
 {
-    /** @var \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler */
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler
+     */
     protected $persistenceHandler;
 
-    /** @var \eZ\Publish\API\Repository\PermissionResolver $permissionResolver */
+    /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     */
     protected $permissionResolver;
 
     /**
@@ -60,15 +64,39 @@ class NotificationService implements NotificationServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function createNotification(APICreateStruct $createStruct): APINotification
+    {
+        $spiCreateStruct = new CreateStruct();
+
+        if (empty($createStruct->ownerId)) {
+            throw new InvalidArgumentException('ownerId', $createStruct->ownerId);
+        }
+
+        $spiCreateStruct->ownerId = $createStruct->ownerId;
+
+        if (empty($createStruct->type)) {
+            throw new InvalidArgumentException('type', $createStruct->type);
+        }
+
+        $spiCreateStruct->type = $createStruct->type;
+        $spiCreateStruct->isPending = (bool) $createStruct->isPending;
+        $spiCreateStruct->data = $createStruct->data;
+        $spiCreateStruct->created = (new DateTime())->getTimestamp();
+
+        return $this->buildDomainObject(
+            $this->persistenceHandler->createNotification($spiCreateStruct)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getNotification(int $notificationId): APINotification
     {
-        $currentUserId = $this->getCurrentUserId();
-
         $notification = $this->persistenceHandler->getNotificationById($notificationId);
 
+        $currentUserId = $this->getCurrentUserId();
         if (!$notification->ownerId || $currentUserId != $notification->ownerId) {
             throw new NotFoundException('Notification', $notificationId);
         }
@@ -78,9 +106,6 @@ class NotificationService implements NotificationServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function markNotificationAsRead(APINotification $notification): void
     {
@@ -99,7 +124,6 @@ class NotificationService implements NotificationServiceInterface
         }
 
         $updateStruct = new UpdateStruct();
-
         $updateStruct->isPending = false;
 
         $this->persistenceHandler->updateNotification($notification, $updateStruct);
@@ -110,9 +134,9 @@ class NotificationService implements NotificationServiceInterface
      */
     public function getPendingNotificationCount(): int
     {
-        $currentUserId = $this->getCurrentUserId();
-
-        return $this->persistenceHandler->countPendingNotifications($currentUserId);
+        return $this->persistenceHandler->countPendingNotifications(
+            $this->getCurrentUserId()
+        );
     }
 
     /**
@@ -120,19 +144,9 @@ class NotificationService implements NotificationServiceInterface
      */
     public function getNotificationCount(): int
     {
-        $currentUserId = $this->getCurrentUserId();
-
-        return $this->persistenceHandler->countNotifications($currentUserId);
-    }
-
-    /**
-     * @return int
-     */
-    private function getCurrentUserId(): int
-    {
-        return $this->permissionResolver
-            ->getCurrentUserReference()
-            ->getUserId();
+        return $this->persistenceHandler->countNotifications(
+            $this->getCurrentUserId()
+        );
     }
 
     /**
@@ -144,6 +158,8 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
+     * Builds Notification domain object from ValueObject returned by Persistence API.
+     *
      * @param \eZ\Publish\SPI\Persistence\Notification\Notification $spiNotification
      *
      * @return \eZ\Publish\API\Repository\Values\Notification\Notification
@@ -160,31 +176,10 @@ class NotificationService implements NotificationServiceInterface
         ]);
     }
 
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Notification\CreateStruct $createStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\Notification\Notification
-     */
-    public function createNotification(APICreateStruct $createStruct): APINotification
+    private function getCurrentUserId(): int
     {
-        $spiCreateStruct = new CreateStruct();
-
-        if (empty($createStruct->ownerId)) {
-            throw new InvalidArgumentException('ownerId', $createStruct->ownerId);
-        }
-
-        $spiCreateStruct->ownerId = $createStruct->ownerId;
-
-        if (empty($createStruct->type)) {
-            throw new InvalidArgumentException('type', $createStruct->type);
-        }
-
-        $spiCreateStruct->isPending = $createStruct->isPending;
-        $spiCreateStruct->data = $createStruct->data;
-        $spiCreateStruct->created = (new DateTime())->getTimestamp();
-
-        return $this->buildDomainObject(
-            $this->persistenceHandler->createNotification($spiCreateStruct)
-        );
+        return $this->permissionResolver
+            ->getCurrentUserReference()
+            ->getUserId();
     }
 }
