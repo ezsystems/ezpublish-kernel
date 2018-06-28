@@ -101,7 +101,7 @@ ADD CONSTRAINT `ezcontentbrowsebookmark_user_fk`
 
 CREATE TABLE `eznotification` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  owner_id int(11) NOT NULL DEFAULT 0,
+  `owner_id` int(11) NOT NULL DEFAULT 0,
   `is_pending` tinyint(1) NOT NULL DEFAULT '1',
   `type` varchar(128) NOT NULL DEFAULT '',
   `created` int(11) NOT NULL DEFAULT 0,
