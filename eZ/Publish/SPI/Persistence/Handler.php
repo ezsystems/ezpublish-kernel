@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Persistence;
 
-use eZ\Publish\SPI\Persistence\Notification\Handler as NotificationHandler;
-
 /**
  * The main handler for Storage Engine.
  */
