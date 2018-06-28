@@ -164,7 +164,14 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         }
 
         if ($simplifiedRequest->port) {
-            $context->setHttpPort($simplifiedRequest->port);
+            switch ($simplifiedRequest->scheme) {
+                case 'https':
+                    $context->setHttpsPort($simplifiedRequest->port);
+                    break;
+                default:
+                    $context->setHttpPort($simplifiedRequest->port);
+                    break;
+            }
         }
 
         if ($simplifiedRequest->host) {

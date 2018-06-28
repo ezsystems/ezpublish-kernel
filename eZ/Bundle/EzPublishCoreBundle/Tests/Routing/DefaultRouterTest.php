@@ -281,4 +281,60 @@ class DefaultRouterTest extends TestCase
             $router->generate($routeName, array('siteaccess' => $siteAccessName), DefaultRouter::ABSOLUTE_PATH)
         );
     }
+
+    /**
+     * @dataProvider providerGetContextBySimplifiedRequest
+     *
+     * @param string $uri
+     */
+    public function testGetContextBySimplifiedRequest($uri)
+    {
+        $this->getExpectedRequestContext($uri);
+
+        $router = new DefaultRouter($this->container, 'foo', [], $this->requestContext);
+
+        self::assertEquals(
+            $this->getExpectedRequestContext($uri),
+            $router->getContextBySimplifiedRequest(SimplifiedRequest::fromUrl($uri))
+        );
+    }
+
+    /**
+     * Data provider for testGetContextBySimplifiedRequest.
+     *
+     * @see testGetContextBySimplifiedRequest
+     *
+     * @return array
+     */
+    public function providerGetContextBySimplifiedRequest()
+    {
+        return [
+            ['/foo/bar'],
+            ['http://ezpublish.dev/foo/bar'],
+            ['http://ezpublish.dev:8080/foo/bar'],
+            ['https://ezpublish.dev/secured'],
+            ['https://ezpublish.dev:445/secured'],
+            ['http://ezpublish.dev:8080/foo/root_folder/bar/baz'],
+        ];
+    }
+
+    private function getExpectedRequestContext($uri)
+    {
+        $requestContext = new RequestContext();
+        $uriComponents = parse_url($uri);
+        if (isset($uriComponents['host'])) {
+            $requestContext->setHost($uriComponents['host']);
+            $requestContext->setScheme($uriComponents['scheme']);
+            if (isset($uriComponents['port']) && $uriComponents['scheme'] === 'http') {
+                $requestContext->setHttpPort($uriComponents['port']);
+            } elseif (isset($uriComponents['port']) && $uriComponents['scheme'] === 'https') {
+                $requestContext->setHttpsPort($uriComponents['port']);
+            }
+        }
+        if (isset($uriComponents['path'])) {
+            $requestContext->setPathInfo($uriComponents['path']);
+        }
+
+        return $requestContext;
+    }
 }
