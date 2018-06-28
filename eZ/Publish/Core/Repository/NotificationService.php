@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct as APICreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification as APINotification;
 use eZ\Publish\API\Repository\Values\Notification\NotificationList;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
@@ -167,8 +168,17 @@ class NotificationService implements NotificationServiceInterface
     public function createNotification(APICreateStruct $createStruct): APINotification
     {
         $spiCreateStruct = new CreateStruct();
+
+        if (empty($createStruct->ownerId)) {
+            throw new InvalidArgumentException('ownerId', $createStruct->ownerId);
+        }
+
         $spiCreateStruct->ownerId = $createStruct->ownerId;
-        $spiCreateStruct->type = $createStruct->type;
+
+        if (empty($createStruct->type)) {
+            throw new InvalidArgumentException('type', $createStruct->type);
+        }
+
         $spiCreateStruct->isPending = $createStruct->isPending;
         $spiCreateStruct->data = $createStruct->data;
         $spiCreateStruct->created = (new DateTime())->getTimestamp();
