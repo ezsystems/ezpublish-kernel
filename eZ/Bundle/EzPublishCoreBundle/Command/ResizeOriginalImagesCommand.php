@@ -146,7 +146,7 @@ class ResizeOriginalImagesCommand extends Command
             'user',
             'u',
             InputOption::VALUE_OPTIONAL,
-            'eZ Platform username (with Role containing at least Content policies: read, versionread)',
+            'eZ Platform username (with Role containing at least Content policies: read, versionread, edit, publish)',
             self::DEFAULT_REPOSITORY_USER
         );
     }
