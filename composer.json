@@ -42,7 +42,8 @@
     },
     "conflict": {
         "symfony/symfony": "3.4.7",
-        "doctrine/dbal": "2.7.0"
+        "doctrine/dbal": "2.7.0",
+        "ezsystems/ezpublish-legacy": "<2018.06"
     },
     "replace": {
         "ezsystems/ezpublish": "*",
