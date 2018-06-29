@@ -267,7 +267,16 @@
 {% endblock %}
 
 
-{% block ezauthor_settings %}{% endblock %}
+{% block ezauthor_settings %}
+<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
+    {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Author\\Type::DEFAULT_EMPTY' ) %}
+        {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
+    {% else %}
+        {% set defaultValue = 'fielddefinition.default-value.current_author'|trans|desc("Current Author") %}
+    {% endif %}
+    {{ block( 'settings_defaultvalue' ) }}
+</ul>
+{% endblock %}
 
 {% block ezurl_settings %}{% endblock %}
 
