@@ -31,7 +31,7 @@ interface NotificationService
     public function loadNotifications(int $offset, int $limit): NotificationList;
 
     /**
-     * Load single notification (by ID)
+     * Load single notification (by ID).
      *
      * @param int $notificationId Notification ID
      *

@@ -25,12 +25,12 @@ use eZ\Publish\SPI\Persistence\Notification\UpdateStruct;
 class NotificationService implements NotificationServiceInterface
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Notification\Handler $persistenceHandler
+     * @var \eZ\Publish\SPI\Persistence\Notification\Handler
      */
     protected $persistenceHandler;
 
     /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     * @var \eZ\Publish\API\Repository\PermissionResolver
      */
     protected $permissionResolver;
 
