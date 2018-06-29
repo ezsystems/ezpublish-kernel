@@ -64,11 +64,7 @@ abstract class Query extends CriterionParser
         // SortClauses
         // -- [SortClauseName: direction|data]
         if (array_key_exists('SortClauses', $data)) {
-            $sortClauses = [];
-            foreach ($data['SortClauses'] as $sortClauseName => $sortClauseData) {
-                $sortClauses[] = $this->dispatchSortClause($sortClauseName, $sortClauseData, $parsingDispatcher);
-            }
-            $query->sortClauses = $sortClauses;
+            $query->sortClauses = $this->processSortClauses($data['SortClauses'], $parsingDispatcher);
         }
 
         // FacetBuilders
@@ -108,5 +104,29 @@ abstract class Query extends CriterionParser
         }
 
         return (count($criteria) === 1) ? $criteria[0] : new CriterionValue\LogicalAnd($criteria);
+    }
+
+    /**
+     * Handles SortClause data.
+     *
+     * @param array $sortClausesArray
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
+     * @return array
+     */
+    private function processSortClauses(array $sortClausesArray, ParsingDispatcher $parsingDispatcher)
+    {
+        $sortClauses = [];
+        foreach ($sortClausesArray as $sortClauseName => $sortClauseData) {
+            if (!is_array($sortClauseData) || !isset($sortClauseData[0])) {
+                $sortClauseData = [$sortClauseData];
+            }
+
+            foreach ($sortClauseData as $data) {
+                $sortClauses[] = $this->dispatchSortClause($sortClauseName, $data, $parsingDispatcher);
+            }
+        }
+
+        return $sortClauses;
     }
 }
