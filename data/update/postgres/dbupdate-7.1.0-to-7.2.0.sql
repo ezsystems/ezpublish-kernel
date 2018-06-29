@@ -1,4 +1,5 @@
 -- Set storage engine schema version number
+BEGIN;
 UPDATE ezsite_data SET value='7.2.0' WHERE name='ezpublish-version';
 
 --
@@ -40,3 +41,9 @@ ALTER TABLE ONLY eznotification
 
 CREATE INDEX eznotification_owner_id ON eznotification USING btree (owner_id);
 CREATE INDEX eznotification_owner_id_is_pending ON eznotification USING btree (owner_id, is_pending);
+COMMIT;
+
+-- If the queries below fail, it means database is already updated
+
+CREATE INDEX ezcontentobject_tree_contentobject_id_path_string ON ezcontentobject_tree (path_string, contentobject_id);
+CREATE INDEX ezcontentobject_section ON ezcontentobject (section_id);
