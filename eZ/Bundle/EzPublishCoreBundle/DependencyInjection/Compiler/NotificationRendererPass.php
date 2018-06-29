@@ -12,9 +12,6 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * Adds all available export methods to registry.
- */
 class NotificationRendererPass implements CompilerPassInterface
 {
     const TAG_NAME = 'ezpublish.notification.renderer';
@@ -35,26 +32,6 @@ class NotificationRendererPass implements CompilerPassInterface
                         'Tag %s needs a "alias" attribute to identify the notification type. None given.',
                         self::TAG_NAME
                     ));
-                }
-
-                $registry->addMethodCall('addRenderer', [$attribute['alias'], new Reference($id)]);
-            }
-        }
-
-        foreach ($container->findTaggedServiceIds('ezstudio.notification.renderer') as $id => $attributes) {
-            @trigger_error(
-                sprintf(
-                    'Tag ezstudio.notification.renderer is deprecated since 2.2. Please use \'%s\' instead.',
-                    self::TAG_NAME
-                ),
-                E_USER_DEPRECATED
-            );
-
-            foreach ($attributes as $attribute) {
-                if (!isset($attribute['alias'])) {
-                    throw new LogicException(
-                        'Tag ezstudio.notification.renderer needs a "alias" attribute to identify the notification type. None given.'
-                    );
                 }
 
                 $registry->addMethodCall('addRenderer', [$attribute['alias'], new Reference($id)]);

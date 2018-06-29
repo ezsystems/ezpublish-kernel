@@ -13,8 +13,6 @@ use eZ\Publish\API\Repository\Values\Notification\Notification;
 use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 
 /**
- * Notification Service.
- *
  * Service to manager user notifications. It works in the context of a current User (obtained from
  * the PermissionResolver).
  */
@@ -77,7 +75,7 @@ interface NotificationService
     public function createNotification(CreateStruct $createStruct): Notification;
 
     /**
-     * Deletes notification.
+     * Deletes a notification.
      *
      * @param \eZ\Publish\API\Repository\Values\Notification\Notification $notification
      */
