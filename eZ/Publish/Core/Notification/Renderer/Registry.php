@@ -8,16 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Notification\Renderer;
 
-use eZ\Publish\SPI\Notification\Renderer\NotificationRenderer;
-
 class Registry
 {
-    /** @var \eZ\Publish\SPI\Notification\Renderer\NotificationRenderer[] */
+    /** @var \eZ\Publish\Core\Notification\Renderer\NotificationRenderer[] */
     protected $registry = [];
 
     /**
      * @param string $alias
-     * @param \eZ\Publish\SPI\Notification\Renderer\NotificationRenderer $notificationRenderer
+     * @param \eZ\Publish\Core\Notification\Renderer\NotificationRenderer $notificationRenderer
      */
     public function addRenderer(string $alias, NotificationRenderer $notificationRenderer): void
     {
@@ -27,7 +25,7 @@ class Registry
     /**
      * @param string $alias
      *
-     * @return \eZ\Publish\SPI\Notification\Renderer\NotificationRenderer
+     * @return \eZ\Publish\Core\Notification\Renderer\NotificationRenderer
      */
     public function getRenderer(string $alias): NotificationRenderer
     {
