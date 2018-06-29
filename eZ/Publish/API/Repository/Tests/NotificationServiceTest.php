@@ -154,4 +154,46 @@ class NotificationServiceTest extends BaseTest
         $this->assertInstanceOf(Notification::class, $notification);
         $this->assertGreaterThan(0, $notification->id);
     }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\NotificationService::createNotification()
+     * @depends testCreateNotification
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateNotificationThrowsInvalidArgumentExceptionOnMissingOwner()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $notificationService = $repository->getNotificationService();
+
+        $createStruct = new CreateStruct([
+            'type' => 'TEST',
+        ]);
+
+        // This call will fail because notification owner is not specified
+        $notificationService->createNotification($createStruct);
+        /* END: Use Case */
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\NotificationService::createNotification()
+     * @depends testCreateNotification
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateNotificationThrowsInvalidArgumentExceptionOnMissingType()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $notificationService = $repository->getNotificationService();
+
+        $createStruct = new CreateStruct([
+            'ownerId' => 14,
+        ]);
+
+        // This call will fail because notification type is not specified
+        $notificationService->createNotification($createStruct);
+        /* END: Use Case */
+    }
 }

@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\SPI\Notification\Renderer;
+namespace eZ\Publish\Core\Notification\Renderer;
 
 use eZ\Publish\API\Repository\Values\Notification\Notification;
 
