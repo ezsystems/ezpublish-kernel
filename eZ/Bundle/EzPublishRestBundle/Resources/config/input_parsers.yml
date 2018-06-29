@@ -66,6 +66,7 @@ parameters:
     ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Visibility
 
     ezpublish_rest.input.parser.internal.sortclause.data_key_value_object.class: eZ\Publish\Core\REST\Server\Input\Parser\SortClause\DataKeyValueObjectClass
+    ezpublish_rest.input.parser.internal.sortclause.field.class: eZ\Publish\Core\REST\Server\Input\Parser\SortClause\Field
 
     ezpublish_rest.input.parser.internal.facetbuilder.content_type.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\ContentTypeParser
     ezpublish_rest.input.parser.internal.facetbuilder.criterion.class: eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\CriterionParser
@@ -659,6 +660,12 @@ services:
             - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionName'
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.SectionName }
+
+    ezpublish_rest.input.parser.internal.sortclause.Field:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.field.class%'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.Field }
 
     ezpublish_rest.input.parser.internal.facetbuilder.content_type:
         parent: ezpublish_rest.input.parser
