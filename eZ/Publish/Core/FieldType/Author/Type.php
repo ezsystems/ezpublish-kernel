@@ -12,6 +12,7 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * Author field type.
@@ -21,6 +22,23 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
  */
 class Type extends FieldType
 {
+    /**
+     * Default value type current user.
+     */
+    const DEFAULT_CURRENT_USER = 1;
+
+    /**
+     * Default value empty.
+     */
+    const DEFAULT_EMPTY = -1;
+
+    protected $settingsSchema = [
+        'defaultAuthor' => [
+            'type' => 'choice',
+            'default' => self::DEFAULT_CURRENT_USER,
+        ],
+    ];
+
     /**
      * Returns the field type identifier for this field type.
      *
@@ -147,5 +165,52 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings($fieldSettings)
+    {
+        $validationErrors = [];
+
+        foreach ($fieldSettings as $name => $value) {
+            if (!isset($this->settingsSchema[$name])) {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    [
+                        '%setting%' => $name,
+                    ],
+                    "[$name]"
+                );
+                continue;
+            }
+
+            switch ($name) {
+                case 'defaultAuthor':
+                    $definedTypes = [
+                        self::DEFAULT_CURRENT_USER,
+                        self::DEFAULT_EMPTY,
+                    ];
+                    if (!in_array($value, $definedTypes, true)) {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' is of unknown type",
+                            null,
+                            [
+                                '%setting%' => $name,
+                            ],
+                            "[$name]"
+                        );
+                    }
+                    break;
+            }
+        }
+
+        return $validationErrors;
     }
 }

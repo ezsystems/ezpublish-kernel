@@ -34,6 +34,7 @@ parameters:
     ezpublish_rest.csrf_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener
     ezpublish_rest.response_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\ResponseListener
 
+    ezpublish_rest.field_type_processor.ezauthor.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\AuthorProcessor
     ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
     ezpublish_rest.field_type_processor.ezimage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
     ezpublish_rest.field_type_processor.ezdatetime.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateAndTimeProcessor

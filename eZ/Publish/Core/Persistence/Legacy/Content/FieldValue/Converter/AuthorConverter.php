@@ -8,8 +8,12 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\Core\FieldType\Author\Type as AuthorType;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -17,6 +21,21 @@ use DOMDocument;
 
 class AuthorConverter implements Converter
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
+     * Sets injected repository used for fetching current logged user.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function setRepository(Repository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Factory for current class.
      *
@@ -61,7 +80,7 @@ class AuthorConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        // Nothing to store
+        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultAuthor'];
     }
 
     /**
@@ -72,7 +91,48 @@ class AuthorConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        $fieldDef->defaultValue->data = array();
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            [
+                'defaultAuthor' => $storageDef->dataInt1,
+            ]
+        );
+
+        switch ($fieldDef->fieldTypeConstraints->fieldSettings['defaultAuthor']) {
+            case AuthorType::DEFAULT_EMPTY:
+                $data = [];
+                break;
+            default:
+                $data = $this->fetchLoggedUser();
+        }
+
+        $fieldDef->defaultValue->data = $data;
+    }
+
+    /**
+     * Returns an array with name and email of currently logged user or empty array if none was found.
+     *
+     * @return array
+     */
+    private function fetchLoggedUser()
+    {
+        $user = [];
+
+        try {
+            $permissionResolver = $this->repository->getPermissionResolver();
+            $userService = $this->repository->getUserService();
+            $loggedUserId = $permissionResolver->getCurrentUserReference()->getUserId();
+            $loggedUser = $userService->loadUser($loggedUserId);
+
+            $user[] = [
+                'id' => 1,
+                'name' => $loggedUser->getName(),
+                'email' => $loggedUser->email,
+            ];
+        } catch (NotFoundException $e) {
+            //Do nothing
+        }
+
+        return $user;
     }
 
     /**
@@ -123,20 +183,20 @@ class AuthorConverter implements Converter
      *
      * @param string $xmlString XML String stored in storage engine
      *
-     * @return \eZ\Publish\Core\FieldType\Author\Value
+     * @return array
      */
     private function restoreValueFromXmlString($xmlString)
     {
         $dom = new DOMDocument('1.0', 'utf-8');
-        $authors = array();
+        $authors = [];
 
         if ($dom->loadXML($xmlString) === true) {
             foreach ($dom->getElementsByTagName('author') as $author) {
-                $authors[] = array(
+                $authors[] = [
                     'id' => $author->getAttribute('id'),
                     'name' => $author->getAttribute('name'),
                     'email' => $author->getAttribute('email'),
-                );
+                ];
             }
         }
 
