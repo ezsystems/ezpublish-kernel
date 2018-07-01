@@ -146,7 +146,7 @@ class DefaultRouterTest extends TestCase
      * @param int $referenceType The type of reference to be generated (one of the constants)
      * @param string $routeName
      */
-    public function testGenerateWithSiteAccess($urlGenerated, $relevantUri, $expectedUrl, $saName, $isMatcherLexer, $referenceType, $routeName)
+    public function testGenerateWithSiteAccess($urlGenerated, $relevantUri, $expectedUrl, $saName, $isMatcherLexer, $referenceType, $routeName, $parameters = [], $ignoreSiteAccess = false)
     {
         $routeName = $routeName ?: __METHOD__;
         $nonSiteAccessAwareRoutes = array('_dontwantsiteaccess');
@@ -168,7 +168,7 @@ class DefaultRouterTest extends TestCase
         if ($isMatcherLexer) {
             $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
             // Route is siteaccess aware, we're expecting analyseLink() to be called
-            if (!in_array($routeName, $nonSiteAccessAwareRoutes)) {
+            if (!in_array($routeName, $nonSiteAccessAwareRoutes) && false === $ignoreSiteAccess) {
                 $matcher
                     ->expects($this->once())
                     ->method('analyseLink')
@@ -204,7 +204,9 @@ class DefaultRouterTest extends TestCase
         $router->setContext($requestContext);
         $router->setNonSiteAccessAwareRoutes($nonSiteAccessAwareRoutes);
 
-        $this->assertSame($expectedUrl, $router->generate($routeName, array(), $referenceType));
+        $parameters['ignoreSiteAccess'] = $ignoreSiteAccess;
+
+        $this->assertSame($expectedUrl, $router->generate($routeName, $parameters, $referenceType));
     }
 
     public function providerGenerateWithSiteAccess()
@@ -222,6 +224,9 @@ class DefaultRouterTest extends TestCase
             array('/foo/bar/baz', '/foo/bar/baz', '/test_siteaccess/foo/bar/baz', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_PATH, null),
             array('/foo/root_folder/bar/baz', '/bar/baz', '/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_PATH, null),
             array('/foo/bar/baz', '/foo/bar/baz', '/foo/bar/baz', 'test_siteaccess', true, UrlGeneratorInterface::ABSOLUTE_PATH, '_dontwantsiteaccess'),
+            array('/view/content/154/full/1/153', '/view/content/154/full/1/153', '/eng/view/content/154/full/1/153', 'eng', true, UrlGeneratorInterface::ABSOLUTE_PATH, '_ez_content_view'),
+            array('/view/content/154/full/1/153', '/view/content/154/full/1/153', '/eng/view/content/154/full/1/153', 'eng', true, UrlGeneratorInterface::ABSOLUTE_PATH, '_ez_content_view', [], false),
+            array('/view/content/154/full/1/153', '/view/content/154/full/1/153', '/view/content/154/full/1/153', 'eng', true, UrlGeneratorInterface::ABSOLUTE_PATH, '_ez_content_view', [], true),
         );
     }
 

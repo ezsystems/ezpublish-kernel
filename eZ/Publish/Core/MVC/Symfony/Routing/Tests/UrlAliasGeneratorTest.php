@@ -312,7 +312,7 @@ class UrlAliasGeneratorTest extends TestCase
             ->method('generate')
             ->with(
                 UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
-                array('contentId' => $location->contentId, 'locationId' => $location->id)
+                array('contentId' => $location->contentId, 'locationId' => $location->id, 'ignoreSiteAccess' => true)
             )
             ->will($this->returnValue($uri));
 
@@ -441,5 +441,41 @@ class UrlAliasGeneratorTest extends TestCase
                 ]
             )
             ->getMock();
+    }
+
+    public function testDoGenerateNoUrlAliasNorSiteAccess()
+    {
+        $location = new Location(array('id' => 153, 'contentInfo' => new ContentInfo(array('id' => 154))));
+        $uri = '/view/content/154/full/1/153';
+
+        $this->configResolver
+            ->expects($this->at(0))
+            ->method('getParameter')
+            ->with('languages', null, 'eng')
+            ->will($this->returnValue(['eng-US']));
+
+        $this->configResolver
+            ->expects($this->at(1))
+            ->method('getParameter')
+            ->with('content.tree_root.location_id', null, 'eng')
+            ->will($this->returnValue(2));
+
+        $this->urlAliasService
+            ->expects($this->once())
+            ->method('listLocationAliases')
+            ->with($location, false, null, null, ['eng-US'])
+            ->will($this->returnValue(array()));
+
+        $this->router
+            ->expects($this->once())
+            ->method('generate')
+            ->with(
+                UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
+                array('contentId' => $location->contentId, 'locationId' => $location->id, 'ignoreSiteAccess' => true),
+                $this->router::ABSOLUTE_PATH
+            )
+            ->will($this->returnValue($uri));
+
+        $this->assertSame($uri, $this->urlAliasGenerator->doGenerate($location, array('contentId' => 154, 'siteaccess' => 'eng')));
     }
 }

@@ -96,6 +96,10 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
             unset($parameters['siteaccess']);
         }
 
+        $ignoreSiteAccess = isset($parameters['ignoreSiteAccess']) ? $parameters['ignoreSiteAccess'] : false;
+
+        unset($parameters['ignoreSiteAccess']);
+
         try {
             $url = parent::generate($name, $parameters, $referenceType);
         } catch (RouteNotFoundException $e) {
@@ -105,7 +109,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         }
 
         // Now putting back SiteAccess URI if needed.
-        if ($isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer) {
+        if ($isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer && false === $ignoreSiteAccess) {
             if ($referenceType === self::ABSOLUTE_URL || $referenceType === self::NETWORK_PATH) {
                 $scheme = $context->getScheme();
                 $port = '';
