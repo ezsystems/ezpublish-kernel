@@ -76,7 +76,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         return $this->match($request->attributes->get('semanticPathinfo', $request->getPathInfo()));
     }
 
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH, $ignoreSiteAccess = false)
     {
         $siteAccess = $this->siteAccess;
         $originalContext = $context = $this->getContext();
@@ -100,7 +100,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         $url = parent::generate($name, $parameters, $referenceType);
 
         // Now putting back SiteAccess URI if needed.
-        if ($isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer) {
+        if ($isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer && false === $ignoreSiteAccess) {
             if ($referenceType === self::ABSOLUTE_URL || $referenceType === self::NETWORK_PATH) {
                 $scheme = $context->getScheme();
                 $port = '';
