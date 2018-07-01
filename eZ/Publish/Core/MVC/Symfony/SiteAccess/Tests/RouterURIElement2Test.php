@@ -187,7 +187,7 @@ class RouterURIElement2Test extends TestCase
      */
     public function testReverseMatch($siteAccessName, $originalPathinfo)
     {
-        $expectedSiteAccessPath = implode('/', explode('_', $siteAccessName));
+        $expectedSiteAccessPath = str_replace('_', '/', $siteAccessName);
         $matcher = new URIElementMatcher(array(2));
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => $originalPathinfo)));
 

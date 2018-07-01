@@ -51,7 +51,7 @@ class DoctrineDatabaseTest extends TestCase
         $data = $this->loadNotification($id);
 
         $this->assertEquals([
-            'id' => "$id",
+            'id' => (string)$id,
             'owner_id' => '14',
             'is_pending' => 1,
             'type' => 'Workflow:Review',

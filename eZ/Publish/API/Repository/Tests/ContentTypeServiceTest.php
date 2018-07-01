@@ -2629,15 +2629,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $this->fail(
                 sprintf(
                     'Missing expected FieldDefinitions: %s',
-                    implode(
-                        ',',
-                        array_map(
-                            function ($fieldDefArray) {
-                                return $fieldDefArray['identifier'];
-                            },
-                            $expectedFieldDefinitions
-                        )
-                    )
+                    implode(',', array_column($expectedFieldDefinitions, 'identifier'))
                 )
             );
         }

@@ -540,12 +540,7 @@ class LocationHandlerTest extends TestCase
 
         $contentIds = array_values(
             array_unique(
-                array_map(
-                    function ($row) {
-                        return $row['contentobject_id'];
-                    },
-                    $subtreeContentRows
-                )
+                array_column($subtreeContentRows, 'contentobject_id')
             )
         );
         foreach ($contentIds as $index => $contentId) {

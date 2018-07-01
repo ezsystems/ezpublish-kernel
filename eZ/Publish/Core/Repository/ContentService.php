@@ -635,8 +635,9 @@ class ContentService implements ContentServiceInterface
                 $contentCreateStruct->contentType
             );
 
+            $objectStateHandler = $this->persistenceHandler->objectStateHandler();
             foreach ($defaultObjectStates as $objectStateGroupId => $objectState) {
-                $this->persistenceHandler->objectStateHandler()->setContentState(
+                $objectStateHandler->setContentState(
                     $spiContent->versionInfo->contentInfo->id,
                     $objectStateGroupId,
                     $objectState->id
@@ -931,9 +932,10 @@ class ContentService implements ContentServiceInterface
         $locations = $this->repository->getLocationService()->loadLocations(
             $content->getVersionInfo()->getContentInfo()
         );
+        $urlAliasHandler = $this->persistenceHandler->urlAliasHandler();
         foreach ($locations as $location) {
             foreach ($urlAliasNames as $languageCode => $name) {
-                $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
+                $urlAliasHandler->publishUrlAliasForLocation(
                     $location->id,
                     $location->parentLocationId,
                     $name,
@@ -943,7 +945,7 @@ class ContentService implements ContentServiceInterface
                 );
             }
             // archive URL aliases of Translations that got deleted
-            $this->persistenceHandler->urlAliasHandler()->archiveUrlAliasesForDeletedTranslations(
+            $urlAliasHandler->archiveUrlAliasesForDeletedTranslations(
                 $location->id,
                 $location->parentLocationId,
                 $content->versionInfo->languageCodes
@@ -974,8 +976,9 @@ class ContentService implements ContentServiceInterface
             // Load Locations first as deleting Content also deletes belonging Locations
             $spiLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
             $this->persistenceHandler->contentHandler()->deleteContent($contentInfo->id);
+            $urlAliasHandler = $this->persistenceHandler->urlAliasHandler();
             foreach ($spiLocations as $spiLocation) {
-                $this->persistenceHandler->urlAliasHandler()->locationDeleted($spiLocation->id);
+                $urlAliasHandler->locationDeleted($spiLocation->id);
                 $affectedLocations[] = $spiLocation->id;
             }
             $this->repository->commit();
@@ -1145,8 +1148,9 @@ class ContentService implements ContentServiceInterface
         }
 
         $allLanguageCodes = $this->getLanguageCodesForUpdate($contentUpdateStruct, $content);
+        $contentLanguageHandler = $this->persistenceHandler->contentLanguageHandler();
         foreach ($allLanguageCodes as $languageCode) {
-            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+            $contentLanguageHandler->loadByLanguageCode($languageCode);
         }
 
         $updatedLanguageCodes = $this->getUpdatedLanguageCodes($contentUpdateStruct);
@@ -1607,8 +1611,9 @@ class ContentService implements ContentServiceInterface
                 $versionInfo ? $versionInfo->versionNo : null
             );
 
+            $objectStateHandler = $this->persistenceHandler->objectStateHandler();
             foreach ($defaultObjectStates as $objectStateGroupId => $objectState) {
-                $this->persistenceHandler->objectStateHandler()->setContentState(
+                $objectStateHandler->setContentState(
                     $spiContent->versionInfo->contentInfo->id,
                     $objectStateGroupId,
                     $objectState->id

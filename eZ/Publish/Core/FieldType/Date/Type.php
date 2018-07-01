@@ -110,7 +110,7 @@ class Type extends FieldType
     {
         if (!$value->date instanceof DateTime) {
             throw new InvalidArgumentType(
-                "$value->date",
+                (string)$value->date,
                 'DateTime',
                 $value->date
             );
